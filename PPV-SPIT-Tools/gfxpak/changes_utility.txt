@@ -1,0 +1,372 @@
+
+GFX/SND utility history (GFXUTILS = change affected GFX.DLL and GFXPAK)
+
+29.04.00 - GFXPAK 0.50/GFX.DLL 0.72
+         - added shorter commands (-e=-extract,-u=-unpack,-l=-list)
+         - freeze fixed when extracting images with transparency (png only)
+         - crash fixed when viewing some fsh files
+         - PNG palette error fixed
+         - viewed image files' filehandles are now closed immediately
+         - fullscreen mode didn't skip non-image files and crashed, fixed
+
+24.04.00 - GFXPAK 0.49/GFX.DLL 0.71
+         - IFF image crash fixed
+         - interlaced GIFs fixed
+         - resolution shortcuts SHIFT+F1-F8 fixed
+         - resolution and bit depth shown on top left of screen for two
+           seconds after resolution or bit depth change
+
+09.04.00 - known bugs: interlaced gif support broken, image viewer
+           unstable and may freeze.
+         - GFX.DLL 0.70
+         - Now selecting ".." is identical to backspace (parent directory
+           cursor position is restored to remembered position)
+         - background image type scanner is automatically restarted
+         - multithreaded image decoding (not used with EA images or 256
+           color modes)
+         - /24 is default like documentation says
+         - most Amiga specific IFF images supported (HAM6,HAM8 and EHB)
+         - in fullscreen image viewing mode function keys F1-F8 changes
+           resolution and bit depths
+         - 15/16 bit and 32 bit fullscreen viewer modes fixed
+         - known bugs: may be unstable, also interlaced gif support broken
+         - GFXPAK 0.48
+         - error "couldn't find directory 'blahblah'" replaced with better
+           (and more correct) message
+         - SNDVIEW 0.37
+         - NHL 2000 WAV->ASF fixed
+
+02.03.00 - SNDVIEW 0.36
+         - NHL 2000 ditties conversion to wav works again
+
+23.01.00 - SNDVIEW 0.35
+         - -nhl2kdittyfix also fixes HORNS.VIV offsets
+         - PAT-file importing fixed
+         - BNK decoding fixes
+         - GFXPAK 0.47/GFX.DLL 0.68
+         - 24 bit BMP writing fixed
+
+29.12.99 - SNDVIEW 0.34
+         - improved -nhl2kdittyfix
+
+21.12.99 - SNDVIEW 0.33
+         - NHL 2000 ditties patch (-nhl2kdittyfix)
+         - GFXPAK 0.46/GFX.DLL 0.67
+         - replace crashed if fsh-file had more than 1000 images, fixed
+         - new image type added (Fifa 2000)
+
+14.11.99 - GFXPAK 0.45/GFX.DLL 0.66
+         - new image type added (16 color image, from NHL2000 PSX version)
+           no support for replacing added
+         - transparency improvements
+         - added -face support for NHL 2000 frontend faces
+
+02.11.99 - SNDVIEW 0.32
+         - some parts rewritten
+         - selects ASF type automatically (not 100% correct yet)
+         - better destination filenames when exporting ASF files
+         - removes read-only attribute before trying to open file for writing
+         - automatic 44100Hz->22050Hz and 22050Hz->44100Hz resampling
+
+12.10.99 - SNDVIEW 0.31
+         - improved BNK exporting
+         - BNK importing
+         - some small sound import fixes
+         - destination and original file can be same
+         - creating longer than original ASF file works
+         - GFXPAK 0.44/GFX.DLL 0.65
+         - C0FB pack file support was broken, fixed
+
+10.10.99 - SNDVIEW 0.30
+         - NHL 2000 ASF export and import support. Use mode 5 to decode
+           NHL 2000 ASF-files
+         - encoding time remaining added
+         - import updates PT header with correct file length
+
+20.09.99 - GFXPAK 0.43/GFX.DLL 0.64
+         - added browsing support for MS BaseBall 2000 FST packfiles
+         - gfxpak can replace files inside FST packfiles
+         - crash fixed when browing some small images
+         - some short-cut buttons added to GFX.DLL bottom of screen
+
+01.06.99 - GFXPAK 0.42/GFX.DLL 0.63
+         - 32b RGBA image type fixed (0x7d)
+         - added support for 16-bit image (0x7e) and 24-bit image (0x7f)
+           (Used in Need for Speed 3)
+         - SNDVIEW 0.23
+         - converts NHL'96 (TGV), NHL'97 (TGQ), some NHL'98 (DCT) and
+           NHL'99 (MAD) movies' sounds to WAV format. Unfortunately I was
+           forced to add manual decoder selection because I couldn't find
+           a way to separate NHL'99 movies' sounds from other soundfiles.
+         - supports old ASF format from Need for Speed
+
+01.04.99 - GFXPAK 0.41
+	 - experimental small face generator. Clips and scales big face
+	   image (Lxxxx) and creates small face (Sxxxx) automatically.
+	 - some changes to auto transparency algorithm. Remember to use
+	   -notrans if your image does not have any transparent areas
+	   and gfxpak seems to change some colors strangely..
+	 - -face understand more image formats than png and pcx..
+	 - GFX.DLL 0.62
+	 - parent directory added to directory list ("..")
+	 - SHIFT+'C' changes to C-drive SHIFT+'D' to D-drive etc..
+	 - GFXPAK & GFX.DLL
+	 - in some cases forget to close old file causing "couldn't open
+	   for writing" error message
+    
+20.03.99 - SNDVIEW 0.22
+	 - more compatible WAV-file loader
+	 - automatically downsamples 44100KHz to 22050KHz
+	 - no changes to sound encoder
+
+25.02.99 - SNDVIEW 0.21
+	 - -pack parameter works better
+
+23.02.99 - SNDVIEW 0.20
+	 - limited music importing
+
+16.02.99 - SNDVIEW 0.15
+	 - NHL'99 FESPCHx.VIV files are decoded correctly
+	 - NHL'98/'99: some *.BNK (sound effects) are decoded
+
+08.01.99 - GFX.DLL 0.61, recompiled for NHLINFO 5.30
+	 - some changes to palette file loading
+
+16.11.98 - GFX.DLL 0.60 (Fullscreen viewer is still experimental!)
+	 - real full screen support. + and - keys change fullscreen
+	   resolution and color depth. Use mouse or cursor keys to scroll
+	   screen if image is bigger than selected resolution
+	 - O-key does not anymore crash when viewing image files
+	 - much faster resizing algorithm
+	 - directories are shown first in file/directory listing
+	 - GFXUTILS
+	 - JPEG support (read-only)
+	 - GFXPAK 0.40
+	 - some Fifa'98 problems fixed
+
+02.11.98 - GFX.DLL 0.52
+	 - now requires NHLINFO 5.23
+
+22.10.98 - GFXPAK 0.38
+	 - NHL'99 -face didn't work with PHOTOS\ faces. Stupid me, I only
+	   tested game faces not front end faces...
+
+17.10.98 - GFXUTILS
+	 - bmp-loader fix
+	 - some small fixes
+	 - GFX.DLL 0.51
+	 - GFXPAK 0.37
+	 - NHL'99 support in -face
+	 
+03.10.98 - GFX.DLL 0.50
+	 - better cursor positioning after backspace/return
+	 - /gfx parameter works slightly differently and is not normally
+	   anymore needed (Because of game selector screen). /gfx = go
+	   directly to GFX.DLL without game selector, /nogfx = don't
+	   "detect" GFX.DLL at all
+	 - change directory command ('D'-key)
+	 - stack image command ('O'-key) (Useful for viewing images that
+	   are divided in three pieces)
+	 - image replace support. Much easier and intuitive than GFXPAK
+	 - most memory leaks fixed, but there is still one memory leak left
+	   that eats 700KB of memory / replaced image. Restarting NHLINFO
+	   frees all leaked memory
+
+13.08.98 - GFXPAK 0.35
+	 - recompiled with correct settings. Should work now
+
+11.08.98 - GFXUTILS
+	 - real 10FB compression implemented. (Thanks to TASsoft for help!)
+	   Use -real parameter to use it. (Not perfect yet..)
+	 - GIF support
+	 - all images were named imagename..png,imagename..pcx etc.. fixed
+	 - experimental automatic transparent color detector. Report if
+	   something does not work anymore, but remember to first try
+	   -notrans parameter if it helps. Report also if transparency
+	   works now correctly but didn't work with older GFXPAK.
+	 - fixed 0x78 (15-bit RGB) SHPI-image (World Cup 98)
+	 - GFX.DLL 0.49
+	 - image replace support nearly complete
+	 - F1 can be used to select between two directories. First directory
+	   is used for replacing/viewing images and second only for viewing
+	 - GFXPAK 0.34
+	 - replaces 15-bit and 32-bit SHPI-images
+
+26.07.98 - GFXUTILS
+	 - truecolor -> 256 color conversion
+	 - fixed PCX decompression (May have caused memory corruption)
+	 - GFX.DLL 0.41
+	 - views BMP/PCX/PNG images
+	 - automatic zooming if image is bigger than screen
+	 - added "fullscreen" view, use F2-key to select
+	 - added support for truecolor images
+	 - GFXPAK 0.33
+
+20.07.98 - GFXPAK 0.32
+	 - r-parameter fixed
+	 - BMP support implemented
+	 - GFX.DLL 0.40 (Test-version, not everything works yet)
+	 - GFXVIEW is now NHLINFO DLL-module (GFXVIEW.EXE is not developed
+	   anymore and is considered obsolete)
+	 - see NHLINFO.TXT for usage
+
+14.07.98 - SNDVIEW 0.14
+	 - NHL'96 ASF-files work
+	 - GFXPAK 0.31
+	 - adding new entries works again
+	 - GFXVIEW 0.33
+	 - implemented new graphics and font support from NHLINFO
+
+04.05.98 - GFXPAK 0.30
+	 - -p parameter finally works with multiple files
+	 - -c/-r support also non-image (data) files
+
+28.04.98 - GFXPAK 0.29
+	 - -r parameter sometimes deleted new SHPI-file
+
+27.04.98 - GFXPAK 0.28
+	 - -p parameter didn't work correctly with multiple files
+	 - adding new entries didn't work
+	   (gfxpak -c shpifile newshpifile newimage newshpi oldshpi)
+
+20.04.98 - GFXPAK 0.27
+	 - GFXPAK didn't always 10FB-fakecompress files, fixed.
+
+15.04.98 - GFXVIEW 0.32 GFXPAK 0.26
+	 - new palette types implemented (many NBA Live'98 and Triple
+	   Play'99 images are now correct)
+	 - -r(p) parameter implemented (combined -c(p) and -p)
+	 - -p parameter internal changes, also new pack file header is
+	   identical to original.
+	 - if you have problems with GFXPAK (game crashing etc..) first
+	   replace modified files from game CD with original files and
+	   then replace images again. Contact me if you still have problems.
+
+06.04.98 - GFXPAK 0.25
+	 - -p parameter sometimes didn't replace files
+
+02.04.98 - GFXPAK 0.24
+	 - replaces all duplicate SHPI-images
+	   (NHL'98 Referee UNI0000.VIV\UNIFORM.FSH\TORB)
+	 - SHPI-name case was not preserved correctly
+	 - new fsh-file's directory is not anymore sorted
+
+26.03.98 - GFXVIEW 0.31 GFXPAK 0.23
+	 - AGAIN! Removed palette matching bug. Caused random wrong colors
+	   when 'palette changed, matching..' text was output
+	   (It begins to look it is nearly impossible to remove all
+	   palette matching bugs....)
+	 - added support for new SHPI images and palette (found from Triple
+	   Play'99 demo) (Currently GFXVIEW only, full GFXPAK support is
+	   implemented later)
+	 - GFXVIEW probably looks now very bad with 256 color desktop
+	 - WARNING: GFXVIEW /fullscreen may not work very well
+	 - T-key can be used to check transparency
+	 - background transparency works with -c parameter
+	 - SHPI-names' case is now automatically preserved when replacing
+	   images
+	 - NHL'96 GAMEART.VIV\TOTAL.REF does not crash GFXPAK anymore
+
+22.03.98 - GFXPAK 0.22
+	 - -p parameter crashed with large FIFA'98 *.ALL files, fixed
+
+21.03.98 - GFXVIEW 0.30
+	 - GFXPAK 0.21
+	 - added more usage information to this document
+	 - GFXVIEW/GFXPAK does not anymore use huge amounts of memory
+	 - GFXPAK -p parameter supports now compressed pack files
+	   (=FIFA'98 *.ALL files)
+	 - palette matching bug fixed (-face produced bad game faces)
+	 - -c1 and -cp1 are not needed anymore (-c and -cp automatically
+	   compress new *.fsh file if original fsh-file was compressed)
+	 - -pal parameter did not work correctly, fixed
+
+15.03.98 - GFXVIEW 0.28
+	 - FIFA'98 ??HEAD.FSH-files don't anymore crash (broke in 0.27)
+	 - zoom range increased (1/4 to 4 times)
+	 - cursor keys+CTRL moves big images
+	 - file list does not anymore show unknown files
+	 - GFXPAK 0.20
+	 - -face parameter creates better big and small face images
+	 - -face and PNG-images with background chunk produces correct
+	    background for yellow highlight
+	 - -list and -extract/-extractpcx parameters implemented
+	 - added 10fb-fake compression option to -p parameter
+
+10.02.98 - SNDVIEW 0.13
+	 - NHL'96 *.ASF sound files works
+
+08.02.98 - GFXPAK 0.17
+	 - -face didn't accept PNG images, fixed
+
+03.02.98 - GFXVIEW 0.27
+	 - /pcx switch fixed
+	 - NHL'95 .PPV files supported
+	 - GFXPAK 0.16
+	 - added support for external palette files (-pal <filename>)
+
+23.01.98 - SNDVIEW 0.12
+	 - NHL'97 *.ASF file support was broken in 0.11, fixed
+	 - NHL'96 *.ASF/*.KSF files supported (95% identical to NHL'97)
+	 - NHL'98 FESPEECH directory sound file supported
+	 - GFXVIEW 0.26
+	 - NHL'96 DONRUSS.VIV images are shown correctly
+	 - GFXPAK 0.15
+	 - PNG background color information was read incorrectly
+	 - problems with 3D-acceleration and new uniforms fixed. (All
+	   uniforms must be build again with -c parameter to fix it)
+
+19.01.98 - GFXPAK 0.14
+	 - again GFX-import palette fixes
+
+18.01.98 - GFXVIEW 0.25 GFXPAK 0.13
+	 - PNG-file format support added. GFXVIEW saves transparency
+	   information if palette type is BGRA and GFXPAK uses transparency
+	   during importing automatically. Also PNG-image background color
+	   is used if available (RGB6 and RGB8 palette types).
+	 - SNDVIEW 0.11
+	 - converts NHL'97 AUDSPK*.KSF speech files
+
+16.01.98 - SNDVIEW 0.10
+	 - audio decoder. Currently converts at least NHL'97/'98 and
+	   FIFA'98 *.ASF files to WAV-format. Also NHL'98 DITTIES.VIV
+	   is convertable audio file.
+	 - GFXVIEW 0.24
+	 - Does not crash anymore if Windows desktop resolution is 640*480
+	 - External palette file support
+
+11.01.98 - GFXVIEW 0.23 GFXPAK 0.12
+	 - fixed dark image bug in GFXVIEW (Saved images had correct
+	   palette, only viewer showed dark colors)
+	 - removed -u parameter from GFXPAK. Use GFXVIEW to unpack images.
+	 - GFXPAK -c works with more games (NHL'95). Some palette errors
+	   fixed. Added ability to use pcx-image's palette instead of
+	   original SHPI-file palette.
+	 - GFXVIEW shows now palette type next to picture's size.
+	 - NHL'94 images are partially viewable.
+
+05.01.98 - GFXPAK 0.11
+	   fixed palette matching bug. (caused dark images)
+
+03.01.98 - added examples.
+
+02.01.98 - GFXVIEW 0.22 GFXPAK 0.10
+	   first public gfxpak released. Create your own faces or
+	   modify existing graphics!
+
+21.12.97 - GFXVIEW 0.21
+	   added support for older image format (NHL'95) NHL'94 images
+	   can not be viewed (gfxview may crash)
+	   added support for double compressed files (FIFA'98)
+
+19.12.97 - GFXVIEW 0.20
+	   implemented 10FB and 30FB compressed file decompressors!
+	   (Nearly all NHL'97, NHL'98 and FIFA'98 images are now
+	   viewable! Probably other EA products' graphics can also
+	   be viewed) Creates smaller PCX files and bug fixes.
+
+06.12.97 - GFXVIEW 0.11
+	   fixed many stupid bugs (Exiting fullscreen mode still crashes)
+
+04.12.97 - GFXVIEW 0.10
+	   first released version

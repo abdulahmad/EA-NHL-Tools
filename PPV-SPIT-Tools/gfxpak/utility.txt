@@ -1,0 +1,598 @@
+
+-------------- GFX.DLL 0.72 GFXPAK 0.50 SNDVIEW 0.37 ----------------------
+
+               GFXPAK is freeware SHPI-image rebuilder
+       SNDVIEW is freeware Electronic Art's music file converter
+   GFX.DLL is freeware Electronic Art's SHPI-image file viewer/replacer
+
+---------------------------------------------------------------------------
+
+
+***************************************************************************
+I am in no way responsible for possible damage caused by using this program
+***************************************************************************
+
+NOTES:
+------
+
+WNHLINFO.EXE (from NHLINFO_EXE.ZIP/NHLINFO_ALL.ZIP) is required if you want
+to use new GFXVIEW replacement (NHLINFO_GFX.DLL)
+
+Graphics and sound utilities can be freely distributed freely as long as
+they are not modified and ripped pictures or images are not packaged with
+the programs. Pictures/sounds ripped with SNDVIEW/GFXPAK/GFX.DLL are
+copyrighted by their owner (In this case Electronic Arts) and so they must
+not be distributed.
+
+Credits
+-------
+
+TASsoft for 10FB-compression algorithm and other helpful information
+
+Asatur V. Nazarian for PT information
+
+Electronic Arts for NOT changing their image format every year/game!
+
+GIF license requires this note:
+
+The Graphics Interchange Format(c) is the Copyright property of
+CompuServe Incorporated. GIF(sm) is a Service Mark property of
+CompuServe Incorporated.
+
+System Requirements:
+--------------------
+
+CPU:            Any that can run Windows'95
+RAM:            8MB or more
+DISPLAY CARD:   Any Windows compatible display card
+OS:             Windows'95/'98 or Windows NT 4.0/5.0
+
+*********
+*GFX.DLL*
+*********
+
+See NHLINFO.TXT for instructions
+
+
+********
+*GFXPAK*
+********
+
+GFXPAK can replace/extract data/image-files from Electronic Arts'
+SHPI-image files and C0FB and BIGF pack files.
+
+Works with NHL'95 and newer EA games. 
+
+Misc parameters:
+----------------
+
+-notrans
+
+Use -notrans to disable automatic transparent color detection. Should be
+only needed when replacing images which does not have any transparent
+color.
+
+-real
+
+Enables real 10FB-compression instead of fake 10FB-compression. Real means
+it really compresses data. Fake compression just make data look like
+compressed and also "compressed" file was bigger than original! Compression
+(real or fake) is required for some images because game expects them to be
+compressed and crashes when it tries to decompress non-compressed images.
+Note that if you decompress original file and then compress it again, it
+is about 10% bigger than original. This maybe fixed in future version.
+
+Starting parameters:
+--------------------
+
+** replace NHL'98/'99/2000 faces **
+
+  GFXPAK -face <game base dir> <face number> <face number> ...
+
+  for example: gfxpak -face e:\games\nhl98 1000 1001 1002
+
+  before running GFXPAK put into current directory your face image files
+  (BMP, GIF, JPG, PCX or PNG) with following names:
+   small face name must be S<number>.PNG (eg.S0001.BMP, S1000.GIF, etc..)
+   and image size must be 52*74 (NHL'98) 36*43 (NHL'99/2000) pixels.
+   large face name must be L(number>.PNG (eg.L0001.JPG, L1000.PCX, etc..)
+   and image size must be 176*250 (NHL'98/'99/2000) pixels.
+   game face name must be G<number>.PNG and size is 64*64 pixels.
+  After gfxpak exists you can delete all *.FSH files that gfxpak have
+  created. Also remember to keep enough free diskspace in nhl98 partition
+  (at least about 25 megs) Modified files are REQUIRED\FACES.VIV (NHL'98),
+  GAMEDATA\FACES99.VIV (NHL'99) PHOTOS\SPHOTO.VIV and PHOTOS\BPHOTO.VIV.
+  NHL 2000 -face only supports frontend face images, use NHL 2000's buildin
+  face importer for game faces.
+
+  Use NHLINFO to change player's face number. (PLAYERS/MISC or GOALIES/MISC
+  and FACE)
+
+** replace images (new, easier way) **
+
+  GFXPAK -r(p) (-real) (-pal <palettefile>) <packfilepath>
+  <image file> <SHPI-name> <picture2> <SHPI2> etc...
+
+  see -c for more information and -p parameter for disk space requirements.
+
+  Generic -r parameter list:
+
+    gfxpak -rp <packfile\fsh-file> <imagefile.pcx/png> <SHPI-filename>
+
+    if fsh-file is not contained in packfile:
+   
+    gfxpak -rp <fsh-file> <imagefile.pcx/png> <SHPI-filename>
+
+  Replacing multiple images:
+
+    gfxpak -rp <packfile\fsh-file> <img1> <SHPI1> <img2> <SHPI2> ...
+        
+
+** create SHPI file: (face creator uses this internally) **
+
+  GFXPAK -c(p) (-real) (-pal <palettefile>) <packfilepath> <new fsh-file>
+  <image file> <SHPI-name> <original SHPI-name> (only if pack file
+  does not already contain 'SHPI-name') <picture> <new SHPI-name> etc..
+
+  Use -c if original SHPI-file had palette type RGB6 or RGB8 or if -cp
+  produces garbage colors. Note that it is possible that colors are corrupt
+  in game even if GFX.DLL shows correct colors.
+
+  <image file> is considered data file if it does not end to BMP, GIF,
+  PCX or PNG.
+
+  -pal <palettefile> palettefile is GFX.DLL saved palette file. Usefull
+  if original SHPI-file does not contain palette (GFX.DLL shows '----'
+  -palette type)
+
+  Face creator uses this function as follows (small faces):
+
+   gfxpak -cp PHOTOS\SPHOTO.VIV\S000.FSH S<number>.FSH S<number>.PNG
+   s<number> s000
+
+   Old example SHPI file is required (I selected S000.FSH) because
+   not all SHPI-file data can be saved easily to exported images.
+
+  NOTE: You don't need this if you only want to create new face graphics,
+  only if you want to modify other graphics.
+
+  Generic -c parameter list:
+
+   gfxpak -cp <packfile\fsh-file> <fsh-file> <image.pcx/png> <SHPI-filename>
+   gfxpak -p <packfile> <fsh-file>
+
+   if fsh-file is not contained in packfile:
+
+   gfxpak -cp <fsh-file> <fsh-file> <imagefile.pcx/png> <SHPI-filename>
+
+  Replacing multiple files:
+
+   gfxpak -cp <packfile\fsh-file> <fsh-file> <img1> <SHPI1> <img2> <SHPI2> ..
+   gfxpak -p <packfile> <fsh-file>
+
+   or
+
+   gfxpak -cp <packfile\fsh-file> <fsh-file> <img1> <SHPI1>
+   gfxpak -cp <fsh-file> <fsh-file> <img2> <SHPI2>
+   ...
+   gfxpak -p <packfile> <fsh-file>
+
+  Adding new images/data:
+
+   gfxpak -c(p) <fsh-file> <fsh-file> <new image/datafile> <SHPI1> <SHPI2> ..
+    SHPI1=new SHPI-name for added image/data
+    SHPI2=any old existing SHPI-name in fsh-file
+
+
+** view pack file contents **
+
+  GFXPAK -list <pack file path>
+
+** extract and decompress images from pack file **
+
+  GFXPAK -extract(bmp/gif/pcx) <pack file path> (<image1> <image2>...)
+
+  extracts images from pack file. -extract creates png images,
+  -extractbmp creates bmp images, -extractgif creates gif images and
+  -excractpcx create pcx images.
+  Extracts all images if no image names specified.
+
+** extract and decompress data from pack file **
+
+  GFXPAK -unpack <pack file path> (<name1> <name2>...)
+
+  extracts data from pack file. Extracts all data files if no names
+  specified.
+
+** decompress 10FB/30FB-compressed files **
+
+  GFXPAK -decompress <source file> <destination file>
+
+** compress file with 10FB-algorithm **
+
+  GFXPAK -compress (-real) <source file> <destination file>
+
+** update packfile with modified fsh-file (face creator uses this internally) **
+
+  GFXPAK -p(1) (-real) <pack file> <file1> <file2>...
+
+  -p1 compresses with 10fb-compression. (Don't compress if they are already
+  compressed!)
+  Now packfile <pack file> contains files <file1> and <file2>. Overwrites
+  automatically existing files. This is not needed for face creating. 
+  NOTE: This option requires at least size of <pack file> bytes
+        free disk space!
+
+How to replaces images
+----------------------
+
+1. *.fsh files have palette: (=can be seen correctly on GFX.DLL without
+   using P-key and palette files)
+
+   New method:
+
+   gfxpak -r <pack file\fsh-file> <image.pcx/png> <SHPI-filename>
+
+   Old method:
+
+   create modifed fsh file:
+    gfxpak -c <pack file\fsh-file> <fsh-file> <image.pcx/png> <SHPI-filename>
+   replace old fsh file in pack file with new modified file(s):
+    gfxpak -p <pack file> <fsh-file>
+
+   NOTE: Use -rp/-cp instead of -r/-c if original file had BGRA palette type
+   (Use GFX.DLL to check) -rp/-cp creates better palette but does usually
+   create garbage colors if used with RGB6 or RGB8 images)
+
+2. without palette: (=GFX.DLL shows grayscale image without using P-key
+   and palette files)
+
+   New method:
+
+    gfxpak -r -pal <palette file> <pack file\fsh-file> <image> <SHPI>
+
+   Old method:
+
+   create modifed fsh file:
+    gfxpak -c -pal <palette file> <pack file\fsh-file> <fsh-file>
+           <imagefile.pcx/png> <SHPI-filename>
+   replace old fsh file in pack file with new modified file:
+    gfxpak -p <pack file> <fsh-file>
+
+ palette file=file that contains correct palette
+ (for example, !PAL-file from *.fsh files)
+ pack file=usually *.viv pack file
+ fsh-file=*.fsh file which contains graphics you want to change
+ imagefile=your new image
+ SHPI-filename=file you want to replace inside fsh-file
+
+
+NHL'98 Examples
+---------------
+
+ * = new easier method
+
+how to replace NHLPA and NHL logos? (FEFLUFF\VFLUFF.VIV\INTRO.FSH)
+
+*GFXPAK -rp FEFLUFF\VFLUFF.VIV\INTRO.FSH <newshield> IN01 <newlogo> IN02
+
+ GFXPAK -cp FEFLUFF\VFLUFF.VIV\INTRO.FSH INTRO.FSH
+           <new NHL shield image.png> IN01
+           <new NHLPA logo image.png> IN02
+ GFXPAK -p FEFLUFF\VFLUFF.VIV IN01 IN02
+
+how to replace big NHL'98 logo? (GUI\BACKGROUND.VIV\BG63.FSH)
+
+*GFXPAK -rp GUI\BACKGROUND.VIV\BG63.FSH left B63A middle B63B right BG63C
+
+ GFXPAK -cp GUI\BACKGROUND.VIV\BG63.FSH BG63.FSH
+            <left side image.png> B63A
+            <middle image.png> B63B
+            <right side image.png> B63C
+ GFXPAK -p GUI\BACKGROUND.VIV BG63.FSH
+
+how to replace Stanley Cup picture?
+
+*GFXPAK -rp FEFLUFF\VFLUFF.VIV\AWARDS.FSH <newimage.png> tr16
+
+ GFXPAK -cp FEFLUFF\VFLUFF.VIV\AWARDS.FSH AWARDS.FSH <new image.png> tr16
+ GFXPAK -p FEFLUFF\VFLUFF.VIV AWARDS.FSH
+
+Remember to add your NHL'98 base directory to all directory names.
+
+Notes/Hints:
+------------
+
+- If picture doesn't appear to work, use GFX.DLL to check that temporary
+  FSH file(s) are correct and/or updated pack-file was updated correctly
+  Contact me if GFXPAK corrupts pack-files or new SHPI files is incorrect.
+- Also check that your image has exact same width and height as original.
+- GFXPAK tries to match best colors if new image uses different palette
+  than original SHPI-image. But because GFXPAK only uses original image's
+  palette there may not be all colors you need. (=new SHPI have wrong colors)
+- Use -rp/-cp parameter first and -r/-c if colors was incorrect in game
+- Do not leave .FSH files in NHL'98 base directory.
+- try to replace modified files from game CD with original files if you
+  have problems with GFXPAK (game crashing etc..).
+   
+
+
+****************************
+SNDVIEW document starts here
+****************************
+
+
+SNDVIEW converts NHL'96/'97/'98/'99/2000, FIFA'98 and NBA Live '98
+*.ASF/*.KSF files to WAV-format. Also files in NHL'98/'99/2000 DITTIES
+and FESPEECH directory are supported.
+
+Sound from most NHL'96-'99 videos can be also converted to WAV-format.
+
+Also some support for converting wave sound files back to ASF format.
+
+NOTE: Encoding is very slow and audio quality is not good as original.
+Hopefully I can improve this. PBP speech is my next target and I hope to
+implement PBP export/import support "soon"...
+
+** AUDIO IMPORTING IS VERY EXPERIMENTAL AND UNSUPPORTED **
+
+** DON'T COMPLAIN IF GAME CRASHES WITH REPLACED AUDIO **
+
+
+Export (ASF->WAV)
+-----------------
+
+SNDVIEW <ASF file> [mode] [destination directory]
+
+If SNDVIEW produces garbage sound or corrupt file messages, try to
+force correct mode (SNDVIEW normally autodetects it but it does
+not work with all files)
+
+mode types:
+ 1: '98 and '99 ASF, NHL 2000 videos
+ 2: '97 and older
+ 3: NHL'99 uncompressed videos
+ 4/5: very old ASF format (Need for Speed)
+ 6: NHL 2000 ASF
+
+First WAV file is named 001.wav, next 002.wav etc.. (NHL'98/'99 DITTIES.VIV
+contains 140 sounds, you need over 350Megs of free hard disk space if you
+want to convert them because it is not yet possible to convert invidual
+sounds) See below for unpacking NHL 2000 DITTIES.VIV
+
+NHL'98/'99/2000 PBP speech can not be converted (yet?)
+
+
+Export (BNK->WAV)
+-----------------
+
+SNDVIEW <BNK file>
+
+BNK files usually contain many sound effect samples.
+First WAV file is named 001.wav, next 002.wav etc..
+
+It seems that many BNK files have wrong frequency (usually 13000 instead
+of 22050) I am not sure if this is bug in SNDVIEW or some strange feature
+in EA's sound encoder... When saving the wav-file SNDVIEW changes all
+<22050 frequencies to 22050.
+
+
+Import (WAV->EA audio)
+----------------------
+
+SNDVIEW -import <wave sound> <new asf file> <original asf file>
+
+<wave sound> = normal 16-bit 1 or 2 channel WAV-file
+<new asf file> = asf-file that SNDVIEW creates
+<original asf file> = asf-file that you are going to replace, usually same
+                      as <new asf file>
+
+NOTE: If you abort conversion (for example by pressing CTRL+C) and
+<new asf file>=<original asf-file> you must copy asf-file from CD
+because it is only partially rewritten by SNDVIEW! It is best to
+convert to temporary file and after conversion delete original and
+rename temporary file to original file.
+
+Examples
+--------
+
+All examples' paths are relative to your NHL hockey game directory path.
+
+Example 1: (replace frontend musics)
+------------------------------------
+
+Replace MENU1.ASF (FEAUDIO directory NHL'99/2000) with MYMUSIC.WAV
+
+SNDVIEW -import MYMUSIC.WAV MENU1.ASF MENU1.ASF
+
+
+Example 2: (replace frontend speech)
+------------------------------------
+
+Replace COMAC.PAT (FESPEECH\FESPEECH.VIV NHL'99) with MYSOUND.WAV
+
+First you must extract COMAC.PAT, you can use GFXPAK/GFX.DLL to extract
+it (GFXPAK -unpack or GFX.DLL F-key) and then use SNDVIEW to convert
+COMAC.PAT to WAV-format. You can also use SNDVIEW to extract COMAC.WAV
+but you still need to use GFXPAK/GFX.DLL to extract COMAC.PAT because
+SNDVIEW needs it during importing.
+
+convert MYSOUND.WAV -> COMAC.PAT
+
+SNDVIEW -import MYSOUND.WAV COMAC.PAT COMAC.PAT
+
+replace old COMAC.PAT with new COMAC.PAT inside FESPEECH.VIV pack-file
+
+GFXPAK -p FESPEECH.VIV COMAC.PAT
+
+
+Example 3: (replace NHL'98/'99 ditties)
+---------------------------------------
+
+create temporary directory (tmp\ in this example)
+
+Unpack DITTIES.VIV
+
+SNDVIEW -unpack ditties\DITTIES.VIV required\DITTIES.IDX tmp\
+
+In this example I replace 000.asf and 001.asf with NEW1.WAV and NEW2.WAV
+
+cd tmp
+SNDVIEW -import NEW1.WAV 000.ASF 000.ASF
+SNDVIEW -import NEW2.WAV 001.ASF 001.ASF
+cd..
+
+create new DITTIES.VIV
+
+SNDVIEW -pack tmp\ ditties\DITTIES.VIV required\DITTIES.IDX
+
+Note that -pack and -unpack only works with DITTIES.VIV and DITTIES.IDX.
+In future AUDRSPKE.BIG and AUDPBPE.BIG will (hopefully) be supported.
+
+
+Example 4: (replace NHL 2000 ditties)
+-------------------------------------
+
+You need GFXPAK for unpacking/replacing NHL 2000 DITTIES.VIV
+
+Unpack ditties somewhere (tmp\ in this example)
+
+cd tmp
+GFXPAK -unpack ..\ditties\DITTIES.VIV
+
+Here we replace 1.ASF and 2.ASF with NEW1.WAV and NEW2.WAV
+
+SNDVIEW -import NEW1.WAV 1.ASF 1.ASF
+SNDVIEW -import NEW2.WAV 2.ASF 2.ASF
+cd ..
+
+Replace 1.ASF and 2.ASF inside DITTIES.VIV
+
+GFXPAK -p ditties\DITTIES.VIV 1.ASF 2.ASF
+
+Fix NHL2K.EXE
+
+SNDVIEW -nhl2kdittyfix
+
+NOTE: NHL 2000 will crash if you forget this step!
+
+You can also copy new ditty ASF-files to USER\DITTIES\ where
+NHL 2000 plays them randomly during play.
+
+
+Example 5: (replace sound effects inside BNK files)
+---------------------------------------------------
+
+In this example we replace second and sixth sound in PCFRONT.BNK
+(required\PCFRONT.BNK)
+
+SNDVIEW -import NEW2.WAV PCFRONT.BNK PCFRONT.BNK 2
+SNDVIEW -import NEW6.WAV PCFRONT.BNK PCFRONT.BNK 6
+
+
+SOUND IMPORT NOTES:
+-------------------
+
+- structure and contents of "PT"-header in many sound files is not completely
+  known. This may cause problems if there is total size of sound file or
+  other data that needs updating depending on file/chunk size.
+
+  NEW: This should be fixed in 0.30
+
+- import support is very limited. Only 2 channel *.ASF files and 1 channel
+  speech in FESPEECH.VIV are supported. Also 1 channel BNK files are now
+  supported.
+
+- NHL'97 and earlier audio format is not supported (and probably never will),
+  only newer (NHL'98 and later EA games) are supported.
+
+- do not try to replace 1 channel sound with 2 channel sound or vice versa.
+
+- it is normal that 2 channel encoding is >10x slower than 1 channel
+  encoding (without some shortcuts, which unfortunately cause some loss of
+  quality, encoding speed would be >50x slower..) Yes, my encoder is really
+  stupid, it just tries every possible parameter value and then selects
+  which one produced best result...
+
+  NEW: NHL 2000 2 channel files are slightly different than older 2 channel
+  files. Encoding NHL 2000 2 channel files is only 2x slower than encoding
+  1 channel files!
+
+- play by play speech is not yet supported
+
+- did you note that I said "play by play speech is not yet supported"?
+  I hope you did... I really don't want to see questions like "how to
+  replace PBP names" !
+
+- It seems (unfortunately) that PBP speech uses completely different
+  compression method than other music/speech files.
+
+
+EA audio format technical information:
+
+NHL'96/'97 and '98/'99 uses lossy algorithm that compresses 16-bit samples
+to 4 bits. Algorithms in NHL'96/'97 and NHL'98/'99 are different.
+It is some kind of improved adaptive delta compression algorithm.
+
+NHL'96-'98 videos use same audio format as "normal" audio files. It is
+just interleaved with video data. NHL'99 videos have uncompressed audio.
+
+NHL 2000 1 channel files are identical to NHL'98/'99. 2 channel files are
+slightly different. NHL'98/'99 had interleaved channels (12121212...) but
+NHL 2000 have first channel and then second channel (11112222...)
+
+And no, I am not going to make video converter!
+
+
+******************************************************************************
+
+
+Questions and answers:
+----------------------
+
+Q: how to unpack NHL'98 player faces?
+
+A: wnhlinfo /gfx <nhl'98 directory>\photos
+   move cursor to BPHOTO.VIV (large images) or SPHOTO.VIV (small images)
+   DON'T PRESS RETURN! press SHIFT+S, wait for some time (GFX.DLL scans
+   all files) type destination directory. NOTE: Directory must be already
+   created. Wait some time. Use your favorite picture viewer to view all
+   player faces!
+
+Q: Why some NHL'95 (other older games may also have same problem) images
+   have incorrect palette?
+
+A: selected SHPI-file doesn't contain palette entry (!pal,!p101,etc..)
+   (NOTE: Most newer images contain palette in image file itself)
+
+Q: How to view NHL'95 RINK.QFS palette correctly?
+
+A: select RINKPAL.QFS, save !pal (F-key) to current directory with name
+   RINK.PAL (or anything that ends to .PAL). Press SHIFT+P to load palette
+   file(s). Select RINK.QFS and press 'P' until correct palette is in use.
+   Other images without palettes can also be viewed with correct palette
+   this way.
+
+Q: How to view NHL'96 images with correct palette?
+
+A: save ARENAART.VIV\_empty.fsh\!PAL to NHL'96 directory (name can be
+   for example NHL96.PAL) Again press SHIFT+P and use P-key to select
+   correct palette.
+
+Q: How to view NHL'97 faces with correct palette?
+
+A: save FACES\FACEPAL.FSH\!PAL to file with F-key to current directory
+   (Palette file's name can be for example NHL97FACE.PAL). SHIFT+P
+   and P should again view correct palette
+
+Q: can I have compression/decompression/SHPI/Audio algorithms?
+
+A: no, you can't!
+
+
+Contact address:
+----------------
+
+email: nhlinfo@gameshock.com write in english or finnish only.
+www:   www.gameshock.com/nhl/
+

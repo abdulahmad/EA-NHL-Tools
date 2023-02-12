@@ -1,0 +1,287 @@
+
+ToDo:
+        - ability to show/hide players/teams depending on their attributes,
+          points etc.. by comparing them against user settable values.
+          (bigger,smaller,equal and unequal)
+        - view team totals (goals, points, assists etc..)
+        - reprogram very stupid line editor tables with much easier and
+          simpler solution
+
+Work log: (No NHL'xx-prefix=NHL2000 or WNHLINFO.EXE fix/update
+          NHLC = NHL Championship 2000)
+
+29.04   - *** NHLINFO 5.49 ***
+
+27.04   - NHLC: line editor jersey numbers and crash fixed
+
+24.04   - *** NHLINFO 5.48 ***
+
+13.04   - NHL2000: rookie, veteran and prospect editing
+          (old rookie column changed to experience)
+
+12.04   - NHL'98-2000: most player stats increased to 4 digits
+
+09.04   - *** NHLINFO 5.47 ***
+
+11.03   - NHL'96: season/playoffs-texts in season selector was missing
+          and season/playoffs databases didn't load, fixed
+        - NHLC: added support for user created players
+
+13.02   - NHLC: goalie pages fixed, visor attribute added to players
+
+08.02   - NHL2000: in some rare cases weight was shown incorrectly
+
+02.02   - NHLC: jersey number editing works
+        - NHLC: it wasn't always possible to save changes
+
+01.02   - NHLC: seasons/playoffs/tournaments/rosters can be saved
+
+30.01   - NHLC: jersey numbers fixed
+        - NHLC: saved rosters can be loaded. Save support is not
+          yet implemented
+
+23.01   - *** NHLINFO 5.46 ***
+
+22.01   - rewritten multiattribute. see nhlinfo.txt for more information
+        - NHLC improvements
+
+21.01   - NHLC: limited saved season/playoff/tournament support
+        - NHLC: line viewer, no editing yet
+        - NHLC: schedule editing (no create/delete yet)
+
+20.01   - full screen graphics viewer skipped one image when cursor moved
+          to end of list
+        - mouse buttons go to next/previous image in full screen mode
+
+10.01   - added more NHLC player attributes
+        - TLS.DAT is saved correctly (old version stripped all ending .00's)
+        - NHLINFO automatically removes possible read-only attribute
+          before deleting or opening file for writing
+
+08.01   - basic NHLC support
+
+03.01   - goalie career percentage fixed
+        - started to implement NHL Championship 2000 support!
+          Due to NHLC2K's text based roster format, NHLINFO with
+          basic NHLC2K support will be released in couple of days!
+
+YEAR 2000
+---------
+
+29.12   - goalie career GA range increased
+        - goalie career calculation fixed
+
+21.12   - *** NHLINFO 5.45 ***
+
+19.12   - and more converter fixes. Converter should work 100% now.
+        - random startup crash fixed (NHL 2000 only)
+
+29.11   - more converter fixes
+
+19.11   - goalie career wins, loses, ties and penalty minutes fixed
+
+15.11   - converter fixes
+
+14.11   - *** NHLINFO 5.44 ***
+
+04.11   - crashes with /24 parameter fixed
+        - added support for loading two or more databases from command line
+        - improved convert/updater: checks config file for errors before
+          converting/updating, supports addition, subraction, multiplication,
+          division and parenthesis in config files
+        - NHL'98-2000: conversion/update non-user player "delete" fixed
+
+03.11   - editing negative numbers fixed
+        - added support for Playstation version of NHL 2000
+
+30.10   - NHL'98/'99: transfer to free agents fixed
+        - player star points fixed
+
+28.10   - new page key changed to CTRL+HOME
+        - CTRL+INSERT (add new entry) fixed
+        - automatic conversion config file loader (converter/updater)
+
+22.10   - goalie rookie value fixed
+        - player/goalie draft position fixed
+
+11.10   - career stats maximum was 999 not 9999, fixed
+
+07.10   - career (rookie) editing works
+
+06.10   - *** NHLINFO 5.43 ***
+
+05.10   - duplicate players fixed
+        - free agents jersey number fixed
+        - more free agents fixes
+
+04.10   - *** NHLINFO 5.42 ***
+
+03.10   - player create/delete implemented
+        - career stats create/delete implemented
+        - leap year calculation fixed
+
+02.10   - player transfer and additionals should work
+
+29.09   - face numbers implemented
+        - dress/scratch fixed
+
+28.09   - fixed black rectangle when switching between nhl editor and
+          graphics viewer
+        - goalie weight, height, career stats and dressed status added
+        - player and goalie face number editing added
+        - new schedule editor: SHIFT+INSERT do not anymore set 0-0 results
+        - editor screen graphics corruption fixed
+
+24.09   - *** NHLINFO 5.41 ***
+        - startup crash really fixed
+        - captaincy editing fixed
+
+23.09   - startup crash hopefully fixed
+
+22.09   - attribute/statistics "inversion", '&'-key
+        - DB viewer: "size 0x???=???" shows now correct value in all cases
+        - NHL'98/'99: expansion team fixing could crash nhlinfo
+        - NHL'98/2000: team names on player transfer dialog was clipped
+
+21.09   - NHL2000: player/goalie jersey number editing works and does not
+          anymore corrupt other player data (caused duplicate players)
+        - NHL'98/'99: fixed player jersey numbers in line editor screen
+
+20.09   - *** NHLINFO 5.40 *** 
+
+19.09   - full team, player and goalie attributes, season/playoff and career
+          statistics implemented
+
+18.09   - line editor works, partial player/goalie statistics implemented
+
+14.09   - rule editor (mostly useless because you can change all rules
+          inside NHL 2000) Note that missing period length is not a bug,
+          current rule editor code does not support more than 7 selections..
+
+13.09   - team statistics and schedule viewer/editor complete
+          (NHL2000 is very similar in team and schedule data with NHL99)
+
+12.09   - started coding NHL 2000 support
+        - finally EA managed to make ALT+TAB mostly work ok. Makes testing
+          much faster.
+
+30.08   - schedule editor does not crash or show "null" teams after
+          adding expansion teams
+
+25.08   - "Press any key" message added to long listings (for example
+          "Games" list)
+        - "new" schedule editor's "team mode" button changed to
+          "schedule mode"
+
+20.08   - schedule editor: year limit removed
+        - NHL'99 schedule editor: "Games" tooltip was "Select team", fixed
+        - F11 key in tooltips was shown as F10, fixed
+
+12.08   - NHL'99: player playoff star points fixed
+
+18.06   - partial conversion/update
+
+13.06   - internal graphics code changes
+
+01.06   - *** NHLINFO 5.35 ***
+
+23.05   - NHL'96: real freeagent support
+        - updated export code and wrote small documentation
+
+29.04   - NHL'99: player playoff career penalty minutes was wrong. fixed
+
+27.04   - NHL'99/(maybe'98): season schedule editor crashes fixed, playoffs
+          schedule editor fixed
+        - NHL'99/'98: goes automatically to playoff-mode if season have
+          playoff schedule
+        - experimental export option. Command line parameter "-export"
+          exports selected databases' all player, goalie, team and schedule
+          data to a text file. (usage example: "wnhlinfo exhibition -nhl99
+          -import") Import option may be implemented later...
+          See dbexport.txt for more information
+
+19.04   - NHL'99: status changes are not possible with exhibition databases
+
+13.04   - NHL'97/'98: 1st forward and defence lines were invisible
+	- NHL'98/'99: rare career stats insertion bug fixed
+
+07.04   - fixed bug that caused NHLINFO to start minimized but clicking its
+          icon in Windows taskbar didn't un-minimize it.
+
+01.04   - *** NHLINFO 5.34 ***
+
+31.03   - NHL'99: player healing and limited injury date setting
+
+28.03   - WNHLINFO.EXE works with DirectX3 (Windows NT) again
+        - buttons on bottom of screen are redrawn to correct position
+          after changing from fullscreen to windowed mode with CTRL+RETURN
+        - graphics viewer skips buggy Windows NT DX3 16-bit displaymodes
+        - does not overwrite nhlinfo.ini with white colors when using
+          -save command
+
+22.03   - NHL'99: player and goalie career points are automatically fixed
+        - NHL'99: goalie career playoffs stats were incorrect and GAA and
+          PCT was not recalculated, fixed
+
+15.03   - NHL'99: player status viewing/limited editing (injury, streaks etc)
+
+07.03   - NHL'97: loads database files correctly even if they are not in
+          DATA-directory
+        - NHL'98/'99: added DB viewer team stats
+
+01.03   - NHL'99: total career points implemented (finally!)
+
+16.02   - *** NHLINFO 5.33 ***
+
+15.02   - "-save" parameter works again
+
+13.02   - NHL'98/'99: new schedule editor "one team/all team" works correctly
+        - NHL'97: new schedule editor crash fixed
+
+11.02   - NHL'99: multiattribute decrease works correctly
+
+07.02   - NHL'94-'96: added to/from free agents option to line editor
+        - NHL'98-'99: convert/updater deletes reused players' career stats
+
+05.02   - NHL'99: star points editing works again
+
+02.02   - NHL'98-'99: stupid bugs fixed. "CHANGE TEAM" is enabled and works
+          again, custom league's team are shown correctly. 
+
+01.02   - it is possible to use negative values when creating new user slots
+          to delete them. Does only delete created slots.
+
+25.01   - *** NHLINFO 5.32 ***
+
+23.01   - NHL'98-'99: Many seems to have problems with expansion team hack
+          Note added to nhlinfo.txt
+
+21.01   - NHL'98-'99: "CHANGE TEAM" didn't work, disabled until fix is found
+
+20.01   - NHL'98: support for convert/update destination implemented
+        - NHL'94-96: full convert/update support implemented
+
+19.01   - NHL'97: PP% was incorrectly calculated, fixed
+        - NHL'97: convert/update support added (source only)
+        - NHL'97: transfer from free agents back to regulars was
+          not possible, fixed
+
+13.01   - find skipped first entry after wrap-around
+        - converter/updater does not anymore force NHL division, now
+          it is for example possible to convert national teams.
+        - fixed NHL'99 update conversion config-file
+
+11.01   - *** NHLINFO 5.31 ***
+
+10.01   - NHL'99: star points fixed
+        - NHL'99: AAARGHH! Goalies attribute maximum was still limited to
+          63 (New scale maximum is 115) and converter/updater though 5HO
+          is number, not attribute.
+
+08.01   - *** NHLINFO 5.30 with database converter/updater ***
+
+01.01   - decided to release NHL'98/'99 DLL source and enable NHL'99
+          DB-viewer
+
+YEAR 1999
+---------
