@@ -4,7 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ZERO_CHUNK_SIZE = 64;
+const ZERO_CHUNK_SIZE = 48;
 const BYTES_PER_SAMPLE = 2;
 const SAMPLE_RATE = 5500;
 const WAV_HEADER_SIZE = 44;
@@ -20,8 +20,12 @@ function identifyDataSections(file) {
     if (buffer[i] === 0) {
       zeroChunkCount++;
       if (zeroChunkCount === ZERO_CHUNK_SIZE) {
+        console.log('found a zeroChunk');
         dataSections.push({ start: startOffset, end: i - ZERO_CHUNK_SIZE + 1 });
         zeroChunkCount = 0;
+        while(buffer[i+1] == 0) {
+          i++;
+        }
         startOffset = i + 1;
       }
     } else {
