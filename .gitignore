@@ -2,3 +2,5 @@ PPV-SPIT-Tools/NHL95PPV
 PPV-SPIT-Tools/Unpack
 IFF-To-WAV/*.iff
 IFF-To-WAV/*.wav
+DIG-To-WAV/*.dig
+DIG-To-WAV/*.wav
