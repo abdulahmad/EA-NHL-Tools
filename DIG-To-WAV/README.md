@@ -10,3 +10,4 @@ Exports NHL95 PC PCFF001.DIG to separate wave files
 
 ## Future TODO
 - This is not perfect, need to fix the delimiter logic, not all files get separated out properly and empty waveforms come out as files as well
+- Ensure sample rate is correct
