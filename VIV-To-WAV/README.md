@@ -10,8 +10,7 @@ This tool leverages `gfxpak` to export the audio data from the VIV file. Assumin
 
 3. In the `VIV-To-WAV` folder, run `node vivToIff`. This will run `gfxpak` on all of the VIV files in `NHL95VIV`. Now you will have the audio data files for the menu announcer and rink announcer, ready to be converted.
 
-4. Run `node batchUnpackedIffToWav`. It will run the script `iffToWav` on all of the audio data files extracted from the VIV files that are in IFF Format.
+4. Run `node batchUnpackedIffToWav`. It will run the script `iffToWav` on all of the audio data files extracted from the VIV files that are in IFF Format. You will now have `.wav` files in the `Unpack` subfolders.
 
 # Future TODO
-- Currently IFF-To-WAV overwrites to the same output.wav over and over again. Need to update it to be unique files.
 - There is another unknown 8-bit unsigned mono PCM file format for audio in the VIV files. This seems to be for the menu announcer. The data seems to be in 8-bit unsigned mono, but there's some other data or compression going on which is causing the audio to sound distorted. Haven't written a tool to extract these to WAV yet.

@@ -74,8 +74,11 @@ for (let i = 0; i < audioData.length; i++) {
   wavBuffer.writeInt16LE(n, 44 + i * 2);
 }
 
+let str = filePath;
+outputFilePath = str.replace(/\.IFF$/, '.WAV');
+
 // Write the WAV file to disk
-fs.writeFileSync(path.join(__dirname, 'output.wav'), wavBuffer);
+fs.writeFileSync(outputFilePath, wavBuffer);
 
 // Output minsample/maxsample for debugging-- if these values aren't the same, tells you something went wrong with file
 console.log('Conversion complete!', minSample, maxSample);
