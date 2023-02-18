@@ -35,7 +35,8 @@ console.log(oneShotHiSamples, repeatHiSamples, samplesPerHiCycle, samplesPerSec,
 const totalSamples = repeatHiSamples/2; // <-- not sure if this is right, could probably figure it out if I spent more time
 
 // Create a new WAV file with the same audio data
-const wavBuffer = Buffer.alloc(44 + totalSamples * 2);
+// const wavBuffer = Buffer.alloc(44 + totalSamples * 2);
+const wavBuffer = Buffer.alloc(44 + audioData.length*2);
 wavBuffer.write('RIFF', 0);
 wavBuffer.writeUInt32LE(36 + totalSamples * 2, 4);
 wavBuffer.write('WAVE', 8); // FORMAT
@@ -57,7 +58,9 @@ wavBuffer.writeUInt32LE(totalSamples * 2, 40); // Sub Chunk 2 Size
 let maxSample = 0;
 let minSample = 99999;
 
-for (let i = 0; i < totalSamples; i++) {
+// console.log(audioData.length);
+// for (let i = 0; i < totalSamples; i++) {
+for (let i = 0; i < audioData.length; i++) {
   const sample = audioData.readUInt8(i);
   // Just seems like the sample values needed to be on an exponential curve because they didn't sound right just multiplied up by 256 to account for 8-bit to 16-bit conversion.
   // It still doesn't sound right but it's clearer than any method I've tried.
