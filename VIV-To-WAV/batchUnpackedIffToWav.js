@@ -1,27 +1,43 @@
-const execSync = require('child_process').execSync;
 const fs = require('fs');
 const path = require('path');
-const baseDir = process.cwd();
+const execSync = require('child_process').execSync;
 
-const directories = ['NHL95VIV'];
+const root = './Unpack/NHL95VIV';
 
-directories.forEach(directory => {
-  fs.readdir(directory, (err, files) => {
-    if (err) throw err;
+fs.readdir(root, (err, files) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
 
-    files.forEach(file => {
-      if (file.endsWith('.VIV')) {
-        const fileName = file.replace('.VIV', '');
-        const dirPath = path.join('./Unpack', directory, fileName);
+  for (const file of files) {
 
-        fs.mkdirSync(path.join(baseDir, dirPath), { recursive: true });
-        process.chdir(path.join(baseDir, dirPath));
+    const fullPath = path.join(root, file);
+    fs.stat(fullPath, (err, stat) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      if (stat.isDirectory()) {
+        fs.readdir(fullPath, (err, subFiles) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
 
-        console.log(process.cwd());
-        console.log(`..\\..\\${directory}\\${fileName}.VIV`);
-
-        execSync(`..\\..\\..\\..\\3rdParty\\gfxpak\\gfxpak.exe -u ..\\..\\..\\${directory}\\${fileName}.VIV`, { stdio: 'inherit' });
+          for (const subFile of subFiles) {
+            if(subFile.indexOf(".IFF") > 0) { // only run if .iff
+              const subFilePath = path.join(fullPath, subFile);
+              runIffToWav(subFilePath);
+            }
+          }
+        });
       }
     });
-  });
+  }
 });
+
+function runIffToWav(file) {
+//   console.log(`process.cwd(), Running IffToWav on ${file}`);
+  execSync(`node ..\\IFF-To-WAV\\iffToWav ..\\VIV-To-WAV\\${file}`, { stdio: 'inherit' });
+}
