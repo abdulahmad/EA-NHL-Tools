@@ -1,4 +1,4 @@
-# PPV-SPIT-Tools v0.2
+# VIV-To-WAV v0.1
 Exports In-game sprites from NHL95 PC in SPIT format to Photoshop RAW and Windows BMP format. The sprites are extracted as stored-- which means they are in grayscale. 
 
 The sprites with a dynamic palette (player/goalie sprites) have a multi-step mapping done, which means you can't just apply the in-game palette to them. However, the sprites with static palette (such as the referee) can look correct with colors if you apply the in-game palette. I intend to support some sort of palette tools soon, but just wanted to get this out as soon as possible.

@@ -1,4 +1,4 @@
-# EA-NHL-Tools 0.2
+# EA-NHL-Tools 0.3
 Tools for various EA NHL games
 
 ## Tools included
@@ -6,4 +6,18 @@ Tools for various EA NHL games
 
 `IFF-To-WAV` - Converts NHL95 PC .IFF files to .wav (out of game music files)
 
-`DIG-To-WAV` - Converts NHL95 PC .DIG files to .wav (in-game sounds)
+`DIG-To-WAV` - Converts NHL94/95 PC .DIG files to .wav (in-game sounds)
+
+`VIV-To-WAV` - Converts NHL95 PC .VIV files to .wav (menu & rink announcer sound)
+
+### Release Notes
+
+### 0.1
+- First release of PPV-SPIT-Tools
+
+### 0.2
+- First release of IFF-To-WAV and DIG-To-WAV
+
+### 0.3
+- First release of VIV-To-WAV
+- Moved gfxpak to common 3rd party tools folder
