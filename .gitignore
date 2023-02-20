@@ -8,3 +8,7 @@ IFF-To-WAV/*.wav
 DIG-To-WAV/*.dig
 DIG-To-WAV/*.wav
 PAL-Tools/NHL95PAL
+PAL-Tools/NHL94PAL
+PAL-Tools/NHL95QFS
+PAL-Tools/NHL94QPP
+PAL-Tools/Unpack
