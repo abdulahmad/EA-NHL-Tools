@@ -79,7 +79,7 @@ fs.readdir(root, (err, files) => {
 
 function runSpitToBmp(file, paletteFile) {
   console.log(`Running spitToBmp on ${file}`, process.cwd());
-  const cmd = paletteFile ? `node ..\\PPV-SPIT-Tools\\spitToBmp ${file} ${paletteFile}` : `node ..\\PPV-SPIT-Tools\\spitToBmp ${file}`;
+  const cmd = paletteFile ? `node ..\\SPIT-To-BMP\\spitToBmp ${file} ${paletteFile}` : `node ..\\SPIT-To-BMP\\spitToBmp ${file}`;
   execSync(cmd, { stdio: 'inherit' });
 }
 

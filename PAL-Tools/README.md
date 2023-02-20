@@ -1,4 +1,4 @@
-# PAL-Tools v0.1
+# QFS-To-BMP v0.1
 
 ## BIN-To-ACT
 Converts NHL95 PC `<HOME/AWAY>PALS.BIN` files to `.ACT` (jersey palettes).

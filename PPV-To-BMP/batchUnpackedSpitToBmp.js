@@ -40,5 +40,5 @@ fs.readdir(root, (err, files) => {
 
 function runSpitToBmp(file) {
   // console.log(`Running spitToBmp on ${file}`);
-  execSync(`node spitToBmp ${file}`, { stdio: 'inherit' });
+  execSync(`node ..\\SPIT-To-BMP\\spitToBmp ${file}`, { stdio: 'inherit' });
 }
