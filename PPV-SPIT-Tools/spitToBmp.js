@@ -28,8 +28,9 @@ const convertToBMP = (fileName) => {
   const unevenImagePadding = (bmpWidth - width) * height;
   const bmpEOFLength = 2;
   const pixelDataLength = width*height;
-  const expectedBmpLength = fullBmpHeaderLength + palLength + pixelDataLength + unevenImagePadding + bmpEOFLength+1500; // height for line end bytes
-  const expectedRawLength = pixelDataLength+1500;
+  const expectedBmpLength = fullBmpHeaderLength + palLength + pixelDataLength + unevenImagePadding + bmpEOFLength; // height for line end bytes
+  const expectedRawLength = pixelDataLength;
+  // console.log("expected BMP length",expectedBmpLength,"expected raw length", expectedRawLength);
   const bmpImage = Buffer.alloc(expectedBmpLength);
   const rawImage = Buffer.alloc(expectedRawLength);
   
@@ -57,7 +58,7 @@ const convertToBMP = (fileName) => {
   let bufferIndex = fullBmpHeaderLength+palLength;
   let rawIndex = 0;
   let rowCounter = 0;
-  while (index < compressedImage.length) {
+  while (rawIndex < expectedRawLength) {
     // console.log("index",index,compressedImage.byteOffset.toString(16).toUpperCase());
     let description;
     if (fileType == 123) { // override
