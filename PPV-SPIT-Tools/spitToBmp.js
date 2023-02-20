@@ -6,6 +6,7 @@ const convertToBMP = (fileName) => {
   // Read the compressed image data from the file
   const compressedImage = fs.readFileSync(fileName);
   // Extract the header information from the compressed image
+  const fileType = compressedImage.readInt8(0);
   const width = compressedImage.readInt16LE(4);
   const bmpWidth = Math.ceil(width/4)*4; // round up width to nearest multiple of 4 for bmp pixel data format
   const height = compressedImage.readInt16LE(6);
@@ -13,9 +14,9 @@ const convertToBMP = (fileName) => {
   const yOffset = compressedImage.readInt16LE(10);
   const xPos = compressedImage.readInt16LE(12);
   const yPos = compressedImage.readInt16LE(14);
-  console.log("width",width,"height",height,"xOffset",xOffset,"yOffset",yOffset,"xPos",xPos,"yPos",yPos);
+  console.log("fileType",fileType,"width",width,"height",height,"xOffset",xOffset,"yOffset",yOffset,"xPos",xPos,"yPos",yPos);
     // Store the header information in a JSON file
-  const headerInfo = { width, height, xOffset, yOffset, xPos, yPos };
+  const headerInfo = { fileType, width, height, xOffset, yOffset, xPos, yPos };
   fs.writeFileSync(`${fileName}.json`, JSON.stringify(headerInfo));
 
   // Create a Buffer to store the BMP image data
@@ -27,10 +28,10 @@ const convertToBMP = (fileName) => {
   const unevenImagePadding = (bmpWidth - width) * height;
   const bmpEOFLength = 2;
   const pixelDataLength = width*height;
-  const expectedBmpLength = fullBmpHeaderLength + palLength + pixelDataLength + unevenImagePadding + bmpEOFLength; // height for line end bytes
-  const expectedRawLength = pixelDataLength;
+  const expectedBmpLength = fullBmpHeaderLength + palLength + pixelDataLength + unevenImagePadding + bmpEOFLength+1500; // height for line end bytes
+  const expectedRawLength = pixelDataLength+1500;
   const bmpImage = Buffer.alloc(expectedBmpLength);
-  const rawImage = Buffer.alloc(pixelDataLength);
+  const rawImage = Buffer.alloc(expectedRawLength);
   
   // Write the BMP header to the buffer
   bmpImage.write('BM'); // BMP Identifier
@@ -58,7 +59,13 @@ const convertToBMP = (fileName) => {
   let rowCounter = 0;
   while (index < compressedImage.length) {
     // console.log("index",index,compressedImage.byteOffset.toString(16).toUpperCase());
-    let description = compressedImage.readUInt8(index++);
+    let description;
+    if (fileType == 123) { // override
+      description = 1;
+    } else {
+      description = compressedImage.readUInt8(index++);
+    }
+    
     // console.log("description byte",description);
     if (description === 0) break;
 
