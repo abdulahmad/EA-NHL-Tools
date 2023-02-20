@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const execSync = require('child_process').execSync;
 
-const root = './Unpack';
+const root = './Unpack/NHL95QFS';
 
 fs.readdir(root, (err, files) => {
   if (err) {
