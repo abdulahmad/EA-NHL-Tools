@@ -1,7 +1,12 @@
 const fs = require('fs');
 
 // Function to convert the compressed image to BMP format
-const convertToBMP = (fileName) => {
+const convertToBMP = (fileName, palFileName) => {
+  console.log('convertToBMP:', fileName, palFileName);
+  if (typeof palFileName !== 'undefined') {
+    process.exit();
+  }
+
   console.log("Converting "+fileName+ " to BMP");
   // Read the compressed image data from the file
   const compressedImage = fs.readFileSync(fileName);
@@ -127,47 +132,5 @@ const convertToBMP = (fileName) => {
 };
 
 const spriteName = process.argv[2];
-convertToBMP(spriteName);
-
-/* 876photoshop
-42 4D       BMP ID
-38 08 00 00 FILE SIZE - 2104 BYTES -- MATCH WITH WIN EXPLORER
-00 00 00 00 RESERVED
-36 04 00 00 BYTE OFFSET to start of image - 1078 -- not match
-28 00       SIZE OF HEADER - 40 match
-00 00 1F 00 WIDTH - 31 - MATCH
-00 00 E0 FF HEIGHT - -32 - MATCH
-FF FF       PLANES - MATCH
-01 00       BITS PER PIXEL - MATCH
-08 00 00 00 COMPRESSION TYPE - MATCH
-00 00 02 04 SIZE OF COMPRESSED FILE - 1026
-00 00 12 0B HORIZONTAL RES - 2834
-00 00 12 0B VERTICAL RES - 2834
-00 00 00 00 00 00 00 00 00 00 -- 10 BYTES PADDING?
-PAL offset 0x36
-PAL = 0x400 = 1024
-*/
-
-/* 876 broken
-42 4D       BMP ID
-16 08 00 00 FILE SIZE - 2070 BYTES -- MATCH WITH WIN EXPLORER
-00 00 00 00 RESERVED
-36 00 00 00 BYTE OFFSET to start of image - 54 -- not match
-28 00       SIZE OF HEADER - 40 match
-00 00 1F 00 WIDTH - 31 - MATCH
-00 00 E0 FF HEIGHT - -32 MATCH
-FF FF       PLANES - MATCH
-01 00       BPP - MATCH
-08 00 00 00 COMPRESSION TYPE - MATCH
-00 00 E0 07 SIZE OF COMPRESSED FILE - 2016
-00 00 00 00 HORIZONTAL RES - 0 NOT MATCH
-00 00 00 00 VERTICAL RES - 0 NOT MATCH
-00 00 00 00 00 00 00 00 00 00 00 -- 11 BYTES PADDING?
-PAL offset 0x36
-PAL = 0x400 = 1024
-
-header = 54 bytes
-pallength = 1024
-pixels = 31*32 = 992
-end of line 00
-*/
+const pal = process.argv[3];
+convertToBMP(spriteName, pal);
