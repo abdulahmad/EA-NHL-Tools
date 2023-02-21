@@ -1,73 +1,21 @@
 # QFS-To-BMP v0.1
-
-## BIN-To-ACT
-Converts NHL95 PC `<HOME/AWAY>PALS.BIN` files to `.ACT` (jersey palettes).
+Converts NHL95 PC QFS files to `.raw` and `.bmp` as well as stores additional meta data in `.json` files, and tries to convert all images with the correct palette
 
 ### Usage
 1. Ensure you have `node` installed on your machine
 
-2. In the `BIN-To-ACT` folder, run `node binToAct`. This will convert the `.bin` files to .act files in the folder `Unpack`
+2. Create a folder inside of the `QFS-To-BMP` folder called `NHL95QFS`. 
+
+3. Copy `.QFS` files from the NHL95 CD to the `NHL95QFS` folder. Note that the CD will have a more complete set of QFS files than the installed folder, and will be required for the sprites to be extracted correctly as there may be dependencies on palettes that only exist on the CD.
+
+4. In the `QFS-To-BMP` folder, run `node qfsToSpit`. This will leverage `gfxpak` to unpack the SPIT data from the QFS files
+
+5. In the `QFS-To-BMP` folder, run `node batchUnpackedSpitToBMP`. This will use `SPIT-To-BMP` to convert the SPIT files to BMP and use a defined palette mapping to give the correct palette to all images.
 
 ### More Info & Issues
 
-### <HOME/AWAY>PALS.BIN format
-000-0BF - First 64*3 bytes = 192 bytes - colour palette
-0C0-13F - values 0-127 - maybe a reference to rink/game palette?
-140-14F - different values - potentially mapping static colours like skin tone?
+One thing you may ask is how is this different than just using `gfxpak` to extract all images to BMP?
 
-Colour Zone Mapping
-Starting from line 150 -- mapping sprite colour zone to gameplay palette. gameplay palette indexed 0-255
-line 180,190,1A0,1B0 bytes 00-04 - crest palette | bytes 05-0A logo palette
-BIN (byte pair in BIN file) HEX -> Palette value
-150-15F - 144-159
-160-16F - 160-175
-170-17F - 176-191
-180-184 - 192-196
-190-194 - 208-212
-1A0-1A4 - 224-228
-1B0-1B4 - 240-244
-185-18F - UNKNOWN
-195-19F - UNKNOWN
-1A5-1AF - UNKNOWN
-1B5-1BF - UNKNOWN
+1. `gfxpak` tries to take the palette that exists within the current `.QFS` file. But there are cases where the correct palette actually exists in a different palette file.
 
-## UnpackQPP
-
-Extracts NHL94 QPP SPIT files with selected palette.
-
-### Usage
-1. Ensure you have `node` installed on your machine
-
-2. Copy `.QPP` files from NHL94 to a folder called `NHL94QPP` within the PAL-Tools folder
-
-3. In the `PAL-Tools` folder, run `node unPackQPP`. This will run the QPP-Unpack tool, which will extract all of the raw data image files from the files in `NHL94QPP` into the `Unpack\NHL94QPP` folder
-
-### NHL94 SPIT Header details:
-entry header - size unknown
-4-5 bytes (uint16) - X axis offset
-6-7 bytes (uint16) - Y axis offset
-8-9 bytes (uint16) - X axis position
-10-11 bytes (uint16) - Y axis position
-
-
-## UnpackQFS
-
-Extracts NHL95 QFS SPIT files with selected palette.
-
-### Usage
-1. Ensure you have `node` installed on your machine
-
-2. Copy `.QPP` files from NHL94 to a folder called `NHL94QPP` within the PAL-Tools folder
-
-3. In the `PAL-Tools` folder, run `node unPackQPP`. This will run the QPP-Unpack tool, which will extract all of the raw data image files from the files in `NHL94QPP` into the `Unpack\NHL94QPP` folder
-
-
-## RINKPAL-To-ACT
-Extracts and converts the NHL95 Rink Palette to .ACT format
-
-### Usage
-1. Ensure you have `node` installed on your machine
-
-2. In the `PAL-Tools` folder, run `node rinkpalToAct`. This will run the QFS-Unpack tool, which will extract the Palette file. Then it will run qfspalToAct which will convert the extracted palette file to .ACT format
-
-## Merge Rink palette & team palette
+2. Using `gfxpak` to export the raw data actually forced me to improve the `SPIT-To-BMP` tool as the images are stored in an uncompressed format in `.QFS` files whereas they are in a RLE style compression scheme in `.PPV` files. I don't know if I'll ever get around to attempting it, but maybe one day I'll even try to create a custom implementation of unpacking data from `.QFS`/`.VIV`/`.PPV`/`.QPP` files as well. I think the more open source tools, the better. The fact that all of these tools are open source means that its easy for others to come along and improve on them.
