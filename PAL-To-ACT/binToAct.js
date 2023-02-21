@@ -13,10 +13,11 @@ const fileName = process.argv[2];
 const inputBuffer = fs.readFileSync(fileName);
 
 for (let teamIndex = 0; teamIndex < NUM_TEAMS; teamIndex++) {
+  const CURRENT_TEAM_DATA_START = teamIndex * TEAM_DATA_SIZE;
   console.log('team',teamIndex);
   const teamPalette = new Buffer(PALETTE_SIZE * 3);
   for (let i = 0; i < BIN_PALETTE_SIZE; i++) {
-    const offset = teamIndex * TEAM_DATA_SIZE + i * 3;
+    const offset = CURRENT_TEAM_DATA_START + i * 3;
     const r = inputBuffer.readUInt8(offset)*4;
     const g = inputBuffer.readUInt8(offset + 1)*4;
     const b = inputBuffer.readUInt8(offset + 2)*4;
@@ -31,7 +32,7 @@ for (let teamIndex = 0; teamIndex < NUM_TEAMS; teamIndex++) {
   const colorMapping = new Buffer(PALETTE_SIZE);
   let j=144;
   for(let i = COLOR_MAPPING_START; i<TEAM_DATA_SIZE; i++) {
-    const currentColorMapping = inputBuffer.readUInt8(i);
+    const currentColorMapping = inputBuffer.readUInt8(CURRENT_TEAM_DATA_START+i);
     console.log('colorMappingIndex',j,currentColorMapping)
     colorMapping.writeUInt8(currentColorMapping, j++);
   }
