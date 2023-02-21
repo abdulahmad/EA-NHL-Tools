@@ -104,7 +104,7 @@ For each team here is the data layout:
 bytes 000h-0BFh: Colour palette data, which is in RGB form (first byte pair is R value, second byte pair is G value, third byte pair is B value), but the data from the file has to be multiplied by 4 to get the correct value. This palette of 64 colours gets mapped to a team palette with the first colour from the file starting at index 144 and going up to index 207
 bytes 150h-1B4h: These map the NHL 95 sprite palette to the team palette. If byte 150h has the value of 145 for example, it means use the colour at index 145 of the team palette for the sprite palette
 
-Please create a sprite palette in the .ACT file format for every team in the input file. The naming scheme should be 00.ACT for the first team, 01.ACT for the second team, etc
+Please create a node script to create a sprite palette in the .ACT file format for every team in the input file. The naming scheme should be 00.ACT for the first team, 01.ACT for the second team, etc
 
 
 
