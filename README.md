@@ -18,6 +18,8 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 
 `QFS-To-BMP` - WIP: Convert NHL95 PC `.QFS` files to `.BMP` using defined mapping to ensure correct palette is used
 
+`HOCKEY32` - Documentation on potentially expanded NHL95 PC to 32 teams
+
 ### Release Notes
 
 ### 0.1

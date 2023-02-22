@@ -56,16 +56,17 @@ Crest4 - 1B0h-1B4h -> 240-244
 140-14F - different values - potentially mapping static colours like skin tone?
 
 Gameplay Colour Zone Mapping
-Starting from line 150 -- mapping sprite colour zone to gameplay palette. gameplay palette indexed 0-255
+Starting from line 140 -- mapping sprite colour zone to gameplay palette. gameplay palette indexed 0-255
 line 180,190,1A0,1B0 bytes 00-04 - crest palette | bytes 05-0A logo palette
 BIN (byte pair in BIN file) HEX -> Palette value
-150-15F - 144-159
-160-16F - 160-175
-170-17F - 176-191
-180-184 - 192-196
-190-194 - 208-212
-1A0-1A4 - 224-228
-1B0-1B4 - 240-244
+140-14F - 128-143 Skin Tones/Stick/etc
+150-15F - 144-159 Arms
+160-16F - 160-175 Jersey
+170-17F - 176-191 Pants/Socks/Helmet
+180-184 - 192-196 Crest1
+190-194 - 208-212 Crest2
+1A0-1A4 - 224-228 Crest3
+1B0-1B4 - 240-244 Crest4
 185-18F - UNKNOWN
 195-19F - UNKNOWN
 1A5-1AF - UNKNOWN
@@ -92,34 +93,8 @@ Extracts and converts the NHL95 Rink Palette to .ACT format
 
 ## Merge Rink palette & team palette
 
-
-----
-
-I have some NHL95 BIN Palette files containing palette data for NHL 95 sprites, and I want to convert palette data for each team to an .ACT file
-
-Here are the specs for the NHL95 BIN Palette files:
-There are n number of teams in the file. The data for team 0 comes first, then team 1, up to team n.
-
-For each team here is the data layout:
-bytes 000h-0BFh: Colour palette data, which is in RGB form (first byte pair is R value, second byte pair is G value, third byte pair is B value), but the data from the file has to be multiplied by 4 to get the correct value. This palette of 64 colours gets mapped to a team palette with the first colour from the file starting at index 144 and going up to index 207
-bytes 150h-1B4h: These map the NHL 95 sprite palette to the team palette. If byte 150h has the value of 145 for example, it means use the colour at index 145 of the team palette for the sprite palette
-
-Please create a node script to create a sprite palette in the .ACT file format for every team in the input file. The naming scheme should be 00.ACT for the first team, 01.ACT for the second team, etc
-
-
-
-Palette:
-0: Red
-1: Blue
-
-
-Game Palette {
-    128: Red,
-    129: Blue
-    ...
-    244:
-}
-
-Colour Zone Mapping:
-Arm1: Palette index 128 = Red
-Arm2: Palette index 129 = Blue
+## Future TODO
+- Add rinkpal to teampal -- needed for non dynamic colours/non player sprites
+- Add 140h-14Fh to color mapping & adjust code to read from 140h onwards instead of 150h -- needed for non dynamic colours/non player sprites
+- Adjust code to start mapping from 140h  -- needed for non dynamic colours/non player sprites
+- Add rinkpal to sprite pal  -- needed for non dynamic colours/non player sprites
