@@ -5,9 +5,11 @@ const NUM_TEAMS = 28;
 const TEAM_DATA_SIZE = 448;
 const PALETTE_SIZE = 256;
 const BIN_PALETTE_SIZE = 64;
-const TEAM_PALETTE_START = 384;
-const COLOR_MAPPING_START = 336;
-
+const TEAM_PALETTE_REF_OFFSET = 384;
+// const COLOR_MAPPING_DATA_START_IN_HOMEPALS = 336;
+const COLOR_MAPPING_DATA_START_IN_HOMEPALS = 320;
+// const COLOR_MAPPING_DATA_START_IN_MAPBIN = 144;
+const COLOR_MAPPING_DATA_START_IN_MAPBIN = 128;
 const fileName = process.argv[2];
 
 const inputBuffer = fs.readFileSync(fileName);
@@ -22,16 +24,16 @@ for (let teamIndex = 0; teamIndex < NUM_TEAMS; teamIndex++) {
     const g = inputBuffer.readUInt8(offset + 1)*4;
     const b = inputBuffer.readUInt8(offset + 2)*4;
     console.log('team palette',offset/3,offset, r,g,b);
-    teamPalette.writeUInt8(r, TEAM_PALETTE_START+i*3);
-    teamPalette.writeUInt8(g, TEAM_PALETTE_START+i*3 + 1);
-    teamPalette.writeUInt8(b, TEAM_PALETTE_START+i*3 + 2);
+    teamPalette.writeUInt8(r, TEAM_PALETTE_REF_OFFSET+i*3);
+    teamPalette.writeUInt8(g, TEAM_PALETTE_REF_OFFSET+i*3 + 1);
+    teamPalette.writeUInt8(b, TEAM_PALETTE_REF_OFFSET+i*3 + 2);
   }
   fs.writeFileSync(`${teamIndex.toString().padStart(2, '0')}teamPal.ACT`, teamPalette);
 
   console.log('START COLOR MAPPING');
   const colorMapping = new Buffer(PALETTE_SIZE);
-  let j=144;
-  for(let i = COLOR_MAPPING_START; i<TEAM_DATA_SIZE; i++) {
+  let j=COLOR_MAPPING_DATA_START_IN_MAPBIN;
+  for(let i = COLOR_MAPPING_DATA_START_IN_HOMEPALS; i<TEAM_DATA_SIZE; i++) {
     const currentColorMapping = inputBuffer.readUInt8(CURRENT_TEAM_DATA_START+i);
     console.log('colorMappingIndex',j,currentColorMapping)
     colorMapping.writeUInt8(currentColorMapping, j++);
@@ -48,12 +50,6 @@ for (let teamIndex = 0; teamIndex < NUM_TEAMS; teamIndex++) {
     const g = teamPalette.readUInt8(currentColorMapping*3 + 1);
     const b = teamPalette.readUInt8(currentColorMapping*3 + 2);
 
-    // let inputOffset = teamIndex * TEAM_DATA_SIZE + COLOR_MAPPING_START + i;
-    
-    // const teamPaletteIndex = inputBuffer.readUInt8(inputOffset);
-    // const r = teamPalette.readUInt8(teamPaletteIndex * 3);
-    // const g = teamPalette.readUInt8(teamPaletteIndex * 3 + 1);
-    // const b = teamPalette.readUInt8(teamPaletteIndex * 3 + 2);
     spritePalette.writeUInt8(r, spritePaletteOffset);
     spritePalette.writeUInt8(g, spritePaletteOffset + 1);
     spritePalette.writeUInt8(b, spritePaletteOffset + 2);
@@ -61,9 +57,5 @@ for (let teamIndex = 0; teamIndex < NUM_TEAMS; teamIndex++) {
     spritePaletteOffset+=3;
   }
 
-//   const outputBuffer = Buffer.concat([
-//     new Buffer([0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00]), // ACT file header
-//     spritePalette,
-//   ]);
   fs.writeFileSync(`${teamIndex.toString().padStart(2, '0')}.ACT`, spritePalette);
 }
