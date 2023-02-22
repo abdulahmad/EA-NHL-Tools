@@ -6,7 +6,7 @@ Note, this is an incomplete exploration of how to potentially add an additonal t
 
 `TEAMS.DB` - You should be able to copy the Data from the start of the BOS abbreviation to the start of the BUF abbreviation, and paste it to the end of the file. And then Modify the Team abbreviation, Team Short name and Team Full name. -- Standings screens seem to use these names
 
-`CARTEAM.DB` - Similar to previous, you should be able to copy data from th start of the BOS abberviation to the start of the BUF abbreviation and paste it to the end of the file and update the team names
+`CARTEAM.DB` - Similar to previous, you should be able to copy data from the start of the BOS abberviation to the start of the BUF abbreviation and paste it to the end of the file and update the team names
 
 `SCHEDULE.DB` - Would have to update the schedule to include the new team
 
