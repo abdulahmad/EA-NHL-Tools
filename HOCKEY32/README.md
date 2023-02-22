@@ -58,7 +58,7 @@ Following contains offsets where to find team lists, as well as known but not ex
 
 `0x10794C` - List of team abbreviations, used for Exhibition pre-game logo display, season logo display
 
-`0x10A724` - List of team abbreviations, used to display Jersey Graphics on Team Select Screen for exhibition game; ANA & FLA are in alphabetical order in this list
+`0x10A724` - List of team abbreviations, used to display Jersey Graphics on Team Select Screen for exhibition game; ANA & FLA are in alphabetical order in this list. New teams should be added in alphabetical order to this list.
 
 `0x116DEC` - List of team city names for PA division, used for Central Registry menu selection
 
