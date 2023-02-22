@@ -75,6 +75,7 @@ Following contains offsets where to find team lists, as well as known but not ex
 
 ## Other Interesting Notes
 `GAME.SET`
+
 `0x000051` - Home team index.
 
 `0x000055` - Away team index. 
