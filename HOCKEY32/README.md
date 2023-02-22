@@ -41,7 +41,9 @@ Note, this is an incomplete exploration of how to potentially add an additonal t
 
 ## Sound/Music
 `<TEAM>1-3.KMS/CFG` - In-game arena music, may need to add these?
+
 `XBRUCE.VIV` - Rink-announcer, need to add files for new team
+
 `XRBARR.VIV` - Menu announcer, need to add files for new team
 
 ## HOCKEY.EXE
@@ -68,6 +70,8 @@ Following contains offsets where to find team lists, as well as known but not ex
 `0x10E4EC` - List of team abbreviations, used for loading Centre Ice logos, CITY.QFS, (uses incorrect ANH & FLO instead of ANA and FLA)
 
 `0X10822F, 0x108B3C` - Hardcoding of "Mighty Ducks of Anaheim" in game
+
+`0x118C44` - List of team specific kms/cfg (midi) files. Not sure if needed as not all teams have one
 
 ## Other Interesting Notes
 `GAME.SET`
