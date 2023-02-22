@@ -4,7 +4,7 @@ const fs = require('fs');
 const secondFileName = process.argv[2];
 
 // read the first file and get the first 384 and last 15 bytes
-const firstFile = fs.readFileSync('rinkpal.act');
+const firstFile = fs.readFileSync('rinkpalShadowfixed.act');
 const firstFileHeader = firstFile.slice(0, 384);
 const firstFileFooter = firstFile.slice(753, 768);
 

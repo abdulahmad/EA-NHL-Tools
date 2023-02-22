@@ -35,7 +35,7 @@ for (let teamIndex = 0; teamIndex < NUM_TEAMS; teamIndex++) {
   execSync(`node mergeRinkpal ${teamIndex.toString().padStart(2, '0')}teamPal.ACT`, { stdio: 'inherit' });
   // Open Merged Team Pal
   const teamPaletteMerged = fs.readFileSync(`${teamIndex.toString().padStart(2, '0')}teamPalMerged.ACT`);
-
+  
   console.log('START COLOR MAPPING');
   const colorMapping = new Buffer(PALETTE_SIZE);
   let j=COLOR_MAPPING_DATA_START_IN_MAPBIN;
@@ -63,5 +63,12 @@ for (let teamIndex = 0; teamIndex < NUM_TEAMS; teamIndex++) {
     spritePaletteOffset+=3;
   }
 
-  fs.writeFileSync(`${teamIndex.toString().padStart(2, '0')}.ACT`, spritePalette);
+  const spritePaletteStart = spritePalette.slice(0, 753);
+  const spritePaletteEnd = teamPaletteMerged.slice(753, 768);
+  
+    // fs.writeFileSync(`${teamIndex.toString().padStart(2, '0')}.ACT`, spritePalette);
+  fs.writeFileSync(`${teamIndex.toString().padStart(2, '0')}.ACT`, Buffer.concat([spritePaletteStart, spritePaletteEnd]));
+
+  // Merge Rink pal with final pal
+  execSync(`node mergeRinkpal ${teamIndex.toString().padStart(2, '0')}.ACT`, { stdio: 'inherit' });
 }
