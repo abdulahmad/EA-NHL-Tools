@@ -1,3 +1,4 @@
+const execSync = require('child_process').execSync;
 const fs = require('fs');
 
 const NUM_TEAMS = 28;
@@ -30,6 +31,11 @@ for (let teamIndex = 0; teamIndex < NUM_TEAMS; teamIndex++) {
   }
   fs.writeFileSync(`${teamIndex.toString().padStart(2, '0')}teamPal.ACT`, teamPalette);
 
+  // Merge Rink Pal with Team Pal
+  execSync(`node mergeRinkpal ${teamIndex.toString().padStart(2, '0')}teamPal.ACT`, { stdio: 'inherit' });
+  // Open Merged Team Pal
+  const teamPaletteMerged = fs.readFileSync(`${teamIndex.toString().padStart(2, '0')}teamPalMerged.ACT`);
+
   console.log('START COLOR MAPPING');
   const colorMapping = new Buffer(PALETTE_SIZE);
   let j=COLOR_MAPPING_DATA_START_IN_MAPBIN;
@@ -46,9 +52,9 @@ for (let teamIndex = 0; teamIndex < NUM_TEAMS; teamIndex++) {
   console.log(colorMapping);
   for (let i = 0; i < PALETTE_SIZE; i++) {
     const currentColorMapping = colorMapping.readUInt8(i);
-    const r = teamPalette.readUInt8(currentColorMapping*3);
-    const g = teamPalette.readUInt8(currentColorMapping*3 + 1);
-    const b = teamPalette.readUInt8(currentColorMapping*3 + 2);
+    const r = teamPaletteMerged.readUInt8(currentColorMapping*3);
+    const g = teamPaletteMerged.readUInt8(currentColorMapping*3 + 1);
+    const b = teamPaletteMerged.readUInt8(currentColorMapping*3 + 2);
 
     spritePalette.writeUInt8(r, spritePaletteOffset);
     spritePalette.writeUInt8(g, spritePaletteOffset + 1);
