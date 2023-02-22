@@ -75,37 +75,65 @@ Following contains offsets where to find team lists, as well as known but not ex
 
 ## Other Interesting Notes
 `GAME.SET`
-0x000051 - Home team index.
-0x000055 - Away team index. 
+`0x000051` - Home team index.
+
+`0x000055` - Away team index. 
 
 Team indexes used in `GAME.SET`
 0 BOS
+
 1 BUF
+
 2 CGY
+
 3 CHI
+
 4 DET
+
 5 EDM
+
 6 HFD
+
 7 LA
+
 8 DAL
+
 9 MTL
+
 10 NJ
+
 11 NYI
+
 12 NYR
+
 13 OTT
+
 14 PHI
+
 15 PIT
+
 16 QUE
+
 17 STL
+
 18 SJ
+
 19 TB
+
 20 TOR
+
 21 VAN
+
 22 WSH
+
 23 WPG
+
 24 ANA
+
 25 FLA
+
 26 ASW
+
 27 ASE
 
 Setting GAME.SET to Team 28 causes the game to crash when going to the exhibition select screen.
