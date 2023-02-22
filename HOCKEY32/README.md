@@ -81,6 +81,7 @@ Following contains offsets where to find team lists, as well as known but not ex
 `0x000055` - Away team index. 
 
 Team indexes used in `GAME.SET`
+
 0 BOS
 
 1 BUF
