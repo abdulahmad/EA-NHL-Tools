@@ -38,6 +38,7 @@ Note, this is an incomplete exploration of how to potentially add an additonal t
 
 `SRLOGO.QFS` - Game Summary logos, would need to add SPIT file for new team to this
 
+`LELOGO.QFS` - League Team Select logos, would need to add SPIT file for new team to this. I believe the position where the logo displays on the League Select screen depends on the offset/position data in the SPIT header which is easily modifyable.
 
 ## Sound/Music
 `<TEAM>1-3.KMS/CFG` - In-game arena music, may need to add these?
