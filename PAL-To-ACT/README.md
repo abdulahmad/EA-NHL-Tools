@@ -1,12 +1,20 @@
 # PAL-To-ACT v0.1
 
+## PAL-To-ACT
+Extracts and converts the NHL95 PC QFS Palette format to .ACT format
+
+### Usage
+1. Ensure you have `node` installed on your machine.
+
+2. In the `PAL-To-ACT` folder, run `node palToAct <fileName>`. This will convert the NHL95 PC palette to .ACT by removing the 16 byte header and multiplying all of the colour values by 4.
+
 ## BIN-To-ACT
 Converts NHL95 PC `<HOME/AWAY>PALS.BIN` files to `.ACT` (jersey palettes).
 
 ### Usage
 1. Ensure you have `node` installed on your machine
 
-2. In the `BIN-To-ACT` folder, run `node binToAct`. This will convert the `.bin` files to .act files in the folder `Unpack`
+2. In the `BIN-To-ACT` folder, run `node binToAct <fileName>`. This will convert the `.bin` files (HOMEPALS/AWAYPALS) to .ACT files in the folder `Unpack`. The final file should be named `<teamIndex>Merged.ACT`.
 
 ### More Info & Issues
 
@@ -83,18 +91,17 @@ Crest2 - 190h-194h
 Crest3 - 1A0h-1A4h
 Crest4 - 1B0h-1B4h
 
-## PAL-To-ACT
-Extracts and converts the NHL95 Rink Palette to .ACT format
+## Merge Rink Palette Tool
+Merges the rink palette with other palettes, which needs to be done twice as part of the palette mapping process to map palettes from `HOMEPALS/AWAYPALS.BIN` to extracted sprites.
+
+The original rink palette is rinkpal.act, but I had to create a special version called rinkpalShadowfixed.act because the shadow palette was not mapped correctly (whereas everything else including both dynamic & non-dynamic colours were mapped correctly). I'm not sure if this will cause palette issues with certain sprites in the game or not.
 
 ### Usage
-1. Ensure you have `node` installed on your machine
+1. Ensure you have `node` installed on your machine.
 
-2. In the `PAL-Tools` folder, run `node rinkpalToAct`. This will run the QFS-Unpack tool, which will extract the Palette file. Then it will run qfspalToAct which will convert the extracted palette file to .ACT format
+2. In the `PAL-To-ACT` folder, run `node mergeRinkpal <fileName>`. This will overwrite the first 128 colours and last 5 colours of the input palette with the Rink Palette (which is essentially the basis for the gameplay palette minus the team colours for jerseys/logos).
 
-## Merge Rink palette & team palette
 
 ## Future TODO
-- Add rinkpal to teampal -- needed for non dynamic colours/non player sprites
-- Add 140h-14Fh to color mapping & adjust code to read from 140h onwards instead of 150h -- needed for non dynamic colours/non player sprites
-- Adjust code to start mapping from 140h  -- needed for non dynamic colours/non player sprites
-- Add rinkpal to sprite pal  -- needed for non dynamic colours/non player sprites
+- Handle HOMEPALS/AWAYPALS.BIN automatically, output home and away version
+- Use team abbreviations instead of team indexes

@@ -1,6 +1,7 @@
 const execSync = require('child_process').execSync;
 const fs = require('fs');
 
+const baseDir = '.\\Unpack';
 const NUM_TEAMS = 28;
 // const NUM_TEAMS = 1;
 const TEAM_DATA_SIZE = 448;
@@ -29,12 +30,13 @@ for (let teamIndex = 0; teamIndex < NUM_TEAMS; teamIndex++) {
     teamPalette.writeUInt8(g, TEAM_PALETTE_REF_OFFSET+i*3 + 1);
     teamPalette.writeUInt8(b, TEAM_PALETTE_REF_OFFSET+i*3 + 2);
   }
-  fs.writeFileSync(`${teamIndex.toString().padStart(2, '0')}teamPal.ACT`, teamPalette);
+  fs.mkdirSync(baseDir, { recursive: true });
+  fs.writeFileSync(`${baseDir}\\${teamIndex.toString().padStart(2, '0')}teamPal.ACT`, teamPalette);
 
   // Merge Rink Pal with Team Pal
-  execSync(`node mergeRinkpal ${teamIndex.toString().padStart(2, '0')}teamPal.ACT`, { stdio: 'inherit' });
+  execSync(`node mergeRinkpal ${baseDir}\\${teamIndex.toString().padStart(2, '0')}teamPal.ACT`, { stdio: 'inherit' });
   // Open Merged Team Pal
-  const teamPaletteMerged = fs.readFileSync(`${teamIndex.toString().padStart(2, '0')}teamPalMerged.ACT`);
+  const teamPaletteMerged = fs.readFileSync(`${baseDir}\\${teamIndex.toString().padStart(2, '0')}teamPalMerged.ACT`);
   
   console.log('START COLOR MAPPING');
   const colorMapping = new Buffer(PALETTE_SIZE);
@@ -44,7 +46,7 @@ for (let teamIndex = 0; teamIndex < NUM_TEAMS; teamIndex++) {
     console.log('colorMappingIndex',j,currentColorMapping)
     colorMapping.writeUInt8(currentColorMapping, j++);
   }
-  fs.writeFileSync(`${teamIndex.toString().padStart(2, '0')}colorMapping.bin`, colorMapping);
+  fs.writeFileSync(`${baseDir}\\${teamIndex.toString().padStart(2, '0')}colorMapping.bin`, colorMapping);
 
   const spritePalette = new Buffer(PALETTE_SIZE * 3);
   let spritePaletteOffset = 0;
@@ -67,8 +69,8 @@ for (let teamIndex = 0; teamIndex < NUM_TEAMS; teamIndex++) {
   const spritePaletteEnd = teamPaletteMerged.slice(753, 768);
   
     // fs.writeFileSync(`${teamIndex.toString().padStart(2, '0')}.ACT`, spritePalette);
-  fs.writeFileSync(`${teamIndex.toString().padStart(2, '0')}.ACT`, Buffer.concat([spritePaletteStart, spritePaletteEnd]));
+  fs.writeFileSync(`${baseDir}\\${teamIndex.toString().padStart(2, '0')}.ACT`, Buffer.concat([spritePaletteStart, spritePaletteEnd]));
 
   // Merge Rink pal with final pal
-  execSync(`node mergeRinkpal ${teamIndex.toString().padStart(2, '0')}.ACT`, { stdio: 'inherit' });
+  execSync(`node mergeRinkpal ${baseDir}\\${teamIndex.toString().padStart(2, '0')}.ACT`, { stdio: 'inherit' });
 }

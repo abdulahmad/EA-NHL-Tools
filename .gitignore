@@ -15,7 +15,8 @@ QFS-To-BMP/NHL94QPP
 QFS-To-BMP/Unpack
 QFS-To-BMP/AWARDSI
 PAL-To-ACT/NHL**PAL
-# PAL-To-ACT/*.ACT
+PAL-To-ACT/Unpack/*.ACT
+PAL-To-ACT/Unpack/*.BIN
 PAL-To-ACT/*.bin
 PAL-To-ACT/*.bak
 95-Team-Swap-Mod/**/*.png
