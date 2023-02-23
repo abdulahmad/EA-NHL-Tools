@@ -68,7 +68,11 @@ Following contains offsets where to find team lists, as well as known but not ex
 
 `0x11713C` - List of team city names for SE division, used for Central Registry menu selection
 
-`0x10E4EC` - List of team abbreviations, used for loading Centre Ice logos, CITY.QFS, (uses incorrect ANH & FLO instead of ANA and FLA)
+`0x10E4EC` - List of team abbreviations, used for loading Centre Ice logos, CITY.QFS, (uses incorrect ANH & FLO instead of ANA and FLA). Also to note that after every team abbreviation there are 9 bytes. This controls the centre ice logo arrangement. So for example, LA shows the logo near the blue line and mirrored. If you want to change this to a more traditional layout you can by overwriting the 9 bytes after the 3 byte abbreviation with one from another team. Heres what the bytes mean:
+Byte 1 - Seems to be always 0
+Byte 2-3 - X offset - think this is based on tiles so you will move the logo by 8 pixels as you change this value by 1
+Byte 4-5 - Y offset - think this is based on tiles so you will move the logo by 8 pixels as you change this value by 1
+Byte 6-9 - Not sure how this is broken down but controls how centre ice logo displays. LA has the logos mirrored, believe this controls that
 
 `0X10822F, 0x108B3C` - Hardcoding of "Mighty Ducks of Anaheim" in game
 
