@@ -3,9 +3,6 @@ const fs = require('fs');
 // Function to convert the compressed image to BMP format
 const convertToBMP = (fileName, palFileName) => {
   console.log('convertToBMP:', fileName, palFileName);
-  if (typeof palFileName !== 'undefined') {
-    process.exit();
-  }
 
   console.log("Converting "+fileName+ " to BMP");
   // Read the compressed image data from the file
@@ -51,11 +48,27 @@ const convertToBMP = (fileName, palFileName) => {
   bmpImage.writeUInt32LE(pixelDataLength+unevenImagePadding+bmpEOFLength, 34); // Size of Compressed file
 
   // Write the palette information to the buffer
-  for (let i = 0; i < 256; i++) {
-    bmpImage.writeUInt8(i, fullBmpHeaderLength + i * 4);     // R
-    bmpImage.writeUInt8(i, fullBmpHeaderLength + 1 + i * 4); // G
-    bmpImage.writeUInt8(i, fullBmpHeaderLength + 2 + i * 4); // B
-    bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
+  if (typeof palFileName !== 'undefined') {
+    const palFile = fs.readFileSync(palFileName);
+    let palFileOffset = 0
+    let palMultiplier = 1;
+    if(palFileName.indexOf('.act') == -1) { // EA palette, skip header & multiply colour values by 4
+      palFileOffset = 16;
+      palMultiplier = 4;
+    }
+    for (let i = 0; i < 256; i++) {
+      bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 2 + i * 3)*palMultiplier, fullBmpHeaderLength + i * 4);     // R
+      bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 1 + i * 3)*palMultiplier, fullBmpHeaderLength + 1 + i * 4); // G
+      bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 0 + i * 3)*palMultiplier, fullBmpHeaderLength + 2 + i * 4); // B
+      bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
+    }
+  } else { // no palette, make it greyscale
+    for (let i = 0; i < 256; i++) {
+      bmpImage.writeUInt8(i, fullBmpHeaderLength + i * 4);     // R
+      bmpImage.writeUInt8(i, fullBmpHeaderLength + 1 + i * 4); // G
+      bmpImage.writeUInt8(i, fullBmpHeaderLength + 2 + i * 4); // B
+      bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
+    }
   }
 
   // Decode the compressed image data and write it to the buffer
