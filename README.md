@@ -20,7 +20,7 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 
 `HOCKEY32` - Documentation on potentially expanded NHL95 PC to 32 teams
 
-### Release Notes
+## Release Notes
 
 ### 0.1
 - First release of PPV-SPIT-Tools
@@ -36,3 +36,39 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 - Alpha release with inflight Palette Tools
 - Intend to split out `SPIT-To-BMP` from `PPV-To-BMP` for final 0.4 release
 - Intend to split out `QFS-To-BMP` from `PAL-To-ACT` for final 0.4 release
+
+## Future version plans
+### 0.4
+- QFS-To-BMP with palettes
+
+### 0.41
+- TIL-To-BMP
+- BMP-To-TIL
+- extract & set centre ice logo configuration
+
+### 0.42
+- .ACT to .PAL
+
+### 0.5
+- Set up Image assets for NSH, WPG, CBJ, MIN
+
+### 0.51
+- Set up Sound extraction for Team swap mod
+
+### 0.52
+- Set up Palette & TIL/MAP extraction for Team swap mod
+
+### 0.53
+- Set up Roster extraction for Team swap mod
+
+### 0.6
+- Set up Image extraction for Team swap mod
+
+### 0.61
+- Set up Sound extraction for Team swap mod
+
+### 0.62
+- Set up Palette & TIL/MAP extraction for Team swap mod
+
+### 0.63
+- Set up Roster extraction for Team swap mod
