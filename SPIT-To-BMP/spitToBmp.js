@@ -57,10 +57,19 @@ const convertToBMP = (fileName, palFileName) => {
       palMultiplier = 4;
     }
     for (let i = 0; i < 256; i++) {
-      bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 2 + i * 3)*palMultiplier, fullBmpHeaderLength + i * 4);     // R
-      bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 1 + i * 3)*palMultiplier, fullBmpHeaderLength + 1 + i * 4); // G
-      bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 0 + i * 3)*palMultiplier, fullBmpHeaderLength + 2 + i * 4); // B
-      bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
+      try {
+        bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 2 + i * 3)*palMultiplier, fullBmpHeaderLength + i * 4);     // R
+        bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 1 + i * 3)*palMultiplier, fullBmpHeaderLength + 1 + i * 4); // G
+        bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 0 + i * 3)*palMultiplier, fullBmpHeaderLength + 2 + i * 4); // B
+        bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
+      } catch(e) {
+        if (e instanceof RangeError) {
+          console.log("early end of palette file, will skip the rest of the palette");
+          i = 256;
+        } else {
+          throw e;
+        }
+      }
     }
   } else { // no palette, make it greyscale
     for (let i = 0; i < 256; i++) {

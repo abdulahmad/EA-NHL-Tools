@@ -44,14 +44,16 @@ fs.readdir(root, (err, files) => {
             const palFiles = fs.readdirSync(palFolderPath);
             for (const palFile of palFiles) {
               if (palFile === '!pal' || palFile === '!p01' || palFile === '!pl1' || palFile === '!pio') {
-                currentPalette = palFile;
+                currentPalette = path.join(palFolderPath, palFile);
+                console.log('Palette found in palette mapping', currentPalette);
                 break;
               }
             }
           } else {
             for (const subFile of subFiles) { // check this folder for default palette files
               if (subFile === '!pal' || subFile === '!p01' || subFile === '!pl1' || subFile === '!pio') {
-                currentPalette = subFile;
+                currentPalette = path.join(fullPath, subFile);
+                console.log('Palette found in images folder', currentPalette);
                 break;
               }
             }
@@ -65,7 +67,7 @@ fs.readdir(root, (err, files) => {
               // Check if there is a palette file with the same name as the subFile
               const paletteFileName = `!${subFile.substring(1)}`;
               if (subFiles.includes(paletteFileName)) {
-                currentPalette = paletteFileName;
+                currentPalette = path.join(fullPath, paletteFileName);
               }
 
               runSpitToBmp(subFilePath, currentPalette);
