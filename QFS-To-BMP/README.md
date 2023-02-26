@@ -1,4 +1,6 @@
 # QFS-To-BMP v0.1
+
+## batchUnpackedSpitToBmp
 Converts NHL95 PC QFS files to `.raw` and `.bmp` as well as stores additional meta data in `.json` files, and tries to convert all images with the correct palette
 
 ### Usage
@@ -19,3 +21,15 @@ One thing you may ask is how is this different than just using `gfxpak` to extra
 1. `gfxpak` tries to take the palette that exists within the current `.QFS` file. But there are cases where the correct palette actually exists in a different palette file.
 
 2. Using `gfxpak` to export the raw data actually forced me to improve the `SPIT-To-BMP` tool as the images are stored in an uncompressed format in `.QFS` files whereas they are in a RLE style compression scheme in `.PPV` files. I don't know if I'll ever get around to attempting it, but maybe one day I'll even try to create a custom implementation of unpacking data from `.QFS`/`.VIV`/`.PPV`/`.QPP` files as well. I think the more open source tools, the better. The fact that all of these tools are open source means that its easy for others to come along and improve on them.
+
+## batchUnpackedEAPalTo Act
+Converts EA palettes (`!pal` other other files beginning with !) to `.ACT`-- which is a file format that is easy to use within Photoshop.
+
+### Usage
+1. Once you've already run `qfsToSpit`, in the `QFS-To-BMP` folder, run `node batchUnpackedEAPalToAct`.
+
+### More Info & issues
+
+- I've noticed CTLogos don't get the right palette for some reason
+
+- `HOMEPAL3.QFS` and `AWAYPAL3.QFS` seem to contain the palette used to generate `HOMEPALS.BIN` and `AWAYPALS.BIN`
