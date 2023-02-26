@@ -1,12 +1,19 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 const fs = require('fs');
+const csv = require('csv-parser');
+const players = [];
 
-const players = [
-  {firstName: 'Connor', lastName: 'McDavid'},
-  {firstName: 'Sidney', lastName: 'Crosby'},
-  {firstName: 'Auston', lastName: 'Matthews'},
-];
+const data = fs.readFileSync('nhl-players.csv');
+csv({ headers: ['id', 'name', 'team', 'firstName', 'lastName', 'age'] })
+  .on('data', (row) => {
+    players.push({ firstName: row.firstName, lastName: row.lastName });
+  })
+  .on('end', () => {
+    console.log(players);
+  })
+  .write(data);
+
 
 const getAttributes = async (firstName, lastName) => {
     const url = `https://www.nhlratings.net/${firstName}-${lastName}`;
