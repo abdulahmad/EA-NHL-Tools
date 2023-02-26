@@ -1,0 +1,17 @@
+{
+  "name": "nhl-player-stats",
+  "version": "1.0.0",
+  "description": "Script to pull player bios and stats for every player on every NHL team and store it in a CSV file.",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "cheerio": "^1.0.0-rc.12",
+    "json2csv": "^6.0.0-alpha.2",
+    "objects-to-csv": "^1.3.6"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Your Name",
+  "license": "MIT"
+}
