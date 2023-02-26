@@ -9,29 +9,28 @@ const players = [
 ];
 
 const getAttributes = async (firstName, lastName) => {
-  const url = `https://www.nhlratings.net/${firstName}-${lastName}`;
-  const response = await axios.get(url);
-  const html = response.data;
-
+    const url = `https://www.nhlratings.net/${firstName}-${lastName}`;
+    const response = await axios.get(url);
+    const html = response.data;
+  
     // Extract NHL 23 Attributes
     const attributesStartComment = '<!-- Start Attributes -->';
     const attributesEndComment = '<!-- End attributes -->';
     const attributesHtml = html.slice(html.indexOf(attributesStartComment) + attributesStartComment.length, html.indexOf(attributesEndComment));
-    // console.log(attributesHtml);
-  const $ = cheerio.load(attributesHtml);
-
+    const $ = cheerio.load(attributesHtml);
   
-  const attributes = {};
-
-  $('body ul li').each((index, element) => {
-    const spc = $(element).text().indexOf(' ')+1;
-    const attribute = $(element).text().substring(spc).trim().replace(/\s+/g, ' ');
-    const value = $(element).find('.attribute-box').text().trim();
-    attributes[attribute] = value;
-  });
-
-  return attributes;
-};
+    const attributes = Object.create(null); // create a new object with no prototype
+  
+    $('body ul li').each((index, element) => {
+      const spc = $(element).text().indexOf(' ')+1;
+      const attribute = $(element).text().substring(spc).trim().replace(/\s+/g, ' ');
+      const value = $(element).find('.attribute-box').text().trim();
+      attributes[attribute] = value;
+    });
+  
+    return attributes;
+  };
+  
 
 const getSuperstarAbilities = async (firstName, lastName) => {
   const url = `https://www.nhlratings.net/${firstName}-${lastName}`;
@@ -79,10 +78,40 @@ const getSuperstarAbilities = async (firstName, lastName) => {
   console.log('Data saved to players.csv');
 })();
 
-const generateCsv = (data) => {
-  const headers = Object.keys(data[0]).join(',');
-  const rows = data.map((item) => {
-    return Object.values(item).join(',');
-  });
-  return headers + '\n' + rows.join('\n');
-};
+  const generateCsv = (data) => {
+    // console.log(data);
+    let uniqueAttributeNames = new Set();
+    for (playerIndex in data) {
+        let player = data[playerIndex];
+         // get the keys of the current object
+        let keys = Object.keys(player);
+        // loop through the keys and add unique ones to the Set
+        for (let j = 0; j < keys.length; j++) {
+            uniqueAttributeNames.add(keys[j]);
+        }
+    }
+    
+    // convert the Set back to an array or object
+    let uniqueAttributeNamesArray = Array.from(uniqueAttributeNames);
+    // let uniqueAttributeNamesObject = {};
+    // for (let i = 0; i < uniqueAttributeNamesArray.length; i++) {
+    //     uniqueAttributeNamesObject[uniqueAttributeNamesArray[i]] = null;
+    // }
+
+    const headers = uniqueAttributeNamesArray.join(',');
+    const rows = data.map((player) => {
+      const rowValues = [];
+      for (const header of headers.split(',')) {
+        // If the header matches a key in the player object, add its value to the row
+        if (player.hasOwnProperty(header)) {
+          rowValues.push(player[header]);
+        } else {
+          rowValues.push('');
+        }
+      }
+      return rowValues.join(',');
+    });
+    return headers + '\n' + rows.join('\n');
+  };
+  
+  
