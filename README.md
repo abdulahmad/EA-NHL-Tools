@@ -4,21 +4,34 @@ Tools for various EA NHL games
 Recommend checking out Releases for latest stable release: https://github.com/abdulahmad/EA-NHL-Tools/releases
 
 ## Tools included
-`PPV-To-BMP` - Extracts NHL95 PC `.PPV` files (in-game sprites), WIP: with ability to pass in .ACT palette
 
-`IFF-To-WAV` - Converts NHL95 PC `.IFF` files to `.WAV` (out of game music files)
+`95-Team-Swap-Mod` - WIP Mod for NHL95PC that allows you to use teams/rosters/jerseys/logos from the '22-'23 season
 
 `DIG-To-WAV` - Converts NHL94/95 PC `.DIG` files to `.WAV` (in-game sounds)
 
-`VIV-To-WAV` - Converts NHL95 PC `.VIV` files to `.WAV` (menu & rink announcer sound)
+`HOCKEY32` - Documentation on potentially expanded NHL95 PC to 32 teams
 
-`SPIT-To-BMP` - Converts NHL95 PC SPIT format files to `.RAW` & `.BMP`, WIP: with ability to pass in .ACT palette
+`IFF-To-WAV` - Converts NHL95 PC `.IFF` files to `.WAV` (out of game music files)
 
-`PAL-To-ACT` - WIP: Convert NHL95 PC `!<palname>` & `<HOME/AWAY>PALS.bin` files to `.ACT`.
+`PAL-To-ACT` - Convert NHL95 PC `!<palname>` & `<HOME/AWAY>PALS.bin` files to `.ACT`. For use with sprites extracted from PPV files & centre ice logos extracted
+
+`PPV-To-BMP` - Extracts NHL95 PC `.PPV` files (in-game sprites), WIP: with ability to pass in .ACT palette
 
 `QFS-To-BMP` - WIP: Convert NHL95 PC `.QFS` files to `.BMP` using defined mapping to ensure correct palette is used
 
-`HOCKEY32` - Documentation on potentially expanded NHL95 PC to 32 teams
+`SPIT-To-BMP` - Converts NHL95 PC SPIT format files to `.RAW` & `.BMP`, WIP: with ability to pass in .ACT palette
+
+`TIL-To-BMP` - WIP Converts NHL95 PC TIL/MAP format to .BMP (centre ice logos)
+
+`VIV-To-WAV` - Converts NHL95 PC `.VIV` files to `.WAV` (menu & rink announcer sound)
+
+
+
+
+
+
+
+
 
 ## Release Notes
 
