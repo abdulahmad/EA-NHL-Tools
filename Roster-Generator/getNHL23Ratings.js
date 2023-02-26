@@ -76,13 +76,28 @@ const getSuperstarAbilities = async (firstName, lastName) => {
         data.push(playerData);
     } catch(e) {
         console.log(`failed getting https://www.nhlratings.net/${player.firstName}-${player.lastName}`, e.response.status,e.response.statusText);
+        const playerData = {
+          firstName: player.firstName,
+          lastName: player.lastName,
+          };
+          console.log(playerData);
+
+          data.push(playerData);
     }
   }
 
   const csv = generateCsv(data);
-  fs.writeFileSync('players.csv', csv);
+  try {
+    fs.writeFileSync('nhl23ratings.csv', csv);
 
-  console.log('Data saved to players.csv');
+    console.log('Data saved to nhl23ratings.csv');
+  } catch(e) {
+    console.log('error, writing to random alternate name')
+    const filename='nhl23ratings_'+parseInt(Math.random()*1000+'.csv');
+    fs.writeFileSync(filename, csv);
+
+    console.log('Data saved to '+filename);
+  }
 })();
 
   const generateCsv = (data) => {
