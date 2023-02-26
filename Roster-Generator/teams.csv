@@ -1,0 +1,33 @@
+ID,Name,Abbreviation,Conference,Division,Venue,City,Time Zone
+1,New Jersey Devils,NJD,Eastern,Metropolitan,Prudential Center,Newark,America/New_York
+2,New York Islanders,NYI,Eastern,Metropolitan,UBS Arena,Elmont,America/New_York
+3,New York Rangers,NYR,Eastern,Metropolitan,Madison Square Garden,New York,America/New_York
+4,Philadelphia Flyers,PHI,Eastern,Metropolitan,Wells Fargo Center,Philadelphia,America/New_York
+5,Pittsburgh Penguins,PIT,Eastern,Metropolitan,PPG Paints Arena,Pittsburgh,America/New_York
+6,Boston Bruins,BOS,Eastern,Atlantic,TD Garden,Boston,America/New_York
+7,Buffalo Sabres,BUF,Eastern,Atlantic,KeyBank Center,Buffalo,America/New_York
+8,Montréal Canadiens,MTL,Eastern,Atlantic,Bell Centre,Montréal,America/Montreal
+9,Ottawa Senators,OTT,Eastern,Atlantic,Canadian Tire Centre,Ottawa,America/New_York
+10,Toronto Maple Leafs,TOR,Eastern,Atlantic,Scotiabank Arena,Toronto,America/Toronto
+12,Carolina Hurricanes,CAR,Eastern,Metropolitan,PNC Arena,Raleigh,America/New_York
+13,Florida Panthers,FLA,Eastern,Atlantic,FLA Live Arena,Sunrise,America/New_York
+14,Tampa Bay Lightning,TBL,Eastern,Atlantic,AMALIE Arena,Tampa,America/New_York
+15,Washington Capitals,WSH,Eastern,Metropolitan,Capital One Arena,Washington,America/New_York
+16,Chicago Blackhawks,CHI,Western,Central,United Center,Chicago,America/Chicago
+17,Detroit Red Wings,DET,Eastern,Atlantic,Little Caesars Arena,Detroit,America/Detroit
+18,Nashville Predators,NSH,Western,Central,Bridgestone Arena,Nashville,America/Chicago
+19,St. Louis Blues,STL,Western,Central,Enterprise Center,St. Louis,America/Chicago
+20,Calgary Flames,CGY,Western,Pacific,Scotiabank Saddledome,Calgary,America/Denver
+21,Colorado Avalanche,COL,Western,Central,Ball Arena,Denver,America/Denver
+22,Edmonton Oilers,EDM,Western,Pacific,Rogers Place,Edmonton,America/Edmonton
+23,Vancouver Canucks,VAN,Western,Pacific,Rogers Arena,Vancouver,America/Vancouver
+24,Anaheim Ducks,ANA,Western,Pacific,Honda Center,Anaheim,America/Los_Angeles
+25,Dallas Stars,DAL,Western,Central,American Airlines Center,Dallas,America/Chicago
+26,Los Angeles Kings,LAK,Western,Pacific,Crypto.com Arena,Los Angeles,America/Los_Angeles
+28,San Jose Sharks,SJS,Western,Pacific,SAP Center at San Jose,San Jose,America/Los_Angeles
+29,Columbus Blue Jackets,CBJ,Eastern,Metropolitan,Nationwide Arena,Columbus,America/New_York
+30,Minnesota Wild,MIN,Western,Central,Xcel Energy Center,St. Paul,America/Chicago
+52,Winnipeg Jets,WPG,Western,Central,Canada Life Centre,Winnipeg,America/Winnipeg
+53,Arizona Coyotes,ARI,Western,Central,Mullett Arena,Tempe,America/Phoenix
+54,Vegas Golden Knights,VGK,Western,Pacific,T-Mobile Arena,Las Vegas,America/Los_Angeles
+55,Seattle Kraken,SEA,Western,Pacific,Climate Pledge Arena,Seattle,America/Los_Angeles
