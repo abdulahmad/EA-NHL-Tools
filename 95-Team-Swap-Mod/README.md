@@ -26,19 +26,31 @@ b = 40 diff
 
 Names to update:
 24 - Anaheim Mighty Ducks -> Anaheim Ducks
+
 XX - Winnipeg Jets -> Arizon Coyotes
+
 XX - Hartford Whalers -> Carolina Hurricanes
+
 XX - Quebec Nordiques -> Colorado Avalanche
+
 XX - All-Stars East -> Metro
+
 XX - All-Stars West -> Pacific
+
 
 Abbreviations to update:
 ANH -> ANA
+
 WPG -> ARZ
+
 MIN -> DAL
+
 HFD -> CAR
+
 QUE -> COL
+
 ASE -> MET
+
 ASW -> PAC
 
 Divisions to update
