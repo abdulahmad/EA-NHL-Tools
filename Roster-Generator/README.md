@@ -156,6 +156,32 @@ Endurance - games
 Speed - savePercentage
 Vision - savePercentage
 
+## How does each attribute contribute to 0-99 rating:
+assists
+blocked
+faceOffPct
+games
+gameWinningGoals
+goals
+hits
+ot
+overTimeGoals
+pim
+plusMinus
+powerPlayGoals
+powerPlayPoints
+powerPlaySavePercentage
+savePercentage
+shortHandedSavePercentage
+shortHandedTimeOnIcePerGame
+shotPct
+shots
+shotsAgainst
+shutouts
+timeOnIcePerGame
+wins/games
+
+
 ## Ratings Translation between NHL94 SG and 95 PC
 
 Normal Mapping
