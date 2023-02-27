@@ -46,7 +46,7 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 - First release of `QFS-To-BMP`
 - First release of `Roster-Generator`
 - Split out `SPIT-To-BMP` from `PPV-To-BMP`
-- Documentation on Centire Ice logos in `TIL-To-BMP`
+- Documentation on Centre Ice logos in `TIL-To-BMP`
 - Added palette support to `SPIT-To-BMP`
 
 ## Future version plans (May not be in this order)
