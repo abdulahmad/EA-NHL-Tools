@@ -35,31 +35,31 @@ shortHandedTimeOnIcePerGame
 powerPlayTimeOnIcePerGame
 
 ## NHL 23 Ratings for forwards:
-Passing - assists
-Poise - plus/minus / faceoffPct / shortHandedTimeOnIce
-Aggressiveness - goals / hits / pim
-Agility - TOI / shots
-Durability - TOI / games
-Endurance - TOI / games
-Speed - goals / assists
-Deking - goals / game winning goals / ot goals
-Hand-Eye - pp points / goals / assists
-Puck Control - pp points / goals / assists
-Defensive Awareness = blocked / shorthanded time on ice / plusMinus
-Faceoffs - faceOffPct
-Shot Blocking - blocked
-Stick Checking - assists
-Discipline - pim
-Offensive Awareness - goals/assists/shots
-Acceleration - goals / shorthandedtime on ice
-Balance - hits
-Slap Shot Accuracy - shot pct / goals / shots / pp goals
-Slap Shot Power - shots
-Wrist Shot Accuracy - shot pct / goals / shots
-Wrist Shot Power - shots
-Body Checking - hits
-Fighting Skill - pim / hits
-Strength - hits
+Passing
+Poise
+Aggressiveness
+Agility
+Durability
+Endurance
+Speed
+Deking
+Hand-Eye
+Puck Control
+Defensive Awareness
+Faceoffs
+Shot Blocking
+Stick Checking
+Discipline
+Offensive Awareness
+Acceleration
+Balance
+Slap Shot Accuracy
+Slap Shot Power
+Wrist Shot Accuracy
+Wrist Shot Power
+Body Checking
+Fighting Skill
+Strength
 
 ## Stats for goalies
 games
@@ -85,76 +85,76 @@ shortHandedSavePercentage
 evenStrengthSavePercentage
 
 ## NHL 23 Ratings for goalies:
-Angles - Save%/PPSV%
-Breakaway - Save% / Win%
-Five Hole - Save%
-Gloveside High - Save% / Win% / Handedness (strong side adv) / PPSV%
-Gloveside Low - Save% / Win% / Handedness (strong side adv) / PPSV%
-Stickside High - Save% / Win% / Handedness (strong side adv)
-Stickside Low - Save% / Win% / Handedness (strong side adv)
-Passing - shotsagainst
-Poise - shutouts/ot wins/ pp/sh  save%
-Poke Check - save%
+Angles
+Breakaway
+Five Hole
+Gloveside High
+Gloveside Low
+Stickside High
+Stickside Low
+Passing
+Poise
+Poke Check
 Puck Playing Frequency
-Rebound Control - save%
-Recover - save%
+Rebound Control
+Recover
 Aggressiveness
-Agility - games
-Durability - games
-Endurance - games
-Speed - save%
-Vision - save%
+Agility
+Durability
+Endurance
+Speed
+Vision
 
 
 ## Generate missing ratings
 
 ## NHL 23 Ratings mapping for forwards:
 Passing - assists
-Poise - plus/minus / faceoffPct / shortHandedTimeOnIce
-Aggressiveness - goals / hits / pim
-Agility - TOI / shots
-Durability - TOI / games
-Endurance - TOI / games
-Speed - goals / assists
-Deking - goals / game winning goals / ot goals
-Hand-Eye - pp points / goals / assists
-Puck Control - pp points / goals / assists
-Defensive Awareness = blocked / shorthanded time on ice / plusMinus
+Poise - plusMinus, faceOffPct, shortHandedTimeOnIcePerGame
+Aggressiveness - goals, hits, pim
+Agility - timeOnIcePerGame, shots
+Durability - timeOnIcePerGame, games
+Endurance - timeOnIcePerGame, games
+Speed - goals, assists
+Deking - goals, gameWinningGoals, overTimeGoals
+Hand-Eye - powerPlayPoints, goals, assists
+Puck Control - powerPlayPoints, goals, assists
+Defensive Awareness - blocked, shortHandedTimeOnIcePerGame, plusMinus
 Faceoffs - faceOffPct
 Shot Blocking - blocked
 Stick Checking - assists
 Discipline - pim
-Offensive Awareness - goals/assists/shots
-Acceleration - goals / shorthandedtime on ice
+Offensive Awareness - goals, assists, shots
+Acceleration - goals, shortHandedTimeOnIcePerGame
 Balance - hits
-Slap Shot Accuracy - shot pct / goals / shots / pp goals
+Slap Shot Accuracy - shotPct, goals, shots, powerPlayGoals
 Slap Shot Power - shots
-Wrist Shot Accuracy - shot pct / goals / shots
+Wrist Shot Accuracy - shotPct, goals, shots
 Wrist Shot Power - shots
 Body Checking - hits
-Fighting Skill - pim / hits
+Fighting Skill - pim, hits
 Strength - hits
 
 ## NHL 23 Ratings mapping for goalies:
-Angles - Save%/PPSV%
-Breakaway - Save% / Win%
-Five Hole - Save%
-Gloveside High - Save% / Win% / Handedness (strong side adv) / PPSV%
-Gloveside Low - Save% / Win% / Handedness (strong side adv) / PPSV%
-Stickside High - Save% / Win% / Handedness (strong side adv)
-Stickside Low - Save% / Win% / Handedness (strong side adv)
-Passing - shotsagainst
-Poise - shutouts/ot wins/ pp/sh  save%
-Poke Check - save%
-Puck Playing Frequency
-Rebound Control - save%
-Recover - save%
-Aggressiveness
+Angles - savePercentage, powerPlaySavePercentage
+Breakaway - savePercentage, wins/games
+Five Hole - savePercentage
+Gloveside High - savePercentage, wins/games, powerPlaySavePercentage + 5
+Gloveside Low - savePercentage, wins/games, powerPlaySavePercentage + 5
+Stickside High - savePercentage, wins/games - 5
+Stickside Low - savePercentage, wins/games - 5
+Passing - shotsAgainst
+Poise - shutouts, ot, powerPlaySavePercentage, shortHandedSavePercentage
+Poke Check - savePercentage
+Puck Playing Frequency - shotsAgainst
+Rebound Control - savePercentage
+Recover - savePercentage
+Aggressiveness - powerPlaySavePercentage
 Agility - games
 Durability - games
 Endurance - games
-Speed - save%
-Vision - save%
+Speed - savePercentage
+Vision - savePercentage
 
 ## Ratings Translation between NHL94 SG and 95 PC
 
