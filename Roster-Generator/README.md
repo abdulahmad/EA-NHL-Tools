@@ -1,6 +1,8 @@
 # Roster Generator
 Pulls Teams, Players & Stats from public NHL APIs & scrapes `nhlratings.net` for NHL23 ratings to create a base for a modern roster for NHL 94/95
 
+Note: This readme is not formatted well for Markdown, view the raw version if you'd like to read it. It will make this file unusable for my purposes if I format it for markdown.
+
 ## Usage
 1. Ensure `node` is installed on your machine.
 1. Run `node getNHLTeams.js` to get team data
