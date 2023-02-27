@@ -1,3 +1,6 @@
+# NHL 95 PC 22-23 Season Mod
+This is very WIP, will add more readable details as this gets closer to fruition.
+
 Trying to document how stock NHL 95 does jersey shading
 
 

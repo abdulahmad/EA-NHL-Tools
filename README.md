@@ -1,15 +1,15 @@
-# EA-NHL-Tools 0.4 ALPHA
+# EA-NHL-Tools 0.4
 Tools for various EA NHL games
 
 Recommend checking out Releases for latest stable release: https://github.com/abdulahmad/EA-NHL-Tools/releases
 
 ## Tools included
 
-`95-Team-Swap-Mod` - WIP Mod for NHL95PC that allows you to use teams/rosters/jerseys/logos from the '22-'23 season
+`95-Team-Swap-Mod` - Very WIP Mod for NHL95PC that allows you to use teams/rosters/jerseys/logos from the '22-'23 season
 
 `DIG-To-WAV` - Converts NHL94/95 PC `.DIG` files to `.WAV` (in-game sounds)
 
-`HOCKEY32` - Documentation on potentially expanded NHL95 PC to 32 teams
+`HOCKEY32` - Documentation on potentially expanding NHL95 PC to 32 teams
 
 `IFF-To-WAV` - Converts NHL95 PC `.IFF` files to `.WAV` (out of game music files)
 
@@ -17,9 +17,11 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 
 `PPV-To-BMP` - Extracts NHL95 PC `.PPV` files (in-game sprites), WIP: with ability to pass in .ACT palette
 
-`QFS-To-BMP` - WIP: Convert NHL95 PC `.QFS` files to `.BMP` using defined mapping to ensure correct palette is used
+`QFS-To-BMP` - Convert NHL95 PC `.QFS` files to `.BMP` using defined mapping to ensure correct palette is used
 
-`SPIT-To-BMP` - Converts NHL95 PC SPIT format files to `.RAW` & `.BMP`, WIP: with ability to pass in .ACT palette
+`Roster-Generator` - Pulls Teams, Players & Stats from public NHL APIs & scrapes `nhlratings.net` for NHL23 ratings to create a base for a modern roster for NHL 94/95
+
+`SPIT-To-BMP` - Converts NHL95 PC SPIT format files to `.RAW` & `.BMP`, with ability to pass in .ACT palette
 
 `TIL-To-BMP` - WIP Converts NHL95 PC TIL/MAP format to .BMP (centre ice logos)
 
@@ -37,43 +39,29 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 - First release of VIV-To-WAV
 - Moved gfxpak to common 3rd party tools folder
 
-### 0.4 ALPHA
-- Alpha release with inflight Palette Tools
-- Intend to split out `SPIT-To-BMP` from `PPV-To-BMP` for final 0.4 release
-- Intend to split out `QFS-To-BMP` from `PAL-To-ACT` for final 0.4 release
-
-## Future version plans
 ### 0.4
-- QFS-To-BMP with palettes
+- `95 Team Swap Mod` added (WIP), included prototype jerseys for NSH, CBJ, WPG, MIN, SEA, VGK, All-Star Teams
+- Documentation on expanding NHL95 PC to 32 teams added
+- First release of `PAL-To-ACT`
+- First release of `QFS-To-BMP`
+- First release of `Roster-Generator`
+- Split out `SPIT-To-BMP` from `PPV-To-BMP`
+- Documentation on Centire Ice logos in `TIL-To-BMP`
+- Added palette support to `SPIT-To-BMP`
 
-### 0.41
-- TIL-To-BMP
-- BMP-To-TIL
-- extract & set centre ice logo configuration
-
-### 0.42
-- .ACT to .PAL
-
-### 0.5
-- Set up Image assets for NSH, WPG, CBJ, MIN
-
-### 0.51
-- Set up Sound extraction for Team swap mod
-
-### 0.52
-- Set up Palette & TIL/MAP extraction for Team swap mod
-
-### 0.53
-- Set up Roster extraction for Team swap mod
-
-### 0.6
-- Set up Image extraction for Team swap mod
-
-### 0.61
-- Set up Sound extraction for Team swap mod
-
-### 0.62
-- Set up Palette & TIL/MAP extraction for Team swap mod
-
-### 0.63
-- Set up Roster extraction for Team swap mod
+## Future version plans (May not be in this order)
+- Fix SRLOGO/CTLOGO palette bug for QFS-To-BMP
+- Similar functionality in PPV-To-BMP to extract with palette
+- Create structure to compile 95 Team swap mod
+- Template to create in-game team specific assets (PALs/CRESTS/TIL) -- all share same palette
+- Build tools to create in-game team specific assets (PALs/CRESTS/TIL) -- all share same palette
+- TIL-To-BMP / BMP-To-TIL (include MAP/centre ice logo config)
+- Tool to import/export rosters from NHL95PC
+- Tool to import into QFS files
+- Figure out how to rebuild CALLOGO Palette for new teams
+- Tool to import IFF
+- Tool to Export unknown viv format
+- Tool to import unknown viv format
+- .ACT to !PAL
+- Reorg to use central NHL95CD folder
+- Set up assets for Team Swap Mod

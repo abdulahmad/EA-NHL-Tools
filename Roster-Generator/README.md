@@ -1,7 +1,11 @@
-# Usage
-1. Run getNHLTeams.js to get team data
-2. Run getNHLPlayerData to get player data from NHL APIs
-3. Run getNHL23Ratings to get ratings for players
+# Roster Generator
+Pulls Teams, Players & Stats from public NHL APIs & scrapes `nhlratings.net` for NHL23 ratings to create a base for a modern roster for NHL 94/95
+
+## Usage
+1. Ensure `node` is installed on your machine.
+1. Run `node getNHLTeams.js` to get team data
+2. Run `node getNHLPlayerData.js` to get player data from NHL APIs
+3. Run `node getNHL23Ratings` to get ratings for players
 
 Note: Many players are missing from the NHL 23 ratings, including Crosby, Malkin, etc plus all rookies. I believe the API I'm scraping from only is from the launch of the game, and even then is missing some important players
 
@@ -140,11 +144,11 @@ Angles - savePercentage, powerPlaySavePercentage
 Breakaway - savePercentage, wins/games
 Five Hole - savePercentage
 Gloveside High - savePercentage, wins/games, powerPlaySavePercentage + 5
-Gloveside Low - savePercentage, wins/games, powerPlaySavePercentage + 5
-Stickside High - savePercentage, wins/games - 5
+Gloveside Low - savePercentage, wins/games + 5
+Stickside High - savePercentage, wins/games, powerPlaySavePercentage - 5
 Stickside Low - savePercentage, wins/games - 5
 Passing - shotsAgainst
-Poise - shutouts, ot, powerPlaySavePercentage, shortHandedSavePercentage
+Poise - shutouts, powerPlaySavePercentage, shortHandedSavePercentage
 Poke Check - savePercentage
 Puck Playing Frequency - shotsAgainst
 Rebound Control - savePercentage

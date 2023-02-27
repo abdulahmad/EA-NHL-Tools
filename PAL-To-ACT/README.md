@@ -105,3 +105,4 @@ The original rink palette is rinkpal.act, but I had to create a special version 
 ## Future TODO
 - Handle HOMEPALS/AWAYPALS.BIN automatically, output home and away version
 - Use team abbreviations instead of team indexes
+- Ensure non-player sprites aren't affecting by Shadow palette issue

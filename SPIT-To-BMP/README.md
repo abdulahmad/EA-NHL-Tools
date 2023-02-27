@@ -8,7 +8,7 @@ There is also a `.json` file saved per sprite, which contains the x/y offset & p
 # Usage
 1. Ensure you have `node` installed on your machine
 
-2. Run `node spitToBmp <spitfile>`. It will decompress the SPIT file and you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file in the same path that the SPIT file lives in.
+2. Run `node spitToBmp <spitfile>` or `node spitToBmp <spitfile> <EAPalfile>`. It will decompress the SPIT file and you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file in the same path that the SPIT file lives in. If a palfile (in EA Pal format, !pal, etc) was specified, it will use that palette in extracting SPIT files.
 
 ## NHL95 SPIT Header details
 entry header - 16 bytes
@@ -25,5 +25,4 @@ byte pair 14-15 (uint16) - Y axis position
 The SPIT format seems to be some sort of variant of the ILBM IFF format. It uses a similar Run Length Encoding Scheme.
 
 # Future TODO
-- Add palette support for both dynamically paletted sprites and statically paletted sprites
 - Import sprites back into NHL 95 (if there is enough demand)

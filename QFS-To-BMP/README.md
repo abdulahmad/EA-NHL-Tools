@@ -1,7 +1,7 @@
 # QFS-To-BMP v0.1
 
-## batchUnpackedSpitToBmp
-Converts NHL95 PC QFS files to `.raw` and `.bmp` as well as stores additional meta data in `.json` files, and tries to convert all images with the correct palette
+## qfsToSpit
+Leverages GFXPak to extract images from `.QFS` files in SPIT format
 
 ### Usage
 1. Ensure you have `node` installed on your machine
@@ -12,7 +12,11 @@ Converts NHL95 PC QFS files to `.raw` and `.bmp` as well as stores additional me
 
 4. In the `QFS-To-BMP` folder, run `node qfsToSpit`. This will leverage `gfxpak` to unpack the SPIT data from the QFS files
 
-5. In the `QFS-To-BMP` folder, run `node batchUnpackedSpitToBMP`. This will use `SPIT-To-BMP` to convert the SPIT files to BMP and use a defined palette mapping to give the correct palette to all images.
+## batchUnpackedSpitToBmp
+Converts NHL95 PC QFS files to `.raw` and `.bmp` as well as stores additional meta data in `.json` files, and tries to convert all images with the correct palette
+
+### Usage
+1. Once you've already run `qfsToSpit`, in the `QFS-To-BMP` folder, run `node batchUnpackedSpitToBMP`. This will use `SPIT-To-BMP` to convert the SPIT files to BMP and use a defined palette mapping to give the correct palette to all images.
 
 ### More Info & Issues
 
