@@ -33,7 +33,4 @@ Converts EA palettes (`!pal` other other files beginning with !) to `.ACT`-- whi
 1. Once you've already run `qfsToSpit`, in the `QFS-To-BMP` folder, run `node batchUnpackedEAPalToAct`.
 
 ### More Info & issues
-
-- I've noticed CTLogos don't get the right palette for some reason
-
 - `HOMEPAL3.QFS` and `AWAYPAL3.QFS` seem to contain the palette used to generate `HOMEPALS.BIN` and `AWAYPALS.BIN`

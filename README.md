@@ -50,8 +50,7 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 - Added palette support to `SPIT-To-BMP`
 
 ## Future version plans (May not be in this order)
-- Fix SRLOGO/CTLOGO palette bug for QFS-To-BMP
-- Similar functionality in PPV-To-BMP to extract with palette
+- Make similar functionality in PPV-To-BMP to extract with palette
 - Create structure to compile 95 Team swap mod
 - Template to create in-game team specific assets (PALs/CRESTS/TIL) -- all share same palette
 - Build tools to create in-game team specific assets (PALs/CRESTS/TIL) -- all share same palette
