@@ -1,4 +1,21 @@
-# PAL-To-ACT v0.1
+# Palette Tools 0.2
+
+AA Notes:
+- restructure file structure in repo so that all source files are in one place
+- change bin-to-act to have team names and config
+- compile home/away palettes to format that can be used for Crest & rink
+
+## Act-To-BIN
+Converts PAL file to a .bin segment. All the colours from 144 to 255 should be taken as unique colours and stored from 144 onwards. 
+
+Colours should be sorted by R, then G, then B.
+
+If unique colours > 59, error out.
+
+Colours 192-255 get mapped, this is the space to use for Crests + Ice logo (these use 0-255 as well)
+
+When Importing Crest & Ice in photoshop, need to use special palette which blanks out 128-191
+
 
 ## PAL-To-ACT
 Extracts and converts the NHL95 PC QFS Palette format to .ACT format

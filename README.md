@@ -1,4 +1,4 @@
-# EA-NHL-Tools 0.4
+# EA-NHL-Tools 0.5 ALPHA
 Tools for various EA NHL games
 
 Recommend checking out Releases for latest stable release: https://github.com/abdulahmad/EA-NHL-Tools/releases
@@ -49,8 +49,14 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 - Documentation on Centre Ice logos in `TIL-To-BMP`
 - Added palette support to `SPIT-To-BMP`
 
+### 0.5 ALPHA
+- WIP: move source files to central `./NHL94INST` and `./NHL95CD`) folder
+- WIP: Create batch to extract homepals & awaypals
+- WIP: Create rinkpal-03-ingame
+- WIP: Create rinkpal-01-jersey
+
+
 ## Future version plans (May not be in this order)
-- Make similar functionality in PPV-To-BMP to extract with palette
 - Create structure to compile 95 Team swap mod
 - Template to create in-game team specific assets (PALs/CRESTS/TIL) -- all share same palette
 - Build tools to create in-game team specific assets (PALs/CRESTS/TIL) -- all share same palette
@@ -64,3 +70,4 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 - .ACT to !PAL
 - Reorg to use central NHL95CD folder
 - Set up assets for Team Swap Mod
+- Make similar functionality in PPV-To-BMP to extract with palette
