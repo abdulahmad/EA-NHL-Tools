@@ -23,3 +23,5 @@ PAL-To-ACT/*.bak
 95-Team-Swap-Mod/**/*.svg
 TIL-TO-BMP/NHL95TILMAP
 **/node_modules
+NHL94INST/**
+NHL95CD/**
