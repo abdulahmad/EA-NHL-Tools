@@ -77,7 +77,7 @@ Centre Ice Logos from .TIL follow
 
 BYTES 180-1CF contain some sort of mapping for crests. I think Crests are supposed to use this area, and then this area gets mapped.
 
-
+Question is-- what about rink palette after 128, how does it get mapped? does it just know?
 
 
 so homepals Team Logo + Crest Area -> maps
