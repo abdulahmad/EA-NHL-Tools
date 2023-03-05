@@ -1,9 +1,25 @@
 # Palette Tools 0.2
 
 AA Notes:
-- restructure file structure in repo so that all source files are in one place
-- change bin-to-act to have team names and config
-- compile home/away palettes to format that can be used for Crest & rink
+- Create 01-compressPalette.js
+    - Take colours 144-254
+    - round to nearest multiple of 4
+    - max value = 63 * 4
+    - make unique -- remove dupes of 0-143 & dupes of itself
+    - sort in order of R,G,B
+    - output rinkpal 0-143 + team pal 144-216 (leaving 39 colours for crest + rink)
+    -- why 39? 0-143 is rink pal + skin tones. 144-191 = team pal, of last 64 colours (192-255), 5 for rink pal, 20 for 5x4 jersey crest = 64 - 5 - 20 = 39.
+    - team pal (144-191) should actually be blacked out so that crest & rink graphics don't refer to these colours directly
+
+- Create 02-compileExtendedPal.js
+    - combines <TEAM><H/V>.pal & <TEAM><H/V>-02-compressed.pal to create -03-crestrink.pal
+    -- last 39 colours get organized into open slots next to 5x4 jersey crest palette
+    - if too many unique colours, spit out error, instruct user to recreate compressed pal with less colours (tell how many)
+- Create 03-compileTeamGfx.js
+    - combine 01pal and 03pal to put new colours in correct places & remove dupe colours
+    - script to create .map/.til
+    - script to create crest.ppv
+    - script to create .bin segment
 
 ## Act-To-BIN
 Converts PAL file to a .bin segment. All the colours from 144 to 255 should be taken as unique colours and stored from 144 onwards. 
@@ -15,6 +31,27 @@ If unique colours > 59, error out.
 Colours 192-255 get mapped, this is the space to use for Crests + Ice logo (these use 0-255 as well)
 
 When Importing Crest & Ice in photoshop, need to use special palette which blanks out 128-191
+
+### Usage
+This is a multi-step process. First you must create your jersey palette. Then you'll have to generate the extended team palette for the crests
+
+1. Create `PACK\<TEAM><H/V>.pal` for all teams.
+
+2. Ensure you have `node` installed on your machine.
+
+3. In the `PAL-TO-ACT` folder, run `01-compressPalette.js <team>` You will be left with `PACK\<TEAM><H>-02-compressed.pal` and `PACK\<TEAM><V>-02-compressed.pal`
+
+4. Use rink.psd to place your Crest & rink graphics. Make sure you are using the blacked out overlay. Copy merged and paste into new file.
+
+5. Go to Image -> Mode -> Indexed Color, Click OK to flatten layers if asked. In the Indexed Color pop up, Select Palette -> Local (Perceptual). Set colors to 256. Set Forced colors to Custom -> Load -> `<TEAM><H/V>-02-compressed.pal`. Click OK and OK again. This should generate the additonal palette colors that can be used for the Crest & Rink graphics. 
+
+6. Go to Image -> Mode -> Color Table, Save file as `PACK\<TEAM><H/V>-03-crestrink.pal`
+
+7. In the `PAL-TO-ACT` folder, run `02-compileExtendedPal.js <team>`. You will be left with `PACK\<TEAM><H>-04-extendedPal.act` and `PACK\<TEAM><H>-04-extendedPal.act`.
+
+8. Now you need to convert the rink/crest graphics used in step 5 to use `PACK\<TEAM><H>-extendedPal.act` by going into Image -> Mode -> Color Table and loading `PACK\<TEAM><H>-04-extendedPal.act` (you must use the Home version of this palette!) and save it into `PACK\<team>.bmp`. Now you're ready to compile the final graphics for the game.
+
+9. Run `node 03-compileTeamGfx.js`
 
 
 ## PAL-To-ACT
