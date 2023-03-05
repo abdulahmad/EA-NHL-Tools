@@ -50,7 +50,7 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 - Added palette support to `SPIT-To-BMP`
 
 ### 0.5 ALPHA
-- WIP: move source files to central `./NHL94INST` and `./NHL95CD`) folder
+- move source files to central `./NHL94INST` and `./NHL95CD`) folder
 - WIP: Create batch to extract homepals & awaypals
 - WIP: Create rinkpal-03-ingame
 - WIP: Create rinkpal-01-jersey
