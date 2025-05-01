@@ -264,3 +264,27 @@ Roughness / Shoot/Pass Bias - ??? Goals vs Assists?
 Passing - Passing
 Aggressiveness - Aggressiveness
 Faceoffs - Faceoffs
+
+
+---
+
+I am making a remake of NHL 94 for Sega Genesis in Unity. I need to create code for the main menu. The main menu has the following Option Labels & Option Values:
+
+Play Mode: Exhibition, Season, Playoffs, Shootout
+Home Team: <current 32 NHL teams> -- Vegas is default
+Away Team: <current 32 NHL teams> -- Seattle is default
+Per Length: 3 min, 5 min, 10 min, 20 min
+Goalies: Auto Control, Manual Control
+Penlaties: On Except Off-sides, On, Off
+Fighting: On
+Line Changes: Auto, On, Off
+
+The menu itself can only display 6 menu items at a time. It will display an up arrow near the top of the menu items if you can scroll up, or a down arrow near the bottom of the items if you can scroll down.
+
+These options labels & option values should be displayed as TextMeshPro - Text UI objects
+
+There is also a team name graphic, and team name logo that needs to be displayed per team. The team name graphic sprites are named 94logo-<TEAM ABBREVIATION> (ex '94logo-TOR' for Toronto), and 94banner-<TEAM ABBREVIATION> (ex '94banner-TOR' for Toronto).
+
+It reads the teams from a csv file in Assets\DB\Teams.csv. The header for this CSV file is as follows: ID,Name,Abbreviation,Conference,Division,Venue,City,TimeZone
+
+Can you please write me a unity c# script for this menu?
