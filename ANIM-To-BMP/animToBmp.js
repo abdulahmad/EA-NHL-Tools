@@ -24,7 +24,6 @@ const convertToBMP = (fileName) => {
     // Store the header information in a JSON file
   const headerInfo = { fileType, numFrames, numPals};
   fs.writeFileSync(`${fileName}.json`, JSON.stringify(headerInfo));
-  console.log('currentIndex?',currentIndex);
   var currentIndex = 6;
   for (var currentFrame=0; currentFrame<2; currentFrame++) {
     var frameHeader = animData.toString('ascii', currentIndex, currentIndex+2);
@@ -51,9 +50,9 @@ const convertToBMP = (fileName) => {
     currentIndex = currentIndex + 2;
     var u7 = animData.readInt16BE(currentIndex);
     currentIndex = currentIndex + 2;
-    var u8 = animData.readInt16BE(currentIndex);
+    var frXoff = animData.readInt16BE(currentIndex);
     currentIndex = currentIndex + 2;
-    var u9 = animData.readInt16BE(currentIndex);
+    var frYoff = animData.readInt16BE(currentIndex);
     currentIndex = currentIndex + 2;
     var u10 = animData.readInt16BE(currentIndex);
     currentIndex = currentIndex + 2;
@@ -63,16 +62,9 @@ const convertToBMP = (fileName) => {
     currentIndex = currentIndex + 2;
     var u13 = animData.readInt16BE(currentIndex);
     currentIndex = currentIndex + 2;
-    // var u14 = animData.readInt16BE(currentIndex);
-    // currentIndex = currentIndex + 2;
     var numSpritesinFrame = animData.readInt16BE(currentIndex)+1;
     currentIndex = currentIndex + 2;
-    // SprStratt	=	2+8	;equates for building frame lists from alice files SprStratt length = 2
-    // SprStrhot	=	SprStratt+2 SprStrhot length = 24
-    // SprStrnum	=	SprStrhot+24 SprStrnum length = 2
-    // SprStrdat	=	SprStrnum+2 SprStrdat length = 8
-    // add	#SprStrdat+8,d1
-    console.log("Frame #",currentFrame,"frameHeader",frameHeader,"u",u1,u2,u3,"sprStrAtt",sprStrAtt,"sprStrHot",sprStrHot,"sprStrXHot",sprStrXHot,"sprStrYHot",sprStrYHot,"u",u4,u5,u6,u7,u8,u9,u10,u11,u12,u13,"numSpritesinFrame",numSpritesinFrame);
+    console.log("Frame #",currentFrame,"frameHeader",frameHeader,"u",u1,u2,u3,"sprStrAtt",sprStrAtt,"sprStrHot",sprStrHot,"sprStrXHot",sprStrXHot,"sprStrYHot",sprStrYHot,"u",u4,u5,u6,u7,"frXoff",frXoff,"frYoff",frYoff,u10,u11,u12,u13,"numSpritesinFrame",numSpritesinFrame);
     for (var currentSprite=0; currentSprite<numSpritesinFrame; currentSprite++) {
       // console.log('current file index at start of sprite:',currentIndex);
 
@@ -87,33 +79,7 @@ const convertToBMP = (fileName) => {
 
       const result = parseSpriteData(sizetab, tileLoc);
       // console.log('current file index at end of sprite:',currentIndex);
-      // 8928h = starting offset of tile data
-      // 46A0h = tile offset in sprite 0, frame 0
-      // 8928h + 46A0h = CFC8h
-      // 15D28h = frame 0 sprite 0 tile data -- 89384 bytes in
-      // 6A0h * 32 = 1696 * 32 = 54272 tile offset
-      // 35112 = 8928 = starting offset of tile data
 
-      // tile sizes:
-      // 2x4 7h 08h - 8928h - 6A8h tiles (1704)
-      // 1x4 3h 04h - 15E28h - 14h tiles (20)
-      // 4x3 Eh 0Ch - 160A8h - FCh tiles (252)
-      // 3x3 Ah 09h - 18028h - 
-      // 2x3 6h 06h - 1BF28h
-      // 1x3 2h 03h - 21328h
-      // 4x2 Dh 08h - 22528h
-      // 3x2 9h 06h - 24028h
-      // 2x2 5h 04h - 265A8h
-      // 1x2 1h 02h - 287A8h
-      // 4x1 Ch 04h - 2B228h
-      // 3x1 8h 03h - 2B928h
-      // 2x1 4h 02h - 2CB28h
-      // 1x1 0h 01h - 2F3A8h - 2BAh tiles (698)
-      // END OF TILE DATA - 34AE8h
-
-      // 60Dh*32 + 2F3A8h
-
-      // Frame 1 Sprite 1 - 34AC8h - believe this is it
       console.log("Sprite #", currentSprite,"ypos",ypos,"sizetab",sizetab,"tileLoc",tileLoc,"xpos",xpos);
       console.log(result);
     }
