@@ -263,17 +263,40 @@ const convertToBMP = (fileName) => {
 // sizetab table from assembly: maps size index (0–15) to number of 8x8 tiles
 const sizetabTable = [1, 2, 3, 4, 2, 4, 6, 8, 3, 6, 9, 12, 4, 8, 12, 16];
 
+// Dimensions table: maps size index to { width, height } in tiles
+const dimensionsTable = [
+  { width: 1, height: 1 }, // 1 tile
+  { width: 1, height: 2 }, // 2 tiles
+  { width: 1, height: 3 }, // 3 tiles
+  { width: 2, height: 2 }, // 4 tiles
+  { width: 2, height: 1 }, // 2 tiles
+  { width: 2, height: 2 }, // 4 tiles
+  { width: 2, height: 3 }, // 6 tiles
+  { width: 2, height: 4 }, // 8 tiles
+  { width: 1, height: 3 }, // 3 tiles
+  { width: 2, height: 3 }, // 6 tiles
+  { width: 3, height: 3 }, // 9 tiles
+  { width: 3, height: 4 }, // 12 tiles
+  { width: 2, height: 2 }, // 4 tiles
+  { width: 2, height: 4 }, // 8 tiles
+  { width: 3, height: 4 }, // 12 tiles
+  { width: 4, height: 4 }  // 16 tiles
+];
+
 // Function to parse sizetab and tileLoc fields
 function parseSpriteData(sizetab, tileLoc) {
+  // Extract size index (low nibble, bits 0–3)
+  const sizeIndex = (sizetab >> 8) & 0xF;
+
   // Ensure inputs are 16-bit unsigned integers
   sizetab = sizetab & 0xFFFF;
   tileLoc = tileLoc & 0xFFFF;
 
-  // Extract size index (low nibble, bits 0–3)
-  const sizeIndex = sizetab & 0x000F;
-
   // Get number of tiles from sizetab table
   const tileCount = sizetabTable[sizeIndex];
+
+  // Get dimensions from dimensions table
+  const dimensions = dimensionsTable[sizeIndex];
 
   // Extract tile index high bit (bit 15 of sizetab)
    // Extract tile index high bits (mimic assembly: sizetab & 0xF000, lsr #1)
@@ -298,6 +321,7 @@ function parseSpriteData(sizetab, tileLoc) {
   return {
     sizeIndex,          // Index into sizetab table (0–15)
     tileCount,          // Number of 8x8 tiles (1–16)
+    dimensions,         // { width, height } in tiles
     tileIndex,          // 15-bit tile index for tile data section
     hFlip,              // Horizontal flip flag (speculative)
     vFlip,              // Vertical flip flag (speculative)
