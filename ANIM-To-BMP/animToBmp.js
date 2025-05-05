@@ -21,69 +21,66 @@ const convertToBMP = (fileName) => {
 
   // const yPos = animData.readInt16LE(14);
   console.log("fileType",fileType,"numFrames",numFrames,"numPalettes",numPals);
-    // Store the header information in a JSON file
+
+  // Initialize frames array
+  const frames = new Array(numFrames); // Pre-allocate for efficiency
+
+  // Store the header information in a JSON file
   const headerInfo = { fileType, numFrames, numPals};
   fs.writeFileSync(`${fileName}.json`, JSON.stringify(headerInfo));
+
   var currentIndex = 6;
   for (var currentFrame=0; currentFrame<2; currentFrame++) {
-    var frameHeader = animData.toString('ascii', currentIndex, currentIndex+2);
-    currentIndex = currentIndex + 2;
-    var u1 = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var u2 = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var u3 = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var sprStrAtt = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var sprStrHot = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var sprStrXHot = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var sprStrYHot = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var u4 = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var u5 = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var u6 = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var u7 = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var frXoff = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var frYoff = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var u10 = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var u11 = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var u12 = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var u13 = animData.readInt16BE(currentIndex);
-    currentIndex = currentIndex + 2;
-    var numSpritesinFrame = animData.readInt16BE(currentIndex)+1;
-    currentIndex = currentIndex + 2;
-    console.log("Frame #",currentFrame,"frameHeader",frameHeader,"u",u1,u2,u3,"sprStrAtt",sprStrAtt,"sprStrHot",sprStrHot,"sprStrXHot",sprStrXHot,"sprStrYHot",sprStrYHot,"u",u4,u5,u6,u7,"frXoff",frXoff,"frYoff",frYoff,u10,u11,u12,u13,"numSpritesinFrame",numSpritesinFrame);
-    for (var currentSprite=0; currentSprite<numSpritesinFrame; currentSprite++) {
-      // console.log('current file index at start of sprite:',currentIndex);
 
-      var ypos = animData.readInt16BE(currentIndex);
-      currentIndex = currentIndex + 2;
-      var sizetab = animData.readInt16BE(currentIndex);
-      currentIndex = currentIndex + 2;
-      var tileLoc = animData.readInt16BE(currentIndex);
-      currentIndex = currentIndex + 2;
-      var xpos = animData.readInt16BE(currentIndex);
-      currentIndex = currentIndex + 2;
+    // Initialize frame object
+    const frame = {
+      frameIndex: currentFrame,
+      sprites: []
+    };
 
-      const result = parseSpriteData(sizetab, tileLoc);
-      // console.log('current file index at end of sprite:',currentIndex);
+    // Read frame header and attributes
+    frame.frameHeader = animData.toString('ascii', currentIndex, currentIndex + 2);
+    currentIndex += 2;
+    frame.u1 = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.u2 = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.u3 = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.sprStrAtt = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.sprStrHot = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.sprStrXHot = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.sprStrYHot = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.u4 = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.u5 = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.u6 = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.u7 = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.frXoff = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.frYoff = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.u10 = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.u11 = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.u12 = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.u13 = animData.readInt16BE(currentIndex); currentIndex += 2;
+    frame.numSpritesinFrame = animData.readInt16BE(currentIndex) + 1; currentIndex += 2;
 
-      console.log("Sprite #", currentSprite,"ypos",ypos,"sizetab",sizetab,"tileLoc",tileLoc,"xpos",xpos);
-      console.log(result);
+    console.log("Frame #",currentFrame,frame);
+    for (var currentSprite=0; currentSprite<frame.numSpritesinFrame; currentSprite++) {
+      const sprite = {
+        spriteIndex: currentSprite,
+        ypos: animData.readInt16BE(currentIndex),
+        sizetab: animData.readInt16BE(currentIndex + 2),
+        tileLoc: animData.readInt16BE(currentIndex + 4),
+        xpos: animData.readInt16BE(currentIndex + 6)
+      };
+      currentIndex += 8;
+
+      // Get parsed data and merge into sprite object
+      const parsedData = parseSpriteData(sprite.sizetab, sprite.tileLoc);
+      Object.assign(sprite, parsedData); // Merge parsed key/value pairs into sprite
+
+      frame.sprites.push(sprite);
+      console.log(sprite);
     }
+    frames[currentFrame] = frame;
   }
+  
   currentIndex = 35108; // Sprite.anim start of tile data
   var tileHeader = animData.toString('ascii', currentIndex, currentIndex+2);
   currentIndex = currentIndex + 2;
