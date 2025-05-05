@@ -88,6 +88,58 @@ const convertToBMP = (fileName) => {
   currentIndex = currentIndex + 2;
   console.log("Tile Data Header", tileHeader, "numTiles", numTiles);
 
+  const spriteTilesIndex = currentIndex;
+  for (var currentFrame=0; currentFrame<2; currentFrame++) {
+    var minX; var maxX;
+    var minY; var maxY;
+    var length;
+    var width;
+     console.log('AA TEST',currentFrame,frames[currentFrame]);
+    for (var currentSprite=0; currentSprite<frames[currentFrame].sprites.length; currentSprite++) {
+      console.log('AA2','frame',currentFrame,'sprite',currentSprite);
+      var curMinX = frames[currentFrame].sprites[currentSprite].xpos;
+      var curMaxX = (frames[currentFrame].sprites[currentSprite].dimensions.width * 8) + curMinX;
+      var curMinY = frames[currentFrame].sprites[currentSprite].ypos;
+      var curMaxY = (frames[currentFrame].sprites[currentSprite].dimensions.height * 8) + curMinY;
+
+      if (minX == null || curMinX < minX) {
+        minX = curMinX
+      }
+      if (maxX == null || curMaxX > maxX) {
+        maxX = curMaxX
+      }
+      if (minY == null || curMinY < minY) {
+        minY = curMinY
+      }
+      if (maxY == null || curMaxY > maxY) {
+        maxY = curMaxY
+      }
+      console.log(curMinX, curMaxX, curMinY, curMaxY);
+    }
+    console.log('final',minX,maxX,minY,maxY);
+    var frameDimensions = adjustCanvasDimensions(minX,maxX,minY,maxY);
+    console.log(frameDimensions);
+    minX = null;
+    maxX = null;
+    minY = null;
+    maxY = null;
+  }
+
+  function adjustCanvasDimensions(minX, maxX, minY, maxY) {
+    const width = maxX - minX;
+    const height = maxY - minY;
+    const offsetX = -minX; // Amount to shift X coordinates
+    const offsetY = -minY; // Amount to shift Y coordinates
+    
+    return {
+        minX: 0,
+        minY: 0,
+        maxX: width,
+        maxY: height,
+        offsetX: offsetX,
+        offsetY: offsetY
+    };
+  }
   // 32 bytes per tile; 5646 tiles = 180672 bytes
   // 35108 + 180672 = 215780 = 0x34AE4 <-- start of palette data
 
