@@ -116,9 +116,46 @@ const convertToBMP = (fileName) => {
       }
       console.log(curMinX, curMaxX, curMinY, curMaxY);
     }
-    console.log('final',minX,maxX,minY,maxY);
+    console.log('original canvas dimensions',minX,maxX,minY,maxY);
     var frameDimensions = adjustCanvasDimensions(minX,maxX,minY,maxY);
-    console.log(frameDimensions);
+    console.log('adjusted canvas',frameDimensions);
+
+    var spriteCanvas = Array(frameDimensions.maxY).fill().map(() => Array(frameDimensions.maxX).fill(0));
+    console.log('Rows:', spriteCanvas.length, 'Columns:', spriteCanvas[0].length);
+    print2DArray(spriteCanvas);
+    for (var currentSpriteIndex=0; currentSpriteIndex<frames[currentFrame].sprites.length; currentSpriteIndex++) {
+      var sprite = frames[currentFrame].sprites[currentSpriteIndex];
+      console.log('Place Sprite',currentSpriteIndex,'tileIndex',sprite.tileIndex,'at',sprite.xpos+frameDimensions.offsetX,sprite.ypos+frameDimensions.offsetY,'size',sprite.dimensions);
+      var spriteOffset = spriteTilesIndex + sprite.tileIndex * 32;
+      for (var curSpriteCol=0; curSpriteCol<sprite.dimensions.width; curSpriteCol++) {
+        for (var curSpriteRow=0; curSpriteRow<sprite.dimensions.height; curSpriteRow++) {
+          console.log('currentTile',curSpriteCol+curSpriteRow+1,'of',sprite.dimensions.width*sprite.dimensions.height);
+          for (var curTileRow=0; curTileRow<8; curTileRow++) { // Y
+            for (var curTileCol=0; curTileCol<4; curTileCol++) { // X
+                var idx = spriteOffset+curTileRow+(curTileCol*2)+(curSpriteRow*32)+(curSpriteCol*curSpriteRow*32);
+                var ypixel = sprite.ypos+frameDimensions.offsetY+(curSpriteRow*8)+curTileRow;
+                var xpixel = sprite.xpos+frameDimensions.offsetX+(curSpriteCol*8)+(curTileCol*2);
+                // Row, Col -> Y, X -> Height, Width
+                // Read the byte at index X
+                const byte = animData[idx];
+
+                // Upper 4 bits: Shift right by 4 to get the high nibble
+                const upper = (byte >> 4) & 0x0F;
+
+                // Lower 4 bits: Mask with 0x0F to get the low nibble
+                const lower = byte & 0x0F;
+
+                spriteCanvas[ypixel][xpixel] = upper;
+                spriteCanvas[ypixel][xpixel+1] = lower;
+            }
+          }
+          // console.log('spriteCanvas',spriteCanvas);
+          print2DArray(spriteCanvas);
+        }
+      }
+    }
+    // print2DArray(spriteCanvas);
+
     minX = null;
     maxX = null;
     minY = null;
@@ -383,3 +420,13 @@ function parseSpriteData(sizetab, tileLoc) {
 const animFile = process.argv[2];
 // const pal = process.argv[3];
 convertToBMP(animFile);
+
+function print2DArray(array2D) {
+  // Find the longest number for padding
+  const maxLength = Math.max(...array2D.flat().map(num => String(num).length));
+  
+  // Print each row with aligned columns
+  array2D.forEach(row => {
+    console.log(row.map(num => String(num).padStart(maxLength, ' ')).join(' | '));
+  });
+}
