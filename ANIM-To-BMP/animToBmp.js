@@ -125,14 +125,17 @@ const convertToBMP = (fileName) => {
     print2DArray(spriteCanvas);
     for (var currentSpriteIndex=0; currentSpriteIndex<frames[currentFrame].sprites.length; currentSpriteIndex++) {
       var sprite = frames[currentFrame].sprites[currentSpriteIndex];
-      console.log('Place Sprite',currentSpriteIndex,'tileIndex',sprite.tileIndex,'at',sprite.xpos+frameDimensions.offsetX,sprite.ypos+frameDimensions.offsetY,'size',sprite.dimensions);
       var spriteOffset = spriteTilesIndex + sprite.tileIndex * 32;
+      console.log('Place Sprite',currentSpriteIndex,'tileIndex',sprite.tileIndex,'at',sprite.xpos+frameDimensions.offsetX,sprite.ypos+frameDimensions.offsetY,'size',sprite.dimensions,'fileOffset',spriteOffset);
+      
       for (var curSpriteCol=0; curSpriteCol<sprite.dimensions.width; curSpriteCol++) {
         for (var curSpriteRow=0; curSpriteRow<sprite.dimensions.height; curSpriteRow++) {
           console.log('currentTile',curSpriteCol+curSpriteRow+1,'of',sprite.dimensions.width*sprite.dimensions.height);
           for (var curTileRow=0; curTileRow<8; curTileRow++) { // Y
             for (var curTileCol=0; curTileCol<4; curTileCol++) { // X
-                var idx = spriteOffset+curTileRow+(curTileCol*2)+(curSpriteRow*32)+(curSpriteCol*curSpriteRow*32);
+                // var idx = spriteOffset+curTileRow+(curTileCol)+(curSpriteRow*32)+(curSpriteCol*curSpriteRow*32);
+                var idx = spriteOffset+curTileRow*4+(curTileCol)+(curSpriteRow*16)+(curSpriteCol*sprite.dimensions.height*16);
+                
                 var ypixel = sprite.ypos+frameDimensions.offsetY+(curSpriteRow*8)+curTileRow;
                 var xpixel = sprite.xpos+frameDimensions.offsetX+(curSpriteCol*8)+(curTileCol*2);
                 // Row, Col -> Y, X -> Height, Width
@@ -145,6 +148,8 @@ const convertToBMP = (fileName) => {
                 // Lower 4 bits: Mask with 0x0F to get the low nibble
                 const lower = byte & 0x0F;
 
+                console.log('idx',idx, 'yxpixels',ypixel,xpixel,'byte',byte,'upper/lower',upper,lower);
+                console.log(`${idx} = spriteOffset ${spriteOffset} + curTileRow*4 ${curTileRow*4} + curTileCol ${curTileCol} + curSpriteRow*16 ${curSpriteRow*16} + (curSpriteCol*sprite.dimensions.height*16) ${curSpriteCol*sprite.dimensions.height*16}`)
                 spriteCanvas[ypixel][xpixel] = upper;
                 spriteCanvas[ypixel][xpixel+1] = lower;
             }
