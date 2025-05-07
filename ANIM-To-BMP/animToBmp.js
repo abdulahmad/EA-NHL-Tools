@@ -359,9 +359,16 @@ function saveImage(spriteArray,width,height,fileName,currentFrame) {
     }
   } else { // no palette, make it greyscale
     for (let i = 0; i < 256; i++) {
-      bmpImage.writeUInt8(i, fullBmpHeaderLength + i * 4);     // R
-      bmpImage.writeUInt8(i, fullBmpHeaderLength + 1 + i * 4); // G
-      bmpImage.writeUInt8(i, fullBmpHeaderLength + 2 + i * 4); // B
+      if (i==0) {
+        bmpImage.writeUInt8(252, fullBmpHeaderLength + i * 4);     // R
+        bmpImage.writeUInt8(0, fullBmpHeaderLength + 1 + i * 4); // G
+        bmpImage.writeUInt8(252, fullBmpHeaderLength + 2 + i * 4); // B
+      } else {
+        bmpImage.writeUInt8((i % 16) * 16, fullBmpHeaderLength + i * 4);     // R
+        bmpImage.writeUInt8((i % 16) * 16, fullBmpHeaderLength + 1 + i * 4); // G
+        bmpImage.writeUInt8((i % 16) * 16, fullBmpHeaderLength + 2 + i * 4); // B
+      }
+      
       bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
     }
   }
