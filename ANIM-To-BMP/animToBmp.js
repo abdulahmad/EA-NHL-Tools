@@ -5,21 +5,10 @@ const convertToBMP = (fileName) => {
   console.log('animToBMP:', fileName);
 
   console.log("Converting "+fileName+ " to BMP");
-  // Read the compressed image data from the file
   const animData = fs.readFileSync(fileName);
-  // Extract the header information from the compressed image
-  // const fileType = animData.readInt8(0);
   const fileType = animData.toString('ascii', 0, 2);
-  // const width = animData.readInt16LE(4);
   const numFrames = animData.readInt16BE(2)+1;
-  // const bmpWidth = Math.ceil(width/4)*4; // round up width to nearest multiple of 4 for bmp pixel data format
   const numPals = animData.readInt16BE(4)+1;
-  // const height = animData.readInt16LE(6);
-  // const xOffset = animData.readInt16LE(8);
-  // const yOffset = animData.readInt16LE(10);
-  // const xPos = animData.readInt16LE(12);
-
-  // const yPos = animData.readInt16LE(14);
   console.log("fileType",fileType,"numFrames",numFrames,"numPalettes",numPals);
 
   // Initialize frames array
@@ -30,8 +19,8 @@ const convertToBMP = (fileName) => {
   fs.writeFileSync(`Extracted\\${fileName}.json`, JSON.stringify(headerInfo));
 
   var currentIndex = 6;
-  for (var currentFrame=0; currentFrame<2; currentFrame++) {
-
+  for (var currentFrame=0; currentFrame<364; currentFrame++) {
+    console.log('currentIndex',currentIndex);
     // Initialize frame object
     const frame = {
       frameIndex: currentFrame,
@@ -89,7 +78,7 @@ const convertToBMP = (fileName) => {
   console.log("Tile Data Header", tileHeader, "numTiles", numTiles);
 
   const spriteTilesIndex = currentIndex;
-  for (var currentFrame=0; currentFrame<2; currentFrame++) { // populate tile data & save image
+  for (var currentFrame=0; currentFrame<0; currentFrame++) { // populate tile data & save image
     var minX; var maxX;
     var minY; var maxY;
     var length;
@@ -122,7 +111,7 @@ const convertToBMP = (fileName) => {
 
     var spriteCanvas = Array(frameDimensions.maxY).fill().map(() => Array(frameDimensions.maxX).fill(0));
     console.log('Rows:', spriteCanvas.length, 'Columns:', spriteCanvas[0].length);
-    print2DArray(spriteCanvas);
+    // print2DArray(spriteCanvas);
     for (var currentSpriteIndex=0; currentSpriteIndex<frames[currentFrame].sprites.length; currentSpriteIndex++) {
       var sprite = frames[currentFrame].sprites[currentSpriteIndex];
       var spriteOffset = spriteTilesIndex + sprite.tileIndex * 32;
@@ -153,11 +142,10 @@ const convertToBMP = (fileName) => {
                 idx++;
             }
           }
-          print2DArray(spriteCanvas);
+          // print2DArray(spriteCanvas);
         }
       }
     }
-    // print2DArray(spriteCanvas);
 
     minX = null;
     maxX = null;
@@ -256,41 +244,6 @@ function parseSpriteData(sizetab, tileLoc) {
     middleBits          // Bits 4–11, possibly unused
   };
 }
-
-// Example usage
-// Assume sizetab and tileLoc are read from bytes 2–3 and 4–5 (big-endian)
-// Example: sizetab = 0x4001, tileLoc = 0x0020
-// const sizetab = 0x4001; // Example: size index = 1, high tile bit = 0
-// const tileLoc = 0x0020; // Example: tile index low = 32
-
-// const result = parseSpriteData(sizetab, tileLoc);
-// console.log(result);
-// Output:
-// {
-//   sizeIndex: 1,          // Size index 1
-//   tileCount: 2,          // 2 tiles (from sizetabTable[1])
-//   tileIndex: 32,         // Tile index = 0x0020 (high bit 0, low bits 32)
-//   hFlip: true,           // Bit 13 set (speculative)
-//   vFlip: false,          // Bit 12 not set
-//   flipPriorityFlags: 2,  // Bits 13–12 = 0b10
-//   middleBits: 0          // Bits 4–11 = 0
-// }
-
-// // Helper function to read 16-bit big-endian word from buffer (if needed)
-// function readUInt16BE(buffer, offset) {
-//   return (buffer[offset] << 8) | buffer[offset + 1];
-// }
-
-// // Example with a buffer (if reading from a file)
-// const buffer = Buffer.from([
-//   0x00, 0x10, // ypos = 16
-//   0x40, 0x01, // sizetab = 0x4001
-//   0x00, 0x20, // tileLoc = 0x0020
-//   0x00, 0x30  // xpos = 48
-// ]);
-// const spriteSizetab = readUInt16BE(buffer, 2);
-// const spriteTileLoc = readUInt16BE(buffer, 4);
-// console.log(parseSpriteData(spriteSizetab, spriteTileLoc));
 
 const animFile = process.argv[2];
 // const pal = process.argv[3];
