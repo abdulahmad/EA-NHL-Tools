@@ -19,7 +19,7 @@ const convertToBMP = (fileName) => {
   fs.writeFileSync(`Extracted\\${fileName}.json`, JSON.stringify(headerInfo));
 
   var currentIndex = 6;
-  for (var currentFrame=0; currentFrame<81; currentFrame++) {
+  for (var currentFrame=0; currentFrame<numFrames; currentFrame++) {
     console.log('currentIndex',currentIndex);
     // Initialize frame object
     const frame = {
@@ -78,14 +78,14 @@ const convertToBMP = (fileName) => {
   console.log("Tile Data Header", tileHeader, "numTiles", numTiles);
 
   const spriteTilesIndex = currentIndex;
-  for (var currentFrame=0; currentFrame<81; currentFrame++) { // populate tile data & save image
+  for (var currentFrame=0; currentFrame<numFrames; currentFrame++) { // populate tile data & save image
     var minX; var maxX;
     var minY; var maxY;
     var length;
     var width;
      console.log('AA TEST',currentFrame,frames[currentFrame]);
     for (var currentSprite=0; currentSprite<frames[currentFrame].sprites.length; currentSprite++) {
-      console.log('AA2','frame',currentFrame,'sprite',currentSprite);
+      console.log('AA2','frame',currentFrame,'sprite',currentSprite, frames[currentFrame].sprites[currentSprite].dimensions);
       var curMinX = frames[currentFrame].sprites[currentSprite].xpos;
       var curMaxX = (frames[currentFrame].sprites[currentSprite].dimensions.width * 8) + curMinX;
       var curMinY = frames[currentFrame].sprites[currentSprite].ypos;
@@ -201,20 +201,37 @@ const dimensionsTable = [
   { width: 1, height: 1 }, // 1 tile
   { width: 1, height: 2 }, // 2 tiles
   { width: 1, height: 3 }, // 3 tiles
-  { width: 2, height: 2 }, // 4 tiles
+  { width: 1, height: 4 }, // 4 tiles
   { width: 2, height: 1 }, // 2 tiles
   { width: 2, height: 2 }, // 4 tiles
   { width: 2, height: 3 }, // 6 tiles
   { width: 2, height: 4 }, // 8 tiles
-  { width: 1, height: 3 }, // 3 tiles
+  { width: 3, height: 1 }, // 3 tiles
   { width: 3, height: 2 }, // 6 tiles
   { width: 3, height: 3 }, // 9 tiles
   { width: 3, height: 4 }, // 12 tiles
-  { width: 2, height: 2 }, // 4 tiles
-  { width: 2, height: 4 }, // 8 tiles
-  { width: 3, height: 4 }, // 12 tiles
+  { width: 4, height: 1 }, // 4 tiles
+  { width: 4, height: 2 }, // 8 tiles
+  { width: 4, height: 3 }, // 12 tiles
   { width: 4, height: 4 }  // 16 tiles
 ];
+
+// 0x0     | 0x01  | 1      | 1x1
+// 0x1     | 0x02  | 2      | 1x2
+// 0x2     | 0x03  | 3      | 1x3
+// 0x3     | 0x04  | 4      | 1x4
+// 0x4     | 0x02  | 2      | 2x1
+// 0x5     | 0x04  | 4      | 2x2
+// 0x6     | 0x06  | 6      | 2x3
+// 0x7     | 0x08  | 8      | 2x4
+// 0x8     | 0x03  | 3      | 3x1
+// 0x9     | 0x06  | 6      | 3x2
+// 0xA     | 0x09  | 9      | 3x3
+// 0xB     | 0x0C  | 12     | 3x4
+// 0xC     | 0x04  | 4      | 4x1
+// 0xD     | 0x08  | 8      | 4x2
+// 0xE     | 0x0C  | 12     | 4x3
+// 0xF     | 0x10  | 16     | 4x4
 
 // Function to parse sizetab and tileLoc fields
 function parseSpriteData(sizetab, tileLoc) {
