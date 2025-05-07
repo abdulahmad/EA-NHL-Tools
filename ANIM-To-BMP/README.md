@@ -1,16 +1,14 @@
 # ANIM-To-BMP v0.1
 Exports In-game sprites from NHL92 Sega Genesis in ANIM format to Photoshop RAW and Windows BMP format. The sprites are extracted as stored-- which means they are in grayscale. 
 
-Big thank you to chaos & McMarkis on the NHL94 discord for helping me figure everything out
-
-There is also a `.json` file saved per sprite, which contains the x/y offset & position data that are also stored in the SPIT Image file. 
+There is also a `.json` file saved per Animation Frame, which contains the metadata associated with each Frame. 
 
 # Usage
 1. Ensure you have `node` installed on your machine
 
-2. Run `node spitToBmp <spitfile>` or `node spitToBmp <spitfile> <EAPalfile>`. It will decompress the SPIT file and you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file in the same path that the SPIT file lives in. If a palfile (in EA Pal format, !pal, etc) was specified, it will use that palette in extracting SPIT files.
+2. Run `node animToBmp <animfile>` or `node animToBmp <animfile> <EAPalfile>`. It will decompress the ANIM file and you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file in the `Extracted` path. If a palfile (in EA Pal format, !pal, etc) was specified, it will use that palette in extracting ANIM files.
 
-## NHL95 SPIT Header details
+## NHL92 ANIM file details
 entry header - 16 bytes
 byte pair 0 (uint8) - record ID / entry type / image type
 byte pair 1-3 (uint24) - size of the block
@@ -22,7 +20,11 @@ byte pair 12-13 (uint16) - X axis position
 byte pair 14-15 (uint16) - Y axis position
 
 ## More Info
-The SPIT format seems to be some sort of variant of the ILBM IFF format. It uses a similar Run Length Encoding Scheme.
+Big thank you to chaos & McMarkis on the NHL94.com discord for helping me figure everything out
 
 # Future TODO
-- Import sprites back into NHL 95 (if there is enough demand)
+- Update Readme.md with 92 file format
+- Update .json file with correct metadata
+- Update Script to support 92 palettes
+- Update Script to extract Sprites from '93
+- Update Script to extract Sprites from '94
