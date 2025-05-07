@@ -224,10 +224,13 @@ function parseSpriteData(sizetab, tileLoc) {
   const tileIndex = tileIndexHigh | tileIndexLow;
 
   // Extract potential flip/priority flags (bits 12–13 of sizetab)
-  const flipPriorityFlags = (sizetab & 0x3000) >> 12;
-  const hFlip = (flipPriorityFlags & 0x2) !== 0; // Bit 13 (tentative, based on assembly)
-  const vFlip = (flipPriorityFlags & 0x1) !== 0; // Bit 12 (tentative, based on assembly)
+  // const flipPriorityFlags = (sizetab & 0x3000) >> 12;
+  // const hFlip = (flipPriorityFlags & 0x2) !== 0; // Bit 13 (tentative, based on assembly)
+  // const vFlip = (flipPriorityFlags & 0x1) !== 0; // Bit 12 (tentative, based on assembly)
   // Note: These are speculative; the assembly uses object attributes for flips, so these may be priority or unused
+  const flipPriorityFlags = (tileLoc >> 15) & 1;
+  const vFlip = (tileLoc >> 12) & 1;
+  const hFlip = (tileLoc >> 11) & 1;
 
   // Extract middle bits (4–11) of sizetab, possibly unused
   const middleBits = (sizetab & 0x0FF0) >> 4;
