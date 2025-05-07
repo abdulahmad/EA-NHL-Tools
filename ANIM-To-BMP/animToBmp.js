@@ -89,7 +89,7 @@ const convertToBMP = (fileName) => {
   console.log("Tile Data Header", tileHeader, "numTiles", numTiles);
 
   const spriteTilesIndex = currentIndex;
-  for (var currentFrame=0; currentFrame<2; currentFrame++) {
+  for (var currentFrame=0; currentFrame<2; currentFrame++) { // populate tile data & save image
     var minX; var maxX;
     var minY; var maxY;
     var length;
@@ -133,10 +133,7 @@ const convertToBMP = (fileName) => {
         for (var curSpriteRow=0; curSpriteRow<sprite.dimensions.height; curSpriteRow++) {
           console.log('currentTile',curSpriteCol+curSpriteRow+1,'of',sprite.dimensions.width*sprite.dimensions.height);
           for (var curTileRow=0; curTileRow<8; curTileRow++) { // Y
-            for (var curTileCol=0; curTileCol<4; curTileCol++) { // X
-                // var idx = spriteOffset+curTileRow+(curTileCol)+(curSpriteRow*32)+(curSpriteCol*curSpriteRow*32);
-                // var idx = spriteOffset+curTileRow*4+(curTileCol)+(curSpriteRow*16)+(curSpriteCol*sprite.dimensions.height*16);
-                
+            for (var curTileCol=0; curTileCol<4; curTileCol++) { // 
                 var ypixel = sprite.ypos+frameDimensions.offsetY+(curSpriteRow*8)+curTileRow;
                 var xpixel = sprite.xpos+frameDimensions.offsetX+(curSpriteCol*8)+(curTileCol*2);
                 // Row, Col -> Y, X -> Height, Width
@@ -153,7 +150,6 @@ const convertToBMP = (fileName) => {
                 console.log(`${idx} = spriteOffset ${spriteOffset} + curTileRow*4 ${curTileRow*4} + curTileCol ${curTileCol} + curSpriteRow*16 ${curSpriteRow*16} + (curSpriteCol*sprite.dimensions.height*16) ${curSpriteCol*sprite.dimensions.height*16}`)
                 spriteCanvas[ypixel][xpixel] = upper;
                 spriteCanvas[ypixel][xpixel+1] = lower;
-                idx++;
             }
           }
           // console.log('spriteCanvas',spriteCanvas);
@@ -167,6 +163,8 @@ const convertToBMP = (fileName) => {
     maxX = null;
     minY = null;
     maxY = null;
+
+    saveImage(spriteCanvas,frameDimensions.maxX,frameDimensions.maxY);
   }
 
   function adjustCanvasDimensions(minX, maxX, minY, maxY) {
@@ -186,19 +184,20 @@ const convertToBMP = (fileName) => {
   }
   // 32 bytes per tile; 5646 tiles = 180672 bytes
   // 35108 + 180672 = 215780 = 0x34AE4 <-- start of palette data
-
-  // // Create a Buffer to store the BMP image data
-  // const spitHeaderLength = 16;
-  // const bmpHeaderLength = 40;
-  // const bmpPadding = 14;
-  // const fullBmpHeaderLength = bmpHeaderLength + bmpPadding; // Header + padding
-  // const palLength = 256 * 4;
-  // const unevenImagePadding = (bmpWidth - width) * height;
-  // const bmpEOFLength = 2;
-  // const pixelDataLength = width*height;
-  // const expectedBmpLength = fullBmpHeaderLength + palLength + pixelDataLength + unevenImagePadding + bmpEOFLength; // height for line end bytes
-  // const expectedRawLength = pixelDataLength;
-  // // console.log("expected BMP length",expectedBmpLength,"expected raw length", expectedRawLength);
+  function saveImage(spriteArray,width,height) {
+    // Create a Buffer to store the BMP image data
+    const bmpWidth = Math.ceil(width/4)*4; // round up width to nearest multiple of 4 for bmp pixel data format
+    const spitHeaderLength = 16;
+    const bmpHeaderLength = 40;
+    const bmpPadding = 14;
+    const fullBmpHeaderLength = bmpHeaderLength + bmpPadding; // Header + padding
+    const palLength = 256 * 4;
+    const unevenImagePadding = (bmpWidth - width) * height;
+    const bmpEOFLength = 2;
+    const pixelDataLength = width*height;
+    const expectedBmpLength = fullBmpHeaderLength + palLength + pixelDataLength + unevenImagePadding + bmpEOFLength; // height for line end bytes
+    const expectedRawLength = pixelDataLength;
+    console.log("expected BMP length",expectedBmpLength,"expected raw length", expectedRawLength);
   // const bmpImage = Buffer.alloc(expectedBmpLength);
   // const rawImage = Buffer.alloc(expectedRawLength);
   
@@ -317,6 +316,8 @@ const convertToBMP = (fileName) => {
   //   console.log('ERROR RAW');
   //   throw new Error('Expected RAW Length',expectedRawLength,'does not match actual length',rawImage.length);
   // }
+  }
+  
 };
 
 // sizetab table from assembly: maps size index (0–15) to number of 8x8 tiles
