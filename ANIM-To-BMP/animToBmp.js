@@ -78,7 +78,7 @@ const convertToBMP = (fileName) => {
   console.log("Tile Data Header", tileHeader, "numTiles", numTiles);
 
   const spriteTilesIndex = currentIndex;
-  for (var currentFrame=0; currentFrame<0; currentFrame++) { // populate tile data & save image
+  for (var currentFrame=0; currentFrame<364; currentFrame++) { // populate tile data & save image
     var minX; var maxX;
     var minY; var maxY;
     var length;
@@ -123,23 +123,35 @@ const convertToBMP = (fileName) => {
           console.log('currentTile',curSpriteCol+curSpriteRow+1,'of',sprite.dimensions.width*sprite.dimensions.height);
           for (var curTileRow=0; curTileRow<8; curTileRow++) { // Y
             for (var curTileCol=0; curTileCol<4; curTileCol++) { // 
-                var ypixel = sprite.ypos+frameDimensions.offsetY+(curSpriteRow*8)+curTileRow;
-                var xpixel = sprite.xpos+frameDimensions.offsetX+(curSpriteCol*8)+(curTileCol*2);
-                // Row, Col -> Y, X -> Height, Width
-                // Read the byte at index X
-                const byte = animData[idx];
+              // Adjust tile row and column based on flip flags
+              var tileRow = sprite.vFlip == true ? 7 - curTileRow : curTileRow; // Reverse row for vertical flip
+              var tileCol = sprite.hFlip == true ? 3 - curTileCol : curTileCol; // Reverse column for horizontal flip
 
-                // Upper 4 bits: Shift right by 4 to get the high nibble
-                const upper = (byte >> 4) & 0x0F;
+              // Calculate pixel coordinates
+              var ypixel = sprite.ypos + frameDimensions.offsetY + (curSpriteRow * 8) + tileRow;
+              var xpixel = sprite.xpos + frameDimensions.offsetX + (curSpriteCol * 8) + (tileCol * 2);
 
-                // Lower 4 bits: Mask with 0x0F to get the low nibble
-                const lower = byte & 0x0F;
+              // Read the byte at the current index
+              const byte = animData[idx];
 
-                console.log('idx',idx, 'yxpixels',ypixel,xpixel,'byte',byte,'upper/lower',upper,lower);
-                console.log(`${idx} = spriteOffset ${spriteOffset} + curTileRow*4 ${curTileRow*4} + curTileCol ${curTileCol} + curSpriteRow*16 ${curSpriteRow*16} + (curSpriteCol*sprite.dimensions.height*16) ${curSpriteCol*sprite.dimensions.height*16}`)
+              // Upper 4 bits: Shift right by 4 to get the high nibble
+              const upper = (byte >> 4) & 0x0F;
+              // Lower 4 bits: Mask with 0x0F to get the low nibble
+              const lower = byte & 0x0F;
+
+              // console.log('idx', idx, 'yxpixels', ypixel, xpixel, 'byte', byte, 'upper/lower', upper, lower);
+              // console.log(`${idx} = spriteOffset ${spriteOffset} + curTileRow*4 ${curTileRow*4} + curTileCol ${curTileCol} + curSpriteRow*16 ${curSpriteRow*16} + (curSpriteCol*sprite.dimensions.height*16) ${curSpriteCol*sprite.dimensions.height*16}`);
+
+              // Assign pixels to canvas, swapping upper/lower for hFlip
+              if (sprite.hFlip) {
+                spriteCanvas[ypixel][xpixel] = lower; // Swap upper and lower nibbles
+                spriteCanvas[ypixel][xpixel + 1] = upper;
+              } else {
                 spriteCanvas[ypixel][xpixel] = upper;
-                spriteCanvas[ypixel][xpixel+1] = lower;
-                idx++;
+                spriteCanvas[ypixel][xpixel + 1] = lower;
+              }
+
+              idx++;
             }
           }
           // print2DArray(spriteCanvas);
