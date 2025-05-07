@@ -27,7 +27,7 @@ const convertToBMP = (fileName) => {
 
   // Store the header information in a JSON file
   const headerInfo = { fileType, numFrames, numPals};
-  fs.writeFileSync(`${fileName}.json`, JSON.stringify(headerInfo));
+  fs.writeFileSync(`Extracted\\${fileName}.json`, JSON.stringify(headerInfo));
 
   var currentIndex = 6;
   for (var currentFrame=0; currentFrame<2; currentFrame++) {
@@ -165,6 +165,7 @@ const convertToBMP = (fileName) => {
     maxY = null;
 
     saveImage(spriteCanvas,frameDimensions.maxX,frameDimensions.maxY,fileName,currentFrame);
+    fs.writeFileSync(`Extracted\\${fileName}${currentFrame}.json`, JSON.stringify(headerInfo));
   }
 
   function adjustCanvasDimensions(minX, maxX, minY, maxY) {
@@ -393,10 +394,11 @@ function saveImage(spriteArray,width,height,fileName,currentFrame) {
     }
   }
 
+  fs.mkdirSync('Extracted', { recursive: true });
   // Write the BMP image data to a file
-  fs.writeFileSync(`${fileName}${currentFrame}.bmp`, bmpImage);
+  fs.writeFileSync(`Extracted\\${fileName}${currentFrame}.bmp`, bmpImage);
   // Write the RAW image data to a file
-  fs.writeFileSync(`${fileName}${currentFrame}.raw`, rawImage);
+  fs.writeFileSync(`Extracted\\${fileName}${currentFrame}.raw`, rawImage);
 
   if (bmpImage.length !== expectedBmpLength) {
     console.log('ERROR BMP');
