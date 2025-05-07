@@ -19,7 +19,7 @@ const convertToBMP = (fileName) => {
   fs.writeFileSync(`Extracted\\${fileName}.json`, JSON.stringify(headerInfo));
 
   var currentIndex = 6;
-  for (var currentFrame=0; currentFrame<364; currentFrame++) {
+  for (var currentFrame=0; currentFrame<81; currentFrame++) {
     console.log('currentIndex',currentIndex);
     // Initialize frame object
     const frame = {
@@ -78,7 +78,7 @@ const convertToBMP = (fileName) => {
   console.log("Tile Data Header", tileHeader, "numTiles", numTiles);
 
   const spriteTilesIndex = currentIndex;
-  for (var currentFrame=0; currentFrame<364; currentFrame++) { // populate tile data & save image
+  for (var currentFrame=0; currentFrame<81; currentFrame++) { // populate tile data & save image
     var minX; var maxX;
     var minY; var maxY;
     var length;
@@ -123,13 +123,17 @@ const convertToBMP = (fileName) => {
           console.log('currentTile',curSpriteCol+curSpriteRow+1,'of',sprite.dimensions.width*sprite.dimensions.height);
           for (var curTileRow=0; curTileRow<8; curTileRow++) { // Y
             for (var curTileCol=0; curTileCol<4; curTileCol++) { // 
-              // Adjust tile row and column based on flip flags
-              var tileRow = sprite.vFlip == true ? 7 - curTileRow : curTileRow; // Reverse row for vertical flip
-              var tileCol = sprite.hFlip == true ? 3 - curTileCol : curTileCol; // Reverse column for horizontal flip
+              // Calculate base pixel coordinates within the sprite (unflipped)
+              var pixelXInSprite = (curSpriteCol * 8) + (curTileCol * 2);
+              var pixelYInSprite = (curSpriteRow * 8) + curTileRow;
 
-              // Calculate pixel coordinates
-              var ypixel = sprite.ypos + frameDimensions.offsetY + (curSpriteRow * 8) + tileRow;
-              var xpixel = sprite.xpos + frameDimensions.offsetX + (curSpriteCol * 8) + (tileCol * 2);
+              // Apply flipping across the entire sprite
+              var flippedX = sprite.hFlip == true ? (sprite.dimensions.width * 8 - pixelXInSprite - 2) : pixelXInSprite;
+              var flippedY = sprite.vFlip == true ? (sprite.dimensions.height * 8 - pixelYInSprite - 1) : pixelYInSprite;
+
+              // Calculate final canvas coordinates
+              var ypixel = sprite.ypos + frameDimensions.offsetY + flippedY;
+              var xpixel = sprite.xpos + frameDimensions.offsetX + flippedX;
 
               // Read the byte at the current index
               const byte = animData[idx];
@@ -154,7 +158,9 @@ const convertToBMP = (fileName) => {
               idx++;
             }
           }
-          // print2DArray(spriteCanvas);
+          if(currentFrame==80) { 
+            print2DArray(spriteCanvas);
+          }
         }
       }
     }
