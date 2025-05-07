@@ -150,9 +150,9 @@ const convertToBMP = (fileName) => {
                 console.log(`${idx} = spriteOffset ${spriteOffset} + curTileRow*4 ${curTileRow*4} + curTileCol ${curTileCol} + curSpriteRow*16 ${curSpriteRow*16} + (curSpriteCol*sprite.dimensions.height*16) ${curSpriteCol*sprite.dimensions.height*16}`)
                 spriteCanvas[ypixel][xpixel] = upper;
                 spriteCanvas[ypixel][xpixel+1] = lower;
+                idx++;
             }
           }
-          // console.log('spriteCanvas',spriteCanvas);
           print2DArray(spriteCanvas);
         }
       }
@@ -164,7 +164,7 @@ const convertToBMP = (fileName) => {
     minY = null;
     maxY = null;
 
-    saveImage(spriteCanvas,frameDimensions.maxX,frameDimensions.maxY);
+    saveImage(spriteCanvas,frameDimensions.maxX,frameDimensions.maxY,fileName,currentFrame);
   }
 
   function adjustCanvasDimensions(minX, maxX, minY, maxY) {
@@ -184,140 +184,6 @@ const convertToBMP = (fileName) => {
   }
   // 32 bytes per tile; 5646 tiles = 180672 bytes
   // 35108 + 180672 = 215780 = 0x34AE4 <-- start of palette data
-  function saveImage(spriteArray,width,height) {
-    // Create a Buffer to store the BMP image data
-    const bmpWidth = Math.ceil(width/4)*4; // round up width to nearest multiple of 4 for bmp pixel data format
-    const spitHeaderLength = 16;
-    const bmpHeaderLength = 40;
-    const bmpPadding = 14;
-    const fullBmpHeaderLength = bmpHeaderLength + bmpPadding; // Header + padding
-    const palLength = 256 * 4;
-    const unevenImagePadding = (bmpWidth - width) * height;
-    const bmpEOFLength = 2;
-    const pixelDataLength = width*height;
-    const expectedBmpLength = fullBmpHeaderLength + palLength + pixelDataLength + unevenImagePadding + bmpEOFLength; // height for line end bytes
-    const expectedRawLength = pixelDataLength;
-    console.log("expected BMP length",expectedBmpLength,"expected raw length", expectedRawLength);
-  // const bmpImage = Buffer.alloc(expectedBmpLength);
-  // const rawImage = Buffer.alloc(expectedRawLength);
-  
-  // // Write the BMP header to the buffer
-  // bmpImage.write('BM'); // BMP Identifier
-  // bmpImage.writeUInt32LE(expectedBmpLength, 2); // File Size
-  // bmpImage.writeUInt32LE(fullBmpHeaderLength+palLength, 10); // Byte Offset to Start of Image
-  // bmpImage.writeUInt32LE(bmpHeaderLength, 14); // Size of Header
-  // bmpImage.writeInt32LE(width, 18); // Image Width
-  // bmpImage.writeInt32LE(height*-1, 22); // Image Height -- origin of pixel data is top left instead of bottom left
-  // bmpImage.writeUInt16LE(1, 26); // Bit Planes
-  // bmpImage.writeUInt16LE(8, 28); // Bits/Pixel -- 8 is grayscale
-  // bmpImage.writeUInt32LE(pixelDataLength+unevenImagePadding+bmpEOFLength, 34); // Size of Compressed file
-
-  // // Write the palette information to the buffer
-  // if (typeof palFileName !== 'undefined') {
-  //   const palFile = fs.readFileSync(palFileName);
-  //   let palFileOffset = 0
-  //   let palMultiplier = 1;
-  //   if(palFileName.indexOf('.act') == -1) { // EA palette, skip header & multiply colour values by 4
-  //     palFileOffset = 16;
-  //     palMultiplier = 4;
-  //   }
-  //   for (let i = 0; i < 256; i++) {
-  //     try {
-  //       bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 2 + i * 3)*palMultiplier, fullBmpHeaderLength + i * 4);     // R
-  //       bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 1 + i * 3)*palMultiplier, fullBmpHeaderLength + 1 + i * 4); // G
-  //       bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 0 + i * 3)*palMultiplier, fullBmpHeaderLength + 2 + i * 4); // B
-  //       bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
-  //     } catch(e) {
-  //       if (e instanceof RangeError) {
-  //         console.log("early end of palette file, will skip the rest of the palette");
-  //         i = 256;
-  //       } else {
-  //         throw e;
-  //       }
-  //     }
-  //   }
-  // } else { // no palette, make it greyscale
-  //   for (let i = 0; i < 256; i++) {
-  //     bmpImage.writeUInt8(i, fullBmpHeaderLength + i * 4);     // R
-  //     bmpImage.writeUInt8(i, fullBmpHeaderLength + 1 + i * 4); // G
-  //     bmpImage.writeUInt8(i, fullBmpHeaderLength + 2 + i * 4); // B
-  //     bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
-  //   }
-  // }
-
-  // // Decode the compressed image data and write it to the buffer
-  // let index = spitHeaderLength;
-  // let bufferIndex = fullBmpHeaderLength+palLength;
-  // let rawIndex = 0;
-  // let rowCounter = 0;
-  // while (rawIndex < expectedRawLength) {
-  //   // console.log("index",index,compressedImage.byteOffset.toString(16).toUpperCase());
-  //   let description;
-  //   if (fileType == 123) { // override
-  //     description = 1;
-  //   } else {
-  //     description = compressedImage.readUInt8(index++);
-  //   }
-    
-  //   // console.log("description byte",description);
-  //   if (description === 0) break;
-
-  //   // let color = compressedImage.readUInt8(index++);
-  //   if (description >= 128) {
-  //       let writeLen = 255 - description + 1;
-  //     // console.log("Write next X chars", writeLen.toString(16).toUpperCase());
-  //     for (let i = 0; i < (writeLen); i++) {
-  //       let color = compressedImage.readUInt8(index++);
-  //       // console.log(color.toString(16).toUpperCase());
-  //       bmpImage.writeUInt8(color, bufferIndex++);
-  //       rowCounter++;
-  //       if (rowCounter==width && unevenImagePadding !== 0) { 
-  //         for(j=0; j < bmpWidth-width; j++) {
-  //           bmpImage.writeUInt8('00', bufferIndex++); 
-  //         }
-  //         rowCounter = 0;
-  //       }
-  //       rawImage.writeUInt8(color, rawIndex++);
-  //       // color = compressedImage.readUInt8(index++);
-  //     }
-  //   } else {
-  //     // console.log("Write color X times","multiplier",description);
-  //     for (let i = 0; i < description; i++) {
-  //       let color = compressedImage.readUInt8(index);
-  //       // console.log(color.toString(16).toUpperCase());
-  //       bmpImage.writeUInt8(color, bufferIndex++);
-  //       rowCounter++;
-  //       if (rowCounter==width && unevenImagePadding !== 0) { 
-  //         for(j=0; j < bmpWidth-width; j++) {
-  //           bmpImage.writeUInt8('00', bufferIndex++); 
-  //         }
-  //         rowCounter = 0;
-  //       }
-  //       rawImage.writeUInt8(color, rawIndex++);
-  //     }
-  //     index++;
-  //   }
-  // }
-
-  // // Write the BMP image data to a file
-  // // bmpImage.writeUInt8('00', bufferIndex++);
-  // // bmpImage.writeUInt8('00', bufferIndex++);
-  // fs.writeFileSync(`${fileName}.bmp`, bmpImage);
-  // // Write the RAW image data to a file
-  // fs.writeFileSync(`${fileName}.raw`, rawImage);
-
-  // // console.log(rawImage);
-
-  // if (bmpImage.length !== expectedBmpLength) {
-  //   console.log('ERROR BMP');
-  //   throw new Error('Expected BMP Length',expectedBmpLength,'does not match actual length',bmpImage.length);
-  // }
-  // if (rawImage.length !== expectedRawLength) {
-  //   console.log('ERROR RAW');
-  //   throw new Error('Expected RAW Length',expectedRawLength,'does not match actual length',rawImage.length);
-  // }
-  }
-  
 };
 
 // sizetab table from assembly: maps size index (0–15) to number of 8x8 tiles
@@ -437,4 +303,100 @@ function print2DArray(array2D) {
   array2D.forEach(row => {
     console.log(row.map(num => String(num).padStart(maxLength, ' ')).join(' | '));
   });
+}
+
+function saveImage(spriteArray,width,height,fileName,currentFrame) {
+  // Create a Buffer to store the BMP image data
+  const bmpWidth = Math.ceil(width/4)*4; // round up width to nearest multiple of 4 for bmp pixel data format
+  const spitHeaderLength = 16;
+  const bmpHeaderLength = 40;
+  const bmpPadding = 14;
+  const fullBmpHeaderLength = bmpHeaderLength + bmpPadding; // Header + padding
+  const palLength = 256 * 4;
+  const unevenImagePadding = (bmpWidth - width) * height;
+  const bmpEOFLength = 2;
+  const pixelDataLength = width*height;
+  const expectedBmpLength = fullBmpHeaderLength + palLength + pixelDataLength + unevenImagePadding + bmpEOFLength; // height for line end bytes
+  const expectedRawLength = pixelDataLength;
+  console.log("expected BMP length",expectedBmpLength,"expected raw length", expectedRawLength);
+  const bmpImage = Buffer.alloc(expectedBmpLength);
+  const rawImage = Buffer.alloc(expectedRawLength);
+
+  // Write the BMP header to the buffer
+  bmpImage.write('BM'); // BMP Identifier
+  bmpImage.writeUInt32LE(expectedBmpLength, 2); // File Size
+  bmpImage.writeUInt32LE(fullBmpHeaderLength+palLength, 10); // Byte Offset to Start of Image
+  bmpImage.writeUInt32LE(bmpHeaderLength, 14); // Size of Header
+  bmpImage.writeInt32LE(width, 18); // Image Width
+  bmpImage.writeInt32LE(height*-1, 22); // Image Height -- origin of pixel data is top left instead of bottom left
+  bmpImage.writeUInt16LE(1, 26); // Bit Planes
+  bmpImage.writeUInt16LE(8, 28); // Bits/Pixel -- 8 is grayscale
+  bmpImage.writeUInt32LE(pixelDataLength+unevenImagePadding+bmpEOFLength, 34); // Size of Compressed file
+
+  // Write the palette information to the buffer
+  if (typeof palFileName !== 'undefined') {
+    const palFile = fs.readFileSync(palFileName);
+    let palFileOffset = 0
+    let palMultiplier = 1;
+    if(palFileName.indexOf('.act') == -1) { // EA palette, skip header & multiply colour values by 4
+      palFileOffset = 16;
+      palMultiplier = 4;
+    }
+    for (let i = 0; i < 256; i++) {
+      try {
+        bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 2 + i * 3)*palMultiplier, fullBmpHeaderLength + i * 4);     // R
+        bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 1 + i * 3)*palMultiplier, fullBmpHeaderLength + 1 + i * 4); // G
+        bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 0 + i * 3)*palMultiplier, fullBmpHeaderLength + 2 + i * 4); // B
+        bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
+      } catch(e) {
+        if (e instanceof RangeError) {
+          console.log("early end of palette file, will skip the rest of the palette");
+          i = 256;
+        } else {
+          throw e;
+        }
+      }
+    }
+  } else { // no palette, make it greyscale
+    for (let i = 0; i < 256; i++) {
+      bmpImage.writeUInt8(i, fullBmpHeaderLength + i * 4);     // R
+      bmpImage.writeUInt8(i, fullBmpHeaderLength + 1 + i * 4); // G
+      bmpImage.writeUInt8(i, fullBmpHeaderLength + 2 + i * 4); // B
+      bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
+    }
+  }
+
+  // Decode the compressed image data and write it to the buffer
+  let bufferIndex = fullBmpHeaderLength+palLength;
+  let rawIndex = 0;
+  let rowCounter = 0;
+ 
+  for (var yidx=0; yidx<height; yidx++) {
+    for( var xidx=0; xidx<width; xidx++) {
+      let color = spriteArray[yidx][xidx];
+      bmpImage.writeUInt8(color, bufferIndex++);
+      rowCounter++;
+      if (rowCounter==width && unevenImagePadding !== 0) { 
+        for(j=0; j < bmpWidth-width; j++) {
+          bmpImage.writeUInt8('00', bufferIndex++); 
+        }
+        rowCounter = 0;
+      }
+      rawImage.writeUInt8(color, rawIndex++);
+    }
+  }
+
+  // Write the BMP image data to a file
+  fs.writeFileSync(`${fileName}${currentFrame}.bmp`, bmpImage);
+  // Write the RAW image data to a file
+  fs.writeFileSync(`${fileName}${currentFrame}.raw`, rawImage);
+
+  if (bmpImage.length !== expectedBmpLength) {
+    console.log('ERROR BMP');
+    throw new Error('Expected BMP Length',expectedBmpLength,'does not match actual length',bmpImage.length);
+  }
+  if (rawImage.length !== expectedRawLength) {
+    console.log('ERROR RAW');
+    throw new Error('Expected RAW Length',expectedRawLength,'does not match actual length',rawImage.length);
+  }
 }
