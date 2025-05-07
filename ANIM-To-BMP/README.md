@@ -8,17 +8,78 @@ There is also a `.json` file saved per Animation Frame, which contains the metad
 
 2. Run `node animToBmp <animfile>` or `node animToBmp <animfile> <EAPalfile>`. It will decompress the ANIM file and you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file in the `Extracted` path. If a palfile (in EA Pal format, !pal, etc) was specified, it will use that palette in extracting ANIM files.
 
-## NHL92 ANIM file details
-entry header - 16 bytes
-byte pair 0 (uint8) - record ID / entry type / image type
-byte pair 1-3 (uint24) - size of the block
-byte pair 4-5 (uint16) - image width
-byte pair 6-7 (uint16) - image height
-byte pair 8-9 (uint16) - X axis offset
-byte pair 10-11 (uint16) - Y axis offset
-byte pair 12-13 (uint16) - X axis position
-byte pair 14-15 (uint16) - Y axis position
+## NHL92 ANIM file details (Big Endian)
+| Byte              | Value           | Description |
+| --------          | -------         | -------     |
+| `0x00-01`         | `"AA"`          | Alice Animation Header |
+| `0x02-03`         | `<int16>`      | Number of Frames in ANIM file - 1 |
+| `0x04-05`         | `<int16>`      | Number of ??? - 1 |
+| `0x06-X`          | `<Frame Data>`  | List of Frames in .ANIM file |
+| `0x(X+1)-(X+2)`   | `"CC"`          | Character Content (Tile Data) Header |
+| `0x(X+3)-(X+4)`   | `<int16>`      | Number of Tiles in ANIM file  |
+| `0x(X+5)-(Y)`     | `<Tile Data>`   | 8x8 Tiles, 4 bits per pixel, Column-Major order |
+| `0x(Y+1)-(Y+2)`   | `"PP"`          | Palette Section Header |
+| `0x(Y+3)-(Y+130)` | `<Palette Data>` | 128 bytes of Palette Data. Unknown as to how this is laid out |
+| `0x(Y+131)-(Y+132)`| `"DD"`          | Unknown Data Section Header |
+| `0x(Y+133)-(Y+148)`| `<"DD" Data>` | 16 bytes of Unknown Data |
+| `0x(Y+149)-(Y+150)`| `"ZZ"`          | End of File Footer |
 
+### `Frame Data` Section
+| Byte              | Value           | Description |
+| --------          | -------         | -------     |
+| `0x00-01`         | `"SS"`          | Sprite Struct Header |
+| `0x02-03`         | `<int16>`      | Unknown Data |
+| `0x04-05`         | `<int16>`      | Unknown Data |
+| `0x06-07`         | `<int16>`      | Unknown Data |
+| `0x08-09`         | `<int16>`      | Sprite Struct Attributes |
+| `0x10-11`         | `<int16>`      | Sprite Struct Hotspot |
+| `0x12-13`         | `<int16>`      | Sprite Struct X Hotspot |
+| `0x14-15`         | `<int16>`      | Sprite Struct Y Hotspot |
+| `0x16-17`         | `<int16>`      | Unknown Data |
+| `0x18-19`         | `<int16>`      | Unknown Data |
+| `0x20-21`         | `<int16>`      | Unknown Data |
+| `0x22-23`         | `<int16>`      | Unknown Data |
+| `0x24-25`         | `<int16>`      | Frame X Offset |
+| `0x26-27`         | `<int16>`      | Frame Y Offset |
+| `0x28-29`         | `<int16>`      | Unknown Data |
+| `0x30-31`         | `<int16>`      | Unknown Data |
+| `0x32-33`         | `<int16>`      | Unknown Data |
+| `0x34-35`         | `<int16>`      | Unknown Data |
+| `0x36-37`         | `<int16>`      | Number of Sprites in Frame - 1 |
+| `0x38-38+(8*numSpritesinFrame)`          | `<Sprite Data>`  | Each Sprite in frame takes up 8 bytes of Data |
+
+### `Sprite Data` Section
+| Byte              | Value           | Description |
+| --------          | -------         | -------     |
+| `0x00-01`         | `<int16>`       | Y Position of Sprite within Frame |
+| `0x02-03`         | `<int16>`      | `Bits 0-3`: Size Index, references dimensions table `sizetab`; `Bits 12-15`: these are bits 11-14 of the `tileIndex`  |
+| `0x04-05`         | `<int16>`      | `Bits 0-10`: these are bits 0-10 of the `tileIndex`; `Bit 11`: `hFlip`-- if sprite should be flipped horizontally; `Bit 12`: `vFlip`-- if sprite should be flipped vertically; `Bit 15`: `flipPriorityFlags` |
+| `0x06-07`         | `<int16>`      | X Position of Sprite within Frame |
+
+### `Size Table` Definition
+```// value at index indicates number of 8x8 tiles. Index references sizetab lookup table
+sizeTab = [1, 2, 3, 4, 2, 4, 6, 8, 3, 6, 9, 12, 4, 8, 12, 16]
+
+// Dimensions table: maps size index to { width, height } in tiles
+const dimensionsTable = [
+  { width: 1, height: 1 }, // 1 tile
+  { width: 1, height: 2 }, // 2 tiles
+  { width: 1, height: 3 }, // 3 tiles
+  { width: 1, height: 4 }, // 4 tiles
+  { width: 2, height: 1 }, // 2 tiles
+  { width: 2, height: 2 }, // 4 tiles
+  { width: 2, height: 3 }, // 6 tiles
+  { width: 2, height: 4 }, // 8 tiles
+  { width: 3, height: 1 }, // 3 tiles
+  { width: 3, height: 2 }, // 6 tiles
+  { width: 3, height: 3 }, // 9 tiles
+  { width: 3, height: 4 }, // 12 tiles
+  { width: 4, height: 1 }, // 4 tiles
+  { width: 4, height: 2 }, // 8 tiles
+  { width: 4, height: 3 }, // 12 tiles
+  { width: 4, height: 4 }  // 16 tiles
+];
+```
 ## More Info
 Big thank you to chaos & McMarkis on the NHL94.com discord for helping me figure everything out
 

@@ -30,24 +30,24 @@ const convertToBMP = (fileName) => {
     // Read frame header and attributes
     frame.frameHeader = animData.toString('ascii', currentIndex, currentIndex + 2);
     currentIndex += 2;
-    frame.u1 = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.u2 = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.u3 = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.sprStrAtt = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.sprStrHot = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.sprStrXHot = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.sprStrYHot = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.u4 = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.u5 = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.u6 = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.u7 = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.frXoff = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.frYoff = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.u10 = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.u11 = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.u12 = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.u13 = animData.readInt16BE(currentIndex); currentIndex += 2;
-    frame.numSpritesinFrame = animData.readInt16BE(currentIndex) + 1; currentIndex += 2;
+    frame.u1 = animData.readInt16BE(currentIndex); currentIndex += 2; // 02-03
+    frame.u2 = animData.readInt16BE(currentIndex); currentIndex += 2; // 04-05
+    frame.u3 = animData.readInt16BE(currentIndex); currentIndex += 2; // 06-07
+    frame.sprStrAtt = animData.readInt16BE(currentIndex); currentIndex += 2; //08-09
+    frame.sprStrHot = animData.readInt16BE(currentIndex); currentIndex += 2; //10
+    frame.sprStrXHot = animData.readInt16BE(currentIndex); currentIndex += 2;//12
+    frame.sprStrYHot = animData.readInt16BE(currentIndex); currentIndex += 2;//14
+    frame.u4 = animData.readInt16BE(currentIndex); currentIndex += 2;//16
+    frame.u5 = animData.readInt16BE(currentIndex); currentIndex += 2;//18
+    frame.u6 = animData.readInt16BE(currentIndex); currentIndex += 2;//20
+    frame.u7 = animData.readInt16BE(currentIndex); currentIndex += 2;//22
+    frame.frXoff = animData.readInt16BE(currentIndex); currentIndex += 2;//24
+    frame.frYoff = animData.readInt16BE(currentIndex); currentIndex += 2;//26
+    frame.u10 = animData.readInt16BE(currentIndex); currentIndex += 2;//28
+    frame.u11 = animData.readInt16BE(currentIndex); currentIndex += 2;//30
+    frame.u12 = animData.readInt16BE(currentIndex); currentIndex += 2;//32
+    frame.u13 = animData.readInt16BE(currentIndex); currentIndex += 2;//34
+    frame.numSpritesinFrame = animData.readInt16BE(currentIndex) + 1; currentIndex += 2;//36
 
     console.log("Frame #",currentFrame,frame);
     for (var currentSprite=0; currentSprite<frame.numSpritesinFrame; currentSprite++) {
