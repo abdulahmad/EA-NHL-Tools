@@ -207,7 +207,7 @@ const dimensionsTable = [
   { width: 2, height: 3 }, // 6 tiles
   { width: 2, height: 4 }, // 8 tiles
   { width: 1, height: 3 }, // 3 tiles
-  { width: 2, height: 3 }, // 6 tiles
+  { width: 3, height: 2 }, // 6 tiles
   { width: 3, height: 3 }, // 9 tiles
   { width: 3, height: 4 }, // 12 tiles
   { width: 2, height: 2 }, // 4 tiles
