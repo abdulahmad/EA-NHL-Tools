@@ -61,7 +61,7 @@ const convertToBMP = (fileName) => {
       currentIndex += 8;
 
       // Get parsed data and merge into sprite object
-      const parsedData = parseSpriteData(sprite.sizetab, sprite.tileLoc);
+      const parsedData = parseSpriteData(sprite.sizetabByte, sprite.tileLocByte);
       Object.assign(sprite, parsedData); // Merge parsed key/value pairs into sprite
 
       frame.sprites.push(sprite);
@@ -217,13 +217,13 @@ const dimensionsTable = [
 ];
 
 // Function to parse sizetab and tileLoc fields
-function parseSpriteData(sizetab, tileLoc) {
+function parseSpriteData(sizetabByte, tileLocByte) {
   // Extract size index (low nibble, bits 0–3)
-  const sizeIndex = (sizetab >> 8) & 0xF;
+  const sizeIndex = (sizetabByte >> 8) & 0xF;
 
   // Ensure inputs are 16-bit unsigned integers
-  sizetab = sizetab & 0xFFFF;
-  tileLoc = tileLoc & 0xFFFF;
+  sizetab = sizetabByte & 0xFFFF;
+  tileLoc = tileLocByte & 0xFFFF;
 
   // Get number of tiles from sizetab table
   const tileCount = sizetabTable[sizeIndex];
@@ -236,25 +236,21 @@ function parseSpriteData(sizetab, tileLoc) {
    const tileIndexHigh = (sizetab & 0xF000) >> 1; // Bits 12–15 shifted to 11–14
 
   // Extract tile index low bits (bits 0–10 of tileLoc)
-  const tileIndexLow = tileLoc & 0x07FF;
+  const tileIndexLow = tileLocByte & 0x07FF;
 
   // Combine to form 15-bit tile index
   const tileIndex = tileIndexHigh | tileIndexLow;
 
-  // Extract potential flip/priority flags (bits 12–13 of sizetab)
-  // const flipPriorityFlags = (sizetab & 0x3000) >> 12;
-  // const hFlip = (flipPriorityFlags & 0x2) !== 0; // Bit 13 (tentative, based on assembly)
-  // const vFlip = (flipPriorityFlags & 0x1) !== 0; // Bit 12 (tentative, based on assembly)
-  // Note: These are speculative; the assembly uses object attributes for flips, so these may be priority or unused
-  const priority = (tileLoc >> 15) & 1;
-  const vFlip = (tileLoc >> 12) & 1;
-  const hFlip = (tileLoc >> 11) & 1;
+  // Extract potential flip/priority flags (bits 11,12,15 of tileLoc)
+  const priority = (tileLocByte >> 15) & 1;
+  const vFlip = (tileLocByte >> 12) & 1;
+  const hFlip = (tileLocByte >> 11) & 1;
 
   // Extract palette from bits 13–14 of tileLoc
-  const palette = (tileLoc >> 13) & 0x3; // Bits 13–14, masked to get 2-bit value (0–3)
+  const palette = (tileLocByte >> 13) & 0x3; // Bits 13–14, masked to get 2-bit value (0–3)
 
   // Extract middle bits (4–11) of sizetab, possibly unused
-  const middleBits = (sizetab & 0x0FF0) >> 4;
+  const middleBits = (sizetabByte & 0x0FF0) >> 4;
 
   // Return all extracted data
   return {
