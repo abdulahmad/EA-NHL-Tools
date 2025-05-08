@@ -19,7 +19,7 @@ There is also a `.json` file saved per Animation Frame, which contains the metad
 | `0x(X+3)-(X+4)`   | `<int16>`      | Number of Tiles in ANIM file  |
 | `0x(X+5)-(Y)`     | `<Tile Data>`   | 8x8 Tiles, 4 bits per pixel, Column-Major order |
 | `0x(Y+1)-(Y+2)`   | `"PP"`          | Palette Section Header |
-| `0x(Y+3)-(Y+130)` | `<Palette Data>` | 128 bytes of Palette Data. Unknown as to how this is laid out |
+| `0x(Y+3)-(Y+130)` | `<Palette Data>` | 128 bytes of Palette Data. Unknown as to how this is laid out. Potentially 4 palettes of 16 colors (2 bytes per color, RGB444 (meed to verify) |
 | `0x(Y+131)-(Y+132)`| `"DD"`          | Unknown Data Section Header |
 | `0x(Y+133)-(Y+148)`| `<"DD" Data>` | 16 bytes of Unknown Data |
 | `0x(Y+149)-(Y+150)`| `"ZZ"`          | End of File Footer |
@@ -35,16 +35,11 @@ There is also a `.json` file saved per Animation Frame, which contains the metad
 | `0x0A-0B`         | `<int16>`      | Sprite Struct Hotspot |
 | `0x0C-0D`         | `<int16>`      | Sprite Struct X Hotspot |
 | `0x0E-0F`         | `<int16>`      | Sprite Struct Y Hotspot |
-| `0x10-11`         | `0x00FF`      | Static Data |
-| `0x12-13`         | `0x0000`      | No Data |
-| `0x14-15`         | `0x0000`      | No Data |
-| `0x16-17`         | `0x00FF`      | Static Data |
-| `0x18-19`         | `<int16>`      | Frame X Offset |
-| `0x1A-1B`         | `<int16>`      | Frame Y Offset |
+| `0x10-17`         | `0x00 0xFF 0x00 0x00 0x00 0x00 0x00 0xFF`      | Padding |
+| `0x18-19`         | `<int16>`      | Unknown Data. Potential X Offset |
+| `0x1A-1B`         | `<int16>`      | Unknown Data. Potential Y Offset |
 | `0x1C-1D`         | `<int16>`      | Unknown Data |
-| `0x1E-1F`         | `0x0000`      | No Data |
-| `0x20-21`         | `0x0000`      | No Data |
-| `0x22-23`         | `0x00FF`      | Static Data |
+| `0x1E-23`         | `0x00 0x00 0x00 0x00 0x00 0xFF`      | Padding |
 | `0x24-25`         | `<int16>`      | Number of Sprites in Frame - 1 |
 | `0x26-26+(8*numSpritesinFrame)`          | `<Sprite Data>`  | Each Sprite in frame takes up 8 bytes of Data |
 
@@ -52,13 +47,13 @@ There is also a `.json` file saved per Animation Frame, which contains the metad
 | Byte              | Value           | Description |
 | --------          | -------         | -------     |
 | `0x00-01`         | `<int16>`       | Y Position of Sprite within Frame |
-| `0x02-03`         | `<int16>`:`Bits 0-3`      | Size Index, references dimensions table `sizetab`|
+| `0x02-03`         | `<int16>`:`Bits 0-3`      | Size Index (0-15), references `sizetab` for number of tiles, e.g.1,2,4, etc|
 | `0x02-03`         | `<int16>`:`Bits 12-15`      | These are `Bits 11-14` of the `tileIndex`  |
 | `0x04-05`         | `<int16>`:`Bits 0-10`      | These are `Bits 0-10` of the `tileIndex`|
-| `0x04-05`         | `<int16>`:`Bit 11`      | `hFlip`-- if sprite should be flipped horizontally|
-| `0x04-05`         | `<int16>`:`Bit 12`      | `vFlip`-- if sprite should be flipped vertically|
-| `0x04-05`         | `<int16>`:`Bits 13-14`      | Palette-- Maps to Palette in CRAM |
-| `0x04-05`         | `<int16>`:`Bit 15`      | `1` = high priority, `0` = low priority |
+| `0x04-05`         | `<int16>`:`Bit 11`      | Horizontal Flip (`1` = flip horizontally, `0` = normal). |
+| `0x04-05`         | `<int16>`:`Bit 12`      | Vertical Flip (`1` = flip vertically, `0` = normal). |
+| `0x04-05`         | `<int16>`:`Bits 13-14`      | Palette Index (0–3, selects one of 4 CRAM palettes). |
+| `0x04-05`         | `<int16>`:`Bit 15`      | Priority (`1` = high, appears in front; `0` = low, appears behind). |
 | `0x06-07`         | `<int16>`      | X Position of Sprite within Frame |
 
 ### `Size Table` Definition
