@@ -19,7 +19,7 @@ There is also a `.json` file saved per Animation Frame, which contains the metad
 | `0x(X+3h)-(X+4h)`   | `<int16>`      | Number of Tiles in ANIM file  |
 | `0x(X+5h)-(Y)`     | `<Tile Data>`   | 8x8 Tiles, 4 bits per pixel, Column-Major order |
 | `0x(Y+1h)-(Y+2h)`   | `"PP"`          | Palette Section Header |
-| `0x(Y+3h)-(Y+82h)` | `<Palette Data>` | 128 bytes of Palette Data. Unknown as to how this is laid out. Potentially 4 palettes of 16 colors (2 bytes per color, RGB444 (meed to verify) |
+| `0x(Y+3h)-(Y+82h)` | `<Palette Data>` | 128 bytes of Palette Data. Unknown as to how this is laid out. Potentially 4 palettes of 16 colors (2 bytes per color, RGB444)-- need to verify |
 | `0x(Y+83h)-(Y+84h)`| `"DD"`          | Unknown Data Section Header |
 | `0x(Y+85h)-(Y+94h)`| `<"DD" Data>` | 16 bytes of Unknown Data |
 | `0x(Y+95h)-(Y+96h)`| `"ZZ"`          | End of File Footer |
