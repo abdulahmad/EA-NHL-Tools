@@ -1,12 +1,14 @@
 # ANIM-To-BMP v0.2
-Exports In-game sprites from NHL92 Sega Genesis in ANIM format to Photoshop RAW and Windows BMP format. The sprites are extracted as stored-- which means they are in grayscale. 
+Exports In-game sprites from NHL92 Sega Genesis in ANIM format to Photoshop RAW and Windows BMP format.
 
 There is also a `.json` file saved per Animation Frame, which contains the metadata associated with each Frame. 
+
+Palette is structured similar to how it is stored by the game in Sega Genesis CRAM. The reason is that sprites can have multiple palettes, and the only way to get multi-palette sprites to dislpay correctly would be to use the same palette structure that the game uses.
 
 # Usage
 1. Ensure you have `node` installed on your machine
 
-2. Run `node animToBmp <animfile>` or `node animToBmp <animfile> <EAPalfile>`. It will decompress the ANIM file and you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file in the `Extracted` path. If a palfile (in EA Pal format, !pal, etc) was specified, it will use that palette in extracting ANIM files.
+2. Run `node animToBmp <animfile>` or `node animToBmp <animfile> Palettes\<Palette File>`. It will decompress the ANIM file and you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file in the `Extracted` path. If a palette file (included in Palettes path) was specified, it will override the player sprite Palette in extracting frames from ANIM files.
 
 ## NHL92 ANIM file details (Big Endian)
 | Byte (All values in hexadecimal)              | Value           | Description |

@@ -1,8 +1,10 @@
 const fs = require('fs');
 
 // Function to convert the compressed image to BMP format
-const convertToBMP = (fileName) => {
+const convertToBMP = (fileName, palFile) => {
   console.log('animToBMP:', fileName);
+  fs.mkdirSync('Extracted', { recursive: true });
+  fs.mkdirSync(`Extracted\\${fileName}`, { recursive: true });
 
   console.log("Converting "+fileName+ " to BMP");
   const animData = fs.readFileSync(fileName);
@@ -16,7 +18,7 @@ const convertToBMP = (fileName) => {
 
   // Store the header information in a JSON file
   const headerInfo = { fileType, numFrames, numPals};
-  fs.writeFileSync(`Extracted\\${fileName}.json`, JSON.stringify(headerInfo));
+  fs.writeFileSync(`Extracted\\${fileName}\\${fileName}.json`, JSON.stringify(headerInfo));
 
   var currentIndex = 6;
   for (var currentFrame=0; currentFrame<numFrames; currentFrame++) {
@@ -88,48 +90,83 @@ const convertToBMP = (fileName) => {
   const palettes = [];
   const combinedPalette = Buffer.alloc(64 * 3); // 64 colors (16 per palette * 4 palettes), 3 bytes each (R,G,B)
 
-  for (var palIndex = 0; palIndex < 4; palIndex++) {
-    var animPal = Buffer.alloc(16 * 3); // 16 colors, 3 bytes (R,G,B) each
-    for (var colorIndex = 0; colorIndex < 16; colorIndex++) {
-      // Read 2 bytes for each color (9-bit palette stored in 16 bits)
-      const color = animData.readUInt16BE(currentIndex);
-      currentIndex += 2;
-
-      // Extract 3-bit components (Sega Genesis palette format: 0000BBB0GGG0RRR0)
+  // Read palette file if provided
+  let overridePalette = null;
+  if (palFile) {
+    const palData = fs.readFileSync(palFile);
+    if (palData.length !== 32) {
+      throw new Error(`Palette file ${palFile} must contain exactly 32 bytes (16 colors). Found ${palData.length} bytes.`);
+    }
+    overridePalette = Buffer.alloc(16 * 3); // 16 colors, 3 bytes each (R,G,B)
+    for (let i = 0; i < 16; i++) {
+      const color = palData.readUInt16BE(i * 2); // Read big-endian 16-bit value
       const blue = (color >> 9) & 0x07;  // Bits 9–11
       const green = (color >> 5) & 0x07; // Bits 5–7
       const red = (color >> 1) & 0x07;   // Bits 1–3
-
-      // Scale 3-bit values (0–7) to 8-bit (0–255) by multiplying by 32
       const scaledRed = red * 32;
       const scaledGreen = green * 32;
       const scaledBlue = blue * 32;
-
-      // Write RGB values to animPal buffer
-      const offset = colorIndex * 3;
-      animPal.writeUInt8(scaledRed, offset);
-      animPal.writeUInt8(scaledGreen, offset + 1);
-      animPal.writeUInt8(scaledBlue, offset + 2);
-
-      // Write to combined palette (colors 0-15 for pal 0, 16-31 for pal 1, etc.)
-      const combinedOffset = (palIndex * 16 + colorIndex) * 3;
-      combinedPalette.writeUInt8(scaledRed, combinedOffset);
-      combinedPalette.writeUInt8(scaledGreen, combinedOffset + 1);
-      combinedPalette.writeUInt8(scaledBlue, combinedOffset + 2);
+      const offset = i * 3;
+      overridePalette.writeUInt8(scaledRed, offset);
+      overridePalette.writeUInt8(scaledGreen, offset + 1);
+      overridePalette.writeUInt8(scaledBlue, offset + 2);
     }
+    console.log(`Palette file ${palFile} read and parsed for palette 2 override.`);
+  }
+
+  for (var palIndex = 0; palIndex < 4; palIndex++) {
+    var animPal = Buffer.alloc(16 * 3); // 16 colors, 3 bytes (R,G,B) each
+    if (palIndex === 2 && overridePalette) {
+      // Use the override palette for palette 2
+      overridePalette.copy(animPal, 0, 0, 16 * 3);
+      console.log(`Palette ${palIndex} overridden with palette file:`, animPal);
+    } else {
+      // Read from animData
+      for (var colorIndex = 0; colorIndex < 16; colorIndex++) {
+        // Read 2 bytes for each color (9-bit palette stored in 16 bits)
+        const color = animData.readUInt16BE(currentIndex);
+        currentIndex += 2;
+
+        // Extract 3-bit components (Sega Genesis palette format: 0000BBB0GGG0RRR0)
+        const blue = (color >> 9) & 0x07;  // Bits 9–11
+        const green = (color >> 5) & 0x07; // Bits 5–7
+        const red = (color >> 1) & 0x07;   // Bits 1–3
+
+        // Scale 3-bit values (0–7) to 8-bit (0–255) by multiplying by 32
+        const scaledRed = red * 32;
+        const scaledGreen = green * 32;
+        const scaledBlue = blue * 32;
+
+        // Write RGB values to animPal buffer
+        const offset = colorIndex * 3;
+        animPal.writeUInt8(scaledRed, offset);
+        animPal.writeUInt8(scaledGreen, offset + 1);
+        animPal.writeUInt8(scaledBlue, offset + 2);
+      }
+      console.log(`Palette ${palIndex} read from animData:`, animPal);
+    }
+
+    // Write to combined palette (colors 0-15 for pal 0, 16-31 for pal 1, etc.)
+    const combinedOffset = palIndex * 16 * 3;
+    animPal.copy(combinedPalette, combinedOffset, 0, 16 * 3);
+
     palettes.push(animPal); // Store the individual palette
-    console.log(`Palette ${palIndex} read:`, animPal);
 
     // Write palette to .ACT file
     const actBuffer = Buffer.alloc(768); // 256 colors (768 bytes), no footer
     animPal.copy(actBuffer, 0, 0, 16 * 3); // Copy 16 RGB triplets
-    fs.writeFileSync(`Extracted\\${fileName}_pal${palIndex}.act`, actBuffer);
+    fs.writeFileSync(`Extracted\\${fileName}\\pal${palIndex}.act`, actBuffer);
+  }
+
+   // Skip palette 2 data in animData if overridden
+   if (overridePalette) {
+    currentIndex += 32; // 16 colors * 2 bytes
   }
 
   // Write combined palette to .ACT file
   const combinedActBuffer = Buffer.alloc(768); // 256 colors (768 bytes), no footer
   combinedPalette.copy(combinedActBuffer, 0, 0, 64 * 3); // Copy 64 RGB triplets
-  fs.writeFileSync(`Extracted\\${fileName}_combined_pal.act`, combinedActBuffer);
+  fs.writeFileSync(`Extracted\\${fileName}\\palCombined.act`, combinedActBuffer);
   
   for (var currentFrame=0; currentFrame<numFrames; currentFrame++) { // populate tile data & save image
     var minX; var maxX;
@@ -228,7 +265,7 @@ const convertToBMP = (fileName) => {
     maxY = null;
 
     saveImage(spriteCanvas,frameDimensions.maxX,frameDimensions.maxY,fileName,currentFrame,combinedPalette);
-    fs.writeFileSync(`Extracted\\${fileName}${currentFrame}.json`, JSON.stringify(frames[currentFrame]));
+    fs.writeFileSync(`Extracted\\${fileName}\\${currentFrame}.json`, JSON.stringify(frames[currentFrame]));
   }
 
   function adjustCanvasDimensions(minX, maxX, minY, maxY) {
@@ -324,8 +361,8 @@ function parseSpriteData(sizetabByte, tileLocByte) {
 }
 
 const animFile = process.argv[2];
-// const pal = process.argv[3];
-convertToBMP(animFile);
+const palFile = process.argv[3]; // Optional palette file to override palette 2
+convertToBMP(animFile, palFile);
 
 function print2DArray(array2D) {
   // Find the longest number for padding
@@ -401,11 +438,10 @@ function saveImage(spriteArray, width, height, fileName, currentFrame, combinedP
     }
   }
 
-  fs.mkdirSync('Extracted', { recursive: true });
   // Write the BMP image data to a file
-  fs.writeFileSync(`Extracted\\${fileName}${currentFrame}.bmp`, bmpImage);
+  fs.writeFileSync(`Extracted\\${fileName}\\${currentFrame}.bmp`, bmpImage);
   // Write the RAW image data to a file
-  fs.writeFileSync(`Extracted\\${fileName}${currentFrame}.raw`, rawImage);
+  fs.writeFileSync(`Extracted\\${fileName}\\${currentFrame}.raw`, rawImage);
 
   if (bmpImage.length !== expectedBmpLength) {
     console.log('ERROR BMP');
