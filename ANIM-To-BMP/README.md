@@ -30,30 +30,35 @@ There is also a `.json` file saved per Animation Frame, which contains the metad
 | `0x00-01`         | `"SS"`          | Sprite Struct Header |
 | `0x02-03`         | `<int16>`      | Unknown Data |
 | `0x04-05`         | `<int16>`      | Unknown Data |
-| `0x06-07`         | `<int16>`      | Unknown Data |
-| `0x08-09`         | `<int16>`      | Sprite Struct Attributes |
-| `0x10-11`         | `<int16>`      | Sprite Struct Hotspot |
-| `0x12-13`         | `<int16>`      | Sprite Struct X Hotspot |
-| `0x14-15`         | `<int16>`      | Sprite Struct Y Hotspot |
-| `0x16-17`         | `<int16>`      | Unknown Data |
-| `0x18-19`         | `<int16>`      | Unknown Data |
-| `0x20-21`         | `<int16>`      | Unknown Data |
-| `0x22-23`         | `<int16>`      | Unknown Data |
-| `0x24-25`         | `<int16>`      | Frame X Offset |
-| `0x26-27`         | `<int16>`      | Frame Y Offset |
-| `0x28-29`         | `<int16>`      | Unknown Data |
-| `0x30-31`         | `<int16>`      | Unknown Data |
-| `0x32-33`         | `<int16>`      | Unknown Data |
-| `0x34-35`         | `<int16>`      | Unknown Data |
-| `0x36-37`         | `<int16>`      | Number of Sprites in Frame - 1 |
-| `0x38-38+(8*numSpritesinFrame)`          | `<Sprite Data>`  | Each Sprite in frame takes up 8 bytes of Data |
+| `0x06-07`         | `<int16>`      | Seems to correlate with `Canvas Width * 2` |
+| `0x08-09`         | `<int16>`      | Sprite Struct Attributes. Seems to correlate with `Canvas Height * 2` |
+| `0x0A-0B`         | `<int16>`      | Sprite Struct Hotspot |
+| `0x0C-0D`         | `<int16>`      | Sprite Struct X Hotspot |
+| `0x0E-0F`         | `<int16>`      | Sprite Struct Y Hotspot |
+| `0x10-11`         | `0x00FF`      | Static Data |
+| `0x12-13`         | `0x0000`      | No Data |
+| `0x14-15`         | `0x0000`      | No Data |
+| `0x16-17`         | `0x00FF`      | Static Data |
+| `0x18-19`         | `<int16>`      | Frame X Offset |
+| `0x1A-1B`         | `<int16>`      | Frame Y Offset |
+| `0x1C-1D`         | `<int16>`      | Unknown Data |
+| `0x1E-1F`         | `0x0000`      | No Data |
+| `0x20-21`         | `0x0000`      | No Data |
+| `0x22-23`         | `0x00FF`      | Static Data |
+| `0x24-25`         | `<int16>`      | Number of Sprites in Frame - 1 |
+| `0x26-26+(8*numSpritesinFrame)`          | `<Sprite Data>`  | Each Sprite in frame takes up 8 bytes of Data |
 
 ### `Sprite Data` Section
 | Byte              | Value           | Description |
 | --------          | -------         | -------     |
 | `0x00-01`         | `<int16>`       | Y Position of Sprite within Frame |
-| `0x02-03`         | `<int16>`      | `Bits 0-3`: Size Index, references dimensions table `sizetab`; `Bits 12-15`: these are bits 11-14 of the `tileIndex`  |
-| `0x04-05`         | `<int16>`      | `Bits 0-10`: these are bits 0-10 of the `tileIndex`; `Bit 11`: `hFlip`-- if sprite should be flipped horizontally; `Bit 12`: `vFlip`-- if sprite should be flipped vertically; `Bit 15`: `flipPriorityFlags` |
+| `0x02-03`         | `<int16>`:`Bits 0-3`      | Size Index, references dimensions table `sizetab`|
+| `0x02-03`         | `<int16>`:`Bits 12-15`      | These are `Bits 11-14` of the `tileIndex`  |
+| `0x04-05`         | `<int16>`:`Bits 0-10`      | These are `Bits 0-10` of the `tileIndex`|
+| `0x04-05`         | `<int16>`:`Bit 11`      | `hFlip`-- if sprite should be flipped horizontally|
+| `0x04-05`         | `<int16>`:`Bit 12`      | `vFlip`-- if sprite should be flipped vertically|
+| `0x04-05`         | `<int16>`:`Bits 13-14`      | Palette-- Maps to Palette in CRAM |
+| `0x04-05`         | `<int16>`:`Bit 15`      | `1` = high priority, `0` = low priority |
 | `0x06-07`         | `<int16>`      | X Position of Sprite within Frame |
 
 ### `Size Table` Definition
