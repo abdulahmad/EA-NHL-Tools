@@ -32,7 +32,7 @@ const convertToBMP = (fileName) => {
     currentIndex += 2;
     frame.u1 = animData.readInt16BE(currentIndex); currentIndex += 2; // 02-03
     frame.u2 = animData.readInt16BE(currentIndex); currentIndex += 2; // 04-05
-    frame.u3 = animData.readInt16BE(currentIndex); currentIndex += 2; // 06-07
+    frame.doubleCanvasWidth = animData.readInt16BE(currentIndex); currentIndex += 2; // 06-07
     frame.sprStrAtt = animData.readInt16BE(currentIndex); currentIndex += 2; //08-09
     frame.sprStrHot = animData.readInt16BE(currentIndex); currentIndex += 2; //10
     frame.sprStrXHot = animData.readInt16BE(currentIndex); currentIndex += 2;//12
@@ -54,8 +54,8 @@ const convertToBMP = (fileName) => {
       const sprite = {
         spriteIndex: currentSprite,
         ypos: animData.readInt16BE(currentIndex),
-        sizetab: animData.readInt16BE(currentIndex + 2),
-        tileLoc: animData.readInt16BE(currentIndex + 4),
+        sizetabByte: animData.readInt16BE(currentIndex + 2),
+        tileLocByte: animData.readInt16BE(currentIndex + 4),
         xpos: animData.readInt16BE(currentIndex + 6)
       };
       currentIndex += 8;
@@ -171,7 +171,7 @@ const convertToBMP = (fileName) => {
     maxY = null;
 
     saveImage(spriteCanvas,frameDimensions.maxX,frameDimensions.maxY,fileName,currentFrame);
-    fs.writeFileSync(`Extracted\\${fileName}${currentFrame}.json`, JSON.stringify(headerInfo));
+    fs.writeFileSync(`Extracted\\${fileName}${currentFrame}.json`, JSON.stringify(frames[currentFrame]));
   }
 
   function adjustCanvasDimensions(minX, maxX, minY, maxY) {
@@ -216,23 +216,6 @@ const dimensionsTable = [
   { width: 4, height: 4 }  // 16 tiles
 ];
 
-// 0x0     | 0x01  | 1      | 1x1
-// 0x1     | 0x02  | 2      | 1x2
-// 0x2     | 0x03  | 3      | 1x3
-// 0x3     | 0x04  | 4      | 1x4
-// 0x4     | 0x02  | 2      | 2x1
-// 0x5     | 0x04  | 4      | 2x2
-// 0x6     | 0x06  | 6      | 2x3
-// 0x7     | 0x08  | 8      | 2x4
-// 0x8     | 0x03  | 3      | 3x1
-// 0x9     | 0x06  | 6      | 3x2
-// 0xA     | 0x09  | 9      | 3x3
-// 0xB     | 0x0C  | 12     | 3x4
-// 0xC     | 0x04  | 4      | 4x1
-// 0xD     | 0x08  | 8      | 4x2
-// 0xE     | 0x0C  | 12     | 4x3
-// 0xF     | 0x10  | 16     | 4x4
-
 // Function to parse sizetab and tileLoc fields
 function parseSpriteData(sizetab, tileLoc) {
   // Extract size index (low nibble, bits 0–3)
@@ -263,9 +246,12 @@ function parseSpriteData(sizetab, tileLoc) {
   // const hFlip = (flipPriorityFlags & 0x2) !== 0; // Bit 13 (tentative, based on assembly)
   // const vFlip = (flipPriorityFlags & 0x1) !== 0; // Bit 12 (tentative, based on assembly)
   // Note: These are speculative; the assembly uses object attributes for flips, so these may be priority or unused
-  const flipPriorityFlags = (tileLoc >> 15) & 1;
+  const priority = (tileLoc >> 15) & 1;
   const vFlip = (tileLoc >> 12) & 1;
   const hFlip = (tileLoc >> 11) & 1;
+
+  // Extract palette from bits 13–14 of tileLoc
+  const palette = (tileLoc >> 13) & 0x3; // Bits 13–14, masked to get 2-bit value (0–3)
 
   // Extract middle bits (4–11) of sizetab, possibly unused
   const middleBits = (sizetab & 0x0FF0) >> 4;
@@ -278,7 +264,8 @@ function parseSpriteData(sizetab, tileLoc) {
     tileIndex,          // 15-bit tile index for tile data section
     hFlip,              // Horizontal flip flag (speculative)
     vFlip,              // Vertical flip flag (speculative)
-    flipPriorityFlags,  // Raw bits 12–13 for debugging
+    palette,            // Palette of Sprite
+    priority,           // 1 = high, 0 = low
     middleBits          // Bits 4–11, possibly unused
   };
 }
