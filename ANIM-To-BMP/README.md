@@ -17,7 +17,7 @@ There is also a `.json` file saved per Animation Frame, which contains the metad
 | `0x06-X`          | `<Frame Data>`  | List of Frames in .ANIM file |
 | `0x(X+1h)-(X+2h)`   | `"CC"`          | Character Content (Tile Data) Header |
 | `0x(X+3h)-(X+4h)`   | `<int16>`      | Number of Tiles in ANIM file  |
-| `0x(X+5h)-(Y)`     | `<Tile Data>`   | 8x8 Tiles, 4 bits per pixel, Column-Major order |
+| `0x(X+5h)-(Y)`     | `<Sprite Tile Data>`   | 8x8 Tiles, 4 bits per pixel, Column-Major order. In the retail ROM, sprites are grouped together in order of descending height. See `Size Table` Definition Section for Sprite Sizes. Sprites seem to be in opposite order of tileIndex in each size group. |
 | `0x(Y+1h)-(Y+2h)`   | `"PP"`          | Palette Section Header |
 | `0x(Y+3h)-(Y+82h)` | `<Palette Data>` | 128 bytes of Palette Data. Unknown as to how this is laid out. Potentially 4 palettes of 16 colors (2 bytes per color, RGB444)-- need to verify |
 | `0x(Y+83h)-(Y+84h)`| `"DD"`          | Unknown Data Section Header |
