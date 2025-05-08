@@ -190,17 +190,19 @@ const convertToBMP = (fileName) => {
               const upper = (byte >> 4) & 0x0F;
               // Lower 4 bits: Mask with 0x0F to get the low nibble
               const lower = byte & 0x0F;
+              // Offset Palette so that the right palette colors are used -- required because frames can be multi-palette
+              const palShift = (16*sprite.paletteIndex);
 
               // console.log('idx', idx, 'yxpixels', ypixel, xpixel, 'byte', byte, 'upper/lower', upper, lower);
               // console.log(`${idx} = spriteOffset ${spriteOffset} + curTileRow*4 ${curTileRow*4} + curTileCol ${curTileCol} + curSpriteRow*16 ${curSpriteRow*16} + (curSpriteCol*sprite.dimensions.height*16) ${curSpriteCol*sprite.dimensions.height*16}`);
-
+              
               // Assign pixels to canvas, swapping upper/lower for hFlip
-              if (sprite.hFlip) {
-                if (lower != 0) { spriteCanvas[ypixel][xpixel] = lower; } // Swap upper and lower nibbles
-                if (upper != 0) { spriteCanvas[ypixel][xpixel + 1] = upper; }
+              if (sprite.hFlip) { // if != 0 statements ensures transparency works
+                if (lower != 0) { spriteCanvas[ypixel][xpixel] = lower+palShift; } // Swap upper and lower nibbles
+                if (upper != 0) { spriteCanvas[ypixel][xpixel + 1] = upper+palShift; }
               } else {
-                if (upper != 0) { spriteCanvas[ypixel][xpixel] = upper; }
-                if (lower != 0) { spriteCanvas[ypixel][xpixel + 1] = lower; }
+                if (upper != 0) { spriteCanvas[ypixel][xpixel] = upper+palShift; }
+                if (lower != 0) { spriteCanvas[ypixel][xpixel + 1] = lower+palShift; }
               }
 
               idx++;
@@ -295,7 +297,7 @@ function parseSpriteData(sizetabByte, tileLocByte) {
   const hFlip = (tileLocByte >> 11) & 1;
 
   // Extract palette from bits 13–14 of tileLoc
-  const palette = (tileLocByte >> 13) & 0x3; // Bits 13–14, masked to get 2-bit value (0–3)
+  const paletteIndex = (tileLocByte >> 13) & 0x3; // Bits 13–14, masked to get 2-bit value (0–3)
 
   // Extract middle bits (4–11) of sizetab, possibly unused
   const middleBits = (sizetabByte & 0x0FF0) >> 4;
@@ -308,7 +310,7 @@ function parseSpriteData(sizetabByte, tileLocByte) {
     tileIndex,          // 15-bit tile index for tile data section
     hFlip,              // Horizontal flip flag (speculative)
     vFlip,              // Vertical flip flag (speculative)
-    palette,            // Palette of Sprite
+    paletteIndex,            // Palette of Sprite
     priority,           // 1 = high, 0 = low
     middleBits          // Bits 4–11, possibly unused
   };
@@ -382,7 +384,7 @@ function saveImage(spriteArray,width,height,fileName,currentFrame) {
     }
   } else { // no palette, make it greyscale
     for (let i = 0; i < 256; i++) {
-      if (i==0) {
+      if ((i%16)==0) {
         bmpImage.writeUInt8(252, fullBmpHeaderLength + i * 4);     // R
         bmpImage.writeUInt8(0, fullBmpHeaderLength + 1 + i * 4); // G
         bmpImage.writeUInt8(252, fullBmpHeaderLength + 2 + i * 4); // B
