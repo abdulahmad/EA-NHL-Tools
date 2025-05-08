@@ -21,7 +21,7 @@ There is also a `.json` file saved per Animation Frame, which contains the metad
 | `0x(TileDataEnd+1)-(TileDataEnd+2)`   | `"PP"`          | Palette Section Header |
 | `0x(TileDataEnd+3)-(TileDataEnd+82)` | `<Palette Data>` | 128 bytes of Palette Data. Unknown as to how this is laid out. Potentially 4 palettes of 16 colors (2 bytes per color, RGB444)-- need to verify |
 | `0x(TileDataEnd+83)-(TileDataEnd+84)`| `"DD"`          | Unknown Data Section Header |
-| `0x(TileDataEnd+85)-(TileDataEnd+94)`| `<"DD" Data>` | 16 bytes of Unknown Data |
+| `0x(TileDataEnd+85)-(TileDataEnd+94)`| `<DD Data>` | 16 bytes of Unknown Data |
 | `0x(TileDataEnd+95)-(TileDataEnd+96)`| `"ZZ"`          | End of File Footer |
 
 ### `Frame Data` Section
