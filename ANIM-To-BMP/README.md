@@ -1,4 +1,4 @@
-# ANIM-To-BMP v0.1
+# ANIM-To-BMP v0.2
 Exports In-game sprites from NHL92 Sega Genesis in ANIM format to Photoshop RAW and Windows BMP format. The sprites are extracted as stored-- which means they are in grayscale. 
 
 There is also a `.json` file saved per Animation Frame, which contains the metadata associated with each Frame. 
@@ -84,8 +84,6 @@ const dimensionsTable = [
 Big thank you to chaos & McMarkis on the NHL94.com discord for helping me figure everything out
 
 # Future TODO
-- Update Readme.md with 92 file format
-- Update .json file with correct metadata
-- Update Script to support 92 palettes
+- Update Script to support 92 team specific palettes
 - Update Script to extract Sprites from '93
 - Update Script to extract Sprites from '94

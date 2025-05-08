@@ -84,8 +84,9 @@ const convertToBMP = (fileName) => {
   currentIndex = currentIndex + 2;
   console.log('palette header', palHeader);
 
-  // Array to store all palettes (for potential later use)
+  // Array to store individual palettes and combined palette
   const palettes = [];
+  const combinedPalette = Buffer.alloc(64 * 3); // 64 colors (16 per palette * 4 palettes), 3 bytes each (R,G,B)
 
   for (var palIndex = 0; palIndex < 4; palIndex++) {
     var animPal = Buffer.alloc(16 * 3); // 16 colors, 3 bytes (R,G,B) each
@@ -109,20 +110,26 @@ const convertToBMP = (fileName) => {
       animPal.writeUInt8(scaledRed, offset);
       animPal.writeUInt8(scaledGreen, offset + 1);
       animPal.writeUInt8(scaledBlue, offset + 2);
+
+      // Write to combined palette (colors 0-15 for pal 0, 16-31 for pal 1, etc.)
+      const combinedOffset = (palIndex * 16 + colorIndex) * 3;
+      combinedPalette.writeUInt8(scaledRed, combinedOffset);
+      combinedPalette.writeUInt8(scaledGreen, combinedOffset + 1);
+      combinedPalette.writeUInt8(scaledBlue, combinedOffset + 2);
     }
-    palettes.push(animPal); // Store the palette
+    palettes.push(animPal); // Store the individual palette
     console.log(`Palette ${palIndex} read:`, animPal);
 
     // Write palette to .ACT file
     const actBuffer = Buffer.alloc(768); // 256 colors (768 bytes), no footer
-    // Write the 16 colors
     animPal.copy(actBuffer, 0, 0, 16 * 3); // Copy 16 RGB triplets
-    // Remaining 240 colors are left as zeros (black)
-    // No footer written for compatibility with strict 768-byte .ACT format
-    // Save to file
     fs.writeFileSync(`Extracted\\${fileName}_pal${palIndex}.act`, actBuffer);
   }
 
+  // Write combined palette to .ACT file
+  const combinedActBuffer = Buffer.alloc(768); // 256 colors (768 bytes), no footer
+  combinedPalette.copy(combinedActBuffer, 0, 0, 64 * 3); // Copy 64 RGB triplets
+  fs.writeFileSync(`Extracted\\${fileName}_combined_pal.act`, combinedActBuffer);
   
   for (var currentFrame=0; currentFrame<numFrames; currentFrame++) { // populate tile data & save image
     var minX; var maxX;
@@ -220,7 +227,7 @@ const convertToBMP = (fileName) => {
     minY = null;
     maxY = null;
 
-    saveImage(spriteCanvas,frameDimensions.maxX,frameDimensions.maxY,fileName,currentFrame);
+    saveImage(spriteCanvas,frameDimensions.maxX,frameDimensions.maxY,fileName,currentFrame,combinedPalette);
     fs.writeFileSync(`Extracted\\${fileName}${currentFrame}.json`, JSON.stringify(frames[currentFrame]));
   }
 
@@ -330,87 +337,63 @@ function print2DArray(array2D) {
   });
 }
 
-function saveImage(spriteArray,width,height,fileName,currentFrame) {
+function saveImage(spriteArray, width, height, fileName, currentFrame, combinedPalette) {
   // Create a Buffer to store the BMP image data
-  const bmpWidth = Math.ceil(width/4)*4; // round up width to nearest multiple of 4 for bmp pixel data format
-  const spitHeaderLength = 16;
+  const bmpWidth = Math.ceil(width / 4) * 4; // Round up width to nearest multiple of 4 for BMP pixel data format
   const bmpHeaderLength = 40;
   const bmpPadding = 14;
   const fullBmpHeaderLength = bmpHeaderLength + bmpPadding; // Header + padding
-  const palLength = 256 * 4;
+  const palLength = 256 * 4; // 256 colors, 4 bytes each (RGBA)
   const unevenImagePadding = (bmpWidth - width) * height;
   const bmpEOFLength = 2;
-  const pixelDataLength = width*height;
-  const expectedBmpLength = fullBmpHeaderLength + palLength + pixelDataLength + unevenImagePadding + bmpEOFLength; // height for line end bytes
+  const pixelDataLength = width * height;
+  const expectedBmpLength = fullBmpHeaderLength + palLength + pixelDataLength + unevenImagePadding + bmpEOFLength;
   const expectedRawLength = pixelDataLength;
-  console.log("expected BMP length",expectedBmpLength,"expected raw length", expectedRawLength);
+  console.log("expected BMP length", expectedBmpLength, "expected raw length", expectedRawLength);
   const bmpImage = Buffer.alloc(expectedBmpLength);
   const rawImage = Buffer.alloc(expectedRawLength);
 
   // Write the BMP header to the buffer
   bmpImage.write('BM'); // BMP Identifier
   bmpImage.writeUInt32LE(expectedBmpLength, 2); // File Size
-  bmpImage.writeUInt32LE(fullBmpHeaderLength+palLength, 10); // Byte Offset to Start of Image
+  bmpImage.writeUInt32LE(fullBmpHeaderLength + palLength, 10); // Byte Offset to Start of Image
   bmpImage.writeUInt32LE(bmpHeaderLength, 14); // Size of Header
   bmpImage.writeInt32LE(width, 18); // Image Width
-  bmpImage.writeInt32LE(height*-1, 22); // Image Height -- origin of pixel data is top left instead of bottom left
+  bmpImage.writeInt32LE(height * -1, 22); // Image Height (negative for top-down)
   bmpImage.writeUInt16LE(1, 26); // Bit Planes
-  bmpImage.writeUInt16LE(8, 28); // Bits/Pixel -- 8 is grayscale
-  bmpImage.writeUInt32LE(pixelDataLength+unevenImagePadding+bmpEOFLength, 34); // Size of Compressed file
+  bmpImage.writeUInt16LE(8, 28); // Bits/Pixel (8-bit indexed)
+  bmpImage.writeUInt32LE(pixelDataLength + unevenImagePadding + bmpEOFLength, 34); // Size of pixel data
 
-  // Write the palette information to the buffer
-  if (typeof palFileName !== 'undefined') {
-    const palFile = fs.readFileSync(palFileName);
-    let palFileOffset = 0
-    let palMultiplier = 1;
-    if(palFileName.indexOf('.act') == -1) { // EA palette, skip header & multiply colour values by 4
-      palFileOffset = 16;
-      palMultiplier = 4;
-    }
-    for (let i = 0; i < 256; i++) {
-      try {
-        bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 2 + i * 3)*palMultiplier, fullBmpHeaderLength + i * 4);     // R
-        bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 1 + i * 3)*palMultiplier, fullBmpHeaderLength + 1 + i * 4); // G
-        bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 0 + i * 3)*palMultiplier, fullBmpHeaderLength + 2 + i * 4); // B
-        bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
-      } catch(e) {
-        if (e instanceof RangeError) {
-          console.log("early end of palette file, will skip the rest of the palette");
-          i = 256;
-        } else {
-          throw e;
-        }
-      }
-    }
-  } else { // no palette, make it greyscale
-    for (let i = 0; i < 256; i++) {
-      if ((i%16)==0) {
-        bmpImage.writeUInt8(252, fullBmpHeaderLength + i * 4);     // R
-        bmpImage.writeUInt8(0, fullBmpHeaderLength + 1 + i * 4); // G
-        bmpImage.writeUInt8(252, fullBmpHeaderLength + 2 + i * 4); // B
-      } else {
-        bmpImage.writeUInt8((i % 16) * 16, fullBmpHeaderLength + i * 4);     // R
-        bmpImage.writeUInt8((i % 16) * 16, fullBmpHeaderLength + 1 + i * 4); // G
-        bmpImage.writeUInt8((i % 16) * 16, fullBmpHeaderLength + 2 + i * 4); // B
-      }
-      
-      bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
-    }
+  // Write the combined palette to the BMP
+  for (let i = 0; i < 64; i++) {
+    const offset = i * 3;
+    // BMP palette is in BGRA order
+    bmpImage.writeUInt8(combinedPalette[offset + 2], fullBmpHeaderLength + i * 4); // B
+    bmpImage.writeUInt8(combinedPalette[offset + 1], fullBmpHeaderLength + i * 4 + 1); // G
+    bmpImage.writeUInt8(combinedPalette[offset], fullBmpHeaderLength + i * 4 + 2); // R
+    bmpImage.writeUInt8(0, fullBmpHeaderLength + i * 4 + 3); // A (unused)
+  }
+  // Fill remaining palette entries (64–255) with black
+  for (let i = 64; i < 256; i++) {
+    bmpImage.writeUInt8(0, fullBmpHeaderLength + i * 4); // B
+    bmpImage.writeUInt8(0, fullBmpHeaderLength + i * 4 + 1); // G
+    bmpImage.writeUInt8(0, fullBmpHeaderLength + i * 4 + 2); // R
+    bmpImage.writeUInt8(0, fullBmpHeaderLength + i * 4 + 3); // A
   }
 
-  // Decode the compressed image data and write it to the buffer
-  let bufferIndex = fullBmpHeaderLength+palLength;
+  // Write pixel data
+  let bufferIndex = fullBmpHeaderLength + palLength;
   let rawIndex = 0;
   let rowCounter = 0;
- 
-  for (var yidx=0; yidx<height; yidx++) {
-    for( var xidx=0; xidx<width; xidx++) {
+
+  for (var yidx = 0; yidx < height; yidx++) {
+    for (var xidx = 0; xidx < width; xidx++) {
       let color = spriteArray[yidx][xidx];
       bmpImage.writeUInt8(color, bufferIndex++);
       rowCounter++;
-      if (rowCounter==width && unevenImagePadding !== 0) { 
-        for(j=0; j < bmpWidth-width; j++) {
-          bmpImage.writeUInt8('00', bufferIndex++); 
+      if (rowCounter == width && unevenImagePadding !== 0) {
+        for (let j = 0; j < bmpWidth - width; j++) {
+          bmpImage.writeUInt8(0, bufferIndex++); // Padding bytes
         }
         rowCounter = 0;
       }
@@ -426,10 +409,10 @@ function saveImage(spriteArray,width,height,fileName,currentFrame) {
 
   if (bmpImage.length !== expectedBmpLength) {
     console.log('ERROR BMP');
-    throw new Error('Expected BMP Length',expectedBmpLength,'does not match actual length',bmpImage.length);
+    throw new Error(`Expected BMP Length ${expectedBmpLength} does not match actual length ${bmpImage.length}`);
   }
   if (rawImage.length !== expectedRawLength) {
     console.log('ERROR RAW');
-    throw new Error('Expected RAW Length',expectedRawLength,'does not match actual length',rawImage.length);
+    throw new Error(`Expected RAW Length ${expectedRawLength} does not match actual length ${rawImage.length}`);
   }
 }
