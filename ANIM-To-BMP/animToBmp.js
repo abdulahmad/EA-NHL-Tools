@@ -124,7 +124,7 @@ const convertToBMP = (fileName) => {
   }
 
   
-  for (var currentFrame=0; currentFrame<0; currentFrame++) { // populate tile data & save image
+  for (var currentFrame=0; currentFrame<numFrames; currentFrame++) { // populate tile data & save image
     var minX; var maxX;
     var minY; var maxY;
     var length;
@@ -158,8 +158,10 @@ const convertToBMP = (fileName) => {
     var spriteCanvas = Array(frameDimensions.maxY).fill().map(() => Array(frameDimensions.maxX).fill(0));
     console.log('Rows:', spriteCanvas.length, 'Columns:', spriteCanvas[0].length);
     // print2DArray(spriteCanvas);
-    for (var currentSpriteIndex=0; currentSpriteIndex<frames[currentFrame].sprites.length; currentSpriteIndex++) {
+
+    for (var currentSpriteIndex=0; currentSpriteIndex<frames[currentFrame].sprites.length; currentSpriteIndex++) { // lay pixels into canvas
       var sprite = frames[currentFrame].sprites[currentSpriteIndex];
+      
       var spriteOffset = spriteTilesIndex + sprite.tileIndex * 32;
       var idx = spriteOffset;
       console.log('Place Sprite',currentSpriteIndex,'tileIndex',sprite.tileIndex,'at',sprite.xpos+frameDimensions.offsetX,sprite.ypos+frameDimensions.offsetY,'size',sprite.dimensions,'fileOffset',spriteOffset);
@@ -194,11 +196,11 @@ const convertToBMP = (fileName) => {
 
               // Assign pixels to canvas, swapping upper/lower for hFlip
               if (sprite.hFlip) {
-                spriteCanvas[ypixel][xpixel] = lower; // Swap upper and lower nibbles
-                spriteCanvas[ypixel][xpixel + 1] = upper;
+                if (lower != 0) { spriteCanvas[ypixel][xpixel] = lower; } // Swap upper and lower nibbles
+                if (upper != 0) { spriteCanvas[ypixel][xpixel + 1] = upper; }
               } else {
-                spriteCanvas[ypixel][xpixel] = upper;
-                spriteCanvas[ypixel][xpixel + 1] = lower;
+                if (upper != 0) { spriteCanvas[ypixel][xpixel] = upper; }
+                if (lower != 0) { spriteCanvas[ypixel][xpixel + 1] = lower; }
               }
 
               idx++;
