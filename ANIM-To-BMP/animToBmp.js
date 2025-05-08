@@ -70,15 +70,63 @@ const convertToBMP = (fileName) => {
     frames[currentFrame] = frame;
   }
   
-  currentIndex = 35108; // Sprite.anim start of tile data
+  // currentIndex = 35108; // Sprite.anim start of tile data
   var tileHeader = animData.toString('ascii', currentIndex, currentIndex+2);
   currentIndex = currentIndex + 2;
   var numTiles = animData.readInt16BE(currentIndex);
   currentIndex = currentIndex + 2;
   console.log("Tile Data Header", tileHeader, "numTiles", numTiles);
-
   const spriteTilesIndex = currentIndex;
-  for (var currentFrame=0; currentFrame<numFrames; currentFrame++) { // populate tile data & save image
+  
+  // Skip to palette data
+  currentIndex = currentIndex + numTiles * 32;
+  var palHeader = animData.toString('ascii', currentIndex, currentIndex + 2);
+  currentIndex = currentIndex + 2;
+  console.log('palette header', palHeader);
+
+  // Array to store all palettes (for potential later use)
+  const palettes = [];
+
+  for (var palIndex = 0; palIndex < numPals; palIndex++) {
+    var animPal = Buffer.alloc(16 * 3); // 16 colors, 3 bytes (R,G,B) each
+    for (var colorIndex = 0; colorIndex < 16; colorIndex++) {
+      // Read 2 bytes for each color (9-bit palette stored in 16 bits)
+      const color = animData.readUInt16BE(currentIndex);
+      currentIndex += 2;
+
+      // Extract 3-bit components (Sega Genesis palette format: 0000BBB0GGG0RRR0)
+      const blue = (color >> 9) & 0x07;  // Bits 9–11
+      const green = (color >> 5) & 0x07; // Bits 5–7
+      const red = (color >> 1) & 0x07;   // Bits 1–3
+
+      // Scale 3-bit values (0–7) to 8-bit (0–255) by multiplying by 32
+      const scaledRed = red * 32;
+      const scaledGreen = green * 32;
+      const scaledBlue = blue * 32;
+
+      // Write RGB values to animPal buffer
+      const offset = colorIndex * 3;
+      animPal.writeUInt8(scaledRed, offset);
+      animPal.writeUInt8(scaledGreen, offset + 1);
+      animPal.writeUInt8(scaledBlue, offset + 2);
+    }
+    palettes.push(animPal); // Store the palette
+    console.log(`Palette ${palIndex} read:`, animPal);
+
+    // Write palette to .ACT file
+    const actBuffer = Buffer.alloc(768 + 2); // 256 colors (768 bytes) + 2-byte footer
+    // Write the 16 colors
+    animPal.copy(actBuffer, 0, 0, 16 * 3); // Copy 16 RGB triplets
+    // Remaining 240 colors are left as zeros (black)
+    // Write footer: number of colors (16) and transparent color index (0xFFFF for none)
+    actBuffer.writeUInt16BE(16, 768); // Number of colors
+    actBuffer.writeUInt16BE(0xFFFF, 770); // No transparent color
+    // Save to file
+    fs.writeFileSync(`Extracted\\${fileName}_pal${palIndex}.act`, actBuffer);
+  }
+
+  
+  for (var currentFrame=0; currentFrame<0; currentFrame++) { // populate tile data & save image
     var minX; var maxX;
     var minY; var maxY;
     var length;
