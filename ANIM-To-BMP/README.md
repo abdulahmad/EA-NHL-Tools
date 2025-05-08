@@ -11,7 +11,7 @@ There is also a `.json` file saved per Animation Frame, which contains the metad
 ## NHL92 ANIM file details (Big Endian)
 | Byte (All values in hexadecimal)              | Value           | Description |
 | --------          | -------         | -------     |
-| `0x00..01`         | `"AA"`          | Alice Animation Header |
+| `0x00-01`         | `"AA"`          | Alice Animation Header |
 | `0x02-03`         | `<int16>`      | Number of Frames in ANIM file - 1 |
 | `0x04-05`         | `<int16>`      | Number of ??? - 1 |
 | `0x06-FrameDataEnd`          | `<Frame Data>`  | List of Frames in .ANIM file |
