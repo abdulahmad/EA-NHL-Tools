@@ -9,23 +9,23 @@ There is also a `.json` file saved per Animation Frame, which contains the metad
 2. Run `node animToBmp <animfile>` or `node animToBmp <animfile> <EAPalfile>`. It will decompress the ANIM file and you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file in the `Extracted` path. If a palfile (in EA Pal format, !pal, etc) was specified, it will use that palette in extracting ANIM files.
 
 ## NHL92 ANIM file details (Big Endian)
-| Byte              | Value           | Description |
+| Byte (All values in hexadecimal)              | Value           | Description |
 | --------          | -------         | -------     |
-| `0x00-01`         | `"AA"`          | Alice Animation Header |
+| `0x00..01`         | `"AA"`          | Alice Animation Header |
 | `0x02-03`         | `<int16>`      | Number of Frames in ANIM file - 1 |
 | `0x04-05`         | `<int16>`      | Number of ??? - 1 |
-| `0x06-X`          | `<Frame Data>`  | List of Frames in .ANIM file |
-| `0x(X+1h)-(X+2h)`   | `"CC"`          | Character Content (Tile Data) Header |
-| `0x(X+3h)-(X+4h)`   | `<int16>`      | Number of Tiles in ANIM file  |
-| `0x(X+5h)-(Y)`     | `<Sprite Tile Data>`   | 8x8 Tiles, 4 bits per pixel, Column-Major order. In the retail ROM, sprites are grouped together in order of descending height. See `Size Table` Definition Section for Sprite Sizes. Sprites seem to be in opposite order of tileIndex in each size group. |
-| `0x(Y+1h)-(Y+2h)`   | `"PP"`          | Palette Section Header |
-| `0x(Y+3h)-(Y+82h)` | `<Palette Data>` | 128 bytes of Palette Data. Unknown as to how this is laid out. Potentially 4 palettes of 16 colors (2 bytes per color, RGB444)-- need to verify |
-| `0x(Y+83h)-(Y+84h)`| `"DD"`          | Unknown Data Section Header |
-| `0x(Y+85h)-(Y+94h)`| `<"DD" Data>` | 16 bytes of Unknown Data |
-| `0x(Y+95h)-(Y+96h)`| `"ZZ"`          | End of File Footer |
+| `0x06-FrameDataEnd`          | `<Frame Data>`  | List of Frames in .ANIM file |
+| `0x(FrameDataEnd+1)-(FrameDataEnd+2)`   | `"CC"`          | Character Content (Tile Data) Header |
+| `0x(FrameDataEnd+3)-(FrameDataEnd+4)`   | `<int16>`      | Number of Tiles in ANIM file  |
+| `0x(FrameDataEnd+5)-(TileDataEnd)`     | `<Sprite Tile Data>`   | 8x8 Tiles, 4 bits per pixel, Column-Major order. In the retail ROM, sprites are grouped together in order of descending height. See `Size Table` Definition Section for Sprite Sizes. Sprites seem to be in opposite order of tileIndex in each size group. |
+| `0x(TileDataEnd+1)-(TileDataEnd+2)`   | `"PP"`          | Palette Section Header |
+| `0x(TileDataEnd+3)-(TileDataEnd+82)` | `<Palette Data>` | 128 bytes of Palette Data. Unknown as to how this is laid out. Potentially 4 palettes of 16 colors (2 bytes per color, RGB444)-- need to verify |
+| `0x(TileDataEnd+83)-(TileDataEnd+84)`| `"DD"`          | Unknown Data Section Header |
+| `0x(TileDataEnd+85)-(TileDataEnd+94)`| `<"DD" Data>` | 16 bytes of Unknown Data |
+| `0x(TileDataEnd+95)-(TileDataEnd+96)`| `"ZZ"`          | End of File Footer |
 
 ### `Frame Data` Section
-| Byte              | Value           | Description |
+| Byte (All values in hexadecimal)              | Value           | Description |
 | --------          | -------         | -------     |
 | `0x00-01`         | `"SS"`          | Sprite Struct Header |
 | `0x02-03`         | `<int16>`      | Unknown Data |
@@ -44,7 +44,7 @@ There is also a `.json` file saved per Animation Frame, which contains the metad
 | `0x26-26+(8*numSpritesinFrame)`          | `<Sprite Data>`  | Each Sprite in frame takes up 8 bytes of Data |
 
 ### `Sprite Data` Section
-| Byte              | Value           | Description |
+| Byte (All values in hexadecimal)              | Value           | Description |
 | --------          | -------         | -------     |
 | `0x00-01`         | `<int16>`       | Y Position of Sprite within Frame |
 | `0x02-03`         | `<int16>`:`Bits 0-3`      | Size Index (0-15), references `sizetab` for number of tiles, e.g.1,2,4, etc|
