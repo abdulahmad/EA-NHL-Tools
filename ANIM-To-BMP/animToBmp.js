@@ -78,7 +78,7 @@ const convertToBMP = (fileName) => {
   console.log("Tile Data Header", tileHeader, "numTiles", numTiles);
   const spriteTilesIndex = currentIndex;
   
-  // Skip to palette data
+ // Skip to palette data
   currentIndex = currentIndex + numTiles * 32;
   var palHeader = animData.toString('ascii', currentIndex, currentIndex + 2);
   currentIndex = currentIndex + 2;
@@ -87,7 +87,7 @@ const convertToBMP = (fileName) => {
   // Array to store all palettes (for potential later use)
   const palettes = [];
 
-  for (var palIndex = 0; palIndex < numPals; palIndex++) {
+  for (var palIndex = 0; palIndex < 4; palIndex++) {
     var animPal = Buffer.alloc(16 * 3); // 16 colors, 3 bytes (R,G,B) each
     for (var colorIndex = 0; colorIndex < 16; colorIndex++) {
       // Read 2 bytes for each color (9-bit palette stored in 16 bits)
@@ -114,13 +114,11 @@ const convertToBMP = (fileName) => {
     console.log(`Palette ${palIndex} read:`, animPal);
 
     // Write palette to .ACT file
-    const actBuffer = Buffer.alloc(768 + 2); // 256 colors (768 bytes) + 2-byte footer
+    const actBuffer = Buffer.alloc(768); // 256 colors (768 bytes), no footer
     // Write the 16 colors
     animPal.copy(actBuffer, 0, 0, 16 * 3); // Copy 16 RGB triplets
     // Remaining 240 colors are left as zeros (black)
-    // Write footer: number of colors (16) and transparent color index (0xFFFF for none)
-    actBuffer.writeUInt16BE(16, 768); // Number of colors
-    actBuffer.writeUInt16BE(0xFFFF, 770); // No transparent color
+    // No footer written for compatibility with strict 768-byte .ACT format
     // Save to file
     fs.writeFileSync(`Extracted\\${fileName}_pal${palIndex}.act`, actBuffer);
   }
