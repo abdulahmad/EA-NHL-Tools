@@ -15,7 +15,7 @@ const ROM_CONFIG = {
   },
   NHL94: {
     name: 'NHL94',
-    crc32: 0x00000000, // TODO: Replace with actual CRC32
+    crc32: 0x9438f5dd, // TODO: Replace with actual CRC32
     expectedSize: 0x100000, // 1 MB (adjust if 2 MB)
     addresses: {
       frameOffsets: { start: 0x9E724, end: 0x9EDC2 }, // 0x69E bytes
