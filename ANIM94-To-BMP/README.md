@@ -26,20 +26,13 @@ $70006-$743FC: Sprite data bytes
 $743FC-$74910: Hotlist table ($514 long, last 10 bytes are 0) 
 
 ## NHL93 ANIM file locations (Big Endian)
-| Address (All values in hexadecimal)              | Value           | Description |
-| --------          | -------         | -------     |
-| `0x4D8E-6446`         | `<SPAList>`          | zr |
-| `0x02-03`         | `<int16>`      | Number of Frames in ANIM file - 1 |
-| `0x04-05`         | `<int16>`      | Number of ??? - 1 |
-| `0x06-FrameDataEnd`          | `<Frame Data>`  | List of Frames in .ANIM file |
-| `0x(FrameDataEnd+1)-(FrameDataEnd+2)`   | `"CC"`          | Character Content (Tile Data) Header |
-| `0x(FrameDataEnd+3)-(FrameDataEnd+4)`   | `<int16>`      | Number of Tiles in ANIM file  |
-| `0x(FrameDataEnd+5)-(TileDataEnd)`     | `<Sprite Tile Data>`   | 8x8 Tiles, 4 bits per pixel, Column-Major order. In the retail ROM, sprites are grouped together in order of descending height. See `Size Table` Definition Section for Sprite Sizes. Sprites seem to be in opposite order of tileIndex in each size group. |
-| `0x(TileDataEnd+1)-(TileDataEnd+2)`   | `"PP"`          | Palette Section Header |
-| `0x(TileDataEnd+3)-(TileDataEnd+82)` | `<Palette Data>` | 128 bytes of Palette Data. Unknown as to how this is laid out. Potentially 4 palettes of 16 colors (2 bytes per color, RGB444)-- need to verify |
-| `0x(TileDataEnd+83)-(TileDataEnd+84)`| `"DD"`          | Unknown Data Section Header |
-| `0x(TileDataEnd+85)-(TileDataEnd+94)`| `<DD Data>` | 16 bytes of Unknown Data |
-| `0x(TileDataEnd+95)-(TileDataEnd+96)`| `"ZZ"`          | End of File Footer |
+| Address (All values in hexadecimal) | Value       | Description |
+| --------                            | -------     | -------     |
+| `0x4D8E-6446`                       | `<SPAList>` | ??? |
+| `0x3A3B0-6FAF0`                     | `<Sprite Tile Data>`   | 8x8 Tiles, 4 bits per pixel, Column-Major order. |
+| `0x6FAF0-70006`         | `<Frame Sprite Offsets>`      | ??? |
+| `0x70006-743FC`          | `<Sprite data bytes>`  | ??? |
+| `0x743FC-74910`   | `<Hotlist Table>`          | ??? |
 
 ### `Frame Data` Section
 | Byte (All values in hexadecimal)              | Value           | Description |
