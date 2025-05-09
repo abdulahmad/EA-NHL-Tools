@@ -68,6 +68,7 @@ const convertToBMP = (fileName, palFile) => {
 
       frame.sprites.push(sprite);
       console.log(sprite);
+      if (sprite.priority == 1) { throw new Exception('priority bit used'); }
     }
     frames[currentFrame] = frame;
   }

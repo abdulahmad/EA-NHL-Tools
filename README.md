@@ -1,11 +1,13 @@
-# EA-NHL-Tools 0.5 ALPHA
+# EA-NHL-Tools 0.6
 Tools for various EA NHL games
 
 Recommend checking out Releases for latest stable release: https://github.com/abdulahmad/EA-NHL-Tools/releases
 
 ## Tools included
 
-`95-Team-Swap-Mod` - Very WIP Mod for NHL95PC that allows you to use teams/rosters/jerseys/logos from the '22-'23 season
+`95-Team-Swap-Mod` - Unfinished Mod for NHL95PC that allows you to use teams/rosters/jerseys/logos from the '22-'23 season
+
+`ANIM-To-BMP` - Extracts NHL92 `.ANIM` Sprite Animation files to `.BMP`
 
 `DIG-To-WAV` - Converts NHL94/95 PC `.DIG` files to `.WAV` (in-game sounds)
 
@@ -55,9 +57,15 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 - WIP: Create rinkpal-03-ingame
 - WIP: Create rinkpal-01-jersey
 
+### 0.6
+- First release of `ANIM-To-BMP`
 
-## Future version plans (May not be in this order)
-- Create structure to compile 95 Team swap mod
+## New future version plans
+- Add NHL 93 & 94 Support for `ANIM-To-BMP`
+- Update `ANIM-To-BMP` to extract sprite components from `.ANIM` files
+- Create tool to build `.ANIM` file from frame/sprite metadata/components
+
+## Postponed future version plans
 - Template to create in-game team specific assets (PALs/CRESTS/TIL) -- all share same palette
 - Build tools to create in-game team specific assets (PALs/CRESTS/TIL) -- all share same palette
 - TIL-To-BMP / BMP-To-TIL (include MAP/centre ice logo config)
@@ -69,5 +77,4 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 - Tool to import unknown viv format
 - .ACT to !PAL
 - Reorg to use central NHL95CD folder
-- Set up assets for Team Swap Mod
 - Make similar functionality in PPV-To-BMP to extract with palette
