@@ -39,6 +39,15 @@ $743FC-$74910: Hotlist table ($514 long, last 10 bytes are 0)
 | **NHL94**   | Sprite Data Bytes          | `0x9EDC2–0xA44C8`     | Sprite attributes for each frame (position, size, tile index, etc.). |
 | **NHL94**   | Hotlist Table              | `0xA44C8–0xA4B54`     | Unknown table, possibly hotspot data (0x68C bytes). |
 
+### `SPAList` Section
+| Byte Offset | Value           | Description |
+|-------------|-----------------|-------------|
+| `0x00–0x01` | `<int16>`       | Animation ID or group identifier (e.g., player skating, shooting). |
+| `0x02–0x03` | `<int16>`       | Frame count for the animation sequence. |
+| `0x04–0x05` | `<int16>`       | Starting frame index in the Frame Sprite Data Offsets table. |
+| `0x06–0x07` | `<int16>`       | Timing/delay (frames per animation step, in VBlank counts). |
+| `0x08–0x09` | `<int16>`       | Loop flag or next animation ID (e.g., 0xFFFF for no loop, or ID of next animation). |
+
 ### `Frame Data offsets` Section
 | Byte Offset | Value           | Description |
 |-------------|-----------------|-------------|
@@ -57,6 +66,12 @@ $743FC-$74910: Hotlist table ($514 long, last 10 bytes are 0)
 | `0x04–0x05` | `Bit 15`        | Priority (`1` = high, appears in front; `0` = low, appears behind). |
 | `0x06`      | `<uint8>`       | Palette-related byte (used when setting palette, possibly for team colors). |
 | `0x07`      | `<uint8>`       | Size Index (0–15, references `sizetab` for number of tiles). |
+
+### `Hotlist` Section
+| Byte Offset | Value           | Description |
+|-------------|-----------------|-------------|
+| `0x00–0x01` | `<int16>`       | X Hotspot offset (signed, relative to frame’s origin). |
+| `0x02–0x03` | `<int16>`       | Y Hotspot offset (signed, relative to frame’s origin). |
 
 ### `Size Table` Definition
 ```// value at index indicates number of 8x8 tiles. Index references sizetab lookup table
