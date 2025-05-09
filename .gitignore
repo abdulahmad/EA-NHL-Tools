@@ -25,8 +25,5 @@ TIL-TO-BMP/NHL95TILMAP
 **/node_modules
 NHL94INST/**
 NHL95CD/**
-Extracted/**
-*.BMP
-*.raw
-*.json
-*.act
+ANIM-To-BMP/Extracted/**
+ANIM94-To-BMP/*.bin
