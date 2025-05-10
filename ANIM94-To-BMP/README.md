@@ -54,7 +54,15 @@ $743FC-$74910: Hotlist table ($514 long, last 10 bytes are 0)
 | `0x00–0x01` | `<int16>`       | Number of sprites in frame - 1 (equivalent to `SprStrNum` in `.anim`). |
 | `0x02–0x03` | `<int16>`       | Offset to sprite data bytes for this frame, relative to the start of the Sprite Data Bytes section (e.g., `0x70006` for NHLPA93, `0x9EDC2` for NHL94). |
 
-### `Sprite Data` Section
+Note this is the correct definition of Sprite data from chaos:
+Sprite tile data bytes (same for 93/94):
+Byte 0-1: X Global
+Byte 2-3: Y Global
+Byte 4-5: Tile offset
+Byte   6: Used when setting palette 
+Byte   7: Sizetab byte  
+
+### `Sprite Data` Section (incorrect)
 | Byte Offset | Value           | Description |
 |-------------|-----------------|-------------|
 | `0x00–0x01` | `<int16>`       | Y Position of sprite within frame (global Y coordinate). |

@@ -5,8 +5,8 @@ const crc32 = require('crc-32'); // Install via `npm install crc-32`
 const ROM_CONFIG = {
   NHLPA93: {
     name: 'NHLPA93 (v1.1)',
-    crc32: 0x00000000, // TODO: Replace with actual CRC32
-    expectedSize: 0x100000, // 1 MB
+    crc32: 0xf361d0bf,
+    expectedSize: 0x80000, // 1 MB
     addresses: {
       frameOffsets: { start: 0x6FAF0, end: 0x70006 }, // 0x516 bytes
       spriteData: { start: 0x70006, end: 0x743FC },
@@ -15,7 +15,7 @@ const ROM_CONFIG = {
   },
   NHL94: {
     name: 'NHL94',
-    crc32: 0x9438f5dd, // TODO: Replace with actual CRC32
+    crc32: 0x9438f5dd,
     expectedSize: 0x100000, // 1 MB (adjust if 2 MB)
     addresses: {
       frameOffsets: { start: 0x9E724, end: 0x9EDC2 }, // 0x69E bytes
