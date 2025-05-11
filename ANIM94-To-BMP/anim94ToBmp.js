@@ -14,6 +14,7 @@ const ROM_CONFIG = {
       spriteData: { start: 0x70006, end: 0x743FC },
       hotlist: { start: 0x743FC, end: 0x74910 },
       spriteTiles: { start: 0x3A3B0, end: 0x6FAF0 },
+      paletteOffset: { start: 0x35E50 }
     },
   },
   NHL94: {
@@ -27,10 +28,25 @@ const ROM_CONFIG = {
       spriteData: { start: 0x9EDC2, end: 0xA44C8 },
       hotlist: { start: 0xA44C8, end: 0xA4B54 },
       spriteTiles: { start: 0x5DE84, end: 0x9E724 },
+      paletteOffset: { start: 0x59924 }, // same as 93
+      paletteOffset2: { start: 0x4E298 },
+      paletteOffset3: { start: 0xA5A1E },
+      paletteOffset4: { start: 0xA98CC },
+      paletteOffset5: { start: 0xB8A0A }, // same as 93
+      paletteOffset6: { start: 0xBBE78 },
+      paletteOffset7: { start: 0xBDAE6 },
+      paletteOffset8: { start: 0xBEE34 },
+      paletteOffset9: { start: 0xBF0E2 },
+      paletteOffset10: { start: 0xBF66C },
+      paletteOffset11: { start: 0xEA6D6 },
+      paletteOffset12: { start: 0xEAF9A },
+      paletteOffset13: { start: 0xEBE60 },
+      paletteOffset14: { start: 0xEC7EE },
+      paletteOffset15: { start: 0xED7FA } // same as 93
     },
   },
 };
-
+const frameOffsetHeaderLength = 2;
 // Function to convert ROM sprite data to BMP format
 const convertRomToBMP = (romFile, palFile) => {
   console.log('romSpriteToBMP:', romFile);
@@ -60,7 +76,8 @@ const convertRomToBMP = (romFile, palFile) => {
 
   // Calculate number of frames
   const frameTableSize = romConfig.addresses.frameOffsets.end - romConfig.addresses.frameOffsets.start;
-  const numFrames = frameTableSize / 2; // 4 bytes per frame (2 for numSprites, 2 for offset)
+  // 4 bytes per frame (2 for numSprites, 2 for offset), last frame is dummy
+  const numFrames = (frameTableSize / 2) - 1; 
   console.log(`Number of frames: ${numFrames}`);
 
   // Initialize frames array
@@ -76,18 +93,17 @@ const convertRomToBMP = (romFile, palFile) => {
 
     // Read frame data
     // frame.numSpritesinFrame = romData.readUInt16BE(currentIndex) + 1; // SprStrNum + 1
-    frame.spriteDataOffset = romData.readUInt16BE(currentIndex) + romConfig.addresses.spriteData.start;
-    frame.nextOffset = romData.readUInt16BE(currentIndex+2) + romConfig.addresses.spriteData.start;
+    frame.spriteDataOffset = romData.readUInt16BE(currentIndex) + romConfig.addresses.frameOffsets.start - frameOffsetHeaderLength;
+    frame.nextOffset = romData.readUInt16BE(currentIndex+2) + romConfig.addresses.frameOffsets.start - frameOffsetHeaderLength;
     frame.numSpritesInFrame = (frame.nextOffset - frame.spriteDataOffset) / 8;
     currentIndex += 2;
     
-
     console.log(frame);
 
     // Read sprite data
     let spriteIndex = frame.spriteDataOffset;
     console.log('sprite loop',currentFrame, frame.numSpritesInFrame);
-    for (let currentSprite = 0; currentSprite < frame.numSpritesInFrame-1; currentSprite++) { // assuming there is a dummy frame at the end
+    for (let currentSprite = 0; currentSprite < frame.numSpritesInFrame; currentSprite++) { // assuming there is a dummy frame at the end
 
       const sprite = {
           spriteIndex: currentSprite,
@@ -101,12 +117,14 @@ const convertRomToBMP = (romFile, palFile) => {
       const parsedData = parseSpriteData(sprite.sizetabByte, sprite.tileLocByte);
       Object.assign(sprite, parsedData);
       
-      console.log(sprite);
+      // console.log(sprite);
 
       frame.sprites.push(sprite);
       spriteIndex += 8;
-    }
 
+      // console.log(frame);
+    }
+    console.log(frame);
     frames[currentFrame] = frame;
   }
 
