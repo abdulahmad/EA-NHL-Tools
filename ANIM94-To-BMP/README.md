@@ -1,4 +1,4 @@
-# ANIM94-To-BMP v0.1
+# ANIM94-To-BMP v0.1 WIP NOT WORKING YET
 Exports In-game sprites from NHLPA93 & NHL94 Sega Genesis ROM files to Photoshop RAW and Windows BMP format.
 
 There is also a `.json` file saved per Animation Frame, which contains the metadata associated with each Frame. 
@@ -30,7 +30,7 @@ $743FC-$74910: Hotlist table ($514 long, last 10 bytes are 0)
 |------------|-----------------------------|-----------------------|-------------|
 | **NHLPA93** | SPAList                    | `0x4D8E–0x6446`       | Unknown list, possibly sprite animation metadata (not covered here). |
 | **NHLPA93** | Sprite Tiles               | `0x3A3B0–0x6FAF0`     | Raw 8x8 tile data, 4 bits per pixel, 32 bytes per tile. |
-| **NHLPA93** | Frame Sprite Data Offsets  | `0x6FAF0–0x70006`     | Table of offsets to sprite data for each frame (0x514 bytes). |
+| **NHLPA93** | Frame Sprite Data Offsets  | `0x6FAF2–0x70006`     | Table of offsets to sprite data for each frame (0x514 bytes). |
 | **NHLPA93** | Sprite Data Bytes          | `0x70006–0x743FC`     | Sprite attributes for each frame (position, size, tile index, etc.). |
 | **NHLPA93** | Hotlist Table              | `0x743FC–0x74910`     | Unknown table, possibly hotspot data (0x514 bytes, last 10 bytes zero). |
 | **NHL94**   | SPAList                    | `0x5B1C–0x76B2`       | Unknown list, possibly sprite animation metadata (not covered here). |
@@ -51,8 +51,10 @@ $743FC-$74910: Hotlist table ($514 long, last 10 bytes are 0)
 ### `Frame Data offsets` Section
 | Byte Offset | Value           | Description |
 |-------------|-----------------|-------------|
-| `0x00–0x01` | `<int16>`       | Number of sprites in frame - 1 (equivalent to `SprStrNum` in `.anim`). |
-| `0x02–0x03` | `<int16>`       | Offset to sprite data bytes for this frame, relative to the start of the Sprite Data Bytes section (e.g., `0x70006` for NHLPA93, `0x9EDC2` for NHL94). |
+| `0x00..0x01` | `<int16>`       | Offset to sprite data bytes for this frame, relative to the start of the Sprite Data Bytes section (e.g., `0x70006` for NHLPA93, `0x9EDC2` for NHL94). |
+| `0x02..0x03` | `<int16>`       | Offset to sprite data bytes for this frame, relative to the start of the Sprite Data Bytes section (e.g., `0x70006` for NHLPA93, `0x9EDC2` for NHL94). |
+| ... | ...       | ... |
+| `0x(NumberOfFrames*2)-2..0x(NumberOfFrames*2)-1` | `<int16>`       | Offset to sprite data bytes for this frame, relative to the start of the Sprite Data Bytes section (e.g., `0x70006` for NHLPA93, `0x9EDC2` for NHL94). |
 
 Note this is the correct definition of Sprite data from chaos:
 Sprite tile data bytes (same for 93/94):

@@ -6,10 +6,13 @@ const ROM_CONFIG = {
   NHLPA93: {
     name: 'NHLPA93 (v1.1)',
     crc32: 0xf361d0bf,
-    expectedSize: 0x80000, // 1 MB
+    expectedSize: 0x80000, // 512 kb
     addresses: {
-      frameOffsets: { start: 0x6FAF0, end: 0x70006 }, // 0x516 bytes
+      //spaList: { start:0x4D8E, end: 0x6446, length: 0xA }, // 5816 bytes -> should be 5810 or 5820
+      spaList: { start:0x4D8E, end: 0x6440, length: 0xA },
+      frameOffsets: { start: 0x6FAF2, end: 0x70006 }, // 0x514 bytes
       spriteData: { start: 0x70006, end: 0x743FC },
+      hotlist: { start: 0x743FC, end: 0x74910 },
       spriteTiles: { start: 0x3A3B0, end: 0x6FAF0 },
     },
   },
@@ -18,8 +21,11 @@ const ROM_CONFIG = {
     crc32: 0x9438f5dd,
     expectedSize: 0x100000, // 1 MB (adjust if 2 MB)
     addresses: {
+      //spaList: { start:0x5B1C, end: 0x76B2 },
+      spaList: { start:0x5B1C, end: 0x76B0, length: 0xA },
       frameOffsets: { start: 0x9E724, end: 0x9EDC2 }, // 0x69E bytes
       spriteData: { start: 0x9EDC2, end: 0xA44C8 },
+      hotlist: { start: 0xA44C8, end: 0xA4B54 },
       spriteTiles: { start: 0x5DE84, end: 0x9E724 },
     },
   },
@@ -54,14 +60,14 @@ const convertRomToBMP = (romFile, palFile) => {
 
   // Calculate number of frames
   const frameTableSize = romConfig.addresses.frameOffsets.end - romConfig.addresses.frameOffsets.start;
-  const numFrames = frameTableSize / 4; // 4 bytes per frame (2 for numSprites, 2 for offset)
+  const numFrames = frameTableSize / 2; // 4 bytes per frame (2 for numSprites, 2 for offset)
   console.log(`Number of frames: ${numFrames}`);
 
   // Initialize frames array
   const frames = new Array(numFrames);
 
   // Read frame offsets and sprite counts
-  let currentIndex = romConfig.addresses.frameOffsets.start;
+  currentIndex = romConfig.addresses.frameOffsets.start;
   for (let currentFrame = 0; currentFrame < numFrames; currentFrame++) {
     const frame = {
       frameIndex: currentFrame,
@@ -69,25 +75,33 @@ const convertRomToBMP = (romFile, palFile) => {
     };
 
     // Read frame data
-    frame.numSpritesinFrame = romData.readUInt16BE(currentIndex) + 1; // SprStrNum + 1
-    const spriteDataOffset = romData.readUInt16BE(currentIndex + 2) + romConfig.addresses.spriteData.start;
-    currentIndex += 4;
+    // frame.numSpritesinFrame = romData.readUInt16BE(currentIndex) + 1; // SprStrNum + 1
+    frame.spriteDataOffset = romData.readUInt16BE(currentIndex) + romConfig.addresses.spriteData.start;
+    frame.nextOffset = romData.readUInt16BE(currentIndex+2) + romConfig.addresses.spriteData.start;
+    frame.numSpritesInFrame = (frame.nextOffset - frame.spriteDataOffset) / 8;
+    currentIndex += 2;
+    
+
+    console.log(frame);
 
     // Read sprite data
-    let spriteIndex = spriteDataOffset;
-    for (let currentSprite = 0; currentSprite < frame.numSpritesinFrame; currentSprite++) {
-      const sprite = {
-        spriteIndex: currentSprite,
-        ypos: romData.readInt16BE(spriteIndex), // Bytes 0–1: Y position
-        xpos: romData.readInt16BE(spriteIndex + 2), // Bytes 2–3: X position
-        tileLocByte: romData.readUInt16BE(spriteIndex + 4), // Bytes 4–5: Tile index and flags
-        paletteByte: romData.readUInt8(spriteIndex + 6), // Byte 6: Palette-related
-        sizetabByte: romData.readUInt8(spriteIndex + 7), // Byte 7: Size index
-      };
+    let spriteIndex = frame.spriteDataOffset;
+    console.log('sprite loop',currentFrame, frame.numSpritesInFrame);
+    for (let currentSprite = 0; currentSprite < frame.numSpritesInFrame-1; currentSprite++) { // assuming there is a dummy frame at the end
 
+      const sprite = {
+          spriteIndex: currentSprite,
+          xpos: romData.readInt16BE(spriteIndex), // Bytes 0–1: X position
+          ypos: romData.readInt16BE(spriteIndex + 2), // Bytes 2–3: Y position
+          tileLocByte: romData.readUInt16BE(spriteIndex + 4), // Bytes 4–5: Tile offset
+          paletteByte: romData.readUInt8(spriteIndex + 6), // Byte 6: Palette-related
+          sizetabByte: romData.readUInt8(spriteIndex + 7), // Byte 7: Size index
+        };
       // Parse sprite data
       const parsedData = parseSpriteData(sprite.sizetabByte, sprite.tileLocByte);
       Object.assign(sprite, parsedData);
+      
+      console.log(sprite);
 
       frame.sprites.push(sprite);
       spriteIndex += 8;
