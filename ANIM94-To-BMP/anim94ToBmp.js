@@ -24,7 +24,7 @@ const ROM_CONFIG = {
     addresses: {
       //spaList: { start:0x5B1C, end: 0x76B2 },
       spaList: { start:0x5B1C, end: 0x76B0, length: 0xA },
-      frameOffsets: { start: 0x9E724, end: 0x9EDC2 }, // 0x69E bytes
+      frameOffsets: { start: 0x9E726, end: 0x9EDC2 }, // 0x69E bytes
       spriteData: { start: 0x9EDC2, end: 0xA44C8 },
       hotlist: { start: 0xA44C8, end: 0xA4B54 },
       spriteTiles: { start: 0x5DE84, end: 0x9E724 },
@@ -114,7 +114,7 @@ const convertRomToBMP = (romFile, palFile) => {
           sizetabByte: romData.readUInt8(spriteIndex + 7), // Byte 7: Size index
         };
       // Parse sprite data
-      const parsedData = parseSpriteData(sprite.sizetabByte, sprite.tileLocByte);
+      const parsedData = parseSpriteData(sprite.sizetabByte, sprite.tileLocByte, sprite.paletteByte);
       Object.assign(sprite, parsedData);
       
       // console.log(sprite);
@@ -163,8 +163,8 @@ const convertRomToBMP = (romFile, palFile) => {
       // Fill with black (or read from ROM if palette offset is provided)
       for (let i = 0; i < 16; i++) {
         // animPal[i] = 0;
-        let currentPalIndex = romConfig.addresses.paletteOffset.start + (i*2);
-        console.log('AA TEST',currentPalIndex);
+        let currentPalIndex = romConfig.addresses.paletteOffset.start + (i*2) + 16 * palIndex;
+        // console.log('AA TEST',currentPalIndex);
         const color = romData.readUInt16BE(currentPalIndex);
 
         // Extract 3-bit components (Sega Genesis palette format: 0000BBB0GGG0RRR0)
@@ -277,22 +277,34 @@ const dimensionsTable = [
 ];
 
 // Parse sprite data
-function parseSpriteData(sizetabByte, tileLocByte) {
+function parseSpriteData(sizetabByte, tileLocByte, paletteByte) {
+  // Extract size index (low 4 bits of sizetabByte)
   const sizeIndex = sizetabByte & 0x0F;
   const tileCount = sizetabTable[sizeIndex];
   const dimensions = dimensionsTable[sizeIndex];
 
-  const tileIndexLow = tileLocByte & 0x07FF;
-  const tileIndexHigh = (sizetabByte & 0xF0) << 7; // Bits 4–7 of sizetabByte as high bits
+  // Tile index: combine high bits from sizetabByte (bits 4–7) and low bits from tileLocByte (bits 0–10)
+  const tileIndexLow = tileLocByte & 0x07FF; // Bits 0–10
+  const tileIndexHigh = (sizetabByte & 0xF0) << 7; // Bits 4–7 shifted to 11–14
   const tileIndex = tileIndexHigh | tileIndexLow;
 
-  const priority = (tileLocByte >> 15) & 1;
-  const vFlip = (tileLocByte >> 12) & 1;
-  const hFlip = (tileLocByte >> 11) & 1;
-  const paletteIndex = (tileLocByte >> 13) & 0x3;
+  // Extract flags from tileLocByte
+  const priority = (tileLocByte >> 15) & 1; // Bit 15
+  const vFlip = (tileLocByte >> 12) & 1; // Bit 12
+  const hFlip = (tileLocByte >> 11) & 1; // Bit 11
+
+  // Extract palette index from paletteByte (bits 5–6)
+  const paletteIndex = (paletteByte >> 5) & 0x3; // Bits 5–6, masked to 2-bit value (0–3)
 
   return {
-    sizeIndex, tileCount, dimensions, tileIndex, hFlip, vFlip, paletteIndex, priority,
+    sizeIndex,
+    tileCount,
+    dimensions,
+    tileIndex,
+    hFlip,
+    vFlip,
+    paletteIndex,
+    priority,
   };
 }
 
