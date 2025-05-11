@@ -14,7 +14,7 @@ const ROM_CONFIG = {
       spriteData: { start: 0x70006, end: 0x743FC },
       hotlist: { start: 0x743FC, end: 0x74910 },
       spriteTiles: { start: 0x3A3B0, end: 0x6FAF0 },
-      paletteOffset: { start: 0x35E50 }
+      paletteOffset: { start: 0x35E50 } // 0x4560 before spriteTiles
     },
   },
   NHL94: {
@@ -28,7 +28,7 @@ const ROM_CONFIG = {
       spriteData: { start: 0x9EDC2, end: 0xA44C8 },
       hotlist: { start: 0xA44C8, end: 0xA4B54 },
       spriteTiles: { start: 0x5DE84, end: 0x9E724 },
-      paletteOffset: { start: 0x59924 }, // same as 93
+      paletteOffset: { start: 0x59924 }, // same as 93,  0x4560 before spriteTiles
       paletteOffset2: { start: 0x4E298 },
       paletteOffset3: { start: 0xA5A1E },
       paletteOffset4: { start: 0xA98CC },
