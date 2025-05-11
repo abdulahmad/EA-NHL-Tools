@@ -161,8 +161,27 @@ const convertRomToBMP = (romFile, palFile) => {
       overridePalette.copy(animPal, 0, 0, 16 * 3);
     } else {
       // Fill with black (or read from ROM if palette offset is provided)
-      for (let i = 0; i < 16 * 3; i++) {
-        animPal[i] = 0;
+      for (let i = 0; i < 16; i++) {
+        // animPal[i] = 0;
+        let currentPalIndex = romConfig.addresses.paletteOffset.start + (i*2);
+        console.log('AA TEST',currentPalIndex);
+        const color = romData.readUInt16BE(currentPalIndex);
+
+        // Extract 3-bit components (Sega Genesis palette format: 0000BBB0GGG0RRR0)
+        const blue = (color >> 9) & 0x07;  // Bits 9–11
+        const green = (color >> 5) & 0x07; // Bits 5–7
+        const red = (color >> 1) & 0x07;   // Bits 1–3
+
+        // Scale 3-bit values (0–7) to 8-bit (0–255) by multiplying by 32
+        const scaledRed = red * 32;
+        const scaledGreen = green * 32;
+        const scaledBlue = blue * 32;
+
+        // Write RGB values to animPal buffer
+        const offset = i * 3;
+        animPal.writeUInt8(scaledRed, offset);
+        animPal.writeUInt8(scaledGreen, offset + 1);
+        animPal.writeUInt8(scaledBlue, offset + 2);
       }
     }
     const combinedOffset = palIndex * 16 * 3;
