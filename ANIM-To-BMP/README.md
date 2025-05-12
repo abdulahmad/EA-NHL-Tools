@@ -21,7 +21,7 @@ Palette is structured similar to how it is stored by the game in Sega Genesis CR
 | `0x(FrameDataEnd+3)-(FrameDataEnd+4)`   | `<int16>`      | Number of Tiles in ANIM file  |
 | `0x(FrameDataEnd+5)-(TileDataEnd)`     | `<Sprite Tile Data>`   | 8x8 Tiles, 4 bits per pixel, Column-Major order. In the retail ROM, sprites are grouped together in order of descending height. See `Size Table` Definition Section for Sprite Sizes. Sprites seem to be in opposite order of tileIndex in each size group. |
 | `0x(TileDataEnd+1)-(TileDataEnd+2)`   | `"PP"`          | Palette Section Header |
-| `0x(TileDataEnd+3)-(TileDataEnd+82)` | `<Palette Data>` | 128 bytes of Palette Data. Unknown as to how this is laid out. Potentially 4 palettes of 16 colors (2 bytes per color, RGB444)-- need to verify |
+| `0x(TileDataEnd+3)-(TileDataEnd+82)` | `<Palette Data>` | 128 bytes of Palette Data. 4 palettes of 16 colors (9bpp Sega Genesis Format). |
 | `0x(TileDataEnd+83)-(TileDataEnd+84)`| `"DD"`          | Unknown Data Section Header |
 | `0x(TileDataEnd+85)-(TileDataEnd+94)`| `<DD Data>` | 16 bytes of Unknown Data |
 | `0x(TileDataEnd+95)-(TileDataEnd+96)`| `"ZZ"`          | End of File Footer |
@@ -84,8 +84,3 @@ const dimensionsTable = [
 ```
 ## More Info
 Big thank you to chaos & McMarkis on the NHL94.com discord for helping me figure everything out
-
-# Future TODO
-- Update Script to support 92 team specific palettes
-- Update Script to extract Sprites from '93
-- Update Script to extract Sprites from '94

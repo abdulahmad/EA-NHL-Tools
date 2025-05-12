@@ -294,19 +294,8 @@ function parseSpriteData(sizetabByte, tileLocByte, paletteByte, disableFlip) {
   // Extract flags from tileLocByte
   const priority = (tileLocByte >> 15) & 1; // Bit 15
 
-  let vFlip;
-  let hFlip;
-  if (disableFlip) {
-    vFlip = 0;
-    hFlip = 0;
-  } else {
-    vFlip = (tileLocByte >> 12) & 1; // Bit 12
-    hFlip = (tileLocByte >> 11) & 1; // Bit 11
-  }
-  hFlip = 0;
-  vFlip = 0;
-  
- 
+  vFlip = (paletteByte >> 4) & 1; // Bit 4
+  hFlip = (paletteByte >> 3) & 1; // Bit 3
 
   // Extract palette index from paletteByte (bits 5–6)
   const paletteIndex = (paletteByte >> 5) & 0x3; // Bits 5–6, masked to 2-bit value (0–3)
