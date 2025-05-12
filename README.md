@@ -9,6 +9,8 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 
 `ANIM-To-BMP` - Extracts NHL92 `.ANIM` Sprite Animation files to `.BMP`
 
+`ANIM-To-BMP` - Extracts NHL93/94 `.ANIM` Sprite Animation files (directly from the ROM) to `.BMP`
+
 `DIG-To-WAV` - Converts NHL94/95 PC `.DIG` files to `.WAV` (in-game sounds)
 
 `HOCKEY32` - Documentation on potentially expanding NHL95 PC to 32 teams
