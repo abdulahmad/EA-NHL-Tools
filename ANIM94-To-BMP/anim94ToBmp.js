@@ -7,6 +7,7 @@ const ROM_CONFIG = {
     name: 'NHLPA93 (v1.1)',
     crc32: 0xf361d0bf,
     expectedSize: 0x80000, // 512 kb
+    disableFlip: true,
     addresses: {
       //spaList: { start:0x4D8E, end: 0x6446, length: 0xA }, // 5816 bytes -> should be 5810 or 5820
       spaList: { start:0x4D8E, end: 0x6440, length: 0xA },
@@ -21,6 +22,7 @@ const ROM_CONFIG = {
     name: 'NHL94',
     crc32: 0x9438f5dd,
     expectedSize: 0x100000, // 1 MB (adjust if 2 MB)
+    disableFlip: false,
     addresses: {
       //spaList: { start:0x5B1C, end: 0x76B2 },
       spaList: { start:0x5B1C, end: 0x76B0, length: 0xA },
@@ -114,7 +116,7 @@ const convertRomToBMP = (romFile, palFile) => {
           sizetabByte: romData.readUInt8(spriteIndex + 7), // Byte 7: Size index
         };
       // Parse sprite data
-      const parsedData = parseSpriteData(sprite.sizetabByte, sprite.tileLocByte, sprite.paletteByte);
+      const parsedData = parseSpriteData(sprite.sizetabByte, sprite.tileLocByte, sprite.paletteByte, romConfig.disableFlip);
       Object.assign(sprite, parsedData);
       
       // console.log(sprite);
@@ -277,7 +279,7 @@ const dimensionsTable = [
 ];
 
 // Parse sprite data
-function parseSpriteData(sizetabByte, tileLocByte, paletteByte) {
+function parseSpriteData(sizetabByte, tileLocByte, paletteByte, disableFlip) {
   // Extract size index (low 4 bits of sizetabByte)
   const sizeIndex = sizetabByte & 0x0F;
   const tileCount = sizetabTable[sizeIndex];
@@ -286,12 +288,25 @@ function parseSpriteData(sizetabByte, tileLocByte, paletteByte) {
   // Tile index: combine high bits from sizetabByte (bits 4–7) and low bits from tileLocByte (bits 0–10)
   const tileIndexLow = tileLocByte & 0x07FF; // Bits 0–10
   const tileIndexHigh = (sizetabByte & 0xF0) << 7; // Bits 4–7 shifted to 11–14
-  const tileIndex = tileIndexHigh | tileIndexLow;
+  // const tileIndex = tileIndexHigh | tileIndexLow;
+  const tileIndex = tileLocByte;
 
   // Extract flags from tileLocByte
   const priority = (tileLocByte >> 15) & 1; // Bit 15
-  const vFlip = (tileLocByte >> 12) & 1; // Bit 12
-  const hFlip = (tileLocByte >> 11) & 1; // Bit 11
+
+  let vFlip;
+  let hFlip;
+  if (disableFlip) {
+    vFlip = 0;
+    hFlip = 0;
+  } else {
+    vFlip = (tileLocByte >> 12) & 1; // Bit 12
+    hFlip = (tileLocByte >> 11) & 1; // Bit 11
+  }
+  hFlip = 0;
+  vFlip = 0;
+  
+ 
 
   // Extract palette index from paletteByte (bits 5–6)
   const paletteIndex = (paletteByte >> 5) & 0x3; // Bits 5–6, masked to 2-bit value (0–3)
