@@ -15,7 +15,8 @@ const ROM_CONFIG = {
       spriteData: { start: 0x70006, end: 0x743FC },
       hotlist: { start: 0x743FC, end: 0x74910 },
       spriteTiles: { start: 0x3A3B0, end: 0x6FAF0 },
-      paletteOffset: { start: 0x35E50 } // 0x4560 before spriteTiles
+      paletteOffset: { start: 0x35E50 }, // 0x4560 before spriteTiles
+      paletteOffset2: { start: 0x2E68C }
     },
   },
   NHL94: {
