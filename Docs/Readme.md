@@ -44,7 +44,7 @@ Sprites.anim: Frame 0-548
 837-844: player 3/4 arrows/star
 
 ## NHL 94 DOS:
-Sprites 000-899
+Sprites 000-875
 Crowd Sprites F000-F149
 0-351: identical player sprites as 93/94
 352-355: arrows
@@ -60,3 +60,27 @@ Crowd Sprites F000-F149
 392: instant replay cross hair (identical to 93/94)
 393-403: puck (identical to 93/94)
 405-406: net (identical to 93/94)
+407-553: goalie sprites (identical to 93)
+554-567: goal light (same index as 93 but sprites look modified)
+568-643: player animations (swat puck, hooking, wobble, flip, injury) -- identical to 93
+644-648: broken glass (same index as 93 but sprites look modified)
+649-698: referee animations (new for PC)
+699-702: between play at bench animations (new for PC)
+703-871: referee animations, mouse control UI (new for PC)
+872-875: stanley cup skating sprites (new for PC)
+
+## NHL 95 DOS:
+Sprites 000-875 are identical to 94 (not 100% verified)
+876-886: player checked into bench (new for 95 PC)
+887: player celebration
+888-903: upright crosscheck (new for 95 PC)
+904-973: checked into boards (new for 95 PC-- 94 Genesis has similar sprites but seems like these were created from scratch)
+974-1071: goalie animations (new for 95 PC-- are these from SNES version?)
+1072-1127: shot blocking (new for 95 PC)
+1128-1133: referee animations (new for 95 PC)
+
+
+# Routine investigation:
+part of playeracc routine hex bytes are:
+
+3400 3601 C5C2 C7C3 D782 -- first 16 bytes are exact

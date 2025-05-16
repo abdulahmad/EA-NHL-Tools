@@ -8,7 +8,11 @@ Palette is structured similar to how it is stored by the game in Sega Genesis CR
 # Usage
 1. Ensure you have `node` installed on your machine
 
-2. Run `node anim94ToBmp <animfile>` or `node anim94ToBmp <animfile> Palettes\<Palette File>`. It will decompress the ANIM file and you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file in the `Extracted` path. If a palette file (included in Palettes path) was specified, it will override the player sprite Palette in extracting frames from ANIM files.
+2. Go to the directory with the `anim94ToBmp.js` script
+
+2. Run `node anim94ToBmp <romfile>` or `node anim94ToBmp.js <romfile> Palettes\<Palette File>`, where the `<romfile>` is either the NHLPA93 v1.1 ROM or the NHL94 ROM for Sega Genesis.
+
+It will decompress the ANIM file and you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file in the `Extracted` path. If a palette file (included in Palettes path) was specified, it will override the player sprite Palette in extracting frames from ANIM files.
 
 ## ANIM data locations (Big Endian)
 | Game       | Section                     | Address Range         | Description |
