@@ -166,12 +166,10 @@ function extractJim(jimPath) {
 
     // Read map dimensions
     const mapWidth = buffer.readUInt16BE(paletteOffset + 128);
-    const mapHeight = buffer.readUInt16BE(paletteOffset + 130);
-
-    // Read map data
+    const mapHeight = buffer.readUInt16BE(paletteOffset + 130);    // Read map data
     const mapData = [];
     const paletteData = [];
-    offset = mapOffset;
+    offset = mapOffset+4; // 4 bytes account for map width and height
     
     for (let y = 0; y < mapHeight; y++) {
         const mapRow = [];
@@ -184,8 +182,12 @@ function extractJim(jimPath) {
             const palIndex = (data >> 13) & 3; // Bits 13-14
             const priority = (data >> 15) & 1; // Bit 15
             
+            // Calculate the offset of this tile in the file
+            const tileOffset = firstTileOffset + (tileIndex * 32); // Each tile is 32 bytes
+            
             mapRow.push({
                 tileIndex,
+                tileOffset: '0x' + tileOffset.toString(16).toUpperCase(),
                 hFlip,
                 vFlip,
                 palIndex,
