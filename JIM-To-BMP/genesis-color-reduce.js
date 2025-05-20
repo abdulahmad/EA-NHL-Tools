@@ -25,16 +25,18 @@ function processBmp(inputPath, options = {}) {
         optimizePalettes: options.optimizePalettes !== false,
         verbose: options.verbose !== false,
         outputDir: options.outputDir || null,
+        palettes: options.palettes || [0, 1, 2, 3], // Default to all 4 palettes
         ...options
     };
 
     // Create output directory structure
     const inputFileName = basename(inputPath, '.bmp');
     const strategyName = opts.balanceStrategy;
+    const palettesUsed = opts.palettes.join('-');
     
-    // Default output directory is build/<filename>-<strategy>
+    // Default output directory is build/<filename>-<strategy>-<palettes>
     const outputDir = opts.outputDir || 
-        join(__dirname, 'build', `${inputFileName}-${strategyName}`);
+        join(__dirname, 'build', `${inputFileName}-${strategyName}-pal${palettesUsed}`);
     
     // Create directory structure
     if (!existsSync(outputDir)) {
@@ -55,30 +57,18 @@ function processBmp(inputPath, options = {}) {
     
     // Read and process the BMP file
     const bmp = readBMP(inputPath);
+      console.log(`BMP dimensions: ${bmp.width}x${bmp.height}, ${bmp.bpp} bits per pixel`);
     
-    console.log(`BMP dimensions: ${bmp.width}x${bmp.height}, ${bmp.bpp} bits per pixel`);
-    
-    // Find optimal splits
-    console.log('Finding optimal quadrant splits...');
-    const splits = findOptimalSplits(bmp.pixels, bmp.width, bmp.height, opts.balanceStrategy);
-    
-    console.log(`Optimal split points - Horizontal: ${splits.horizontal}, Vertical: ${splits.vertical}`);
-    
-    // Define the four quadrants
-    const quadrants = [
-        { startX: 0, startY: 0, endX: splits.vertical, endY: splits.horizontal },
-        { startX: splits.vertical, startY: 0, endX: bmp.width, endY: splits.horizontal },
-        { startX: 0, startY: splits.horizontal, endX: splits.vertical, endY: bmp.height },
-        { startX: splits.vertical, startY: splits.horizontal, endX: bmp.width, endY: bmp.height }
-    ];
+    // Define quadrants based on selected palettes
+    const quadrants = defineQuadrantsAndPalettes(bmp, opts);
     
     // Generate palettes for each quadrant
-    console.log('Creating palettes for each quadrant...');
+    console.log('Creating palettes for each region...');
     const palettes = [];
     
     for (let i = 0; i < quadrants.length; i++) {
         const q = quadrants[i];
-        console.log(`Generating palette for quadrant ${i+1}: (${q.startX},${q.startY}) to (${q.endX},${q.endY})`);
+        console.log(`Generating palette for region ${i+1}: (${q.startX},${q.startY}) to (${q.endX},${q.endY})`);
         const colors = findDominantColors(bmp.pixels, q.startX, q.startY, q.endX, q.endY);
         palettes.push(colors);
         console.log(`Palette ${i+1} has ${colors.length} colors`);
@@ -119,26 +109,24 @@ function processBmp(inputPath, options = {}) {
     for (let ty = 0; ty < Math.ceil(bmp.height / tileSize); ty++) {
         const assignmentRow = [];
         const indexedRow = [];
-        
-        for (let tx = 0; tx < Math.ceil(bmp.width / tileSize); tx++) {
+          for (let tx = 0; tx < Math.ceil(bmp.width / tileSize); tx++) {
             // Determine which quadrant this tile belongs to
-            let quadrantIndex;
+            let quadrantIndex = 0;
             const tileX = tx * tileSize;
             const tileY = ty * tileSize;
             
-            if (tileX < splits.vertical) {
-                if (tileY < splits.horizontal) {
-                    quadrantIndex = 0; // Top-left
-                } else {
-                    quadrantIndex = 2; // Bottom-left
-                }
-            } else {
-                if (tileY < splits.horizontal) {
-                    quadrantIndex = 1; // Top-right
-                } else {
-                    quadrantIndex = 3; // Bottom-right
+            // Find which quadrant this tile belongs to
+            for (let i = 0; i < quadrants.length; i++) {
+                const q = quadrants[i];
+                if (tileX >= q.startX && tileX < q.endX && 
+                    tileY >= q.startY && tileY < q.endY) {
+                    quadrantIndex = i;
+                    break;
                 }
             }
+            
+            // Get the palette index for this quadrant
+            const paletteIndex = quadrants[quadrantIndex].paletteIndex;
             
             // Get palette for this quadrant
             const palette = palettes[quadrantIndex];
@@ -152,12 +140,11 @@ function processBmp(inputPath, options = {}) {
                     const py = ty * tileSize + y;
                     
                     if (px < bmp.width && py < bmp.height) {
-                        const pixel = bmp.pixels[py][px];
-                        const colorIndex = findBestMatch(pixel, palette);
+                        const pixel = bmp.pixels[py][px];                        const colorIndex = findBestMatch(pixel, palette);
                         tile.push(colorIndex);
                         
-                        // Convert to global palette index for the BMP (quadrantIndex * 16 + colorIndex)
-                        const globalIndex = quadrantIndex * 16 + colorIndex;
+                        // Convert to global palette index for the BMP
+                        const globalIndex = paletteIndex * 16 + colorIndex;
                         flatPixels[py * bmp.width + px] = globalIndex;
                     } else {
                         // For pixels outside image bounds, use index 0 of this quadrant's palette
@@ -173,7 +160,7 @@ function processBmp(inputPath, options = {}) {
             const tileInfo = {
                 x: tx,
                 y: ty,
-                paletteIndex: quadrantIndex,
+                paletteIndex: paletteIndex,
                 pixelData: [...tile] // Create a copy
             };
             
@@ -191,8 +178,7 @@ function processBmp(inputPath, options = {}) {
     
     // Create color statistics
     const colorStats = calculateColorStats(tileData, palettes);
-    
-    // Create metadata
+      // Create metadata
     const metadata = {
         sourceFile: inputPath,
         width: bmp.width,
@@ -204,10 +190,17 @@ function processBmp(inputPath, options = {}) {
         totalTiles: tileData.length,
         balanceStrategy: opts.balanceStrategy,
         optimizedPalettes: opts.optimizePalettes,
-        splits: {
-            horizontal: splits.horizontal,
-            vertical: splits.vertical
-        },
+        selectedPalettes: opts.palettes,
+        regions: quadrants.map((q, i) => ({
+            index: i,
+            paletteIndex: q.paletteIndex,
+            bounds: {
+                startX: q.startX,
+                startY: q.startY,
+                endX: q.endX,
+                endY: q.endY
+            }
+        })),
         palettes: genesisPalettes.map((palette, index) => ({
             index,
             colors: palette.map(value => ({
@@ -341,15 +334,18 @@ function saveTileBMP(width, height, pixels, palette, filepath) {
     bmp.writeUInt32LE(0, 38); // H-DPI
     bmp.writeUInt32LE(0, 42); // V-DPI
     bmp.writeUInt32LE(16, 46); // Colors in palette
-    bmp.writeUInt32LE(0, 50); // Important colors (0 = all)
-
-    // Write palette (just 16 colors for the tile)
+    bmp.writeUInt32LE(0, 50); // Important colors (0 = all)    // Write palette (just 16 colors for the tile)
     let paletteOffset = 54;
     for (let i = 0; i < 16; i++) {
         if (i < palette.length) {
-            bmp.writeUInt8(palette[i].b, paletteOffset++); // Blue
-            bmp.writeUInt8(palette[i].g, paletteOffset++); // Green
-            bmp.writeUInt8(palette[i].r, paletteOffset++); // Red
+            // Ensure color values are in valid range (0-255)
+            const b = Math.max(0, Math.min(255, palette[i].b || 0));
+            const g = Math.max(0, Math.min(255, palette[i].g || 0));
+            const r = Math.max(0, Math.min(255, palette[i].r || 0));
+            
+            bmp.writeUInt8(b, paletteOffset++); // Blue
+            bmp.writeUInt8(g, paletteOffset++); // Green
+            bmp.writeUInt8(r, paletteOffset++); // Red
             bmp.writeUInt8(0, paletteOffset++); // Alpha (unused)
         } else {
             // Fill remaining entries with black
@@ -402,15 +398,18 @@ function saveBMP(width, height, pixels, palette, filepath) {
     bmp.writeUInt32LE(0, 38); // H-DPI
     bmp.writeUInt32LE(0, 42); // V-DPI
     bmp.writeUInt32LE(0, 46); // Colors in palette (0 = 2^n)
-    bmp.writeUInt32LE(0, 50); // Important colors (0 = all)
-
-    // Write palette
+    bmp.writeUInt32LE(0, 50); // Important colors (0 = all)    // Write palette
     let paletteOffset = 54;
     for (let i = 0; i < 256; i++) {
         if (i < palette.length) {
-            bmp.writeUInt8(palette[i][2], paletteOffset++); // Blue
-            bmp.writeUInt8(palette[i][1], paletteOffset++); // Green
-            bmp.writeUInt8(palette[i][0], paletteOffset++); // Red
+            // Ensure color values are in valid range (0-255)
+            const b = Math.max(0, Math.min(255, palette[i][2] || 0));
+            const g = Math.max(0, Math.min(255, palette[i][1] || 0));
+            const r = Math.max(0, Math.min(255, palette[i][0] || 0));
+            
+            bmp.writeUInt8(b, paletteOffset++); // Blue
+            bmp.writeUInt8(g, paletteOffset++); // Green
+            bmp.writeUInt8(r, paletteOffset++); // Red
             bmp.writeUInt8(0, paletteOffset++); // Alpha (unused)
         } else {
             // Fill remaining entries with black
@@ -768,6 +767,13 @@ function findDominantColors(pixels, startX, startY, endX, endY, maxColors = 16) 
     // Count colors in this region
     const colorMap = countUniqueColors(pixels, startX, startY, endX, endY);
     
+    // If we have too many unique colors, we need to quantize them
+    const uniqueColors = colorMap.size;
+    if (uniqueColors > 100) {
+        console.log(`Region has ${uniqueColors} unique colors, performing color quantization...`);
+        return quantizeColors(colorMap, maxColors);
+    }
+    
     // Convert map to array and sort by frequency
     const colorArr = [];
     for (const [key, count] of colorMap.entries()) {
@@ -782,8 +788,161 @@ function findDominantColors(pixels, startX, startY, endX, endY, maxColors = 16) 
     return colorArr.slice(0, maxColors);
 }
 
-// Find best matching color from palette
+// Quantize colors to a smaller palette using k-means clustering
+function quantizeColors(colorMap, maxColors) {
+    // Extract color points with their frequencies
+    const colorPoints = [];
+    for (const [key, count] of colorMap.entries()) {
+        const [r, g, b] = key.split(',').map(Number);
+        // We'll use Lab color space for better clustering
+        const lab = rgbToLab(r, g, b);
+        colorPoints.push({
+            r, g, b,
+            l: lab.l, 
+            a: lab.a, 
+            bValue: lab.b, // Renamed to avoid conflict with the RGB 'b' property
+            count
+        });
+    }
+    
+    // Initialize centroids with "k-means++" approach
+    const centroids = [];
+    
+    // First centroid - pick randomly with probability proportional to frequency
+    let totalCount = 0;
+    for (const point of colorPoints) {
+        totalCount += point.count;
+    }
+    
+    let rnd = Math.random() * totalCount;
+    let selectedIndex = 0;
+    for (let i = 0; i < colorPoints.length; i++) {
+        rnd -= colorPoints[i].count;
+        if (rnd <= 0) {
+            selectedIndex = i;
+            break;
+        }
+    }
+    
+    // Add first centroid
+    centroids.push({...colorPoints[selectedIndex]});
+    
+    // Choose remaining centroids
+    for (let k = 1; k < maxColors && k < colorPoints.length; k++) {
+        // Calculate minimum distance from each point to any existing centroid
+        const distances = [];
+        for (const point of colorPoints) {
+            let minDistance = Infinity;
+            for (const centroid of centroids) {
+                const distance = Math.sqrt(
+                    Math.pow(point.l - centroid.l, 2) +
+                    Math.pow(point.a - centroid.a, 2) +
+                    Math.pow(point.b - centroid.b, 2)
+                ) * point.count; // Weight by frequency
+                
+                minDistance = Math.min(minDistance, distance);
+            }
+            distances.push(minDistance);
+        }
+        
+        // Choose point with maximum distance as the next centroid
+        let maxDistance = -1;
+        let maxIndex = -1;
+        for (let i = 0; i < distances.length; i++) {
+            if (distances[i] > maxDistance) {
+                maxDistance = distances[i];
+                maxIndex = i;
+            }
+        }
+        
+        centroids.push({...colorPoints[maxIndex]});
+    }
+    
+    // Run k-means iterations
+    const MAX_ITERATIONS = 10;
+    for (let iter = 0; iter < MAX_ITERATIONS; iter++) {
+        // Assign points to clusters
+        const clusters = Array(centroids.length).fill().map(() => []);
+        
+        for (const point of colorPoints) {
+            let minDistance = Infinity;
+            let closestCentroid = 0;
+              for (let i = 0; i < centroids.length; i++) {
+                const distance = Math.sqrt(
+                    Math.pow(point.l - centroids[i].l, 2) +
+                    Math.pow(point.a - centroids[i].a, 2) +
+                    Math.pow(point.bValue - centroids[i].bValue, 2)
+                );
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestCentroid = i;
+                }
+            }
+            
+            clusters[closestCentroid].push(point);
+        }
+        
+        // Update centroids
+        let changed = false;
+        for (let i = 0; i < centroids.length; i++) {            if (clusters[i].length === 0) continue;
+            
+            let sumL = 0, sumA = 0, sumBValue = 0, sumR = 0, sumG = 0, sumBlue = 0, totalWeight = 0;
+            
+            for (const point of clusters[i]) {
+                sumL += point.l * point.count;
+                sumA += point.a * point.count;
+                sumBValue += point.bValue * point.count;
+                sumR += point.r * point.count;
+                sumG += point.g * point.count;
+                sumBlue += point.b * point.count;
+                totalWeight += point.count;
+            }// Ensure RGB values are clamped to valid range 0-255
+            const clamp = (value) => Math.max(0, Math.min(255, Math.round(value)));
+            
+            const newCentroid = {
+                l: sumL / totalWeight,
+                a: sumA / totalWeight,
+                bValue: sumBValue / totalWeight,
+                r: clamp(sumR / totalWeight),
+                g: clamp(sumG / totalWeight),
+                b: clamp(sumBlue / totalWeight),
+                count: totalWeight
+            };
+              // Check if centroid changed significantly
+            const dist = Math.sqrt(
+                Math.pow(newCentroid.l - centroids[i].l, 2) +
+                Math.pow(newCentroid.a - centroids[i].a, 2) +
+                Math.pow(newCentroid.bValue - centroids[i].bValue, 2)
+            );
+            
+            if (dist > 1.0) {
+                changed = true;
+            }
+            
+            centroids[i] = newCentroid;
+        }
+        
+        // If centroids didn't change much, we're done
+        if (!changed) break;
+    }
+    
+    // Convert centroids to the format expected by the rest of the code
+    return centroids.map(c => ({
+        r: c.r,
+        g: c.g,
+        b: c.b,
+        count: c.count
+    }));
+}
+
+// Find best matching color from palette using Delta E color difference
 function findBestMatch(pixel, palette) {
+    // Special case for very small palettes to avoid black-only output
+    if (palette.length < 3) {
+        return 0; // Just use the first color
+    }
+    
     const targetLab = rgbToLab(pixel.r, pixel.g, pixel.b);
     let bestMatch = 0;
     let lowestDistance = Infinity;
@@ -1015,6 +1174,301 @@ function optimizePalettes(palettes, pixels, quadrants) {
     return palettes;
 }
 
+// Define the quadrants and palettes based on the number of palettes selected
+function defineQuadrantsAndPalettes(bmp, opts) {
+    const width = bmp.width;
+    const height = bmp.height;
+    let quadrants = [];
+    console.log(`Using ${opts.palettes.length} palettes: ${opts.palettes.join(', ')}`);
+    
+    if (opts.palettes.length === 1) {
+        // Just one palette - use it for the entire image
+        console.log('Using single palette for the entire image');
+        quadrants = [
+            { startX: 0, startY: 0, endX: width, endY: height, paletteIndex: opts.palettes[0] }
+        ];
+    } else if (opts.palettes.length === 2) {
+        // Two palettes - try both horizontal and vertical splits
+        console.log('Using 2 palettes with horizontal and vertical split strategies');
+        
+        // Find best horizontal split
+        const hSplit = findOptimalSplitPoint(bmp.pixels, width, height, 'horizontal', opts.balanceStrategy);
+        // Find best vertical split
+        const vSplit = findOptimalSplitPoint(bmp.pixels, width, height, 'vertical', opts.balanceStrategy);
+        
+        // Determine which split has better balance
+        const hImbalance = calculateImbalanceForSplit(bmp.pixels, width, height, 'horizontal', hSplit, opts.balanceStrategy);
+        const vImbalance = calculateImbalanceForSplit(bmp.pixels, width, height, 'vertical', vSplit, opts.balanceStrategy);
+        
+        if (hImbalance <= vImbalance) {
+            console.log(`Using horizontal split at ${hSplit} (imbalance: ${hImbalance})`);
+            quadrants = [
+                { startX: 0, startY: 0, endX: width, endY: hSplit, paletteIndex: opts.palettes[0] },
+                { startX: 0, startY: hSplit, endX: width, endY: height, paletteIndex: opts.palettes[1] }
+            ];
+        } else {
+            console.log(`Using vertical split at ${vSplit} (imbalance: ${vImbalance})`);
+            quadrants = [
+                { startX: 0, startY: 0, endX: vSplit, endY: height, paletteIndex: opts.palettes[0] },
+                { startX: vSplit, startY: 0, endX: width, endY: height, paletteIndex: opts.palettes[1] }
+            ];
+        }
+    } else if (opts.palettes.length === 3) {
+        // Three palettes - try different arrangements
+        console.log('Using 3 palettes with multiple split strategies');
+        
+        // Option 1: Horizontal split first, then vertical split on top
+        const hSplit = findOptimalSplitPoint(bmp.pixels, width, height, 'horizontal', opts.balanceStrategy);
+        const vSplitTop = findOptimalSplitPoint(
+            bmp.pixels.slice(0, hSplit), 
+            width, 
+            hSplit, 
+            'vertical', 
+            opts.balanceStrategy
+        );
+        
+        // Option 2: Horizontal split first, then vertical split on bottom
+        const vSplitBottom = findOptimalSplitPoint(
+            bmp.pixels.slice(hSplit), 
+            width, 
+            height - hSplit, 
+            'vertical',
+            opts.balanceStrategy
+        );
+        
+        // Option 3: Vertical split first, then horizontal split on left
+        const vSplit = findOptimalSplitPoint(bmp.pixels, width, height, 'vertical', opts.balanceStrategy);
+        const hSplitLeft = findOptimalSplitPointForRegion(
+            bmp.pixels,
+            0, 0, vSplit, height,
+            'horizontal',
+            opts.balanceStrategy
+        );
+        
+        // Option 4: Vertical split first, then horizontal split on right
+        const hSplitRight = findOptimalSplitPointForRegion(
+            bmp.pixels,
+            vSplit, 0, width, height,
+            'horizontal',
+            opts.balanceStrategy
+        );
+        
+        // Calculate imbalance for each arrangement
+        const imbalance1 = calculateImbalanceForArrangement(bmp.pixels, [
+            { startX: 0, startY: 0, endX: vSplitTop, endY: hSplit },
+            { startX: vSplitTop, startY: 0, endX: width, endY: hSplit },
+            { startX: 0, startY: hSplit, endX: width, endY: height }
+        ], opts.balanceStrategy);
+        
+        const imbalance2 = calculateImbalanceForArrangement(bmp.pixels, [
+            { startX: 0, startY: 0, endX: width, endY: hSplit },
+            { startX: 0, startY: hSplit, endX: vSplitBottom, endY: height },
+            { startX: vSplitBottom, startY: hSplit, endX: width, endY: height }
+        ], opts.balanceStrategy);
+        
+        const imbalance3 = calculateImbalanceForArrangement(bmp.pixels, [
+            { startX: 0, startY: 0, endX: vSplit, endY: hSplitLeft },
+            { startX: 0, startY: hSplitLeft, endX: vSplit, endY: height },
+            { startX: vSplit, startY: 0, endX: width, endY: height }
+        ], opts.balanceStrategy);
+        
+        const imbalance4 = calculateImbalanceForArrangement(bmp.pixels, [
+            { startX: 0, startY: 0, endX: vSplit, endY: height },
+            { startX: vSplit, startY: 0, endX: width, endY: hSplitRight },
+            { startX: vSplit, startY: hSplitRight, endX: width, endY: height }
+        ], opts.balanceStrategy);
+        
+        // Find arrangement with least imbalance
+        const imbalances = [imbalance1, imbalance2, imbalance3, imbalance4];
+        const minImbalanceIndex = imbalances.indexOf(Math.min(...imbalances));
+        
+        console.log(`Selected arrangement ${minImbalanceIndex + 1} with imbalance ${imbalances[minImbalanceIndex]}`);
+        
+        switch (minImbalanceIndex) {
+            case 0:
+                quadrants = [
+                    { startX: 0, startY: 0, endX: vSplitTop, endY: hSplit, paletteIndex: opts.palettes[0] },
+                    { startX: vSplitTop, startY: 0, endX: width, endY: hSplit, paletteIndex: opts.palettes[1] },
+                    { startX: 0, startY: hSplit, endX: width, endY: height, paletteIndex: opts.palettes[2] }
+                ];
+                break;
+            case 1:
+                quadrants = [
+                    { startX: 0, startY: 0, endX: width, endY: hSplit, paletteIndex: opts.palettes[0] },
+                    { startX: 0, startY: hSplit, endX: vSplitBottom, endY: height, paletteIndex: opts.palettes[1] },
+                    { startX: vSplitBottom, startY: hSplit, endX: width, endY: height, paletteIndex: opts.palettes[2] }
+                ];
+                break;
+            case 2:
+                quadrants = [
+                    { startX: 0, startY: 0, endX: vSplit, endY: hSplitLeft, paletteIndex: opts.palettes[0] },
+                    { startX: 0, startY: hSplitLeft, endX: vSplit, endY: height, paletteIndex: opts.palettes[1] },
+                    { startX: vSplit, startY: 0, endX: width, endY: height, paletteIndex: opts.palettes[2] }
+                ];
+                break;
+            case 3:
+                quadrants = [
+                    { startX: 0, startY: 0, endX: vSplit, endY: height, paletteIndex: opts.palettes[0] },
+                    { startX: vSplit, startY: 0, endX: width, endY: hSplitRight, paletteIndex: opts.palettes[1] },
+                    { startX: vSplit, startY: hSplitRight, endX: width, endY: height, paletteIndex: opts.palettes[2] }
+                ];
+                break;
+        }
+    } else {
+        // Four palettes - use the standard quadrant method
+        console.log('Using 4 palettes with standard quadrant method');
+        const splits = findOptimalSplits(bmp.pixels, width, height, opts.balanceStrategy);
+        
+        quadrants = [
+            { startX: 0, startY: 0, endX: splits.vertical, endY: splits.horizontal, paletteIndex: opts.palettes[0] },
+            { startX: splits.vertical, startY: 0, endX: width, endY: splits.horizontal, paletteIndex: opts.palettes[1] },
+            { startX: 0, startY: splits.horizontal, endX: splits.vertical, endY: height, paletteIndex: opts.palettes[2] },
+            { startX: splits.vertical, startY: splits.horizontal, endX: width, endY: height, paletteIndex: opts.palettes[3] }
+        ];
+    }
+    
+    return quadrants;
+}
+
+// Find optimal split point for a single dimension
+function findOptimalSplitPoint(pixels, width, height, direction, balanceStrategy) {
+    // Define possible split points (avoid edges)
+    let min, max;
+    if (direction === 'horizontal') {
+        min = Math.floor(height * 0.3);
+        max = Math.floor(height * 0.7);
+    } else { // vertical
+        min = Math.floor(width * 0.3);
+        max = Math.floor(width * 0.7);
+    }
+    
+    let bestSplit = (direction === 'horizontal') ? Math.floor(height / 2) : Math.floor(width / 2);
+    let lowestImbalance = Infinity;
+    
+    // Step size for larger images
+    const stepSize = 8;
+    
+    // Try different split points
+    for (let split = min; split <= max; split += stepSize) {
+        // Calculate imbalance for this split
+        let imbalance;
+        if (direction === 'horizontal') {
+            // Split top vs bottom
+            const colorSet1 = getColorsInRegion(pixels, 0, 0, width, split);
+            const colorSet2 = getColorsInRegion(pixels, 0, split, width, height);
+            
+            imbalance = calculateBalanceImbalance([colorSet1, colorSet2], balanceStrategy);
+        } else {
+            // Split left vs right
+            const colorSet1 = getColorsInRegion(pixels, 0, 0, split, height);
+            const colorSet2 = getColorsInRegion(pixels, split, 0, width, height);
+            
+            imbalance = calculateBalanceImbalance([colorSet1, colorSet2], balanceStrategy);
+        }
+        
+        // Update best split if this is better
+        if (imbalance < lowestImbalance) {
+            lowestImbalance = imbalance;
+            bestSplit = split;
+        }
+    }
+    
+    return bestSplit;
+}
+
+// Find optimal split point for a specific region
+function findOptimalSplitPointForRegion(pixels, startX, startY, endX, endY, direction, balanceStrategy) {
+    // Define possible split points (avoid edges)
+    let min, max;
+    if (direction === 'horizontal') {
+        min = Math.floor(startY + (endY - startY) * 0.3);
+        max = Math.floor(startY + (endY - startY) * 0.7);
+    } else { // vertical
+        min = Math.floor(startX + (endX - startX) * 0.3);
+        max = Math.floor(startX + (endX - startX) * 0.7);
+    }
+    
+    let bestSplit = (direction === 'horizontal') ? Math.floor((startY + endY) / 2) : Math.floor((startX + endX) / 2);
+    let lowestImbalance = Infinity;
+    
+    // Step size for larger regions
+    const stepSize = 8;
+    
+    // Try different split points
+    for (let split = min; split <= max; split += stepSize) {
+        // Calculate imbalance for this split
+        let imbalance;
+        if (direction === 'horizontal') {
+            // Split top vs bottom
+            const colorSet1 = getColorsInRegion(pixels, startX, startY, endX, split);
+            const colorSet2 = getColorsInRegion(pixels, startX, split, endX, endY);
+            
+            imbalance = calculateBalanceImbalance([colorSet1, colorSet2], balanceStrategy);
+        } else {
+            // Split left vs right
+            const colorSet1 = getColorsInRegion(pixels, startX, startY, split, endY);
+            const colorSet2 = getColorsInRegion(pixels, split, startY, endX, endY);
+            
+            imbalance = calculateBalanceImbalance([colorSet1, colorSet2], balanceStrategy);
+        }
+        
+        // Update best split if this is better
+        if (imbalance < lowestImbalance) {
+            lowestImbalance = imbalance;
+            bestSplit = split;
+        }
+    }
+    
+    return bestSplit;
+}
+
+// Calculate imbalance for a specific split
+function calculateImbalanceForSplit(pixels, width, height, direction, splitPoint, balanceStrategy) {
+    let colorSets = [];
+    
+    if (direction === 'horizontal') {
+        // Split top vs bottom
+        colorSets = [
+            getColorsInRegion(pixels, 0, 0, width, splitPoint),
+            getColorsInRegion(pixels, 0, splitPoint, width, height)
+        ];
+    } else {
+        // Split left vs right
+        colorSets = [
+            getColorsInRegion(pixels, 0, 0, splitPoint, height),
+            getColorsInRegion(pixels, splitPoint, 0, width, height)
+        ];
+    }
+    
+    return calculateBalanceImbalance(colorSets, balanceStrategy);
+}
+
+// Calculate imbalance for a specific arrangement of regions
+function calculateImbalanceForArrangement(pixels, regions, balanceStrategy) {
+    const colorSets = regions.map(region => 
+        getColorsInRegion(pixels, region.startX, region.startY, region.endX, region.endY)
+    );
+    
+    return calculateBalanceImbalance(colorSets, balanceStrategy);
+}
+
+// Calculate balance imbalance between regions
+function calculateBalanceImbalance(colorSets, balanceStrategy) {
+    switch (balanceStrategy) {
+        case 'count':
+            return calculateCountImbalance(colorSets);
+        case 'entropy':
+            return calculateEntropyImbalance(colorSets);
+        case 'importance':
+            return calculateImportanceImbalance(colorSets);
+        case 'area':
+            // Cannot calculate area-based imbalance here
+            return calculateCountImbalance(colorSets);
+        default:
+            return calculateCountImbalance(colorSets);
+    }
+}
+
 // If running directly from command line
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
     if (process.argv.length < 3) {
@@ -1024,12 +1478,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         console.log('  --balance=<count|entropy|importance|area>   Balance strategy (default: count)');
         console.log('  --optimize=<true|false>   Optimize palettes (default: true)');
         console.log('  --verbose=<true|false>    Verbosity level (default: true)');
+        console.log('  --palettes=<0,1,2,3>      Palettes to use (default: all 4)');
         process.exit(1);
     }
     
-    const inputPath = process.argv[2];
-    
-    // Parse additional options
+    const inputPath = process.argv[2];    // Parse additional options
     const options = {};
     for (let i = 3; i < process.argv.length; i++) {
         const arg = process.argv[i];
@@ -1039,6 +1492,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
             options.balanceStrategy = arg.substring(10);
         } else if (arg.startsWith('--optimize=')) {
             options.optimizePalettes = arg.substring(11).toLowerCase() === 'true';
+        } else if (arg.startsWith('--palettes=')) {
+            // Parse palettes option (e.g., --palettes=0,1,2)
+            options.palettes = arg.substring(11).split(',').map(Number);
         } else if (arg.startsWith('--verbose=')) {
             options.verbose = arg.substring(10).toLowerCase() === 'true';
         }
