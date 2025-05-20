@@ -9,17 +9,38 @@ function readUInt16BE(buf, offset) {
     return buf.readUInt16BE(offset);
 }
 
+// Correct Genesis color extraction: 0b0000BBBBGGGGRRRR (each 0-7)
 function genesisColorToRGB(word) {
-    // Genesis color: 0b0000BBBBGGGGRRRR (each 0-7)
-    const r = (word & 0x00E) >> 1;
-    const g = (word & 0x0E0) >> 5;
-    const b = (word & 0xE00) >> 9;
+    // Genesis color: 0000 bbb0 ggg0 rrr0
+    const r = ((word & 0x000E) >> 1); // bits 1-3
+    const g = ((word & 0x00E0) >> 5); // bits 5-7
+    const b = ((word & 0x0E00) >> 9); // bits 9-11
     // Scale 0-7 to 0-255
     return [
         Math.floor((r / 7) * 255),
         Math.floor((g / 7) * 255),
         Math.floor((b / 7) * 255)
     ];
+}
+
+function decodeGenesisTile(tileBuf) {
+    // tileBuf: 32 bytes, 4bpp planar format
+    // Returns: Uint8Array[64] (row-major, top-down)
+    const pixels = new Uint8Array(64);
+    for (let y = 0; y < 8; y++) {
+        for (let x = 0; x < 8; x++) {
+            let color = 0;
+            // Process 4 bitplanes
+            for (let plane = 0; plane < 4; plane++) {
+                const planeByte = tileBuf[y * 4 + plane];
+                const bit = (planeByte >> (7 - x)) & 1;
+                color |= (bit << plane);
+            }
+            // Store in row-major order, no vertical flip needed
+            pixels[y * 8 + x] = color;
+        }
+    }
+    return pixels;
 }
 
 function extractJim(jimPath) {
@@ -37,7 +58,7 @@ function extractJim(jimPath) {
 
     // Tile Data
     const tileDataOffset = 0x10;
-    const tileSize = 32; // 8x8, 4bpp = 32 bytes
+    const tileSize = 32; // 8x8, 4bpp planar = 32 bytes
     const tiles = [];
     for (let i = 0; i < numTiles; i++) {
         const tileBuf = buf.slice(tileDataOffset + i * tileSize, tileDataOffset + (i + 1) * tileSize);
@@ -92,27 +113,19 @@ function extractJim(jimPath) {
     // Export each tile as BMP (using palette 0)
     for (let t = 0; t < tiles.length; t++) {
         const tileBuf = tiles[t];
-        const pixels = [];
-        for (let y = 0; y < 8; y++) {
-            for (let x = 0; x < 8; x++) {
-                const byteIndex = y * 4 + Math.floor(x / 2);
-                const byte = tileBuf[byteIndex];
-                const colorIdx = (x % 2 === 0) ? (byte >> 4) : (byte & 0x0F);
-                const [r, g, b] = palettes[0][colorIdx];
-                pixels.push({ r, g, b, a: 255 });
-            }
-        }
-        // BMP expects bottom-up rows
+        const pixels = decodeGenesisTile(tileBuf);
+        // BMP expects bottom-up rows, so flip vertically
         const bmpData = Buffer.alloc(8 * 8 * 4);
         for (let y = 0; y < 8; y++) {
             for (let x = 0; x < 8; x++) {
-                const srcIdx = (7 - y) * 8 + x;
+                const srcIdx = (7 - y) * 8 + x; // flip vertically for BMP
                 const dstIdx = (y * 8 + x) * 4;
-                const px = pixels[srcIdx];
-                bmpData[dstIdx] = px.r;
-                bmpData[dstIdx + 1] = px.g;
-                bmpData[dstIdx + 2] = px.b;
-                bmpData[dstIdx + 3] = px.a;
+                const colorIdx = pixels[srcIdx];
+                const [r, g, b] = palettes[0][colorIdx];
+                bmpData[dstIdx] = r;
+                bmpData[dstIdx + 1] = g;
+                bmpData[dstIdx + 2] = b;
+                bmpData[dstIdx + 3] = 255;
             }
         }
         const bmpImage = bmp.encode({
@@ -134,23 +147,19 @@ function extractJim(jimPath) {
             const paletteLine = mapPaletteLines[my][mx];
             if (tileIndex >= tiles.length) continue;
             const tileBuf = tiles[tileIndex];
+            const pixels = decodeGenesisTile(tileBuf);
             for (let ty = 0; ty < 8; ty++) {
                 for (let tx = 0; tx < 8; tx++) {
-                    const byteIndex = ty * 4 + Math.floor(tx / 2);
-                    const byte = tileBuf[byteIndex];
-                    const colorIdx = (tx % 2 === 0) ? (byte >> 4) : (byte & 0x0F);
-                    const [r, g, b] = palettes[paletteLine][colorIdx];
-                    // BMP is bottom-up, so invert Y
-                    const px = {
-                        r, g, b, a: 255
-                    };
+                    // BMP is bottom-up, so invert Y for the whole image
                     const pxX = mx * 8 + tx;
                     const pxY = mapH - 1 - (my * 8 + ty);
                     const dstIdx = (pxY * mapW + pxX) * 4;
-                    mapBmpData[dstIdx] = px.r;
-                    mapBmpData[dstIdx + 1] = px.g;
-                    mapBmpData[dstIdx + 2] = px.b;
-                    mapBmpData[dstIdx + 3] = px.a;
+                    const colorIdx = pixels[ty * 8 + tx];
+                    const [r, g, b] = palettes[paletteLine][colorIdx];
+                    mapBmpData[dstIdx] = r;
+                    mapBmpData[dstIdx + 1] = g;
+                    mapBmpData[dstIdx + 2] = b;
+                    mapBmpData[dstIdx + 3] = 255;
                 }
             }
         }
