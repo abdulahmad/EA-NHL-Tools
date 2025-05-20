@@ -15,6 +15,8 @@
 | `0x(PaletteDataEnd+8)..(PaletteDataEnd+8)+(mapWidth*mapHeight*2)`| `Map Data Section`    | Map Data |
 
 ## Map Data Section
+| Byte (All values in hexadecimal)              | Value         | Description |
+| --------                                      | -------       | -------     |
 | `0x00..0x01`  | `<uint16>:Bits 0-10` | Tile Index |
 | `0x00..0x01`  | `<uint16>:Bit 11`    | Horizontal flip |
 | `0x00..0x01`  | `<uint16>:Bit 12`    | Vertical flip |

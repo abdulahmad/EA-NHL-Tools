@@ -1,54 +1,40 @@
 import fs from 'fs/promises';
 import sharp from 'sharp';
-import { Buffer } from 'buffer';
-
-interface TileAttributes {
-    tile_index: number;
-    palette_line: number;
-    priority: number;
-    vflip: boolean;
-    hflip: boolean;
-}
 
 export class JimExtractor {
-    private data: Buffer;
-    private palOffset: number;
-    private mapOffset: number;
-    private numStamps: number;
-
-    constructor(data: Buffer) {
+    constructor(data) {
         this.data = data;
         this.extractHeader();
     }
 
-    static async fromFile(filename: string): Promise<JimExtractor> {
+    static async fromFile(filename) {
         const data = await fs.readFile(filename);
         return new JimExtractor(data);
     }
 
-    private readLong(offset: number): number {
+    readLong(offset) {
         return this.data.readUInt32BE(offset);
     }
 
-    private readWord(offset: number): number {
+    readWord(offset) {
         return this.data.readUInt16BE(offset);
     }
 
-    private extractHeader(): void {
+    extractHeader() {
         this.palOffset = this.readLong(0);
         this.mapOffset = this.readLong(4);
         this.numStamps = this.readWord(8);
     }
 
-    public printHeaderInfo(): void {
+    printHeaderInfo() {
         console.log("Header Information:");
         console.log(`├── Palette Offset: ${this.palOffset} (0x${this.palOffset.toString(16).toUpperCase()})`);
         console.log(`├── Map Offset: ${this.mapOffset} (0x${this.mapOffset.toString(16).toUpperCase()})`);
         console.log(`└── Stamps Offset: 10 to ${this.palOffset} (0x${this.palOffset.toString(16).toUpperCase()})`);
     }
 
-    public extractPalette(): Array<[number, number, number]> {
-        const colors: Array<[number, number, number]> = [];
+    extractPalette() {
+        const colors = [];
         const palData = this.data.slice(this.palOffset, this.palOffset + 128);
 
         for (let i = 0; i < 128; i += 2) {
@@ -63,11 +49,11 @@ export class JimExtractor {
         return colors;
     }
 
-    public extractStamps(): Buffer {
+    extractStamps() {
         return this.data.slice(10, this.palOffset);
     }
 
-    public extractMap(): [number, number, Buffer] {
+    extractMap() {
         const width = this.readWord(this.mapOffset);
         const height = this.readWord(this.mapOffset + 2);
         const mapData = this.data.slice(
@@ -77,21 +63,18 @@ export class JimExtractor {
         return [width, height, mapData];
     }
 
-    public async buildPNG(outputFile: string): Promise<void> {
+    async buildPNG(outputFile) {
         const [mapWidth, mapHeight, mapData] = this.extractMap();
         const stampsData = this.extractStamps();
         const palette = this.extractPalette();
 
-        // Create image dimensions
         const imageWidth = mapWidth * 8;
         const imageHeight = mapHeight * 8;
 
-        // Create image buffer
         const imageBuffer = Buffer.alloc(imageWidth * imageHeight);
         const priorityBuffer = Buffer.alloc(imageWidth * imageHeight);
 
-        // Helper function to decode tile attributes
-        const decodeTileAttributes = (tileWord: number): TileAttributes => ({
+        const decodeTileAttributes = (tileWord) => ({
             priority: (tileWord >> 15) & 1,
             palette_line: (tileWord >> 13) & 3,
             vflip: Boolean((tileWord >> 12) & 1),
@@ -99,8 +82,7 @@ export class JimExtractor {
             tile_index: tileWord & 0x7FF
         });
 
-        // Helper function to decode 4bpp tile data
-        const decodeTile = (tileData: Buffer, palLine: number): Buffer => {
+        const decodeTile = (tileData, palLine) => {
             const result = Buffer.alloc(64); // 8x8 pixels
 
             for (let y = 0; y < 8; y++) {
@@ -117,7 +99,6 @@ export class JimExtractor {
             return result;
         };
 
-        // Process each tile in the map
         for (let y = 0; y < mapHeight; y++) {
             for (let x = 0; x < mapWidth; x++) {
                 const mapIndex = (y * mapWidth + x) * 2;
@@ -129,7 +110,6 @@ export class JimExtractor {
                 const tileData = stampsData.slice(attrs.tile_index * 32, (attrs.tile_index + 1) * 32);
                 const decodedTile = decodeTile(tileData, attrs.palette_line);
 
-                // Apply tile to appropriate buffer
                 const targetBuffer = attrs.priority ? priorityBuffer : imageBuffer;
                 for (let py = 0; py < 8; py++) {
                     for (let px = 0; px < 8; px++) {
@@ -144,22 +124,19 @@ export class JimExtractor {
             }
         }
 
-        // Combine layers (priority layer on top)
         for (let i = 0; i < imageBuffer.length; i++) {
             if (priorityBuffer[i] > 0) {
                 imageBuffer[i] = priorityBuffer[i];
             }
         }
 
-        // Convert palette to format expected by sharp
-        const flatPalette = Buffer.alloc(768); // 256 colors * 3 bytes
+        const flatPalette = Buffer.alloc(768);
         palette.forEach(([r, g, b], i) => {
             flatPalette[i * 3] = r;
             flatPalette[i * 3 + 1] = g;
             flatPalette[i * 3 + 2] = b;
         });
 
-        // Create PNG using sharp
         await sharp(imageBuffer, {
             raw: {
                 width: imageWidth,
@@ -168,7 +145,8 @@ export class JimExtractor {
             }
         })
         .png({
-            palette: flatPalette
+            colors: 64,  // Limit to 64 colors (Genesis palette size)
+            palette: true  // Enable palette mode
         })
         .toFile(outputFile);
 

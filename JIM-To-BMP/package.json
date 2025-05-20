@@ -1,5 +1,9 @@
 {
-  "devDependencies": {
-    "bmp-js": "^0.1.0"
-  }
+    "name": "jim-to-bmp",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "JimTool.js",
+    "dependencies": {
+        "sharp": "^0.32.1"
+    }
 }
