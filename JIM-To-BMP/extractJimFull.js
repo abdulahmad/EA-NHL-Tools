@@ -120,15 +120,87 @@ function saveACT(colors, filepath) {
     writeFileSync(filepath, act);
 }
 
+// Find actual data section boundaries in the file
+function findDataSections(buffer) {
+    // Start with header-declared offsets
+    const headerPaletteOffset = buffer.readUInt32BE(0);
+    const headerMapOffset = buffer.readUInt32BE(4);
+    const numTiles = buffer.readUInt16BE(8);
+    
+    // Calculate expected end of tile data
+    const expectedTileEnd = 0x0A + (numTiles * 32);
+    
+    // Scan for palette start - should be right after tiles
+    let actualPaletteOffset = -1;
+    let actualMapOffset = -1;
+    
+    // Look for palette data patterns (4 16-color palettes)
+    for (let offset = expectedTileEnd; offset < buffer.length - 128; offset++) {
+        // Check if we have what looks like palette data
+        let isPaletteStart = true;
+        for (let p = 0; p < 4; p++) {
+            for (let c = 0; c < 16; c++) {
+                const value = buffer.readUInt16BE(offset + (p * 32) + (c * 2));
+                // Check if value looks like a Genesis color (0000BBB0GGG0RRR0)
+                if ((value & 0xFFF0) !== 0 || (value & 0x0F0F) !== 0) {
+                    isPaletteStart = false;
+                    break;
+                }
+            }
+            if (!isPaletteStart) break;
+        }
+        
+        if (isPaletteStart) {
+            actualPaletteOffset = offset;
+            break;
+        }
+    }
+    
+    // If we found palette, look for map data after it
+    if (actualPaletteOffset !== -1) {
+        // Map data should start with valid dimensions
+        for (let offset = actualPaletteOffset + 128; offset < buffer.length - 4; offset++) {
+            const width = buffer.readUInt16BE(offset);
+            const height = buffer.readUInt16BE(offset + 2);
+            
+            // Check if dimensions look reasonable
+            if (width > 0 && width <= 256 && height > 0 && height <= 256) {
+                // Verify we have enough data for the map
+                const requiredSize = offset + 4 + (width * height * 2);
+                if (requiredSize <= buffer.length) {
+                    actualMapOffset = offset;
+                    break;
+                }
+            }
+        }
+    }
+    
+    return {
+        paletteOffset: actualPaletteOffset !== -1 ? actualPaletteOffset : headerPaletteOffset,
+        mapOffset: actualMapOffset !== -1 ? actualMapOffset : headerMapOffset,
+        numTiles
+    };
+}
+
 function extractJim(jimPath) {
     // Read the file
     const buffer = readFileSync(jimPath);
 
-    // Read header values
-    const paletteOffset = buffer.readUInt32BE(0);
-    const mapOffset = buffer.readUInt32BE(4);
-    const numTiles = buffer.readUInt16BE(8);
+    // Find actual data section boundaries
+    const header = findDataSections(buffer);
+    
+    // Use found offsets
+    const paletteOffset = header.paletteOffset;
+    const mapOffset = header.mapOffset;
+    const numTiles = header.numTiles;
     const firstTileOffset = 0x0A;
+
+    console.log(`Reading header:`)
+    console.log(`- Declared palette offset: 0x${buffer.readUInt32BE(0).toString(16).toUpperCase()}`);
+    console.log(`- Declared map offset: 0x${buffer.readUInt32BE(4).toString(16).toUpperCase()}`);
+    console.log(`- Found palette offset: 0x${paletteOffset.toString(16).toUpperCase()}`);
+    console.log(`- Found map offset: 0x${mapOffset.toString(16).toUpperCase()}`);
+    console.log(`- Number of tiles: ${numTiles}`);
 
     // Create output structure
     const fileBaseName = basename(jimPath, '.jim');
@@ -137,9 +209,9 @@ function extractJim(jimPath) {
     mkdirSync(outDir, { recursive: true });
     mkdirSync(tilesDir, { recursive: true });
 
-    // Extract tiles (starting at 0x0A)
+    // Extract tiles
     const tiles = [];
-    let offset = firstTileOffset;
+    let offset = 0x0A;
     for (let i = 0; i < numTiles; i++) {
         const tileData = buffer.subarray(offset, offset + 32);
         tiles.push(tileData);
@@ -156,7 +228,7 @@ function extractJim(jimPath) {
         }
         palettes.push(palette);
         
-        // Save individual palette as .ACT
+        // Save individual palette
         saveACT(palette, join(outDir, `${p}.act`));
     }
 
@@ -165,54 +237,35 @@ function extractJim(jimPath) {
     saveACT(combinedPalette, join(outDir, 'combined.act'));
 
     // Read map dimensions
-    const mapWidth = buffer.readUInt16BE(paletteOffset + 128);
-    const mapHeight = buffer.readUInt16BE(paletteOffset + 130);    // Read map data
+    const mapWidth = buffer.readUInt16BE(mapOffset);
+    const mapHeight = buffer.readUInt16BE(mapOffset + 2);
+    console.log(`Map dimensions: ${mapWidth}x${mapHeight}`);
+
+    // Extract map data
     const mapData = [];
-    const paletteData = [];
-    offset = mapOffset+4; // 4 bytes account for map width and height
+    let mapDataOffset = mapOffset + 4;
     
     for (let y = 0; y < mapHeight; y++) {
-        const mapRow = [];
-        const palRow = [];
+        const row = [];
         for (let x = 0; x < mapWidth; x++) {
-            const data = buffer.readUInt16BE(offset);
-            const tileIndex = data & 0x7FF; // Bits 0-10
-            const hFlip = (data >> 11) & 1; // Bit 11
-            const vFlip = (data >> 12) & 1; // Bit 12
-            const palIndex = (data >> 13) & 3; // Bits 13-14
-            const priority = (data >> 15) & 1; // Bit 15
-            
-            // Calculate the offset of this tile in the file
-            const tileOffset = firstTileOffset + (tileIndex * 32); // Each tile is 32 bytes
-            
-            mapRow.push({
-                tileIndex,
-                tileOffset: '0x' + tileOffset.toString(16).toUpperCase(),
-                hFlip,
-                vFlip,
-                palIndex,
-                priority
-            });
-            
-            palRow.push(palIndex);
-            offset += 2;
+            const tileWord = buffer.readUInt16BE(mapDataOffset);
+            mapDataOffset += 2;
+
+            // Extract tile info
+            const tileInfo = {
+                tileIndex: tileWord & 0x7FF,
+                tileOffset: `0x${(firstTileOffset + ((tileWord & 0x7FF) * 32)).toString(16).toUpperCase()}`,
+                hFlip: (tileWord >> 11) & 1,
+                vFlip: (tileWord >> 12) & 1,
+                palIndex: (tileWord >> 13) & 0x03,
+                priority: (tileWord >> 15) & 1
+            };
+            row.push(tileInfo);
         }
-        mapData.push(mapRow);
-        paletteData.push(palRow);
+        mapData.push(row);
     }
 
-    // Save metadata
-    const metadata = {
-        paletteOffset: '0x' + paletteOffset.toString(16).toUpperCase(),
-        mapOffset: '0x' + mapOffset.toString(16).toUpperCase(),
-        numTiles,
-        mapWidth,
-        mapHeight,
-        mapData
-    };
-    writeFileSync(join(outDir, 'metadata.json'), JSON.stringify(metadata, null, 2));
-
-    // Extract individual tiles as BMPs
+    // Extract tileset
     for (let t = 0; t < tiles.length; t++) {
         const pixels = decodeGenesisTile(tiles[t]);
         const filename = t.toString().padStart(4, '0') + '.bmp';
@@ -252,9 +305,20 @@ function extractJim(jimPath) {
     // Save the final composed image
     saveBMP(finalWidth, finalHeight, finalPixels, combinedPalette, join(outDir, 'full_map.bmp'));
 
+    // Save metadata
+    const metadata = {
+        paletteOffset: `0x${paletteOffset.toString(16).toUpperCase()}`,
+        mapOffset: `0x${mapOffset.toString(16).toUpperCase()}`,
+        numTiles,
+        mapWidth,
+        mapHeight,
+        mapData
+    };
+    writeFileSync(join(outDir, 'metadata.json'), JSON.stringify(metadata, null, 2));
+
     console.log('Extraction complete. Output saved to:', outDir);
     
-    // Output the requested information
+    // Output file structure info
     console.log(`Palette Section Offset: 0x${paletteOffset.toString(16).toUpperCase()}`);
     console.log(`Map Section Offset: 0x${mapOffset.toString(16).toUpperCase()}`);
     console.log(`Number of Tiles/Stamps: ${numTiles}`);
