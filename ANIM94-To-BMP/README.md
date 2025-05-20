@@ -26,7 +26,7 @@ It will decompress the ANIM file and you will get a `.raw` (Photoshop RAW), `.js
 | **NHLPA93** | Sprite Data Bytes          | `0x70006–0x743FC`     | Sprite attributes for each frame (position, size, tile index, etc.). |
 | **NHLPA93** | Hotlist Table              | `0x743FC–0x74910`     | Hotspot Data. |
 | **NHL94**   | SPAList                    | `0x5B1C–0x76B2`       | Animation Data. Equivalent to Frames.asm from NHL92. |
-| **NHLPA93** | Sprite Palettes            | `0x59924–0x599A4`     | 128 bytes of Palette Data. 4 palettes of 16 colors (9bpp Sega Genesis Format). Exactly 0x4560 bytes before Sprite Tiles. |
+| **NHL94** | Sprite Palettes            | `0x59924–0x599A4`     | 128 bytes of Palette Data. 4 palettes of 16 colors (9bpp Sega Genesis Format). Exactly 0x4560 bytes before Sprite Tiles. |
 | **NHL94**   | Sprite Tiles               | `0x5DE84–0x9E724`     | Raw 8x8 tile data, 4 bits per pixel, 32 bytes per tile. |
 | **NHL94**   | Frame Sprite Data Offsets  | `0x9E726–0x9EDC2`     | Table of offsets to sprite data for each frame. |
 | **NHL94**   | Sprite Data Bytes          | `0x9EDC2–0xA44C8`     | Sprite attributes for each frame (position, size, tile index, etc.). |

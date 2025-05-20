@@ -84,3 +84,10 @@ Sprites 000-875 are identical to 94 (not 100% verified)
 part of playeracc routine hex bytes are:
 
 3400 3601 C5C2 C7C3 D782 -- first 16 bytes are exact
+
+## SND Investigation
+88 88 81 78 76 78 7B
+- @ 0x149D0 in NHL 92 Hockey.snd
+- @ 0x1F420 in NHL 93
+- @ 0x23330 in NHL 94
+- @ 0x705F0 in NHL 95
