@@ -9,10 +9,10 @@
 | `0x04..0x07`                                  | `<uint32>`    | Map Section Offset |
 | `0x08..0x09`                                  | `<uint16>`    | Number of Tiles/Stamps |
 | `0x0A..0x0A+numTiles*32`                      | `Tile Data`   | Raw 8x8 tile data, 4 bits per pixel, 32 bytes per tile. |
-| `0x(TileDataEnd+1)..0x(TileDataEnd+1)+80`     | `Palette Data`| 128 bytes of Palette Data. 4 palettes of 16 colors (9bpp Sega Genesis Format). |
-| `0x(PaletteDataEnd+1)..(PaletteDataEnd+4)`  | `<uint16>`    | Map Width |
-| `0x(PaletteDataEnd+5)..(PaletteDataEnd+8)`| `<uint16>`    | Map Height |
-| `0x(PaletteDataEnd+8)..(PaletteDataEnd+8)+(mapWidth*mapHeight*2)`| `Map Data Section`    | Map Data |
+| `0xPaletteSectionOffset..0xPaletteSectionOffset+80`| `Palette Data`| 128 bytes of Palette Data. 4 palettes of 16 colors. Each color is 2 bytes in Genesis format (0000BBB0GGG0RRR0, where BBB=Blue bits, GGG=Green bits, RRR=Red bits). |
+| `0xMapSectionOffset..0xMapSectionOffset+1`  | `<uint16>`    | Map Width |
+| `0xMapSectionOffset+2..0xMapSectionOffset+3`| `<uint16>`    | Map Height |
+| `0xMapSectionOffset+4..0x(MapSectionOffset+4)+(mapWidth*mapHeight*2)`| `Map Data Section`    | Map Data |
 
 ## Map Data Section
 | Byte (All values in hexadecimal)              | Value         | Description |
