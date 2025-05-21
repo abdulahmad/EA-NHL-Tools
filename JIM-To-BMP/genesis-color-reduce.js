@@ -1180,6 +1180,12 @@ function defineQuadrantsAndPalettes(bmp, opts) {
     const height = bmp.height;
     let quadrants = [];
     console.log(`Using ${opts.palettes.length} palettes: ${opts.palettes.join(', ')}`);
+
+    // New option for 9-section mode
+    if (opts.sections === 9) {
+        console.log('Using 9-section mode with optimized splits');
+        return defineNineSections(bmp, opts);
+    }
     
     if (opts.palettes.length === 1) {
         // Just one palette - use it for the entire image
@@ -1330,6 +1336,361 @@ function defineQuadrantsAndPalettes(bmp, opts) {
     return quadrants;
 }
 
+// New function to define 9 sections and map them to palettes
+function defineNineSections(bmp, opts) {
+    const width = bmp.width;
+    const height = bmp.height;
+    
+    // Find optimal horizontal splits (dividing into 3 rows)
+    const hSplit1 = findOptimalSplitPointForRange(bmp.pixels, width, height, 
+                   'horizontal', 0.2, 0.4, opts.balanceStrategy);
+    const hSplit2 = findOptimalSplitPointForRange(bmp.pixels, width, height, 
+                   'horizontal', 0.6, 0.8, opts.balanceStrategy);
+    
+    // Find optimal vertical splits (dividing into 3 columns)
+    const vSplit1 = findOptimalSplitPointForRange(bmp.pixels, width, height, 
+                   'vertical', 0.2, 0.4, opts.balanceStrategy);
+    const vSplit2 = findOptimalSplitPointForRange(bmp.pixels, width, height, 
+                   'vertical', 0.6, 0.8, opts.balanceStrategy);
+    
+    console.log(`Horizontal splits at ${hSplit1} and ${hSplit2}`);
+    console.log(`Vertical splits at ${vSplit1} and ${vSplit2}`);
+    
+    // Define all 9 sections
+    const sections = [
+        // Top row
+        { startX: 0,       startY: 0,       endX: vSplit1, endY: hSplit1, index: 0 },
+        { startX: vSplit1, startY: 0,       endX: vSplit2, endY: hSplit1, index: 1 },
+        { startX: vSplit2, startY: 0,       endX: width,   endY: hSplit1, index: 2 },
+        // Middle row
+        { startX: 0,       startY: hSplit1, endX: vSplit1, endY: hSplit2, index: 3 },
+        { startX: vSplit1, startY: hSplit1, endX: vSplit2, endY: hSplit2, index: 4 },
+        { startX: vSplit2, startY: hSplit1, endX: width,   endY: hSplit2, index: 5 },
+        // Bottom row
+        { startX: 0,       startY: hSplit2, endX: vSplit1, endY: height,  index: 6 },
+        { startX: vSplit1, startY: hSplit2, endX: vSplit2, endY: height,  index: 7 },
+        { startX: vSplit2, startY: hSplit2, endX: width,   endY: height,  index: 8 }
+    ];
+    
+    // Analyze color usage in each section
+    const sectionStats = sections.map(section => {
+        const colors = getColorsInRegion(bmp.pixels, section.startX, section.startY, 
+                                        section.endX, section.endY);
+        return {
+            ...section,
+            colorCount: colors.length,
+            totalPixels: (section.endX - section.startX) * (section.endY - section.startY),
+            colorDensity: colors.length / ((section.endX - section.startX) * (section.endY - section.startY))
+        };
+    });
+    
+    // Assign sections to palettes based on the number of available palettes
+    let mappedSections;
+    if (opts.palettes.length === 1) {
+        // Single palette - all sections use it
+        mappedSections = sections.map(section => ({
+            ...section, 
+            paletteIndex: opts.palettes[0]
+        }));
+    } else if (opts.palettes.length === 2) {
+        // Map to 2 palettes - checkerboard pattern works well
+        mappedSections = assignSectionsToPalettesCheckerboard(sections, opts.palettes);
+    } else if (opts.palettes.length === 3) {
+        // Map to 3 palettes - optimize based on color similarity
+        mappedSections = assignSectionsTo3Palettes(sections, sectionStats, bmp.pixels, opts.palettes);
+    } else {
+        // Map to 4 palettes - optimized for color similarity
+        mappedSections = assignSectionsTo4Palettes(sections, sectionStats, bmp.pixels, opts.palettes);
+    }
+    
+    console.log("Section to palette mapping:");
+    mappedSections.forEach(section => {
+        console.log(`Section ${section.index} (${section.startX},${section.startY})-(${section.endX},${section.endY}) → Palette ${section.paletteIndex}`);
+    });
+    
+    return mappedSections;
+}
+
+// Find optimal split point within a specified range
+function findOptimalSplitPointForRange(pixels, width, height, direction, minPercent, maxPercent, balanceStrategy) {
+    // Define possible split points within the percentage range
+    let min, max;
+    if (direction === 'horizontal') {
+        min = Math.floor(height * minPercent);
+        max = Math.floor(height * maxPercent);
+    } else { // vertical
+        min = Math.floor(width * minPercent);
+        max = Math.floor(width * maxPercent);
+    }
+    
+    let bestSplit = (direction === 'horizontal') ? 
+                    Math.floor(height * (minPercent + maxPercent) / 2) : 
+                    Math.floor(width * (minPercent + maxPercent) / 2);
+    let lowestImbalance = Infinity;
+    
+    // Step size for larger images
+    const stepSize = 8;
+    
+    // Try different split points
+    for (let split = min; split <= max; split += stepSize) {
+        // Calculate imbalance for this split
+        let imbalance;
+        if (direction === 'horizontal') {
+            // Split top vs bottom
+            const colorSet1 = getColorsInRegion(pixels, 0, 0, width, split);
+            const colorSet2 = getColorsInRegion(pixels, 0, split, width, height);
+            
+            imbalance = calculateBalanceImbalance([colorSet1, colorSet2], balanceStrategy);
+        } else {
+            // Split left vs right
+            const colorSet1 = getColorsInRegion(pixels, 0, 0, split, height);
+            const colorSet2 = getColorsInRegion(pixels, split, 0, width, height);
+            
+            imbalance = calculateBalanceImbalance([colorSet1, colorSet2], balanceStrategy);
+        }
+        
+        // Update best split if this is better
+        if (imbalance < lowestImbalance) {
+            lowestImbalance = imbalance;
+            bestSplit = split;
+        }
+    }
+    
+    return bestSplit;
+}
+
+// Assign sections to 2 palettes using checkerboard pattern
+function assignSectionsToPalettesCheckerboard(sections, palettes) {
+    return sections.map(section => {
+        // Checkerboard pattern - alternate palettes
+        const row = Math.floor(section.index / 3);
+        const col = section.index % 3;
+        const paletteIndex = palettes[(row + col) % 2];
+        
+        return {
+            ...section,
+            paletteIndex
+        };
+    });
+}
+
+// Assign sections to 3 palettes based on color similarity
+function assignSectionsTo3Palettes(sections, sectionStats, pixels, palettes) {
+    // Group sections by similarity
+    // Start with the corners and center as anchors
+    const cornerIndices = [0, 2, 6, 8];
+    const centerIndex = 4;
+    
+    // Calculate color similarity between sections
+    const similarities = [];
+    for (let i = 0; i < sections.length; i++) {
+        for (let j = i + 1; j < sections.length; j++) {
+            const similarity = calculateSectionSimilarity(
+                pixels, 
+                sections[i].startX, sections[i].startY, sections[i].endX, sections[i].endY,
+                sections[j].startX, sections[j].startY, sections[j].endX, sections[j].endY
+            );
+            similarities.push({ section1: i, section2: j, similarity });
+        }
+    }
+    
+    // Sort by similarity (highest first)
+    similarities.sort((a, b) => b.similarity - a.similarity);
+    
+    // Assign sections to palettes
+    const assignments = {};
+    // Start with the center
+    assignments[centerIndex] = palettes[0];
+    
+    // Assign corners to palettes based on similarity to center
+    const cornerAssignments = cornerIndices.map(cornerIndex => ({
+        cornerIndex,
+        similarity: calculateSectionSimilarity(
+            pixels,
+            sections[centerIndex].startX, sections[centerIndex].startY, 
+            sections[centerIndex].endX, sections[centerIndex].endY,
+            sections[cornerIndex].startX, sections[cornerIndex].startY, 
+            sections[cornerIndex].endX, sections[cornerIndex].endY
+        )
+    })).sort((a, b) => a.similarity - b.similarity);
+    
+    // Assign top two similar corners to palette 1, bottom two to palette 2
+    assignments[cornerAssignments[0].cornerIndex] = palettes[1];
+    assignments[cornerAssignments[1].cornerIndex] = palettes[1];
+    assignments[cornerAssignments[2].cornerIndex] = palettes[2];
+    assignments[cornerAssignments[3].cornerIndex] = palettes[2];
+    
+    // Assign remaining sections based on similarity
+    const remainingIndices = [1, 3, 5, 7];
+    for (const index of remainingIndices) {
+        // Find which palette it's most similar to
+        let bestPalette = null;
+        let bestSimilarity = -Infinity;
+        
+        for (const paletteIndex of [palettes[0], palettes[1], palettes[2]]) {
+            let totalSimilarity = 0;
+            let count = 0;
+            
+            // Check similarity to all sections already in this palette
+            for (const [sectionIndex, assignedPalette] of Object.entries(assignments)) {
+                if (assignedPalette === paletteIndex) {
+                    const sim = calculateSectionSimilarity(
+                        pixels,
+                        sections[index].startX, sections[index].startY, 
+                        sections[index].endX, sections[index].endY,
+                        sections[sectionIndex].startX, sections[sectionIndex].startY, 
+                        sections[sectionIndex].endX, sections[sectionIndex].endY
+                    );
+                    totalSimilarity += sim;
+                    count++;
+                }
+            }
+            
+            const avgSimilarity = count > 0 ? totalSimilarity / count : 0;
+            if (avgSimilarity > bestSimilarity) {
+                bestSimilarity = avgSimilarity;
+                bestPalette = paletteIndex;
+            }
+        }
+        
+        assignments[index] = bestPalette;
+    }
+    
+    return sections.map(section => ({
+        ...section,
+        paletteIndex: assignments[section.index]
+    }));
+}
+
+// Assign sections to 4 palettes based on optimal grouping
+function assignSectionsTo4Palettes(sections, sectionStats, pixels, palettes) {
+    // For 4 palettes, we'll divide into quadrants but with flexibility based on color similarity
+    // Start with initial assignment based on position
+    const initialAssignments = [
+        palettes[0], palettes[0], palettes[1],  // Top row
+        palettes[0], palettes[1], palettes[1],  // Middle row
+        palettes[2], palettes[2], palettes[3]   // Bottom row
+    ];
+    
+    // Refine assignments using color similarity
+    const assignments = [...initialAssignments];
+    let improved = true;
+    let iterations = 0;
+    const MAX_ITERATIONS = 10;
+    
+    while (improved && iterations < MAX_ITERATIONS) {
+        improved = false;
+        iterations++;
+        
+        // For each section, see if it would be better in another palette
+        for (let i = 0; i < sections.length; i++) {
+            const currentPalette = assignments[i];
+            
+            // Try each alternative palette
+            for (const alternatePalette of palettes) {
+                if (alternatePalette === currentPalette) continue;
+                
+                // Calculate current palette cohesion
+                const currentCohesion = calculatePaletteCohesion(sections, pixels, assignments);
+                
+                // Try alternative assignment
+                const tempAssignments = [...assignments];
+                tempAssignments[i] = alternatePalette;
+                const newCohesion = calculatePaletteCohesion(sections, pixels, tempAssignments);
+                
+                // If improved, keep the change
+                if (newCohesion > currentCohesion) {
+                    assignments[i] = alternatePalette;
+                    improved = true;
+                    break;
+                }
+            }
+        }
+    }
+    
+    return sections.map((section, index) => ({
+        ...section,
+        paletteIndex: assignments[index]
+    }));
+}
+
+// Calculate similarity between two sections
+function calculateSectionSimilarity(pixels, x1, y1, x2, y2, x3, y3, x4, y4) {
+    const colors1 = getColorsInRegion(pixels, x1, y1, x2, y2);
+    const colors2 = getColorsInRegion(pixels, x3, y3, x4, y4);
+    
+    // Create color maps for efficient lookup
+    const colorMap1 = new Map();
+    const colorMap2 = new Map();
+    
+    colors1.forEach(color => {
+        colorMap1.set(`${color.r},${color.g},${color.b}`, color.count);
+    });
+    
+    colors2.forEach(color => {
+        colorMap2.set(`${color.r},${color.g},${color.b}`, color.count);
+    });
+    
+    // Find shared colors
+    let sharedColorCount = 0;
+    let totalColors = 0;
+    
+    colorMap1.forEach((count, key) => {
+        totalColors += count;
+        if (colorMap2.has(key)) {
+            sharedColorCount += Math.min(count, colorMap2.get(key));
+        }
+    });
+    
+    colorMap2.forEach((count, key) => {
+        totalColors += count;
+    });
+    
+    // Avoid double-counting shared colors
+    totalColors -= sharedColorCount;
+    
+    return sharedColorCount / totalColors;
+}
+
+// Calculate overall cohesion of palette assignments
+function calculatePaletteCohesion(sections, pixels, assignments) {
+    // Group sections by palette
+    const paletteGroups = {};
+    
+    assignments.forEach((palette, index) => {
+        if (!paletteGroups[palette]) {
+            paletteGroups[palette] = [];
+        }
+        paletteGroups[palette].push(index);
+    });
+    
+    // Calculate internal similarity within each palette
+    let totalSimilarity = 0;
+    let totalPairs = 0;
+    
+    Object.values(paletteGroups).forEach(group => {
+        for (let i = 0; i < group.length; i++) {
+            for (let j = i + 1; j < group.length; j++) {
+                const section1 = sections[group[i]];
+                const section2 = sections[group[j]];
+                
+                const similarity = calculateSectionSimilarity(
+                    pixels,
+                    section1.startX, section1.startY, section1.endX, section1.endY,
+                    section2.startX, section2.startY, section2.endX, section2.endY
+                );
+                
+                totalSimilarity += similarity;
+                totalPairs++;
+            }
+        }
+    });
+    
+    return totalPairs > 0 ? totalSimilarity / totalPairs : 0;
+}
+
+
+
 // Find optimal split point for a single dimension
 function findOptimalSplitPoint(pixels, width, height, direction, balanceStrategy) {
     // Define possible split points (avoid edges)
@@ -1376,51 +1737,6 @@ function findOptimalSplitPoint(pixels, width, height, direction, balanceStrategy
     return bestSplit;
 }
 
-// Find optimal split point for a specific region
-function findOptimalSplitPointForRegion(pixels, startX, startY, endX, endY, direction, balanceStrategy) {
-    // Define possible split points (avoid edges)
-    let min, max;
-    if (direction === 'horizontal') {
-        min = Math.floor(startY + (endY - startY) * 0.3);
-        max = Math.floor(startY + (endY - startY) * 0.7);
-    } else { // vertical
-        min = Math.floor(startX + (endX - startX) * 0.3);
-        max = Math.floor(startX + (endX - startX) * 0.7);
-    }
-    
-    let bestSplit = (direction === 'horizontal') ? Math.floor((startY + endY) / 2) : Math.floor((startX + endX) / 2);
-    let lowestImbalance = Infinity;
-    
-    // Step size for larger regions
-    const stepSize = 8;
-    
-    // Try different split points
-    for (let split = min; split <= max; split += stepSize) {
-        // Calculate imbalance for this split
-        let imbalance;
-        if (direction === 'horizontal') {
-            // Split top vs bottom
-            const colorSet1 = getColorsInRegion(pixels, startX, startY, endX, split);
-            const colorSet2 = getColorsInRegion(pixels, startX, split, endX, endY);
-            
-            imbalance = calculateBalanceImbalance([colorSet1, colorSet2], balanceStrategy);
-        } else {
-            // Split left vs right
-            const colorSet1 = getColorsInRegion(pixels, startX, startY, split, endY);
-            const colorSet2 = getColorsInRegion(pixels, split, startY, endX, endY);
-            
-            imbalance = calculateBalanceImbalance([colorSet1, colorSet2], balanceStrategy);
-        }
-        
-        // Update best split if this is better
-        if (imbalance < lowestImbalance) {
-            lowestImbalance = imbalance;
-            bestSplit = split;
-        }
-    }
-    
-    return bestSplit;
-}
 
 // Calculate imbalance for a specific split
 function calculateImbalanceForSplit(pixels, width, height, direction, splitPoint, balanceStrategy) {
@@ -1441,6 +1757,7 @@ function calculateImbalanceForSplit(pixels, width, height, direction, splitPoint
     }
     
     return calculateBalanceImbalance(colorSets, balanceStrategy);
+
 }
 
 // Calculate imbalance for a specific arrangement of regions
@@ -1479,10 +1796,12 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         console.log('  --optimize=<true|false>   Optimize palettes (default: true)');
         console.log('  --verbose=<true|false>    Verbosity level (default: true)');
         console.log('  --palettes=<0,1,2,3>      Palettes to use (default: all 4)');
+        console.log('  --sections=<4|9>          Number of sections to split image into (default: 4)');
         process.exit(1);
     }
     
-    const inputPath = process.argv[2];    // Parse additional options
+    const inputPath = process.argv[2];
+    // Parse additional options
     const options = {};
     for (let i = 3; i < process.argv.length; i++) {
         const arg = process.argv[i];
@@ -1497,6 +1816,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
             options.palettes = arg.substring(11).split(',').map(Number);
         } else if (arg.startsWith('--verbose=')) {
             options.verbose = arg.substring(10).toLowerCase() === 'true';
+        } else if (arg.startsWith('--sections=')) {
+            // New option for number of sections
+            options.sections = parseInt(arg.substring(11));
         }
     }
     
