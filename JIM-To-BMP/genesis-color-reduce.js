@@ -230,7 +230,8 @@ function processBmp(inputPath, options = {}) {
     
     // Create color statistics
     const colorStats = calculateColorStats(tileData, palettes);
-      // Create metadata
+
+    // Create metadata compatible with bmpToJim script
     const metadata = {
         sourceFile: inputPath,
         width: bmp.width,
@@ -261,6 +262,23 @@ function processBmp(inputPath, options = {}) {
                 rgb: genesisColorToRgb(value)
             }))
         })),
+        // Additional fields for bmpToJim compatibility
+        palette: {
+            format: "genesis", // Specify Sega Genesis palette format
+            numPalettes: palettes.length,
+            colorsPerPalette: 16,
+            // Include raw palette data for easy access
+            raw: palettes.map(pal => 
+                pal.map(color => ({r: color.r, g: color.g, b: color.b}))
+            )
+        },
+        // Add tile mapping information
+        tiles: tileData.map(tile => ({
+            x: tile.x,
+            y: tile.y,
+            paletteIndex: tile.paletteIndex,
+            pixelData: tile.pixelData
+        })),
         colorStats,
         tileAssignments,
         processingTime: {
@@ -271,7 +289,22 @@ function processBmp(inputPath, options = {}) {
     
     // Save metadata JSON
     console.log('Writing metadata...');
-    writeFileSync(metadataPath, JSON.stringify(metadata, null, 2));
+    try {
+        // Ensure the JSON is properly formatted
+        const metadataJson = JSON.stringify(metadata, null, 2);
+        
+        // Write with explicit UTF-8 encoding
+        writeFileSync(metadataPath, metadataJson, { encoding: 'utf8' });
+        console.log(`Metadata written to ${metadataPath}`);
+    } catch (error) {
+        console.error(`Error writing metadata: ${error.message}`);
+        throw error;
+    }
+
+    // Save palette as Adobe Color Table (.act) file for JIM conversion compatibility
+    console.log('Writing ACT palette file...');
+    const actFilePath = join(outputDir, `${inputFileName}.act`);
+    saveACTPalette(palettes, actFilePath);
     
     // Save reduced color BMP
     console.log('Writing reduced color BMP...');
@@ -283,7 +316,8 @@ function processBmp(inputPath, options = {}) {
         metadata,
         outputDir,
         bmpOutputPath,
-        tilesDir
+        tilesDir,
+        actFilePath
     };
 }
 
@@ -2048,6 +2082,43 @@ function calculateBalanceImbalance(colorSets, balanceStrategy) {
         default:
             return calculateCountImbalance(colorSets);
     }
+}
+
+function saveACTPalette(palettes, filepath) {
+    // ACT files are binary files with 256 RGB triplets (768 bytes)
+    // followed by 2 bytes for color count and 2 bytes for transparent color index
+    const buffer = Buffer.alloc(768 + 4);
+    let offset = 0;
+    
+    // First, write the Genesis palettes (up to 4 palettes of 16 colors each)
+    for (const palette of palettes) {
+        for (const color of palette) {
+            if (offset >= 768) break; // Ensure we don't exceed 256 colors
+            
+            // Write RGB triplet
+            buffer.writeUInt8(color.r, offset++);
+            buffer.writeUInt8(color.g, offset++);
+            buffer.writeUInt8(color.b, offset++);
+        }
+    }
+    
+    // Fill remaining palette entries with zeros (black)
+    while (offset < 768) {
+        buffer.writeUInt8(0, offset++);
+        buffer.writeUInt8(0, offset++);
+        buffer.writeUInt8(0, offset++);
+    }
+    
+    // Write the total color count (up to 256)
+    const totalColors = Math.min(256, palettes.reduce((total, palette) => total + palette.length, 0));
+    buffer.writeUInt16BE(totalColors, 768);
+    
+    // Write transparent color index (usually -1 if not used, use 0 as default)
+    buffer.writeInt16BE(0, 770);
+    
+    // Write the buffer to the file
+    writeFileSync(filepath, buffer);
+    console.log(`Wrote palette to ${filepath}`);
 }
 
 // If running directly from command line
