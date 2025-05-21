@@ -62,22 +62,73 @@ function processBmp(inputPath, options = {}) {
     // Define quadrants based on selected palettes
     const quadrants = defineQuadrantsAndPalettes(bmp, opts);
     
-    // Generate palettes for each quadrant
-    console.log('Creating palettes for each region...');
+    // Generate palettes for each palette index
+    console.log('Creating palettes...');
     const palettes = [];
-    
-    for (let i = 0; i < quadrants.length; i++) {
-        const q = quadrants[i];
-        console.log(`Generating palette for region ${i+1}: (${q.startX},${q.startY}) to (${q.endX},${q.endY})`);
-        const colors = findDominantColors(bmp.pixels, q.startX, q.startY, q.endX, q.endY);
-        palettes.push(colors);
-        console.log(`Palette ${i+1} has ${colors.length} colors`);
+
+    // Initialize array for the number of required palettes (always 4 for Genesis)
+    for (let i = 0; i < 4; i++) {
+        palettes.push(null);
+    }
+
+    // Find which palette indices are actually used
+    const usedPaletteIndices = new Set();
+    for (const q of quadrants) {
+        usedPaletteIndices.add(q.paletteIndex);
+    }
+
+    // Generate palettes only for the indices that are used
+    for (const paletteIndex of usedPaletteIndices) {
+        // Collect all regions using this palette
+        const regionsWithThisPalette = quadrants.filter(q => q.paletteIndex === paletteIndex);
+        console.log(`Generating palette ${paletteIndex} used by ${regionsWithThisPalette.length} regions`);
+        
+        // Collect colors from all regions using this palette
+        const combinedColors = new Map();
+        for (const region of regionsWithThisPalette) {
+            const colors = findDominantColors(bmp.pixels, region.startX, region.startY, region.endX, region.endY, 64); // Get more colors initially
+            for (const color of colors) {
+                const key = `${color.r},${color.g},${color.b}`;
+                if (!combinedColors.has(key)) {
+                    combinedColors.set(key, { ...color });
+                } else {
+                    combinedColors.get(key).count += color.count;
+                }
+            }
+        }
+        
+        // Convert combined colors to array and sort by frequency
+        const colorArray = Array.from(combinedColors.values())
+            .sort((a, b) => b.count - a.count)
+            .slice(0, 16); // Take top 16 colors
+        
+        palettes[paletteIndex] = colorArray;
+        console.log(`Palette ${paletteIndex} has ${colorArray.length} colors`);
+    }
+
+    // Fill in any unused palettes with a default palette if needed
+    for (let i = 0; i < palettes.length; i++) {
+        if (!palettes[i]) {
+            console.log(`Palette ${i} is unused, creating default`);
+            palettes[i] = [{ r: 0, g: 0, b: 0, count: 1 }]; // Default black
+        }
     }
     
     // Optimize palettes if requested
     if (opts.optimizePalettes) {
         console.log('Optimizing palettes to improve color distribution...');
-        optimizePalettes(palettes, bmp.pixels, quadrants);
+        // Get list of used palette indices
+        const usedPaletteIndices = new Set();
+        for (const q of quadrants) {
+            usedPaletteIndices.add(q.paletteIndex);
+        }
+        
+        // Only optimize the palettes that are actually used
+        for (const paletteIndex of usedPaletteIndices) {
+            console.log(`Optimizing palette ${paletteIndex}...`);
+            const regionsUsingThisPalette = quadrants.filter(q => q.paletteIndex === paletteIndex);
+            optimizePalette(palettes[paletteIndex], bmp.pixels, regionsUsingThisPalette);
+        }
     }
     
     // Convert to Genesis color format for JSON output
@@ -109,7 +160,7 @@ function processBmp(inputPath, options = {}) {
     for (let ty = 0; ty < Math.ceil(bmp.height / tileSize); ty++) {
         const assignmentRow = [];
         const indexedRow = [];
-          for (let tx = 0; tx < Math.ceil(bmp.width / tileSize); tx++) {
+        for (let tx = 0; tx < Math.ceil(bmp.width / tileSize); tx++) {
             // Determine which quadrant this tile belongs to
             let quadrantIndex = 0;
             const tileX = tx * tileSize;
@@ -128,8 +179,8 @@ function processBmp(inputPath, options = {}) {
             // Get the palette index for this quadrant
             const paletteIndex = quadrants[quadrantIndex].paletteIndex;
             
-            // Get palette for this quadrant
-            const palette = palettes[quadrantIndex];
+            // Get palette for this quadrant - FIX: use paletteIndex, not quadrantIndex
+            const palette = palettes[paletteIndex];
             
             // Map pixels in this tile to the palette
             const tile = [];
@@ -140,7 +191,8 @@ function processBmp(inputPath, options = {}) {
                     const py = ty * tileSize + y;
                     
                     if (px < bmp.width && py < bmp.height) {
-                        const pixel = bmp.pixels[py][px];                        const colorIndex = findBestMatch(pixel, palette);
+                        const pixel = bmp.pixels[py][px];
+                        const colorIndex = findBestMatch(pixel, palette);
                         tile.push(colorIndex);
                         
                         // Convert to global palette index for the BMP
@@ -1174,6 +1226,178 @@ function optimizePalettes(palettes, pixels, quadrants) {
     return palettes;
 }
 
+// Optimize a single palette based on regions that use it
+function optimizePalette(palette, pixels, regions) {
+    if (!palette || palette.length === 0 || regions.length === 0) return;
+    
+    // Sample pixels from all regions using this palette
+    const samplePixels = [];
+    const sampleStep = 3; // Sample every 3 pixels for performance
+    
+    for (const region of regions) {
+        for (let y = region.startY; y < region.endY; y += sampleStep) {
+            if (y >= pixels.length) continue;
+            
+            for (let x = region.startX; x < region.endX; x += sampleStep) {
+                if (x >= pixels[y].length) continue;
+                samplePixels.push(pixels[y][x]);
+            }
+        }
+    }
+    
+    // Run k-means clustering on the sample pixels
+    const kMeansPalette = quantizePixels(samplePixels, 16);
+    
+    // Replace palette with optimized colors
+    for (let i = 0; i < kMeansPalette.length && i < palette.length; i++) {
+        palette[i].r = kMeansPalette[i].r;
+        palette[i].g = kMeansPalette[i].g;
+        palette[i].b = kMeansPalette[i].b;
+    }
+    
+    // Sort palette by luminance (keep index 0 as background)
+    const background = palette[0];
+    const sorted = palette.slice(1).sort((a, b) => {
+        const lumA = 0.299 * a.r + 0.587 * a.g + 0.114 * a.b;
+        const lumB = 0.299 * b.r + 0.587 * b.g + 0.114 * b.b;
+        return lumA - lumB;
+    });
+    palette[0] = background;
+    for (let i = 0; i < sorted.length; i++) {
+        palette[i + 1] = sorted[i];
+    }
+}
+
+// Quantize a set of pixels directly (not using a color map)
+function quantizePixels(pixels, maxColors) {
+    // Convert pixels to Lab color space for better clustering
+    const points = pixels.map(pixel => {
+        const lab = rgbToLab(pixel.r, pixel.g, pixel.b);
+        return {
+            r: pixel.r,
+            g: pixel.g,
+            b: pixel.b,
+            l: lab.l,
+            a: lab.a,
+            bValue: lab.b,
+            count: 1
+        };
+    });
+    
+    // Use k-means clustering similar to the existing quantizeColors function
+    // But handling points directly rather than a color map
+    
+    // Initialize centroids with k-means++ approach
+    const centroids = [];
+    // First centroid randomly
+    const firstIndex = Math.floor(Math.random() * points.length);
+    centroids.push({...points[firstIndex]});
+    
+    // Choose remaining centroids
+    for (let k = 1; k < maxColors && k < points.length; k++) {
+        // Calculate distance from each point to nearest centroid
+        const distances = points.map(point => {
+            let minDist = Infinity;
+            for (const centroid of centroids) {
+                const dist = Math.sqrt(
+                    Math.pow(point.l - centroid.l, 2) +
+                    Math.pow(point.a - centroid.a, 2) +
+                    Math.pow(point.bValue - centroid.bValue, 2)
+                );
+                minDist = Math.min(minDist, dist);
+            }
+            return minDist;
+        });
+        
+        // Choose next centroid weighted by squared distance
+        let totalWeight = distances.reduce((sum, dist) => sum + dist * dist, 0);
+        let threshold = Math.random() * totalWeight;
+        let sum = 0;
+        let nextIndex = 0;
+        
+        for (let i = 0; i < distances.length; i++) {
+            sum += distances[i] * distances[i];
+            if (sum >= threshold) {
+                nextIndex = i;
+                break;
+            }
+        }
+        
+        centroids.push({...points[nextIndex]});
+    }
+    
+    // Run k-means iterations
+    for (let iter = 0; iter < 10; iter++) {
+        // Assign points to clusters
+        const clusters = Array(centroids.length).fill().map(() => []);
+        
+        for (const point of points) {
+            let minDist = Infinity;
+            let clusterId = 0;
+            
+            for (let i = 0; i < centroids.length; i++) {
+                const dist = Math.sqrt(
+                    Math.pow(point.l - centroids[i].l, 2) +
+                    Math.pow(point.a - centroids[i].a, 2) +
+                    Math.pow(point.bValue - centroids[i].bValue, 2)
+                );
+                
+                if (dist < minDist) {
+                    minDist = dist;
+                    clusterId = i;
+                }
+            }
+            
+            clusters[clusterId].push(point);
+        }
+        
+        // Update centroids
+        let changed = false;
+        
+        for (let i = 0; i < centroids.length; i++) {
+            if (clusters[i].length === 0) continue;
+            
+            const avgL = clusters[i].reduce((sum, p) => sum + p.l, 0) / clusters[i].length;
+            const avgA = clusters[i].reduce((sum, p) => sum + p.a, 0) / clusters[i].length;
+            const avgB = clusters[i].reduce((sum, p) => sum + p.bValue, 0) / clusters[i].length;
+            const avgR = clusters[i].reduce((sum, p) => sum + p.r, 0) / clusters[i].length;
+            const avgG = clusters[i].reduce((sum, p) => sum + p.g, 0) / clusters[i].length;
+            const avgBlue = clusters[i].reduce((sum, p) => sum + p.b, 0) / clusters[i].length;
+            
+            const newCentroid = {
+                l: avgL,
+                a: avgA,
+                bValue: avgB,
+                r: Math.round(avgR),
+                g: Math.round(avgG),
+                b: Math.round(avgBlue),
+                count: clusters[i].length
+            };
+            
+            // Check if centroid changed
+            const dist = Math.sqrt(
+                Math.pow(newCentroid.l - centroids[i].l, 2) +
+                Math.pow(newCentroid.a - centroids[i].a, 2) +
+                Math.pow(newCentroid.bValue - centroids[i].bValue, 2)
+            );
+            
+            if (dist > 0.5) {
+                changed = true;
+                centroids[i] = newCentroid;
+            }
+        }
+        
+        if (!changed) break;
+    }
+    
+    return centroids.map(c => ({
+        r: Math.max(0, Math.min(255, Math.round(c.r))),
+        g: Math.max(0, Math.min(255, Math.round(c.g))),
+        b: Math.max(0, Math.min(255, Math.round(c.b))),
+        count: c.count
+    }));
+}
+
 // Define the quadrants and palettes based on the number of palettes selected
 function defineQuadrantsAndPalettes(bmp, opts) {
     const width = bmp.width;
@@ -1564,53 +1788,93 @@ function assignSectionsTo3Palettes(sections, sectionStats, pixels, palettes) {
 
 // Assign sections to 4 palettes based on optimal grouping
 function assignSectionsTo4Palettes(sections, sectionStats, pixels, palettes) {
-    // For 4 palettes, we'll divide into quadrants but with flexibility based on color similarity
-    // Start with initial assignment based on position
-    const initialAssignments = [
-        palettes[0], palettes[0], palettes[1],  // Top row
-        palettes[0], palettes[1], palettes[1],  // Middle row
-        palettes[2], palettes[2], palettes[3]   // Bottom row
-    ];
+    console.log('Grouping 9 sections into 4 palette groups based on color similarity');
     
-    // Refine assignments using color similarity
-    const assignments = [...initialAssignments];
-    let improved = true;
-    let iterations = 0;
-    const MAX_ITERATIONS = 10;
-    
-    while (improved && iterations < MAX_ITERATIONS) {
-        improved = false;
-        iterations++;
-        
-        // For each section, see if it would be better in another palette
-        for (let i = 0; i < sections.length; i++) {
-            const currentPalette = assignments[i];
-            
-            // Try each alternative palette
-            for (const alternatePalette of palettes) {
-                if (alternatePalette === currentPalette) continue;
-                
-                // Calculate current palette cohesion
-                const currentCohesion = calculatePaletteCohesion(sections, pixels, assignments);
-                
-                // Try alternative assignment
-                const tempAssignments = [...assignments];
-                tempAssignments[i] = alternatePalette;
-                const newCohesion = calculatePaletteCohesion(sections, pixels, tempAssignments);
-                
-                // If improved, keep the change
-                if (newCohesion > currentCohesion) {
-                    assignments[i] = alternatePalette;
-                    improved = true;
-                    break;
-                }
+    // Calculate similarity matrix between all sections
+    const similarityMatrix = [];
+    for (let i = 0; i < sections.length; i++) {
+        similarityMatrix[i] = [];
+        for (let j = 0; j < sections.length; j++) {
+            if (i === j) {
+                similarityMatrix[i][j] = 1; // Same section has perfect similarity
+            } else if (j < i) {
+                similarityMatrix[i][j] = similarityMatrix[j][i]; // Matrix is symmetric
+            } else {
+                const similarity = calculateSectionSimilarity(
+                    pixels,
+                    sections[i].startX, sections[i].startY, sections[i].endX, sections[i].endY,
+                    sections[j].startX, sections[j].startY, sections[j].endX, sections[j].endY
+                );
+                similarityMatrix[i][j] = similarity;
             }
         }
     }
     
-    return sections.map((section, index) => ({
+    // Sort sections by total similarity to all other sections (most similar first)
+    const sectionsByConnectivity = sections.map((section, index) => {
+        const totalSimilarity = similarityMatrix[index].reduce((sum, sim) => sum + sim, 0);
+        return { index, totalSimilarity };
+    }).sort((a, b) => b.totalSimilarity - a.totalSimilarity);
+    
+    // Initialize the 4 palette groups with the most connected sections as seeds
+    const paletteGroups = [
+        [sectionsByConnectivity[0].index],
+        [sectionsByConnectivity[1].index],
+        [sectionsByConnectivity[2].index],
+        [sectionsByConnectivity[3].index]
+    ];
+    
+    // Track which sections have been assigned
+    const assigned = new Set(paletteGroups.flat());
+    
+    // Assign remaining sections to the most similar group
+    const remainingSections = sections
+        .filter((_, index) => !assigned.has(index))
+        .map(section => section.index);
+    
+    for (const sectionIndex of remainingSections) {
+        let bestGroupIndex = 0;
+        let bestSimilarity = -Infinity;
+        
+        // Find the group with highest average similarity to this section
+        for (let groupIndex = 0; groupIndex < 4; groupIndex++) {
+            const group = paletteGroups[groupIndex];
+            let totalSimilarity = 0;
+            
+            for (const memberIndex of group) {
+                totalSimilarity += similarityMatrix[sectionIndex][memberIndex];
+            }
+            
+            const avgSimilarity = totalSimilarity / group.length;
+            
+            if (avgSimilarity > bestSimilarity) {
+                bestSimilarity = avgSimilarity;
+                bestGroupIndex = groupIndex;
+            }
+        }
+        
+        // Assign this section to the best group
+        paletteGroups[bestGroupIndex].push(sectionIndex);
+    }
+    
+    // Assign each group to a palette
+    const assignments = {};
+    for (let i = 0; i < 4; i++) {
+        const paletteIndex = palettes[i];
+        for (const sectionIndex of paletteGroups[i]) {
+            assignments[sectionIndex] = paletteIndex;
+        }
+    }
+    
+    // Log the groupings
+    console.log('Section to palette groupings:');
+    for (let i = 0; i < 4; i++) {
+        console.log(`Palette ${palettes[i]}: Sections ${paletteGroups[i].join(', ')}`);
+    }
+    
+    return sections.map(section => ({
         ...section,
-        paletteIndex: assignments[index]
+        paletteIndex: assignments[section.index]
     }));
 }
 
