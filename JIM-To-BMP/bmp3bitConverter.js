@@ -120,6 +120,148 @@ function applyDithering(pixels, ditheredPixels, ditherBits) {
     return ditheredPixels;
 }
 
+// Get colors in a specific region of the image with their frequencies
+function getColorsInRegion(pixels, left, top, right, bottom) {
+    const colorMap = new Map();
+    
+    for (let y = top; y <= bottom; y++) {
+        for (let x = left; x <= right; x++) {
+            const color = pixels[y][x].toString();
+            if (!colorMap.has(color)) {
+                colorMap.set(color, 0);
+            }
+            colorMap.set(color, colorMap.get(color) + 1);
+        }
+    }
+    
+    // Convert map to sorted array of [color, frequency] pairs
+    const sortedColors = Array.from(colorMap.entries()).sort((a, b) => b[1] - a[1]);
+    
+    return sortedColors.map(entry => ({ color: entry[0].split(',').map(Number), frequency: entry[1] }));
+}
+
+// Apply Floyd-Steinberg error diffusion dithering
+function applyDiffusionDithering(pixels, ditheredPixels, ditherBits, diffusionStrength = 1.0) {
+    const height = pixels.length;
+    const width = pixels[0].length;
+    
+    // Calculate max value for the N-bit color space
+    const maxValue = (1 << ditherBits) - 1;
+    
+    // Create a copy of pixels to track errors (use floating point values)
+    const workingPixels = [];
+    for (let y = 0; y < height; y++) {
+        const row = [];
+        for (let x = 0; x < width; x++) {
+            const [r, g, b] = pixels[y][x];
+            // First convert to N-bit color space (dithering source)
+            const [rN, gN, bN] = convertToNBit(r, g, b, ditherBits);
+            // Store as normalized 0.0-1.0 values
+            row.push([rN/maxValue, gN/maxValue, bN/maxValue]);
+        }
+        workingPixels.push(row);
+    }
+    
+    // Apply Floyd-Steinberg error diffusion
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const [oldR, oldG, oldB] = workingPixels[y][x];
+            
+            // Quantize to 3-bit color (0-7)
+            const r3 = Math.min(7, Math.max(0, Math.round(oldR * 7)));
+            const g3 = Math.min(7, Math.max(0, Math.round(oldG * 7)));
+            const b3 = Math.min(7, Math.max(0, Math.round(oldB * 7)));
+            
+            // Convert back to 8-bit for output
+            const r8 = Math.round(r3 * 255 / 7);
+            const g8 = Math.round(g3 * 255 / 7);
+            const b8 = Math.round(b3 * 255 / 7);
+            
+            // Save the dithered pixel
+            ditheredPixels[y][x] = [r8, g8, b8];
+            
+            // Calculate quantization error
+            const errorR = oldR - (r3 / 7);
+            const errorG = oldG - (g3 / 7);
+            const errorB = oldB - (b3 / 7);
+            
+            // Distribute error to neighboring pixels with diffusion strength factor
+            const strength = diffusionStrength * 0.5; // Scale factor to dampen the effect
+            
+            // Floyd-Steinberg diffusion pattern:
+            //   *   7/16
+            // 3/16 5/16 1/16
+            
+            // Right pixel (7/16)
+            if (x + 1 < width) {
+                workingPixels[y][x + 1][0] += errorR * (7/16) * strength;
+                workingPixels[y][x + 1][1] += errorG * (7/16) * strength;
+                workingPixels[y][x + 1][2] += errorB * (7/16) * strength;
+            }
+            
+            if (y + 1 < height) {
+                // Bottom-left pixel (3/16)
+                if (x - 1 >= 0) {
+                    workingPixels[y + 1][x - 1][0] += errorR * (3/16) * strength;
+                    workingPixels[y + 1][x - 1][1] += errorG * (3/16) * strength;
+                    workingPixels[y + 1][x - 1][2] += errorB * (3/16) * strength;
+                }
+                
+                // Bottom pixel (5/16)
+                workingPixels[y + 1][x][0] += errorR * (5/16) * strength;
+                workingPixels[y + 1][x][1] += errorG * (5/16) * strength;
+                workingPixels[y + 1][x][2] += errorB * (5/16) * strength;
+                
+                // Bottom-right pixel (1/16)
+                if (x + 1 < width) {
+                    workingPixels[y + 1][x + 1][0] += errorR * (1/16) * strength;
+                    workingPixels[y + 1][x + 1][1] += errorG * (1/16) * strength;
+                    workingPixels[y + 1][x + 1][2] += errorB * (1/16) * strength;
+                }
+            }
+        }
+    }
+    
+    return ditheredPixels;
+}
+
+// Apply noise dithering
+function applyNoiseDithering(pixels, ditheredPixels, ditherBits, noiseAmount = 0.5) {
+    const height = pixels.length;
+    const width = pixels[0].length;
+    
+    // Calculate max value for the N-bit color space
+    const maxValue = (1 << ditherBits) - 1;
+    
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const [r, g, b] = pixels[y][x];
+            
+            // First convert to N-bit color space (dithering source)
+            const [rN, gN, bN] = convertToNBit(r, g, b, ditherBits);
+            
+            // Apply noise to each color channel
+            const noiseR = (Math.random() - 0.5) * noiseAmount * 2;
+            const noiseG = (Math.random() - 0.5) * noiseAmount * 2;
+            const noiseB = (Math.random() - 0.5) * noiseAmount * 2;
+            
+            // Add noise and quantize to 3-bit (0-7)
+            const r3 = Math.min(7, Math.max(0, Math.round(rN / maxValue * 7 + noiseR)));
+            const g3 = Math.min(7, Math.max(0, Math.round(gN / maxValue * 7 + noiseG)));
+            const b3 = Math.min(7, Math.max(0, Math.round(bN / maxValue * 7 + noiseB)));
+            
+            // Convert back to 8-bit for output
+            const r8 = Math.round(r3 * 255 / 7);
+            const g8 = Math.round(g3 * 255 / 7);
+            const b8 = Math.round(b3 * 255 / 7);
+            
+            ditheredPixels[y][x] = [r8, g8, b8];
+        }
+    }
+    
+    return ditheredPixels;
+}
+
 // Read a BMP file and parse its header and data
 function readBMP(filepath) {
     const buffer = readFileSync(filepath);
@@ -260,12 +402,25 @@ function processBMP(inputPath, options = {}) {
         
         // Initialize the array for converted pixels
         const convertedPixels = Array(height).fill().map(() => Array(width).fill(null));
-        
-        // Check if dithering is enabled and what bit depth to use
+          // Check if dithering is enabled and what bit depth to use
         if (options.dither) {
-            console.log(`Using ${options.dither}-bit dithering`);
-            // Apply dithering with the specified bit depth
-            applyDithering(pixels, convertedPixels, parseInt(options.dither));
+            const ditherDepth = parseInt(options.dither);
+            console.log(`Using ${ditherDepth}-bit dithering with ${options.ditherType || 'pattern'} method`);
+            
+            // Apply the appropriate dithering method
+            if (options.ditherType === 'diffusion') {
+                const strength = options.diffusionStrength || 1.0;
+                console.log(`Diffusion strength: ${strength}`);
+                applyDiffusionDithering(pixels, convertedPixels, ditherDepth, strength);
+            } else if (options.ditherType === 'noise') {
+                const noiseAmount = options.noiseAmount || 0.5;
+                console.log(`Noise amount: ${noiseAmount}`);
+                applyNoiseDithering(pixels, convertedPixels, ditherDepth, noiseAmount);
+            } else {
+                // Default to pattern (Bayer) dithering
+                console.log('Using pattern (Bayer) dithering');
+                applyDithering(pixels, convertedPixels, ditherDepth);
+            }
         } else {
             // Standard non-dithered conversion
             for (let y = 0; y < height; y++) {
@@ -276,10 +431,15 @@ function processBMP(inputPath, options = {}) {
                 }
             }
         }
-        
-        // Determine output filename
+          // Determine output filename
         const ditherSuffix = options.dither ? `-dither${options.dither}bit` : '';
-        const outputPath = join(outputDir, `${inputFileName}-3bit${ditherSuffix}.bmp`);
+        const methodSuffix = options.ditherType ? `-${options.ditherType}` : '';
+        const strengthSuffix = options.ditherType === 'diffusion' && options.diffusionStrength ? 
+                             `-s${options.diffusionStrength}` : 
+                             (options.ditherType === 'noise' && options.noiseAmount ? 
+                             `-n${options.noiseAmount}` : '');
+        
+        const outputPath = join(outputDir, `${inputFileName}-3bit${ditherSuffix}${methodSuffix}${strengthSuffix}.bmp`);
         
         // Save the converted image
         saveBMP(width, height, convertedPixels, outputPath);
@@ -297,7 +457,14 @@ function processBMP(inputPath, options = {}) {
 if (process.argv.length < 3) {
     console.log('Usage: node bmp3bitConverter.js <path-to-bmp-file> [options]');
     console.log('Options:');
-    console.log('  -dither=<4bit|5bit|6bit|7bit|8bit>   Apply dithering with specified bit depth');
+    console.log('  -dither=<4bit|5bit|6bit|7bit|8bit>    Apply dithering with specified bit depth');
+    console.log('  -method=<pattern|diffusion|noise>     Dithering method (default: pattern)');
+    console.log('  -strength=<value>                     Diffusion strength (0.1-2.0, default: 1.0)');
+    console.log('  -noise=<value>                        Noise amount (0.1-1.0, default: 0.5)');
+    console.log('');
+    console.log('Examples:');
+    console.log('  node bmp3bitConverter.js image.bmp -dither=6bit -method=diffusion -strength=0.8');
+    console.log('  node bmp3bitConverter.js image.bmp -dither=5bit -method=noise -noise=0.4');
     process.exit(1);
 }
 
@@ -317,6 +484,32 @@ for (let i = 3; i < process.argv.length; i++) {
             options.dither = parseInt(ditherValue.replace('bit', ''));
         } else {
             console.warn(`Warning: Invalid dither value '${ditherValue}'. Using no dithering.`);
+        }
+    } else if (arg.startsWith('-method=')) {
+        const method = arg.substring(8).toLowerCase();
+        // Validate method
+        const validMethods = ['pattern', 'diffusion', 'noise'];
+        if (validMethods.includes(method)) {
+            options.ditherType = method;
+        } else {
+            console.warn(`Warning: Invalid dithering method '${method}'. Using default method 'pattern'.`);
+            options.ditherType = 'pattern';
+        }
+    } else if (arg.startsWith('-strength=')) {
+        const strength = parseFloat(arg.substring(10));
+        if (!isNaN(strength) && strength > 0) {
+            options.diffusionStrength = Math.min(2.0, Math.max(0.1, strength));
+        } else {
+            console.warn(`Warning: Invalid diffusion strength '${arg.substring(10)}'. Using default 1.0.`);
+            options.diffusionStrength = 1.0;
+        }
+    } else if (arg.startsWith('-noise=')) {
+        const noise = parseFloat(arg.substring(7));
+        if (!isNaN(noise) && noise > 0) {
+            options.noiseAmount = Math.min(1.0, Math.max(0.1, noise));
+        } else {
+            console.warn(`Warning: Invalid noise amount '${arg.substring(7)}'. Using default 0.5.`);
+            options.noiseAmount = 0.5;
         }
     }
 }
