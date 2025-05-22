@@ -36,12 +36,32 @@ function rebuildJim(metadataPath) {
     console.log(`numTiles: ${numTiles}`);
     const firstTileOffset = 0x0A;
     const tileDataSize = numTiles * 32;
+      // Calculate dynamic offsets based on the number of tiles
+    let calculatedPaletteOffset = firstTileOffset + (numTiles * 32);
+    // Align to 4-byte boundary for safety
+    calculatedPaletteOffset = Math.ceil(calculatedPaletteOffset / 4) * 4;
     
-    // Set default offsets if not provided in metadata
-    const paletteOffset = metadata.paletteOffset ? parseInt(metadata.paletteOffset.slice(2), 16) : 0x82; // Default after tiles
-    const mapOffset = metadata.mapOffset ? parseInt(metadata.mapOffset.slice(2), 16) : 0x102; // Default after palette
-    console.log(`paletteOffset: 0x${paletteOffset.toString(16).toUpperCase()}`);
-    console.log(`mapOffset: 0x${mapOffset.toString(16).toUpperCase()}`);
+    let calculatedMapOffset = calculatedPaletteOffset + 128; // 4 palettes * 32 bytes
+    // Align to 4-byte boundary for safety
+    calculatedMapOffset = Math.ceil(calculatedMapOffset / 4) * 4;
+    
+    // Use metadata offsets if provided, otherwise use calculated values
+    const paletteOffset = metadata.paletteOffset ? parseInt(metadata.paletteOffset.slice(2), 16) : calculatedPaletteOffset;
+    const mapOffset = metadata.mapOffset ? parseInt(metadata.mapOffset.slice(2), 16) : calculatedMapOffset;
+    
+    // Verify offsets don't cause overlap
+    if (paletteOffset < firstTileOffset + (numTiles * 32)) {
+        console.warn(`Warning: Palette offset 0x${paletteOffset.toString(16).toUpperCase()} is too small and may overwrite tile data!`);
+        console.warn(`Minimum safe palette offset would be 0x${calculatedPaletteOffset.toString(16).toUpperCase()}`);
+    }
+    
+    if (mapOffset < paletteOffset + 128) {
+        console.warn(`Warning: Map offset 0x${mapOffset.toString(16).toUpperCase()} is too small and may overwrite palette data!`);
+        console.warn(`Minimum safe map offset would be 0x${calculatedMapOffset.toString(16).toUpperCase()}`);
+    }
+    
+    console.log(`paletteOffset: 0x${paletteOffset.toString(16).toUpperCase()} (calculated minimum: 0x${calculatedPaletteOffset.toString(16).toUpperCase()})`);
+    console.log(`mapOffset: 0x${mapOffset.toString(16).toUpperCase()} (calculated minimum: 0x${calculatedMapOffset.toString(16).toUpperCase()})`);
     
     // Check mapWidth and mapHeight
     if (!metadata.mapWidth || !metadata.mapHeight) {

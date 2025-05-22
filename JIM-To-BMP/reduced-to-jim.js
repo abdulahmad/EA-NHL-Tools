@@ -178,12 +178,17 @@ function convertReducedToJim(inputDir, options = {}) {
     }
     
     console.log(`Extracted ${tileMap.size} unique tiles from ${totalTiles} total tiles`);
+      // Create the metadata.json file for rebuildJim.js
+    const tileDataSize = tileMap.size * 32;
+    const calculatedPaletteOffset = 0x0A + tileDataSize; // First tile offset + tile data size
+    const calculatedMapOffset = calculatedPaletteOffset + 128; // Palette offset + (4 palettes * 32 bytes)
     
-    // Create the metadata.json file for rebuildJim.js
     const jimMetadata = {
         numTiles: tileMap.size,
         mapWidth: tilesX,
         mapHeight: tilesY,
+        paletteOffset: `0x${calculatedPaletteOffset.toString(16).toUpperCase()}`,
+        mapOffset: `0x${calculatedMapOffset.toString(16).toUpperCase()}`,
         mapData: mapData
     };
     
