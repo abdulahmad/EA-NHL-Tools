@@ -29,6 +29,9 @@ function processBmp(inputPath, options = {}) {
         // Manual split point configuration
         manualSplits: options.manualSplits || null, // For 4-section: {h: number, v: number}
         // For 9-section: {h1: number, h2: number, v1: number, v2: number}
+        // New dithering options
+        dither: options.dither || false, // false or a dithering method: 'pattern', 'diffusion', 'noise'
+        ditherStrength: options.ditherStrength !== undefined ? options.ditherStrength : 1.0,
         ...options
     };
 
@@ -177,6 +180,11 @@ function processBmp(inputPath, options = {}) {
     
     // Individual tile data for export
     const tileData = [];
+
+    // Initialize diffusion errors if needed
+    if (opts.dither === 'diffusion') {
+        initDiffusionErrors(bmp.width, bmp.height);
+    }
     
     // Process the image tile by tile
     for (let ty = 0; ty < Math.ceil(bmp.height / tileSize); ty++) {
@@ -201,7 +209,7 @@ function processBmp(inputPath, options = {}) {
             // Get the palette index for this quadrant
             const paletteIndex = quadrants[quadrantIndex].paletteIndex;
             
-            // Get palette for this quadrant - FIX: use paletteIndex, not quadrantIndex
+            // Get palette for this quadrant
             const palette = palettes[paletteIndex];
             
             // Map pixels in this tile to the palette
@@ -214,7 +222,23 @@ function processBmp(inputPath, options = {}) {
                     
                     if (px < bmp.width && py < bmp.height) {
                         const pixel = bmp.pixels[py][px];
-                        const colorIndex = findBestMatch(pixel, palette);
+                        
+                        // Choose the appropriate color matching method based on dithering options
+                        let colorIndex;
+                        
+                        if (opts.dither === 'pattern') {
+                            colorIndex = findBestMatchWithPatternDithering(pixel, palette, px, py, opts.ditherStrength);
+                        } else if (opts.dither === 'noise') {
+                            colorIndex = findBestMatchWithNoiseDithering(pixel, palette, opts.ditherStrength);
+                        } else if (opts.dither === 'diffusion') {
+                            colorIndex = findBestMatchWithDiffusionDithering(
+                                pixel, palette, px, py, bmp.width, bmp.height, opts.ditherStrength
+                            );
+                        } else {
+                            // Default: no dithering
+                            colorIndex = findBestMatch(pixel, palette);
+                        }
+                        
                         tile.push(colorIndex);
                         
                         // Convert to global palette index for the BMP
@@ -261,6 +285,11 @@ function processBmp(inputPath, options = {}) {
             acc[key] = basename(opts.forcePalettes[key]); // Store just the filename
             return acc;
         }, {}),
+        // Add dithering information to metadata
+        dithering: opts.dither ? {
+            method: opts.dither,
+            strength: opts.ditherStrength
+        } : null,
         sections: quadrants.map((q, i) => ({
             index: i,
             paletteIndex: q.paletteIndex,
@@ -2191,6 +2220,162 @@ function readACTPalette(filepath) {
     }
 }
 
+// An 8x8 Bayer matrix for ordered dithering
+const BAYER_MATRIX_8X8 = [
+    [0, 32, 8, 40, 2, 34, 10, 42],
+    [48, 16, 56, 24, 50, 18, 58, 26],
+    [12, 44, 4, 36, 14, 46, 6, 38],
+    [60, 28, 52, 20, 62, 30, 54, 22],
+    [3, 35, 11, 43, 1, 33, 9, 41],
+    [51, 19, 59, 27, 49, 17, 57, 25],
+    [15, 47, 7, 39, 13, 45, 5, 37],
+    [63, 31, 55, 23, 61, 29, 53, 21]
+];
+
+// Normalize the Bayer matrix to 0.0-1.0 range for easier use
+const BAYER_NORMALIZED = BAYER_MATRIX_8X8.map(row => row.map(v => v / 64));
+
+// Apply pattern (Bayer) dithering when matching to palette
+function findBestMatchWithPatternDithering(pixel, palette, x, y, strength = 1.0) {
+    // Convert to Lab space for better color matching
+    const pixelLab = rgbToLab(pixel.r, pixel.g, pixel.b);
+    
+    // Get threshold from Bayer matrix
+    const threshold = BAYER_NORMALIZED[y % 8][x % 8] * strength;
+    
+    // Find two closest colors in the palette
+    let bestMatch = 0;
+    let secondBestMatch = 0;
+    let lowestDistance = Infinity;
+    let secondLowestDistance = Infinity;
+    
+    for (let i = 0; i < palette.length; i++) {
+        const color = palette[i];
+        const colorLab = rgbToLab(color.r, color.g, color.b);
+        const distance = deltaE(pixelLab, colorLab);
+        
+        if (distance < lowestDistance) {
+            secondLowestDistance = lowestDistance;
+            secondBestMatch = bestMatch;
+            lowestDistance = distance;
+            bestMatch = i;
+        } else if (distance < secondLowestDistance) {
+            secondLowestDistance = distance;
+            secondBestMatch = i;
+        }
+    }
+    
+    // If the two distances are very similar, use dithering to choose between them
+    if (lowestDistance < secondLowestDistance && secondLowestDistance < lowestDistance * 1.5) {
+        const ratio = lowestDistance / (lowestDistance + secondLowestDistance);
+        return ratio > threshold ? secondBestMatch : bestMatch;
+    }
+    
+    return bestMatch;
+}
+
+// Apply noise dithering when matching to palette
+function findBestMatchWithNoiseDithering(pixel, palette, strength = 0.5) {
+    // Convert to Lab space for better color matching
+    const pixelLab = rgbToLab(pixel.r, pixel.g, pixel.b);
+    
+    // Add random noise based on strength
+    const noise = (Math.random() - 0.5) * strength * 30; // Scale for Lab space
+    
+    // Find best match considering noise
+    let bestMatch = 0;
+    let lowestDistance = Infinity;
+    
+    for (let i = 0; i < palette.length; i++) {
+        const color = palette[i];
+        const colorLab = rgbToLab(color.r, color.g, color.b);
+        // Add noise to the distance calculation
+        const distance = deltaE(pixelLab, colorLab) + noise;
+        
+        if (distance < lowestDistance) {
+            lowestDistance = distance;
+            bestMatch = i;
+        }
+    }
+    
+    return bestMatch;
+}
+
+// Error arrays for diffusion dithering
+const diffusionErrors = new Map();
+
+// Initialize error diffusion arrays
+function initDiffusionErrors(width, height) {
+    // Create arrays to track error for each color channel
+    diffusionErrors.clear();
+    diffusionErrors.set('r', Array(height).fill().map(() => Array(width).fill(0)));
+    diffusionErrors.set('g', Array(height).fill().map(() => Array(width).fill(0)));
+    diffusionErrors.set('b', Array(height).fill().map(() => Array(width).fill(0)));
+}
+
+// Apply diffusion dithering when matching to palette
+function findBestMatchWithDiffusionDithering(pixel, palette, x, y, width, height, strength = 1.0) {
+    // Get accumulated errors for this pixel
+    const errorR = y < diffusionErrors.get('r').length && x < diffusionErrors.get('r')[0].length 
+        ? diffusionErrors.get('r')[y][x] : 0;
+    const errorG = y < diffusionErrors.get('g').length && x < diffusionErrors.get('g')[0].length
+        ? diffusionErrors.get('g')[y][x] : 0;
+    const errorB = y < diffusionErrors.get('b').length && x < diffusionErrors.get('b')[0].length
+        ? diffusionErrors.get('b')[y][x] : 0;
+    
+    // Apply errors to the pixel values
+    const adjustedPixel = {
+        r: Math.max(0, Math.min(255, pixel.r + errorR * strength)),
+        g: Math.max(0, Math.min(255, pixel.g + errorG * strength)),
+        b: Math.max(0, Math.min(255, pixel.b + errorB * strength))
+    };
+    
+    // Find best matching color using standard method
+    const bestIndex = findBestMatch(adjustedPixel, palette);
+    const selectedColor = palette[bestIndex];
+    
+    // Calculate new errors
+    const newErrorR = adjustedPixel.r - selectedColor.r;
+    const newErrorG = adjustedPixel.g - selectedColor.g;
+    const newErrorB = adjustedPixel.b - selectedColor.b;
+    
+    // Distribute errors using Floyd-Steinberg pattern
+    // Floyd-Steinberg diffusion pattern:
+    //   *   7/16
+    // 3/16 5/16 1/16
+    
+    // Only distribute errors if we're not at the image edges
+    if (x + 1 < width) {
+        // Right pixel (7/16)
+        diffusionErrors.get('r')[y][x + 1] += newErrorR * (7/16);
+        diffusionErrors.get('g')[y][x + 1] += newErrorG * (7/16);
+        diffusionErrors.get('b')[y][x + 1] += newErrorB * (7/16);
+    }
+    
+    if (y + 1 < height) {
+        // Bottom-left pixel (3/16)
+        if (x - 1 >= 0) {
+            diffusionErrors.get('r')[y + 1][x - 1] += newErrorR * (3/16);
+            diffusionErrors.get('g')[y + 1][x - 1] += newErrorG * (3/16);
+            diffusionErrors.get('b')[y + 1][x - 1] += newErrorB * (3/16);
+        }
+        
+        // Bottom pixel (5/16)
+        diffusionErrors.get('r')[y + 1][x] += newErrorR * (5/16);
+        diffusionErrors.get('g')[y + 1][x] += newErrorG * (5/16);
+        diffusionErrors.get('b')[y + 1][x] += newErrorB * (5/16);
+        
+        // Bottom-right pixel (1/16)
+        if (x + 1 < width) {
+            diffusionErrors.get('r')[y + 1][x + 1] += newErrorR * (1/16);
+            diffusionErrors.get('g')[y + 1][x + 1] += newErrorG * (1/16);
+            diffusionErrors.get('b')[y + 1][x + 1] += newErrorB * (1/16);
+        }
+    }
+    
+    return bestIndex;
+}
+
 // If running directly from command line
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
     if (process.argv.length < 3) {
@@ -2200,7 +2385,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         console.log('  --balance=<count|entropy|importance|area>   Balance strategy (default: count)');
         console.log('  --optimize=<true|false>   Optimize palettes (default: true)');
         console.log('  --verbose=<true|false>    Verbosity level (default: true)');
-        console.log('  --palettes=<0,1,2,3>      Palettes to use (default: all 4)');        console.log('  --sections=<4|9>          Number of sections to split image into (default: 4)');
+        console.log('  --palettes=<0,1,2,3>      Palettes to use (default: all 4)');        
+        console.log('  --sections=<4|9>          Number of sections to split image into (default: 4)');
+        console.log('  --dither=<pattern|diffusion|noise>  Apply dithering (default: none)');
+        console.log('  --strength=<0.1-2.0>      Dithering strength (default: 1.0)');
         console.log('  --forcepal0=<file.act>    Force palette 0 to use colors from specified .ACT file');
         console.log('  --forcepal1=<file.act>    Force palette 1 to use colors from specified .ACT file');
         console.log('  --forcepal2=<file.act>    Force palette 2 to use colors from specified .ACT file');
@@ -2216,7 +2404,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     }
     
     const inputPath = process.argv[2];
-    // Parse additional options    const options = {};
+    // Parse additional options    
+    const options = {};
     options.forcePalettes = {};
     options.manualSplits = {};
     let hasManualSplits = false;
@@ -2237,6 +2426,27 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         } else if (arg.startsWith('--sections=')) {
             // New option for number of sections
             options.sections = parseInt(arg.substring(11));
+        } else if (arg.startsWith('--dither=')) {
+            const ditherMethod = arg.substring(9).toLowerCase();
+            if (['pattern', 'diffusion', 'noise'].includes(ditherMethod)) {
+                options.dither = ditherMethod;
+                console.log(`Using ${ditherMethod} dithering`);
+            } else {
+                console.warn(`Warning: Unknown dithering method '${ditherMethod}'. Using no dithering.`);
+            }
+        } else if (arg.startsWith('--strength=')) {
+            const strength = parseFloat(arg.substring(11));
+            if (!isNaN(strength) && strength > 0) {
+                // Set appropriate limits based on dither method
+                if (options.dither === 'noise') {
+                    options.ditherStrength = Math.min(1.0, Math.max(0.1, strength));
+                } else {
+                    options.ditherStrength = Math.min(2.0, Math.max(0.1, strength));
+                }
+                console.log(`Dithering strength: ${options.ditherStrength}`);
+            } else {
+                console.warn(`Warning: Invalid strength value '${arg.substring(11)}'. Using default strength.`);
+            }
         } else if (arg.startsWith('--hsplit=')) {
             // Horizontal split for 2-palette or 4-palette modes
             options.manualSplits.h = parseInt(arg.substring(9));
