@@ -26,6 +26,7 @@ function processBmp(inputPath, options = {}) {
         verbose: options.verbose !== false,
         outputDir: options.outputDir || null,
         palettes: options.palettes || [0, 1, 2, 3], // Default to all 4 palettes
+        forcePalettes: options.forcePalettes || {}, // Map of palette index to .ACT file path
         ...options
     };
 
@@ -69,10 +70,30 @@ function processBmp(inputPath, options = {}) {
     const usedPaletteIndices = new Set();
     for (const q of quadrants) {
         usedPaletteIndices.add(q.paletteIndex);
-    }
-
-    // Generate palettes only for the indices that are used
+    }    // Generate palettes only for the indices that are used
     for (const paletteIndex of usedPaletteIndices) {
+        // Check if we have a forced palette for this index
+        if (opts.forcePalettes[paletteIndex]) {
+            const forcedPalettePath = opts.forcePalettes[paletteIndex];
+            console.log(`Using forced palette for index ${paletteIndex} from ${forcedPalettePath}`);
+            
+            const forcedPalette = readACTPalette(forcedPalettePath);
+            if (forcedPalette) {
+                palettes[paletteIndex] = forcedPalette;
+                console.log(`Forced palette ${paletteIndex} loaded with ${forcedPalette.length} colors`);
+            } else {
+                console.error(`Failed to load forced palette from ${forcedPalettePath}. Using auto-generated palette instead.`);
+                // Fall back to auto-generated palette
+                generatePaletteForIndex(paletteIndex);
+            }
+        } else {
+            // No forced palette, generate one
+            generatePaletteForIndex(paletteIndex);
+        }
+    }
+    
+    // Helper function to generate a palette for a specific index
+    function generatePaletteForIndex(paletteIndex) {
         // Collect all regions using this palette
         const regionsWithThisPalette = quadrants.filter(q => q.paletteIndex === paletteIndex);
         console.log(`Generating palette ${paletteIndex} used by ${regionsWithThisPalette.length} regions`);
@@ -107,8 +128,7 @@ function processBmp(inputPath, options = {}) {
             palettes[i] = [{ r: 0, g: 0, b: 0, count: 1 }]; // Default black
         }
     }
-    
-    // Optimize palettes if requested
+      // Optimize palettes if requested
     if (opts.optimizePalettes) {
         console.log('Optimizing palettes to improve color distribution...');
         // Get list of used palette indices
@@ -117,8 +137,14 @@ function processBmp(inputPath, options = {}) {
             usedPaletteIndices.add(q.paletteIndex);
         }
         
-        // Only optimize the palettes that are actually used
+        // Only optimize the palettes that are actually used and not forced
         for (const paletteIndex of usedPaletteIndices) {
+            // Skip optimization for forced palettes
+            if (opts.forcePalettes[paletteIndex]) {
+                console.log(`Skipping optimization for forced palette ${paletteIndex}`);
+                continue;
+            }
+            
             console.log(`Optimizing palette ${paletteIndex}...`);
             const regionsUsingThisPalette = quadrants.filter(q => q.paletteIndex === paletteIndex);
             optimizePalette(palettes[paletteIndex], bmp.pixels, regionsUsingThisPalette);
@@ -229,6 +255,10 @@ function processBmp(inputPath, options = {}) {
         balanceStrategy: opts.balanceStrategy,
         optimizedPalettes: opts.optimizePalettes,
         selectedPalettes: opts.palettes,
+        forcedPalettes: Object.keys(opts.forcePalettes).reduce((acc, key) => {
+            acc[key] = basename(opts.forcePalettes[key]); // Store just the filename
+            return acc;
+        }, {}),
         sections: quadrants.map((q, i) => ({
             index: i,
             paletteIndex: q.paletteIndex,
@@ -786,7 +816,7 @@ function quantizeColors(colorMap, maxColors) {
             r, g, b,
             l: lab.l, 
             a: lab.a, 
-            bValue: lab.b, // Renamed to avoid conflict with the RGB 'b' property
+            b: lab.b, // Renamed to avoid conflict with the RGB 'b' property
             count
         });
     }
@@ -1712,6 +1742,9 @@ function assignSectionsTo3Palettes(sections, sectionStats, pixels, palettes) {
         )
     })).sort((a, b) => a.similarity - b.similarity);
     
+       
+
+    
     // Assign top two similar corners to palette 1, bottom two to palette 2
     assignments[cornerAssignments[0].cornerIndex] = palettes[1];
     assignments[cornerAssignments[1].cornerIndex] = palettes[1];
@@ -2098,6 +2131,34 @@ function saveACTPalette(palettes, filepath) {
     console.log(`Saved combined palette to ${combinedFilepath}`);
 }
 
+// Read a palette from .ACT format
+function readACTPalette(filepath) {
+    try {
+        const data = readFileSync(filepath);
+        const colors = [];
+        
+        // ACT files store colors as RGB triplets
+        for (let i = 0; i < Math.min(data.length, 16 * 3); i += 3) {
+            colors.push({
+                r: data[i],     // R
+                g: data[i + 1], // G
+                b: data[i + 2], // B
+                count: 1        // Dummy count, not actually used for forced palettes
+            });
+        }
+        
+        // Ensure we have exactly 16 colors (pad with black if needed)
+        while (colors.length < 16) {
+            colors.push({ r: 0, g: 0, b: 0, count: 1 });
+        }
+        
+        return colors.slice(0, 16); // Only take the first 16 colors
+    } catch (error) {
+        console.error(`Error reading ACT file ${filepath}: ${error.message}`);
+        return null;
+    }
+}
+
 // If running directly from command line
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
     if (process.argv.length < 3) {
@@ -2109,12 +2170,18 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         console.log('  --verbose=<true|false>    Verbosity level (default: true)');
         console.log('  --palettes=<0,1,2,3>      Palettes to use (default: all 4)');
         console.log('  --sections=<4|9>          Number of sections to split image into (default: 4)');
+        console.log('  --forcepal0=<file.act>    Force palette 0 to use colors from specified .ACT file');
+        console.log('  --forcepal1=<file.act>    Force palette 1 to use colors from specified .ACT file');
+        console.log('  --forcepal2=<file.act>    Force palette 2 to use colors from specified .ACT file');
+        console.log('  --forcepal3=<file.act>    Force palette 3 to use colors from specified .ACT file');
         process.exit(1);
     }
     
     const inputPath = process.argv[2];
     // Parse additional options
     const options = {};
+    options.forcePalettes = {};
+    
     for (let i = 3; i < process.argv.length; i++) {
         const arg = process.argv[i];
         if (arg.startsWith('--output=')) {
@@ -2131,6 +2198,15 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         } else if (arg.startsWith('--sections=')) {
             // New option for number of sections
             options.sections = parseInt(arg.substring(11));
+        } else if (arg.startsWith('--forcepal')) {
+            // Handle forced palette options (--forcepal0, --forcepal1, etc.)
+            const paletteIndex = parseInt(arg.charAt(10));
+            const filePath = arg.substring(12); // Skip past '=', e.g. "--forcepal0=path.act"
+            
+            if (paletteIndex >= 0 && paletteIndex <= 3) {
+                options.forcePalettes[paletteIndex] = filePath;
+                console.log(`Force palette ${paletteIndex} to use colors from ${filePath}`);
+            }
         }
     }
     
