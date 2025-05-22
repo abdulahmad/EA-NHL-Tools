@@ -5,9 +5,9 @@ import { join } from 'path';
 function RGBToGenesisColor(r, g, b) {
     // Convert from 8-bit (0-255) to 3-bit (0-7)
     // Use Math.min to avoid overflow and ensure proper rounding
-    const r3 = Math.min(7, Math.round(r / 36.428));
-    const g3 = Math.min(7, Math.round(g / 36.428));
-    const b3 = Math.min(7, Math.round(b / 36.428));
+    const r3 = Math.min(7, Math.round(r / (255/7)));
+    const g3 = Math.min(7, Math.round(g / (255/7)));
+    const b3 = Math.min(7, Math.round(b / (255/7)));
 
     // Pack into 16-bit genesis format (0000BBB0GGG0RRR0)
     return ((b3 & 0x07) << 9) | ((g3 & 0x07) << 5) | ((r3 & 0x07) << 1);
