@@ -18,8 +18,7 @@ const __dirname = dirname(__filename);
  */
 function processBmp(inputPath, options = {}) {
     const startTime = performance.now();
-    
-    // Default options
+      // Default options
     const opts = {
         balanceStrategy: options.balanceStrategy || 'count', // 'count', 'entropy', 'importance', 'area'
         optimizePalettes: options.optimizePalettes !== false,
@@ -27,6 +26,9 @@ function processBmp(inputPath, options = {}) {
         outputDir: options.outputDir || null,
         palettes: options.palettes || [0, 1, 2, 3], // Default to all 4 palettes
         forcePalettes: options.forcePalettes || {}, // Map of palette index to .ACT file path
+        // Manual split point configuration
+        manualSplits: options.manualSplits || null, // For 4-section: {h: number, v: number}
+        // For 9-section: {h1: number, h2: number, v1: number, v2: number}
         ...options
     };
 
@@ -1398,7 +1400,7 @@ function defineQuadrantsAndPalettes(bmp, opts) {
 
     // New option for 9-section mode
     if (opts.sections === 9) {
-        console.log('Using 9-section mode with optimized splits');
+        console.log('Using 9-section mode');
         return defineNineSections(bmp, opts);
     }
     
@@ -1413,22 +1415,22 @@ function defineQuadrantsAndPalettes(bmp, opts) {
         console.log('Using 2 palettes with horizontal and vertical split strategies');
         
         // Find best horizontal split
-        const hSplit = findOptimalSplitPoint(bmp.pixels, width, height, 'horizontal', opts.balanceStrategy);
+        const hSplit = opts.manualSplits?.h || findOptimalSplitPoint(bmp.pixels, width, height, 'horizontal', opts.balanceStrategy);
         // Find best vertical split
-        const vSplit = findOptimalSplitPoint(bmp.pixels, width, height, 'vertical', opts.balanceStrategy);
+        const vSplit = opts.manualSplits?.v || findOptimalSplitPoint(bmp.pixels, width, height, 'vertical', opts.balanceStrategy);
         
         // Determine which split has better balance
         const hImbalance = calculateImbalanceForSplit(bmp.pixels, width, height, 'horizontal', hSplit, opts.balanceStrategy);
         const vImbalance = calculateImbalanceForSplit(bmp.pixels, width, height, 'vertical', vSplit, opts.balanceStrategy);
         
-        if (hImbalance <= vImbalance) {
-            console.log(`Using horizontal split at ${hSplit} (imbalance: ${hImbalance})`);
+        if (opts.manualSplits?.direction === 'horizontal' || (!opts.manualSplits?.direction && hImbalance <= vImbalance)) {
+            console.log(`Using horizontal split at ${hSplit}${opts.manualSplits?.h ? ' (manual)' : ''} (imbalance: ${hImbalance})`);
             quadrants = [
                 { startX: 0, startY: 0, endX: width, endY: hSplit, paletteIndex: opts.palettes[0] },
                 { startX: 0, startY: hSplit, endX: width, endY: height, paletteIndex: opts.palettes[1] }
             ];
         } else {
-            console.log(`Using vertical split at ${vSplit} (imbalance: ${vImbalance})`);
+            console.log(`Using vertical split at ${vSplit}${opts.manualSplits?.v ? ' (manual)' : ''} (imbalance: ${vImbalance})`);
             quadrants = [
                 { startX: 0, startY: 0, endX: vSplit, endY: height, paletteIndex: opts.palettes[0] },
                 { startX: vSplit, startY: 0, endX: width, endY: height, paletteIndex: opts.palettes[1] }
@@ -1534,17 +1536,33 @@ function defineQuadrantsAndPalettes(bmp, opts) {
                     { startX: vSplit, startY: hSplitRight, endX: width, endY: height, paletteIndex: opts.palettes[2] }
                 ];
                 break;
-        }
-    } else {
+        }    } else {
         // Four palettes - use the standard quadrant method
         console.log('Using 4 palettes with standard quadrant method');
-        const splits = findOptimalSplits(bmp.pixels, width, height, opts.balanceStrategy);
+        
+        // Use manual splits if provided, otherwise find optimal ones
+        let horizontal, vertical;
+        
+        if (opts.manualSplits && (opts.manualSplits.h !== undefined || opts.manualSplits.v !== undefined)) {
+            // Use manual splits if available
+            horizontal = opts.manualSplits.h !== undefined ? opts.manualSplits.h : Math.floor(height / 2);
+            vertical = opts.manualSplits.v !== undefined ? opts.manualSplits.v : Math.floor(width / 2);
+            
+            console.log(`Using manually specified splits - horizontal: ${horizontal}${opts.manualSplits.h !== undefined ? ' (manual)' : ''}, vertical: ${vertical}${opts.manualSplits.v !== undefined ? ' (manual)' : ''}`);
+        } else {
+            // Find optimal splits
+            const splits = findOptimalSplits(bmp.pixels, width, height, opts.balanceStrategy);
+            horizontal = splits.horizontal;
+            vertical = splits.vertical;
+            
+            console.log(`Using automatically calculated splits - horizontal: ${horizontal}, vertical: ${vertical}`);
+        }
         
         quadrants = [
-            { startX: 0, startY: 0, endX: splits.vertical, endY: splits.horizontal, paletteIndex: opts.palettes[0] },
-            { startX: splits.vertical, startY: 0, endX: width, endY: splits.horizontal, paletteIndex: opts.palettes[1] },
-            { startX: 0, startY: splits.horizontal, endX: splits.vertical, endY: height, paletteIndex: opts.palettes[2] },
-            { startX: splits.vertical, startY: splits.horizontal, endX: width, endY: height, paletteIndex: opts.palettes[3] }
+            { startX: 0, startY: 0, endX: vertical, endY: horizontal, paletteIndex: opts.palettes[0] },
+            { startX: vertical, startY: 0, endX: width, endY: horizontal, paletteIndex: opts.palettes[1] },
+            { startX: 0, startY: horizontal, endX: vertical, endY: height, paletteIndex: opts.palettes[2] },
+            { startX: vertical, startY: horizontal, endX: width, endY: height, paletteIndex: opts.palettes[3] }
         ];
     }
     
@@ -1555,21 +1573,35 @@ function defineQuadrantsAndPalettes(bmp, opts) {
 function defineNineSections(bmp, opts) {
     const width = bmp.width;
     const height = bmp.height;
+      // Find optimal horizontal splits (dividing into 3 rows)
+    let hSplit1, hSplit2, vSplit1, vSplit2;
     
-    // Find optimal horizontal splits (dividing into 3 rows)
-    const hSplit1 = findOptimalSplitPointForRange(bmp.pixels, width, height, 
-                   'horizontal', 0.2, 0.4, opts.balanceStrategy);
-    const hSplit2 = findOptimalSplitPointForRange(bmp.pixels, width, height, 
-                   'horizontal', 0.6, 0.8, opts.balanceStrategy);
-    
-    // Find optimal vertical splits (dividing into 3 columns)
-    const vSplit1 = findOptimalSplitPointForRange(bmp.pixels, width, height, 
-                   'vertical', 0.2, 0.4, opts.balanceStrategy);
-    const vSplit2 = findOptimalSplitPointForRange(bmp.pixels, width, height, 
-                   'vertical', 0.6, 0.8, opts.balanceStrategy);
-    
-    console.log(`Horizontal splits at ${hSplit1} and ${hSplit2}`);
-    console.log(`Vertical splits at ${vSplit1} and ${vSplit2}`);
+    if (opts.manualSplits) {
+        // Use manual splits if provided
+        hSplit1 = opts.manualSplits.h1 !== undefined ? opts.manualSplits.h1 : 
+                 findOptimalSplitPointForRange(bmp.pixels, width, height, 'horizontal', 0.2, 0.4, opts.balanceStrategy);
+        
+        hSplit2 = opts.manualSplits.h2 !== undefined ? opts.manualSplits.h2 : 
+                 findOptimalSplitPointForRange(bmp.pixels, width, height, 'horizontal', 0.6, 0.8, opts.balanceStrategy);
+        
+        vSplit1 = opts.manualSplits.v1 !== undefined ? opts.manualSplits.v1 : 
+                 findOptimalSplitPointForRange(bmp.pixels, width, height, 'vertical', 0.2, 0.4, opts.balanceStrategy);
+        
+        vSplit2 = opts.manualSplits.v2 !== undefined ? opts.manualSplits.v2 : 
+                 findOptimalSplitPointForRange(bmp.pixels, width, height, 'vertical', 0.6, 0.8, opts.balanceStrategy);
+        
+        console.log(`Horizontal splits at ${hSplit1}${opts.manualSplits.h1 !== undefined ? ' (manual)' : ''} and ${hSplit2}${opts.manualSplits.h2 !== undefined ? ' (manual)' : ''}`);
+        console.log(`Vertical splits at ${vSplit1}${opts.manualSplits.v1 !== undefined ? ' (manual)' : ''} and ${vSplit2}${opts.manualSplits.v2 !== undefined ? ' (manual)' : ''}`);
+    } else {
+        // Find optimal splits
+        hSplit1 = findOptimalSplitPointForRange(bmp.pixels, width, height, 'horizontal', 0.2, 0.4, opts.balanceStrategy);
+        hSplit2 = findOptimalSplitPointForRange(bmp.pixels, width, height, 'horizontal', 0.6, 0.8, opts.balanceStrategy);
+        vSplit1 = findOptimalSplitPointForRange(bmp.pixels, width, height, 'vertical', 0.2, 0.4, opts.balanceStrategy);
+        vSplit2 = findOptimalSplitPointForRange(bmp.pixels, width, height, 'vertical', 0.6, 0.8, opts.balanceStrategy);
+        
+        console.log(`Horizontal splits at ${hSplit1} and ${hSplit2}`);
+        console.log(`Vertical splits at ${vSplit1} and ${vSplit2}`);
+    }
     
     // Define all 9 sections
     const sections = [
@@ -2168,19 +2200,26 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         console.log('  --balance=<count|entropy|importance|area>   Balance strategy (default: count)');
         console.log('  --optimize=<true|false>   Optimize palettes (default: true)');
         console.log('  --verbose=<true|false>    Verbosity level (default: true)');
-        console.log('  --palettes=<0,1,2,3>      Palettes to use (default: all 4)');
-        console.log('  --sections=<4|9>          Number of sections to split image into (default: 4)');
+        console.log('  --palettes=<0,1,2,3>      Palettes to use (default: all 4)');        console.log('  --sections=<4|9>          Number of sections to split image into (default: 4)');
         console.log('  --forcepal0=<file.act>    Force palette 0 to use colors from specified .ACT file');
         console.log('  --forcepal1=<file.act>    Force palette 1 to use colors from specified .ACT file');
         console.log('  --forcepal2=<file.act>    Force palette 2 to use colors from specified .ACT file');
         console.log('  --forcepal3=<file.act>    Force palette 3 to use colors from specified .ACT file');
+        console.log('  --hsplit=<pixel>          Manually set horizontal split position for 2-palette or 4-palette mode');
+        console.log('  --vsplit=<pixel>          Manually set vertical split position for 2-palette or 4-palette mode');
+        console.log('  --direction=<horizontal|vertical>  Force direction of split for 2-palette mode');
+        console.log('  --hsplit1=<pixel>         Manually set first horizontal split position for 4/9-section mode');
+        console.log('  --hsplit2=<pixel>         Manually set second horizontal split position for 4/9-section mode');
+        console.log('  --vsplit1=<pixel>         Manually set first vertical split position for 9-section mode');
+        console.log('  --vsplit2=<pixel>         Manually set second vertical split position for 9-section mode');
         process.exit(1);
     }
     
     const inputPath = process.argv[2];
-    // Parse additional options
-    const options = {};
+    // Parse additional options    const options = {};
     options.forcePalettes = {};
+    options.manualSplits = {};
+    let hasManualSplits = false;
     
     for (let i = 3; i < process.argv.length; i++) {
         const arg = process.argv[i];
@@ -2198,6 +2237,41 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         } else if (arg.startsWith('--sections=')) {
             // New option for number of sections
             options.sections = parseInt(arg.substring(11));
+        } else if (arg.startsWith('--hsplit=')) {
+            // Horizontal split for 2-palette or 4-palette modes
+            options.manualSplits.h = parseInt(arg.substring(9));
+            hasManualSplits = true;
+            console.log(`Manual horizontal split at ${options.manualSplits.h}`);
+        } else if (arg.startsWith('--vsplit=')) {
+            // Vertical split for 2-palette or 4-palette modes
+            options.manualSplits.v = parseInt(arg.substring(9));
+            hasManualSplits = true;
+            console.log(`Manual vertical split at ${options.manualSplits.v}`);
+        } else if (arg.startsWith('--direction=')) {
+            // Direction for 2-palette mode
+            options.manualSplits.direction = arg.substring(12).toLowerCase();
+            hasManualSplits = true;
+            console.log(`Manual split direction: ${options.manualSplits.direction}`);
+        } else if (arg.startsWith('--hsplit1=')) {
+            // First horizontal split for 9-section mode
+            options.manualSplits.h1 = parseInt(arg.substring(10));
+            hasManualSplits = true;
+            console.log(`Manual first horizontal split at ${options.manualSplits.h1}`);
+        } else if (arg.startsWith('--hsplit2=')) {
+            // Second horizontal split for 9-section mode
+            options.manualSplits.h2 = parseInt(arg.substring(10));
+            hasManualSplits = true;
+            console.log(`Manual second horizontal split at ${options.manualSplits.h2}`);
+        } else if (arg.startsWith('--vsplit1=')) {
+            // First vertical split for 9-section mode
+            options.manualSplits.v1 = parseInt(arg.substring(10));
+            hasManualSplits = true;
+            console.log(`Manual first vertical split at ${options.manualSplits.v1}`);
+        } else if (arg.startsWith('--vsplit2=')) {
+            // Second vertical split for 9-section mode
+            options.manualSplits.v2 = parseInt(arg.substring(10));
+            hasManualSplits = true;
+            console.log(`Manual second vertical split at ${options.manualSplits.v2}`);
         } else if (arg.startsWith('--forcepal')) {
             // Handle forced palette options (--forcepal0, --forcepal1, etc.)
             const paletteIndex = parseInt(arg.charAt(10));
@@ -2206,8 +2280,12 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
             if (paletteIndex >= 0 && paletteIndex <= 3) {
                 options.forcePalettes[paletteIndex] = filePath;
                 console.log(`Force palette ${paletteIndex} to use colors from ${filePath}`);
-            }
-        }
+            }        }
+    }
+    
+    // Only set manualSplits if at least one manual split parameter was provided
+    if (!hasManualSplits) {
+        options.manualSplits = null;
     }
     
     // Process the BMP file
