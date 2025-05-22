@@ -14,10 +14,11 @@ function genesisColorToRGB(word) {
     const red = (word >> 1) & 0x07;   // Bits 1-3
 
     // Scale from 3-bit (0-7) to 8-bit (0-255)
+    // Using exactly 255/7 as the scaling factor to match rebuildJim.js
     return [
-        red * 32,    // Multiply by 32 to scale from 0-7 to 0-224
-        green * 32,
-        blue * 32
+        Math.round(red * 255 / 7),
+        Math.round(green * 255 / 7),
+        Math.round(blue * 255 / 7)
     ];
 }
 

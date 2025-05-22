@@ -65,29 +65,35 @@ function rebuildJim(metadataPath) {
     // Write header
     buffer.writeUInt32BE(paletteOffset, 0);
     buffer.writeUInt32BE(mapOffset, 4);
-    buffer.writeUInt16BE(numTiles, 8);
-
-    // Read and write tiles
+    buffer.writeUInt16BE(numTiles, 8);    // Read and write tiles
     for (let t = 0; t < numTiles; t++) {
         const tileFile = join(tilesDir, `${t.toString().padStart(4, '0')}.bmp`);
         const tileData = readFileSync(tileFile);
         
         // BMP data starts after header, DIB header, and palette
+        // Get the data offset from the BMP header
+        const dataOffset = tileData.readUInt32LE(10);
+        
+        // Calculate row size (including padding)
+        // BMP rows are padded to multiples of 4 bytes
+        const width = 8;
+        const rowSize = Math.ceil(width / 4) * 4;
+        
         // Extract 8x8 pixels from indexed color data
-        const pixelOffset = 54 + (256 * 4); // Skip BMP header + color table
         const pixels = [];
-        for (let i = 0; i < 64; i++) {
-            pixels.push(tileData[pixelOffset + i]);
-        }
-
-        // Convert pixels to Genesis 4bpp tile format
+        for (let y = 0; y < 8; y++) {
+            const rowOffset = dataOffset + (y * rowSize);
+            for (let x = 0; x < 8; x++) {
+                pixels.push(tileData[rowOffset + x]);
+            }
+        }        // Convert pixels to Genesis 4bpp tile format
         const tileOffset = firstTileOffset + (t * 32);
         for (let y = 0; y < 8; y++) {
             for (let x = 0; x < 4; x++) {
                 // Pack two pixels into one byte
-                const pixel1 = pixels[y * 8 + x * 2];
-                const pixel2 = pixels[y * 8 + x * 2 + 1];
-                const byte = ((pixel1 & 0x0F) << 4) | (pixel2 & 0x0F);
+                const pixel1 = pixels[y * 8 + x * 2] & 0x0F;  // Ensure pixel is within 4 bits
+                const pixel2 = pixels[y * 8 + x * 2 + 1] & 0x0F;  // Ensure pixel is within 4 bits
+                const byte = (pixel1 << 4) | pixel2;
                 buffer[tileOffset + y * 4 + x] = byte;
             }
         }
