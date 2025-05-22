@@ -1,45 +1,55 @@
 // validate-jim-file.js
-// Script to validate JIM file structure and check for potential data overlaps
-import { readFileSync } from 'fs';
-import { join, basename } from 'path';
+// A comprehensive validator for JIM files to detect structural issues
+import { readFileSync, writeFileSync } from 'fs';
+import { join, dirname, basename } from 'path';
 
+// Check if a file path is provided via command line or use first argument passed to function
 function validateJimFile(jimPath) {
-    console.log(`Validating JIM file: ${jimPath}`);
+    let jimFilePath = jimPath;
+    let output = "";
+
+    // Helper function to log to both console and output string
+    function log(str) {
+        console.log(str);
+        output += str + "\n";
+    }
     
-    try {
-        const buffer = readFileSync(jimPath);
-        const fileSize = buffer.length;
-        console.log(`File size: ${fileSize} bytes`);
-        
-        // Read header
-        const paletteOffset = buffer.readUInt32BE(0);
-        const mapOffset = buffer.readUInt32BE(4);
-        const numTiles = buffer.readUInt16BE(8);
-        const firstTileOffset = 0x0A;
-        
-        console.log(`Header information:`);
-        console.log(`- Number of tiles: ${numTiles}`);
-        console.log(`- First tile offset: 0x${firstTileOffset.toString(16).toUpperCase()} (${firstTileOffset})`);
-        console.log(`- Palette offset: 0x${paletteOffset.toString(16).toUpperCase()} (${paletteOffset})`);
-        console.log(`- Map offset: 0x${mapOffset.toString(16).toUpperCase()} (${mapOffset})`);
-        
-        // Calculate section sizes
-        const tileDataEnd = firstTileOffset + (numTiles * 32);
-        const paletteDataEnd = paletteOffset + 128; // 4 palettes * 16 colors * 2 bytes
-        
-        // Read map dimensions
-        let mapWidth = 0;
-        let mapHeight = 0;
-        let mapDataEnd = 0;
-        
-        if (mapOffset + 4 <= fileSize) {
-            mapWidth = buffer.readUInt16BE(mapOffset);
-            mapHeight = buffer.readUInt16BE(mapOffset + 2);
-            mapDataEnd = mapOffset + 4 + (mapWidth * mapHeight * 2);
-            console.log(`- Map dimensions: ${mapWidth}x${mapHeight}`);
-        } else {
-            console.error("Error: Map offset points beyond the end of the file!");
-        }
+    log(`Validating JIM file: ${jimFilePath}`);
+    
+    // Read the JIM file    try {
+        var jimBuffer = readFileSync(jimFilePath);
+        log(`Successfully read JIM file: ${jimFilePath}`);
+        log(`File size: ${jimBuffer.length} bytes\n`);
+    } catch (error) {
+        log(`Error reading file: ${error.message}`);
+        return { valid: false, errors: [`Error reading file: ${error.message}`] };
+    }
+
+    // === JIM FILE STRUCTURE ANALYSIS ===
+
+    // Parse JIM header
+    const numTiles = jimBuffer.readUInt16LE(0x00);
+    const width = jimBuffer.readUInt16LE(0x02);
+    const height = jimBuffer.readUInt16LE(0x04);
+    const mapWidth = jimBuffer.readUInt16LE(0x06);
+    const mapHeight = jimBuffer.readUInt16LE(0x08);
+
+    // First tile is typically at offset 0x0A
+    const firstTileOffset = 0x0A;
+
+    log("=== JIM FILE HEADER INFORMATION ===");
+    log(`Number of Tiles: ${numTiles}`);
+    log(`Width: ${width}`);
+    log(`Height: ${height}`);
+    log(`Map Width: ${mapWidth}`);
+    log(`Map Height: ${mapHeight}`);
+    log(`First Tile Offset: 0x${firstTileOffset.toString(16).toUpperCase()}`);
+
+    // Calculate expected offsets
+    const expectedTileDataSize = numTiles * 32; // Each tile is 32 bytes
+    const expectedPaletteOffset = firstTileOffset + expectedTileDataSize;
+    // Round up to nearest 4-byte boundary
+    const alignedPaletteOffset = Math.ceil(expectedPaletteOffset / 4) * 4;
         
         // Validate sections
         console.log(`\nSection validation:`);
