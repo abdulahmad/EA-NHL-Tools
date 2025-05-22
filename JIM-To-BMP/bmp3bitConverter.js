@@ -23,6 +23,103 @@ function convertTo3BitAndBack(r, g, b) {
     ];
 }
 
+// Convert 8-bit RGB (0-255) to N-bit (0 to 2^N-1)
+// Returns the values in the N-bit color space, not converted back to 8-bit
+function convertToNBit(r, g, b, bits) {
+    // Skip conversion if bits is 8 (already at full color)
+    if (bits === 8) return [r, g, b];
+    
+    // Calculate the max value for N bits (2^N - 1)
+    const maxValue = (1 << bits) - 1;
+    
+    // Convert from 8-bit (0-255) to N-bit
+    const rN = Math.round((r / 255) * maxValue);
+    const gN = Math.round((g / 255) * maxValue);
+    const bN = Math.round((b / 255) * maxValue);
+    
+    return [rN, gN, bN];
+}
+
+// Convert N-bit color value back to 8-bit (0-255)
+function convertFromNBitTo8Bit(value, bits) {
+    const maxValue = (1 << bits) - 1;
+    return Math.round((value / maxValue) * 255);
+}
+
+// A 8x8 Bayer matrix for better dithering patterns
+const BAYER_MATRIX_8X8 = [
+    [0, 32, 8, 40, 2, 34, 10, 42],
+    [48, 16, 56, 24, 50, 18, 58, 26],
+    [12, 44, 4, 36, 14, 46, 6, 38],
+    [60, 28, 52, 20, 62, 30, 54, 22],
+    [3, 35, 11, 43, 1, 33, 9, 41],
+    [51, 19, 59, 27, 49, 17, 57, 25],
+    [15, 47, 7, 39, 13, 45, 5, 37],
+    [63, 31, 55, 23, 61, 29, 53, 21]
+];
+
+// Normalize the Bayer matrix to 0.0-1.0 range for easier use
+const BAYER_NORMALIZED = BAYER_MATRIX_8X8.map(row => row.map(v => v / 64));
+
+// Dither a color component from N-bit color space to 3-bit (0-7)
+function ditherTo3Bit(value, maxValue, x, y) {
+    // Convert from N-bit to 0-1 range for proper dithering
+    const normalizedValue = value / maxValue;
+    
+    // Scale to 3-bit range (0-7)
+    const scaledValue = normalizedValue * 7;
+    
+    // Find the closest lower and upper 3-bit values
+    const lowerValue = Math.floor(scaledValue);
+    const upperValue = Math.min(7, lowerValue + 1);
+    
+    // If the value exactly matches a 3-bit value, no dithering needed
+    if (scaledValue === lowerValue) {
+        return lowerValue;
+    }
+    
+    // Calculate how far the value is between lower and upper (0.0 to 1.0)
+    const distance = scaledValue - lowerValue;
+    
+    // Get the threshold from the Bayer matrix based on pixel position
+    const threshold = BAYER_NORMALIZED[y % 8][x % 8];
+    
+    // Choose upper or lower value based on threshold comparison
+    return distance > threshold ? upperValue : lowerValue;
+}
+
+// Apply dithering to convert to 3-bit color space
+function applyDithering(pixels, ditheredPixels, ditherBits) {
+    const height = pixels.length;
+    const width = pixels[0].length;
+    
+    // Calculate max value for the N-bit color space
+    const maxValue = (1 << ditherBits) - 1;
+    
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const [r, g, b] = pixels[y][x];
+            
+            // First convert to N-bit color space (dithering source)
+            const [rN, gN, bN] = convertToNBit(r, g, b, ditherBits);
+            
+            // Apply dithering to get 3-bit color values
+            const r3 = ditherTo3Bit(rN, maxValue, x, y);
+            const g3 = ditherTo3Bit(gN, maxValue, x, y);
+            const b3 = ditherTo3Bit(bN, maxValue, x, y);
+            
+            // Convert the 3-bit values back to 8-bit for storage/display
+            const r8 = Math.round(r3 * 255 / 7);
+            const g8 = Math.round(g3 * 255 / 7);
+            const b8 = Math.round(b3 * 255 / 7);
+            
+            ditheredPixels[y][x] = [r8, g8, b8];
+        }
+    }
+    
+    return ditheredPixels;
+}
+
 // Read a BMP file and parse its header and data
 function readBMP(filepath) {
     const buffer = readFileSync(filepath);
@@ -149,7 +246,7 @@ function saveBMP(width, height, pixels, filepath) {
 }
 
 // Main function to process a BMP file
-function processBMP(inputPath) {
+function processBMP(inputPath, options = {}) {
     try {
         console.log(`Processing ${inputPath}...`);
         
@@ -161,20 +258,30 @@ function processBMP(inputPath) {
         // Read the BMP file
         const { width, height, pixels } = readBMP(inputPath);
         
-        // Convert each pixel's color to 3-bit and back
-        const convertedPixels = [];
-        for (let y = 0; y < height; y++) {
-            const row = [];
-            for (let x = 0; x < width; x++) {
-                const [r, g, b] = pixels[y][x];
-                const [r3, g3, b3] = convertTo3BitAndBack(r, g, b);
-                row.push([r3, g3, b3]);
+        // Initialize the array for converted pixels
+        const convertedPixels = Array(height).fill().map(() => Array(width).fill(null));
+        
+        // Check if dithering is enabled and what bit depth to use
+        if (options.dither) {
+            console.log(`Using ${options.dither}-bit dithering`);
+            // Apply dithering with the specified bit depth
+            applyDithering(pixels, convertedPixels, parseInt(options.dither));
+        } else {
+            // Standard non-dithered conversion
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const [r, g, b] = pixels[y][x];
+                    const [r3, g3, b3] = convertTo3BitAndBack(r, g, b);
+                    convertedPixels[y][x] = [r3, g3, b3];
+                }
             }
-            convertedPixels.push(row);
         }
         
+        // Determine output filename
+        const ditherSuffix = options.dither ? `-dither${options.dither}bit` : '';
+        const outputPath = join(outputDir, `${inputFileName}-3bit${ditherSuffix}.bmp`);
+        
         // Save the converted image
-        const outputPath = join(outputDir, `${inputFileName}-3bit.bmp`);
         saveBMP(width, height, convertedPixels, outputPath);
         
         console.log(`Successfully created 3-bit color version at: ${outputPath}`);
@@ -188,10 +295,31 @@ function processBMP(inputPath) {
 
 // Check command line arguments
 if (process.argv.length < 3) {
-    console.log('Usage: node bmp3bitConverter.js <path-to-bmp-file>');
+    console.log('Usage: node bmp3bitConverter.js <path-to-bmp-file> [options]');
+    console.log('Options:');
+    console.log('  -dither=<4bit|5bit|6bit|7bit|8bit>   Apply dithering with specified bit depth');
     process.exit(1);
 }
 
-// Get file path and run conversion
+// Parse command line options
+const options = {};
 const bmpPath = process.argv[2];
-processBMP(bmpPath);
+
+// Parse any additional options
+for (let i = 3; i < process.argv.length; i++) {
+    const arg = process.argv[i];
+    
+    if (arg.startsWith('-dither=')) {
+        const ditherValue = arg.substring(8);
+        // Validate dither value
+        const validValues = ['4bit', '5bit', '6bit', '7bit', '8bit'];
+        if (validValues.includes(ditherValue)) {
+            options.dither = parseInt(ditherValue.replace('bit', ''));
+        } else {
+            console.warn(`Warning: Invalid dither value '${ditherValue}'. Using no dithering.`);
+        }
+    }
+}
+
+// Run the conversion with options
+processBMP(bmpPath, options);
