@@ -952,6 +952,13 @@ function getColorsInRegion(pixels, left, top, right, bottom) {
     const colorMap = new Map();
     let totalPixels = 0;
     
+    // Handle invalid region bounds
+    if (left >= right || top >= bottom || 
+        left < 0 || top < 0 || 
+        left >= pixels[0]?.length || top >= pixels.length) {
+        return [];
+    }
+    
     for (let y = top; y < bottom; y++) {
         if (y >= pixels.length) continue;
         
@@ -1010,14 +1017,34 @@ function calculateEntropyImbalance(colorSets) {
 
 // Calculate importance-based imbalance (weighs colors by usage frequency) 
 function calculateImportanceImbalance(colorSets) {
-    // Calculate importance score for each quadrant
+    // Calculate importance score for each quadrant with normalization
     const importanceScores = colorSets.map(colors => {
-        return colors.reduce((sum, color) => sum + Math.pow(color.count, 0.75), 0);
+        // Skip empty regions or handle them specially
+        if (colors.length === 0) return 0;
+        
+        // Get total pixel count in this section for normalization
+        const totalPixels = colors.reduce((sum, color) => sum + color.count, 0);
+        if (totalPixels === 0) return 0;
+        
+        // For very low color images, use a more balanced approach
+        if (colors.length <= 3) {
+            // When there are very few colors, avoid overweighting by using sqrt instead
+            return Math.sqrt(totalPixels);
+        }
+        
+        // Calculate importance using a less aggressive power (0.5 instead of 0.75)
+        // and normalize by total pixels in the section
+        return colors.reduce((sum, color) => {
+            return sum + Math.pow(color.count / totalPixels, 0.5) * Math.sqrt(totalPixels);
+        }, 0);
     });
     
+    // If any section has an extreme importance score, cap it
     const maxScore = Math.max(...importanceScores);
-    const minScore = Math.min(...importanceScores);
-    return maxScore - minScore;
+    const minScore = Math.min(...importanceScores.filter(s => s > 0)); // Ignore zero scores
+    
+    // Apply a logarithmic difference to avoid extreme values dominating
+    return Math.log(1 + maxScore) - Math.log(1 + minScore);
 }
 
 // Calculate area-based imbalance (looks at pixel area in each quadrant)
@@ -1574,11 +1601,19 @@ function findOptimalSplitPointForRange(pixels, width, height, direction, minPerc
     // Define possible split points within the percentage range
     let min, max;
     if (direction === 'horizontal') {
-        min = Math.floor(height * minPercent);
-        max = Math.floor(height * maxPercent);
+        min = Math.max(1, Math.floor(height * minPercent));
+        max = Math.min(height - 1, Math.floor(height * maxPercent));
     } else { // vertical
-        min = Math.floor(width * minPercent);
-        max = Math.floor(width * maxPercent);
+        min = Math.max(1, Math.floor(width * minPercent));
+        max = Math.min(width - 1, Math.floor(width * maxPercent));
+    }
+    
+    // Ensure the range is valid
+    if (min >= max) {
+        // If range is invalid, return the midpoint
+        return (direction === 'horizontal') ? 
+                Math.floor(height / 2) : 
+                Math.floor(width / 2);
     }
     
     let bestSplit = (direction === 'horizontal') ? 
@@ -1586,8 +1621,8 @@ function findOptimalSplitPointForRange(pixels, width, height, direction, minPerc
                     Math.floor(width * (minPercent + maxPercent) / 2);
     let lowestImbalance = Infinity;
     
-    // Step size for larger images
-    const stepSize = 8;
+    // Step size for larger images (adaptive to image size)
+    const stepSize = Math.max(1, Math.floor((max - min) / 20));
     
     // Try different split points
     for (let split = min; split <= max; split += stepSize) {
@@ -1605,6 +1640,11 @@ function findOptimalSplitPointForRange(pixels, width, height, direction, minPerc
             const colorSet2 = getColorsInRegion(pixels, split, 0, width, height);
             
             imbalance = calculateBalanceImbalance([colorSet1, colorSet2], balanceStrategy);
+        }
+        
+        // Handle NaN or invalid imbalance values
+        if (isNaN(imbalance) || !isFinite(imbalance)) {
+            continue;
         }
         
         // Update best split if this is better
