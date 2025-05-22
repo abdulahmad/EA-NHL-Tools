@@ -37,19 +37,13 @@ function processBmp(inputPath, options = {}) {
     // Default output directory is build/<filename>-<strategy>-<palettes>
     const outputDir = opts.outputDir || 
         join(__dirname, 'build', `${inputFileName}-${strategyName}-pal${palettesUsed}`);
-    
-    // Create directory structure
+      // Create directory structure
     if (!existsSync(outputDir)) {
         mkdirSync(outputDir, { recursive: true });
     }
     
-    const tilesDir = join(outputDir, 'tiles');
-    if (!existsSync(tilesDir)) {
-        mkdirSync(tilesDir, { recursive: true });
-    }
-    
     // Output file paths
-    const metadataPath = join(outputDir, 'metadata.json');
+    const metadataPath = join(outputDir, 'metadata-color.json');
     const bmpOutputPath = join(outputDir, `${inputFileName}-reduced.bmp`);
     
     console.log(`Processing ${inputPath} with ${strategyName} balance strategy`);
@@ -207,8 +201,7 @@ function processBmp(inputPath, options = {}) {
             
             indexedRow.push(tile);
             assignmentRow.push(quadrantIndex);
-            
-            // Save the individual tile data
+              // Save the individual tile data
             const tileInfo = {
                 x: tx,
                 y: ty,
@@ -217,11 +210,6 @@ function processBmp(inputPath, options = {}) {
             };
             
             tileData.push(tileInfo);
-            
-            // Save tile as a small BMP
-            const tileFileName = `tile_${ty}_${tx}.bmp`;
-            const tileFilePath = join(tilesDir, tileFileName);
-            saveTileBMP(tileSize, tileSize, tile, palette, tileFilePath);
         }
         
         indexedPixels.push(indexedRow);
@@ -229,9 +217,7 @@ function processBmp(inputPath, options = {}) {
     }
     
     // Create color statistics
-    const colorStats = calculateColorStats(tileData, palettes);
-
-    // Create metadata compatible with bmpToJim script
+    const colorStats = calculateColorStats(tileData, palettes);    // Create metadata compatible with simplified format
     const metadata = {
         sourceFile: inputPath,
         width: bmp.width,
@@ -240,11 +226,10 @@ function processBmp(inputPath, options = {}) {
         format: bmp.format,
         tileWidth: Math.ceil(bmp.width / tileSize),
         tileHeight: Math.ceil(bmp.height / tileSize), 
-        totalTiles: tileData.length,
         balanceStrategy: opts.balanceStrategy,
         optimizedPalettes: opts.optimizePalettes,
         selectedPalettes: opts.palettes,
-        regions: quadrants.map((q, i) => ({
+        sections: quadrants.map((q, i) => ({
             index: i,
             paletteIndex: q.paletteIndex,
             bounds: {
@@ -254,33 +239,15 @@ function processBmp(inputPath, options = {}) {
                 endY: q.endY
             }
         })),
-        palettes: genesisPalettes.map((palette, index) => ({
-            index,
-            colors: palette.map(value => ({
-                value,
-                hex: genesisColorToHex(value),
-                rgb: genesisColorToRgb(value)
-            }))
-        })),
-        // Additional fields for bmpToJim compatibility
-        palette: {
-            format: "genesis", // Specify Sega Genesis palette format
-            numPalettes: palettes.length,
-            colorsPerPalette: 16,
-            // Include raw palette data for easy access
-            raw: palettes.map(pal => 
-                pal.map(color => ({r: color.r, g: color.g, b: color.b}))
-            )
-        },
-        // Add tile mapping information
-        tiles: tileData.map(tile => ({
-            x: tile.x,
-            y: tile.y,
-            paletteIndex: tile.paletteIndex,
-            pixelData: tile.pixelData
-        })),
+        // palettes: genesisPalettes.map((palette, index) => ({
+        //     index,
+        //     colors: palette.map(value => ({
+        //         value,
+        //         hex: genesisColorToHex(value),
+        //         rgb: genesisColorToRgb(value)
+        //     }))
+        // })),
         colorStats,
-        tileAssignments,
         processingTime: {
             startTime: new Date().toISOString(),
             elapsedMs: performance.now() - startTime
@@ -311,13 +278,10 @@ function processBmp(inputPath, options = {}) {
     saveBMP(bmp.width, bmp.height, flatPixels, combinedPalette, bmpOutputPath);
     
     console.log('Processing complete!');
-    
-    return {
+      return {
         metadata,
         outputDir,
-        bmpOutputPath,
-        tilesDir,
-        actFilePath
+        bmpOutputPath
     };
 }
 
@@ -391,70 +355,6 @@ function calculateColorStats(tileData, palettes) {
     }
     
     return stats;
-}
-
-// Save a small BMP for an individual tile
-function saveTileBMP(width, height, pixels, palette, filepath) {
-    const headerSize = 14 + 40; // BMP header + DIB header
-    const paletteSize = 16 * 4; // 16 colors * 4 bytes (BGRA)
-    const rowSize = Math.ceil(width / 4) * 4; // Rows padded to multiple of 4 bytes
-    const pixelDataSize = rowSize * height;
-    const fileSize = headerSize + paletteSize + pixelDataSize;
-
-    const bmp = Buffer.alloc(fileSize);
-
-    // BMP Header
-    bmp.write('BM', 0); // Magic number
-    bmp.writeUInt32LE(fileSize, 2); // File size
-    bmp.writeUInt32LE(0, 6); // Reserved
-    bmp.writeUInt32LE(headerSize + paletteSize, 10); // Pixel data offset
-
-    // DIB Header
-    bmp.writeUInt32LE(40, 14); // DIB header size
-    bmp.writeInt32LE(width, 18); // Width
-    bmp.writeInt32LE(-height, 22); // Height (negative for top-down)
-    bmp.writeUInt16LE(1, 26); // Color planes
-    bmp.writeUInt16LE(8, 28); // Bits per pixel (8 for indexed)
-    bmp.writeUInt32LE(0, 30); // No compression
-    bmp.writeUInt32LE(pixelDataSize, 34); // Image size
-    bmp.writeUInt32LE(0, 38); // H-DPI
-    bmp.writeUInt32LE(0, 42); // V-DPI
-    bmp.writeUInt32LE(16, 46); // Colors in palette
-    bmp.writeUInt32LE(0, 50); // Important colors (0 = all)    // Write palette (just 16 colors for the tile)
-    let paletteOffset = 54;
-    for (let i = 0; i < 16; i++) {
-        if (i < palette.length) {
-            // Ensure color values are in valid range (0-255)
-            const b = Math.max(0, Math.min(255, palette[i].b || 0));
-            const g = Math.max(0, Math.min(255, palette[i].g || 0));
-            const r = Math.max(0, Math.min(255, palette[i].r || 0));
-            
-            bmp.writeUInt8(b, paletteOffset++); // Blue
-            bmp.writeUInt8(g, paletteOffset++); // Green
-            bmp.writeUInt8(r, paletteOffset++); // Red
-            bmp.writeUInt8(0, paletteOffset++); // Alpha (unused)
-        } else {
-            // Fill remaining entries with black
-            bmp.writeUInt32LE(0, paletteOffset);
-            paletteOffset += 4;
-        }
-    }
-
-    // Write pixel data
-    const dataOffset = headerSize + paletteSize;
-    let pixelOffset = 0;
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-            bmp.writeUInt8(pixels[y * width + x], dataOffset + pixelOffset++);
-        }
-        
-        // Pad row to multiple of 4 bytes
-        while (pixelOffset % 4 !== 0) {
-            bmp.writeUInt8(0, dataOffset + pixelOffset++);
-        }
-    }
-
-    writeFileSync(filepath, bmp);
 }
 
 // Save BMP file with indexed color palette
@@ -2085,8 +1985,40 @@ function calculateBalanceImbalance(colorSets, balanceStrategy) {
 }
 
 function saveACTPalette(palettes, filepath) {
-    // ACT files are binary files with 256 RGB triplets (768 bytes)
-    // followed by 2 bytes for color count and 2 bytes for transparent color index
+    const baseDir = dirname(filepath);
+    
+    // Save individual palette files (0.act, 1.act, 2.act, 3.act)
+    for (let paletteIndex = 0; paletteIndex < palettes.length; paletteIndex++) {
+        const palette = palettes[paletteIndex];
+        const individualBuffer = Buffer.alloc(768 + 4); // 256 colors (768 bytes) + 4 bytes for footer
+        let offset = 0;
+        
+        // Write this palette's colors
+        for (const color of palette) {
+            // Write RGB triplet
+            individualBuffer.writeUInt8(color.r, offset++);
+            individualBuffer.writeUInt8(color.g, offset++);
+            individualBuffer.writeUInt8(color.b, offset++);
+        }
+        
+        // Fill remaining entries with zeros
+        while (offset < 768) {
+            individualBuffer.writeUInt8(0, offset++);
+            individualBuffer.writeUInt8(0, offset++);
+            individualBuffer.writeUInt8(0, offset++);
+        }
+        
+        // Write color count (16) and transparent color index (0)
+        individualBuffer.writeUInt16BE(16, 768);
+        individualBuffer.writeInt16BE(0, 770);
+        
+        // Save this palette
+        const individualFilepath = join(baseDir, `${paletteIndex}.act`);
+        writeFileSync(individualFilepath, individualBuffer);
+        console.log(`Saved individual palette to ${individualFilepath}`);
+    }
+    
+    // Create combined palette
     const buffer = Buffer.alloc(768 + 4);
     let offset = 0;
     
@@ -2116,9 +2048,14 @@ function saveACTPalette(palettes, filepath) {
     // Write transparent color index (usually -1 if not used, use 0 as default)
     buffer.writeInt16BE(0, 770);
     
-    // Write the buffer to the file
-    writeFileSync(filepath, buffer);
-    console.log(`Wrote palette to ${filepath}`);
+    // // Save the original combined palette
+    // writeFileSync(filepath, buffer);
+    // console.log(`Wrote original palette to ${filepath}`);
+    
+    // Also save a combined.act in the same directory
+    const combinedFilepath = join(baseDir, 'combined.act');
+    writeFileSync(combinedFilepath, buffer);
+    console.log(`Saved combined palette to ${combinedFilepath}`);
 }
 
 // If running directly from command line
