@@ -4,12 +4,13 @@ import { join } from 'path';
 // Convert RGB color to Genesis format (0000BBB0GGG0RRR0)
 function RGBToGenesisColor(r, g, b) {
     // Convert from 8-bit (0-255) to 3-bit (0-7)
-    r = Math.round(r / 32) & 0x07;
-    g = Math.round(g / 32) & 0x07;
-    b = Math.round(b / 32) & 0x07;
+    // Use Math.min to avoid overflow and ensure proper rounding
+    const r3 = Math.min(7, Math.round(r / 36.428));
+    const g3 = Math.min(7, Math.round(g / 36.428));
+    const b3 = Math.min(7, Math.round(b / 36.428));
 
-    // Pack into 16-bit genesis format
-    return ((b << 9) | (g << 5) | (r << 1));
+    // Pack into 16-bit genesis format (0000BBB0GGG0RRR0)
+    return ((b3 & 0x07) << 9) | ((g3 & 0x07) << 5) | ((r3 & 0x07) << 1);
 }
 
 // Read a palette from .ACT format
@@ -101,6 +102,7 @@ function rebuildJim(metadataPath) {
         for (let c = 0; c < 16; c++) {
             const color = palette[c];
             const genesisColor = RGBToGenesisColor(color[0], color[1], color[2]);
+            console.log(p, c, color, genesisColor);
             buffer.writeUInt16BE(genesisColor, paletteOffset + (p * 32) + (c * 2));
         }
     }

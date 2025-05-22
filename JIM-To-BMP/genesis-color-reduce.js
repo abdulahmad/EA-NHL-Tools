@@ -2010,7 +2010,7 @@ function saveACTPalette(palettes, filepath) {
         
         // Write color count (16) and transparent color index (0)
         individualBuffer.writeUInt16BE(16, 768);
-        individualBuffer.writeInt16BE(0, 770);
+        individualBuffer.writeInt16BE(-1, 770);
         
         // Save this palette
         const individualFilepath = join(baseDir, `${paletteIndex}.act`);
@@ -2046,7 +2046,7 @@ function saveACTPalette(palettes, filepath) {
     buffer.writeUInt16BE(totalColors, 768);
     
     // Write transparent color index (usually -1 if not used, use 0 as default)
-    buffer.writeInt16BE(0, 770);
+    buffer.writeInt16BE(-1, 770);
     
     // // Save the original combined palette
     // writeFileSync(filepath, buffer);

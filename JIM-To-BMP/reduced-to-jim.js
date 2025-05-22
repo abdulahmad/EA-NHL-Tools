@@ -2,7 +2,7 @@
 // Takes the output of genesis-color-reduce.js and converts it to the format required by rebuildJim.js
 // Extracts 8x8 tiles from the reduced BMP and creates the necessary metadata structure
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'fs';
 import { dirname, basename, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -29,7 +29,7 @@ function convertReducedToJim(inputDir, options = {}) {
     
     // Find the reduced BMP file (it should end with "-reduced.bmp")
     let bmpFile = null;
-    const files = readFileSync(inputDir);
+    const files = readdirSync(inputDir);
     for (const file of files) {
         if (file.endsWith('-reduced.bmp')) {
             bmpFile = join(inputDir, file);
