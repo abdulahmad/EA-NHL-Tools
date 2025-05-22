@@ -30,14 +30,26 @@ function rebuildJim(metadataPath) {
     // Read metadata
     const metadata = JSON.parse(readFileSync(metadataPath, 'utf8'));
     const baseDir = join(metadataPath, '..');
-    const tilesDir = join(baseDir, 'tiles');
-
-    // Calculate sizes and offsets
-    const numTiles = metadata.numTiles;
+    const tilesDir = join(baseDir, 'tiles');    // Calculate sizes and offsets
+    const numTiles = metadata.numTiles || 0;
+    console.log(`numTiles: ${numTiles}`);
     const firstTileOffset = 0x0A;
     const tileDataSize = numTiles * 32;
-    const paletteOffset = parseInt(metadata.paletteOffset.slice(2), 16);
-    const mapOffset = parseInt(metadata.mapOffset.slice(2), 16);
+    
+    // Set default offsets if not provided in metadata
+    const paletteOffset = metadata.paletteOffset ? parseInt(metadata.paletteOffset.slice(2), 16) : 0x82; // Default after tiles
+    const mapOffset = metadata.mapOffset ? parseInt(metadata.mapOffset.slice(2), 16) : 0x102; // Default after palette
+    console.log(`paletteOffset: 0x${paletteOffset.toString(16).toUpperCase()}`);
+    console.log(`mapOffset: 0x${mapOffset.toString(16).toUpperCase()}`);
+    
+    // Check mapWidth and mapHeight
+    if (!metadata.mapWidth || !metadata.mapHeight) {
+        console.error("Error: mapWidth or mapHeight is undefined in metadata.json");
+        console.log("Metadata:", JSON.stringify(metadata, null, 2));
+        process.exit(1);
+    }
+    
+    console.log(`mapWidth: ${metadata.mapWidth}, mapHeight: ${metadata.mapHeight}`);
 
     // Create output buffer
     const headerSize = 0x0A;  // 10 bytes for header
@@ -46,6 +58,7 @@ function rebuildJim(metadataPath) {
         paletteOffset + 128,  // 4 palettes * 32 bytes each
         mapOffset + 4 + (metadata.mapWidth * metadata.mapHeight * 2)
     );
+    console.log(`totalSize: ${totalSize}`);
     const buffer = Buffer.alloc(totalSize);
 
     // Write header
