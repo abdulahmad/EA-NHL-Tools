@@ -407,21 +407,23 @@ function processBMP(inputPath, options = {}) {
             const ditherDepth = parseInt(options.dither);
             console.log(`Using ${ditherDepth}-bit dithering with ${options.ditherType || 'pattern'} method`);
             
+            // Get the strength parameter (works for all dithering methods)
+            const strength = options.strength !== undefined ? parseFloat(options.strength) : 
+                            (options.ditherType === 'noise' ? 0.5 : 1.0);
+            
             // Apply the appropriate dithering method
             if (options.ditherType === 'diffusion') {
-                const strength = options.diffusionStrength || 1.0;
                 console.log(`Diffusion strength: ${strength}`);
                 applyDiffusionDithering(pixels, convertedPixels, ditherDepth, strength);
             } else if (options.ditherType === 'noise') {
-                const noiseAmount = options.noiseAmount || 0.5;
-                console.log(`Noise amount: ${noiseAmount}`);
-                applyNoiseDithering(pixels, convertedPixels, ditherDepth, noiseAmount);
+                console.log(`Noise amount: ${strength}`);
+                applyNoiseDithering(pixels, convertedPixels, ditherDepth, strength);
             } else {
                 // Default to pattern (Bayer) dithering
                 console.log('Using pattern (Bayer) dithering');
                 applyDithering(pixels, convertedPixels, ditherDepth);
             }
-        } else {
+        }else {
             // Standard non-dithered conversion
             for (let y = 0; y < height; y++) {
                 for (let x = 0; x < width; x++) {
@@ -430,14 +432,11 @@ function processBMP(inputPath, options = {}) {
                     convertedPixels[y][x] = [r3, g3, b3];
                 }
             }
-        }
-          // Determine output filename
+        }        // Determine output filename
         const ditherSuffix = options.dither ? `-dither${options.dither}bit` : '';
         const methodSuffix = options.ditherType ? `-${options.ditherType}` : '';
-        const strengthSuffix = options.ditherType === 'diffusion' && options.diffusionStrength ? 
-                             `-s${options.diffusionStrength}` : 
-                             (options.ditherType === 'noise' && options.noiseAmount ? 
-                             `-n${options.noiseAmount}` : '');
+        const strengthSuffix = options.strength !== undefined && (options.ditherType === 'diffusion' || options.ditherType === 'noise') ? 
+                             `-s${options.strength}` : '';
         
         const outputPath = join(outputDir, `${inputFileName}-3bit${ditherSuffix}${methodSuffix}${strengthSuffix}.bmp`);
         
@@ -454,17 +453,17 @@ function processBMP(inputPath, options = {}) {
 }
 
 // Check command line arguments
-if (process.argv.length < 3) {
-    console.log('Usage: node bmp3bitConverter.js <path-to-bmp-file> [options]');
+if (process.argv.length < 3) {    console.log('Usage: node bmp3bitConverter.js <path-to-bmp-file> [options]');
     console.log('Options:');
     console.log('  -dither=<4bit|5bit|6bit|7bit|8bit>    Apply dithering with specified bit depth');
     console.log('  -method=<pattern|diffusion|noise>     Dithering method (default: pattern)');
-    console.log('  -strength=<value>                     Diffusion strength (0.1-2.0, default: 1.0)');
-    console.log('  -noise=<value>                        Noise amount (0.1-1.0, default: 0.5)');
+    console.log('  -strength=<value>                     Dithering strength/amount:');
+    console.log('                                         - For diffusion: 0.1-2.0, default: 1.0');
+    console.log('                                         - For noise: 0.1-1.0, default: 0.5');
     console.log('');
     console.log('Examples:');
     console.log('  node bmp3bitConverter.js image.bmp -dither=6bit -method=diffusion -strength=0.8');
-    console.log('  node bmp3bitConverter.js image.bmp -dither=5bit -method=noise -noise=0.4');
+    console.log('  node bmp3bitConverter.js image.bmp -dither=5bit -method=noise -strength=0.4');
     process.exit(1);
 }
 
@@ -494,22 +493,19 @@ for (let i = 3; i < process.argv.length; i++) {
         } else {
             console.warn(`Warning: Invalid dithering method '${method}'. Using default method 'pattern'.`);
             options.ditherType = 'pattern';
-        }
-    } else if (arg.startsWith('-strength=')) {
+        }    } else if (arg.startsWith('-strength=')) {
         const strength = parseFloat(arg.substring(10));
         if (!isNaN(strength) && strength > 0) {
-            options.diffusionStrength = Math.min(2.0, Math.max(0.1, strength));
+            // Set appropriate limits based on dither method
+            if (options.ditherType === 'noise') {
+                options.strength = Math.min(1.0, Math.max(0.1, strength));
+            } else {
+                // Diffusion or any other method
+                options.strength = Math.min(2.0, Math.max(0.1, strength));
+            }
         } else {
-            console.warn(`Warning: Invalid diffusion strength '${arg.substring(10)}'. Using default 1.0.`);
-            options.diffusionStrength = 1.0;
-        }
-    } else if (arg.startsWith('-noise=')) {
-        const noise = parseFloat(arg.substring(7));
-        if (!isNaN(noise) && noise > 0) {
-            options.noiseAmount = Math.min(1.0, Math.max(0.1, noise));
-        } else {
-            console.warn(`Warning: Invalid noise amount '${arg.substring(7)}'. Using default 0.5.`);
-            options.noiseAmount = 0.5;
+            console.warn(`Warning: Invalid strength value '${arg.substring(10)}'. Using default value.`);
+            // Default will be applied in processBMP
         }
     }
 }
