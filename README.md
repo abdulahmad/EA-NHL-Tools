@@ -1,7 +1,9 @@
-# EA-NHL-Tools 0.6
+# EA-NHL-Tools 0.7
 Tools for various EA NHL games
 
 Recommend checking out Releases for latest stable release: https://github.com/abdulahmad/EA-NHL-Tools/releases
+
+Note that this suite of tools have only been tested on a windows machine. Some of the tools (the ones designed for NHL94/95 PC) use `gfxpak`, which is a windows only application.
 
 ## Tools included
 
@@ -9,11 +11,11 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 
 `ANIM-To-BMP` - Extracts NHL92 `.ANIM` Sprite Animation files to `.BMP`
 
-`ANIM-To-BMP` - Extracts NHL93/94 `.ANIM` Sprite Animation files (directly from the ROM) to `.BMP`
+`ANIM94-To-BMP` - Extracts NHL93/94 `.ANIM` Sprite Animation files (directly from the ROM) to `.BMP`
 
 `DIG-To-WAV` - Converts NHL94/95 PC `.DIG` files to `.WAV` (in-game sounds)
 
-`HOCKEY32` - Documentation on potentially expanding NHL95 PC to 32 teams
+`Docs` - Documentation on various aspects of the NHL games.
 
 `IFF-To-WAV` - Converts NHL95 PC `.IFF` files to `.WAV` (out of game music files)
 
