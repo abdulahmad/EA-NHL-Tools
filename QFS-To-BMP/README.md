@@ -1,4 +1,4 @@
-# QFS-To-BMP v0.1
+# QFS-To-BMP v0.2
 
 ## qfsToSpit
 Leverages GFXPak to extract images from `.QFS` files in SPIT format
@@ -30,7 +30,7 @@ One thing you may ask is how is this different than just using `gfxpak` to extra
 Converts EA palettes (`!pal` other other files beginning with !) to `.ACT`-- which is a file format that is easy to use within Photoshop.
 
 ### Usage
-1. Once you've already run `qfsToSpit`, in the `QFS-To-BMP` folder, run `node batchUnpackedEAPalToAct`.
+1. Once you've already run `qfsToSpit` and/or `unpackQPP`, run `node batchUnpackedEAPalToAct`.
 
 ### More Info & issues
 - `HOMEPAL3.QFS` and `AWAYPAL3.QFS` seem to contain the palette used to generate `HOMEPALS.BIN` and `AWAYPALS.BIN`

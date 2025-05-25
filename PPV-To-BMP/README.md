@@ -16,16 +16,17 @@ This tool leverages `gfxpak` to export the SPIT data from the PPV file. Assuming
 
 4. Run `node batchUnpackedSpitToBmp`. It will run the script `spitToBmp` on all of the SPIT files extracted from the PPV files. For every SPIT file, you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file.
 
-## NHL95 SPIT Header details
-entry header - 16 bytes
-byte pair 0 (uint8) - record ID / entry type / image type
-byte pair 1-3 (uint24) - size of the block
-byte pair 4-5 (uint16) - image width
-byte pair 6-7 (uint16) - image height
-byte pair 8-9 (uint16) - X axis offset
-byte pair 10-11 (uint16) - Y axis offset
-byte pair 12-13 (uint16) - X axis position
-byte pair 14-15 (uint16) - Y axis position
+## NHL95 PC SPIT Header details
+| Byte (All values in hexadecimal)  | Value             | Description                           |
+| --------                          | -------           | -------                               |
+| `0x00`                            | `<uint8>`         | Record ID / entry type / image type   |
+| `0x01-03`                         | `<uint24>`        | Size of the block                     |
+| `0x04-05`                         | `<uint16>`        | Image Width                           |
+| `0x06-07`                         | `<uint16>`        | Image Height                          |
+| `0x08-09`                         | `<uint16>`        | X axis offset                         |
+| `0x10-11`                         | `<uint16>`        | Y axis offset                         |
+| `0x12-13`                         | `<uint16>`        | X axis position                       |
+| `0x14-14`                         | `<uint16>`        | Y axis position                       |
 
 ## More Info
 The SPIT format seems to be some sort of variant of the ILBM IFF format. It uses a similar Run Length Encoding Scheme.

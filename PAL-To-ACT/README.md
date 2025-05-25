@@ -1,26 +1,5 @@
 # Palette Tools 0.2
 
-AA Notes:
-- Create 01-compressPalette.js
-    - Take colours 144-254
-    - round to nearest multiple of 4
-    - max value = 63 * 4
-    - make unique -- remove dupes of 0-143 & dupes of itself
-    - sort in order of R,G,B
-    - output rinkpal 0-143 + team pal 144-216 (leaving 39 colours for crest + rink)
-    -- why 39? 0-143 is rink pal + skin tones. 144-191 = team pal, of last 64 colours (192-255), 5 for rink pal, 20 for 5x4 jersey crest = 64 - 5 - 20 = 39.
-    - team pal (144-191) should actually be blacked out so that crest & rink graphics don't refer to these colours directly
-
-- Create 02-compileExtendedPal.js
-    - combines <TEAM><H/V>.pal & <TEAM><H/V>-02-compressed.pal to create -03-crestrink.pal
-    -- last 39 colours get organized into open slots next to 5x4 jersey crest palette
-    - if too many unique colours, spit out error, instruct user to recreate compressed pal with less colours (tell how many)
-- Create 03-compileTeamGfx.js
-    - combine 01pal and 03pal to put new colours in correct places & remove dupe colours
-    - script to create .map/.til
-    - script to create crest.ppv
-    - script to create .bin segment
-
 ## Act-To-BIN
 Converts PAL file to a .bin segment. All the colours from 144 to 255 should be taken as unique colours and stored from 144 onwards. 
 
@@ -217,3 +196,25 @@ The original rink palette is rinkpal.act, but I had to create a special version 
 - Handle HOMEPALS/AWAYPALS.BIN automatically, output home and away version
 - Use team abbreviations instead of team indexes
 - Ensure non-player sprites aren't affecting by Shadow palette issue
+
+## AA Notes:
+Note: Coming back to this 2 years later in 2025, I'm assuming these were notes for the next version if I iterated on this tool.
+
+- Create 01-compressPalette.js
+    - Take colours 144-254
+    - round to nearest multiple of 4
+    - max value = 63 * 4
+    - make unique -- remove dupes of 0-143 & dupes of itself
+    - sort in order of R,G,B
+    - output rinkpal 0-143 + team pal 144-216 (leaving 39 colours for crest + rink)
+    -- why 39? 0-143 is rink pal + skin tones. 144-191 = team pal, of last 64 colours (192-255), 5 for rink pal, 20 for 5x4 jersey crest = 64 - 5 - 20 = 39.
+    - team pal (144-191) should actually be blacked out so that crest & rink graphics don't refer to these colours directly
+- Create 02-compileExtendedPal.js
+    - combines <TEAM><H/V>.pal & <TEAM><H/V>-02-compressed.pal to create -03-crestrink.pal
+    -- last 39 colours get organized into open slots next to 5x4 jersey crest palette
+    - if too many unique colours, spit out error, instruct user to recreate compressed pal with less colours (tell how many)
+- Create 03-compileTeamGfx.js
+    - combine 01pal and 03pal to put new colours in correct places & remove dupe colours
+    - script to create .map/.til
+    - script to create crest.ppv
+    - script to create .bin segment
