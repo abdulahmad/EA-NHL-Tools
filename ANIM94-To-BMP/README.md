@@ -17,29 +17,29 @@ Palette is structured similar to how it is stored by the game in Sega Genesis CR
 It will decompress the ANIM file and you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file in the `Extracted` path. If a palette file (included in Palettes path) was specified, it will override the player sprite Palette in extracting frames from ANIM files.
 
 ## ANIM data locations (Big Endian)
-| Game       | Section                     | Address Range         | Description |
-|------------|-----------------------------|-----------------------|-------------|
-| **NHLPA93** | SPAList                    | `0x4D8E–0x6446`       | Animation Data. Equivalent to Frames.asm from NHL92 |
-| **NHLPA93** | Sprite Palettes            | `0x35E50–0x35ED0`     | 128 bytes of Palette Data. 4 palettes of 16 colors (9bpp Sega Genesis Format). Exactly 0x4560 bytes before Sprite Tiles. |
-| **NHLPA93** | Sprite Tiles               | `0x3A3B0–0x6FAF0`     | Raw 8x8 tile data, 4 bits per pixel, 32 bytes per tile. |
-| **NHLPA93** | Frame Sprite Data Offsets  | `0x6FAF2–0x70006`     | Table of offsets to sprite data for each frame (0x514 bytes). |
-| **NHLPA93** | Sprite Data Bytes          | `0x70006–0x743FC`     | Sprite attributes for each frame (position, size, tile index, etc.). |
-| **NHLPA93** | Hotlist Table              | `0x743FC–0x74910`     | Hotspot Data. |
-| **NHL94**   | SPAList                    | `0x5B1C–0x76B2`       | Animation Data. Equivalent to Frames.asm from NHL92. |
-| **NHL94** | Sprite Palettes            | `0x59924–0x599A4`     | 128 bytes of Palette Data. 4 palettes of 16 colors (9bpp Sega Genesis Format). Exactly 0x4560 bytes before Sprite Tiles. |
-| **NHL94**   | Sprite Tiles               | `0x5DE84–0x9E724`     | Raw 8x8 tile data, 4 bits per pixel, 32 bytes per tile. |
-| **NHL94**   | Frame Sprite Data Offsets  | `0x9E726–0x9EDC2`     | Table of offsets to sprite data for each frame. |
-| **NHL94**   | Sprite Data Bytes          | `0x9EDC2–0xA44C8`     | Sprite attributes for each frame (position, size, tile index, etc.). |
-| **NHL94**   | Hotlist Table              | `0xA44C8–0xA4B54`     | Hotspot Data. |
+| Game       | Section                   | Address Range         | Description |
+|------------|---------------------------|-----------------------|-------------|
+| **NHLPA93** | SPAList                  | `0x4D8E–0x6446`       | Animation Data. Equivalent to Frames.asm from NHL92     |
+| **NHLPA93** | Sprite Palettes          | `0x35E50–0x35ED0`     | 128 bytes of Palette Data. 4 palettes of 16 colors (9bpp Sega Genesis Format). Exactly 0x4560 bytes before Sprite Tiles.                                                            |
+| **NHLPA93** | Sprite Tiles             | `0x3A3B0–0x6FAF0`     | Raw 8x8 tile data, 4 bits per pixel, 32 bytes per tile. |
+| **NHLPA93** | Frame Sprite Data Offsets| `0x6FAF2–0x70006`     | Table of offsets to sprite data for each frame (0x514 bytes).                                                                                                                    |
+| **NHLPA93** | Sprite Data Bytes        | `0x70006–0x743FC`     | Sprite attributes for each frame (position, size, tile index, etc.).                                                                                                              |
+| **NHLPA93** | Hotlist Table            | `0x743FC–0x74910`     | Hotspot Data.                                           |
+| **NHL94**   | SPAList                  | `0x5B1C–0x76B2`       | Animation Data. Equivalent to Frames.asm from NHL92.    |
+| **NHL94** | Sprite Palettes            | `0x59924–0x599A4`     | 128 bytes of Palette Data. 4 palettes of 16 colors (9bpp Sega Genesis Format). Exactly 0x4560 bytes before Sprite Tiles.                                                            |
+| **NHL94**   | Sprite Tiles             | `0x5DE84–0x9E724`     | Raw 8x8 tile data, 4 bits per pixel, 32 bytes per tile. |
+| **NHL94**   | Frame Sprite Data Offsets| `0x9E726–0x9EDC2`     | Table of offsets to sprite data for each frame.         |
+| **NHL94**   | Sprite Data Bytes        | `0x9EDC2–0xA44C8`     | Sprite attributes for each frame (position, size, tile index, etc.).                                                                                                              |
+| **NHL94**   | Hotlist Table            | `0xA44C8–0xA4B54`     | Hotspot Data.                                           |
 
 ### `SPAList` Section
-| Byte Offset | Value           | Description |
-|-------------|-----------------|-------------|
-| `0x00–0x01` | `<int16>`       | Animation ID or group identifier (e.g., player skating, shooting). |
-| `0x02–0x03` | `<int16>`       | Frame count for the animation sequence. |
-| `0x04–0x05` | `<int16>`       | Starting frame index in the Frame Sprite Data Offsets table. |
-| `0x06–0x07` | `<int16>`       | Timing/delay (frames per animation step, in VBlank counts). |
-| `0x08–0x09` | `<int16>`       | Loop flag or next animation ID (e.g., 0xFFFF for no loop, or ID of next animation). |
+| Byte Offset | Value     | Description                                                                         |
+|-------------|-----------|-------------                                                                        |
+| `0x00–0x01` | `<int16>` | Animation ID or group identifier (e.g., player skating, shooting).                  |
+| `0x02–0x03` | `<int16>` | Frame count for the animation sequence.                                             |
+| `0x04–0x05` | `<int16>` | Starting frame index in the Frame Sprite Data Offsets table.                        |
+| `0x06–0x07` | `<int16>` | Timing/delay (frames per animation step, in VBlank counts).                         |
+| `0x08–0x09` | `<int16>` | Loop flag or next animation ID (e.g., 0xFFFF for no loop, or ID of next animation). |
 
 ### `Frame Data offsets` Section
 | Byte Offset | Value           | Description |
