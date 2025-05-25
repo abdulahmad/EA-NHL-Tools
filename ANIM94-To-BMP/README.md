@@ -42,30 +42,30 @@ It will decompress the ANIM file and you will get a `.raw` (Photoshop RAW), `.js
 | `0x08–0x09` | `<int16>` | Loop flag or next animation ID (e.g., 0xFFFF for no loop, or ID of next animation). |
 
 ### `Frame Data offsets` Section
-| Byte Offset | Value           | Description |
-|-------------|-----------------|-------------|
-| `0x00..0x01` | `<int16>`       | Offset to sprite data bytes for this frame, relative to the start of the Sprite Data Bytes section (e.g., `0x70006` for NHLPA93, `0x9EDC2` for NHL94). |
-| `0x02..0x03` | `<int16>`       | Offset to sprite data bytes for this frame, relative to the start of the Sprite Data Bytes section (e.g., `0x70006` for NHLPA93, `0x9EDC2` for NHL94). |
-| ... | ...       | ... |
-| `0x(NumberOfFrames*2)-2..0x(NumberOfFrames*2)-1` | `<int16>`       | Offset to sprite data bytes for this frame, relative to the start of the Sprite Data Bytes section (e.g., `0x70006` for NHLPA93, `0x9EDC2` for NHL94). |
+| Byte Offset                                     | Value     | Description                                               |
+|-------------                                    |-----------|-------------                                              |
+| `0x00..0x01`                                    | `<int16>` | Offset to sprite data bytes for this frame, relative to the start of the Sprite Data Bytes section (e.g., `0x70006` for NHLPA93, `0x9EDC2` for NHL94).                                |
+| `0x02..0x03`                                    | `<int16>` | Offset to sprite data bytes for this frame, relative to the start of the Sprite Data Bytes section (e.g., `0x70006` for NHLPA93, `0x9EDC2` for NHL94).                                |
+| ...                                             | ...       | ...                                                       |
+| `0x(NumberOfFrames*2)-2..0x(NumberOfFrames*2)-1`| `<int16>` | Offset to sprite data bytes for this frame, relative to the start of the Sprite Data Bytes section (e.g., `0x70006` for NHLPA93, `0x9EDC2` for NHL94).                                |
 *Note*: Number of sprites in each frame can be calculated by `(bytes between each frame offset) / (length of sprite data)`.
 
 ### `Sprite Data` Section (incorrect)
-| Byte Offset | Value           | Description |
-|-------------|-----------------|-------------|
-| `0x00–0x01` | `<int16>`       | X Position of sprite within frame |
-| `0x02–0x03` | `<int16>`       | Y Position of sprite within frame |
-| `0x04–0x05` | `<int16>`       | Tile Index. Can be multiplied by 32 to find the Tile Offset. |
-| `0x06`      | `<int8>`:`Bit 3` | Horizontal Flip (`1` = flip horizontally, `0` = normal). |
-| `0x06`      | `<int8>`:`Bit 4` | Vertical Flip (`1` = flip vertically, `0` = normal). |
-| `0x06`      | `<int8>`:`Bits 5-6` | Palette Index (0–3, selects one of 4 CRAM palettes). |
-| `0x07`      | `<uint8>`       | Size Index (0–15, references `sizetab` for number of tiles). |
+| Byte Offset | Value               | Description                                                   |
+|-------------|-----------------    |-------------                                                  |
+| `0x00–0x01` | `<int16>`           | X Position of sprite within frame                             |
+| `0x02–0x03` | `<int16>`           | Y Position of sprite within frame                             |
+| `0x04–0x05` | `<int16>`           | Tile Index. Can be multiplied by 32 to find the Tile Offset.  |
+| `0x06`      | `<int8>`:`Bit 3`    | Horizontal Flip (`1` = flip horizontally, `0` = normal).      |
+| `0x06`      | `<int8>`:`Bit 4`    | Vertical Flip (`1` = flip vertically, `0` = normal).          |
+| `0x06`      | `<int8>`:`Bits 5-6` | Palette Index (0–3, selects one of 4 CRAM palettes).          |
+| `0x07`      | `<uint8>`           | Size Index (0–15, references `sizetab` for number of tiles).  |
 
 ### `Hotlist` Section
-| Byte Offset | Value           | Description |
-|-------------|-----------------|-------------|
-| `0x00–0x01` | `<int16>`       | X Hotspot offset (signed, relative to frame’s origin). |
-| `0x02–0x03` | `<int16>`       | Y Hotspot offset (signed, relative to frame’s origin). |
+| Byte Offset | Value           | Description                                             |
+|-------------|-----------------|-------------                                            |
+| `0x00–0x01` | `<int16>`       | X Hotspot offset (signed, relative to frame’s origin).  |
+| `0x02–0x03` | `<int16>`       | Y Hotspot offset (signed, relative to frame’s origin).  |
 
 ### `Size Table` Definition
 ```// value at index indicates number of 8x8 tiles. Index references sizetab lookup table
