@@ -19,6 +19,8 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 
 `IFF-To-WAV` - Converts NHL95 PC `.IFF` files to `.WAV` (out of game music files)
 
+`JIM-Tools` - Tools to import/export images from/to NHL 92
+
 `PAL-To-ACT` - Convert NHL95 PC `!<palname>` & `<HOME/AWAY>PALS.bin` files to `.ACT`. For use with sprites extracted from PPV files & centre ice logos extracted
 
 `PPV-To-BMP` - Extracts NHL95 PC `.PPV` files (in-game sprites), WIP: with ability to pass in .ACT palette
@@ -64,9 +66,13 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 ### 0.6
 - First release of `ANIM-To-BMP`
 
+### 0.7
+- First release of `ANIM94-To-BMP`
+- First release of `JIM-Tools`
+
 ## New future version plans
-- Add NHL 93 & 94 Support for `ANIM-To-BMP`
-- Update `ANIM-To-BMP` to extract sprite components from `.ANIM` files
+- SND extractor/builder
+- Update `ANIM-To-BMP` & `ANIM94-To-BMP` to extract sprite components from `.ANIM` files
 - Create tool to build `.ANIM` file from frame/sprite metadata/components
 
 ## Postponed future version plans

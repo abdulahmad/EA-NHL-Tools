@@ -31,4 +31,8 @@ ANIM94-To-BMP/*.bin
 JIM-To-BMP/NHL92/*
 JIM-To-BMP/Extracted/*
 JIM-To-BMP/Build/*
+JIM-Tools/NHL92/*
+JIM-Tools/Extracted/*
+JIM-Tools/Build/*
+JIM-Tools/3bit-converted/*
 SND-Builder/*.snd
