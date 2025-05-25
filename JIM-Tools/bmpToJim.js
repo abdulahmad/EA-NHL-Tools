@@ -82,9 +82,9 @@ function readBMP(filepath) {
 // Convert RGB color to Genesis format (0000BBB0GGG0RRR0)
 function RGBToGenesisColor(r, g, b) {
     // Convert 8-bit RGB (0-255) to 3-bit Genesis RGB (0-7)
-    r = Math.round((r / 255) * 7) & 0x7;
-    g = Math.round((g / 255) * 7) & 0x7;
-    b = Math.round((b / 255) * 7) & 0x7;
+    r = Math.round((r / 252) * 7) & 0x7;
+    g = Math.round((g / 252) * 7) & 0x7;
+    b = Math.round((b / 252) * 7) & 0x7;
 
     // Pack into Genesis color format: 0000BBB0GGG0RRR0
     return ((b & 0x7) << 9) | ((g & 0x7) << 5) | ((r & 0x7) << 1);

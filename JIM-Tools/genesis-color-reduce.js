@@ -124,13 +124,20 @@ function processBmp(inputPath, options = {}) {
         
         palettes[paletteIndex] = colorArray;
         console.log(`Palette ${paletteIndex} has ${colorArray.length} colors`);
-    }
-
-    // Fill in any unused palettes with a default palette if needed
+    }    // Fill in any unused palettes with a default palette if needed
     for (let i = 0; i < palettes.length; i++) {
         if (!palettes[i]) {
             console.log(`Palette ${i} is unused, creating default`);
             palettes[i] = [{ r: 0, g: 0, b: 0, count: 1 }]; // Default black
+        }
+    }
+    
+    // Ensure Palette 1-3 have transparent color at index 0
+    for (let i = 1; i < 4; i++) {
+        if (palettes[i] && palettes[i].length > 0) {
+            // Set first color as transparent magenta (252,0,252)
+            palettes[i][0] = { r: 252, g: 0, b: 252, count: 1 };
+            console.log(`Set transparent color (252,0,252) for Palette ${i} at index 0`);
         }
     }
       // Optimize palettes if requested
@@ -520,9 +527,9 @@ function deltaE(lab1, lab2) {
 
 // Convert 24-bit RGB to Genesis 9-bit RGB
 function rgbToGenesis(r, g, b) {
-    r = Math.round((r / 255) * 7) & 0x7;
-    g = Math.round((g / 255) * 7) & 0x7;
-    b = Math.round((b / 255) * 7) & 0x7;
+    r = Math.round((r / 252) * 7) & 0x7;
+    g = Math.round((g / 252) * 7) & 0x7;
+    b = Math.round((b / 252) * 7) & 0x7;
     return ((b & 0x7) << 9) | ((g & 0x7) << 5) | ((r & 0x7) << 1);
 }
 

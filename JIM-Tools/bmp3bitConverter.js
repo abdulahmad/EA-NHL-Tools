@@ -10,16 +10,16 @@ const __dirname = dirname(__filename);
 function convertTo3BitAndBack(r, g, b) {
     // Convert from 8-bit (0-255) to 3-bit (0-7)
     // Use Math.min to avoid overflow and ensure proper rounding
-    const r3 = Math.min(7, Math.round(r / (255/7)));
-    const g3 = Math.min(7, Math.round(g / (255/7)));
-    const b3 = Math.min(7, Math.round(b / (255/7)));
+    const r3 = Math.min(7, Math.round(r / (252/7)));
+    const g3 = Math.min(7, Math.round(g / (252/7)));
+    const b3 = Math.min(7, Math.round(b / (252/7)));
 
     // Convert back from 3-bit (0-7) to 8-bit (0-255)
-    // Using the scaling factor 255/7 exactly as in extractJimFull.js
+    // Using the correct scaling factor 252/7 
     return [
-        Math.round(r3 * 255 / 7),
-        Math.round(g3 * 255 / 7),
-        Math.round(b3 * 255 / 7)
+        Math.round(r3 * 252 / 7),
+        Math.round(g3 * 252 / 7),
+        Math.round(b3 * 252 / 7)
     ];
 }
 
@@ -107,11 +107,10 @@ function applyDithering(pixels, ditheredPixels, ditherBits) {
             const r3 = ditherTo3Bit(rN, maxValue, x, y);
             const g3 = ditherTo3Bit(gN, maxValue, x, y);
             const b3 = ditherTo3Bit(bN, maxValue, x, y);
-            
-            // Convert the 3-bit values back to 8-bit for storage/display
-            const r8 = Math.round(r3 * 255 / 7);
-            const g8 = Math.round(g3 * 255 / 7);
-            const b8 = Math.round(b3 * 255 / 7);
+              // Convert the 3-bit values back to 8-bit for storage/display
+            const r8 = Math.round(r3 * 252 / 7);
+            const g8 = Math.round(g3 * 252 / 7);
+            const b8 = Math.round(b3 * 252 / 7);
             
             ditheredPixels[y][x] = [r8, g8, b8];
         }
@@ -166,16 +165,15 @@ function applyDiffusionDithering(pixels, ditheredPixels, ditherBits, diffusionSt
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
             const [oldR, oldG, oldB] = workingPixels[y][x];
-            
-            // Quantize to 3-bit color (0-7)
+              // Quantize to 3-bit color (0-7)
             const r3 = Math.min(7, Math.max(0, Math.round(oldR * 7)));
             const g3 = Math.min(7, Math.max(0, Math.round(oldG * 7)));
             const b3 = Math.min(7, Math.max(0, Math.round(oldB * 7)));
             
             // Convert back to 8-bit for output
-            const r8 = Math.round(r3 * 255 / 7);
-            const g8 = Math.round(g3 * 255 / 7);
-            const b8 = Math.round(b3 * 255 / 7);
+            const r8 = Math.round(r3 * 252 / 7);
+            const g8 = Math.round(g3 * 252 / 7);
+            const b8 = Math.round(b3 * 252 / 7);
             
             // Save the dithered pixel
             ditheredPixels[y][x] = [r8, g8, b8];
@@ -239,8 +237,7 @@ function applyNoiseDithering(pixels, ditheredPixels, ditherBits, noiseAmount = 0
             
             // First convert to N-bit color space (dithering source)
             const [rN, gN, bN] = convertToNBit(r, g, b, ditherBits);
-            
-            // Apply noise to each color channel
+              // Apply noise to each color channel
             const noiseR = (Math.random() - 0.5) * noiseAmount * 2;
             const noiseG = (Math.random() - 0.5) * noiseAmount * 2;
             const noiseB = (Math.random() - 0.5) * noiseAmount * 2;
@@ -250,11 +247,11 @@ function applyNoiseDithering(pixels, ditheredPixels, ditherBits, noiseAmount = 0
             const g3 = Math.min(7, Math.max(0, Math.round(gN / maxValue * 7 + noiseG)));
             const b3 = Math.min(7, Math.max(0, Math.round(bN / maxValue * 7 + noiseB)));
             
-            // Convert back to 8-bit for output
-            const r8 = Math.round(r3 * 255 / 7);
-            const g8 = Math.round(g3 * 255 / 7);
-            const b8 = Math.round(b3 * 255 / 7);
-            
+            // Convert back from 3-bit to 8-bit
+            const r8 = Math.round(r3 * 252 / 7);
+            const g8 = Math.round(g3 * 252 / 7);
+            const b8 = Math.round(b3 * 252 / 7);
+
             ditheredPixels[y][x] = [r8, g8, b8];
         }
     }

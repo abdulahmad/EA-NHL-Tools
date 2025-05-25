@@ -11,14 +11,12 @@ function arrToBuffer(arr) {
 function genesisColorToRGB(word) {
     const blue = (word >> 9) & 0x07;  // Bits 9-11
     const green = (word >> 5) & 0x07; // Bits 5-7
-    const red = (word >> 1) & 0x07;   // Bits 1-3
-
-    // Scale from 3-bit (0-7) to 8-bit (0-255)
-    // Using exactly 255/7 as the scaling factor to match rebuildJim.js
+    const red = (word >> 1) & 0x07;   // Bits 1-3    // Scale from 3-bit (0-7) to 8-bit (0-252)
+    // Using exactly 252/7 as the scaling factor for proper color conversion
     return [
-        Math.round(red * 255 / 7),
-        Math.round(green * 255 / 7),
-        Math.round(blue * 255 / 7)
+        Math.round(red * 252 / 7),
+        Math.round(green * 252 / 7),
+        Math.round(blue * 252 / 7)
     ];
 }
 
