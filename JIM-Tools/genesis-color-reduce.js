@@ -139,8 +139,7 @@ function processBmp(inputPath, options = {}) {
             palettes[i][0] = { r: 252, g: 0, b: 252, count: 1 };
             console.log(`Set transparent color (252,0,252) for Palette ${i} at index 0`);
         }
-    }
-      // Optimize palettes if requested
+    }    // Optimize palettes if requested
     if (opts.optimizePalettes) {
         console.log('Optimizing palettes to improve color distribution...');
         // Get list of used palette indices
@@ -159,7 +158,20 @@ function processBmp(inputPath, options = {}) {
             
             console.log(`Optimizing palette ${paletteIndex}...`);
             const regionsUsingThisPalette = quadrants.filter(q => q.paletteIndex === paletteIndex);
-            optimizePalette(palettes[paletteIndex], bmp.pixels, regionsUsingThisPalette);
+            
+            // For palette 0, use all 16 colors for optimization
+            // For palettes 1-3, preserve the transparent color at index 0 and only optimize the remaining 15 colors
+            const preserveTransparent = paletteIndex >= 1 && paletteIndex <= 3;
+            optimizePalette(palettes[paletteIndex], bmp.pixels, regionsUsingThisPalette, preserveTransparent);
+        }
+    }
+    
+    // Ensure Palette 1-3 have transparent color at index 0 (again after optimization)
+    for (let i = 1; i < 4; i++) {
+        if (palettes[i] && palettes[i].length > 0) {
+            // Set first color as transparent magenta (252,0,252)
+            palettes[i][0] = { r: 252, g: 0, b: 252, count: 1 };
+            console.log(`Ensuring transparent color (252,0,252) for Palette ${i} at index 0 after optimization`);
         }
     }
     
@@ -229,21 +241,20 @@ function processBmp(inputPath, options = {}) {
                     
                     if (px < bmp.width && py < bmp.height) {
                         const pixel = bmp.pixels[py][px];
-                        
-                        // Choose the appropriate color matching method based on dithering options
+                          // Choose the appropriate color matching method based on dithering options
                         let colorIndex;
                         
                         if (opts.dither === 'pattern') {
-                            colorIndex = findBestMatchWithPatternDithering(pixel, palette, px, py, opts.ditherStrength);
+                            colorIndex = findBestMatchWithPatternDithering(pixel, palette, px, py, paletteIndex, opts.ditherStrength);
                         } else if (opts.dither === 'noise') {
-                            colorIndex = findBestMatchWithNoiseDithering(pixel, palette, opts.ditherStrength);
+                            colorIndex = findBestMatchWithNoiseDithering(pixel, palette, paletteIndex, opts.ditherStrength);
                         } else if (opts.dither === 'diffusion') {
                             colorIndex = findBestMatchWithDiffusionDithering(
-                                pixel, palette, px, py, bmp.width, bmp.height, opts.ditherStrength
+                                pixel, palette, px, py, bmp.width, bmp.height, paletteIndex, opts.ditherStrength
                             );
                         } else {
                             // Default: no dithering
-                            colorIndex = findBestMatch(pixel, palette);
+                            colorIndex = findBestMatch(pixel, palette, paletteIndex);
                         }
                         
                         tile.push(colorIndex);
@@ -991,7 +1002,7 @@ function quantizeColors(colorMap, maxColors) {
 }
 
 // Find best matching color from palette using Delta E color difference
-function findBestMatch(pixel, palette) {
+function findBestMatch(pixel, palette, paletteIndex = 0) {
     // Special case for very small palettes to avoid black-only output
     if (palette.length < 3) {
         return 0; // Just use the first color
@@ -1001,7 +1012,10 @@ function findBestMatch(pixel, palette) {
     let bestMatch = 0;
     let lowestDistance = Infinity;
     
-    for (let i = 0; i < palette.length; i++) {
+    // For palettes 1-3, start from index 1 to avoid using the transparent color
+    const startIndex = (paletteIndex >= 1 && paletteIndex <= 3) ? 1 : 0;
+    
+    for (let i = startIndex; i < palette.length; i++) {
         const color = palette[i];
         const colorLab = rgbToLab(color.r, color.g, color.b);
         const distance = deltaE(targetLab, colorLab);
@@ -1256,8 +1270,15 @@ function optimizePalettes(palettes, pixels, quadrants) {
 }
 
 // Optimize a single palette based on regions that use it
-function optimizePalette(palette, pixels, regions) {
+function optimizePalette(palette, pixels, regions, preserveTransparent = false) {
     if (!palette || palette.length === 0 || regions.length === 0) return;
+    
+    // If we need to preserve the transparent color, save it
+    const transparentColor = preserveTransparent ? palette[0] : null;
+    
+    // Calculate how many colors to optimize
+    const colorsToOptimize = preserveTransparent ? 15 : 16;
+    const startIndex = preserveTransparent ? 1 : 0;
     
     // Sample pixels from all regions using this palette
     const samplePixels = [];
@@ -1275,25 +1296,53 @@ function optimizePalette(palette, pixels, regions) {
     }
     
     // Run k-means clustering on the sample pixels
-    const kMeansPalette = quantizePixels(samplePixels, 16);
+    const kMeansPalette = quantizePixels(samplePixels, colorsToOptimize);
     
-    // Replace palette with optimized colors
-    for (let i = 0; i < kMeansPalette.length && i < palette.length; i++) {
-        palette[i].r = kMeansPalette[i].r;
-        palette[i].g = kMeansPalette[i].g;
-        palette[i].b = kMeansPalette[i].b;
+    // Replace palette with optimized colors, respecting transparent color if needed
+    if (preserveTransparent) {
+        // Keep transparent color at index 0
+        for (let i = 0; i < kMeansPalette.length && i + startIndex < palette.length; i++) {
+            palette[i + startIndex].r = kMeansPalette[i].r;
+            palette[i + startIndex].g = kMeansPalette[i].g;
+            palette[i + startIndex].b = kMeansPalette[i].b;
+        }
+    } else {
+        // Replace all colors
+        for (let i = 0; i < kMeansPalette.length && i < palette.length; i++) {
+            palette[i].r = kMeansPalette[i].r;
+            palette[i].g = kMeansPalette[i].g;
+            palette[i].b = kMeansPalette[i].b;
+        }
     }
     
-    // Sort palette by luminance (keep index 0 as background)
-    const background = palette[0];
-    const sorted = palette.slice(1).sort((a, b) => {
-        const lumA = 0.299 * a.r + 0.587 * a.g + 0.114 * a.b;
-        const lumB = 0.299 * b.r + 0.587 * b.g + 0.114 * b.b;
-        return lumA - lumB;
-    });
-    palette[0] = background;
-    for (let i = 0; i < sorted.length; i++) {
-        palette[i + 1] = sorted[i];
+    // Sort palette by luminance (while preserving special indexes if needed)
+    if (preserveTransparent) {
+        // Keep index 0 as transparent, sort the rest by luminance
+        const sorted = palette.slice(1).sort((a, b) => {
+            const lumA = 0.299 * a.r + 0.587 * a.g + 0.114 * a.b;
+            const lumB = 0.299 * b.r + 0.587 * b.g + 0.114 * b.b;
+            return lumA - lumB;
+        });
+        
+        // Restore transparent color at index 0
+        palette[0] = transparentColor;
+        
+        // Apply sorted colors to remaining indices
+        for (let i = 0; i < sorted.length; i++) {
+            palette[i + 1] = sorted[i];
+        }
+    } else {
+        // Standard sort - keep index 0, sort the rest
+        const background = palette[0];
+        const sorted = palette.slice(1).sort((a, b) => {
+            const lumA = 0.299 * a.r + 0.587 * a.g + 0.114 * a.b;
+            const lumB = 0.299 * b.r + 0.587 * b.g + 0.114 * b.b;
+            return lumA - lumB;
+        });
+        palette[0] = background;
+        for (let i = 0; i < sorted.length; i++) {
+            palette[i + 1] = sorted[i];
+        }
     }
 }
 
@@ -2243,7 +2292,7 @@ const BAYER_MATRIX_8X8 = [
 const BAYER_NORMALIZED = BAYER_MATRIX_8X8.map(row => row.map(v => v / 64));
 
 // Apply pattern (Bayer) dithering when matching to palette
-function findBestMatchWithPatternDithering(pixel, palette, x, y, strength = 1.0) {
+function findBestMatchWithPatternDithering(pixel, palette, x, y, paletteIndex = 0, strength = 1.0) {
     // Convert to Lab space for better color matching
     const pixelLab = rgbToLab(pixel.r, pixel.g, pixel.b);
     
@@ -2256,7 +2305,10 @@ function findBestMatchWithPatternDithering(pixel, palette, x, y, strength = 1.0)
     let lowestDistance = Infinity;
     let secondLowestDistance = Infinity;
     
-    for (let i = 0; i < palette.length; i++) {
+    // For palettes 1-3, start from index 1 to avoid using the transparent color
+    const startIndex = (paletteIndex >= 1 && paletteIndex <= 3) ? 1 : 0;
+    
+    for (let i = startIndex; i < palette.length; i++) {
         const color = palette[i];
         const colorLab = rgbToLab(color.r, color.g, color.b);
         const distance = deltaE(pixelLab, colorLab);
@@ -2282,7 +2334,7 @@ function findBestMatchWithPatternDithering(pixel, palette, x, y, strength = 1.0)
 }
 
 // Apply noise dithering when matching to palette
-function findBestMatchWithNoiseDithering(pixel, palette, strength = 0.5) {
+function findBestMatchWithNoiseDithering(pixel, palette, paletteIndex = 0, strength = 0.5) {
     // Convert to Lab space for better color matching
     const pixelLab = rgbToLab(pixel.r, pixel.g, pixel.b);
     
@@ -2293,7 +2345,10 @@ function findBestMatchWithNoiseDithering(pixel, palette, strength = 0.5) {
     let bestMatch = 0;
     let lowestDistance = Infinity;
     
-    for (let i = 0; i < palette.length; i++) {
+    // For palettes 1-3, start from index 1 to avoid using the transparent color
+    const startIndex = (paletteIndex >= 1 && paletteIndex <= 3) ? 1 : 0;
+    
+    for (let i = startIndex; i < palette.length; i++) {
         const color = palette[i];
         const colorLab = rgbToLab(color.r, color.g, color.b);
         // Add noise to the distance calculation
@@ -2321,7 +2376,7 @@ function initDiffusionErrors(width, height) {
 }
 
 // Apply diffusion dithering when matching to palette
-function findBestMatchWithDiffusionDithering(pixel, palette, x, y, width, height, strength = 1.0) {
+function findBestMatchWithDiffusionDithering(pixel, palette, x, y, width, height, paletteIndex = 0, strength = 1.0) {
     // Get accumulated errors for this pixel
     const errorR = y < diffusionErrors.get('r').length && x < diffusionErrors.get('r')[0].length 
         ? diffusionErrors.get('r')[y][x] : 0;
@@ -2337,8 +2392,8 @@ function findBestMatchWithDiffusionDithering(pixel, palette, x, y, width, height
         b: Math.max(0, Math.min(255, pixel.b + errorB * strength))
     };
     
-    // Find best matching color using standard method
-    const bestIndex = findBestMatch(adjustedPixel, palette);
+    // Find best matching color using standard method with palette index
+    const bestIndex = findBestMatch(adjustedPixel, palette, paletteIndex);
     const selectedColor = palette[bestIndex];
     
     // Calculate new errors
