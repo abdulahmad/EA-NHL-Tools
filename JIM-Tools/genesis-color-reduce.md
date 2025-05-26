@@ -1,87 +1,107 @@
-# Color Reduction and Jim Format Conversion Tools
+# genesis-color-reduce.js
 
-This directory contains tools for reducing BMP images to a format suitable for the Sega Genesis/Mega Drive and converting them to the Jim format used in NHL Hockey.
+## Overview
 
-## Tools
+This tool takes a BMP image and reduces its colors to fit the Sega Genesis/Mega Drive palette restrictions. It divides the image into sections and assigns each section one of 4 palettes, with each palette containing up to 16 colors. This is a key step in preparing images for use in NHL Hockey games for the Sega Genesis.
 
-### 1. Genesis Color Reducer (`genesis-color-reduce.js`)
+## Purpose
 
-This tool takes a BMP image of any format (24-bit, 8-bit, 4-bit, 1-bit) and reduces its colors to fit the Sega Genesis/Mega Drive palette restrictions. It divides the image into sections and assigns each section one of 4 palettes, with each palette containing up to 16 colors.
+The Sega Genesis hardware has strict color limitations:
+- Only 4 palettes of 16 colors each can be used at once
+- Each 8x8 pixel tile must use colors from a single palette
 
-**Features:**
-- Handles any BMP format
-- Multiple color reduction algorithms
-- Optimized palette generation
-- Exports reduced-color BMP
-- Saves individual palette files (0.act, 1.act, 2.act, 3.act) and combined palette (combined.act)
-- Generates metadata with section and palette information
+This tool intelligently divides your image into sections, assigns the most appropriate palette to each section, and performs color reduction to fit within these hardware limitations.
 
-**Usage:**
+## Installation
+
+Before using this tool, you need to install the required dependencies:
+
+```bash
+# Navigate to the JIM-Tools directory
+cd JIM-Tools
+
+# Install dependencies
+npm install
 ```
+
+This tool requires Node.js version 14.0.0 or higher as it uses ES modules.
+
+## Features
+
+- Handles any BMP format (24-bit, 8-bit, 4-bit, 1-bit)
+- Multiple section division strategies (4 or 9 sections)
+- Multiple color balancing strategies (count, entropy, importance, area)
+- Optimized palette generation
+- Dithering options to improve visual quality
+- Ability to force specific palettes for certain sections
+- Comprehensive metadata-color output for further processing
+
+## Usage
+
+```bash
 node genesis-color-reduce.js <input.bmp> [options]
 ```
 
-**Options:**
+### Options
+
 - `--output=<directory>` - Custom output directory
 - `--balance=<count|entropy|importance|area>` - Balance strategy (default: count)
 - `--optimize=<true|false>` - Optimize palettes (default: true)
 - `--palettes=<0,1,2,3>` - Palettes to use (default: all 4)
 - `--sections=<4|9>` - Number of sections to split image into (default: 4)
+- `--dither=<none|pattern|diffusion|noise>` - Dithering method (default: none)
+- `--ditherStrength=<value>` - Dithering strength (0.1-2.0)
 - `--verbose=<true|false>` - Verbosity level (default: true)
 
-### 2. Reduced BMP to Jim Converter (`reduced-bmp-to-jim.js`)
+### Examples
 
-This tool takes a BMP image that has been processed by the Genesis Color Reducer and converts it to the component parts needed for the Jim format.
+```bash
+# Basic usage with default settings
+node genesis-color-reduce.js my-image.bmp
 
-**Features:**
-- Processes tiles from the reduced BMP
-- Optimizes by detecting duplicate tiles
-- Generates map data
-- Saves tiles and map data in Jim-compatible format
-- Creates metadata for rebuildJim.js compatibility
+# Use 9 sections with entropy balancing
+node genesis-color-reduce.js my-image.bmp --sections=9 --balance=entropy
 
-**Usage:**
+# Enable pattern dithering
+node genesis-color-reduce.js my-image.bmp --dither=pattern --ditherStrength=1.0
+
+# Use only palettes 0, 1, and 2
+node genesis-color-reduce.js my-image.bmp --palettes=0,1,2
 ```
-node reduced-bmp-to-jim.js <input-reduced.bmp> <metadata.json> [options]
+
+## Output
+
+The tool creates a directory with the following structure:
+
+- **my-image-reduced.bmp**: The color-reduced image with all sections combined
+- **metadata-color.json**: Detailed information about the reduction process
+- **0.act, 1.act, 2.act, 3.act**: Adobe Color Table files for each palette
+- **combined.act**: A combined palette with all colors from all palettes
+
+## How It Works
+
+1. **Image Analysis**: The tool analyzes the image and divides it into sections (4 or 9)
+   
+2. **Color Extraction**: For each section, the dominant colors are extracted
+   
+3. **Palette Assignment**: Sections are assigned to palettes based on the selected balance strategy:
+   - **count**: Balances sections based on the number of colors needed
+   - **entropy**: Balances sections based on color complexity
+   - **importance**: Balances sections based on visual importance
+   - **area**: Balances sections based on pixel area
+   
+4. **Color Reduction**: Each section's colors are reduced to fit within a 16-color palette
+   
+5. **Optimization**: If enabled, palettes are optimized to improve color fidelity
+   
+6. **Dithering**: If enabled, dithering is applied to create the illusion of more colors
+   
+7. **Output Generation**: The reduced image, palettes, and metadata-color.json are saved
+
+## Next Steps
+
+After running this tool, use `reduced-to-exJim.js` to convert the output to exploded JIM format:
+
+```bash
+node reduced-to-exJim.js my-image-reduced/
 ```
-
-**Options:**
-- `--output=<directory>` - Custom output directory
-- `--verbose=<true|false>` - Verbosity level (default: true)
-
-## Workflow
-
-1. **Reduce Colors:**
-   ```
-   node genesis-color-reduce.js my-image.bmp
-   ```
-   This will create a directory with the reduced BMP, palette files, and metadata.
-
-2. **Convert to Jim Format:**
-   ```
-   node reduced-bmp-to-jim.js build/my-image-count-pal0-1-2-3/my-image-reduced.bmp build/my-image-count-pal0-1-2-3/metadata.json
-   ```
-   This will create a `jimparts` directory with the tile and map data needed for the Jim format.
-
-3. **Rebuild Jim File:**
-   Use the existing `rebuildJim.js` script to create a final Jim file from the components.
-   ```
-   node rebuildJim.js jimparts/my-image
-   ```
-
-## File Formats
-
-### Palette Files (.act)
-Adobe Color Table format. Each palette contains 16 colors stored as RGB triplets.
-
-### Metadata JSON
-Contains information about the source image, section boundaries, palette assignments, and color statistics.
-
-### Tile Data (tiles.bin)
-Binary file containing the tile data in planar format compatible with the Sega Genesis.
-
-### Map Data (map.bin)
-Binary file containing the map data (tile indices with palette information).
-
-## Jim Format
-The Jim format is used in NHL Hockey for storing graphics. It consists of palettes, tile data, and map data describing how tiles are arranged.

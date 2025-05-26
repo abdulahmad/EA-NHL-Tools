@@ -1,45 +1,89 @@
-# BMP 3-Bit Color Converter
+# bmp3bitConverter.js
 
-This script converts a BMP image to simulate Sega Genesis/Mega Drive 3-bit color limitations.
+## Overview
 
-## What Does This Script Do?
+This tool converts 24-bit color BMP images to the Sega Genesis/Mega Drive color space (3 bits per RGB channel). The Genesis can only display colors with 3 bits each for red, green, and blue (resulting in 512 possible colors). This tool helps prepare images for use with the Genesis hardware by simulating this color limitation.
+
+## Purpose
 
 The Sega Genesis uses a palette system with only 3-bits per color channel (RGB). This means each
 channel can only have 8 possible values (0-7) instead of the 256 values (0-255) in typical 8-bit
-color channels. This script:
+color channels. This script prepares images for the Genesis color space before further processing.
 
-1. Takes a BMP image as input
-2. Converts each RGB channel from 8-bit to 3-bit color space
-3. Converts back to 8-bit for viewing (with the color limitations visible)
-4. Saves the result as a new BMP file
+## Installation
 
-This helps you visualize what your image would look like with Genesis color limitations.
+Before using this tool, you need to install the required dependencies:
+
+```bash
+# Navigate to the JIM-Tools directory
+cd JIM-Tools
+
+# Install dependencies
+npm install
+```
+
+This tool requires Node.js version 14.0.0 or higher as it uses ES modules.
+
+## Features
+
+- Converts 24-bit BMP images to Genesis-compatible color depth (3 bits per channel)
+- Multiple dithering options to improve visual quality:
+  - Pattern dithering (using Bayer matrix)
+  - Error diffusion dithering (Floyd-Steinberg algorithm)
+  - Noise dithering
+- Configurable dithering bit depth for intermediate processing
+- Control over dithering strength
 
 ## Usage
 
+```bash
+node bmp3bitConverter.js <path-to-bmp-file> [options]
 ```
-node bmp3bitConverter.js path/to/your/image.bmp
+
+### Options
+
+- `-dither=<4bit|5bit|6bit|7bit|8bit>` - Apply dithering with specified bit depth
+- `-method=<pattern|diffusion|noise>` - Dithering method (default: pattern)
+- `-strength=<value>` - Dithering strength/amount:
+  - For diffusion: 0.1-2.0, default: 1.0
+  - For noise: 0.1-1.0, default: 0.5
+
+### Examples
+
+```bash
+# Basic conversion (no dithering)
+node bmp3bitConverter.js my_image.bmp
+
+# Apply pattern dithering with 5-bit intermediate depth
+node bmp3bitConverter.js my_image.bmp -dither=5bit -method=pattern
+
+# Apply error diffusion dithering with high strength
+node bmp3bitConverter.js my_image.bmp -dither=6bit -method=diffusion -strength=1.5
+
+# Apply noise dithering with low strength
+node bmp3bitConverter.js my_image.bmp -dither=5bit -method=noise -strength=0.3
 ```
 
-The converted image will be saved to a `3bit-converted` folder in the same directory as your
-original image, with "-3bit" added to the filename.
+## Output
 
-## Color Conversion Details
+The tool creates a new BMP file with "_3bit" appended to the filename. The output image will have colors that accurately represent how they would appear on a Sega Genesis/Mega Drive system.
 
-- **8-bit to 3-bit**: Colors are scaled down using the factor `255/7` (approximately 36.43)
-- **3-bit to 8-bit**: Colors are scaled back up using the same factor
+## How It Works
 
-This ensures consistent color conversion matching the Sega Genesis hardware limitations.
+1. The tool reads the source BMP file
+2. Converts all RGB colors to the Genesis color space (3 bits per channel)
+3. If dithering is enabled:
+   - For pattern dithering: Uses a Bayer matrix to create a pattern that simulates additional colors
+   - For error diffusion: Uses the Floyd-Steinberg algorithm to spread the quantization error to neighboring pixels
+   - For noise dithering: Adds controlled random noise to break up banding
+4. Saves the output BMP with the Genesis-compatible colors
 
-## Supported BMP Formats
+## Technical Details
 
-- 24-bit BMP (RGB)
-- 8-bit indexed color BMP
+- Genesis colors use the format `0000BBB0GGG0RRR0` (16-bit)
+- Each color channel (R, G, B) is limited to 3 bits (values 0-7)
+- The tool uses the scaling factor of 252/7 for proper color conversion (252 is the maximum value that can be represented by 3 bits when scaled to 8 bits)
 
-## Example
+## Next Steps
 
-Original image colors might look like:
-`RGB(128, 192, 233)` → Scaled to 3-bit → `RGB(4, 5, 6)` → Scaled back to 8-bit → `RGB(146, 182, 219)`
-
-The resulting image demonstrates what your graphics would look like with the Genesis color palette
-constraints.
+After running this tool, the next step in the workflow is to run `genesis-color-reduce.js` on the output file to reduce the image to the 4 palettes of 16 colors required by the Genesis hardware.

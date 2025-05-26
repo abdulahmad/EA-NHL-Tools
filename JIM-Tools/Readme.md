@@ -1,6 +1,80 @@
-# JIM-To-BMP
+# JIM-Tools - Sega Genesis Image Format Utilities
 
+This folder contains utilities for working with JIM image format files used in EA's NHL Hockey series for the Sega Genesis/Mega Drive. These tools allow you to extract, modify, and rebuild JIM files for game modifications or analysis.
 
+## What is JIM Format?
+
+JIM (likely "John's Image Map") is a proprietary EA image format used in early Sega Genesis sports titles. The format consists of:
+
+- Tiles (8x8 pixel blocks in 4bpp Genesis format)
+- Palettes (Up to 4 palettes with 16 colors each)
+- Map data (References to tiles with positioning and attribute information)
+
+## Workflow Overview
+
+### Importing Images into the Game
+
+1. **Color Conversion** (`bmp3bitConverter.js`):  
+   Convert a 24-bit color BMP to one with Sega Genesis color limitations (3 bits per RGB channel)
+
+2. **Color Reduction** (`genesis-color-reduce.js`):  
+   Split image into sections and reduce to 4 palettes of 16 colors each
+
+3. **Create Exploded JIM** (`reduced-to-exJim.js`):  
+   Convert the color-reduced image to exploded JIM format (metadata and individual tiles)
+
+4. **Rebuild JIM** (`exJim-to-jim.js`):  
+   Compile the exploded JIM format into a single binary JIM file for use in the game
+
+### Extracting Images from the Game
+
+1. **Extract JIM** (`extract-jim.js`):  
+   Extract a JIM file into exploded JIM format (metadata and individual files)
+
+2. You can then modify the tiles, palettes, or map data and rebuild the JIM file
+
+## Tools Reference
+
+- [bmp3bitConverter.js](./bmp3bitConverter.md) - Convert 24-bit BMP to Genesis color space
+- [genesis-color-reduce.js](./genesis-color-reduce.md) - Reduce BMP to 4 palettes of 16 colors
+- [reduced-to-exJim.js](./reduced-to-exJim.md) - Convert reduced image to exploded JIM format
+- [exJim-to-jim.js](./exJim-to-jim.md) - Rebuild JIM file from exploded format
+- [extract-jim.js](./extract-jim.md) - Extract JIM file to exploded format
+
+## Installation
+
+Before using these tools, you need to install the required dependencies:
+
+```bash
+# Navigate to the JIM-Tools directory
+cd JIM-Tools
+
+# Install dependencies
+npm install
+```
+
+The tools require Node.js and use ES modules. Make sure you have Node.js version 14.0.0 or higher installed.
+
+## Example Workflow
+
+```bash
+# Install dependencies first
+npm install
+
+# Convert full-color BMP to Genesis color space
+node bmp3bitConverter.js input.bmp
+
+# Reduce colors and split into 4 palettes
+node genesis-color-reduce.js input_3bit.bmp
+
+# Convert to exploded JIM format
+node reduced-to-exJim.js input_3bit_reduced/metadata.json
+
+# Rebuild JIM file
+node exJim-to-jim.js input_3bit_reduced_exjim/metadata.json
+```
+
+The final output will be a `rebuilt.jim` file that can be imported into the game.
 
 ## NHL92 .map.jim file details (Big Endian)
 | Byte (All values in hexadecimal)              | Value         | Description |
@@ -21,5 +95,5 @@
 | `0x00..0x01`  | `<uint16>:Bit 11`    | Horizontal flip |
 | `0x00..0x01`  | `<uint16>:Bit 12`    | Vertical flip |
 | `0x00..0x01`  | `<uint16>:Bit 13-14` | Palette Index (0–3, selects one of 4 CRAM palettes). |
-| `0x00..0x01`  | `<uint16>:Bit 15` | Priority (0=low, 1=high) | 
+| `0x00..0x01`  | `<uint16>:Bit 15` | Priority (0=low, 1=high) |
 
