@@ -6,7 +6,7 @@ There is also a `.json` file saved per Animation Frame, which contains the metad
 Palette is structured similar to how it is stored by the game in Sega Genesis CRAM. The reason is that sprites can have multiple palettes, and the only way to get multi-palette sprites to dislpay correctly would be to use the same palette structure that the game uses.
 
 # Usage
-1. Ensure you have `node` installed on your machine
+1. Ensure you have `node` installed on your machine and run `npm install` in the `ANIM-To-BMP` folder to install required dependencies.
 
 2. Run `node animToBmp <animfile>` or `node animToBmp <animfile> Palettes\<Palette File>`. It will decompress the ANIM file and you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file in the `Extracted` path. If a palette file (included in Palettes path) was specified, it will override the player sprite Palette in extracting frames from ANIM files.
 
