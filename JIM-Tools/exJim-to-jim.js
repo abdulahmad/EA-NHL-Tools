@@ -162,7 +162,7 @@ function rebuildJim(metadataPath) {
 
 // Check command line arguments
 if (process.argv.length < 3) {
-    console.log('Usage: node rebuildJim.js <path-to-metadata.json>');
+    console.log('Usage: node exJim-to-jim.js <path-to-metadata.json>');
     process.exit(1);
 }
 

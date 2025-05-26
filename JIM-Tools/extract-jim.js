@@ -328,7 +328,7 @@ function extractJim(jimPath) {
 
 // Check command line arguments
 if (process.argv.length < 3) {
-    console.log('Usage: node extractJimFull.js <path-to-jim-file>');
+    console.log('Usage: node extract-jim.js <path-to-jim-file>');
     process.exit(1);
 }
 

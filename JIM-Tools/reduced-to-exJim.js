@@ -289,7 +289,7 @@ function saveTileBmp(pixels, width, height, palette, filePath) {
 // Check if running directly from command line
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
     if (process.argv.length < 3) {
-        console.log('Usage: node reduced-to-jim.js <path-to-directory-with-metadata-color.json>');
+        console.log('Usage: node reduced-to-exJim.js <path-to-directory-with-metadata-color.json>');
         process.exit(1);
     }
     
