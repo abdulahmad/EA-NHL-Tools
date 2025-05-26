@@ -79,7 +79,17 @@ fs.readdir(root, (err, files) => {
 });
 
 function runSpitToBmp(file) {
-  // console.log(`Running spitToBmp on ${file}`);
-  const paletteArg = palettePath ? `"${palettePath}"` : '';
-  execSync(`node ..\\SPIT-To-BMP\\spitToBmp "${file}" ${paletteArg}`.trim(), { stdio: 'inherit' });
+  try {
+    // Check if palette exists if specified
+    if (palettePath && !fs.existsSync(palettePath)) {
+      console.warn(`Warning: Specified palette file does not exist: ${palettePath}`);
+      console.warn('Will fall back to grayscale palette');
+    }
+    
+    const paletteArg = palettePath ? `"${palettePath}"` : '';
+    console.log(`Converting ${file} with palette: ${palettePath || 'None (using grayscale)'}`);
+    execSync(`node ..\\SPIT-To-BMP\\spitToBmp "${file}" ${paletteArg}`.trim(), { stdio: 'inherit' });
+  } catch (error) {
+    console.error(`Error processing file ${file}: ${error.message}`);
+  }
 }

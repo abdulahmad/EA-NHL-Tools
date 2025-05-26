@@ -14,7 +14,7 @@ This tool leverages `gfxpak` to export the SPIT data from the PPV file. Assuming
 
 3. In the `PPV-SPIT-Tools` folder, run `node ppvToSpit`. This will run `gfxpak` on all of the PPV files in `NHL95PPV`. Now you will have the SPIT data files, ready to be converted.
 
-4. Run `node batchUnpackedSpitToBmp`. It will run the script `spitToBmp` on all of the SPIT files extracted from the PPV files. For every SPIT file, you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file. Note, you can use palette files unpacked by `PAL-To-Act` called `<team>-02.teamEditPal.ACT`.
+4. Run `node batchUnpackedSpitToBmp`. It will run the script `spitToBmp` on all of the SPIT files extracted from the PPV files. For every SPIT file, you will get a `.raw` (Photoshop RAW), `.json` (additonal image attributes) and a `.bmp` file. Note, you can use palette files unpacked by `BIN-To-Act` called `<team>-01-createPal.ACT`.
 
 ## NHL95 PC SPIT Header details
 | Byte (All values in hexadecimal)  | Value             | Description                           |

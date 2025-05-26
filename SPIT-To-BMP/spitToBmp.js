@@ -48,34 +48,99 @@ const convertToBMP = (fileName, palFileName) => {
   bmpImage.writeUInt32LE(pixelDataLength+unevenImagePadding+bmpEOFLength, 34); // Size of Compressed file
 
   // Write the palette information to the buffer
-  if (typeof palFileName !== 'undefined') {
-    const palFile = fs.readFileSync(palFileName);
-    let palFileOffset = 0
-    let palMultiplier = 1;
-    if(palFileName.indexOf('.act') == -1) { // EA palette, skip header & multiply colour values by 4
-      palFileOffset = 16;
-      palMultiplier = 4;
-    }
-    for (let i = 0; i < 256; i++) {
-      try {
-        bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 2 + i * 3)*palMultiplier, fullBmpHeaderLength + i * 4);     // R
-        bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 1 + i * 3)*palMultiplier, fullBmpHeaderLength + 1 + i * 4); // G
-        bmpImage.writeUInt8(palFile.readUint8(palFileOffset + 0 + i * 3)*palMultiplier, fullBmpHeaderLength + 2 + i * 4); // B
-        bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
-      } catch(e) {
-        if (e instanceof RangeError) {
-          console.log("early end of palette file, will skip the rest of the palette");
-          i = 256;
-        } else {
-          throw e;
+  if (palFileName && fs.existsSync(palFileName)) {
+    console.log(`Using palette file: ${palFileName}`);
+    try {
+      const palFile = fs.readFileSync(palFileName);
+      let palFileOffset = 0;
+      let palMultiplier = 1;
+      let isEAPalette = false;
+      
+      // Determine palette type based on file extension and content
+      if (palFileName.toLowerCase().indexOf('.act') === -1) {
+        // Likely an EA palette file
+        isEAPalette = true;
+        palFileOffset = 16; // Skip 16-byte header in EA palette files
+        palMultiplier = 4;  // EA palettes use 0-63 color values, multiply by 4 to get 0-255
+        console.log('Detected EA palette format');
+      } else {
+        console.log('Detected ACT palette format');
+      }
+      
+      // Debug info about palette file
+      console.log(`Palette file size: ${palFile.length} bytes`);
+      if (palFile.length < 768 && !isEAPalette) {
+        console.log('Warning: ACT palette file appears to be smaller than expected (should be 768 bytes)');
+      }
+      
+      // Apply palette
+      for (let i = 0; i < 256; i++) {
+        try {
+          // Note: RGB components might be in BGR order in some palette formats
+          const rPos = palFileOffset + 0 + i * 3; // Red component (was at position 2)
+          const gPos = palFileOffset + 1 + i * 3; // Green component
+          const bPos = palFileOffset + 2 + i * 3; // Blue component (was at position 0)
+          
+          if (rPos < palFile.length && gPos < palFile.length && bPos < palFile.length) {
+            // Read RGB values
+            const r = palFile.readUInt8(rPos) * palMultiplier;
+            const g = palFile.readUInt8(gPos) * palMultiplier;
+            const b = palFile.readUInt8(bPos) * palMultiplier;
+            
+            // Write to BMP palette table
+            bmpImage.writeUInt8(b, fullBmpHeaderLength + i * 4);     // B
+            bmpImage.writeUInt8(g, fullBmpHeaderLength + 1 + i * 4); // G
+            bmpImage.writeUInt8(r, fullBmpHeaderLength + 2 + i * 4); // R
+            bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
+          } else {
+            // If we're past the end of the palette file, use grayscale for remaining colors
+            bmpImage.writeUInt8(i, fullBmpHeaderLength + i * 4);     // B (grayscale)
+            bmpImage.writeUInt8(i, fullBmpHeaderLength + 1 + i * 4); // G (grayscale)
+            bmpImage.writeUInt8(i, fullBmpHeaderLength + 2 + i * 4); // R (grayscale)
+            bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
+          }
+        } catch(e) {
+          if (e instanceof RangeError) {
+            console.log(`Warning: Early end of palette file at color index ${i}, will use grayscale for remaining colors`);
+            
+            // Fill remaining palette entries with grayscale
+            for (let j = i; j < 256; j++) {
+              bmpImage.writeUInt8(j, fullBmpHeaderLength + j * 4);     // B (grayscale)
+              bmpImage.writeUInt8(j, fullBmpHeaderLength + 1 + j * 4); // G (grayscale)
+              bmpImage.writeUInt8(j, fullBmpHeaderLength + 2 + j * 4); // R (grayscale)
+              bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + j * 4); // A
+            }
+            break;
+          } else {
+            console.error(`Error processing palette: ${e.message}`);
+            throw e;
+          }
         }
       }
+    } catch (err) {
+      console.error(`Error reading palette file: ${err.message}`);
+      console.log('Falling back to grayscale palette');
+      // Fall back to grayscale palette
+      for (let i = 0; i < 256; i++) {
+        bmpImage.writeUInt8(i, fullBmpHeaderLength + i * 4);     // B (grayscale)
+        bmpImage.writeUInt8(i, fullBmpHeaderLength + 1 + i * 4); // G (grayscale)
+        bmpImage.writeUInt8(i, fullBmpHeaderLength + 2 + i * 4); // R (grayscale)
+        bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
+      }
     }
-  } else { // no palette, make it greyscale
+  } else { 
+    // No palette or palette file doesn't exist, use grayscale
+    if (palFileName) {
+      console.log(`Palette file not found: ${palFileName}`);
+      console.log('Using grayscale palette instead');
+    } else {
+      console.log('No palette specified, using grayscale');
+    }
+    
     for (let i = 0; i < 256; i++) {
-      bmpImage.writeUInt8(i, fullBmpHeaderLength + i * 4);     // R
-      bmpImage.writeUInt8(i, fullBmpHeaderLength + 1 + i * 4); // G
-      bmpImage.writeUInt8(i, fullBmpHeaderLength + 2 + i * 4); // B
+      bmpImage.writeUInt8(i, fullBmpHeaderLength + i * 4);     // B (grayscale)
+      bmpImage.writeUInt8(i, fullBmpHeaderLength + 1 + i * 4); // G (grayscale)
+      bmpImage.writeUInt8(i, fullBmpHeaderLength + 2 + i * 4); // R (grayscale)
       bmpImage.writeUInt8(0, fullBmpHeaderLength + 3 + i * 4); // A
     }
   }
@@ -168,4 +233,16 @@ if (!spriteName) {
   process.exit(1);
 }
 
-convertToBMP(spriteName, pal);
+// Verify the SPIT file exists
+if (!fs.existsSync(spriteName)) {
+  console.error(`Error: SPIT file not found: ${spriteName}`);
+  process.exit(1);
+}
+
+try {
+  convertToBMP(spriteName, pal);
+  console.log(`Successfully converted ${spriteName} to BMP format`);
+} catch (error) {
+  console.error(`Error converting ${spriteName}: ${error.message}`);
+  process.exit(1);
+}
