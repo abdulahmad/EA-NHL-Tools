@@ -155,4 +155,17 @@ const convertToBMP = (fileName, palFileName) => {
 
 const spriteName = process.argv[2];
 const pal = process.argv[3];
+
+// Check if the required parameter is provided
+if (!spriteName) {
+  console.log('Convert EA Sports SPIT image format to BMP\n');
+  console.log('Usage: node spitToBmp.js <spitFile> [palettePath]\n');
+  console.log('Parameters:');
+  console.log('  spitFile    - Path to the SPIT format image file');
+  console.log('  palettePath - Optional path to a palette file (.act or EA palette)\n');
+  console.log('Example:');
+  console.log('  node spitToBmp.js ./sprites/player.spit ./palettes/nhl.pal');
+  process.exit(1);
+}
+
 convertToBMP(spriteName, pal);
