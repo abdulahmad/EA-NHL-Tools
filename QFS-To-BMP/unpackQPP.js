@@ -14,12 +14,12 @@ directories.forEach(directory => {
         console.log(file);
       if (file.endsWith('.QPP')) {
         const fileName = file.replace('.QPP', '');
-        const dirPath = path.join('./Unpack', directory, fileName);
-
-        fs.mkdirSync(path.join(baseDir, dirPath), { recursive: true });
+        const dirPath = path.join('./Unpack', directory, fileName);        fs.mkdirSync(path.join(baseDir, dirPath), { recursive: true });
         process.chdir(path.join(baseDir, dirPath));
 
-        execSync(`..\\..\\..\\..\\3rdParty\\gfxpak\\gfxpak.exe -u ..\\..\\..\\${directory}\\${fileName}.QPP`, { stdio: 'inherit' });
+        const gfxpakPath = path.join('..', '..', '..', '..', '3rdParty', 'gfxpak', 'gfxpak.exe');
+        const qppPath = path.join('..', '..', '..', directory, `${fileName}.QPP`);
+        execSync(`${gfxpakPath} -u ${qppPath}`, { stdio: 'inherit' });
 
         // if(file.startsWith('XBRUCE2.QPP')) {
         //   process.chdir(baseDir);

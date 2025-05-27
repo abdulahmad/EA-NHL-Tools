@@ -39,5 +39,7 @@ fs.readdir(root, (err, files) => {
 
 function runIffToWav(file) {
 //   console.log(`process.cwd(), Running IffToWav on ${file}`);
-  execSync(`node ..\\IFF-To-WAV\\iffToWav ..\\VIV-To-WAV\\${file}`, { stdio: 'inherit' });
+  const iffToWavPath = path.join('..', 'IFF-To-WAV', 'iffToWav');
+  const filePath = path.join('..', 'VIV-To-WAV', file);
+  execSync(`node ${iffToWavPath} ${filePath}`, { stdio: 'inherit' });
 }

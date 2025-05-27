@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const crc32 = require('crc-32'); // Install via `npm install crc-32`
 
 // ROM configuration
@@ -52,13 +53,19 @@ const ROM_CONFIG = {
 const frameOffsetHeaderLength = 2;
 // Function to convert ROM sprite data to BMP format
 const convertRomToBMP = (romFile, palFile) => {
-  console.log('romSpriteToBMP:', romFile);
-  fs.mkdirSync('Extracted', { recursive: true });
+  try {
+    console.log('romSpriteToBMP:', romFile);
+    fs.mkdirSync('Extracted', { recursive: true });
 
-  // Read ROM and verify
-  const romData = fs.readFileSync(romFile);
-  const romSize = romData.length;
-  const romCrc = crc32.buf(romData) >>> 0; // Convert to unsigned 32-bit
+    // Check if file exists before attempting to read
+    if (!fs.existsSync(romFile)) {
+      throw new Error(`ROM file '${romFile}' not found.`);
+    }
+
+    // Read ROM and verify
+    const romData = fs.readFileSync(romFile);
+    const romSize = romData.length;
+    const romCrc = crc32.buf(romData) >>> 0; // Convert to unsigned 32-bit
 
   // Detect ROM type
   let romConfig;
@@ -75,7 +82,7 @@ const convertRomToBMP = (romFile, palFile) => {
   }
   console.log(`Detected ROM: ${romConfig.name}`);
 
-  fs.mkdirSync(`Extracted\\${romConfig.name}`, { recursive: true });
+  fs.mkdirSync(path.join('Extracted', romConfig.name), { recursive: true });
 
   // Calculate number of frames
   const frameTableSize = romConfig.addresses.frameOffsets.end - romConfig.addresses.frameOffsets.start;
@@ -175,7 +182,7 @@ const convertRomToBMP = (romFile, palFile) => {
         const green = (color >> 5) & 0x07; // Bits 5–7
         const red = (color >> 1) & 0x07;   // Bits 1–3
 
-        // Scale 3-bit values (0–7) to 8-bit (0–255) by multiplying by 32
+        // Scale 3-bit values (0–7) to 8-bit (0–255) by multiplying with 32
         const scaledRed = red * 32;
         const scaledGreen = green * 32;
         const scaledBlue = blue * 32;
@@ -193,13 +200,13 @@ const convertRomToBMP = (romFile, palFile) => {
     // Write palette to .ACT file
     const actBuffer = Buffer.alloc(768);
     animPal.copy(actBuffer, 0, 0, 16 * 3);
-    fs.writeFileSync(`Extracted\\${romConfig.name}\\pal${palIndex}.act`, actBuffer);
+    fs.writeFileSync(path.join('Extracted', romConfig.name, `pal${palIndex}.act`), actBuffer);
   }
 
   // Write combined palette
   const combinedActBuffer = Buffer.alloc(768);
   combinedPalette.copy(combinedActBuffer, 0, 0, 64 * 3);
-  fs.writeFileSync(`Extracted\\${romConfig.name}\\palCombined.act`, combinedActBuffer);
+  fs.writeFileSync(path.join('Extracted', romConfig.name, 'palCombined.act'), combinedActBuffer);
 
   // Process frames and generate images
   for (let currentFrame = 0; currentFrame < numFrames; currentFrame++) {
@@ -260,11 +267,13 @@ const convertRomToBMP = (romFile, palFile) => {
           }
         }
       }
-    }
-
-    // Save frame data and image
+    }    // Save frame data and image
     saveImage(spriteCanvas, frameDimensions.maxX, frameDimensions.maxY, romConfig.name, currentFrame, combinedPalette);
-    fs.writeFileSync(`Extracted\\${romConfig.name}\\${currentFrame}.json`, JSON.stringify(frames[currentFrame]));
+    fs.writeFileSync(path.join('Extracted', romConfig.name, `${currentFrame}.json`), JSON.stringify(frames[currentFrame]));
+  }
+  } catch (error) {
+    // Don't log here, let the calling function handle the error
+    throw error; // Re-throw to be caught by the main try-catch
   }
 };
 
@@ -387,16 +396,51 @@ function saveImage(spriteArray, width, height, fileName, currentFrame, combinedP
     }
   }
 
-  // Write files
-  fs.writeFileSync(`Extracted\\${fileName}\\${currentFrame}.bmp`, bmpImage);
-  fs.writeFileSync(`Extracted\\${fileName}\\${currentFrame}.raw`, rawImage);
+  // Write files  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame}.bmp`), bmpImage);
+  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame}.raw`), rawImage);
 
   if (bmpImage.length !== expectedBmpLength || rawImage.length !== expectedRawLength) {
     throw new Error(`Length mismatch: BMP ${bmpImage.length}/${expectedBmpLength}, RAW ${rawImage.length}/${expectedRawLength}`);
   }
 }
 
+// Function to display usage information
+function displayUsage() {
+  console.log('EA NHL 93/94 ROM Sprite Extractor');
+  console.log('=================================');
+  console.log('\nExtracts sprite animations from NHL 93 and NHL 94 ROM files and converts them to BMP images');
+  console.log('\nUsage: node anim94ToBmp.js <romFile> [palettePath]');
+  console.log('\nParameters:');
+  console.log('  romFile     - Path to the ROM file (NHL 93 or NHL 94)');
+  console.log('  palettePath - Optional path to a palette file (16-color, 32 bytes) to override palette 2');
+  console.log('\nExamples:');
+  console.log('  node anim94ToBmp.js nhl94retail.bin');
+  console.log('  node anim94ToBmp.js nhl93retail.bin custom_palette.bin');
+  console.log('\nSupported ROMs:');
+  console.log('  - NHLPA 93 (v1.1): CRC32 0xf361d0bf, Size: 512KB');
+  console.log('  - NHL 94: CRC32 0x9438f5dd, Size: 1MB');
+  console.log('\nOutput:');
+  console.log('  The script creates an "Extracted/<ROM Name>" directory with:');
+  console.log('   - BMP images for each frame');
+  console.log('   - RAW data files');
+  console.log('   - JSON files with frame data');
+  console.log('   - ACT palette files');
+  console.log('\nNote: This tool is cross-platform compatible (Windows, macOS, Linux)');
+}
+
 // Main execution
 const romFile = process.argv[2];
 const palFile = process.argv[3];
-convertRomToBMP(romFile, palFile);
+
+// Check if arguments were provided
+if (!romFile) {
+  displayUsage();
+  process.exit(1);
+}
+
+try {
+  convertRomToBMP(romFile, palFile);
+} catch (error) {
+  console.error(`Error processing ROM file: ${error.message}`);
+  process.exit(1);
+}

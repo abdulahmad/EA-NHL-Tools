@@ -85,10 +85,10 @@ function runSpitToBmp(file) {
       console.warn(`Warning: Specified palette file does not exist: ${palettePath}`);
       console.warn('Will fall back to grayscale palette');
     }
-    
-    const paletteArg = palettePath ? `"${palettePath}"` : '';
+      const paletteArg = palettePath ? `"${palettePath}"` : '';
     console.log(`Converting ${file} with palette: ${palettePath || 'None (using grayscale)'}`);
-    execSync(`node ..\\SPIT-To-BMP\\spitToBmp "${file}" ${paletteArg}`.trim(), { stdio: 'inherit' });
+    const spitToBmpPath = path.join('..', 'SPIT-To-BMP', 'spitToBmp');
+    execSync(`node ${spitToBmpPath} "${file}" ${paletteArg}`.trim(), { stdio: 'inherit' });
   } catch (error) {
     console.error(`Error processing file ${file}: ${error.message}`);
   }

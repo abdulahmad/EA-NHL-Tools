@@ -38,15 +38,14 @@ fs.readdir(sourceDir, (err, files) => {
   files.forEach(file => {
     if (file.endsWith('.PPV')) {
       processCount++;
-      const fileName = file.replace('.PPV', '');
-      const dirPath = path.join(outputDir, fileName);
+      const fileName = file.replace('.PPV', '');      const dirPath = path.join(outputDir, fileName);
 
-      fs.mkdirSync(baseDir+"\\"+dirPath, { recursive: true });
-      process.chdir(baseDir+"\\"+dirPath);
+      fs.mkdirSync(path.join(baseDir, dirPath), { recursive: true });
+      process.chdir(path.join(baseDir, dirPath));
 
       try {
         console.log(`Extracting ${fileName}.PPV...`);
-        execSync(`..\\..\\..\\3rdParty\\gfxpak\\gfxpak.exe -u ..\\..\\${sourceDir}\\${fileName}.PPV`, { stdio: 'inherit' });
+        execSync(`${path.join('..', '..', '..', '3rdParty', 'gfxpak', 'gfxpak.exe')} -u ${path.join('..', '..', sourceDir, fileName + '.PPV')}`, { stdio: 'inherit' });
       } catch (error) {
         console.error(`Error extracting ${fileName}.PPV:`, error.message);
       }

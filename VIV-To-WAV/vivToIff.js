@@ -12,12 +12,12 @@ directories.forEach(directory => {
     files.forEach(file => {
       if (file.endsWith('.VIV')) {
         const fileName = file.replace('.VIV', '');
-        const dirPath = path.join('./Unpack', directory, fileName);
-
-        fs.mkdirSync(path.join(baseDir, dirPath), { recursive: true });
+        const dirPath = path.join('./Unpack', directory, fileName);        fs.mkdirSync(path.join(baseDir, dirPath), { recursive: true });
         process.chdir(path.join(baseDir, dirPath));
 
-        execSync(`..\\..\\..\\..\\3rdParty\\gfxpak\\gfxpak.exe -u ..\\..\\..\\${directory}\\${fileName}.VIV`, { stdio: 'inherit' });
+        const gfxpakPath = path.join('..', '..', '..', '..', '3rdParty', 'gfxpak', 'gfxpak.exe');
+        const vivPath = path.join('..', '..', '..', directory, `${fileName}.VIV`);
+        execSync(`${gfxpakPath} -u ${vivPath}`, { stdio: 'inherit' });
 
         if(file.startsWith('XBRUCE2.VIV')) {
           process.chdir(baseDir);

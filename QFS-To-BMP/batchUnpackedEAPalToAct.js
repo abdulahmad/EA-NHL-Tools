@@ -51,5 +51,6 @@ function processRootDirectory(root) {
 
 function runPalToAct(file) {
   console.log(`Running palToAct on ${file}`);
-  execSync(`node ..\\PAL-To-ACT\\palToAct ${file}`, { stdio: 'inherit' });
+  const palToActPath = path.join('..', 'PAL-To-ACT', 'palToAct');
+  execSync(`node ${palToActPath} ${file}`, { stdio: 'inherit' });
 }

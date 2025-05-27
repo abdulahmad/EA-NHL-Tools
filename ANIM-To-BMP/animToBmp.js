@@ -1,24 +1,40 @@
 const fs = require('fs');
+const path = require('path');
 
 // Function to convert the compressed image to BMP format
 const convertToBMP = (fileName, palFile) => {
-  console.log('animToBMP:', fileName);
-  fs.mkdirSync('Extracted', { recursive: true });
-  fs.mkdirSync(`Extracted\\${fileName}`, { recursive: true });
+  try {
+    console.log('animToBMP:', fileName);
+    fs.mkdirSync('Extracted', { recursive: true });
+    fs.mkdirSync(path.join('Extracted', fileName), { recursive: true });
 
-  console.log("Converting "+fileName+ " to BMP");
-  const animData = fs.readFileSync(fileName);
-  const fileType = animData.toString('ascii', 0, 2);
-  const numFrames = animData.readInt16BE(2)+1;
-  const u0 = animData.readInt16BE(4)+1;
-  console.log("fileType",fileType,"numFrames",numFrames,"u0",u0);
+    console.log("Converting "+fileName+ " to BMP");
+    
+    // Check if file exists before attempting to read
+    if (!fs.existsSync(fileName)) {
+      console.error(`Error: File '${fileName}' not found.`);
+      process.exit(1);
+    }
+    
+    const animData = fs.readFileSync(fileName);
+    
+    // Validate minimum file size
+    if (animData.length < 6) {
+      console.error(`Error: File '${fileName}' is too small to be a valid ANIM file.`);
+      process.exit(1);
+    }
+    
+    const fileType = animData.toString('ascii', 0, 2);
+    const numFrames = animData.readInt16BE(2)+1;
+    const u0 = animData.readInt16BE(4)+1;
+    console.log("fileType",fileType,"numFrames",numFrames,"u0",u0);
 
   // Initialize frames array
   const frames = new Array(numFrames); // Pre-allocate for efficiency
 
   // Store the header information in a JSON file
   const headerInfo = { fileType, numFrames, u0};
-  fs.writeFileSync(`Extracted\\${fileName}\\${fileName}.json`, JSON.stringify(headerInfo));
+  fs.writeFileSync(path.join('Extracted', fileName, `${fileName}.json`), JSON.stringify(headerInfo));
 
   var currentIndex = 6;
   for (var currentFrame=0; currentFrame<numFrames; currentFrame++) {
@@ -133,7 +149,7 @@ const convertToBMP = (fileName, palFile) => {
         const green = (color >> 5) & 0x07; // Bits 5–7
         const red = (color >> 1) & 0x07;   // Bits 1–3
 
-        // Scale 3-bit values (0–7) to 8-bit (0–255) by multiplying by 32
+        // Scale 3-bit values (0–7) to 8-bit (0–255) by multiplying with 32
         const scaledRed = red * 32;
         const scaledGreen = green * 32;
         const scaledBlue = blue * 32;
@@ -156,7 +172,7 @@ const convertToBMP = (fileName, palFile) => {
     // Write palette to .ACT file
     const actBuffer = Buffer.alloc(768); // 256 colors (768 bytes), no footer
     animPal.copy(actBuffer, 0, 0, 16 * 3); // Copy 16 RGB triplets
-    fs.writeFileSync(`Extracted\\${fileName}\\pal${palIndex}.act`, actBuffer);
+    fs.writeFileSync(path.join('Extracted', fileName, `pal${palIndex}.act`), actBuffer);
   }
 
    // Skip palette 2 data in animData if overridden
@@ -167,7 +183,7 @@ const convertToBMP = (fileName, palFile) => {
   // Write combined palette to .ACT file
   const combinedActBuffer = Buffer.alloc(768); // 256 colors (768 bytes), no footer
   combinedPalette.copy(combinedActBuffer, 0, 0, 64 * 3); // Copy 64 RGB triplets
-  fs.writeFileSync(`Extracted\\${fileName}\\palCombined.act`, combinedActBuffer);
+  fs.writeFileSync(path.join('Extracted', fileName, 'palCombined.act'), combinedActBuffer);
   
   for (var currentFrame=0; currentFrame<numFrames; currentFrame++) { // populate tile data & save image
     var minX; var maxX;
@@ -266,7 +282,7 @@ const convertToBMP = (fileName, palFile) => {
     maxY = null;
 
     saveImage(spriteCanvas,frameDimensions.maxX,frameDimensions.maxY,fileName,currentFrame,combinedPalette);
-    fs.writeFileSync(`Extracted\\${fileName}\\${currentFrame}.json`, JSON.stringify(frames[currentFrame]));
+    fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame}.json`), JSON.stringify(frames[currentFrame]));
   }
 
   function adjustCanvasDimensions(minX, maxX, minY, maxY) {
@@ -283,9 +299,12 @@ const convertToBMP = (fileName, palFile) => {
         offsetX: offsetX,
         offsetY: offsetY
     };
-  }
-  // 32 bytes per tile; 5646 tiles = 180672 bytes
+  }  // 32 bytes per tile; 5646 tiles = 180672 bytes
   // 35108 + 180672 = 215780 = 0x34AE4 <-- start of palette data
+  } catch (error) {
+    console.error(`Error processing file ${fileName}: ${error.message}`);
+    process.exit(1);
+  }
 };
 
 // sizetab table from assembly: maps size index (0–15) to number of 8x8 tiles
@@ -361,8 +380,36 @@ function parseSpriteData(sizetabByte, tileLocByte) {
   };
 }
 
+// Function to display usage information
+function displayUsage() {
+  console.log('EA NHL ANIM to BMP Converter');
+  console.log('============================');
+  console.log('\nConverts EA Sports ANIM format files to BMP images');
+  console.log('\nUsage: node animToBmp.js <animFile> [palettePath]');
+  console.log('\nParameters:');
+  console.log('  animFile   - Path to the ANIM file to convert');
+  console.log('  palettePath - Optional path to a palette file (16-color, 32 bytes) to override palette 2');
+  console.log('\nExamples:');
+  console.log('  node animToBmp.js Sprites.anim');
+  console.log('  node animToBmp.js Puck.anim custom_palette.bin');
+  console.log('\nOutput:');
+  console.log('  The script creates an "Extracted/<filename>" directory with:');
+  console.log('   - BMP images for each frame');
+  console.log('   - RAW data files');
+  console.log('   - JSON files with frame data');
+  console.log('   - ACT palette files');
+  console.log('\nNote: This tool is cross-platform compatible (Windows, macOS, Linux)');
+}
+
 const animFile = process.argv[2];
 const palFile = process.argv[3]; // Optional palette file to override palette 2
+
+// Check if arguments were provided
+if (!animFile) {
+  displayUsage();
+  process.exit(1);
+}
+
 convertToBMP(animFile, palFile);
 
 function print2DArray(array2D) {
@@ -440,9 +487,9 @@ function saveImage(spriteArray, width, height, fileName, currentFrame, combinedP
   }
 
   // Write the BMP image data to a file
-  fs.writeFileSync(`Extracted\\${fileName}\\${currentFrame}.bmp`, bmpImage);
+  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame}.bmp`), bmpImage);
   // Write the RAW image data to a file
-  fs.writeFileSync(`Extracted\\${fileName}\\${currentFrame}.raw`, rawImage);
+  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame}.raw`), rawImage);
 
   if (bmpImage.length !== expectedBmpLength) {
     console.log('ERROR BMP');

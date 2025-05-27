@@ -1,7 +1,8 @@
 const execSync = require('child_process').execSync;
 const fs = require('fs');
+const path = require('path');
 
-const baseDir = '.\\Unpack';
+const baseDir = path.join('.', 'Unpack');
 const NUM_TEAMS = 28;
 // const NUM_TEAMS = 1;
 const TEAM_DATA_SIZE = 448;
@@ -97,16 +98,18 @@ for (let teamIndex = 0; teamIndex < NUM_TEAMS; teamIndex++) {
     const b = inputBuffer.readUInt8(offset + 2)*4;
     console.log('team palette',offset/3,offset, r,g,b);
     teamPalette.writeUInt8(r, TEAM_PALETTE_REF_OFFSET+i*3);
-    teamPalette.writeUInt8(g, TEAM_PALETTE_REF_OFFSET+i*3 + 1);
+  teamPalette.writeUInt8(g, TEAM_PALETTE_REF_OFFSET+i*3 + 1);
     teamPalette.writeUInt8(b, TEAM_PALETTE_REF_OFFSET+i*3 + 2);
   }
   let currentTeam = teamName95[teamIndex];
 
   fs.mkdirSync(baseDir, { recursive: true });
-  fs.writeFileSync(`${baseDir}\\${currentTeam}-04-teamPal.ACT`, teamPalette);
+  fs.writeFileSync(path.join(baseDir, `${currentTeam}-04-teamPal.ACT`), teamPalette);
 
   // Merge Rink Pal with Team Pal
-  execSync(`node mergePal rinkpal.act ${baseDir}\\${currentTeam}-04-teamPal.ACT 128 ${baseDir}\\${currentTeam}-03-gamePal.ACT`, { stdio: 'inherit' });
+  const teamPalPath = path.join(baseDir, `${currentTeam}-04-teamPal.ACT`);
+  const gamePalPath = path.join(baseDir, `${currentTeam}-03-gamePal.ACT`);
+  execSync(`node mergePal rinkpal.act "${teamPalPath}" 128 "${gamePalPath}"`, { stdio: 'inherit' });
   // Open Merged Team Pal
   const teamPaletteMerged = fs.readFileSync(`${baseDir}\\${currentTeam}-03-gamePal.ACT`);
   
