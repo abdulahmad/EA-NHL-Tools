@@ -2,6 +2,54 @@ const execSync = require('child_process').execSync;
 const fs = require('fs');
 const path = require('path');
 
+/**
+ * BIN-To-ACT: Converts NHL95 PC HOMEPALS/AWAYPALS.BIN files to ACT files
+ * 
+ * This script processes the NHL95 PC jersey palette files and creates Adobe Color Table (.ACT) 
+ * files for each team. It extracts team colors, merges them with the rink palette,
+ * and creates properly mapped palettes for sprite editing.
+ * 
+ * Usage:
+ *   node binToAct.js <fileName>
+ * 
+ * Arguments:
+ *   fileName - Path to the HOMEPALS.BIN or AWAYPALS.BIN file
+ * 
+ * Example:
+ *   node binToAct.js HOMEPALS.BIN
+ *   node binToAct.js AWAYPALS.BIN
+ * 
+ * Output:
+ *   Creates multiple .ACT files in the ./Unpack directory for each team:
+ *   - <team>-04-teamPal.ACT   - Team palette
+ *   - <team>-03-gamePal.ACT   - Game palette (rink + team)
+ *   - <team>-04-colorMapping.bin - Color mapping data
+ *   - <team>-02-teamEditPal.ACT - Team edit palette
+ *   - <team>-01-createPal.ACT   - Final create palette
+ */
+
+// Get script name for usage display
+const scriptName = path.basename(process.argv[1]);
+
+// Check if required argument is provided
+if (process.argv.length !== 3) {
+  console.error(`
+Error: Missing required argument
+
+Usage: node ${scriptName} <fileName>
+
+Arguments:
+  fileName - Path to the HOMEPALS.BIN or AWAYPALS.BIN file
+
+Example:
+  node ${scriptName} HOMEPALS.BIN
+  node ${scriptName} AWAYPALS.BIN
+
+This will create multiple .ACT files in the ./Unpack directory for each team.
+`);
+  process.exit(1);
+}
+
 const baseDir = path.join('.', 'Unpack');
 const NUM_TEAMS = 28;
 // const NUM_TEAMS = 1;
@@ -14,6 +62,19 @@ const COLOR_MAPPING_DATA_START_IN_HOMEPALS = 320;
 // const COLOR_MAPPING_DATA_START_IN_MAPBIN = 144;
 const COLOR_MAPPING_DATA_START_IN_MAPBIN = 128;
 const fileName = process.argv[2];
+
+// Check if the input file exists
+if (!fs.existsSync(fileName)) {
+  console.error(`Error: Input file "${fileName}" does not exist`);
+  process.exit(1);
+}
+
+try {
+  const inputBuffer = fs.readFileSync(fileName);
+} catch (err) {
+  console.error(`Error reading input file: ${err.message}`);
+  process.exit(1);
+}
 
 const inputBuffer = fs.readFileSync(fileName);
 

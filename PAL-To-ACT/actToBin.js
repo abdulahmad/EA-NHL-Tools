@@ -1,7 +1,48 @@
-// First step -- compile NHL palette
+/**
+ * ACT-To-BIN: Converts ACT palette files to NHL95 PC BIN format
+ * 
+ * This script takes a BIN file (like HOMEPALS.BIN or AWAYPALS.BIN) and processes
+ * all team palettes, creating a variety of intermediate files for working with
+ * NHL95 PC team graphics.
+ * 
+ * Usage:
+ *   node actToBin.js <fileName>
+ * 
+ * Arguments:
+ *   fileName - Path to the HOMEPALS.BIN or AWAYPALS.BIN file to process
+ * 
+ * Example:
+ *   node actToBin.js HOMEPALS.BIN
+ * 
+ * Output:
+ *   Creates multiple intermediate files in the ./Unpack directory for all teams
+ */
 
 const execSync = require('child_process').execSync;
 const fs = require('fs');
+const path = require('path');
+
+// Get script name for usage display
+const scriptName = path.basename(process.argv[1]);
+
+// Check if required argument is provided
+if (process.argv.length !== 3) {
+  console.error(`
+Error: Missing required argument
+
+Usage: node ${scriptName} <fileName>
+
+Arguments:
+  fileName - Path to the HOMEPALS.BIN or AWAYPALS.BIN file to process
+
+Example:
+  node ${scriptName} HOMEPALS.BIN
+
+This script will process all team palettes from the input file and create
+several intermediate files in the ./Unpack directory.
+`);
+  process.exit(1);
+}
 
 const baseDir = '.\\Unpack';
 const NUM_TEAMS = 28;
@@ -15,6 +56,19 @@ const COLOR_MAPPING_DATA_START_IN_HOMEPALS = 320;
 // const COLOR_MAPPING_DATA_START_IN_MAPBIN = 144;
 const COLOR_MAPPING_DATA_START_IN_MAPBIN = 128;
 const fileName = process.argv[2];
+
+// Check if the input file exists
+if (!fs.existsSync(fileName)) {
+  console.error(`Error: Input file "${fileName}" does not exist`);
+  process.exit(1);
+}
+
+try {
+  const inputBuffer = fs.readFileSync(fileName);
+} catch (err) {
+  console.error(`Error reading input file: ${err.message}`);
+  process.exit(1);
+}
 
 const inputBuffer = fs.readFileSync(fileName);
 
