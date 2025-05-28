@@ -2125,6 +2125,52 @@ function findOptimalSplitPoint(pixels, width, height, direction, balanceStrategy
     return bestSplit;
 }
 
+// Find optimal split point for a specific region
+function findOptimalSplitPointForRegion(pixels, startX, startY, endX, endY, direction, balanceStrategy) {
+    // Define possible split points (avoid edges)
+    let min, max;
+    if (direction === 'horizontal') {
+        min = Math.floor(startY + (endY - startY) * 0.3);
+        max = Math.floor(startY + (endY - startY) * 0.7);
+    } else { // vertical
+        min = Math.floor(startX + (endX - startX) * 0.3);
+        max = Math.floor(startX + (endX - startX) * 0.7);
+    }
+    
+    let bestSplit = (direction === 'horizontal') ? Math.floor((startY + endY) / 2) : Math.floor((startX + endX) / 2);
+    let lowestImbalance = Infinity;
+    
+    // Step size for larger regions
+    const stepSize = 8;
+    
+    // Try different split points
+    for (let split = min; split <= max; split += stepSize) {
+        // Calculate imbalance for this split
+        let imbalance;
+        if (direction === 'horizontal') {
+            // Split top vs bottom
+            const colorSet1 = getColorsInRegion(pixels, startX, startY, endX, split);
+            const colorSet2 = getColorsInRegion(pixels, startX, split, endX, endY);
+            
+            imbalance = calculateBalanceImbalance([colorSet1, colorSet2], balanceStrategy);
+        } else {
+            // Split left vs right
+            const colorSet1 = getColorsInRegion(pixels, startX, startY, split, endY);
+            const colorSet2 = getColorsInRegion(pixels, split, startY, endX, endY);
+            
+            imbalance = calculateBalanceImbalance([colorSet1, colorSet2], balanceStrategy);
+        }
+        
+        // Update best split if this is better
+        if (imbalance < lowestImbalance) {
+            lowestImbalance = imbalance;
+            bestSplit = split;
+        }
+    }
+    
+    return bestSplit;
+}
+
 
 // Calculate imbalance for a specific split
 function calculateImbalanceForSplit(pixels, width, height, direction, splitPoint, balanceStrategy) {
