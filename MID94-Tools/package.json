@@ -1,0 +1,23 @@
+{
+  "name": "mid94-tools",
+  "version": "1.0.0",
+  "description": "Tools for extracting and converting NHL 94 music to MIDI and vice versa",
+  "main": "mid94-to-midi.js",
+  "scripts": {
+    "extract": "node mid94-to-midi.js",
+    "convert": "node midi-to-nhl94.js",
+    "analyze": "node analyze-midi.js",
+    "test-timing": "node test-timing-factors.js",
+    "list-instruments": "node mid94-to-midi.js --list-instruments",
+    "map-instruments": "node map_instruments.js",
+    "extract-footer": "node extract_footer.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["nhl94", "midi", "sega", "genesis", "music", "extraction", "conversion", "timing", "instrument"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "midi-parser-js": "^4.0.4",
+    "midi-writer-js": "^3.1.1"
+  }
+}
