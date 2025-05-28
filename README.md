@@ -71,9 +71,9 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - First release of `JIM-Tools`
 
 ## New future version plans
-- SND extractor/builder
 - Update `ANIM-To-BMP` & `ANIM94-To-BMP` to extract sprite components from `.ANIM` files
 - Create tool to build `.ANIM` file from frame/sprite metadata/components
+- SND extractor/builder
 
 ## Postponed future version plans
 - Template to create in-game team specific assets (PALs/CRESTS/TIL) -- all share same palette
