@@ -20,12 +20,12 @@ const INSTRUMENTS = {
 
 // Channel configuration from NHL 94
 const CHANNELS = {
-  0: { instrument: 0x0B, pitchRange: [40, 49], timingFactor: 1.0 }, // Channel 0: 0B (chorus synth)
-  1: { instrument: 0x08, pitchRange: [50, 59], timingFactor: 0.5 }, // Channel 1: 08 (brassy sound) - slower (bass?)
-  2: { instrument: 0x04, pitchRange: [60, 69], timingFactor: 1.0 }, // Channel 2: 04
-  3: { instrument: 0x0B, pitchRange: [70, 79], timingFactor: 1.0 }, // Channel 3: 0B
-  6: { instrument: 0x08, pitchRange: [80, 89], timingFactor: 1.0 }, // Channel 6: 08
-  7: { instrument: 0x0B, pitchRange: [90, 99], timingFactor: 1.0 }  // Channel 7: 0B
+  0: { instrument: 0x0B, pitchRange: [40, 49], timingFactor: 1.0 }, // timing 1.0 Channel 0: 0B (chorus synth)
+  1: { instrument: 0x08, pitchRange: [50, 59], timingFactor: 0.01 }, // 2.0 Channel 1: 08 (brassy sound) - slower (bass?)
+  2: { instrument: 0x04, pitchRange: [60, 69], timingFactor: 0.01 }, // 2 or 3 Channel 2: 04
+  3: { instrument: 0x0B, pitchRange: [70, 79], timingFactor: 0.01 }, // empty? Channel 3: 0B
+  6: { instrument: 0x08, pitchRange: [80, 89], timingFactor: 0.01 }, // 1 or 1.5 Channel 6: 08
+  7: { instrument: 0x0B, pitchRange: [90, 99], timingFactor: 0.01 }  // 1 Channel 7: 0B
 };
 
 // Function to display usage information
