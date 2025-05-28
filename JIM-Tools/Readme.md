@@ -4,7 +4,7 @@ This folder contains utilities for working with JIM image format files used in E
 
 ## What is JIM Format?
 
-JIM (likely "John's Image Map") is a proprietary EA image format used in early Sega Genesis sports titles. The format consists of:
+JIM is a proprietary EA image format used in early Sega Genesis sports titles. The format consists of:
 
 - Tiles (8x8 pixel blocks in 4bpp Genesis format)
 - Palettes (Up to 4 palettes with 16 colors each)
