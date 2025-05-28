@@ -69,6 +69,10 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 ### 0.7
 - First release of `ANIM94-To-BMP`
 - First release of `JIM-Tools`
+- clean up on documentation for various tools
+- added command line usage info to all of the tools
+- tools (outside of the ones that use gfxpak) are now mac/linux compatible
+- support for batch export of NHL 95 PC sprites with specific team palette
 
 ## New future version plans
 - Update `ANIM-To-BMP` & `ANIM94-To-BMP` to extract sprite components from `.ANIM` files
