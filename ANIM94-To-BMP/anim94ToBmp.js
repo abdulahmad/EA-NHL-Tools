@@ -12,11 +12,11 @@ const ROM_CONFIG = {
     addresses: {
       //spaList: { start:0x4D8E, end: 0x6446, length: 0xA }, // 5816 bytes -> should be 5810 or 5820
       spaList: { start:0x4D8E, end: 0x6440, length: 0xA },
+      paletteOffset: { start: 0x35E50 }, // 0x4560 before spriteTiles
+      spriteTiles: { start: 0x3A3B0, end: 0x6FAF0 },
       frameOffsets: { start: 0x6FAF2, end: 0x70006 }, // 0x514 bytes
       spriteData: { start: 0x70006, end: 0x743FC },
       hotlist: { start: 0x743FC, end: 0x74910 },
-      spriteTiles: { start: 0x3A3B0, end: 0x6FAF0 },
-      paletteOffset: { start: 0x35E50 }, // 0x4560 before spriteTiles
       paletteOffset2: { start: 0x2E68C }
     },
   },
@@ -28,11 +28,12 @@ const ROM_CONFIG = {
     addresses: {
       //spaList: { start:0x5B1C, end: 0x76B2 },
       spaList: { start:0x5B1C, end: 0x76B0, length: 0xA },
-      frameOffsets: { start: 0x9E726, end: 0x9EDC2 }, // 0x69E bytes
-      spriteData: { start: 0x9EDC2, end: 0xA44C8 },
-      hotlist: { start: 0xA44C8, end: 0xA4B54 },
-      spriteTiles: { start: 0x5DE84, end: 0x9E724 },
       paletteOffset: { start: 0x59924 }, // same as 93,  0x4560 before spriteTiles
+      spriteTiles: { start: 0x5DE84, end: 0x9E724 },
+      frameOffsets: { start: 0x9E726, end: 0x9EDC2 }, // 0x69E bytes
+      //first sprite offset = 1694, last sprite offset = 23974
+      spriteData: { start: 0x9EDC2, end: 0xA44C8 }, // diff of 0x5706 or 22278
+      hotlist: { start: 0xA44C8, end: 0xA4B54 },
       paletteOffset2: { start: 0x4E298 },
       paletteOffset3: { start: 0xA5A1E },
       paletteOffset4: { start: 0xA98CC },
@@ -47,6 +48,39 @@ const ROM_CONFIG = {
       paletteOffset13: { start: 0xEBE60 },
       paletteOffset14: { start: 0xEC7EE },
       paletteOffset15: { start: 0xED7FA } // same as 93
+    },
+  },
+  NHL95: {
+    name: 'NHL95',
+    crc32: 0xe8ee917e,
+    expectedSize: 0x200000, // 1 MB (adjust if 2 MB)
+    disableFlip: false,
+    addresses: {
+      //spaList: { start:0x5B1C, end: 0x76B2 },
+      spaList: { start:0x5B1C, end: 0x76B0, length: 0xA },
+      paletteOffset: { start: 0xC8506 }, // 0x206E before spriteTiles
+      spriteTiles: { start: 0xCA574, end: 0x131874 },
+      // frameOffsets: { start: 0x131876, end: 0x9EDC2 }, 
+      frameOffsets: { start: 0x1318F4, end: 0x132136 }, // 0x842 bytes
+      // first sprite offset 2114, last sprite offset = 25202, diff of 23088 or 0x5A30
+      spriteData: { start: 0x132136, end: 0x137B66 },
+      hotlist: { start: 0xA44C8, end: 0xA4B54 }, // incorrect
+    },
+  },
+  NHL96: {
+    name: 'NHL96',
+    crc32: 0x8135702c,
+    expectedSize: 0x200000, // 1 MB (adjust if 2 MB)
+    disableFlip: false,
+    addresses: {
+      //spaList: { start:0x5B1C, end: 0x76B2 },
+      spaList: { start:0x5B1C, end: 0x76B0, length: 0xA },
+      paletteOffset: { start: 0x172DF6 },
+      spriteTiles: { start: 0x9AAA8, end: 0x12F588 },
+      frameOffsets: { start: 0x12F608, end: 0x13012E }, // 0xB26 bytes
+      // first sprite offset = 3718 , last sprite offset = 32750, diff of 29032 or 0x7168
+      spriteData: { start: 0x13012E, end: 0x137296 },
+      hotlist: { start: 0xA44C8, end: 0xA4B54 },
     },
   },
 };
@@ -73,10 +107,16 @@ const convertRomToBMP = (romFile, palFile) => {
     romConfig = ROM_CONFIG.NHLPA93;
   } else if (romSize === ROM_CONFIG.NHL94.expectedSize && romCrc === ROM_CONFIG.NHL94.crc32) {
     romConfig = ROM_CONFIG.NHL94;
+  } else if (romSize === ROM_CONFIG.NHL95.expectedSize && romCrc === ROM_CONFIG.NHL95.crc32) {
+    romConfig = ROM_CONFIG.NHL95;
+  } else if (romSize === ROM_CONFIG.NHL96.expectedSize && romCrc === ROM_CONFIG.NHL96.crc32) {
+    romConfig = ROM_CONFIG.NHL96;
   } else {
     throw new Error(
       `Invalid ROM. Expected NHLPA93 (size: ${ROM_CONFIG.NHLPA93.expectedSize}, CRC32: ${ROM_CONFIG.NHLPA93.crc32.toString(16)}) ` +
-      `or NHL94 (size: ${ROM_CONFIG.NHL94.expectedSize}, CRC32: ${ROM_CONFIG.NHL94.crc32.toString(16)}). ` +
+      `, NHL94 (size: ${ROM_CONFIG.NHL94.expectedSize}, CRC32: ${ROM_CONFIG.NHL94.crc32.toString(16)}). ` +
+      `, NHL95 (size: ${ROM_CONFIG.NHL95.expectedSize}, CRC32: ${ROM_CONFIG.NHL95.crc32.toString(16)}). ` +
+      `or NHL96 (size: ${ROM_CONFIG.NHL96.expectedSize}, CRC32: ${ROM_CONFIG.NHL96.crc32.toString(16)}). ` +
       `Got size: ${romSize}, CRC32: ${romCrc.toString(16)}.`
     );
   }
