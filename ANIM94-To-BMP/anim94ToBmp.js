@@ -335,6 +335,7 @@ const convertRomToBMP = (romFile, palFile) => {
 
     // Log the min/max values
     console.log('====== Tile Statistics ======');
+    console.log('Number of frames:', numFrames);
     console.log(`Min tileLocByte: 0x${minTileLocByte.toString(16).toUpperCase()} (${minTileLocByte})`);
     console.log(`Max tileLocByte: 0x${maxTileLocByte.toString(16).toUpperCase()} (${maxTileLocByte})`);
     console.log(`Min tileIndex: 0x${minTileIndex.toString(16).toUpperCase()} (${minTileIndex})`);
