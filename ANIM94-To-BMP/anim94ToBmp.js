@@ -59,8 +59,8 @@ const ROM_CONFIG = {
       //spaList: { start:0x5B1C, end: 0x76B2 },
       spaList: { start:0x5B1C, end: 0x76B0, length: 0xA },
       paletteOffset: { start: 0xC8506 }, // 0x206E before spriteTiles
-      spriteTiles: { start: 0xCA574, end: 0x131874 },
-      // frameOffsets: { start: 0x131876, end: 0x9EDC2 }, 
+      spriteTiles: { start: 0xCA574, end: 0x131874 }, // 0x3398 tiles or 13028 tiles.
+      // tile size is 0x67300 or 422656 bytes
       frameOffsets: { start: 0x1318F4, end: 0x132136 }, // 0x842 bytes
       // first sprite offset 2114, last sprite offset = 25202, diff of 23088 or 0x5A30
       spriteData: { start: 0x132136, end: 0x137B66 },
@@ -84,6 +84,16 @@ const ROM_CONFIG = {
     },
   },
 };
+
+let minTileLocByte = Number.MAX_SAFE_INTEGER;
+let maxTileLocByte = Number.MIN_SAFE_INTEGER;
+let minTileIndex = Number.MAX_SAFE_INTEGER;
+let maxTileIndex = Number.MIN_SAFE_INTEGER;
+let minSpriteDataOffset = Number.MAX_SAFE_INTEGER;
+let maxSpriteDataOffset = Number.MIN_SAFE_INTEGER;
+let minSpriteOffset = Number.MAX_SAFE_INTEGER;
+let maxSpriteOffset = Number.MIN_SAFE_INTEGER;
+
 const frameOffsetHeaderLength = 2;
 // Function to convert ROM sprite data to BMP format
 const convertRomToBMP = (romFile, palFile) => {
@@ -101,216 +111,242 @@ const convertRomToBMP = (romFile, palFile) => {
     const romSize = romData.length;
     const romCrc = crc32.buf(romData) >>> 0; // Convert to unsigned 32-bit
 
-  // Detect ROM type
-  let romConfig;
-  if (romSize === ROM_CONFIG.NHLPA93.expectedSize && romCrc === ROM_CONFIG.NHLPA93.crc32) {
-    romConfig = ROM_CONFIG.NHLPA93;
-  } else if (romSize === ROM_CONFIG.NHL94.expectedSize && romCrc === ROM_CONFIG.NHL94.crc32) {
-    romConfig = ROM_CONFIG.NHL94;
-  } else if (romSize === ROM_CONFIG.NHL95.expectedSize && romCrc === ROM_CONFIG.NHL95.crc32) {
-    romConfig = ROM_CONFIG.NHL95;
-  } else if (romSize === ROM_CONFIG.NHL96.expectedSize && romCrc === ROM_CONFIG.NHL96.crc32) {
-    romConfig = ROM_CONFIG.NHL96;
-  } else {
-    throw new Error(
-      `Invalid ROM. Expected NHLPA93 (size: ${ROM_CONFIG.NHLPA93.expectedSize}, CRC32: ${ROM_CONFIG.NHLPA93.crc32.toString(16)}) ` +
-      `, NHL94 (size: ${ROM_CONFIG.NHL94.expectedSize}, CRC32: ${ROM_CONFIG.NHL94.crc32.toString(16)}). ` +
-      `, NHL95 (size: ${ROM_CONFIG.NHL95.expectedSize}, CRC32: ${ROM_CONFIG.NHL95.crc32.toString(16)}). ` +
-      `or NHL96 (size: ${ROM_CONFIG.NHL96.expectedSize}, CRC32: ${ROM_CONFIG.NHL96.crc32.toString(16)}). ` +
-      `Got size: ${romSize}, CRC32: ${romCrc.toString(16)}.`
-    );
-  }
-  console.log(`Detected ROM: ${romConfig.name}`);
-
-  fs.mkdirSync(path.join('Extracted', romConfig.name), { recursive: true });
-
-  // Calculate number of frames
-  const frameTableSize = romConfig.addresses.frameOffsets.end - romConfig.addresses.frameOffsets.start;
-  // 4 bytes per frame (2 for numSprites, 2 for offset), last frame is dummy
-  const numFrames = (frameTableSize / 2) - 1; 
-  console.log(`Number of frames: ${numFrames}`);
-
-  // Initialize frames array
-  const frames = new Array(numFrames);
-
-  // Read frame offsets and sprite counts
-  currentIndex = romConfig.addresses.frameOffsets.start;
-  for (let currentFrame = 0; currentFrame < numFrames; currentFrame++) {
-    const frame = {
-      frameIndex: currentFrame,
-      sprites: [],
-    };
-
-    // Read frame data
-    // frame.numSpritesinFrame = romData.readUInt16BE(currentIndex) + 1; // SprStrNum + 1
-    frame.spriteDataOffset = romData.readUInt16BE(currentIndex) + romConfig.addresses.frameOffsets.start - frameOffsetHeaderLength;
-    frame.nextOffset = romData.readUInt16BE(currentIndex+2) + romConfig.addresses.frameOffsets.start - frameOffsetHeaderLength;
-    frame.numSpritesInFrame = (frame.nextOffset - frame.spriteDataOffset) / 8;
-    currentIndex += 2;
-    
-    console.log(frame);
-
-    // Read sprite data
-    let spriteIndex = frame.spriteDataOffset;
-    console.log('sprite loop',currentFrame, frame.numSpritesInFrame);
-    for (let currentSprite = 0; currentSprite < frame.numSpritesInFrame; currentSprite++) { // assuming there is a dummy frame at the end
-
-      const sprite = {
-          spriteIndex: currentSprite,
-          xpos: romData.readInt16BE(spriteIndex), // Bytes 0–1: X position
-          ypos: romData.readInt16BE(spriteIndex + 2), // Bytes 2–3: Y position
-          tileLocByte: romData.readUInt16BE(spriteIndex + 4), // Bytes 4–5: Tile offset
-          paletteByte: romData.readUInt8(spriteIndex + 6), // Byte 6: Palette-related
-          sizetabByte: romData.readUInt8(spriteIndex + 7), // Byte 7: Size index
-        };
-      // Parse sprite data
-      const parsedData = parseSpriteData(sprite.sizetabByte, sprite.tileLocByte, sprite.paletteByte, romConfig.disableFlip);
-      Object.assign(sprite, parsedData);
-      
-      // console.log(sprite);
-
-      frame.sprites.push(sprite);
-      spriteIndex += 8;
-
-      // console.log(frame);
-    }
-    console.log(frame);
-    frames[currentFrame] = frame;
-  }
-
-  // Palette handling
-  const combinedPalette = Buffer.alloc(64 * 3); // 64 colors (16 per palette * 4), 3 bytes each (RGB)
-  let overridePalette = null;
-
-  if (palFile) {
-    const palData = fs.readFileSync(palFile);
-    if (palData.length !== 32) {
-      throw new Error(`Palette file ${palFile} must contain exactly 32 bytes (16 colors). Found ${palData.length} bytes.`);
-    }
-    overridePalette = Buffer.alloc(16 * 3);
-    for (let i = 0; i < 16; i++) {
-      const color = palData.readUInt16BE(i * 2);
-      const blue = (color >> 9) & 0x07;
-      const green = (color >> 5) & 0x07;
-      const red = (color >> 1) & 0x07;
-      const scaledRed = red * 32;
-      const scaledGreen = green * 32;
-      const scaledBlue = blue * 32;
-      const offset = i * 3;
-      overridePalette.writeUInt8(scaledRed, offset);
-      overridePalette.writeUInt8(scaledGreen, offset + 1);
-      overridePalette.writeUInt8(scaledBlue, offset + 2);
-    }
-    console.log(`Palette file ${palFile} read and parsed for palette 2 override.`);
-  }
-
-  // Default palettes (black if no palette file provided for non-overridden palettes)
-  for (let palIndex = 0; palIndex < 4; palIndex++) {
-    const animPal = Buffer.alloc(16 * 3);
-    if (palIndex === 2 && overridePalette) {
-      overridePalette.copy(animPal, 0, 0, 16 * 3);
+    // Detect ROM type
+    let romConfig;
+    if (romSize === ROM_CONFIG.NHLPA93.expectedSize && romCrc === ROM_CONFIG.NHLPA93.crc32) {
+      romConfig = ROM_CONFIG.NHLPA93;
+    } else if (romSize === ROM_CONFIG.NHL94.expectedSize && romCrc === ROM_CONFIG.NHL94.crc32) {
+      romConfig = ROM_CONFIG.NHL94;
+    } else if (romSize === ROM_CONFIG.NHL95.expectedSize && romCrc === ROM_CONFIG.NHL95.crc32) {
+      romConfig = ROM_CONFIG.NHL95;
+    } else if (romSize === ROM_CONFIG.NHL96.expectedSize && romCrc === ROM_CONFIG.NHL96.crc32) {
+      romConfig = ROM_CONFIG.NHL96;
     } else {
-      // Fill with black (or read from ROM if palette offset is provided)
+      throw new Error(
+        `Invalid ROM. Expected NHLPA93 (size: ${ROM_CONFIG.NHLPA93.expectedSize}, CRC32: ${ROM_CONFIG.NHLPA93.crc32.toString(16)}) ` +
+        `, NHL94 (size: ${ROM_CONFIG.NHL94.expectedSize}, CRC32: ${ROM_CONFIG.NHL94.crc32.toString(16)}). ` +
+        `, NHL95 (size: ${ROM_CONFIG.NHL95.expectedSize}, CRC32: ${ROM_CONFIG.NHL95.crc32.toString(16)}). ` +
+        `or NHL96 (size: ${ROM_CONFIG.NHL96.expectedSize}, CRC32: ${ROM_CONFIG.NHL96.crc32.toString(16)}). ` +
+        `Got size: ${romSize}, CRC32: ${romCrc.toString(16)}.`
+      );
+    }
+    console.log(`Detected ROM: ${romConfig.name}`);
+
+    fs.mkdirSync(path.join('Extracted', romConfig.name), { recursive: true });
+
+    // Calculate number of frames
+    const frameTableSize = romConfig.addresses.frameOffsets.end - romConfig.addresses.frameOffsets.start;
+    // 4 bytes per frame (2 for numSprites, 2 for offset), last frame is dummy
+    const numFrames = (frameTableSize / 2) - 1; 
+    console.log(`Number of frames: ${numFrames}`);
+
+    // Initialize frames array
+    const frames = new Array(numFrames);
+
+    // Read frame offsets and sprite counts
+    currentIndex = romConfig.addresses.frameOffsets.start;
+    for (let currentFrame = 0; currentFrame < numFrames; currentFrame++) {
+      const frame = {
+        frameIndex: currentFrame,
+        sprites: [],
+      };
+
+      // Read frame data
+      // frame.numSpritesinFrame = romData.readUInt16BE(currentIndex) + 1; // SprStrNum + 1
+      frame.spriteDataOffset = romData.readUInt16BE(currentIndex) + romConfig.addresses.frameOffsets.start - frameOffsetHeaderLength;
+      frame.nextOffset = romData.readUInt16BE(currentIndex+2) + romConfig.addresses.frameOffsets.start - frameOffsetHeaderLength;
+      frame.numSpritesInFrame = (frame.nextOffset - frame.spriteDataOffset) / 8;
+      currentIndex += 2;
+      
+      console.log(frame);
+
+      // Read sprite data
+      let spriteIndex = frame.spriteDataOffset;
+      console.log('sprite loop',currentFrame, frame.numSpritesInFrame);
+      for (let currentSprite = 0; currentSprite < frame.numSpritesInFrame; currentSprite++) { // assuming there is a dummy frame at the end
+
+        const sprite = {
+            spriteIndex: currentSprite,
+            xpos: romData.readInt16BE(spriteIndex), // Bytes 0–1: X position
+            ypos: romData.readInt16BE(spriteIndex + 2), // Bytes 2–3: Y position
+            tileLocByte: romData.readUInt16BE(spriteIndex + 4), // Bytes 4–5: Tile offset
+            paletteByte: romData.readUInt8(spriteIndex + 6), // Byte 6: Palette-related
+            sizetabByte: romData.readUInt8(spriteIndex + 7), // Byte 7: Size index
+          };
+        // Parse sprite data
+        const parsedData = parseSpriteData(sprite.sizetabByte, sprite.tileLocByte, sprite.paletteByte, romConfig.disableFlip);
+        Object.assign(sprite, parsedData);
+
+        // Track min/max values
+        minTileLocByte = Math.min(minTileLocByte, sprite.tileLocByte);
+        maxTileLocByte = Math.max(maxTileLocByte, sprite.tileLocByte);
+        minTileIndex = Math.min(minTileIndex, sprite.tileIndex);
+        maxTileIndex = Math.max(maxTileIndex, sprite.tileIndex);
+        minSpriteDataOffset = Math.min(minSpriteDataOffset, frame.spriteDataOffset);
+        maxSpriteDataOffset = Math.max(maxSpriteDataOffset, frame.spriteDataOffset);
+        
+        // console.log(sprite);
+
+        frame.sprites.push(sprite);
+        spriteIndex += 8;
+
+        // console.log(frame);
+      }
+      console.log(frame);
+      frames[currentFrame] = frame;
+    }
+
+    // Palette handling
+    const combinedPalette = Buffer.alloc(64 * 3); // 64 colors (16 per palette * 4), 3 bytes each (RGB)
+    let overridePalette = null;
+
+    if (palFile) {
+      const palData = fs.readFileSync(palFile);
+      if (palData.length !== 32) {
+        throw new Error(`Palette file ${palFile} must contain exactly 32 bytes (16 colors). Found ${palData.length} bytes.`);
+      }
+      overridePalette = Buffer.alloc(16 * 3);
       for (let i = 0; i < 16; i++) {
-        // animPal[i] = 0;
-        let currentPalIndex = romConfig.addresses.paletteOffset.start + (i*2) + 16 * palIndex;
-        // console.log('AA TEST',currentPalIndex);
-        const color = romData.readUInt16BE(currentPalIndex);
-
-        // Extract 3-bit components (Sega Genesis palette format: 0000BBB0GGG0RRR0)
-        const blue = (color >> 9) & 0x07;  // Bits 9–11
-        const green = (color >> 5) & 0x07; // Bits 5–7
-        const red = (color >> 1) & 0x07;   // Bits 1–3
-
-        // Scale 3-bit values (0–7) to 8-bit (0–255) by multiplying with 32
+        const color = palData.readUInt16BE(i * 2);
+        const blue = (color >> 9) & 0x07;
+        const green = (color >> 5) & 0x07;
+        const red = (color >> 1) & 0x07;
         const scaledRed = red * 32;
         const scaledGreen = green * 32;
         const scaledBlue = blue * 32;
-
-        // Write RGB values to animPal buffer
         const offset = i * 3;
-        animPal.writeUInt8(scaledRed, offset);
-        animPal.writeUInt8(scaledGreen, offset + 1);
-        animPal.writeUInt8(scaledBlue, offset + 2);
+        overridePalette.writeUInt8(scaledRed, offset);
+        overridePalette.writeUInt8(scaledGreen, offset + 1);
+        overridePalette.writeUInt8(scaledBlue, offset + 2);
       }
-    }
-    const combinedOffset = palIndex * 16 * 3;
-    animPal.copy(combinedPalette, combinedOffset, 0, 16 * 3);
-
-    // Write palette to .ACT file
-    const actBuffer = Buffer.alloc(768);
-    animPal.copy(actBuffer, 0, 0, 16 * 3);
-    fs.writeFileSync(path.join('Extracted', romConfig.name, `pal${palIndex}.act`), actBuffer);
-  }
-
-  // Write combined palette
-  const combinedActBuffer = Buffer.alloc(768);
-  combinedPalette.copy(combinedActBuffer, 0, 0, 64 * 3);
-  fs.writeFileSync(path.join('Extracted', romConfig.name, 'palCombined.act'), combinedActBuffer);
-
-  // Process frames and generate images
-  for (let currentFrame = 0; currentFrame < numFrames; currentFrame++) {
-    let minX, maxX, minY, maxY;
-
-    // Calculate canvas dimensions
-    for (let currentSprite = 0; currentSprite < frames[currentFrame].sprites.length; currentSprite++) {
-      const sprite = frames[currentFrame].sprites[currentSprite];
-      const curMinX = sprite.xpos;
-      const curMaxX = curMinX + sprite.dimensions.width * 8;
-      const curMinY = sprite.ypos;
-      const curMaxY = curMinY + sprite.dimensions.height * 8;
-
-      minX = minX == null || curMinX < minX ? curMinX : minX;
-      maxX = maxX == null || curMaxX > maxX ? curMaxX : maxX;
-      minY = minY == null || curMinY < minY ? curMinY : minY;
-      maxY = maxY == null || curMaxY > maxY ? curMaxY : maxY;
+      console.log(`Palette file ${palFile} read and parsed for palette 2 override.`);
     }
 
-    const frameDimensions = adjustCanvasDimensions(minX || 0, maxX || 0, minY || 0, maxY || 0);
-    const spriteCanvas = Array(frameDimensions.maxY).fill().map(() => Array(frameDimensions.maxX).fill(0));
+    // Default palettes (black if no palette file provided for non-overridden palettes)
+    for (let palIndex = 0; palIndex < 4; palIndex++) {
+      const animPal = Buffer.alloc(16 * 3);
+      if (palIndex === 2 && overridePalette) {
+        overridePalette.copy(animPal, 0, 0, 16 * 3);
+      } else {
+        // Fill with black (or read from ROM if palette offset is provided)
+        for (let i = 0; i < 16; i++) {
+          // animPal[i] = 0;
+          let currentPalIndex = romConfig.addresses.paletteOffset.start + (i*2) + 16 * palIndex;
+          // console.log('AA TEST',currentPalIndex);
+          const color = romData.readUInt16BE(currentPalIndex);
 
-    // Render sprites to canvas
-    for (let currentSpriteIndex = 0; currentSpriteIndex < frames[currentFrame].sprites.length; currentSpriteIndex++) {
-      const sprite = frames[currentFrame].sprites[currentSpriteIndex];
-      const spriteOffset = romConfig.addresses.spriteTiles.start + sprite.tileIndex * 32;
-      let idx = spriteOffset;
+          // Extract 3-bit components (Sega Genesis palette format: 0000BBB0GGG0RRR0)
+          const blue = (color >> 9) & 0x07;  // Bits 9–11
+          const green = (color >> 5) & 0x07; // Bits 5–7
+          const red = (color >> 1) & 0x07;   // Bits 1–3
 
-      for (let curSpriteCol = 0; curSpriteCol < sprite.dimensions.width; curSpriteCol++) {
-        for (let curSpriteRow = 0; curSpriteRow < sprite.dimensions.height; curSpriteRow++) {
-          for (let curTileRow = 0; curTileRow < 8; curTileRow++) {
-            for (let curTileCol = 0; curTileCol < 4; curTileCol++) {
-              const pixelXInSprite = curSpriteCol * 8 + curTileCol * 2;
-              const pixelYInSprite = curSpriteRow * 8 + curTileRow;
+          // Scale 3-bit values (0–7) to 8-bit (0–255) by multiplying with 32
+          const scaledRed = red * 32;
+          const scaledGreen = green * 32;
+          const scaledBlue = blue * 32;
 
-              const flippedX = sprite.hFlip ? (sprite.dimensions.width * 8 - pixelXInSprite - 2) : pixelXInSprite;
-              const flippedY = sprite.vFlip ? (sprite.dimensions.height * 8 - pixelYInSprite - 1) : pixelYInSprite;
+          // Write RGB values to animPal buffer
+          const offset = i * 3;
+          animPal.writeUInt8(scaledRed, offset);
+          animPal.writeUInt8(scaledGreen, offset + 1);
+          animPal.writeUInt8(scaledBlue, offset + 2);
+        }
+      }
+      const combinedOffset = palIndex * 16 * 3;
+      animPal.copy(combinedPalette, combinedOffset, 0, 16 * 3);
 
-              const ypixel = sprite.ypos + frameDimensions.offsetY + flippedY;
-              const xpixel = sprite.xpos + frameDimensions.offsetX + flippedX;
+      // Write palette to .ACT file
+      const actBuffer = Buffer.alloc(768);
+      animPal.copy(actBuffer, 0, 0, 16 * 3);
+      fs.writeFileSync(path.join('Extracted', romConfig.name, `pal${palIndex}.act`), actBuffer);
+    }
 
-              if (ypixel >= 0 && ypixel < frameDimensions.maxY && xpixel >= 0 && xpixel < frameDimensions.maxX) {
-                const byte = romData[idx];
-                const upper = (byte >> 4) & 0x0F;
-                const lower = byte & 0x0F;
-                const palShift = 16 * sprite.paletteIndex;
+    // Write combined palette
+    const combinedActBuffer = Buffer.alloc(768);
+    combinedPalette.copy(combinedActBuffer, 0, 0, 64 * 3);
+    fs.writeFileSync(path.join('Extracted', romConfig.name, 'palCombined.act'), combinedActBuffer);
 
-                if (sprite.hFlip) {
-                  if (lower !== 0) spriteCanvas[ypixel][xpixel] = lower + palShift;
-                  if (upper !== 0 && xpixel + 1 < frameDimensions.maxX) spriteCanvas[ypixel][xpixel + 1] = upper + palShift;
-                } else {
-                  if (upper !== 0) spriteCanvas[ypixel][xpixel] = upper + palShift;
-                  if (lower !== 0 && xpixel + 1 < frameDimensions.maxX) spriteCanvas[ypixel][xpixel + 1] = lower + palShift;
+    // Process frames and generate images
+    for (let currentFrame = 0; currentFrame < numFrames; currentFrame++) {
+      let minX, maxX, minY, maxY;
+
+      // Calculate canvas dimensions
+      for (let currentSprite = 0; currentSprite < frames[currentFrame].sprites.length; currentSprite++) {
+        const sprite = frames[currentFrame].sprites[currentSprite];
+        const curMinX = sprite.xpos;
+        const curMaxX = curMinX + sprite.dimensions.width * 8;
+        const curMinY = sprite.ypos;
+        const curMaxY = curMinY + sprite.dimensions.height * 8;
+
+        minX = minX == null || curMinX < minX ? curMinX : minX;
+        maxX = maxX == null || curMaxX > maxX ? curMaxX : maxX;
+        minY = minY == null || curMinY < minY ? curMinY : minY;
+        maxY = maxY == null || curMaxY > maxY ? curMaxY : maxY;
+      }
+
+      const frameDimensions = adjustCanvasDimensions(minX || 0, maxX || 0, minY || 0, maxY || 0);
+      const spriteCanvas = Array(frameDimensions.maxY).fill().map(() => Array(frameDimensions.maxX).fill(0));
+
+      // Render sprites to canvas
+      for (let currentSpriteIndex = 0; currentSpriteIndex < frames[currentFrame].sprites.length; currentSpriteIndex++) {
+        const sprite = frames[currentFrame].sprites[currentSpriteIndex];
+        const spriteOffset = romConfig.addresses.spriteTiles.start + sprite.tileIndex * 32;
+        let idx = spriteOffset;
+
+        minSpriteOffset = Math.min(minSpriteOffset, spriteOffset);
+        maxSpriteOffset = Math.max(maxSpriteOffset, spriteOffset);
+
+        for (let curSpriteCol = 0; curSpriteCol < sprite.dimensions.width; curSpriteCol++) {
+          for (let curSpriteRow = 0; curSpriteRow < sprite.dimensions.height; curSpriteRow++) {
+            for (let curTileRow = 0; curTileRow < 8; curTileRow++) {
+              for (let curTileCol = 0; curTileCol < 4; curTileCol++) {
+                const pixelXInSprite = curSpriteCol * 8 + curTileCol * 2;
+                const pixelYInSprite = curSpriteRow * 8 + curTileRow;
+
+                const flippedX = sprite.hFlip ? (sprite.dimensions.width * 8 - pixelXInSprite - 2) : pixelXInSprite;
+                const flippedY = sprite.vFlip ? (sprite.dimensions.height * 8 - pixelYInSprite - 1) : pixelYInSprite;
+
+                const ypixel = sprite.ypos + frameDimensions.offsetY + flippedY;
+                const xpixel = sprite.xpos + frameDimensions.offsetX + flippedX;
+
+                if (ypixel >= 0 && ypixel < frameDimensions.maxY && xpixel >= 0 && xpixel < frameDimensions.maxX) {
+                  const byte = romData[idx];
+                  const upper = (byte >> 4) & 0x0F;
+                  const lower = byte & 0x0F;
+                  const palShift = 16 * sprite.paletteIndex;
+
+                  if (sprite.hFlip) {
+                    if (lower !== 0) spriteCanvas[ypixel][xpixel] = lower + palShift;
+                    if (upper !== 0 && xpixel + 1 < frameDimensions.maxX) spriteCanvas[ypixel][xpixel + 1] = upper + palShift;
+                  } else {
+                    if (upper !== 0) spriteCanvas[ypixel][xpixel] = upper + palShift;
+                    if (lower !== 0 && xpixel + 1 < frameDimensions.maxX) spriteCanvas[ypixel][xpixel + 1] = lower + palShift;
+                  }
                 }
+                idx++;
               }
-              idx++;
             }
           }
         }
-      }
-    }    // Save frame data and image
-    saveImage(spriteCanvas, frameDimensions.maxX, frameDimensions.maxY, romConfig.name, currentFrame, combinedPalette);
-    fs.writeFileSync(path.join('Extracted', romConfig.name, `${currentFrame}.json`), JSON.stringify(frames[currentFrame]));
-  }
+      }    // Save frame data and image
+      saveImage(spriteCanvas, frameDimensions.maxX, frameDimensions.maxY, romConfig.name, currentFrame, combinedPalette);
+      fs.writeFileSync(path.join('Extracted', romConfig.name, `${currentFrame}.json`), JSON.stringify(frames[currentFrame]));
+    }
+
+    // Log the min/max values
+    console.log('====== Tile Statistics ======');
+    console.log(`Min tileLocByte: 0x${minTileLocByte.toString(16).toUpperCase()} (${minTileLocByte})`);
+    console.log(`Max tileLocByte: 0x${maxTileLocByte.toString(16).toUpperCase()} (${maxTileLocByte})`);
+    console.log(`Min tileIndex: 0x${minTileIndex.toString(16).toUpperCase()} (${minTileIndex})`);
+    console.log(`Max tileIndex: 0x${maxTileIndex.toString(16).toUpperCase()} (${maxTileIndex})`);
+    console.log(`Min SpriteDataOffset: 0x${minSpriteDataOffset.toString(16).toUpperCase()} (${minSpriteDataOffset})`);
+    console.log(`Max SpriteDataOffset: 0x${maxSpriteDataOffset.toString(16).toUpperCase()} (${maxSpriteDataOffset})`);
+    console.log(`Min SpriteOffset: 0x${minSpriteOffset.toString(16).toUpperCase()} (${minSpriteOffset})`);
+    console.log(`Max SpriteOffset: 0x${maxSpriteOffset.toString(16).toUpperCase()} (${maxSpriteOffset})`);
+    console.log(`Tile range: 0x${(maxTileIndex - minTileIndex).toString(16).toUpperCase()} (${maxTileIndex - minTileIndex})`);
+    console.log(`Sprite Data range: 0x${(maxSpriteDataOffset - minSpriteDataOffset).toString(16).toUpperCase()} (${maxSpriteDataOffset - minSpriteDataOffset})`);
+    console.log(`Sprite Offset range: 0x${(maxSpriteOffset - minSpriteOffset).toString(16).toUpperCase()} (${maxSpriteOffset - minSpriteOffset})`);
+    console.log('===========================');
   } catch (error) {
     // Don't log here, let the calling function handle the error
     throw error; // Re-throw to be caught by the main try-catch
@@ -436,7 +472,8 @@ function saveImage(spriteArray, width, height, fileName, currentFrame, combinedP
     }
   }
 
-  // Write files  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame}.bmp`), bmpImage);
+  // Write files  
+  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame}.bmp`), bmpImage);
   fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame}.raw`), rawImage);
 
   if (bmpImage.length !== expectedBmpLength || rawImage.length !== expectedRawLength) {
