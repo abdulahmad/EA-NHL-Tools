@@ -41,7 +41,7 @@ const convertToBMP = (fileName, palFile) => {
     console.log('currentIndex',currentIndex);
     // Initialize frame object
     const frame = {
-      frameIndex: currentFrame,
+      frameIndex: currentFrame+1,
       sprites: []
     };
 
@@ -67,7 +67,7 @@ const convertToBMP = (fileName, palFile) => {
     frame.u13 = animData.readInt16BE(currentIndex); currentIndex += 2;//34
     frame.numSpritesinFrame = animData.readInt16BE(currentIndex) + 1; currentIndex += 2;//36
 
-    console.log("Frame #",currentFrame,frame);
+    console.log("Frame #",currentFrame+1,frame);
     for (var currentSprite=0; currentSprite<frame.numSpritesinFrame; currentSprite++) {
       const sprite = {
         spriteIndex: currentSprite,
@@ -190,9 +190,9 @@ const convertToBMP = (fileName, palFile) => {
     var minY; var maxY;
     var length;
     var width;
-     console.log('AA TEST',currentFrame,frames[currentFrame]);
+     console.log('AA TEST',currentFrame+1,frames[currentFrame]);
     for (var currentSprite=0; currentSprite<frames[currentFrame].sprites.length; currentSprite++) {
-      console.log('AA2','frame',currentFrame,'sprite',currentSprite, frames[currentFrame].sprites[currentSprite].dimensions);
+      console.log('AA2','frame',currentFrame+1,'sprite',currentSprite, frames[currentFrame].sprites[currentSprite].dimensions);
       var curMinX = frames[currentFrame].sprites[currentSprite].xpos;
       var curMaxX = (frames[currentFrame].sprites[currentSprite].dimensions.width * 8) + curMinX;
       var curMinY = frames[currentFrame].sprites[currentSprite].ypos;
@@ -282,7 +282,7 @@ const convertToBMP = (fileName, palFile) => {
     maxY = null;
 
     saveImage(spriteCanvas,frameDimensions.maxX,frameDimensions.maxY,fileName,currentFrame,combinedPalette);
-    fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame}.json`), JSON.stringify(frames[currentFrame]));
+    fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame+1}.json`), JSON.stringify(frames[currentFrame]));
   }
 
   function adjustCanvasDimensions(minX, maxX, minY, maxY) {
@@ -487,9 +487,9 @@ function saveImage(spriteArray, width, height, fileName, currentFrame, combinedP
   }
 
   // Write the BMP image data to a file
-  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame}.bmp`), bmpImage);
+  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame+1}.bmp`), bmpImage);
   // Write the RAW image data to a file
-  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame}.raw`), rawImage);
+  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame+1}.raw`), rawImage);
 
   if (bmpImage.length !== expectedBmpLength) {
     console.log('ERROR BMP');

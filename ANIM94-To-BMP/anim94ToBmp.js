@@ -147,7 +147,7 @@ const convertRomToBMP = (romFile, palFile) => {
     currentIndex = romConfig.addresses.frameOffsets.start;
     for (let currentFrame = 0; currentFrame < numFrames; currentFrame++) {
       const frame = {
-        frameIndex: currentFrame,
+        frameIndex: currentFrame+1,
         sprites: [],
       };
 
@@ -162,7 +162,7 @@ const convertRomToBMP = (romFile, palFile) => {
 
       // Read sprite data
       let spriteIndex = frame.spriteDataOffset;
-      console.log('sprite loop',currentFrame, frame.numSpritesInFrame);
+      console.log('sprite loop',currentFrame+1, frame.numSpritesInFrame);
       for (let currentSprite = 0; currentSprite < frame.numSpritesInFrame; currentSprite++) { // assuming there is a dummy frame at the end
 
         const sprite = {
@@ -330,7 +330,7 @@ const convertRomToBMP = (romFile, palFile) => {
         }
       }    // Save frame data and image
       saveImage(spriteCanvas, frameDimensions.maxX, frameDimensions.maxY, romConfig.name, currentFrame, combinedPalette);
-      fs.writeFileSync(path.join('Extracted', romConfig.name, `${currentFrame}.json`), JSON.stringify(frames[currentFrame]));
+      fs.writeFileSync(path.join('Extracted', romConfig.name, `${currentFrame+1}.json`), JSON.stringify(frames[currentFrame]));
     }
 
     // Log the min/max values
@@ -474,8 +474,8 @@ function saveImage(spriteArray, width, height, fileName, currentFrame, combinedP
   }
 
   // Write files  
-  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame}.bmp`), bmpImage);
-  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame}.raw`), rawImage);
+  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame+1}.bmp`), bmpImage);
+  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame+1}.raw`), rawImage);
 
   if (bmpImage.length !== expectedBmpLength || rawImage.length !== expectedRawLength) {
     throw new Error(`Length mismatch: BMP ${bmpImage.length}/${expectedBmpLength}, RAW ${rawImage.length}/${expectedRawLength}`);
