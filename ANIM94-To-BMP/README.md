@@ -29,7 +29,7 @@ It will decompress the ANIM file and you will get a `.raw` (Photoshop RAW), `.js
 | **NHL94** | Sprite Palettes            | `0x59924–0x599A4`     | 128 bytes of Palette Data. 4 palettes of 16 colors (9bpp Sega Genesis Format). Exactly 0x4560 bytes before Sprite Tiles.                                                            |
 | **NHL94**   | Sprite Tiles             | `0x5DE84–0x9E724`     | Raw 8x8 tile data, 4 bits per pixel, 32 bytes per tile. |
 | **NHL94**   | Frame Sprite Data Offsets| `0x9E726–0x9EDC2`     | Table of offsets to sprite data for each frame.         |
-| **NHL94**   | Sprite Data Bytes        | `0x9EDC2–0xA44C8`     | Sprite attributes for each frame (position, size, tile index, etc.).                                                                                                              |
+| **NHL94**   | Sprite Data              | `0x9EDC2–0xA44C8`     | Sprite attributes for each frame (position, size, tile index, etc.).                                                                                                              |
 | **NHL94**   | Hotlist Table            | `0xA44C8–0xA4B54`     | Hotspot Data.                                           |
 
 ### `SPAList` Section
@@ -50,7 +50,7 @@ It will decompress the ANIM file and you will get a `.raw` (Photoshop RAW), `.js
 | `0x(NumberOfFrames*2)-2..0x(NumberOfFrames*2)-1`| `<int16>` | Offset to sprite data bytes for this frame, relative to the start of the Sprite Data Bytes section (e.g., `0x70006` for NHLPA93, `0x9EDC2` for NHL94).                                |
 *Note*: Number of sprites in each frame can be calculated by `(bytes between each frame offset) / (length of sprite data)`.
 
-### `Sprite Data` Section (incorrect)
+### `Sprite Data` Section
 | Byte Offset | Value               | Description                                                   |
 |-------------|-----------------    |-------------                                                  |
 | `0x00–0x01` | `<int16>`           | X Position of sprite within frame                             |
@@ -96,3 +96,88 @@ Big thank you to chaos & McMarkis on the NHL94.com discord for helping me figure
 
 # Future TODO
 - Add 93 & 94 palettes
+
+NHL95:
+132140 - first instance of 2816
+
+132158 - tile id 2816 = skate without puck main sprite
+
+2816 - might be sprite starting at E7EF4 = 1D97A from start of tiles = tile 3787
+
+3787 1110 1100 1011
+2816 1011 0000 0000 - normal
+2815 1010 1111 1111 - corrupted
+2814 1010 1111 1110 - same as 2815
+2812 1010 1111 1100 - same as 2815
+2808 1010 1111 1000 - same as 2815
+2800 1010 1111 0000 - same as 2815
+2784 1010 1110 0000 - same
+2688 1010 1000 0000 - same
+XXXX 1110 0000 0000 - weird stuff on left flap
+4043 1111 1100 1011 - FCB -- weird stuff on left flap
+3275 1100 1100 1011 - CCB -- think whats happening is overlap between two 8x8 sprites
+2763 1010 1100 1011 - ACB - same as 2815
+1739 0110 1100 1011 - 6CB - messed up tiles
+// sizetab table
+const sizetabTable = [1, 2, 3, 4, 2, 4, 6, 8, 3, 6, 9, 12, 4, 8, 12, 16];
+
+01  23  4                   5          6U                       6L                                  7
+^-x ^-y ^-affects tileindex ^-sizetab? ^-affects flip/palette    ^-affects tileIndex and sizetab?   ^-affects tileIndex
+00 = 0 => 1 => 1x1
+11 = 3 => 4 => 1x4
+10 = 2 =? 3 =? 1x3
+
+[0]       [1]       [2]       [3]       [4]       [5]       [6]       [7]
+XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX 
+^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^ ^^^^
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| ||﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| ﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| ||﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| ﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| ||﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| ﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||﹂- Flip Y
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| ||﹂- Flip X
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| ||||  ﹂- Palette 0-3
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||﹂- does nothing to tiles
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| ||﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||| ﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |||﹂- does nothing to tiles
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| ||﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| |﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||| ﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |||﹂- Tile on secondary sprite changes?
+|||| |||| |||| |||| |||| |||| |||| |||| |||| ||﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| |﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||| ﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |||﹂- No effect on tiles?
+|||| |||| |||| |||| |||| |||| |||| |||| ||﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| |﹂- TBD
+|||| |||| |||| |||| |||| |||| |||| |||| ﹂- TBD 
+|||| |||| |||| ||||          ﹂- 2-3: Y Position
+         ﹂- 0-1: X Position
+
+|||| |||| |||| |||| |||| |||| || ﹂- Flip X/Y
+|||| |||| |||| |||| |||| ||||  ﹂- Palette
+
+3 = 0011
+4 = 0100
+
+EA XX 41 BC
+
+3787 = 0ECB
+
+// Dimensions table
+const dimensionsTable = [
+  { width: 1, height: 1 }, { width: 1, height: 2 }, { width: 1, height: 3 }, { width: 1, height: 4 },
+  { width: 2, height: 1 }, { width: 2, height: 2 }, { width: 2, height: 3 }, { width: 2, height: 4 },
+  { width: 3, height: 1 }, { width: 3, height: 2 }, { width: 3, height: 3 }, { width: 3, height: 4 },
+  { width: 4, height: 1 }, { width: 4, height: 2 }, { width: 4, height: 3 }, { width: 4, height: 4 },
+];
