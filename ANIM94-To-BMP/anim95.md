@@ -180,3 +180,31 @@ Hex code for NHL95 addframe and addframe2:
 3F2B000448E7FCE0382B00066B000194670001900244F800B96B0004382B0006024407FF247C000CA56AD5EA0004E344B8526C00016E3A3240029A724000E64D5345D4F24000424342443F00302B0006024007FFB06B0008670000AA4A45660000063740000848A7F800342A00020242F000E24A3F02342A0004024207FF845F4244182A00020244000FB87C000F6EFA207C00079F5418304000B86F00086E000024B46F00046D00001C302F0004D06F0008904290446B00000C4C9F00035C4F6000003ED66F00084C9F00035C4F48A7F800D66B001248C2EB8248E78020247C000CA56A200A06800000000AD4804CDF0401E944EB432AC23AC43AC34C9F001F1783500A301F48A7E0003412082B0004000467000012142A0002024200035242E74244429452D2423C81342A0006082B0003000467000014142A00020242000C5842E3424442946A0006D0423D4000061D6A000200021D460003142A0004024200F8E14A142A0002302B0004B1420242F800082B000000056700000E0802000E6700000608C2000D8433500AD46B00123D4200044C9F00075246504E504A51CDFEAA4CDF073F375F00044E75
 
 01020304020406080306090C04080C10
+
+fixed scipt:       let spriteIndex = frame.spriteDataOffset;
+      if (frame.numSpritesInFrame > 25) { throw new Error(`Frame ${currentFrame + 1} has too many sprites: ${frame.numSpritesInFrame}. Maximum is 25.`); }
+      for (let currentSprite = 0; currentSprite < frame.numSpritesInFrame; currentSprite++) {
+        const sprite = {
+          spriteIndex: currentSprite,
+          ypos: romData.readInt16BE(spriteIndex), // Bytes 0-1: Y offset
+          sizeFormat: romData.readUInt8(spriteIndex + 2), // Byte 2: Size/format
+          tileLocByte: romData.readUInt16BE(spriteIndex + 4), // Bytes 4-5: Tile index + attributes
+          xpos: romData.readInt16BE(spriteIndex + 6), // Bytes 6-7: X offset
+        };
+
+        const parsedData = parseSpriteData(sprite.sizeFormat, sprite.tileLocByte, romConfig.disableFlip);
+        Object.assign(sprite, parsedData);
+
+        minTileLocByte = Math.min(minTileLocByte, sprite.tileLocByte);
+        maxTileLocByte = Math.max(maxTileLocByte, sprite.tileLocByte);
+        minTileIndex = Math.min(minTileIndex, sprite.tileIndex);
+        maxTileIndex = Math.max(maxTileIndex, sprite.tileIndex);
+        minSpriteDataOffset = Math.min(minSpriteDataOffset, frame.spriteDataOffset);
+        maxSpriteDataOffset = Math.max(maxSpriteDataOffset, frame.spriteDataOffset);
+
+        frame.sprites.push(sprite);
+        spriteIndex += 8;
+      }
+      console.log(frame);
+      frames[currentFrame] = frame;
+    }

@@ -7,34 +7,29 @@ const ROM_CONFIG = {
   NHL95: {
     name: 'NHL95',
     crc32: 0xe8ee917e,
-    expectedSize: 0x200000, // 1 MB (adjust if 2 MB)
+    expectedSize: 0x200000, // 2 MB
     disableFlip: false,
     addresses: {
-      //spaList: { start:0x5B1C, end: 0x76B2 },
-      spaList: { start:0x5B1C, end: 0x76B0, length: 0xA },
+      spaList: { start: 0x5B1C, end: 0x76B0, length: 0xA },
       paletteOffset: { start: 0xC8506 }, // 0x206E before spriteTiles
-      spriteTiles: { start: 0xCA574, end: 0x131874 }, // 0x3398 tiles or 13028 tiles.
-      // tile size is 0x67300 or 422656 bytes
+      spriteTiles: { start: 0xCA574, end: 0x131874 }, // 13028 tiles, 422656 bytes
       frameOffsets: { start: 0x1318F4, end: 0x132136 }, // 0x842 bytes
-      // first sprite offset 2114, last sprite offset = 25202, diff of 23088 or 0x5A30
-      spriteData: { start: 0x132136, end: 0x137B66 },
-      hotlist: { start: 0xA44C8, end: 0xA4B54 }, // incorrect
+      spriteData: { start: 0x132136, end: 0x137B66 }, // 23088 bytes
+      hotlist: { start: 0x137B66, end: 0x1381B2 }, // Estimated: 1352 bytes, following spriteData
     },
   },
   NHL96: {
     name: 'NHL96',
     crc32: 0x8135702c,
-    expectedSize: 0x200000, // 1 MB (adjust if 2 MB)
+    expectedSize: 0x200000,
     disableFlip: false,
     addresses: {
-      //spaList: { start:0x5B1C, end: 0x76B2 },
-      spaList: { start:0x5B1C, end: 0x76B0, length: 0xA },
+      spaList: { start: 0x5B1C, end: 0x76B0, length: 0xA },
       paletteOffset: { start: 0x172DF6 },
       spriteTiles: { start: 0x9AAA8, end: 0x12F588 },
       frameOffsets: { start: 0x12F608, end: 0x13012E }, // 0xB26 bytes
-      // first sprite offset = 3718 , last sprite offset = 32750, diff of 29032 or 0x7168
-      spriteData: { start: 0x13012E, end: 0x137296 },
-      hotlist: { start: 0xA44C8, end: 0xA4B54 },
+      spriteData: { start: 0x13012E, end: 0x137296 }, // 29032 bytes
+      hotlist: { start: 0x137296, end: 0x137DC2 }, // Estimated: 1324 bytes
     },
   },
 };
@@ -48,24 +43,22 @@ let maxSpriteDataOffset = Number.MIN_SAFE_INTEGER;
 let minSpriteOffset = Number.MAX_SAFE_INTEGER;
 let maxSpriteOffset = Number.MIN_SAFE_INTEGER;
 
-const frameOffsetHeaderLength = 2;
+const frameOffsetHeaderLength = 4; // NHL95: 2 bytes for SprStrnum, 2 bytes for offset
+
 // Function to convert ROM sprite data to BMP format
 const convertRomToBMP = (romFile, palFile) => {
   try {
     console.log('romSpriteToBMP:', romFile);
     fs.mkdirSync('Extracted', { recursive: true });
 
-    // Check if file exists before attempting to read
     if (!fs.existsSync(romFile)) {
       throw new Error(`ROM file '${romFile}' not found.`);
     }
 
-    // Read ROM and verify
     const romData = fs.readFileSync(romFile);
     const romSize = romData.length;
-    const romCrc = crc32.buf(romData) >>> 0; // Convert to unsigned 32-bit
+    const romCrc = crc32.buf(romData) >>> 0;
 
-    // Detect ROM type
     let romConfig;
     if (romSize === ROM_CONFIG.NHL95.expectedSize && romCrc === ROM_CONFIG.NHL95.crc32) {
       romConfig = ROM_CONFIG.NHL95;
@@ -73,7 +66,7 @@ const convertRomToBMP = (romFile, palFile) => {
       romConfig = ROM_CONFIG.NHL96;
     } else {
       throw new Error(
-        `Invalid ROM. Expected NHL95 (size: ${ROM_CONFIG.NHL95.expectedSize}, CRC32: ${ROM_CONFIG.NHL95.crc32.toString(16)}). ` +
+        `Invalid ROM. Expected NHL95 (size: ${ROM_CONFIG.NHL95.expectedSize}, CRC32: ${ROM_CONFIG.NHL95.crc32.toString(16)}) ` +
         `or NHL96 (size: ${ROM_CONFIG.NHL96.expectedSize}, CRC32: ${ROM_CONFIG.NHL96.crc32.toString(16)}). ` +
         `Got size: ${romSize}, CRC32: ${romCrc.toString(16)}.`
       );
@@ -82,34 +75,28 @@ const convertRomToBMP = (romFile, palFile) => {
 
     fs.mkdirSync(path.join('Extracted', romConfig.name), { recursive: true });
 
-    // Calculate number of frames
     const frameTableSize = romConfig.addresses.frameOffsets.end - romConfig.addresses.frameOffsets.start;
-    // 4 bytes per frame (2 for numSprites, 2 for offset), last frame is dummy
-    const numFrames = (frameTableSize / 2) - 1; 
+    const numFrames = (frameTableSize / 2) - 1;
     console.log(`Number of frames: ${numFrames}`);
 
-    // Initialize frames array
     const frames = new Array(numFrames);
 
-    // Read frame offsets and sprite counts
-    currentIndex = romConfig.addresses.frameOffsets.start;
-    for (let currentFrame = 0; currentFrame < numFrames; currentFrame++) {
+    let currentIndex = romConfig.addresses.frameOffsets.start;
+    for (let currentFrame = 0; currentFrame < 2; currentFrame++) {
       const frame = {
-        frameIndex: currentFrame+1,
+        frameIndex: currentFrame + 1,
         sprites: [],
       };
 
-      // Read frame data
-      // frame.numSpritesinFrame = romData.readUInt16BE(currentIndex) + 1; // SprStrNum + 1
-      frame.spriteDataOffset = romData.readUInt16BE(currentIndex) + romConfig.addresses.frameOffsets.start - frameOffsetHeaderLength;
-      frame.nextOffset = romData.readUInt16BE(currentIndex+2) + romConfig.addresses.frameOffsets.start - frameOffsetHeaderLength;
-      frame.numSpritesInFrame = (frame.nextOffset - frame.spriteDataOffset) / 8;
+      frame.spriteDataOffset = romData.readUInt16BE(currentIndex) + romConfig.addresses.spriteData.start;
+      frame.numSpritesInFrame = romData.readUInt16BE(currentIndex - frameOffsetHeaderLength); // SprStrnum at offset 0
       currentIndex += 2;
-      
+
+      console.log('starting frame', currentFrame + 1, 'currentIndex', frame.spriteDataOffset);
+
       console.log(frame);
 
-      // Read sprite data
-             let spriteIndex = frame.spriteDataOffset;
+      let spriteIndex = frame.spriteDataOffset;
       if (frame.numSpritesInFrame > 25) { throw new Error(`Frame ${currentFrame + 1} has too many sprites: ${frame.numSpritesInFrame}. Maximum is 25.`); }
       for (let currentSprite = 0; currentSprite < frame.numSpritesInFrame; currentSprite++) {
         const sprite = {
@@ -137,8 +124,7 @@ const convertRomToBMP = (romFile, palFile) => {
       frames[currentFrame] = frame;
     }
 
-    // Palette handling
-    const combinedPalette = Buffer.alloc(64 * 3); // 64 colors (16 per palette * 4), 3 bytes each (RGB)
+    const combinedPalette = Buffer.alloc(64 * 3);
     let overridePalette = null;
 
     if (palFile) {
@@ -163,30 +149,20 @@ const convertRomToBMP = (romFile, palFile) => {
       console.log(`Palette file ${palFile} read and parsed for palette 2 override.`);
     }
 
-    // Default palettes (black if no palette file provided for non-overridden palettes)
     for (let palIndex = 0; palIndex < 4; palIndex++) {
       const animPal = Buffer.alloc(16 * 3);
       if (palIndex === 2 && overridePalette) {
         overridePalette.copy(animPal, 0, 0, 16 * 3);
       } else {
-        // Fill with black (or read from ROM if palette offset is provided)
         for (let i = 0; i < 16; i++) {
-          // animPal[i] = 0;
-          let currentPalIndex = romConfig.addresses.paletteOffset.start + (i*2) + 16 * palIndex;
-          // console.log('AA TEST',currentPalIndex);
+          let currentPalIndex = romConfig.addresses.paletteOffset.start + (i * 2) + 16 * palIndex;
           const color = romData.readUInt16BE(currentPalIndex);
-
-          // Extract 3-bit components (Sega Genesis palette format: 0000BBB0GGG0RRR0)
-          const blue = (color >> 9) & 0x07;  // Bits 9–11
-          const green = (color >> 5) & 0x07; // Bits 5–7
-          const red = (color >> 1) & 0x07;   // Bits 1–3
-
-          // Scale 3-bit values (0–7) to 8-bit (0–255) by multiplying with 32
+          const blue = (color >> 9) & 0x07;
+          const green = (color >> 5) & 0x07;
+          const red = (color >> 1) & 0x07;
           const scaledRed = red * 32;
           const scaledGreen = green * 32;
           const scaledBlue = blue * 32;
-
-          // Write RGB values to animPal buffer
           const offset = i * 3;
           animPal.writeUInt8(scaledRed, offset);
           animPal.writeUInt8(scaledGreen, offset + 1);
@@ -195,23 +171,18 @@ const convertRomToBMP = (romFile, palFile) => {
       }
       const combinedOffset = palIndex * 16 * 3;
       animPal.copy(combinedPalette, combinedOffset, 0, 16 * 3);
-
-      // Write palette to .ACT file
       const actBuffer = Buffer.alloc(768);
       animPal.copy(actBuffer, 0, 0, 16 * 3);
       fs.writeFileSync(path.join('Extracted', romConfig.name, `pal${palIndex}.act`), actBuffer);
     }
 
-    // Write combined palette
     const combinedActBuffer = Buffer.alloc(768);
     combinedPalette.copy(combinedActBuffer, 0, 0, 64 * 3);
     fs.writeFileSync(path.join('Extracted', romConfig.name, 'palCombined.act'), combinedActBuffer);
 
-    // Process frames and generate images
-    for (let currentFrame = 0; currentFrame < numFrames; currentFrame++) {
+    for (let currentFrame = 0; currentFrame < 2; currentFrame++) {
       let minX, maxX, minY, maxY;
 
-      // Calculate canvas dimensions
       for (let currentSprite = 0; currentSprite < frames[currentFrame].sprites.length; currentSprite++) {
         const sprite = frames[currentFrame].sprites[currentSprite];
         const curMinX = sprite.xpos;
@@ -228,7 +199,6 @@ const convertRomToBMP = (romFile, palFile) => {
       const frameDimensions = adjustCanvasDimensions(minX || 0, maxX || 0, minY || 0, maxY || 0);
       const spriteCanvas = Array(frameDimensions.maxY).fill().map(() => Array(frameDimensions.maxX).fill(0));
 
-      // Render sprites to canvas
       for (let currentSpriteIndex = 0; currentSpriteIndex < frames[currentFrame].sprites.length; currentSpriteIndex++) {
         const sprite = frames[currentFrame].sprites[currentSpriteIndex];
         const spriteOffset = romConfig.addresses.spriteTiles.start + sprite.tileIndex * 32;
@@ -269,12 +239,11 @@ const convertRomToBMP = (romFile, palFile) => {
             }
           }
         }
-      }    // Save frame data and image
+      }
       saveImage(spriteCanvas, frameDimensions.maxX, frameDimensions.maxY, romConfig.name, currentFrame, combinedPalette);
-      fs.writeFileSync(path.join('Extracted', romConfig.name, `${currentFrame+1}.json`), JSON.stringify(frames[currentFrame]));
+      fs.writeFileSync(path.join('Extracted', romConfig.name, `${currentFrame + 1}.json`), JSON.stringify(frames[currentFrame]));
     }
 
-    // Log the min/max values
     console.log('====== Tile Statistics ======');
     console.log('Number of frames:', numFrames);
     console.log(`Min tileLocByte: 0x${minTileLocByte.toString(16).toUpperCase()} (${minTileLocByte})`);
@@ -290,8 +259,7 @@ const convertRomToBMP = (romFile, palFile) => {
     console.log(`Sprite Offset range: 0x${(maxSpriteOffset - minSpriteOffset).toString(16).toUpperCase()} (${maxSpriteOffset - minSpriteOffset})`);
     console.log('===========================');
   } catch (error) {
-    // Don't log here, let the calling function handle the error
-    throw error; // Re-throw to be caught by the main try-catch
+    throw error;
   }
 };
 
@@ -307,38 +275,16 @@ const dimensionsTable = [
 ];
 
 // Parse sprite data
-function parseSpriteData(sizetabByte, tileLocByte, paletteByte, disableFlip) {
-  // Extract size index (low 4 bits of sizetabByte)
-  const sizeIndex = sizetabByte & 0x0F;
+function parseSpriteData(sizeFormat, tileLocByte, disableFlip) {
+  const sizeIndex = (sizeFormat >> 4) & 0x0F; // Bits 4-7
   const tileCount = sizetabTable[sizeIndex];
   const dimensions = dimensionsTable[sizeIndex];
 
-  // Tile index: combine high bits from sizetabByte (bits 4–7) and low bits from tileLocByte (bits 0–10)
-  const tileIndexLow = tileLocByte & 0x07FF; // Bits 0–10
-  const tileIndexHigh = (sizetabByte & 0xF0) << 7; // Bits 4–7 shifted to 11–14
-  // const tileIndex = tileIndexHigh | tileIndexLow;
-
-  // NEW
-  // Assuming sizetabByte and tileLocByte are numbers
-// Mask to ensure tileLocByte uses only 4 bytes (32 bits)
-tileLocByteNew = tileLocByte & 0xFFFF;
-
-// Shift tileLocByte left by 64 bits to position it in bytes 8-11
-// Then combine with sizetabByte using bitwise OR
-let tileIndex = tileLocByteNew << 8 | sizetabByte;
-
-// Convert to hex string for display (optional)
-// console.log(tileIndex.toString(16).padStart(32, '0'));
-  // const tileIndex = tileLocByte;
-
-  // Extract flags from tileLocByte
+  const tileIndex = tileLocByte & 0x07FF; // Bits 0-10
   const priority = (tileLocByte >> 15) & 1; // Bit 15
-
-  vFlip = (paletteByte >> 4) & 1; // Bit 4
-  hFlip = (paletteByte >> 3) & 1; // Bit 3
-
-  // Extract palette index from paletteByte (bits 5–6)
-  const paletteIndex = (paletteByte >> 5) & 0x3; // Bits 5–6, masked to 2-bit value (0–3)
+  const vFlip = disableFlip ? 0 : (tileLocByte >> 14) & 1; // Bit 14
+  const hFlip = disableFlip ? 0 : (tileLocByte >> 13) & 1; // Bit 13
+  const paletteIndex = (tileLocByte >> 11) & 0x3; // Bits 11-12
 
   return {
     sizeIndex,
@@ -380,7 +326,6 @@ function saveImage(spriteArray, width, height, fileName, currentFrame, combinedP
   const bmpImage = Buffer.alloc(expectedBmpLength);
   const rawImage = Buffer.alloc(expectedRawLength);
 
-  // BMP header
   bmpImage.write('BM');
   bmpImage.writeUInt32LE(expectedBmpLength, 2);
   bmpImage.writeUInt32LE(fullBmpHeaderLength + palLength, 10);
@@ -391,13 +336,12 @@ function saveImage(spriteArray, width, height, fileName, currentFrame, combinedP
   bmpImage.writeUInt16LE(8, 28);
   bmpImage.writeUInt32LE(pixelDataLength + unevenImagePadding + bmpEOFLength, 34);
 
-  // Palette
   for (let i = 0; i < 64; i++) {
     const offset = i * 3;
-    bmpImage.writeUInt8(combinedPalette[offset + 2], fullBmpHeaderLength + i * 4); // B
-    bmpImage.writeUInt8(combinedPalette[offset + 1], fullBmpHeaderLength + i * 4 + 1); // G
-    bmpImage.writeUInt8(combinedPalette[offset], fullBmpHeaderLength + i * 4 + 2); // R
-    bmpImage.writeUInt8(0, fullBmpHeaderLength + i * 4 + 3); // A
+    bmpImage.writeUInt8(combinedPalette[offset + 2], fullBmpHeaderLength + i * 4);
+    bmpImage.writeUInt8(combinedPalette[offset + 1], fullBmpHeaderLength + i * 4 + 1);
+    bmpImage.writeUInt8(combinedPalette[offset], fullBmpHeaderLength + i * 4 + 2);
+    bmpImage.writeUInt8(0, fullBmpHeaderLength + i * 4 + 3);
   }
   for (let i = 64; i < 256; i++) {
     bmpImage.writeUInt8(0, fullBmpHeaderLength + i * 4);
@@ -406,7 +350,6 @@ function saveImage(spriteArray, width, height, fileName, currentFrame, combinedP
     bmpImage.writeUInt8(0, fullBmpHeaderLength + i * 4 + 3);
   }
 
-  // Pixel data
   let bufferIndex = fullBmpHeaderLength + palLength;
   let rawIndex = 0;
   let rowCounter = 0;
@@ -426,9 +369,8 @@ function saveImage(spriteArray, width, height, fileName, currentFrame, combinedP
     }
   }
 
-  // Write files  
-  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame+1}.bmp`), bmpImage);
-  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame+1}.raw`), rawImage);
+  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame + 1}.bmp`), bmpImage);
+  fs.writeFileSync(path.join('Extracted', fileName, `${currentFrame + 1}.raw`), rawImage);
 
   if (bmpImage.length !== expectedBmpLength || rawImage.length !== expectedRawLength) {
     throw new Error(`Length mismatch: BMP ${bmpImage.length}/${expectedBmpLength}, RAW ${rawImage.length}/${expectedRawLength}`);
@@ -437,19 +379,19 @@ function saveImage(spriteArray, width, height, fileName, currentFrame, combinedP
 
 // Function to display usage information
 function displayUsage() {
-  console.log('EA NHL 93/94 ROM Sprite Extractor');
+  console.log('EA NHL 95/96 ROM Sprite Extractor');
   console.log('=================================');
-  console.log('\nExtracts sprite animations from NHL 93 and NHL 94 ROM files and converts them to BMP images');
-  console.log('\nUsage: node anim94ToBmp.js <romFile> [palettePath]');
+  console.log('\nExtracts sprite animations from NHL 95 and NHL 96 ROM files and converts them to BMP images');
+  console.log('\nUsage: node anim95ToBmp.js <romFile> [palettePath]');
   console.log('\nParameters:');
-  console.log('  romFile     - Path to the ROM file (NHL 93 or NHL 94)');
+  console.log('  romFile     - Path to the ROM file (NHL 95 or NHL 96)');
   console.log('  palettePath - Optional path to a palette file (16-color, 32 bytes) to override palette 2');
   console.log('\nExamples:');
-  console.log('  node anim94ToBmp.js nhl94retail.bin');
-  console.log('  node anim94ToBmp.js nhl93retail.bin custom_palette.bin');
+  console.log('  node anim95ToBmp.js nhl95retail.bin');
+  console.log('  node anim95ToBmp.js nhl95retail.bin custom_palette.bin');
   console.log('\nSupported ROMs:');
-  console.log('  - NHLPA 93 (v1.1): CRC32 0xf361d0bf, Size: 512KB');
-  console.log('  - NHL 94: CRC32 0x9438f5dd, Size: 1MB');
+  console.log('  - NHL 95: CRC32 0xe8ee917e, Size: 2MB');
+  console.log('  - NHL 96: CRC32 0x8135702c, Size: 2MB');
   console.log('\nOutput:');
   console.log('  The script creates an "Extracted/<ROM Name>" directory with:');
   console.log('   - BMP images for each frame');
@@ -463,7 +405,6 @@ function displayUsage() {
 const romFile = process.argv[2];
 const palFile = process.argv[3];
 
-// Check if arguments were provided
 if (!romFile) {
   displayUsage();
   process.exit(1);

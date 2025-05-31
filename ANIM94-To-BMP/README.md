@@ -102,7 +102,7 @@ NHL95:
 
 132158 - tile id 2816 = skate without puck main sprite
 
-2816 - might be sprite starting at E7EF4 = 1D97A from start of tiles = tile 3787
+2816 - might be sprite starting at E7EF4 = 1D97A from start of tiles = tile 3787-- correction 1D980
 
 3787 1110 1100 1011
 2816 1011 0000 0000 - normal
