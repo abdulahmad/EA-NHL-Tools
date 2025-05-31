@@ -2,7 +2,19 @@ i'm going to give you a listing of the code for the addframe/addframe2 functions
 
 These functions read frame/sprite data and are able to display player animation frames as a result.
 
-I'm trying to understand the NHL95 file format and the changes they made since 94, it seems like they moved around where the tile index and potentially other values are. Can you write out a labelled/commented source of the NHL95 version and then explain the file format for sprite data in NHL95?
+I'm trying to understand the NHL95 file format and the changes they made since 94, it seems like they moved around where the tile index and potentially other values are. Can you write out a labelled/commented source of the NHL95 version and then explain the file format for sprite data in NHL95? And then I want you to write a node port of addfame2 such that I can run the script and pass in the rom file and frame number, and it will console log all the key data its reading from the rom and the offsets its reading it from. Make sure to also call out relative address reads vs absolute address reads-- do I need to base in a base address so that the relative address reads are correct?
+
+Finally-- here is a sample of the data structure in the NHL95 rom:
+OK, so frame table address starts at 0x1318F4. values for frame 1,2,3 are 0x842, 0x84A, 0x862
+
+Sprite data for frame 1 should be at 0x1318F4+0x842 = 0x132136: `00 00 00 00 40 03 00 00`
+
+frame 2 (3 sprites):
+```FF E7 0B 00 41 B0 FF F4 
+FF F7 60 00 41 24 00 0C 
+FF EF 60 00 41 25 00 0C ```
+
+Can you read it and explain to me based on everything you know, what the data in these two frames is? then i can test the script to see if it matches this.
 
 NHL 92:
 addframe
