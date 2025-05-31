@@ -167,6 +167,19 @@ XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX
 |||| |||| |||| |||| |||| |||| || ﹂- Flip X/Y
 |||| |||| |||| |||| |||| ||||  ﹂- Palette
 
+### `Sprite Data` Section
+| Byte Offset | Value               | Description                                                   |
+|-------------|-----------------    |-------------                                                  |
+| `0x00–0x01` | `<int16>`           | Y Position of sprite within frame                             |
+| `0x02`      | `<uint8>:bit 4-7`   | Size Index (0–15, references `sizetab` for number of tiles).  |
+| `0x03`      | `<int8>:bit 5-7`    | Tile Index High bytes (11-13)                                 |
+| `0x04–0x05` | `<int16>:bit 0-10`  | Tile Index Low bytes (0-10)                                   |
+| `0x04–0x05` | `<int16>:bit 11`    | Horizontal Flip. 0=normal, 1=flipped                          |
+| `0x04–0x05` | `<int16>:bit 12`    | Vertical Flip. 0=normal, 1=flipped                            |
+| `0x04–0x05` | `<int16>:bit 13-14` | Palette. 0-3.                                                 |
+| `0x04–0x05` | `<int16>:bit 15`    | Priority. 0=low, 1=high                                       |
+| `0x06–0x07` | `<int16>`           | X Position of sprite within frame                             |
+
 3 = 0011
 4 = 0100
 
@@ -181,3 +194,12 @@ const dimensionsTable = [
   { width: 3, height: 1 }, { width: 3, height: 2 }, { width: 3, height: 3 }, { width: 3, height: 4 },
   { width: 4, height: 1 }, { width: 4, height: 2 }, { width: 4, height: 3 }, { width: 4, height: 4 },
 ];
+
+--- 
+
+CA574 = first tile
+131874 = last tile end
+
+diff of 67300.
+
+13208 tiles

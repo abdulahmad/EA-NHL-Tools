@@ -8,6 +8,13 @@ const SIZE_TAB_ADDRESS = 0x79F50;    // sizetab address
 const SPRITE_TILES_ADDRESS = 0x5DE84; // Assumed from NHL '94
 const SIZE_TAB = [1, 2, 3, 4, 2, 4, 6, 8, 3, 6, 9, 12, 4, 8, 12, 16];
 
+// Dimensions table
+const dimensionsTable = [
+  { width: 1, height: 1 }, { width: 1, height: 2 }, { width: 1, height: 3 }, { width: 1, height: 4 },
+  { width: 2, height: 1 }, { width: 2, height: 2 }, { width: 2, height: 3 }, { width: 2, height: 4 },
+  { width: 3, height: 1 }, { width: 3, height: 2 }, { width: 3, height: 3 }, { width: 3, height: 4 },
+  { width: 4, height: 1 }, { width: 4, height: 2 }, { width: 4, height: 3 }, { width: 4, height: 4 },
+];
 // Simulate sprite structure (A3)
 class SpriteStructure {
   constructor() {
@@ -127,7 +134,7 @@ function parseAddFrame2(romPath, frameNumber, xScreen, yScreen, attribute = 0) {
       const xGlobal = rom.readInt16BE(spriteDataOffset + 6);
 
       console.log(`  Y global: ${yGlobal} (offset 0x${(spriteDataOffset).toString(16)})`);
-      console.log(`  Size byte: 0x${sizeByte.toString(16)} (offset 0x${(spriteDataOffset + 2).toString(16)}), Tile count: ${tileCount}`);
+      console.log(`  Size byte: 0x${sizeByte.toString(16)} (offset 0x${(spriteDataOffset + 2).toString(16)}), Tile count: ${tileCount}, Dimensions: ${dimensionsTable[sizeByte & 0x0F].width}x${dimensionsTable[sizeByte & 0x0F].height}`);
       console.log(`  Tile index: ${tileIndex} (offset 0x${(spriteDataOffset + 4).toString(16)})`);
       console.log(`  X global: ${xGlobal} (offset 0x${(spriteDataOffset + 6).toString(16)})`);
 
@@ -165,7 +172,8 @@ function parseAddFrame2(romPath, frameNumber, xScreen, yScreen, attribute = 0) {
         const wordsToTransfer = tileCount * 16; // ASM: asl #4,d4 (tiles * 32 bytes / 2)
         const vramDest = vramOffset * 2; // ASM: asl #5,d3 (VRAM in bytes)
         dmaList.push({ source: tileAddress, words: wordsToTransfer, dest: vramDest });
-        console.log(`  DMA: Source 0x${tileAddress.toString(16)}, Words ${wordsToTransfer}, VRAM dest ${vramDest} (0x${vramDest.toString(16)})`);
+        console.log(`  DMA: Sprite Tile Offset 0x${tileAddress.toString(16)}, Words ${wordsToTransfer}, VRAM dest ${vramDest} (0x${vramDest.toString(16)})`);
+        console.log('full tile offset', SPRITE_DATA_BASE + SPRITE_TILE_OFFSET + tileAddress);
       }
 
       // --- Store VRAM Offset ---
