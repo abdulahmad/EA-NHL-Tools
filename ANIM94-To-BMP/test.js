@@ -242,7 +242,8 @@ function parseAddFrame2(romPath, frameNumber, xScreen, yScreen, attribute = 0) {
         paletteBits |= 1 << 13; // Set team 2 color
         console.log(`  Team 2 color applied: Palette bits = 0x${paletteBits.toString(16)}`);
       }
-
+      const palIndex = (paletteBits >> 14) & 0b11;
+      console.log(`  Palette bits: 0x${paletteBits.toString(16)}`, 'palette index:', palIndex);
       // --- Final Tile Index ---
       // ASM: or.b VRoffs(a3,d5),d2
       // ASM: add VRchar(a3),d2
