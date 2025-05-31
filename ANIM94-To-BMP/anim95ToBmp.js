@@ -166,7 +166,7 @@ const convertRomToBMP = (romFile, palFile) => {
     // Default palettes (black if no palette file provided for non-overridden palettes)
     for (let palIndex = 0; palIndex < 4; palIndex++) {
       const animPal = Buffer.alloc(16 * 3);
-      if (palIndex === 2 && overridePalette) {
+      if (palIndex === 1 && overridePalette) {
         overridePalette.copy(animPal, 0, 0, 16 * 3);
       } else {
         // Fill with black (or read from ROM if palette offset is provided)
@@ -308,6 +308,7 @@ const dimensionsTable = [
 
 // Parse sprite data
 function parseSpriteData(sizeFormat, tileLocByte, attributeByte, disableFlip) {
+  console.log('AA TEST', sizeFormat, tileLocByte, attributeByte, tileLocByte & 0x15, tileLocByte & 0x14, tileLocByte & 0x13, tileLocByte & 0x12);
   // Extract size information from sizeFormat byte (byte 2)
   const sizeIndex = sizeFormat & 0x0F;
   const tileCount = sizetabTable[sizeIndex];
@@ -316,19 +317,27 @@ function parseSpriteData(sizeFormat, tileLocByte, attributeByte, disableFlip) {
   // Extract tile index from tileLocByte (lower 11 bits)
   const tileIndex = tileLocByte & 0x07FF;
 
-  // Extract flip flags from attribute byte (byte 3)
-  let hFlip = false;
-  let vFlip = false;
+  // // Extract flip flags from attribute byte (byte 3)
+  // let hFlip = false;
+  // let vFlip = false;
   
-  if (!disableFlip) {
-    // Bits 3 and 4 are used for X and Y flip
-    hFlip = (attributeByte & 0x08) !== 0; // Bit 3
-    vFlip = (attributeByte & 0x10) !== 0; // Bit 4
-  }
+  // if (!disableFlip) {
+  //   // Bits 3 and 4 are used for X and Y flip
+  //   hFlip = (attributeByte & 0x08) !== 0; // Bit 3
+  //   vFlip = (attributeByte & 0x10) !== 0; // Bit 4
+  // }
 
-  // Extract palette index from attribute byte (byte 3)
-  // Bits 5-6 for palette (0-3)
-  const paletteIndex = (attributeByte >> 5) & 0x03;
+  // // Extract palette index from attribute byte (byte 3)
+  // // Bits 5-6 for palette (0-3)
+  // const paletteIndex = (attributeByte >> 5) & 0x03;
+  // Extract bit 12 for vFlip (0 or 1)
+  const vFlip = (tileLocByte >> 12) & 0x1;
+
+  // Extract bit 13 for hFlip (0 or 1)
+  const hFlip = (tileLocByte >> 13) & 0x1;
+
+  // Extract bits 14-15 for paletteIndex (0 to 3)
+  const paletteIndex = (tileLocByte >> 14) & 0x3;
   
   // Extract priority bit from tileLocByte
   const priority = (tileLocByte >> 15) & 0x01; // Bit 15
