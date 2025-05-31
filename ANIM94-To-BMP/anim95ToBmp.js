@@ -109,15 +109,15 @@ const convertRomToBMP = (romFile, palFile) => {
       console.log(frame);
 
       // Read sprite data
-             let spriteIndex = frame.spriteDataOffset;
+             let spriteIndex = frame.spriteDataOffset+2;
       if (frame.numSpritesInFrame > 25) { throw new Error(`Frame ${currentFrame + 1} has too many sprites: ${frame.numSpritesInFrame}. Maximum is 25.`); }
       for (let currentSprite = 0; currentSprite < frame.numSpritesInFrame; currentSprite++) {        const sprite = {
           spriteIndex: currentSprite,
-          xpos: romData.readInt16BE(spriteIndex), // Bytes 0-1: X position
-          ypos: romData.readInt16BE(spriteIndex + 2), // Bytes 2-3: Y position
+          ypos: romData.readInt16BE(spriteIndex), // Bytes 0-1: Y position
+          sizeFormat: romData.readUInt8(spriteIndex + 2), // Byte 2: Size/format
+          attributeByte: romData.readUInt8(spriteIndex + 3), // Byte 3: Attribute data (flip, palette)
           tileLocByte: romData.readUInt16BE(spriteIndex + 4), // Bytes 4-5: Tile index + attributes
-          attributeByte: romData.readUInt8(spriteIndex + 6), // Byte 6: Attribute data (palette + flip)
-          sizeFormat: romData.readUInt8(spriteIndex + 7), // Byte 7: Size/format (size index)
+          xpos: romData.readInt16BE(spriteIndex + 6), // Bytes 6-7: X position
         };
 
         const parsedData = parseSpriteData(sprite.sizeFormat, sprite.tileLocByte, sprite.attributeByte, romConfig.disableFlip);
@@ -308,31 +308,30 @@ const dimensionsTable = [
 
 // Parse sprite data
 function parseSpriteData(sizeFormat, tileLocByte, attributeByte, disableFlip) {
-  // Extract size index from sizeFormat byte
+  // Extract size information from sizeFormat byte (byte 2)
   const sizeIndex = sizeFormat & 0x0F;
   const tileCount = sizetabTable[sizeIndex];
   const dimensions = dimensionsTable[sizeIndex];
 
-  // Extract tile index from tileLocByte
-  // In NHL95, the tile index is in the lower 11 bits (0-10) of tileLocByte
+  // Extract tile index from tileLocByte (lower 11 bits)
   const tileIndex = tileLocByte & 0x07FF;
 
-  // Extract flip flags and palette from attributeByte (byte 6)
+  // Extract flip flags from attribute byte (byte 3)
   let hFlip = false;
   let vFlip = false;
   
   if (!disableFlip) {
-    // Extract flip bits from the attributeByte (upper nibble)
-    hFlip = (attributeByte & 0x40) !== 0; // Bit 6 (X flip)
-    vFlip = (attributeByte & 0x80) !== 0; // Bit 7 (Y flip)
+    // Bits 3 and 4 are used for X and Y flip
+    hFlip = (attributeByte & 0x08) !== 0; // Bit 3
+    vFlip = (attributeByte & 0x10) !== 0; // Bit 4
   }
 
-  // Extract palette index from attributeByte (upper nibble)
-  // Bits 4-5 for palette (0-3)
-  const paletteIndex = (attributeByte >> 4) & 0x03;
+  // Extract palette index from attribute byte (byte 3)
+  // Bits 5-6 for palette (0-3)
+  const paletteIndex = (attributeByte >> 5) & 0x03;
   
-  // Extract priority bit
-  const priority = (tileLocByte >> 15) & 1; // Bit 15
+  // Extract priority bit from tileLocByte
+  const priority = (tileLocByte >> 15) & 0x01; // Bit 15
 
   return {
     sizeIndex,
