@@ -111,16 +111,16 @@ const convertRomToBMP = (romFile, palFile) => {
       // Read sprite data
              let spriteIndex = frame.spriteDataOffset;
       if (frame.numSpritesInFrame > 25) { throw new Error(`Frame ${currentFrame + 1} has too many sprites: ${frame.numSpritesInFrame}. Maximum is 25.`); }
-      for (let currentSprite = 0; currentSprite < frame.numSpritesInFrame; currentSprite++) {
-        const sprite = {
+      for (let currentSprite = 0; currentSprite < frame.numSpritesInFrame; currentSprite++) {        const sprite = {
           spriteIndex: currentSprite,
-          ypos: romData.readInt16BE(spriteIndex), // Bytes 0-1: Y offset
-          sizeFormat: romData.readUInt8(spriteIndex + 2), // Byte 2: Size/format
+          xpos: romData.readInt16BE(spriteIndex), // Bytes 0-1: X position
+          ypos: romData.readInt16BE(spriteIndex + 2), // Bytes 2-3: Y position
           tileLocByte: romData.readUInt16BE(spriteIndex + 4), // Bytes 4-5: Tile index + attributes
-          xpos: romData.readInt16BE(spriteIndex + 6), // Bytes 6-7: X offset
+          attributeByte: romData.readUInt8(spriteIndex + 6), // Byte 6: Attribute data (palette + flip)
+          sizeFormat: romData.readUInt8(spriteIndex + 7), // Byte 7: Size/format (size index)
         };
 
-        const parsedData = parseSpriteData(sprite.sizeFormat, sprite.tileLocByte, romConfig.disableFlip);
+        const parsedData = parseSpriteData(sprite.sizeFormat, sprite.tileLocByte, sprite.attributeByte, romConfig.disableFlip);
         Object.assign(sprite, parsedData);
 
         minTileLocByte = Math.min(minTileLocByte, sprite.tileLocByte);
@@ -307,38 +307,43 @@ const dimensionsTable = [
 ];
 
 // Parse sprite data
-function parseSpriteData(sizetabByte, tileLocByte, paletteByte, disableFlip) {
-  // Extract size index (low 4 bits of sizetabByte)
-  const sizeIndex = sizetabByte & 0x0F;
+function parseSpriteData(sizeFormat, tileLocByte, attributeByte, disableFlip) {
+  // Extract size index from sizeFormat byte
+  const sizeIndex = sizeFormat & 0x0F;
   const tileCount = sizetabTable[sizeIndex];
   const dimensions = dimensionsTable[sizeIndex];
 
-  // Tile index: combine high bits from sizetabByte (bits 4–7) and low bits from tileLocByte (bits 0–10)
-  const tileIndexLow = tileLocByte & 0x07FF; // Bits 0–10
-  const tileIndexHigh = (sizetabByte & 0xF0) << 7; // Bits 4–7 shifted to 11–14
-  // const tileIndex = tileIndexHigh | tileIndexLow;
+  // Extract tile index from tileLocByte
+  // In NHL95, the tile index is in the lower 11 bits (0-10) of tileLocByte
+  const tileIndex = tileLocByte & 0x07FF;
 
-  // NEW
-  // Assuming sizetabByte and tileLocByte are numbers
-// Mask to ensure tileLocByte uses only 4 bytes (32 bits)
-tileLocByteNew = tileLocByte & 0xFFFF;
+  // Extract flip flags and palette from attributeByte (byte 6)
+  let hFlip = false;
+  let vFlip = false;
+  
+  if (!disableFlip) {
+    // Extract flip bits from the attributeByte (upper nibble)
+    hFlip = (attributeByte & 0x40) !== 0; // Bit 6 (X flip)
+    vFlip = (attributeByte & 0x80) !== 0; // Bit 7 (Y flip)
+  }
 
-// Shift tileLocByte left by 64 bits to position it in bytes 8-11
-// Then combine with sizetabByte using bitwise OR
-let tileIndex = tileLocByteNew << 8 | sizetabByte;
-
-// Convert to hex string for display (optional)
-// console.log(tileIndex.toString(16).padStart(32, '0'));
-  // const tileIndex = tileLocByte;
-
-  // Extract flags from tileLocByte
+  // Extract palette index from attributeByte (upper nibble)
+  // Bits 4-5 for palette (0-3)
+  const paletteIndex = (attributeByte >> 4) & 0x03;
+  
+  // Extract priority bit
   const priority = (tileLocByte >> 15) & 1; // Bit 15
 
-  vFlip = (paletteByte >> 4) & 1; // Bit 4
-  hFlip = (paletteByte >> 3) & 1; // Bit 3
-
-  // Extract palette index from paletteByte (bits 5–6)
-  const paletteIndex = (paletteByte >> 5) & 0x3; // Bits 5–6, masked to 2-bit value (0–3)
+  return {
+    sizeIndex,
+    tileCount,
+    dimensions,
+    tileIndex,
+    hFlip,
+    vFlip,
+    paletteIndex,
+    priority,
+  };
 
   return {
     sizeIndex,
