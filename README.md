@@ -15,6 +15,8 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 
 `ANIM95-To-BMP` - Extracts NHL95/96/97/98 Genesis `.ANIM` Sprite Animation files (directly from the ROM) to `.BMP`
 
+`Asset-Extractor` - Extracts assets from the various EA NHL Genesis rom files. WIP.
+
 `DIG-To-WAV` - Converts NHL94/95 PC `.DIG` files to `.WAV` (in-game sounds)
 
 `Docs` - Documentation on various aspects of the NHL games.
@@ -80,6 +82,7 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 
 ### 0.8
 - First release of `ANIM95-To-BMP`
+- First release of `Asset-Extractor`
 
 ## New future version plans
 - Refactor ANIM tools to be able to extract .anim files directly from rom, and dynamically parse .anim file.

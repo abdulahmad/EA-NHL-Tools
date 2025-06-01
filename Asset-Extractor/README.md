@@ -1,6 +1,6 @@
 # NHL Asset Extractor
 
-This directory contains scripts to extract assets from various NHL game ROMs from the Genesis/Mega Drive era.
+This directory contains scripts to extract assets from various NHL game ROMs from the Genesis/Mega Drive era. This will become useful as work towards reverse engineering the source code for these games happens.
 
 ## Overview
 
