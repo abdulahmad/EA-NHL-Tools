@@ -5,14 +5,14 @@ const crc32 = require('crc-32'); // Requires 'crc-32' package: npm install crc-3
 // Asset definitions from the .lst file
 const assets = [
     // { name: 'EALogo.bin', folder: 'NHL95/Graphics', start: 0x00000306, end: 0x00001164 },
-    { name: 'anah.pal', folder: 'NHL95/Graphics/Pals', start: 0xD72, end: 0xD82 },
-    { name: 'anav.pal', folder: 'NHL95/Graphics/Pals', start: 0xD82, end: 0xD92 }, // 0x2A4 until next pal
-    { name: 'Bruinsh.pal', folder: 'NHL95/Graphics/Pals', start: 0x00001036, end: 0x00001046 },
-    { name: 'Bruinsv.pal', folder: 'NHL95/Graphics/Pals', start: 0x00001046, end: 0x00001056 }, // 0x2BA until next pal
-    { name: 'sabresh.pal', folder: 'NHL95/Graphics/Pals', start: 0x00001310, end: 0x00001320 },
-    { name: 'sabresv.pal', folder: 'NHL95/Graphics/Pals', start: 0x00001320, end: 0x00001330 },
-    { name: 'flamesh.pal', folder: 'NHL95/Graphics/Pals', start: 0x000015EC, end: 0x000015FC },
-    { name: 'flamesv.pal', folder: 'NHL95/Graphics/Pals', start: 0x000015FC, end: 0x0000160C },
+    { name: 'anah.pal', folder: 'NHL95/Graphics/Pals', start: 0xD72, end: 0xD92 },
+    { name: 'anav.pal', folder: 'NHL95/Graphics/Pals', start: 0xD92, end: 0xDB2 }, // 0x2A4 until next pal
+    { name: 'Bruinsh.pal', folder: 'NHL95/Graphics/Pals', start: 0x00001036, end: 0x00001056 },
+    { name: 'Bruinsv.pal', folder: 'NHL95/Graphics/Pals', start: 0x00001056, end: 0x00001076 }, // 0x2BA until next pal
+    { name: 'sabresh.pal', folder: 'NHL95/Graphics/Pals', start: 0x00001310, end: 0x00001330 },
+    { name: 'sabresv.pal', folder: 'NHL95/Graphics/Pals', start: 0x00001330, end: 0x00001350 },
+    { name: 'flamesh.pal', folder: 'NHL95/Graphics/Pals', start: 0x000015EC, end: 0x0000160C },
+    { name: 'flamesv.pal', folder: 'NHL95/Graphics/Pals', start: 0x0000160C, end: 0x0000162C },
     // { name: 'blackhawksh.pal', folder: 'NHL95/Graphics/Pals', start: 0x000015BC, end: 0x000015DC },
     // { name: 'blackhawksv.pal', folder: 'NHL95/Graphics/Pals', start: 0x000015DC, end: 0x000015FC },
     // { name: 'Redwingsh.pal', folder: 'NHL95/Graphics/Pals', start: 0x00001716, end: 0x00001736 },
@@ -79,7 +79,7 @@ const assets = [
 ];
 
 // Expected CRC32 checksum (996931775 in hexadecimal)
-const EXPECTED_CRC32 = 0x2641653F;
+const EXPECTED_CRC32 = 0xE8EE917E;
 
 async function verifyCRC32(filePath) {
     try {
