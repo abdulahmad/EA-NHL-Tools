@@ -9,9 +9,11 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 
 `95-Team-Swap-Mod` - Unfinished Mod for NHL95PC that allows you to use teams/rosters/jerseys/logos from the '22-'23 season
 
-`ANIM-To-BMP` - Extracts NHL92 `.ANIM` Sprite Animation files to `.BMP`
+`ANIM-To-BMP` - Extracts NHL92 Genesis `.ANIM` Sprite Animation files to `.BMP`
 
-`ANIM94-To-BMP` - Extracts NHL93/94 `.ANIM` Sprite Animation files (directly from the ROM) to `.BMP`
+`ANIM94-To-BMP` - Extracts NHL93/94 Genesis `.ANIM` Sprite Animation files (directly from the ROM) to `.BMP`
+
+`ANIM95-To-BMP` - Extracts NHL95/96/97/98 Genesis `.ANIM` Sprite Animation files (directly from the ROM) to `.BMP`
 
 `DIG-To-WAV` - Converts NHL94/95 PC `.DIG` files to `.WAV` (in-game sounds)
 
@@ -19,9 +21,9 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 
 `IFF-To-WAV` - Converts NHL95 PC `.IFF` files to `.WAV` (out of game music files)
 
-`JIM-Tools` - Tools to import/export images from/to NHL 92
+`JIM-Tools` - Tools to import/export images from/to NHL 92 Genesis
 
-`MID94-Tools` - Experiment in extracting music from NHL 94
+`MID94-Tools` - Experiment in extracting music from NHL 94 Genesis
 
 `PAL-To-ACT` - Convert NHL95 PC `!<palname>` & `<HOME/AWAY>PALS.bin` files to `.ACT`. For use with sprites extracted from PPV files & centre ice logos extracted
 
@@ -76,8 +78,13 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - tools (outside of the ones that use gfxpak) are now mac/linux compatible
 - support for batch export of NHL 95 PC sprites with specific team palette
 
+### 0.8
+- First release of `ANIM95-To-BMP`
+
 ## New future version plans
-- Update `ANIM-To-BMP` & `ANIM94-To-BMP` to extract sprite components from `.ANIM` files
+- Refactor ANIM tools to be able to extract .anim files directly from rom, and dynamically parse .anim file.
+- Add hotspot support to .anim tools
+- Update `ANIM-To-BMP` & `ANIM94-To-BMP` & `ANIM95-To-BMP` to extract sprite components from `.ANIM` files
 - Create tool to build `.ANIM` file from frame/sprite metadata/components
 - SND extractor/builder
 

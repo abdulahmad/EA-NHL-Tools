@@ -50,39 +50,6 @@ const ROM_CONFIG = {
       paletteOffset15: { start: 0xED7FA } // same as 93
     },
   },
-  NHL95: {
-    name: 'NHL95',
-    crc32: 0xe8ee917e,
-    expectedSize: 0x200000, // 1 MB (adjust if 2 MB)
-    disableFlip: false,
-    addresses: {
-      //spaList: { start:0x5B1C, end: 0x76B2 },
-      spaList: { start:0x5B1C, end: 0x76B0, length: 0xA },
-      paletteOffset: { start: 0xC8506 }, // 0x206E before spriteTiles
-      spriteTiles: { start: 0xCA574, end: 0x131874 }, // 0x3398 tiles or 13028 tiles.
-      // tile size is 0x67300 or 422656 bytes
-      frameOffsets: { start: 0x1318F4, end: 0x132136 }, // 0x842 bytes
-      // first sprite offset 2114, last sprite offset = 25202, diff of 23088 or 0x5A30
-      spriteData: { start: 0x132136, end: 0x137B66 },
-      hotlist: { start: 0xA44C8, end: 0xA4B54 }, // incorrect
-    },
-  },
-  NHL96: {
-    name: 'NHL96',
-    crc32: 0x8135702c,
-    expectedSize: 0x200000, // 1 MB (adjust if 2 MB)
-    disableFlip: false,
-    addresses: {
-      //spaList: { start:0x5B1C, end: 0x76B2 },
-      spaList: { start:0x5B1C, end: 0x76B0, length: 0xA },
-      paletteOffset: { start: 0x172DF6 },
-      spriteTiles: { start: 0x9AAA8, end: 0x12F588 },
-      frameOffsets: { start: 0x12F608, end: 0x13012E }, // 0xB26 bytes
-      // first sprite offset = 3718 , last sprite offset = 32750, diff of 29032 or 0x7168
-      spriteData: { start: 0x13012E, end: 0x137296 },
-      hotlist: { start: 0xA44C8, end: 0xA4B54 },
-    },
-  },
 };
 
 let minTileLocByte = Number.MAX_SAFE_INTEGER;
@@ -117,10 +84,6 @@ const convertRomToBMP = (romFile, palFile) => {
       romConfig = ROM_CONFIG.NHLPA93;
     } else if (romSize === ROM_CONFIG.NHL94.expectedSize && romCrc === ROM_CONFIG.NHL94.crc32) {
       romConfig = ROM_CONFIG.NHL94;
-    } else if (romSize === ROM_CONFIG.NHL95.expectedSize && romCrc === ROM_CONFIG.NHL95.crc32) {
-      romConfig = ROM_CONFIG.NHL95;
-    } else if (romSize === ROM_CONFIG.NHL96.expectedSize && romCrc === ROM_CONFIG.NHL96.crc32) {
-      romConfig = ROM_CONFIG.NHL96;
     } else {
       throw new Error(
         `Invalid ROM. Expected NHLPA93 (size: ${ROM_CONFIG.NHLPA93.expectedSize}, CRC32: ${ROM_CONFIG.NHLPA93.crc32.toString(16)}) ` +

@@ -11,7 +11,7 @@ const ROM_CONFIG = {
     disableFlip: false,
     addresses: {
       //spaList: { start:0x5B1C, end: 0x76B2 },
-      spaList: { start:0x5B1C, end: 0x76B0, length: 0xA },
+      spaList: { start:0x5B1C, end: 0x76B0, length: 0xA }, // incorrect
       paletteOffset: { start: 0xC8506 }, // 0x206E before spriteTiles
       spriteTiles: { start: 0xCA574, end: 0x131874 }, // 0x3398 tiles or 13028 tiles.
       // tile size is 0x67300 or 422656 bytes
@@ -28,13 +28,13 @@ const ROM_CONFIG = {
     disableFlip: false,
     addresses: {
       //spaList: { start:0x5B1C, end: 0x76B2 },
-      spaList: { start:0x5B1C, end: 0x76B0, length: 0xA },
+      spaList: { start:0x5B1C, end: 0x76B0, length: 0xA }, // incorrect
       paletteOffset: { start: 0x172DE4 },
       spriteTiles: { start: 0x9AAA8, end: 0x12F588 },
       frameOffsets: { start: 0x12F608, end: 0x13012E }, // 0xB26 bytes
       // first sprite offset = 3718 , last sprite offset = 32750, diff of 29032 or 0x7168
       spriteData: { start: 0x13012E, end: 0x137296 },
-      hotlist: { start: 0xA44C8, end: 0xA4B54 },
+      hotlist: { start: 0xA44C8, end: 0xA4B54 }, // incorrect
     },
   },
 };
