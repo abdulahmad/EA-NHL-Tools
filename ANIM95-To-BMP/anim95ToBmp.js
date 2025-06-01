@@ -9,7 +9,6 @@ const ROM_CONFIG = {
     crc32: 0xe8ee917e,
     expectedSize: 0x200000, // 1 MB (adjust if 2 MB)
     addresses: {
-      //spaList: { start:0x5B1C, end: 0x76B2 },
       spaList: { start:0x5B1C, end: 0x76B0, length: 0xA }, // incorrect
       paletteOffset: { start: 0xC8506 }, // 0x206E before spriteTiles
       spriteTiles: { start: 0xCA574, end: 0x131874 }, // 0x3398 tiles or 13028 tiles.
@@ -25,13 +24,28 @@ const ROM_CONFIG = {
     crc32: 0x8135702c,
     expectedSize: 0x200000, // 1 MB (adjust if 2 MB)
     addresses: {
-      //spaList: { start:0x5B1C, end: 0x76B2 },
       spaList: { start:0x5B1C, end: 0x76B0, length: 0xA }, // incorrect
       paletteOffset: { start: 0x172DE4 },
       spriteTiles: { start: 0x9AAA8, end: 0x12F588 },
       frameOffsets: { start: 0x12F608, end: 0x13012E }, // 0xB26 bytes
       // first sprite offset = 3718 , last sprite offset = 32750, diff of 29032 or 0x7168
       spriteData: { start: 0x13012E, end: 0x137296 },
+      hotlist: { start: 0xA44C8, end: 0xA4B54 }, // incorrect
+    },
+  },
+  NHL97: {
+    name: 'NHL97',
+    crc32: 0xf067c103,
+    expectedSize: 0x200000, // 1 MB (adjust if 2 MB)
+    addresses: {
+      //spaList: { start:0x5B1C, end: 0x76B2 },
+      spaList: { start:0x5B1C, end: 0x76B0, length: 0xA }, // incorrect
+      paletteOffset: { start: 0x172DE4 },
+      spriteTiles: { start: 0xAABB8, end: 0x160CD8 },
+      frameOffsets: { start: 0x160D58, end: 0x161D2E }, // 0xB26 bytes B61AA + AABB8 = 160D62
+      // 160D58 + 4054
+      // 160D58 + b9de
+      spriteData: { start: 0x161D2E, end: 0x16C736 },
       hotlist: { start: 0xA44C8, end: 0xA4B54 }, // incorrect
     },
   },
@@ -69,10 +83,13 @@ const convertRomToBMP = (romFile, palFile) => {
       romConfig = ROM_CONFIG.NHL95;
     } else if (romSize === ROM_CONFIG.NHL96.expectedSize && romCrc === ROM_CONFIG.NHL96.crc32) {
       romConfig = ROM_CONFIG.NHL96;
+    } else if (romSize === ROM_CONFIG.NHL97.expectedSize && romCrc === ROM_CONFIG.NHL97.crc32) {
+      romConfig = ROM_CONFIG.NHL97;
     } else {
       throw new Error(
         `Invalid ROM. Expected NHL95 (size: ${ROM_CONFIG.NHL95.expectedSize}, CRC32: ${ROM_CONFIG.NHL95.crc32.toString(16)}). ` +
         `or NHL96 (size: ${ROM_CONFIG.NHL96.expectedSize}, CRC32: ${ROM_CONFIG.NHL96.crc32.toString(16)}). ` +
+        `or NHL97 (size: ${ROM_CONFIG.NHL97.expectedSize}, CRC32: ${ROM_CONFIG.NHL97.crc32.toString(16)}). ` +
         `Got size: ${romSize}, CRC32: ${romCrc.toString(16)}.`
       );
     }
