@@ -110,6 +110,7 @@ const convertRomToBMP = (romFile, palFile) => {
 
       // Read sprite data
              let spriteIndex = frame.spriteDataOffset+2;
+             console.log('AATEST234', spriteIndex);
       if (frame.numSpritesInFrame > 25) { throw new Error(`Frame ${currentFrame + 1} has too many sprites: ${frame.numSpritesInFrame}. Maximum is 25.`); }
       for (let currentSprite = 0; currentSprite < frame.numSpritesInFrame; currentSprite++) {        const sprite = {
           spriteIndex: currentSprite,
@@ -121,6 +122,7 @@ const convertRomToBMP = (romFile, palFile) => {
         };
 
         const parsedData = parseSpriteData(sprite.sizeFormat, sprite.tileLocByte, sprite.attributeByte, romConfig.disableFlip);
+        console.log(parsedData.dimensions);
         Object.assign(sprite, parsedData);
 
         minTileLocByte = Math.min(minTileLocByte, sprite.tileLocByte);
@@ -232,6 +234,7 @@ const convertRomToBMP = (romFile, palFile) => {
       for (let currentSpriteIndex = 0; currentSpriteIndex < frames[currentFrame].sprites.length; currentSpriteIndex++) {
         const sprite = frames[currentFrame].sprites[currentSpriteIndex];
         const spriteOffset = romConfig.addresses.spriteTiles.start + sprite.tileIndex * 32;
+        console.log('AATEST541',spriteOffset);
         let idx = spriteOffset;
 
         minSpriteOffset = Math.min(minSpriteOffset, spriteOffset);
@@ -311,47 +314,40 @@ function parseSpriteData(sizeFormat, tileLocByte, attributeByte, disableFlip) {
   console.log('AA TEST', sizeFormat, tileLocByte, attributeByte, tileLocByte & 0x15, tileLocByte & 0x14, tileLocByte & 0x13, tileLocByte & 0x12);
   // Extract size information from sizeFormat byte (byte 2)
   const sizeIndex = sizeFormat & 0x0F;
-  const tileCount = sizetabTable[sizeIndex];
-  const dimensions = dimensionsTable[sizeIndex];
+  // const tileCount = sizetabTable[sizeIndex];
+  // const dimensions = dimensionsTable[sizeIndex];
 
   // Extract tile index from tileLocByte (lower 11 bits)
-  const tileIndex = tileLocByte & 0x07FF;
+  // const tileIndex = tileLocByte & 0x07FF;
 
-  // // Extract flip flags from attribute byte (byte 3)
-  // let hFlip = false;
-  // let vFlip = false;
-  
-  // if (!disableFlip) {
-  //   // Bits 3 and 4 are used for X and Y flip
-  //   hFlip = (attributeByte & 0x08) !== 0; // Bit 3
-  //   vFlip = (attributeByte & 0x10) !== 0; // Bit 4
-  // }
-
-  // // Extract palette index from attribute byte (byte 3)
-  // // Bits 5-6 for palette (0-3)
-  // const paletteIndex = (attributeByte >> 5) & 0x03;
   // Extract bit 12 for vFlip (0 or 1)
-  const vFlip = (tileLocByte >> 12) & 0x1;
+  // const vFlip = (tileLocByte >> 12) & 0x1;
 
   // Extract bit 13 for hFlip (0 or 1)
-  const hFlip = (tileLocByte >> 13) & 0x1;
+  // const hFlip = (tileLocByte >> 13) & 0x1;
 
   // Extract bits 14-15 for paletteIndex (0 to 3)
-  const paletteIndex = (tileLocByte >> 14) & 0x3;
+  // const paletteIndex = (tileLocByte >> 14) & 0x3;
   
   // Extract priority bit from tileLocByte
-  const priority = (tileLocByte >> 15) & 0x01; // Bit 15
+  // const priority = (tileLocByte >> 15) & 0x01; // Bit 15
 
-  return {
-    sizeIndex,
-    tileCount,
-    dimensions,
-    tileIndex,
-    hFlip,
-    vFlip,
-    paletteIndex,
-    priority,
-  };
+    // Extract bits 4-7 from sizeFormat into sizeIndex
+  // const sizeIndex = (sizeFormat >> 4) & 0x0F; // Shift right 4 bits, mask with 0x0F (00001111)
+  const tileCount = sizetabTable[sizeIndex];
+  const dimensions = dimensionsTable[sizeIndex];
+  // Extract bits 5-7 from attributeByte into tileIndexHigh
+  const tileIndexHigh = (attributeByte >> 5) & 0x07; // Shift right 5 bits, mask with 0x07 (00000111)
+
+  // Extract bits from tileLocByte
+  const tileIndexLow = tileLocByte & 0x07FF; // Bits 0-10, mask with 0x07FF (0000011111111111)
+  const hFlip = (tileLocByte >> 11) & 0x01; // Bit 11, shift right 11 bits, mask with 0x01 (00000001)
+  const vFlip = (tileLocByte >> 12) & 0x01; // Bit 12, shift right 12 bits, mask with 0x01 (00000001)
+  const paletteIndex = (tileLocByte >> 13) & 0x03; // Bits 13-14, shift right 13 bits, mask with 0x03 (00000011)
+  const priority = (tileLocByte >> 15) & 0x01; // Bit 15, shift right 15 bits, mask with 0x01 (00000001)
+
+  // Combine tileIndexLow (bits 0-10) and tileIndexHigh (bits 0-2 into bits 11-13) into tileIndex
+  const tileIndex = (tileIndexLow & 0x07FF) | ((tileIndexHigh & 0x07) << 11);
 
   return {
     sizeIndex,
