@@ -13,6 +13,5 @@
   "scripts": {
     "start": "node index.js"
   },
-  "author": "Your Name",
-  "license": "MIT"
+  "author": "Your Name"
 }

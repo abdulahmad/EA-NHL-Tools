@@ -91,7 +91,13 @@ async function verifyCRC32(filePath) {
     }
 }
 
-async function extractAssets(romPath) {
+async function extractAssets(romPath, options = {}) {
+    // Set default options
+    const extractOptions = {
+        outputDir: options.outputDir || 'Extracted',
+        verbose: options.verbose || false
+    };
+    
     try {
         // Verify CRC32
         const isValid = await verifyCRC32(romPath);
@@ -104,7 +110,7 @@ async function extractAssets(romPath) {
         const romData = await fs.readFile(romPath);
 
         // Create base Extracted directory
-        const baseDir = 'Extracted';
+        const baseDir = extractOptions.outputDir;
         await fs.mkdir(baseDir, { recursive: true });
 
         // Extract each asset
@@ -119,21 +125,96 @@ async function extractAssets(romPath) {
             // Write to file
             const outputPath = path.join(outputDir, asset.name);
             await fs.writeFile(outputPath, assetData);
-            console.log(`Extracted ${asset.name} to ${outputPath}`);
+            
+            if (extractOptions.verbose) {
+                console.log(`Extracted ${asset.name} (${assetData.length} bytes) from offset 0x${asset.start.toString(16)} to 0x${asset.end.toString(16)}`);
+                console.log(`Saved to ${outputPath}`);
+            } else {
+                console.log(`Extracted ${asset.name} to ${outputPath}`);
+            }
         }
 
         console.log('Extraction completed successfully.');
+        console.log(`Extracted ${assets.length} assets from NHL 92 ROM.`);
     } catch (error) {
         console.error(`Error during extraction: ${error.message}`);
     }
 }
 
-// Run the script with the provided ROM file
-const romFile = process.argv[2];
-if (!romFile) {
-    console.error('Please provide the path to the NHL Hockey ROM file.');
-    console.error('Usage: node script.js <rom_file_path>');
+// Parse command line arguments
+function parseArgs() {
+    const args = process.argv.slice(2);
+    const options = {
+        romFile: null,
+        outputDir: 'Extracted',
+        verbose: false
+    };
+
+    for (let i = 0; i < args.length; i++) {
+        const arg = args[i];
+        
+        if (arg === '-h' || arg === '--help') {
+            displayHelp();
+            process.exit(0);
+        } else if (arg === '-v' || arg === '--verbose') {
+            options.verbose = true;
+        } else if (arg === '-o' || arg === '--output') {
+            if (i + 1 < args.length) {
+                options.outputDir = args[++i];
+            } else {
+                console.error('Error: Output directory not specified');
+                displayHelp();
+                process.exit(1);
+            }
+        } else if (!options.romFile) {
+            options.romFile = arg;
+        }
+    }
+
+    return options;
+}
+
+// Display help information
+function displayHelp() {
+    console.log(`
+NHL 92 Asset Extractor
+======================
+
+This script extracts assets from NHL Hockey (1991/1992) ROM files.
+
+Usage: node extractAssets92.js [options] <rom_file_path>
+
+Options:
+  -h, --help              Display this help message
+  -v, --verbose           Display detailed extraction information
+  -o, --output <dir>      Specify output directory (default: 'Extracted')
+
+Notes:
+  - This script extracts all known assets from the NHL 92 ROM
+  - ROM checksums are verified to ensure correct ROM is used
+
+Examples:
+  node extractAssets92.js nhl92retail.bin
+  node extractAssets92.js --verbose --output NHL92Assets nhl92retail.bin
+    `);
+}
+
+// Main execution
+const options = parseArgs();
+
+if (!options.romFile) {
+    console.error('Error: ROM file path not provided');
+    displayHelp();
     process.exit(1);
 }
 
-extractAssets(romFile);
+console.log(`Extracting assets from: ${options.romFile}`);
+console.log(`Output directory: ${options.outputDir}`);
+if (options.verbose) {
+    console.log('Verbose mode enabled');
+}
+
+extractAssets(options.romFile, {
+    outputDir: options.outputDir,
+    verbose: options.verbose
+});
