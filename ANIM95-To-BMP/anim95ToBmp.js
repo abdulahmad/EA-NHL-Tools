@@ -8,7 +8,6 @@ const ROM_CONFIG = {
     name: 'NHL95',
     crc32: 0xe8ee917e,
     expectedSize: 0x200000, // 1 MB (adjust if 2 MB)
-    disableFlip: false,
     addresses: {
       //spaList: { start:0x5B1C, end: 0x76B2 },
       spaList: { start:0x5B1C, end: 0x76B0, length: 0xA }, // incorrect
@@ -25,7 +24,6 @@ const ROM_CONFIG = {
     name: 'NHL96',
     crc32: 0x8135702c,
     expectedSize: 0x200000, // 1 MB (adjust if 2 MB)
-    disableFlip: false,
     addresses: {
       //spaList: { start:0x5B1C, end: 0x76B2 },
       spaList: { start:0x5B1C, end: 0x76B0, length: 0xA }, // incorrect
@@ -121,7 +119,7 @@ const convertRomToBMP = (romFile, palFile) => {
           xpos: romData.readInt16BE(spriteIndex + 6), // Bytes 6-7: X position
         };
 
-        const parsedData = parseSpriteData(sprite.sizeFormat, sprite.tileLocByte, sprite.attributeByte, romConfig.disableFlip);
+        const parsedData = parseSpriteData(sprite.sizeFormat, sprite.tileLocByte, sprite.attributeByte);
         console.log(parsedData.dimensions);
         Object.assign(sprite, parsedData);
 
@@ -309,34 +307,13 @@ const dimensionsTable = [
 ];
 
 // Parse sprite data
-function parseSpriteData(sizeFormat, tileLocByte, attributeByte, disableFlip) {
-  console.log('AA TEST', sizeFormat, tileLocByte, attributeByte, tileLocByte & 0x15, tileLocByte & 0x14, tileLocByte & 0x13, tileLocByte & 0x12);
+function parseSpriteData(sizeFormat, tileLocByte, attributeByte) {
   // Extract size information from sizeFormat byte (byte 2)
+  // Extract bits 4-7 from sizeFormat into sizeIndex
   const sizeIndex = sizeFormat & 0x0F;
-  // const tileCount = sizetabTable[sizeIndex];
-  // const dimensions = dimensionsTable[sizeIndex];
 
-  // Extract tile index from tileLocByte (lower 11 bits)
-  // const tileIndex = tileLocByte & 0x07FF;
-
-  // Extract bit 12 for vFlip (0 or 1)
-  // const vFlip = (tileLocByte >> 12) & 0x1;
-
-  // Extract bit 13 for hFlip (0 or 1)
-  // const hFlip = (tileLocByte >> 13) & 0x1;
-
-  // Extract bits 14-15 for paletteIndex (0 to 3)
-  // const paletteIndex = (tileLocByte >> 14) & 0x3;
-  
-  // Extract priority bit from tileLocByte
-  // const priority = (tileLocByte >> 15) & 0x01; // Bit 15
-
-    // Extract bits 4-7 from sizeFormat into sizeIndex
-  // const sizeIndex = (sizeFormat >> 4) & 0x0F; // Shift right 4 bits, mask with 0x0F (00001111)
   const tileCount = sizetabTable[sizeIndex];
   const dimensions = dimensionsTable[sizeIndex];
-  // Extract bits 5-7 from attributeByte into tileIndexHigh
-  // const tileIndexHigh = (attributeByte >> 5) & 0x07; // Shift right 5 bits, mask with 0x07 (00000111)
   let tileIndexHigh = (sizeFormat >> 4) & 0x0F; 
 
   // Extract bits from tileLocByte
