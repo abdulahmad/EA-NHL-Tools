@@ -84,3 +84,6 @@ const dimensionsTable = [
 ```
 ## More Info
 Big thank you to chaos & McMarkis on the NHL94.com discord for helping me figure everything out
+
+## Future Updates
+- Refactor all 3 sprite extractors to be efficient, share code where it can, and be able to extract sprites in a way that can be easily edited and re-imported

@@ -5,6 +5,8 @@ There is also a `.json` file saved per Animation Frame, which contains the metad
 
 Palette is structured similar to how it is stored by the game in Sega Genesis CRAM. The reason is that sprites can have multiple palettes, and the only way to get multi-palette sprites to dislpay correctly would be to use the same palette structure that the game uses.
 
+Note: Only NHL 92 palettes are currently included. They are compatible with NHL 93 & 94.
+
 # Usage
 1. Ensure you have `node` installed on your machine
 
@@ -95,4 +97,5 @@ const dimensionsTable = [
 Big thank you to chaos & McMarkis on the NHL94.com discord for helping me figure everything out
 
 # Future TODO
-- Add 93 & 94 palettes
+- Add 93/94 palettes
+- Refactor all 3 sprite extractors to be efficient, share code where it can, and be able to extract sprites in a way that can be easily edited and re-imported
