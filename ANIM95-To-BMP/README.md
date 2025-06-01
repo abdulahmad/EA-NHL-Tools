@@ -1,9 +1,11 @@
 # ANIM95-To-BMP v0.1
-Exports In-game sprites from NHL95, NHL 96, Sega Genesis ROM files to Photoshop RAW and Windows BMP format.
+Exports In-game sprites from NHL95/96/97, Sega Genesis ROM files to Photoshop RAW and Windows BMP format.
 
 There is also a `.json` file saved per Animation Frame, which contains the metadata associated with each Frame. 
 
 Palette is structured similar to how it is stored by the game in Sega Genesis CRAM. The reason is that sprites can have multiple palettes, and the only way to get multi-palette sprites to dislpay correctly would be to use the same palette structure that the game uses.
+
+Unfortunately, the graphics format for NHL 98 for Sega Genesis is wildly different than the other games, so its unsupported, and likely will never be supported.
 
 # Usage
 1. Ensure you have `node` installed on your machine
