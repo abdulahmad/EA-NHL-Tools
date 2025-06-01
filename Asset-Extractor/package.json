@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "crc-32": "^1.2.2"
+  }
+}
