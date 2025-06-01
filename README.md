@@ -1,4 +1,4 @@
-# EA-NHL-Tools 0.7
+# EA-NHL-Tools 0.8
 Tools for various EA NHL games
 
 Recommend checking out Releases for latest stable release: https://github.com/abdulahmad/EA-NHL-Tools/releases
