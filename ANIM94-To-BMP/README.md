@@ -171,14 +171,18 @@ XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX XXXX
 | Byte Offset | Value               | Description                                                   |
 |-------------|-----------------    |-------------                                                  |
 | `0x00–0x01` | `<int16>`           | Y Position of sprite within frame                             |
-| `0x02`      | `<uint8>:bit 4-7`   | Size Index (0–15, references `sizetab` for number of tiles).  |
-| `0x03`      | `<int8>:bit 5-7`    | Tile Index High bytes (11-13)                                 |
-| `0x04–0x05` | `<int16>:bit 0-10`  | Tile Index Low bytes (0-10)                                   |
-| `0x04–0x05` | `<int16>:bit 11`    | Horizontal Flip. 0=normal, 1=flipped                          |
-| `0x04–0x05` | `<int16>:bit 12`    | Vertical Flip. 0=normal, 1=flipped                            |
-| `0x04–0x05` | `<int16>:bit 13-14` | Palette. 0-3.                                                 |
-| `0x04–0x05` | `<int16>:bit 15`    | Priority. 0=low, 1=high                                       |
+| `0x02`      | `<uint8>:bit 0-3`   | Size Index (0–15, references `sizetab` for number of tiles).  |
+| `0x02`      | `<uint8>:bit 4-6`   | Tile Index High bytes (11-13)                                 |
+| `0x04–0x05` | `<uint16>:bit 0-10`  | Tile Index Low bytes (0-10)                                   |
+| `0x04–0x05` | `<uint16>:bit 11`    | Horizontal Flip. 0=normal, 1=flipped                          |
+| `0x04–0x05` | `<uint16>:bit 12`    | Vertical Flip. 0=normal, 1=flipped                            |
+| `0x04–0x05` | `<uint16>:bit 13-14` | Palette. 0-3.                                                 |
+| `0x04–0x05` | `<uint16>:bit 15`    | Priority. 0=low, 1=high                                       |
 | `0x06–0x07` | `<int16>`           | X Position of sprite within frame                             |
+
+NHL96 Frame 4
+FF E3 0B 00 40 E8 FF F5
+Y pos = 
 
 3 = 0011
 4 = 0100
@@ -214,16 +218,6 @@ hflip=0
 vflip=0
 x=-12
 FF F7 60 00 41 24 00 0C 
+tileIndex 01 1001 0010 0100 = 0x1924 --> FC9F4
+tileIndex 11 0001 0010 0100 = 0x3124 --> 12C9F4
 FF EF 60 00 41 25 00 0C
-
-| Byte Offset | Value               | Description                                                   |
-|-------------|-----------------    |-------------                                                  |
-| `0x00–0x01` | `<int16>`           | Y Position of sprite within frame                             |
-| `0x02`      | `<uint8>:bit 0-3`   | Size Index (0–15, references `sizetab` for number of tiles).  |
-| `0x03`      | `<uint8>:bit 5-7`    | Tile Index High bytes (11-13)                                 |
-| `0x04–0x05` | `<uint16>:bit 0-10`  | Tile Index Low bytes (0-10)                                   |
-| `0x04–0x05` | `<uint16>:bit 11`    | Horizontal Flip. 0=normal, 1=flipped                          |
-| `0x04–0x05` | `<uint16>:bit 12`    | Vertical Flip. 0=normal, 1=flipped                            |
-| `0x04–0x05` | `<uint16>:bit 13-14` | Palette. 0-3.                                                 |
-| `0x04–0x05` | `<uint16>:bit 15`    | Priority. 0=low, 1=high                                       |
-| `0x06–0x07` | `<int16>`           | X Position of sprite within frame                             |

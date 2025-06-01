@@ -29,7 +29,7 @@ const ROM_CONFIG = {
     addresses: {
       //spaList: { start:0x5B1C, end: 0x76B2 },
       spaList: { start:0x5B1C, end: 0x76B0, length: 0xA },
-      paletteOffset: { start: 0x172DF6 },
+      paletteOffset: { start: 0x172DE4 },
       spriteTiles: { start: 0x9AAA8, end: 0x12F588 },
       frameOffsets: { start: 0x12F608, end: 0x13012E }, // 0xB26 bytes
       // first sprite offset = 3718 , last sprite offset = 32750, diff of 29032 or 0x7168
@@ -168,7 +168,7 @@ const convertRomToBMP = (romFile, palFile) => {
     // Default palettes (black if no palette file provided for non-overridden palettes)
     for (let palIndex = 0; palIndex < 4; palIndex++) {
       const animPal = Buffer.alloc(16 * 3);
-      if (palIndex === 1 && overridePalette) {
+      if (palIndex === 2 && overridePalette) {
         overridePalette.copy(animPal, 0, 0, 16 * 3);
       } else {
         // Fill with black (or read from ROM if palette offset is provided)
@@ -234,7 +234,6 @@ const convertRomToBMP = (romFile, palFile) => {
       for (let currentSpriteIndex = 0; currentSpriteIndex < frames[currentFrame].sprites.length; currentSpriteIndex++) {
         const sprite = frames[currentFrame].sprites[currentSpriteIndex];
         const spriteOffset = romConfig.addresses.spriteTiles.start + sprite.tileIndex * 32;
-        console.log('AATEST541',spriteOffset);
         let idx = spriteOffset;
 
         minSpriteOffset = Math.min(minSpriteOffset, spriteOffset);
@@ -337,7 +336,8 @@ function parseSpriteData(sizeFormat, tileLocByte, attributeByte, disableFlip) {
   const tileCount = sizetabTable[sizeIndex];
   const dimensions = dimensionsTable[sizeIndex];
   // Extract bits 5-7 from attributeByte into tileIndexHigh
-  const tileIndexHigh = (attributeByte >> 5) & 0x07; // Shift right 5 bits, mask with 0x07 (00000111)
+  // const tileIndexHigh = (attributeByte >> 5) & 0x07; // Shift right 5 bits, mask with 0x07 (00000111)
+  let tileIndexHigh = (sizeFormat >> 4) & 0x0F; 
 
   // Extract bits from tileLocByte
   const tileIndexLow = tileLocByte & 0x07FF; // Bits 0-10, mask with 0x07FF (0000011111111111)
@@ -345,9 +345,9 @@ function parseSpriteData(sizeFormat, tileLocByte, attributeByte, disableFlip) {
   const vFlip = (tileLocByte >> 12) & 0x01; // Bit 12, shift right 12 bits, mask with 0x01 (00000001)
   const paletteIndex = (tileLocByte >> 13) & 0x03; // Bits 13-14, shift right 13 bits, mask with 0x03 (00000011)
   const priority = (tileLocByte >> 15) & 0x01; // Bit 15, shift right 15 bits, mask with 0x01 (00000001)
-
+  console.log('AA TEST!!!!', tileIndexHigh, tileIndexLow);
   // Combine tileIndexLow (bits 0-10) and tileIndexHigh (bits 0-2 into bits 11-13) into tileIndex
-  const tileIndex = (tileIndexLow & 0x07FF) | ((tileIndexHigh & 0x07) << 11);
+  const tileIndex = (tileIndexLow & 0x07FF) | ((tileIndexHigh) << 11);
 
   return {
     sizeIndex,
