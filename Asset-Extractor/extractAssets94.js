@@ -54,6 +54,7 @@ const assets = [
     // { name: 'Walesh.pal', folder: 'NHL94/Graphics/Pals', start: 0x00002FB8, end: 0x00002FD8 },
     // { name: 'Walesv.pal', folder: 'NHL94/Graphics/Pals', start: 0x00002FD8, end: 0x00002FF8 },
     // { name: 'Hockey.snd', folder: 'NHL94/Sound', start: 0x0000F4C8, end: 0x00024214 },
+    // SFC & Music from 0x2CEF4 to 0x-487A0
     { name: 'GameSetUp94-1.map.jim', folder: 'NHL94/Graphics', start: 0x0004B7A0, end: 0x0004DEEE },
     { name: 'GameSetUp94-2.map.jim', folder: 'NHL94/Graphics', start: 0x0004DEEE, end: 0x0004E45C },
     { name: 'Title94-1.map.jim', folder: 'NHL94/Graphics', start: 0x0004E45C, end: 0x00052DAA },
@@ -72,8 +73,8 @@ const assets = [
     // AAC7C -- font, not jim?
     { name: 'unknown9.map.jim', folder: 'NHL94/Graphics', start: 0x000aac52, end: 0x000afe12 }, // error on this one!
     { name: 'TeamBlocks94.map.jim', folder: 'NHL94/Graphics', start: 0x000afe12, end: 0x000b3530 },
-    // gap?
-    { name: 'IceRink94-2.map.jim', folder: 'NHL94/Graphics', start: 0x000b5180, end: 0x000bb4ee },
+    // gap? -- Ron Barr at 0x000B389C
+    { name: 'IceRink94Reverse.map.jim', folder: 'NHL94/Graphics', start: 0x000b5180, end: 0x000bb4ee },
     { name: 'ReplayOptions.map.jim', folder: 'NHL94/Graphics', start: 0x000bb4ee, end: 0x000bc05c },
     { name: 'PauseScreen.map.jim', folder: 'NHL94/Graphics', start: 0x000bc05c, end: 0x000be26a },
     { name: 'SmallFont94.map.jim', folder: 'NHL94/Graphics', start: 0x000be26a, end: 0x000befb8 },

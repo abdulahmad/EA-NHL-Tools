@@ -42,3 +42,4 @@ SND-Builder/*.snd
 Asset-Extractor/NHL**/*
 Asset-Extractor/*bin
 Asset-Extractor/Extracted/*
+Kosinski-Tools/*.bin
