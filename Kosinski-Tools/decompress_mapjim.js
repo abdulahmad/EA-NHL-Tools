@@ -36,40 +36,38 @@ function decompressMapJim(inputBuffer) {
                 return Buffer.from(output);
             }
             const ctrl = inputBuffer[src++];
-            if (ctrl === undefined) throw new Error('Unexpected EOF');
-            // Debug: print control byte and state
-            console.log('ctrl:', ctrl.toString(16), 'src:', src, 'tileBytes:', tileBytes, 'tilesDecompressed:', tilesDecompressed);
-            if (ctrl <= 0x3F) {
-                for (let i = 0; i < ctrl + 1; i++) {
-                    if (src >= inputBuffer.length) {
-                        console.error('EOF during literal copy', {tilesDecompressed, tileBytes, src, i, ctrl});
-                        return Buffer.from(output);
-                    }
-                    output.push(inputBuffer[src++]);
-                    tileBytes++;
-                }
-            } else if (ctrl <= 0x7F) {
-                const count = (ctrl & 0x3F) + 1;
-                if (src >= inputBuffer.length) {
-                    console.error('EOF during repeat', {tilesDecompressed, tileBytes, src, count, ctrl});
-                    return Buffer.from(output);
-                }
+            // New logic based on observed pattern
+            if (ctrl >= 0x30 && ctrl <= 0x3F) {
+                // Repeat next byte (ctrl - 0x2F) times
+                const count = ctrl - 0x2F;
                 const val = inputBuffer[src++];
                 for (let i = 0; i < count; i++) {
                     output.push(val);
                     tileBytes++;
                 }
-            } else if (ctrl <= 0xBF) {
-                // Backreference (LZ-style)
-                // Not fully understood, placeholder: treat as literal for now
-                if (src >= inputBuffer.length) {
-                    console.error('EOF during backreference placeholder', {tilesDecompressed, tileBytes, src, ctrl});
-                    return Buffer.from(output);
-                }
-                output.push(inputBuffer[src++]);
+            } else if (ctrl === 0x00) {
+                // Repeat next byte once
+                const val = inputBuffer[src++];
+                output.push(val);
                 tileBytes++;
+            } else if (ctrl === 0x03) {
+                // Repeat next N bytes (sequence) a certain number of times
+                const count = inputBuffer[src++];
+                const seq = [];
+                for (let i = 0; i < count; i++) {
+                    seq.push(inputBuffer[src++]);
+                }
+                const repeat = inputBuffer[src++];
+                for (let r = 0; r < repeat; r++) {
+                    for (let b = 0; b < seq.length; b++) {
+                        output.push(seq[b]);
+                        tileBytes++;
+                        if (tileBytes >= 32) break;
+                    }
+                    if (tileBytes >= 32) break;
+                }
             } else {
-                // Reserved/unknown control codes
+                // Fallback: treat as literal (for unknown/special cases)
                 output.push(ctrl);
                 tileBytes++;
             }
