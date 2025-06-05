@@ -40,26 +40,20 @@ function decompressMapJim(inputBuffer) {
                 return Buffer.from(output);
             }
             const ctrl = inputBuffer[src++];
-            if (ctrl >= 0x30 && ctrl <= 0x3F) {
-                // Repeat next byte (ctrl - 0x2D) times
-                const count = ctrl - 0x2D;
-                const val = inputBuffer[src++];
-                for (let i = 0; i < count; i++) {
-                    output.push(val);
-                    tileBytes++;
-                }
-            } else if (ctrl === 0x00) {
-                // Repeat next byte once
-                const val = inputBuffer[src++];
-                output.push(val);
-                tileBytes++;
-            } else if (ctrl === 0x03) {
-                // Repeat the next 4 bytes as a sequence, 4 times
+            // Extract upper nibble (shift right 4 bits)
+            const ctrlUpper = (ctrl >> 4) & 0xF;
+            
+            // Extract lower nibble (mask with 0xF)
+            const ctrlLower = ctrl & 0xF;
+            console.log('aa test',ctrl, ctrlUpper, ctrlLower);
+            // throw new Error('stop');
+            if (ctrlUpper == 0x0) { // Repeat next byte ctrl+1 times)
                 const seq = [];
-                for (let i = 0; i < 4; i++) {
+                const count = ctrlLower + 1;
+                for (let i = 0; i < count; i++) {
                     seq.push(inputBuffer[src++]);
                 }
-                for (let r = 0; r < 4; r++) {
+                for (let r = 0; r < count; r++) {
                     for (let b = 0; b < seq.length; b++) {
                         output.push(seq[b]);
                         tileBytes++;
@@ -67,7 +61,36 @@ function decompressMapJim(inputBuffer) {
                     }
                     if (tileBytes >= 32) break;
                 }
-            } else if (ctrl === 0x8D) {
+            } else if (ctrlUpper == 0x3) { // repeat next byte (ctrl+1) + 2 times
+                const count = (ctrlLower+1) + 2;
+                const val = inputBuffer[src++];
+                for (let i = 0; i < count; i++) {
+                    output.push(val);
+                    tileBytes++;
+                }
+            }
+            // else if (ctrl === 0x00) {
+            //     // Repeat next byte once
+            //     const val = inputBuffer[src++];
+            //     output.push(val);
+            //     tileBytes++;
+            // } 
+            // else if (ctrl === 0x03) {
+            //     // Repeat the next 4 bytes as a sequence, 4 times
+            //     const seq = [];
+            //     for (let i = 0; i < 4; i++) {
+            //         seq.push(inputBuffer[src++]);
+            //     }
+            //     for (let r = 0; r < 4; r++) {
+            //         for (let b = 0; b < seq.length; b++) {
+            //             output.push(seq[b]);
+            //             tileBytes++;
+            //             if (tileBytes >= 32) break;
+            //         }
+            //         if (tileBytes >= 32) break;
+            //     }
+            // } 
+            else if (ctrl === 0x8D) {
                 // Backreference: copy the last 'count' bytes from output, but do not overflow the tile
                 const count = inputBuffer[src++];
                 const start = output.length - count;
@@ -76,6 +99,7 @@ function decompressMapJim(inputBuffer) {
                     tileBytes++;
                 }
             } else {
+                // throw new Error(`Unknown control byte: 0x${ctrl.toString(16).padStart(2, '0')} at tile ${tilesDecompressed}, byte ${tileBytes}`);
                 // Treat as literal
                 output.push(ctrl);
                 tileBytes++;
