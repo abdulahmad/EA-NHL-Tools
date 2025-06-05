@@ -19,7 +19,6 @@ function decompressMapJim(inputBuffer) {
     const paletteOffset = readUInt32BE(inputBuffer, 0);
     const mapOffset = readUInt32BE(inputBuffer, 4);
     const numTiles = readUInt16BE(inputBuffer, 8);
-    
     // Copy the 10-byte header to the output first
     const output = [];
     for (let i = 0; i < 10; i++) {
@@ -84,7 +83,7 @@ function decompressMapJim(inputBuffer) {
                 }
                 
             } else if (ctrlUpper == 0x8) { 
-                debug(ctrl, tilesDecompressed, tileBytes, src);
+                // debug(ctrl, tilesDecompressed, tileBytes, src);
                 // Copy 1-8 bytes from a previous position (back-reference)
                 const numBytes = (ctrlLower & 0x7) + 1; // Lower 3 bits + 1
                 const offsetBits = (ctrlLower >> 3) & 0x7; // Bits 6-4 (upper 3 bits of lower nibble)
@@ -167,7 +166,7 @@ function decompressMapJim(inputBuffer) {
 }
 
 function debug(ctrl, tilesDecompressed, tileBytes, src) {
-        throw new Error(`Unknown control byte: 0x${ctrl.toString(16).padStart(2, '0')} at tile ${tilesDecompressed}, byte ${tileBytes}, offset ${src-7}`);
+        // throw new Error(`Unknown control byte: 0x${ctrl.toString(16).padStart(2, '0')} at tile ${tilesDecompressed}, byte ${tileBytes}, offset ${src-7}`);
     return;
 }
 
