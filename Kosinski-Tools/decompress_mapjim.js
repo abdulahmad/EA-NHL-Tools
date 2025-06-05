@@ -20,8 +20,12 @@ function decompressMapJim(inputBuffer) {
     const mapOffset = readUInt32BE(inputBuffer, 4);
     const numTiles = readUInt16BE(inputBuffer, 8);
     
-    let src = 10; // Start after header
+    // Copy the 10-byte header to the output first
     const output = [];
+    for (let i = 0; i < 10; i++) {
+        output.push(inputBuffer[i]);
+    }
+    let src = 10; // Start after header
 
     // Debug: print header info
     console.log('paletteOffset:', paletteOffset, 'mapOffset:', mapOffset, 'numTiles:', numTiles);
@@ -64,9 +68,13 @@ function decompressMapJim(inputBuffer) {
                     if (tileBytes >= 32) break;
                 }
             } else if (ctrl === 0x8D) {
-                // Special command (possibly backreference or skip)
-                const special = inputBuffer[src++];
-                console.log('Special command 0x8D encountered, skipping byte:', special);
+                // Backreference: copy the last 'count' bytes from output
+                const count = inputBuffer[src++];
+                const start = output.length - count;
+                for (let i = 0; i < count; i++) {
+                    output.push(output[start + i]);
+                    tileBytes++;
+                }
             } else {
                 // Treat as literal
                 output.push(ctrl);
