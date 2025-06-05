@@ -68,36 +68,6 @@ function decompressMapJim(inputBuffer) {
                     output.push(val);
                     tileBytes++;
                 }
-            }
-            // else if (ctrl === 0x00) {
-            //     // Repeat next byte once
-            //     const val = inputBuffer[src++];
-            //     output.push(val);
-            //     tileBytes++;
-            // } 
-            // else if (ctrl === 0x03) {
-            //     // Repeat the next 4 bytes as a sequence, 4 times
-            //     const seq = [];
-            //     for (let i = 0; i < 4; i++) {
-            //         seq.push(inputBuffer[src++]);
-            //     }
-            //     for (let r = 0; r < 4; r++) {
-            //         for (let b = 0; b < seq.length; b++) {
-            //             output.push(seq[b]);
-            //             tileBytes++;
-            //             if (tileBytes >= 32) break;
-            //         }
-            //         if (tileBytes >= 32) break;
-            //     }
-            // } 
-            else if (ctrl === 0x8D) {
-                // Backreference: copy the last 'count' bytes from output, but do not overflow the tile
-                const count = inputBuffer[src++];
-                const start = output.length - count;
-                for (let i = 0; i < count && tileBytes < 32; i++) {
-                    output.push(output[start + i]);
-                    tileBytes++;
-                }
             } else {
                 // throw new Error(`Unknown control byte: 0x${ctrl.toString(16).padStart(2, '0')} at tile ${tilesDecompressed}, byte ${tileBytes}`);
                 // Treat as literal
