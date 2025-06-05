@@ -44,10 +44,9 @@ function decompressMapJim(inputBuffer) {
             const ctrlUpper = (ctrl >> 4) & 0xF;
             
             // Extract lower nibble (mask with 0xF)
-            const ctrlLower = ctrl & 0xF;
-            console.log('aa test',ctrl, ctrlUpper, ctrlLower);
-            // throw new Error('stop');
-            if (ctrlUpper == 0x0) { // Repeat next byte ctrl+1 times)
+            const ctrlLower = ctrl & 0xF;            // console.log('Control byte:', ctrl.toString(16).padStart(2, '0'), 'upper:', ctrlUpper.toString(16), 'lower:', ctrlLower.toString(16));
+            
+            if (ctrlUpper == 0x0 || ctrlUpper == 0x1) { 
                 const seq = [];
                 const count = ctrlLower + 1;
                 for (let i = 0; i < count; i++) {
@@ -61,16 +60,102 @@ function decompressMapJim(inputBuffer) {
                     }
                     if (tileBytes >= 32) break;
                 }
-            } else if (ctrlUpper == 0x3) { // repeat next byte (ctrl+1) + 2 times
+                
+            } else if (ctrlUpper == 0x2) { 
+                debug(ctrl, tilesDecompressed, tileBytes, src);
+                // Clear a byte in output at an offset
+                // Lower 4 bits specify the offset where a byte is set to 0
+                const count = ctrlLower + 1;
+                for (let i = 0; i < count; i++) {
+                    output.push(0x00);
+                    tileBytes++;
+                    if (tileBytes >= 32) break;
+                }
+                
+            } else if (ctrlUpper == 0x3 || ctrlUpper == 0x4 || ctrlUpper == 0x5 || 
+                      ctrlUpper == 0x6 || ctrlUpper == 0x7 || ctrlUpper == 0x9) { 
+                // Repeat a byte 2-17 times
                 const count = (ctrlLower+1) + 2;
                 const val = inputBuffer[src++];
                 for (let i = 0; i < count; i++) {
                     output.push(val);
                     tileBytes++;
+                    if (tileBytes >= 32) break;
                 }
+                
+            } else if (ctrlUpper == 0x8) { 
+                debug(ctrl, tilesDecompressed, tileBytes, src);
+                // Copy 1-8 bytes from a previous position (back-reference)
+                const numBytes = (ctrlLower & 0x7) + 1; // Lower 3 bits + 1
+                const offsetBits = (ctrlLower >> 3) & 0x7; // Bits 6-4 (upper 3 bits of lower nibble)
+                const backOffset = -(offsetBits + 1); // Negated offset
+                
+                for (let i = 0; i < numBytes; i++) {
+                    const copyIndex = output.length + backOffset;
+                    if (copyIndex >= 0 && copyIndex < output.length) {
+                        output.push(output[copyIndex]);
+                    } else {
+                        output.push(0x00); // Default if invalid reference
+                    }
+                    tileBytes++;
+                    if (tileBytes >= 32) break;
+                }
+                
+            } else if (ctrlUpper == 0xA) { 
+                debug(ctrl, tilesDecompressed, tileBytes, src);
+                // Repeat a byte for a larger count (2-33)
+                // Lower 4 bits contribute to a 5-bit count with the next byte
+                const nextByte = inputBuffer[src++];
+                const count = ((ctrlLower << 1) | ((nextByte >> 7) & 1)) + 2; // 5-bit count + 2
+                const val = inputBuffer[src++];
+                for (let i = 0; i < count; i++) {
+                    output.push(val);
+                    tileBytes++;
+                    if (tileBytes >= 32) break;
+                }
+                
+            } else if (ctrlUpper == 0xB || ctrlUpper == 0xE) { 
+                debug(ctrl, tilesDecompressed, tileBytes, src);
+                // Repeat a byte for a large count (2-65)
+                // Lower 4 bits contribute to a 6-bit count with the next byte
+                const nextByte = inputBuffer[src++];
+                const count = ((ctrlLower << 2) | ((nextByte >> 6) & 3)) + 2; // 6-bit count + 2
+                const val = inputBuffer[src++];
+                for (let i = 0; i < count; i++) {
+                    output.push(val);
+                    tileBytes++;
+                    if (tileBytes >= 32) break;
+                }
+                
+            } else if (ctrlUpper == 0xC || ctrlUpper == 0xD) { 
+                debug(ctrl, tilesDecompressed, tileBytes, src);
+                // Copy 1-4 bytes from a previous position (back-reference)
+                const numBytes = (ctrlLower & 0x3) + 1; // Lower 2 bits + 1
+                const offsetBits = (ctrlLower >> 2) & 0x7; // Bits 4-2
+                const backOffset = -(offsetBits + 1); // Negated offset
+                
+                for (let i = 0; i < numBytes; i++) {
+                    const copyIndex = output.length + backOffset;
+                    if (copyIndex >= 0 && copyIndex < output.length) {
+                        output.push(output[copyIndex]);
+                    } else {
+                        output.push(0x00); // Default if invalid reference
+                    }
+                    tileBytes++;
+                    if (tileBytes >= 32) break;
+                }
+                
+            } else if (ctrlUpper == 0xF) { 
+                debug(ctrl, tilesDecompressed, tileBytes, src);
+                // Special case or end of decompression
+                // For now, treat as end of tile or skip
+                console.log('End marker or special case encountered');
+                break;
+                
             } else {
+                // Unknown command - treat as literal
                 // throw new Error(`Unknown control byte: 0x${ctrl.toString(16).padStart(2, '0')} at tile ${tilesDecompressed}, byte ${tileBytes}`);
-                // Treat as literal
+                console.warn(`Unknown control byte: 0x${ctrl.toString(16).padStart(2, '0')} at tile ${tilesDecompressed}, byte ${tileBytes}`);
                 output.push(ctrl);
                 tileBytes++;
             }
@@ -79,6 +164,11 @@ function decompressMapJim(inputBuffer) {
     }
 
     return Buffer.from(output);
+}
+
+function debug(ctrl, tilesDecompressed, tileBytes, src) {
+        throw new Error(`Unknown control byte: 0x${ctrl.toString(16).padStart(2, '0')} at tile ${tilesDecompressed}, byte ${tileBytes}, offset ${src-7}`);
+    return;
 }
 
 // File I/O
