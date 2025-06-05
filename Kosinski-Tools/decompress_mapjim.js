@@ -36,10 +36,9 @@ function decompressMapJim(inputBuffer) {
                 return Buffer.from(output);
             }
             const ctrl = inputBuffer[src++];
-            // New logic based on observed pattern
             if (ctrl >= 0x30 && ctrl <= 0x3F) {
-                // Repeat next byte (ctrl - 0x2F) times
-                const count = ctrl - 0x2F;
+                // Repeat next byte (ctrl - 0x2D) times
+                const count = ctrl - 0x2D;
                 const val = inputBuffer[src++];
                 for (let i = 0; i < count; i++) {
                     output.push(val);
@@ -51,14 +50,12 @@ function decompressMapJim(inputBuffer) {
                 output.push(val);
                 tileBytes++;
             } else if (ctrl === 0x03) {
-                // Repeat next N bytes (sequence) a certain number of times
-                const count = inputBuffer[src++];
+                // Repeat the next 4 bytes as a sequence, 4 times
                 const seq = [];
-                for (let i = 0; i < count; i++) {
+                for (let i = 0; i < 4; i++) {
                     seq.push(inputBuffer[src++]);
                 }
-                const repeat = inputBuffer[src++];
-                for (let r = 0; r < repeat; r++) {
+                for (let r = 0; r < 4; r++) {
                     for (let b = 0; b < seq.length; b++) {
                         output.push(seq[b]);
                         tileBytes++;
@@ -66,8 +63,12 @@ function decompressMapJim(inputBuffer) {
                     }
                     if (tileBytes >= 32) break;
                 }
+            } else if (ctrl === 0x8D) {
+                // Special command (possibly backreference or skip)
+                const special = inputBuffer[src++];
+                console.log('Special command 0x8D encountered, skipping byte:', special);
             } else {
-                // Fallback: treat as literal (for unknown/special cases)
+                // Treat as literal
                 output.push(ctrl);
                 tileBytes++;
             }
