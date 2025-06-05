@@ -68,10 +68,10 @@ function decompressMapJim(inputBuffer) {
                     if (tileBytes >= 32) break;
                 }
             } else if (ctrl === 0x8D) {
-                // Backreference: copy the last 'count' bytes from output
+                // Backreference: copy the last 'count' bytes from output, but do not overflow the tile
                 const count = inputBuffer[src++];
                 const start = output.length - count;
-                for (let i = 0; i < count; i++) {
+                for (let i = 0; i < count && tileBytes < 32; i++) {
                     output.push(output[start + i]);
                     tileBytes++;
                 }
