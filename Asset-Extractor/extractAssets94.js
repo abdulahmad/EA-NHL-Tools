@@ -74,6 +74,7 @@ const assets = [
     { name: 'unknown9.map.jim', folder: 'NHL94/Graphics', start: 0x000aac52, end: 0x000afe12 }, // error on this one!
     { name: 'TeamBlocks94.map.jim', folder: 'NHL94/Graphics', start: 0x000afe12, end: 0x000b3530 },
     // gap? -- Ron Barr at 0x000B389C
+    { name: 'RonBarrCompressed.map.jim', folder: 'NHL94/Graphics', start: 0x000b389c, end: 0x000b3e78 },
     { name: 'IceRink94Reverse.map.jim', folder: 'NHL94/Graphics', start: 0x000b5180, end: 0x000bb4ee },
     { name: 'ReplayOptions.map.jim', folder: 'NHL94/Graphics', start: 0x000bb4ee, end: 0x000bc05c },
     { name: 'PauseScreen.map.jim', folder: 'NHL94/Graphics', start: 0x000bc05c, end: 0x000be26a },
