@@ -185,7 +185,9 @@ function decompressMapJim(inputBuffer) {
             } else if (ctrlUpper == 0x9) { 
                 // console.log('HEY!!');
                 // debug(ctrl, tilesDecompressed, tileBytes, src);
-                // Copy 1-256 bytes from a previous position (back-reference)
+                // 9B 1F -> start copying 31 bytes ago, copy 26 bytes?
+                // 9C FF -> start copying -128 (FF) bytes ago, copy 28 bytes (C+2)*2
+
                 const startCopyOffset = inputBuffer[src++] + 1; // start copying from this offset
                 const endCopyOffset = (0xF - (ctrlLower)) + 3;
                 // const backOffset = -(offsetBits); // Negated offset
