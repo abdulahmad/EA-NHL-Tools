@@ -187,12 +187,18 @@ function decompressMapJim(inputBuffer) {
                 // debug(ctrl, tilesDecompressed, tileBytes, src);
                 // 9B 1F -> start copying 31 bytes ago, copy 26 bytes?
                 // 9C FF -> start copying -128 (FF) bytes ago, copy 28 bytes (C+2)*2
-
-                const startCopyOffset = inputBuffer[src++] + 1; // start copying from this offset
-                const endCopyOffset = (0xF - (ctrlLower)) + 3;
+                const val = inputBuffer[src++];
+                let startCopyOffset;
+                if (val > 128) {
+                    startCopyOffset = -(256 - val); // Negative offset, copy from the end
+                } else {
+                    startCopyOffset = val;
+                }
+                const numBytes = (ctrlLower+2) * 2;
+                const endCopyOffset = val-numBytes;
                 // const backOffset = -(offsetBits); // Negated offset
                 const copiedValue = output.slice(output.length-startCopyOffset, output.length-endCopyOffset);
-                const numBytes = startCopyOffset - endCopyOffset;
+                // const numBytes = startCopyOffset - endCopyOffset;
                 console.log(numBytes, startCopyOffset, endCopyOffset, numBytes, copiedValue);
                 
                 for (let i = 0; i < numBytes; i++) {
