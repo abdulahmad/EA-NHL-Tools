@@ -102,7 +102,7 @@ function decompressMapJim(inputBuffer) {
                 }
                 
             } else if (ctrlUpper == 0x3 || ctrlUpper == 0x4 || 
-                      ctrlUpper == 0x6 || ctrlUpper == 0x7) { 
+                       ctrlUpper == 0x7) { 
                 // Repeat a byte 2-17 times
                 const count = (ctrlLower+1) + 2;
                 const val = inputBuffer[src++];
@@ -158,6 +158,21 @@ function decompressMapJim(inputBuffer) {
                 // Copy 2 + lower bytes
                 const startCopyOffset = 2 + ctrlLower; // start copying from this offset
                 const endCopyOffset = 0;
+                const copiedValue = output.slice(output.length-startCopyOffset, output.length-endCopyOffset);
+                const numBytes = startCopyOffset - endCopyOffset;
+                console.log(numBytes, startCopyOffset, endCopyOffset, numBytes, copiedValue);
+                
+                for (let i = 0; i < numBytes; i++) {
+                    output.push(copiedValue[i]);
+                    tileBytes++;
+                    // if (tileBytes >= 32) break; Doing this breaks the decompression
+                }
+            } else if (ctrlUpper == 0x6) { 
+                console.log('HEY!!');
+                // debug(ctrl, tilesDecompressed, tileBytes, src);
+                // Copy 2 bytes from lower-1 bytes ago
+                const startCopyOffset = ctrlLower-2; // start copying from this offset
+                const endCopyOffset = startCopyOffset-2;
                 const copiedValue = output.slice(output.length-startCopyOffset, output.length-endCopyOffset);
                 const numBytes = startCopyOffset - endCopyOffset;
                 console.log(numBytes, startCopyOffset, endCopyOffset, numBytes, copiedValue);
