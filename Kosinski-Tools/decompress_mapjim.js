@@ -101,8 +101,7 @@ function decompressMapJim(inputBuffer) {
                     if (tileBytes >= 32) break;
                 }
                 
-            } else if (ctrlUpper == 0x3 || ctrlUpper == 0x4 || 
-                       ctrlUpper == 0x7) { 
+            } else if (ctrlUpper == 0x3) { 
                 // Repeat a byte 2-17 times
                 const count = (ctrlLower+1) + 2;
                 const val = inputBuffer[src++];
@@ -183,19 +182,22 @@ function decompressMapJim(inputBuffer) {
                     // if (tileBytes >= 32) break; Doing this breaks the decompression
                 }
             } else if (ctrlUpper == 0x9) { 
-                // console.log('HEY!!');
+                console.log('HEY!!');
                 // debug(ctrl, tilesDecompressed, tileBytes, src);
                 // 9B 1F -> start copying 31 bytes ago, copy 26 bytes?
                 // 9C FF -> start copying -128 (FF) bytes ago, copy 28 bytes (C+2)*2
                 const val = inputBuffer[src++];
                 let startCopyOffset;
                 if (val > 128) {
-                    startCopyOffset = -(256 - val); // Negative offset, copy from the end
+                    console.log(val, 'AA TEST!!!');
+                    startCopyOffset = -(128-val)+1; // Negative offset, copy from the end
                 } else {
-                    startCopyOffset = val;
+                    console.log(val, 'AA TEST!!!');
+                    startCopyOffset = val+1;
                 }
-                const numBytes = (ctrlLower+2) * 2;
+                const numBytes = (ctrlLower+1) * 2 + 1;
                 const endCopyOffset = val-numBytes;
+                console.log(val, ctrlLower, startCopyOffset, endCopyOffset);
                 // const backOffset = -(offsetBits); // Negated offset
                 const copiedValue = output.slice(output.length-startCopyOffset, output.length-endCopyOffset);
                 // const numBytes = startCopyOffset - endCopyOffset;
