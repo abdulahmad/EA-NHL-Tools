@@ -88,7 +88,7 @@ function decompressMapJim(inputBuffer) {
                         tileBytes++;
                         if (tileBytes >= 32) break;
                     }
-                    if (tileBytes >= 32) break;
+                    // if (tileBytes >= 32) break;
                 }
                 
             } else if (ctrlUpper == 0x2) { 
@@ -117,29 +117,39 @@ function decompressMapJim(inputBuffer) {
                 
             } else if (ctrlUpper == 0x8) { 
                 // debug(ctrl, tilesDecompressed, tileBytes, src);
-                // Copy 1-8 bytes from a previous position (back-reference)
-                // const numBytes = (ctrlLower & 0x7) + 1; // Lower 3 bits + 1
-                // const offsetBits = (ctrlLower >> 3) & 0x7; // Bits 6-4 (upper 3 bits of lower nibble)
-                // 8A 20 -> need to copy 12 bytes (0xB) from ending 48 bytes (0x56) ago, starting from 60 bytes (0x3C)
                 // 8D 04 -> need to copy 4 bytes (0x4) starting from currentOffset-lower to zero
-                const numBytes = inputBuffer[src++];
-                const offsetBits = 0xF - ctrlLower + 1;
-                const backOffset = -(offsetBits + 1); // Negated offset
-                console.log(numBytes, offsetBits, backOffset, output.length + backOffset);
-                
-                for (let i = 0; i < numBytes; i++) {
-                    const copyIndex = output.length + backOffset;
-                    console.log(i, numBytes, output[copyIndex].toString(16));
-                    if (copyIndex >= 0 && copyIndex < output.length) {
-                        console.log('push 12');
-                        output.push(output[copyIndex]);
-                    } else {
-                        console.log('what is this');
-                        console.log('push 13');
-                        output.push(0x00); // Default if invalid reference
+                if (ctrlLower > inputBuffer[src]) {
+                    const numBytes = inputBuffer[src++];
+                    const backOffset = -(ctrlLower + 1)+2; // Distance back to copy from
+                    
+                    console.log(`Copy ${numBytes} bytes from ${Math.abs(backOffset)} bytes ago`);
+                    
+                    for (let i = 0; i < numBytes; i++) {
+                        const copyIndex = output.length + backOffset;
+                        console.log(i, numBytes, copyIndex, output.length);
+                        if (copyIndex >= 0 && copyIndex < output.length) {
+                            console.log('push 12');
+                            output.push(output[copyIndex]);
+                        } else {
+                            console.log('Invalid back reference');
+                            console.log('push 13');
+                            output.push(0x00); // Default if invalid reference
+                        }
+                        tileBytes++;
+                        // if (tileBytes >= 32) break;
                     }
-                    tileBytes++;
-                    // if (tileBytes >= 32) break;
+                } else { // ctrlLower <= inputBuffer[src])
+                    // 8A 20 -> need to copy 12 bytes (0xB) from ending 48 bytes (0x56) ago, starting from 60 bytes (0x3C)
+                    const numBytes = ctrlLower+3;
+                    const backOffset = inputBuffer[src++] + 10;
+                    const copiedValue = output.slice(backOffset, backOffset + numBytes);
+                    console.log(`Copy ${numBytes} bytes from offset ${backOffset}`);
+                    console.log(output.toString());
+                    for (let i = 0; i < numBytes; i++) {
+                        output.push(copiedValue[i]);
+                        tileBytes++;
+                        // if (tileBytes >= 32) break; Doing this breaks the decompression
+                    }
                 }
             } else if (ctrlUpper == 0x5) { 
                 console.log('HEY!!');
