@@ -18,7 +18,8 @@ function decompressMapJim(inputBuffer) {
     // Header: 2x uint32 offsets, 1x uint16 (10 bytes)
     const paletteOffset = readUInt32BE(inputBuffer, 0);
     const mapOffset = readUInt32BE(inputBuffer, 4);
-    const numTiles = readUInt16BE(inputBuffer, 8);
+    const palSize = inputBuffer.readUInt8(8);
+    const numTiles = inputBuffer.readUInt8(9);
     // Copy the 10-byte header to the output first
     const output = [];
     for (let i = 0; i < 10; i++) {
@@ -32,16 +33,17 @@ function decompressMapJim(inputBuffer) {
     // Decompress tile data (numTiles * 32 bytes per tile)
     let tilesDecompressed = 0;
     while (tilesDecompressed < numTiles) {
+        console.log('numTiles',numTiles);
         let tileBytes = 0;
         while (tileBytes < 32) {
-            if (src >= inputBuffer.length) {
-                console.error('Reached EOF: tilesDecompressed', tilesDecompressed, 'tileBytes', tileBytes, 'src', src);
+            if (src > inputBuffer.length) {
+                console.error('Reached EOF: tilesDecompressed', tilesDecompressed, 'tileBytes', tileBytes, 'src', src, 'inputBuffer', inputBuffer.length);
                 return Buffer.from(output);
             }
             const ctrl = inputBuffer[src++];
             // Extract upper nibble (shift right 4 bits)
             const ctrlUpper = (ctrl >> 4) & 0xF;
-            
+            console.log(ctrlUpper, 'AA TEST!');
             // Extract lower nibble (mask with 0xF)
             const ctrlLower = ctrl & 0xF;            // console.log('Control byte:', ctrl.toString(16).padStart(2, '0'), 'upper:', ctrlUpper.toString(16), 'lower:', ctrlLower.toString(16));
             
@@ -72,7 +74,7 @@ function decompressMapJim(inputBuffer) {
                 }
                 
             } else if (ctrlUpper == 0x3 || ctrlUpper == 0x4 || ctrlUpper == 0x5 || 
-                      ctrlUpper == 0x6 || ctrlUpper == 0x7 || ctrlUpper == 0x9) { 
+                      ctrlUpper == 0x6 || ctrlUpper == 0x7) { 
                 // Repeat a byte 2-17 times
                 const count = (ctrlLower+1) + 2;
                 const val = inputBuffer[src++];
@@ -85,9 +87,33 @@ function decompressMapJim(inputBuffer) {
             } else if (ctrlUpper == 0x8) { 
                 // debug(ctrl, tilesDecompressed, tileBytes, src);
                 // Copy 1-8 bytes from a previous position (back-reference)
-                const numBytes = (ctrlLower & 0x7) + 1; // Lower 3 bits + 1
-                const offsetBits = (ctrlLower >> 3) & 0x7; // Bits 6-4 (upper 3 bits of lower nibble)
+                // const numBytes = (ctrlLower & 0x7) + 1; // Lower 3 bits + 1
+                // const offsetBits = (ctrlLower >> 3) & 0x7; // Bits 6-4 (upper 3 bits of lower nibble)
+                const numBytes = inputBuffer[src++];
+                const offsetBits = 0xF - ctrlLower + 1;
                 const backOffset = -(offsetBits + 1); // Negated offset
+                console.log(numBytes, offsetBits, backOffset, output.length + backOffset);
+                
+                for (let i = 0; i < numBytes; i++) {
+                    const copyIndex = output.length + backOffset;
+                    console.log(i, numBytes, output[copyIndex].toString(16));
+                    if (copyIndex >= 0 && copyIndex < output.length) {
+                        output.push(output[copyIndex]);
+                    } else {
+                        console.log('what is this');
+                        output.push(0x00); // Default if invalid reference
+                    }
+                    tileBytes++;
+                    if (tileBytes >= 32) break;
+                }
+            } else if (ctrlUpper == 0x9) { 
+                console.log('HEY!!');
+                // debug(ctrl, tilesDecompressed, tileBytes, src);
+                // Copy 1-256 bytes from a previous position (back-reference)
+                const numBytes = inputBuffer[src++] - (0xF - ctrlLower);
+                const offsetBits = (0xF - ctrlLower + 1);
+                const backOffset = -(offsetBits + 1); // Negated offset
+                console.log(numBytes, offsetBits, backOffset, output.length + backOffset);
                 
                 for (let i = 0; i < numBytes; i++) {
                     const copyIndex = output.length + backOffset;
@@ -99,7 +125,9 @@ function decompressMapJim(inputBuffer) {
                     tileBytes++;
                     if (tileBytes >= 32) break;
                 }
-                
+                // 9B 1F
+                // offset = -3 ; F-B = 4? 1F
+                // numBytes = 25
             } else if (ctrlUpper == 0xA) { 
                 debug(ctrl, tilesDecompressed, tileBytes, src);
                 // Repeat a byte for a larger count (2-33)
