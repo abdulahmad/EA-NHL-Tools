@@ -75,21 +75,19 @@ function decompressMapJim(inputBuffer) {
             // Extract lower nibble (mask with 0xF)
             const ctrlLower = ctrl & 0xF;            // console.log('Control byte:', ctrl.toString(16).padStart(2, '0'), 'upper:', ctrlUpper.toString(16), 'lower:', ctrlLower.toString(16));
             
-            if (ctrlUpper == 0x0 || ctrlUpper == 0x1) { 
-                const seq = [];
+            if (ctrlUpper == 0x0) { 
+                const copiedValue = [];
                 const count = ctrlLower + 1;
+                console.log('copy next x bytes', count);
                 for (let i = 0; i < count; i++) {
-                    seq.push(inputBuffer[src++]);
+                    copiedValue.push(inputBuffer[src++]);
                 }
-                for (let r = 0; r < count; r++) {
-                    for (let b = 0; b < seq.length; b++) {
-                        console.log('push 9');
-                        output.push(seq[b]);
-                        tileBytes++;
-                        if (tileBytes >= 32) break;
+                for (let i = 0; i < count; i++) {
+                    console.log('push 9');
+                    output.push(copiedValue[i]);
+                    tileBytes++;
+                    // if (tileBytes >= 32) break; Doing this breaks the decompression
                     }
-                    // if (tileBytes >= 32) break;
-                }
                 
             } else if (ctrlUpper == 0x2) { 
                 debug(ctrl, tilesDecompressed, tileBytes, src);
@@ -118,23 +116,26 @@ function decompressMapJim(inputBuffer) {
             } else if (ctrlUpper == 0x8) { 
                 // debug(ctrl, tilesDecompressed, tileBytes, src);
                 // 8D 04 -> need to copy 4 bytes (0x4) starting from currentOffset-lower to zero
+                // F-(D+2) = 4 ; copy last F-(D+2) bytes, 0x04 times
                 if (ctrlLower > inputBuffer[src]) {
-                    const numBytes = inputBuffer[src++];
-                    const backOffset = -(ctrlLower + 1)+2; // Distance back to copy from
+                    const count = inputBuffer[src++];
+                    const backOffset = 0xF - (ctrlLower) + 2; // Distance back to copy from
                     
-                    console.log(`Copy ${numBytes} bytes from ${Math.abs(backOffset)} bytes ago`);
-                    
-                    for (let i = 0; i < numBytes; i++) {
-                        const copyIndex = output.length + backOffset;
-                        console.log(i, numBytes, copyIndex, output.length);
-                        if (copyIndex >= 0 && copyIndex < output.length) {
+                    console.log(`Copy last ${backOffset} bytes, ${count} times`);
+                    const copiedValue = output.slice(output.length - backOffset, output.length);
+                    for (let i = 0; i < count; i++) {
+                        // const copyIndex = output.length + backOffset;
+                        // console.log(i, numBytes, copyIndex, output.length);
+                        // if (copyIndex >= 0 && copyIndex < output.length) {
+                        for (let j = 0; j < copiedValue.length; j++) {
                             console.log('push 12');
-                            output.push(output[copyIndex]);
-                        } else {
-                            console.log('Invalid back reference');
-                            console.log('push 13');
-                            output.push(0x00); // Default if invalid reference
+                            output.push(copiedValue[j]);
                         }
+                        // } else {
+                        //     console.log('Invalid back reference');
+                        //     console.log('push 13');
+                        //     output.push(0x00); // Default if invalid reference
+                        // }
                         tileBytes++;
                         // if (tileBytes >= 32) break;
                     }
