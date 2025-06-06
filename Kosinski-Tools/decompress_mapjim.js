@@ -13,6 +13,23 @@ function readUInt32BE(buf, offset) {
     return (buf[offset] << 24) | (buf[offset + 1] << 16) | (buf[offset + 2] << 8) | buf[offset + 3];
 }
 
+// Helper functions to write values to output array
+function writeUInt8(output, value) {
+    output.push(value & 0xFF);
+}
+
+function writeUInt16BE(output, value) {
+    output.push((value >> 8) & 0xFF);   // High byte first
+    output.push(value & 0xFF);          // Low byte second
+}
+
+function writeUInt32BE(output, value) {
+    output.push((value >> 24) & 0xFF); // Highest byte first
+    output.push((value >> 16) & 0xFF);
+    output.push((value >> 8) & 0xFF);
+    output.push(value & 0xFF);         // Lowest byte last
+}
+
 // Main decompression routine, mirrors 68k code structure
 function decompressMapJim(inputBuffer) {
     // Header: 2x uint32 offsets, 1x uint16 (10 bytes)
@@ -20,11 +37,19 @@ function decompressMapJim(inputBuffer) {
     const mapOffset = readUInt32BE(inputBuffer, 4);
     const palSize = inputBuffer.readUInt8(8);
     const numTiles = inputBuffer.readUInt8(9);
+
+    const newHeaderPaletteOffset = numTiles * 32 + 10;
+    const newHeaderMapOffset = newHeaderPaletteOffset + palSize;
+
     // Copy the 10-byte header to the output first
     const output = [];
-    for (let i = 0; i < 10; i++) {
-        output.push(inputBuffer[i]);
-    }
+    // for (let i = 0; i < 10; i++) {
+    //     output.push(inputBuffer[i]);
+    // }
+    // Write new header values
+    writeUInt32BE(output, newHeaderPaletteOffset);
+    writeUInt32BE(output, newHeaderMapOffset);
+    writeUInt16BE(output, numTiles);
     let src = 10; // Start after header
 
     // Debug: print header info
@@ -43,7 +68,7 @@ function decompressMapJim(inputBuffer) {
             const ctrl = inputBuffer[src++];
             // Extract upper nibble (shift right 4 bits)
             const ctrlUpper = (ctrl >> 4) & 0xF;
-            console.log(ctrlUpper, 'AA TEST!');
+            // console.log(ctrlUpper, 'AA TEST!');
             // Extract lower nibble (mask with 0xF)
             const ctrlLower = ctrl & 0xF;            // console.log('Control byte:', ctrl.toString(16).padStart(2, '0'), 'upper:', ctrlUpper.toString(16), 'lower:', ctrlLower.toString(16));
             
