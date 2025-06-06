@@ -241,7 +241,7 @@ function decompressMapJim(inputBuffer) {
                 
             } else {
                 // Unknown command - treat as literal
-                throw new Error(`Unknown control byte: 0x${ctrl.toString(16).padStart(2, '0')} at tile ${tilesDecompressed}, byte ${tileBytes}`);
+                // throw new Error(`Unknown control byte: 0x${ctrl.toString(16).padStart(2, '0')} at tile ${tilesDecompressed}, byte ${tileBytes}`);
                 console.warn(`Unknown control byte: 0x${ctrl.toString(16).padStart(2, '0')} at tile ${tilesDecompressed}, byte ${tileBytes}`);
                 console.log('push 20');
                 output.push(ctrl);
