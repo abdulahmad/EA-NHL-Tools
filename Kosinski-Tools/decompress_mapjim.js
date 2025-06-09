@@ -184,19 +184,41 @@ function decompressMapJim(inputBuffer) {
             } else if (ctrlUpper == 0x9) { 
                 console.log('HEY!!');
                 // debug(ctrl, tilesDecompressed, tileBytes, src);
-                // 9B 1F -> start copying 31 bytes ago, copy 26 bytes?
+                /* 9B 1F -> start copying 31 bytes ago, copy 26 bytes?
+                    startCopyOffset = val+1 = 31 + 1 = 32
+                    numBytes = (ctrlLower+1)*2+1 = (11+1)*2+1 = 25
+                    numBytes2 = (25) = (ctrlLower)*2+3 = (11)*2+3 = 25
+                    11+1*2 = 12*2  + 1 = 25
+                    11+2*2-1 = 26 -1 = 25
+                    11*2+3 = 22+3 = 25
+                    11+3*2-3 = 28-3 = 25
+                    numBytes3 = (25) = (ctrlLower+2)*2-1 = (11+2)*2-1 = 25
+                    endCopyOffset = startCopyOffset-numBytes = 32-25 = 7
                 // 9C FF -> start copying -128 (FF) bytes ago, copy 28 bytes (C+2)*2
+                    startCopyOffset = -(128-val)+1 = -(128-255)+1 = 127+1 += 128
+                    numBytes = (ctrlLower+1)*2+1 = (12+1)*2+1 = 13*2+1 = 27
+                    numBytes2 = (should be 28) = (ctrlLower)*2+3 = (13)*2+3 = 29
+                    12+2*2 = 28
+                    (12+1)*2+2 = 26+2 = 28
+                    12*2+4 = 24+4 = 28
+                    12+3*2-2 = 30-2 = 28
+                    numBytes3 = (28) = (ctrlLower+2)*2-1 = (12+2)*2-1 = 27
+                    endCopyOffset = startCopyOffset-numBytes = 128-27 = 101
+                */
                 const val = inputBuffer[src++];
-                let startCopyOffset;
+                let startCopyOffset, numBytes;
                 if (val > 128) {
-                    console.log(val, 'AA TEST!!!');
+                    console.log(val, 'AA TEST!!!a');
                     startCopyOffset = -(128-val)+1; // Negative offset, copy from the end
+                    numBytes = (ctrlLower+1)*2+2 ;
                 } else {
-                    console.log(val, 'AA TEST!!!');
+                    console.log(val, 'AA TEST!!!b');
                     startCopyOffset = val+1;
+                    numBytes = (ctrlLower+1)*2+1 ;
                 }
-                const numBytes = (ctrlLower+1) * 2 + 1;
-                const endCopyOffset = val-numBytes;
+                // const numBytes = (ctrlLower+2) * 2-1 ;
+                // numBytes = (ctrlLower+1)*2+1 ;
+                const endCopyOffset = startCopyOffset-numBytes;
                 console.log(val, ctrlLower, startCopyOffset, endCopyOffset);
                 // const backOffset = -(offsetBits); // Negated offset
                 const copiedValue = output.slice(output.length-startCopyOffset, output.length-endCopyOffset);
