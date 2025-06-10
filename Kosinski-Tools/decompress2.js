@@ -92,9 +92,69 @@ function decompressMapJim(compressedHex) {
   return Buffer.from(decompressed).toString('hex').match(/.{1,2}/g).join(' ');
 }
 
-// Example usage
-// const compressedHex = "00 00 04 c4 00 00 05 44 04 03 66 66 66 ..."; // Replace with actual data
-// const decompressedHex = decompressMapJim(compressedHex);
-// console.log(decompressedHex);
+// Function to read hex data from file (supports both binary and hex text files)
+function readHexFromFile(filePath) {
+  const fileContent = fs.readFileSync(filePath);
+  
+  // Try to detect if file is binary or hex text
+  const isTextFile = fileContent.every(byte => byte >= 32 && byte <= 126 || byte === 9 || byte === 10 || byte === 13);
+  
+  if (isTextFile) {
+    // Assume it's a hex text file (space or newline separated hex values)
+    return fileContent.toString().replace(/[^0-9a-fA-F]/g, ' ').trim();
+  } else {
+    // It's a binary file, convert to hex string
+    return Buffer.from(fileContent).toString('hex').match(/.{1,2}/g).join(' ');
+  }
+}
 
-module.exports = { decompressMapJim };
+// Function to write decompressed data to file
+function writeHexToFile(filePath, hexString) {
+  // Convert hex string back to binary data
+  const hexBytes = hexString.split(' ').map(hex => parseInt(hex, 16));
+  const buffer = Buffer.from(hexBytes);
+  fs.writeFileSync(filePath, buffer);
+}
+
+// Main function for command-line usage
+function main() {
+  const args = process.argv.slice(2);
+  
+  if (args.length !== 2) {
+    console.log('Usage: node decompress2.js <input_file> <output_file>');
+    console.log('');
+    console.log('Example:');
+    console.log('  node decompress2.js input.map.jim output.decompressed');
+    console.log('');
+    console.log('Input file can be either:');
+    console.log('  - Binary .map.jim file');
+    console.log('  - Text file with hex data (space-separated)');
+    process.exit(1);
+  }
+  
+  const inputFile = args[0];
+  const outputFile = args[1];
+  
+  try {
+    console.log(`Reading compressed data from: ${inputFile}`);
+    const compressedHex = readHexFromFile(inputFile);
+    
+    console.log('Decompressing data...');
+    const decompressedHex = decompressMapJim(compressedHex);
+    
+    console.log(`Writing decompressed data to: ${outputFile}`);
+    writeHexToFile(outputFile, decompressedHex);
+    
+    console.log('Decompression completed successfully!');
+  } catch (error) {
+    console.error('Error:', error.message);
+    process.exit(1);
+  }
+}
+
+// Run main function if script is executed directly
+if (require.main === module) {
+  main();
+}
+
+module.exports = { decompressMapJim, readHexFromFile, writeHexToFile };
