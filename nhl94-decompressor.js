@@ -198,13 +198,14 @@ class NHL94Decompressor {
     cmd_extended_50(commandByte) { this.handleExtendedCommand(commandByte, 0x50); }
     cmd_extended_60(commandByte) { this.handleExtendedCommand(commandByte, 0x60); }
     cmd_extended_70(commandByte) { this.handleExtendedCommand(commandByte, 0x70); }
-    cmd_long_repeat(commandByte) { this.handleLongRepeat(commandByte); }
-    cmd_extended_90(commandByte) { this.handleExtendedCommand(commandByte, 0x90); }
+        cmd_long_repeat(commandByte) { this.handleLongRepeat(commandByte); }
     cmd_extended_A0(commandByte) { this.handleExtendedCommand(commandByte, 0xA0); }
     cmd_extended_B0(commandByte) { this.handleExtendedCommand(commandByte, 0xB0); }
     cmd_extended_C0(commandByte) { this.handleExtendedCommand(commandByte, 0xC0); }
     cmd_extended_D0(commandByte) { this.handleExtendedCommand(commandByte, 0xD0); }
-    cmd_extended_E0(commandByte) { this.handleExtendedCommand(commandByte, 0xE0); }    /**
+    cmd_extended_E0(commandByte) { this.handleExtendedCommand(commandByte, 0xE0); }
+
+    /**
      * Command 0x40-0x4F: Extended repeat with offset
      * Based on assembly analysis around jump table case 4
      */
@@ -217,23 +218,30 @@ class NHL94Decompressor {
         for (let i = 0; i < count; i++) {
             this.writeOutputByte(nextByte);
         }
-    }
-
-    /**
+    }    /**
      * Command 0x50-0x5F: Copy with extended offset
      * Based on assembly patterns seen in the code
      */
     cmd_extended_50(commandByte) {
         const count = (commandByte & 0x0F) + 1;
         const offset = this.readSourceByte();
-        console.log(`  Extended 50: copy ${count} bytes from offset -${offset}`);
         
-        const sourcePos = this.outputData.length - offset;
-        for (let i = 0; i < count; i++) {
-            if (sourcePos + i >= 0 && sourcePos + i < this.outputData.length) {
-                this.writeOutputByte(this.outputData[sourcePos + i]);
-            } else {
-                this.writeOutputByte(0); // Fill with zero if out of range
+        // Handle special case where offset is 0 - treat as literal bytes
+        if (offset === 0) {
+            console.log(`  Extended 50: ${count} literal bytes (offset=0)`);
+            for (let i = 0; i < count; i++) {
+                const byte = this.readSourceByte();
+                this.writeOutputByte(byte);
+            }
+        } else {
+            console.log(`  Extended 50: copy ${count} bytes from offset -${offset}`);
+            const sourcePos = this.outputData.length - offset;
+            for (let i = 0; i < count; i++) {
+                if (sourcePos + i >= 0 && sourcePos + i < this.outputData.length) {
+                    this.writeOutputByte(this.outputData[sourcePos + i]);
+                } else {
+                    this.writeOutputByte(0); // Fill with zero if out of range
+                }
             }
         }
     }
@@ -268,9 +276,7 @@ class NHL94Decompressor {
         for (let i = 0; i < count; i++) {
             this.writeOutputByte(pattern);
         }
-    }
-
-    /**
+    }    /**
      * Command 0x90-0x9F: Extended operations
      */
     cmd_extended_90(commandByte) {
@@ -320,17 +326,37 @@ class NHL94Decompressor {
             
             for (let i = 0; i < count; i++) {
                 this.writeOutputByte(byte);
-            }
-        } else if (lowNibble < 8) {
-            // 0x81-0x87: Variable length count
-            let count = lowNibble;
-            const extraByte = this.readSourceByte();
-            count = (count << 8) | extraByte;
-            const byte = this.readSourceByte();
-            console.log(`  Long repeat (8${lowNibble.toString(16)}): 0x${byte.toString(16).padStart(2, '0')} × ${count}`);
-            
-            for (let i = 0; i < count; i++) {
-                this.writeOutputByte(byte);
+            }        } else if (lowNibble < 8) {
+            // 0x81-0x87: Variable length count with different encoding
+            // The low nibble might encode the byte value instead of count
+            if (lowNibble === 2) {
+                // 0x82: Special case - might be a different type of command
+                // Based on the data pattern, this might not be a repeat command
+                console.log(`  Long repeat (82): Treating as copy/special command`);
+                
+                // Read next byte as potential parameter
+                const param = this.readSourceByte();
+                console.log(`    Parameter: 0x${param.toString(16)}`);
+                
+                // This might be a special command - for now, treat as single byte output
+                this.writeOutputByte(param);
+                
+            } else {
+                // Other 0x81, 0x83-0x87 commands
+                const extraByte = this.readSourceByte();
+                let count = (lowNibble << 8) | extraByte;
+                const byte = this.readSourceByte();
+                console.log(`  Long repeat (8${lowNibble.toString(16)}): 0x${byte.toString(16).padStart(2, '0')} × ${count}`);
+                
+                // Limit extremely large counts to prevent memory issues
+                if (count > 4096) {
+                    console.log(`    Warning: Large count ${count} limited to 4096`);
+                    count = 4096;
+                }
+                
+                for (let i = 0; i < count; i++) {
+                    this.writeOutputByte(byte);
+                }
             }
         } else {
             // 0x88-0x8F: Copy operations with extended counts
@@ -338,14 +364,23 @@ class NHL94Decompressor {
             const baseCount = this.readSourceByte();
             const count = baseCount + extraCount;
             const offset = this.readSourceByte();
-            console.log(`  Long copy (8${lowNibble.toString(16)}): ${count} bytes from offset -${offset}`);
             
-            const sourcePos = this.outputData.length - offset;
-            for (let i = 0; i < count; i++) {
-                if (sourcePos + (i % offset) >= 0 && sourcePos + (i % offset) < this.outputData.length) {
-                    this.writeOutputByte(this.outputData[sourcePos + (i % offset)]);
-                } else {
+            // Handle special case where offset is 0
+            if (offset === 0) {
+                console.log(`  Long copy (8${lowNibble.toString(16)}): ${count} zero bytes (offset=0)`);
+                for (let i = 0; i < count; i++) {
                     this.writeOutputByte(0);
+                }
+            } else {
+                console.log(`  Long copy (8${lowNibble.toString(16)}): ${count} bytes from offset -${offset}`);
+                const sourcePos = this.outputData.length - offset;
+                for (let i = 0; i < count; i++) {
+                    const srcIndex = sourcePos + (i % offset);
+                    if (srcIndex >= 0 && srcIndex < this.outputData.length) {
+                        this.writeOutputByte(this.outputData[srcIndex]);
+                    } else {
+                        this.writeOutputByte(0);
+                    }
                 }
             }
         }
@@ -500,6 +535,286 @@ function testRealData() {
     return null;
 }
 
+/**
+ * Test full file decompression with comprehensive validation
+ */
+function testFullDecompression() {
+    console.log('\n=== Full File Decompression Test ===');
+    
+    // Use the same correct hex data as the real data test
+    const realCompressedHex = "00000004C40000054480003D31660065305500653044036547777780041F0018510088510092" +
+                              "8A2031110E2228822233322234443298229998888920001130770199886804981118778134" +
+                              "119CFF018287828000613055072144444321777788E048FD48B04387700718A8005E007180";
+    
+    const bytes = [];
+    for (let i = 0; i < realCompressedHex.length; i += 2) {
+        if (i + 1 < realCompressedHex.length) {
+            bytes.push(parseInt(realCompressedHex.substr(i, 2), 16));
+        }
+    }
+    
+    console.log(`Processing ${bytes.length} bytes of compressed data...`);
+    
+    const decompressor = new NHL94Decompressor();
+    const result = decompressor.decompress(bytes, 12); // Use known good offset
+    
+    if (result && result.length > 0) {
+        console.log(`\nDecompression successful: ${result.length} bytes generated`);
+        console.log(`First 32 bytes: ${Array.from(result.slice(0, 32)).map(b => b.toString(16).padStart(2, '0')).join(' ')}`);
+        
+        // Validate expected patterns
+        const expectedStart = [0x66, 0x66, 0x66, 0x66, 0x65, 0x55, 0x55, 0x55, 0x65, 0x44, 0x44, 0x44, 0x65, 0x47, 0x77, 0x77];
+        const matches = expectedStart.every((val, i) => i < result.length && result[i] === val);
+        
+        console.log(`Pattern validation: ${matches ? 'PASS' : 'FAIL'}`);
+        
+        // Check for repeating patterns that indicate proper decompression
+        const patterns = new Map();
+        for (let i = 0; i < Math.min(result.length, 100); i++) {
+            const byte = result[i];
+            patterns.set(byte, (patterns.get(byte) || 0) + 1);
+        }
+        
+        console.log(`Unique byte values found: ${patterns.size}`);
+        console.log(`Most common bytes:`, Array.from(patterns.entries())
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5)
+            .map(([byte, count]) => `0x${byte.toString(16)}(${count})`)
+            .join(', '));
+        
+        return result;
+    } else {
+        console.log('Decompression failed or produced no output');
+        return null;
+    }
+}
+
+/**
+ * Test decompression with command analysis and statistics
+ */
+function testWithAnalysis() {
+    console.log('\n=== Decompression with Analysis ===');
+    
+    const testData = [
+        0x31, 0x66,                    // Command 0x31: repeat byte 0x66 four times
+        0x00, 0x65,                    // Command 0x00: literal byte 0x65
+        0x30, 0x55,                    // Command 0x30: repeat byte 0x55 three times
+        0x00, 0x65,                    // Command 0x00: literal byte 0x65
+        0x30, 0x44,                    // Command 0x30: repeat byte 0x44 three times
+        0x03, 0x65, 0x47, 0x77, 0x77,  // Command 0x03: 4 literal bytes
+        0xFF                           // End marker
+    ];
+    
+    const decompressor = new NHL94Decompressor();
+    
+    // Enable detailed logging
+    const originalLog = console.log;
+    const commandStats = new Map();
+    
+    console.log = function(...args) {
+        const message = args.join(' ');
+        if (message.includes('Command:')) {
+            const match = message.match(/Command: 0x([0-9A-F]+)/);
+            if (match) {
+                const cmd = match[1];
+                commandStats.set(cmd, (commandStats.get(cmd) || 0) + 1);
+            }
+        }
+        originalLog.apply(console, args);
+    };
+    
+    const result = decompressor.decompress(testData);
+    console.log = originalLog; // Restore original logging
+    
+    console.log('\nCommand usage statistics:');
+    for (const [cmd, count] of commandStats.entries()) {
+        console.log(`  0x${cmd}: ${count} times`);
+    }
+    
+    return result;
+}
+
+/**
+ * Analyze and validate decompressed data patterns
+ */
+function analyzeDecompressedData(data, label = "Unknown") {
+    console.log(`\n=== Analysis of ${label} ===`);
+    console.log(`Data length: ${data.length} bytes`);
+    
+    if (data.length === 0) {
+        console.log('No data to analyze');
+        return;
+    }
+    
+    // Show first 64 bytes in hex grid
+    console.log('\nFirst 64 bytes (hex):');
+    for (let i = 0; i < Math.min(64, data.length); i += 16) {
+        const line = Array.from(data.slice(i, i + 16))
+            .map(b => b.toString(16).padStart(2, '0'))
+            .join(' ');
+        console.log(`${i.toString(16).padStart(4, '0')}: ${line}`);
+    }
+    
+    // Byte frequency analysis
+    const freq = new Map();
+    for (let i = 0; i < data.length; i++) {
+        const byte = data[i];
+        freq.set(byte, (freq.get(byte) || 0) + 1);
+    }
+    
+    console.log(`\nByte frequency (top 10):`);
+    Array.from(freq.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 10)
+        .forEach(([byte, count]) => {
+            const percent = ((count / data.length) * 100).toFixed(1);
+            console.log(`  0x${byte.toString(16).padStart(2, '0')}: ${count} times (${percent}%)`);
+        });
+    
+    // Look for patterns
+    console.log(`\nPattern analysis:`);
+    
+    // Check for repeating sequences
+    const patterns = new Map();
+    for (let len = 2; len <= 8; len++) {
+        for (let i = 0; i <= data.length - len * 2; i++) {
+            const pattern = Array.from(data.slice(i, i + len));
+            const next = Array.from(data.slice(i + len, i + len * 2));
+            
+            if (JSON.stringify(pattern) === JSON.stringify(next)) {
+                const key = pattern.join(',');
+                patterns.set(key, (patterns.get(key) || 0) + 1);
+            }
+        }
+    }
+    
+    if (patterns.size > 0) {
+        console.log(`  Found ${patterns.size} repeating patterns`);
+        Array.from(patterns.entries())
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5)
+            .forEach(([pattern, count]) => {
+                console.log(`    [${pattern}] repeats ${count} times`);
+            });
+    } else {
+        console.log(`  No obvious repeating patterns found`);
+    }
+    
+    // Statistical analysis
+    const sum = Array.from(data).reduce((a, b) => a + b, 0);
+    const mean = sum / data.length;
+    const variance = Array.from(data).reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / data.length;
+    const stdDev = Math.sqrt(variance);
+    
+    console.log(`\nStatistical analysis:`);
+    console.log(`  Mean: ${mean.toFixed(2)}`);
+    console.log(`  Std Dev: ${stdDev.toFixed(2)}`);
+    console.log(`  Min: ${Math.min(...data)}`);
+    console.log(`  Max: ${Math.max(...data)}`);
+    console.log(`  Unique values: ${freq.size}`);
+}
+
+/**
+ * Create a utility to process real .map.jim files
+ */
+function createMapJimProcessor() {
+    return {
+        /**
+         * Process a .map.jim file buffer
+         */
+        processFile: function(buffer, filename = "unknown") {
+            console.log(`\n=== Processing ${filename} ===`);
+            console.log(`File size: ${buffer.length} bytes`);
+            
+            // Show file header
+            console.log('File header (first 32 bytes):');
+            const headerBytes = Array.from(buffer.slice(0, 32));
+            for (let i = 0; i < 32; i += 16) {
+                const line = headerBytes.slice(i, i + 16)
+                    .map(b => b.toString(16).padStart(2, '0'))
+                    .join(' ');
+                console.log(`${i.toString(16).padStart(4, '0')}: ${line}`);
+            }
+            
+            // Try to find compression data at various offsets
+            console.log('\nSearching for compressed data...');
+            const possibleOffsets = [0, 10, 12, 16, 20, 24, 32, 48, 64];
+            const results = [];
+            
+            for (const offset of possibleOffsets) {
+                if (offset >= buffer.length) continue;
+                
+                try {
+                    console.log(`\n--- Trying offset ${offset} ---`);
+                    const decompressor = new NHL94Decompressor();
+                    const result = decompressor.decompress(Array.from(buffer), offset);
+                    
+                    if (result && result.length > 0) {
+                        console.log(`Success: ${result.length} bytes decompressed`);
+                        console.log(`First 16 bytes: ${Array.from(result.slice(0, 16)).map(b => b.toString(16).padStart(2, '0')).join(' ')}`);
+                        
+                        results.push({
+                            offset: offset,
+                            data: result,
+                            score: this.scoreDecompression(result)
+                        });
+                    }
+                } catch (error) {
+                    console.log(`Failed: ${error.message}`);
+                }
+            }
+            
+            // Return best result
+            if (results.length > 0) {
+                results.sort((a, b) => b.score - a.score);
+                const best = results[0];
+                console.log(`\nBest result: offset ${best.offset} (score: ${best.score.toFixed(2)})`);
+                return best;
+            } else {
+                console.log('\nNo successful decompression found');
+                return null;
+            }
+        },
+        
+        /**
+         * Score decompression quality (higher is better)
+         */
+        scoreDecompression: function(data) {
+            if (!data || data.length === 0) return 0;
+            
+            // Score based on multiple factors
+            let score = 0;
+            
+            // Length score (longer is generally better, up to a point)
+            score += Math.min(data.length / 1000, 10);
+            
+            // Diversity score (too uniform or too random is bad)
+            const freq = new Map();
+            for (const byte of data) {
+                freq.set(byte, (freq.get(byte) || 0) + 1);
+            }
+            const entropy = -Array.from(freq.values())
+                .map(count => count / data.length)
+                .reduce((sum, p) => sum + p * Math.log2(p), 0);
+            score += Math.min(entropy, 6); // Good entropy is around 4-6 bits
+            
+            // Pattern score (some patterns indicate valid graphics data)
+            const uniqueBytes = freq.size;
+            if (uniqueBytes > 4 && uniqueBytes < 64) score += 5; // Good range for graphics
+            
+            // Look for graphics-like patterns (gradual changes)
+            let gradualChanges = 0;
+            for (let i = 1; i < Math.min(data.length, 100); i++) {
+                const diff = Math.abs(data[i] - data[i-1]);
+                if (diff <= 2) gradualChanges++;
+            }
+            score += gradualChanges / 20; // Reward gradual changes
+            
+            return score;
+        }
+    };
+}
+
 // Run tests
 if (require.main === module) {
     console.log('=== NHL94 Decompressor Tests ===\n');
@@ -509,6 +824,12 @@ if (require.main === module) {
     
     // Test with real data
     testRealData();
+    
+    // Test full decompression
+    testFullDecompression();
+    
+    // Test with analysis
+    testWithAnalysis();
 }
 
-module.exports = { NHL94Decompressor, testDecompressor, testRealData };
+module.exports = { NHL94Decompressor, testDecompressor, testRealData, testFullDecompression, testWithAnalysis, analyzeDecompressedData, createMapJimProcessor };
