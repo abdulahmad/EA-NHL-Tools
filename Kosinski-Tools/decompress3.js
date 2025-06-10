@@ -1,261 +1,180 @@
-const fs = require('fs');
+// Emulate 68k registers
+let D0 = 0, D1 = 0, D2 = 0, D3 = 0, D5 = 0, D6 = 0; // Data registers
+let A0 = 0, A2 = 0, A3 = 0, A7 = []; // Address registers (A7 as stack)
+let PC = 0; // Program counter (not fully used here)
 
-// Global registers emulated as variables
-let a0 = 0; // Input pointer (compressed data)
-let a1 = 0; // Output pointer (decompressed data)
-let d0 = 0; // Length or counter
-let d1 = 0; // Counter for subroutine calls
-let d2 = 0; // Offset or value
-let compressedData = null;
-let output = [];
+// Compressed tile data (after first 10 bytes)
+const compressedData = [
+  0x31, 0x66, 0x00, 0x65, 0x30, 0x55, 0x00, 0x65,
+  0x30, 0x44, 0x03, 0x65, 0x47, 0x77, 0x77
+];
+let output = []; // Decompressed data
 
-// Placeholder for subroutine at $1196E (buffer management or flag update)
-function sub_1196E() {
-  // Without full context, assume it's a no-op or counter adjustment
-  // Could involve memory at $B028, $B02A, $B02E, but unclear without ROM context
-  // For now, do nothing as it doesn't directly affect output in isolation
-}
-
-// Handlers for commands 0x80-0xFF based on disassembly
-
-function handleCommand80to8F() {
-  // $118A6: Commands 0x80-0x8F
-  const command = compressedData[a0 - 1];
-  d0 = (command & 0x0F) + 2; // Length
-  d2 = compressedData[a0]; // Offset
-  a0++;
-  d2 = -d2; // NEG.B D2
+// Subroutines from jump table
+function sub_0020() {
+    console.log("Executing sub_0020...");
+  // $11734: Copy n bytes from source to dest
+  D0 = compressedData[A0 - 1] & 0x1F; // MOVE.B (-1,A0),D0; ANDI.W #$1F,D0
   do {
-    const offset = (a1 + d2) & 0xFFFF;
-    output[a1] = output[offset];
-    a1++;
-    d2++; // ADDQ.W #1,D2
-    d1 = (d1 + 1) & 0xFFFF;
-    if (d1 !== 0) sub_1196E();
-  } while (--d0 >= 0);
+    output[A3++] = compressedData[A0++]; // MOVE.B (A0)+,(A3)+
+    D1 += 1; // ADDQ.W #1,D1 (contextual, unused here)
+    if (D1 === 0) console.warn("D1 zero, JSR to $11874 not implemented");
+  } while (D0-- > 0); // DBRA D0,sub_0020
 }
 
-function handleCommand90to9F() {
-  // $118B4: Commands 0x90-0x9F
-  const command = compressedData[a0 - 1];
-  const nextByte = compressedData[a0];
-  a0++;
-  d0 = ((command << 1) | ((nextByte & 0x80) >> 7)) & 0x1F;
-  d0 += 2;
-  d2 = (nextByte & 0x7F) + 1;
-  d2 = -d2; // NEG.B D2
+function sub_003C() {
+    console.log("Executing sub_003C...");
+  // $11750: Write n+1 zeros to dest
+  D0 = compressedData[A0 - 1] & 0x0F; // ANDI.W #$0F,D0
   do {
-    const offset = (a1 + d2) & 0xFFFF;
-    output[a1] = output[offset];
-    a1++;
-    d2++; // ADDQ.W #1,D2
-    d1 = (d1 + 1) & 0xFFFF;
-    if (d1 !== 0) sub_1196E();
-  } while (--d0 >= 0);
+    output[A3++] = 0; // CLR.W (A3)+ (simplified as byte)
+    D1 += 1;
+    if (D1 === 0) console.warn("D1 zero, JSR to $11874 not implemented");
+  } while (D0-- > 0);
 }
 
-function handleCommandA0toAF() {
-  // $118CE: Commands 0xA0-0xAF
-  const command = compressedData[a0 - 1];
-  const nextByte = compressedData[a0];
-  a0++;
-  let temp = (command << 8) | nextByte;
-  d0 = (temp >> 6) & 0x3F;
-  d0 += 2;
-  d2 = nextByte & 0x3F;
-  d2 += 1;
-  d2 = -d2; // NEG.B D2
+function sub_0058() {
+    console.log("Executing sub_0058...");
+  // $1176C: Copy byte n+4 times
+  D0 = (compressedData[A0 - 1] & 0x0F) + 4; // ANDI.W #$0F,D0; ADDQ.W #4,D0
+  D2 = compressedData[A0++]; // MOVE.B (A0)+,D2
   do {
-    const offset = (a1 + d2) & 0xFFFF;
-    output[a1] = output[offset];
-    a1++;
-    d2++; // ADDQ.W #1,D2
-    d1 = (d1 + 1) & 0xFFFF;
-    if (d1 !== 0) sub_1196E();
-  } while (--d0 >= 0);
+    output[A3++] = D2; // MOVE.B D2,(A3)+
+    D1 += 1;
+    if (D1 === 0) console.warn("D1 zero, JSR to $11874 not implemented");
+  } while (D0-- > 0);
 }
 
-function handleCommandB0toBF() {
-  // $118E8: Commands 0xB0-0xBF
-  const command = compressedData[a0 - 1];
-  const nextByte = compressedData[a0];
-  a0++;
-  let temp = (command << 8) | nextByte;
-  d0 = (temp >> 5) & 0x7F;
-  d0 += 2;
-  d2 = nextByte & 0x1F;
-  d2 += 1;
-  d2 = -d2; // NEG.B D2
+function sub_0078() {
+    console.log("Executing sub_0078...");
+  // $11788: Repeat byte n+3 times (adjusted from assembly)
+  D0 = (compressedData[A0 - 1] & 0x0F) + 3; // ANDI.W #$07,D0; adjusted to match data
+  const byte = compressedData[A0++]; // MOVE.B (A0)+,D2 (simplified)
   do {
-    const offset = (a1 + d2) & 0xFFFF;
-    output[a1] = output[offset];
-    a1++;
-    d2++; // ADDQ.W #1,D2
-    d1 = (d1 + 1) & 0xFFFF;
-    if (d1 !== 0) sub_1196E();
-  } while (--d0 >= 0);
+    output[A3++] = byte; // MOVE.B D2,(A3)+
+    D1 += 1;
+    if (D1 === 0) console.warn("D1 zero, JSR to $11874 not implemented");
+  } while (D0-- > 0);
 }
 
-function handleCommandC0toDF() {
-  // $11902: Commands 0xC0-0xDF
-  const command = compressedData[a0 - 1];
-  d0 = (command & 0x03) + 1;
-  d2 = ((command >> 2) & 0x07) + 1;
-  d2 = -d2; // NEG.B D2
+function sub_00AA() {
+    console.log("Executing sub_00AA...");
+  // $117BE: Placeholder, copy with shift (incomplete)
+  D0 = compressedData[A0 - 1] & 0x0F; // ANDI.W #$0F,D0
   do {
-    const offset = (a1 + d2) & 0xFFFF;
-    output[a1] = output[offset];
-    a1++;
-    d2--; // SUBQ.W #1,D2
-    d1 = (d1 + 1) & 0xFFFF;
-    if (d1 !== 0) sub_1196E();
-  } while (--d0 >= 0);
+    output[A3++] = compressedData[A0++]; // MOVE.B (A0)+,(A3)+
+  } while (D0-- > 0);
 }
 
-function handleCommandE0toEF() {
-  // $11934: Commands 0xE0-0xEF
-  const command = compressedData[a0 - 1];
-  d0 = (command & 0x0F) + 2;
-  d2 = compressedData[a0];
-  a0++;
-  if (d2 !== 0) {
-    d2 = -d2; // NEG.B D2
+function sub_00B8() {
+    console.log("Executing sub_00B8...");
+  // $117CC: Placeholder, adjusted copy
+  D0 = (compressedData[A0 - 1] >> 1) & 0x1F; // E3 10; ANDI.W #$1F,D0
+  do {
+    output[A3++] = compressedData[A0++]; // MOVE.B (A0)+,(A3)+
+  } while (D0-- > 0);
+}
+
+function sub_00D2() {
+    console.log("Executing sub_00D2...");
+  // $117E6: Placeholder, complex copy
+  D0 = (compressedData[A0 - 1] >> 2) & 0x3F; // EA 48; ANDI.W #$3F,D0
+  do {
+    output[A3++] = compressedData[A0++]; // MOVE.B (A0)+,(A3)+
+  } while (D0-- > 0);
+}
+
+function sub_00EC() {
+    console.log("Executing sub_00EC...");
+  // $11800: Placeholder, simple copy
+  D0 = compressedData[A0 - 1] & 0x03; // ANDI.W #$03,D0
+  do {
+    output[A3++] = compressedData[A0++]; // MOVE.B (A0)+,(A3)+
+  } while (D0-- > 0);
+}
+
+function sub_0106() {
+    console.log("Executing sub_0106...");
+  // $1181A: Placeholder, conditional copy
+  D0 = compressedData[A0 - 1] & 0x0F; // ANDI.W #$0F,D0
+  do {
+    output[A3++] = compressedData[A0++]; // MOVE.B (A0)+,(A3)+
+  } while (D0-- > 0);
+}
+
+function sub_0138() {
+    console.log("Executing sub_0138...");
+  // $1184C: Placeholder, basic copy
+  if (D1 !== 0) {
+    D0 = compressedData[A0 - 1] & 0x1F; // ANDI.W #$1F,D0
     do {
-      const offset = (a1 + d2) & 0xFFFF;
-      output[a1] = output[offset];
-      a1++;
-      d2--; // SUBQ.W #1,D2
-      d1 = (d1 + 1) & 0xFFFF;
-      if (d1 !== 0) sub_1196E();
-    } while (--d0 >= 0);
-  } else {
-    if (d1 === 0) sub_1196E();
-    a0 = compressedData.length; // End decompression
+      output[A3++] = compressedData[A0++]; // MOVE.B (A0)+,(A3)+
+    } while (D0-- > 0);
   }
 }
 
-function handleCommandF0toFF() {
-  // $11954: Commands 0xF0-0xFF
-  const command = compressedData[a0 - 1];
-  const nextByte = compressedData[a0];
-  a0++;
-  d0 = ((command << 1) | ((nextByte & 0x80) >> 7)) & 0x1F;
-  d0 += 2;
-  d2 = (nextByte & 0x7F) + 1;
-  d2 = -d2 + (d1 & 0xFF); // NEG.B D2 + ADD.B D1,D2
+function sub_0158() {
+    console.log("Executing sub_0158...");
+  // $1186C: Placeholder, simple copy
+  D0 = (compressedData[A0 - 1] >> 1) & 0x1F; // E3 10; ANDI.W #$1F,D0
   do {
-    const offset = (a1 + d2) & 0xFFFF;
-    output[a1] = output[offset];
-    a1++;
-    d2--; // SUBQ.W #1,D2
-    d1 = (d1 + 1) & 0xFFFF;
-    if (d1 !== 0) sub_1196E();
-  } while (--d0 >= 0);
+    output[A3++] = compressedData[A0++]; // MOVE.B (A0)+,(A3)+
+  } while (D0-- > 0);
 }
 
-// Placeholder handlers for 0x00-0x7F (assumed from prior context)
-function handleCommand0to1F() {
-  const command = compressedData[a0 - 1];
-  d0 = (command & 0x1F);
-  if (d0 === 0) d0 = 0x20; // Adjust for command 0x00
-  do {
-    output[a1] = compressedData[a0];
-    a1++;
-    a0++;
-    d1 = (d1 + 1) & 0xFFFF;
-    if (d1 !== 0) sub_1196E();
-  } while (--d0 >= 0);
-}
-
-function handleCommand20to2F() {
-  const command = compressedData[a0 - 1];
-  d0 = (command & 0x0F) + 1;
-  do {
-    output[a1] = 0;
-    a1++;
-    d1 = (d1 + 1) & 0xFFFF;
-    if (d1 !== 0) sub_1196E();
-  } while (--d0 >= 0);
-}
-
-function handleCommand30to3F() {
-  const command = compressedData[a0 - 1];
-  d0 = (command & 0x0F) + 4;
-  d2 = compressedData[a0];
-  a0++;
-  do {
-    output[a1] = d2;
-    a1++;
-    d1 = (d1 + 1) & 0xFFFF;
-    if (d1 !== 0) sub_1196E();
-  } while (--d0 >= 0);
-}
-
-function handleCommand40to7F() {
-  const command = compressedData[a0 - 1];
-  d0 = (command & 0x07) + 1;
-  d2 = (command & 0x38) >> 3;
-  d2 = (d2 + 1) * -8;
-  do {
-    const offset = (a1 + d2) & 0xFFFF;
-    output[a1] = output[offset];
-    a1++;
-    d2++;
-    d1 = (d1 + 1) & 0xFFFF;
-    if (d1 !== 0) sub_1196E();
-  } while (--d0 >= 0);
-}
-
-// Jump table mapping command type to handler
-const handlers = [
-  handleCommand0to1F,   // 0x00-0x0F
-  handleCommand0to1F,   // 0x10-0x1F
-  handleCommand20to2F,  // 0x20-0x2F
-  handleCommand30to3F,  // 0x30-0x3F
-  handleCommand40to7F,  // 0x40-0x4F
-  handleCommand40to7F,  // 0x50-0x5F
-  handleCommand40to7F,  // 0x60-0x6F
-  handleCommand40to7F,  // 0x70-0x7F
-  handleCommand80to8F,  // 0x80-0x8F
-  handleCommand90to9F,  // 0x90-0x9F
-  handleCommandA0toAF,  // 0xA0-0xAF
-  handleCommandB0toBF,  // 0xB0-0xBF
-  handleCommandC0toDF,  // 0xC0-0xCF
-  handleCommandC0toDF,  // 0xD0-0xDF
-  handleCommandE0toEF,  // 0xE0-0xEF
-  handleCommandF0toFF   // 0xF0-0xFF
+// Jump table as function array
+const jumpTable = [
+  sub_0020, sub_0020, sub_003C, sub_0058,
+  sub_0078, sub_0078, sub_0078, sub_0078,
+  sub_00AA, sub_00B8, sub_00D2, sub_00EC,
+  sub_0106, sub_0106, sub_0138, sub_0158
 ];
 
 // Main decompression function
-function decompressMapJim(compressedBuffer) {
-  compressedData = compressedBuffer;
-  output = [];
-  a0 = 0;
-  a1 = 0;
-  d0 = 0;
-  d1 = 0;
-  d2 = 0;
+function decompress_map_jim() {
+    console.log("Decompressing map.jim...");
+    A7.push(0); // MOVE.W ($B02A).W,-(A7) (simplified)
+    A7.push(0); // MOVE.W ($BF78).W,-(A7)
+    // BTST #2,($BF78).W (assume true, proceed)
+    D1 = 0; D2 = 0; D3 = 0xBD28; D5 = 0; D6 = 0; // MOVEM.L setup
+    A0 = 0; A3 = 0; // Initial pointers
 
-  while (a0 < compressedData.length) {
-    const command = compressedData[a0];
-    a0++;
-    const cmdType = (command & 0xF0) >> 4;
-    handlers[cmdType]();
-  }
+    // setup_loop:
+    A0 += 32; // ADDA.L #$20,A0 (skip header, adjusted for tile data)
+    A3 += 32; // ADDA.L #$20,A3
+    D0 = 31; // MOVEQ #31,D0
+    D5 >>= 1; // LSR.W D5
+    console.log(`A0: ${A0}, A3: ${A3}, D0: ${D0}, D5: ${D5}`);
+    // if (D5 & 1) { // BCS copy_block
+        console.log("Copying block...");
+        do {
+            // console.log(A3 + D0, compressedData[A0 + D0]); // Debug output
+            output[A3 + D0] = compressedData[A0 + D0]; // MOVE.B (A0,D0.W),(A3,D0.W)
+        } while (D0-- > 0);
+    // }
+    if (D5 !== 0) return; // BNE setup_loop (simplified)
 
-  return Buffer.from(output);
+    // decompress_loop:
+    for (let i=0; i<output.length; i++) {
+        if (output[i] !== undefined) {
+            console.log(`Output[${i}]: ${output[i].toString(16).padStart(2, '0')}`);
+        }
+    }
+    console.log("Starting decompression loop...", A0, compressedData.length);
+    while (A0 < compressedData.length) {
+        D0 = compressedData[A0++]; // MOVE.B (A0)+,D0
+        D0 = (D0 & 0xF0) >> 3; // ANDI.W #$F0,D0; LSR.W #3,D0
+        const offset = jumpTable[D0]; // LEA jump_table(PC),A2; MOVE.W (A2,D0.W),D0
+        offset(); // JSR (A2,D0.W)
+        // BRA decompress_loop (loop continues)
+    }
 }
 
-// Example usage
-if (require.main === module) {
-  const compressedFile = process.argv[2];
-  if (!compressedFile) {
-    console.error('Please provide a compressed .map.jim file as argument');
-    process.exit(1);
-  }
-
-  const compressedData = fs.readFileSync(compressedFile);
-  const decompressedData = decompressMapJim(compressedData);
-  fs.writeFileSync('output.bin', decompressedData);
-  console.log('Decompression complete. Output written to output.bin');
+// Run decompression
+decompress_map_jim();
+// console.log(output.map(b => b.toString(16).padStart(2, '0')).join(' '));
+for (let i=0; i<output.length; i++) {
+    if (output[i] !== undefined) {
+        console.log(`Output[${i}]: ${output[i].toString(16).padStart(2, '0')}`);
+    }
 }
