@@ -311,8 +311,7 @@ class NHL94Decompressor {
     /**
      * Handle long repeat commands (0x80-0x8F)
      * Based on assembly analysis - these handle extended length repeats
-     */
-    handleLongRepeat(commandByte, verbose = false) {
+     */    handleLongRepeat(commandByte, verbose = false) {
         const lowNibble = commandByte & 0x0F;
         
         if (lowNibble === 0) {
@@ -357,28 +356,28 @@ class NHL94Decompressor {
                 }
             }
         } else {
-            // 0x88-0x8F: Copy operations with extended counts
-            const extraCount = lowNibble - 8;
-            const baseCount = this.readSourceByte();
-            const count = baseCount + extraCount;
-            const offset = this.readSourceByte();
+            // 0x88-0x8F: Copy/repeat operations based on pattern from output
+            // For 8D (lowNibble = 13): copy last N bytes and repeat them M times
+            const copyLength = this.readSourceByte(); // How many bytes to copy from end
             
-            // Handle special case where offset is 0
-            if (offset === 0) {
-                if (verbose) console.log(`  Long copy (8${lowNibble.toString(16)}): ${count} zero bytes (offset=0)`);
-                for (let i = 0; i < count; i++) {
-                    this.writeOutputByte(0);
+            if (verbose) console.log(`  Long copy (8${lowNibble.toString(16)}): copy last ${copyLength} bytes and repeat ${copyLength} times`);
+            
+            // Copy the last 'copyLength' bytes from output buffer and repeat them 'copyLength' times
+            if (this.outputData.length >= copyLength) {
+                const startPos = this.outputData.length - copyLength;
+                const pattern = this.outputData.slice(startPos);
+                
+                // Repeat the pattern 'copyLength' times
+                for (let rep = 0; rep < copyLength; rep++) {
+                    for (let i = 0; i < pattern.length; i++) {
+                        this.writeOutputByte(pattern[i]);
+                    }
                 }
             } else {
-                if (verbose) console.log(`  Long copy (8${lowNibble.toString(16)}): ${count} bytes from offset -${offset}`);
-                const sourcePos = this.outputData.length - offset;
-                for (let i = 0; i < count; i++) {
-                    const srcIndex = sourcePos + (i % offset);
-                    if (srcIndex >= 0 && srcIndex < this.outputData.length) {
-                        this.writeOutputByte(this.outputData[srcIndex]);
-                    } else {
-                        this.writeOutputByte(0);
-                    }
+                // Not enough data in output buffer, fill with zeros
+                if (verbose) console.log(`    Warning: Not enough output data (${this.outputData.length}) for copy length ${copyLength}`);
+                for (let i = 0; i < copyLength * copyLength; i++) {
+                    this.writeOutputByte(0);
                 }
             }
         }
