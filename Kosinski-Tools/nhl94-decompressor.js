@@ -430,9 +430,7 @@ class NHL94Decompressor {
         }
         
         return null;
-    }
-
-    /**
+    }    /**
      * Score decompression quality (higher is better)
      */
     scoreDecompression(data) {
@@ -441,8 +439,17 @@ class NHL94Decompressor {
         // Score based on multiple factors
         let score = 0;
         
-        // Length score (longer is generally better, up to a point)
-        score += Math.min(data.length / 1000, 10);
+        // Length score (longer is generally better, up to a point, but cap it to prevent bias)
+        score += Math.min(data.length / 1000, 2); // Reduced weight of length
+        
+        // Penalize outputs that are mostly zeros (indicates bad decompression)
+        const zeroCount = Array.from(data).filter(b => b === 0).length;
+        const zeroRatio = zeroCount / data.length;
+        if (zeroRatio > 0.5) {
+            score -= 10; // Heavy penalty for mostly zeros
+        } else if (zeroRatio > 0.25) {
+            score -= 5; // Medium penalty for many zeros
+        }
         
         // Diversity score (too uniform or too random is bad)
         const freq = new Map();
@@ -465,6 +472,11 @@ class NHL94Decompressor {
             if (diff <= 2) gradualChanges++;
         }
         score += gradualChanges / 20; // Reward gradual changes
+        
+        // Penalize very short outputs (likely incomplete)
+        if (data.length < 10) {
+            score -= 2;
+        }
         
         return score;
     }
