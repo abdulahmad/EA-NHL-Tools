@@ -58,24 +58,24 @@ $FCC76-$FCF85: 4E B9 00 0F 9C 68 4E B9 00 0F 71 A2 42 78 D5 A4 3F 3C 00 7A 4E B9
 
 I had you write this script but there are some issues. The main one I want to focus on now is that the 0x90-0x9F command seems broken. I have a file that has the following in it:
 
-31 66 00 65 30 55 00 65 30 44 03 65 47 77 77 8D 04 31 66 31 55 31 44 3F 77
+31 66 00 65 30 55 00 65 30 44 03 65 47 77 77 8D 04 31 66 31 55 31 44 3F 77 9B 1F 00 18
 
 it correctly outputs the following as expected:
 
-66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77
+66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 18
 
 I have another file which has the following in it:
-31 66 00 65 30 55 00 65 30 44 03 65 47 77 77 8D 04 31 66 31 55 31 44 3F 77 9B 1F
+31 66 00 65 30 55 00 65 30 44 03 65 47 77 77 8D 04 31 66 31 55 31 44 3F 77 9B 1F 00 18 51
 
 I would expect it to output:
-66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77
+66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 18 77 77 18
 
 But it outputs:
-66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 1F
+66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 18
 
 this is the output from the script:
 PS C:\repository\EA-NHL-Tools\Kosinski-Tools> node .\nhl94-decompressor.js .\ronbarr_short.bin output.bin --verbose
-Processing .\ronbarr_short.bin (27 bytes)
+Processing .\ronbarr_short.bin (30 bytes)
 Starting decompression from offset 0
 Command byte: 0x31 at offset 0
   Repeat with count: 0x66 × 4
@@ -106,11 +106,15 @@ Command byte: 0x31 at offset 21
 Command byte: 0x3f at offset 23
   Repeat with count: 0x77 × 18
 Command byte: 0x9b at offset 25
-  Extended 90: subcmd=11
-Error in handler 9 for command 0x9b: Source pointer 27 beyond data length 27
-Decompression complete. Output length: 63
-Decompressed 63 bytes
+  Extended 90: copy 25 bytes from offset -32 (subcmd=11)
+Command byte: 0x00 at offset 27
+  Literal bytes: 1 bytes
+    Byte 0: 0x18
+Command byte: 0x51 at offset 29
+Error in handler 5 for command 0x51: Source pointer 30 beyond data length 30
+Decompression complete. Output length: 88
+Decompressed 88 bytes
 Saved decompressed data to output.bin
 First 16 bytes: 66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77
 
-It seems like the 0x90-0x9F command isn't implemented. Can you go back to the assembly and understand how this should be implemented and implement it?
+It seems like the 0x50-0x5F command isn't implemented. Can you go back to the assembly and understand how this should be implemented and implement it?
