@@ -436,7 +436,7 @@ class NHL94Decompressor {
         }
         
         return null;
-    }/**
+    }    /**
      * Score decompression quality (higher is better)
      */
     scoreDecompression(data) {
@@ -445,16 +445,35 @@ class NHL94Decompressor {
         // Score based on multiple factors
         let score = 0;
         
-        // Length score (longer is generally better, up to a point, but cap it to prevent bias)
-        score += Math.min(data.length / 1000, 2); // Reduced weight of length
+        // Length score (moderate weight to avoid bias toward longer outputs)
+        score += Math.min(data.length / 1000, 1.5);
+        
+        // Check for consecutive zeros at the beginning (strong indicator of bad decompression)
+        let consecutiveZeros = 0;
+        for (let i = 0; i < Math.min(data.length, 10); i++) {
+            if (data[i] === 0) {
+                consecutiveZeros++;
+            } else {
+                break;
+            }
+        }
+        
+        // Heavy penalty for starting with multiple zeros
+        if (consecutiveZeros >= 4) {
+            score -= 15; // Very heavy penalty for 4+ consecutive zeros at start
+        } else if (consecutiveZeros >= 2) {
+            score -= 8; // Heavy penalty for 2-3 consecutive zeros at start
+        }
         
         // Penalize outputs that are mostly zeros (indicates bad decompression)
         const zeroCount = Array.from(data).filter(b => b === 0).length;
         const zeroRatio = zeroCount / data.length;
         if (zeroRatio > 0.5) {
-            score -= 10; // Heavy penalty for mostly zeros
+            score -= 12; // Increased penalty for mostly zeros
         } else if (zeroRatio > 0.25) {
-            score -= 5; // Medium penalty for many zeros
+            score -= 7; // Increased penalty for many zeros
+        } else if (zeroRatio > 0.1) {
+            score -= 3; // Penalty for moderate zeros
         }
         
         // Diversity score (too uniform or too random is bad)
@@ -482,6 +501,12 @@ class NHL94Decompressor {
         // Penalize very short outputs (likely incomplete)
         if (data.length < 10) {
             score -= 2;
+        }
+        
+        // Additional check: if output contains the input data verbatim, it's likely wrong
+        const dataStr = Array.from(data).map(b => b.toString(16).padStart(2, '0')).join('');
+        if (this.sourceData && dataStr.includes(Array.from(this.sourceData).slice(this.sourcePos - 10, this.sourcePos + 10).map(b => b.toString(16).padStart(2, '0')).join(''))) {
+            score -= 5; // Penalty for containing source data
         }
         
         return score;
