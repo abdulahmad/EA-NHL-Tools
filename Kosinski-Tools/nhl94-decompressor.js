@@ -392,9 +392,7 @@ class NHL94Decompressor {
             return; // End of data
         }
         // Other special commands can be handled here
-    }
-
-    /**
+    }    /**
      * Find the best decompression offset for a file
      */
     findBestOffset(buffer, maxOffset = 64) {
@@ -405,10 +403,16 @@ class NHL94Decompressor {
         
         const results = [];
         
+        // Store original console.error to restore later
+        const originalConsoleError = console.error;
+        
         for (const offset of possibleOffsets) {
             if (offset >= buffer.length) continue;
             
             try {
+                // Suppress error messages during offset testing
+                console.error = () => {};
+                
                 const result = this.decompress(Array.from(buffer), offset, false);
                 
                 if (result && result.length > 0) {
@@ -420,6 +424,9 @@ class NHL94Decompressor {
                 }
             } catch (error) {
                 // Silently continue on error
+            } finally {
+                // Restore console.error
+                console.error = originalConsoleError;
             }
         }
         
@@ -429,7 +436,7 @@ class NHL94Decompressor {
         }
         
         return null;
-    }    /**
+    }/**
      * Score decompression quality (higher is better)
      */
     scoreDecompression(data) {

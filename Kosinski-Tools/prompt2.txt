@@ -58,43 +58,27 @@ $FCC76-$FCF85: 4E B9 00 0F 9C 68 4E B9 00 0F 71 A2 42 78 D5 A4 3F 3C 00 7A 4E B9
 
 I had you write this script but there are some issues. The main one I want to focus on now is that the "03" command seems broken. I have a file that has the following in it:
 
-31 66 00 65 30 55 00 65 30 44 03 65 47 77 77
+31 66 00 65 30 55 00 65 30 44 03 65 47 77 77 8D 04
 
 it correctly outputs the following as expected:
 
-66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77
-
-I have another file which has the following in it:
-31 66 00 65 30 55 00 65 30 44 03 65 47 77 77 8D 04
-
-I would expect it to output:
 66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77
 
+I have another file which has the following in it:
+31 66 00 65 30 55 00 65 30 44 03 65 47 77 77 8D 04 31 66
+
+I would expect it to output:
+66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66
+
 But it outputs:
-66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77
+00 00 00 00 00 00 65 30 44 03 65 47 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66
 
 this is the output from the script:
-c:\repository\EA-NHL-Tools\Kosinski-Tools>node nhl94-decompressor.js ronbarr_short.bin output.bin                      
-Processing ronbarr_short.bin (17 bytes)
-Error in handler 8 for command 0x8d: Source pointer 17 beyond data length 17
-Error in handler 8 for command 0x8d: Source pointer 17 beyond data length 17
-Error in handler 8 for command 0x8d: Source pointer 17 beyond data length 17
-Error in handler 8 for command 0x8d: Source pointer 17 beyond data length 17
-Error in handler 8 for command 0x8d: Source pointer 17 beyond data length 17
-Error in handler 8 for command 0x8d: Source pointer 17 beyond data length 17
-Error in handler 8 for command 0x8d: Source pointer 17 beyond data length 17
-Error in handler 8 for command 0x8d: Source pointer 17 beyond data length 17
-Error in handler 8 for command 0x8d: Source pointer 17 beyond data length 17
-Error in handler 8 for command 0x8d: Source pointer 17 beyond data length 17
-Error in handler 8 for command 0x8d: Source pointer 17 beyond data length 17
-Error in handler 8 for command 0x8d: Source pointer 17 beyond data length 17
-Error in handler 4 for command 0x47: Source pointer 17 beyond data length 17
-Error in handler 8 for command 0x8d: Source pointer 17 beyond data length 17
-Error in handler 0 for command 0x4: Source pointer 17 beyond data length 17
-Error in handler 8 for command 0x8d: Source pointer 17 beyond data length 17
-Error in handler 0 for command 0x4: Source pointer 17 beyond data length 17
-Best decompression found at offset 0 (score: 7.95)
-Decompressed 16 bytes
+c:\repository\EA-NHL-Tools\Kosinski-Tools>node nhl94-decompressor.js ronbarr_short.bin output.bin --verbose
+Processing ronbarr_short.bin (19 bytes)
+Best decompression found at offset 3 (score: 8.52)
+Decompressed 40 bytes
 Saved decompressed data to output.bin
+First 16 bytes: 00 00 00 00 00 00 65 30 44 03 65 47 77 77 77 77
 
 Can you debug and fix this script based on the information I've given you?
