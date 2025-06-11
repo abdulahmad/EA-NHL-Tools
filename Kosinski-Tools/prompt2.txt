@@ -170,4 +170,4 @@ Decompressed 298 bytes
 Saved decompressed data to output.bin
 First 16 bytes: 66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77
 
-It seems like the 0x90-0x9F command isn't implemented correctly. It works for 9B 1F, but not for 9C FF. Can you disassemble the hex code I included above and understand how this should be implemented and implement it? I think the offset of where it starts reading is off by 0x80-- which might make sense if the second value (FF) is suppose to be signed
+It seems like the 0x90-0x9F command isn't implemented correctly. It works for 9B 1F, but not for 9C FF. Can you disassemble the hex code I included above and understand how this should be implemented and implement it? I think the offset of where it starts reading is off by 0x80-- which might make sense if the second value (FF) is suppose to be a signed integer
