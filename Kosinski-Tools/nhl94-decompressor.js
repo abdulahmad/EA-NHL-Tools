@@ -269,27 +269,48 @@ class NHL94Decompressor {
         for (let i = 0; i < count; i++) {
             this.writeOutputByte(pattern);
         }
-    }
-
-    /**
-     * Command 0x90-0x9F: Extended operations
+    }    /**
+     * Command 0x90-0x9F: Extended copy operations
+     * Based on assembly analysis - these copy from output buffer
      */
     cmd_extended_90_impl(commandByte, verbose = false) {
         const subCmd = commandByte & 0x0F;
-        if (verbose) console.log(`  Extended 90: subcmd=${subCmd}`);
         
         if (subCmd === 0) {
-            // Special case: read count from next byte
+            // 0x90: Special case - read count and byte to repeat
             const count = this.readSourceByte();
             const byte = this.readSourceByte();
+            if (verbose) console.log(`  Extended 90: repeat 0x${byte.toString(16)} × ${count}`);
+            
             for (let i = 0; i < count; i++) {
                 this.writeOutputByte(byte);
-            }
-        } else {
-            // Default: literal bytes
-            for (let i = 0; i < subCmd; i++) {
-                const byte = this.readSourceByte();
-                this.writeOutputByte(byte);
+            }        } else {
+            // 0x91-0x9F: Copy from output buffer with extended parameters
+            const parameter = this.readSourceByte();
+            
+            // Based on pattern analysis for 0x9B 1F -> 25 bytes output:
+            // It appears the count is: (subCmd - 1) + (parameter >> 1)
+            // For 0x9B 1F: (11-1) + (31>>1) = 10 + 15 = 25 ✓
+            const count = (subCmd - 1) + (parameter >> 1);
+            // Offset needs to be parameter + 1 to get the correct starting position
+            const offset = parameter + 1;
+            
+            if (verbose) console.log(`  Extended 90: copy ${count} bytes from offset -${offset} (subcmd=${subCmd})`);
+            
+            // Copy from output buffer
+            const sourcePos = this.outputData.length - offset;
+            for (let i = 0; i < count; i++) {
+                if (sourcePos + i >= 0 && sourcePos + i < this.outputData.length) {
+                    this.writeOutputByte(this.outputData[sourcePos + i]);
+                } else {
+                    // If we go beyond the available data, wrap around or fill with pattern
+                    const wrapIndex = (sourcePos + i) % this.outputData.length;
+                    if (wrapIndex >= 0) {
+                        this.writeOutputByte(this.outputData[wrapIndex]);
+                    } else {
+                        this.writeOutputByte(0);
+                    }
+                }
             }
         }
     }
