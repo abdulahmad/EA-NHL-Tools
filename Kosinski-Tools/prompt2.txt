@@ -75,7 +75,7 @@ But it outputs:
 
 this is the output from the script:
 PS C:\repository\EA-NHL-Tools\Kosinski-Tools> node .\nhl94-decompressor.js .\ronbarr_short.bin output.bin --verbose
-Processing .\ronbarr_short.bin (75 bytes)
+Processing .\ronbarr_short.bin (80 bytes)
 Starting decompression from offset 0
 Command byte: 0x31 at offset 0
   Repeat with count: 0x66 × 4
@@ -164,10 +164,17 @@ Command byte: 0x04 at offset 65
 Command byte: 0x34 at offset 71
   Repeat with count: 0x11 × 7
 Command byte: 0x9c at offset 73
-  Extended 90: copy 138 bytes from offset -256 (subcmd=12)
-Decompression complete. Output length: 298
-Decompressed 298 bytes
+  Extended 90: copy 28 bytes from offset -128 (subcmd=12, param=0xff as signed=-1)
+Command byte: 0x01 at offset 75
+  Literal bytes: 2 bytes
+    Byte 0: 0x82
+    Byte 1: 0x87
+Command byte: 0x82 at offset 78
+  Long repeat (82): Treating as copy/special command
+    Parameter: 0x80
+Decompression complete. Output length: 191
+Decompressed 191 bytes
 Saved decompressed data to output.bin
 First 16 bytes: 66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77
 
-It seems like the 0x90-0x9F command isn't implemented correctly. It works for 9B 1F, but not for 9C FF. Can you disassemble the hex code I included above and understand how this should be implemented and implement it? I think the offset of where it starts reading is off by 0x80-- which might make sense if the second value (FF) is suppose to be a signed integer
+It seems like the 0x80-0x8F command isn't implemented correctly. It works for 8D 04, 8A 20, but not for 82 80. Can you disassemble the hex code I included above and understand how this should be implemented and implement it? I think the offset of where it starts reading is off by 0x80-- which might make sense if the second value (FF) is suppose to be a signed integer
