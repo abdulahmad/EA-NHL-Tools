@@ -382,9 +382,18 @@ class NHL94Decompressor {
                         this.writeOutputByte(0);
                     }
                 }
+                  } else if (lowNibble === 3) {
+                // 0x83: Special termination/control command
+                const parameter = this.readSourceByte();
+                
+                if (verbose) console.log(`  Long repeat (83): termination/control command (parameter=0x${parameter.toString(16)})`);
+                
+                // 0x83 B8 appears to be a termination command that doesn't consume additional bytes
+                // and doesn't output data. This allows the following 0x5E to be processed as a separate command.
+                // Based on analysis, this command should not read a third byte or output data.
                 
             } else {
-                // Other 0x81, 0x83-0x87 commands
+                // Other 0x81, 0x84-0x87 commands
                 const extraByte = this.readSourceByte();
                 let count = (lowNibble << 8) | extraByte;
                 const byte = this.readSourceByte();
@@ -399,7 +408,7 @@ class NHL94Decompressor {
                 for (let i = 0; i < count; i++) {
                     this.writeOutputByte(byte);
                 }
-            }        } else {
+            }} else {
             // 0x88-0x8F: Copy/repeat operations based on pattern from output
             const parameter = this.readSourceByte();            if (lowNibble === 0xA) {
                 // 8A: Copy pattern from specific offset
