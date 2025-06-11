@@ -235,22 +235,24 @@ class NHL94Decompressor {
                 this.writeOutputByte(0);
             }
         }
-    }
-
-    /**
-     * Command 0x60-0x6F: Two-byte offset copy
+    }    /**
+     * Command 0x60-0x6F: Two-byte copy from output buffer
+     * Based on analysis: offset = (low_nibble - 2), count = 2
+     * No additional bytes read from input stream
      */
     cmd_extended_60_impl(commandByte, verbose = false) {
-        const count = (commandByte & 0x0F) + 1;
-        const offset = this.readSourceByte();
-        if (verbose) console.log(`  Extended 60: copy ${count} bytes with offset ${offset}`);
+        const lowNibble = commandByte & 0x0F;
+        const offset = lowNibble - 2;  // For 0x68: 8 - 2 = 6
+        const count = 2;  // Always copy 2 bytes
         
-        // Similar to 50 but different offset calculation
-        const sourcePos = this.outputData.length - offset - 1;
+        if (verbose) console.log(`  Extended 60: copy ${count} bytes from offset -${offset} (cmd=0x${commandByte.toString(16)})`);
+        
+        const sourcePos = this.outputData.length - offset;
         for (let i = 0; i < count; i++) {
             if (sourcePos + i >= 0 && sourcePos + i < this.outputData.length) {
                 this.writeOutputByte(this.outputData[sourcePos + i]);
             } else {
+                if (verbose) console.log(`    Warning: Invalid source position ${sourcePos + i} for output length ${this.outputData.length}`);
                 this.writeOutputByte(0);
             }
         }
