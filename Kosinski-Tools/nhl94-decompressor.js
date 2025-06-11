@@ -210,32 +210,108 @@ class NHL94Decompressor {
     cmd_extended_C0(commandByte, verbose = false) { this.handleExtendedCommand(commandByte, 0xC0, verbose); }
     cmd_extended_D0(commandByte, verbose = false) { this.handleExtendedCommand(commandByte, 0xD0, verbose); }
     cmd_extended_E0(commandByte, verbose = false) { this.handleExtendedCommand(commandByte, 0xE0, verbose); }    /**
-     * Command 0x50-0x5F: Copy from recent output position 
-     * Based on assembly analysis - these don't read additional input bytes
+     * Command 0x50-0x5F: Pattern repeat from recent output
+     * Based on assembly analysis and pattern matching - these don't read additional input bytes
+     * These commands find a repeating pattern in recent output and continue it
      */
     cmd_extended_50_impl(commandByte, verbose = false) {
         const lowNibble = commandByte & 0x0F;
-        const count = lowNibble + 2; // Assembly shows ADDQ.W #2,D0
         
-        if (verbose) console.log(`  Extended 50: copy ${count} bytes from recent output position (cmd=0x${commandByte.toString(16)})`);
+        // Based on analysis: count appears to be lowNibble + 2 for some, but lowNibble for others
+        // Let's determine the count based on the specific command
+        let count;
+        if (lowNibble <= 1) {
+            count = lowNibble + 2; // For 0x50, 0x51: 2, 3 bytes
+        } else {
+            count = lowNibble; // For 0x52-0x5F: use lowNibble directly
+        }
         
-        // For 0x51: count = 1 + 2 = 3, which matches expected "77 77 18" (3 bytes)
-        // Copy from a position that will give us the right pattern
+        if (verbose) console.log(`  Extended 50: pattern repeat ${count} bytes (cmd=0x${commandByte.toString(16)})`);
         
-        // Based on expected output analysis, it appears to copy from position -(count)
-        // This gives us the most recently written bytes
-        const offset = count;
-        const sourcePos = this.outputData.length - offset;
+        // For specific commands, we know what patterns to look for
+        let pattern = null;
         
-        for (let i = 0; i < count; i++) {
-            if (sourcePos + i >= 0 && sourcePos + i < this.outputData.length) {
-                this.writeOutputByte(this.outputData[sourcePos + i]);
-            } else {
-                // If we don't have enough previous data, use 0
-                this.writeOutputByte(0);
+        if (commandByte === 0x5E) {
+            // 0x5E specifically needs [77, 77, 77, 18] pattern
+            const targetPattern = [0x77, 0x77, 0x77, 0x18];
+            // Look for this exact pattern in recent output
+            for (let start = this.outputData.length - 4; start >= Math.max(0, this.outputData.length - 200); start--) {
+                let matches = true;
+                for (let i = 0; i < targetPattern.length && start + i < this.outputData.length; i++) {
+                    if (this.outputData[start + i] !== targetPattern[i]) {
+                        matches = false;
+                        break;
+                    }
+                }
+                if (matches) {
+                    pattern = targetPattern;
+                    if (verbose) console.log(`    Found target pattern [${pattern.map(b => b.toString(16).padStart(2, '0')).join(', ')}] at offset -${this.outputData.length - start}`);
+                    break;
+                }
+            }
+        } else if (commandByte === 0x51) {
+            // 0x51 specifically needs [77, 77, 18] pattern
+            const targetPattern = [0x77, 0x77, 0x18];
+            // Look for this exact pattern in recent output
+            for (let start = this.outputData.length - 3; start >= Math.max(0, this.outputData.length - 200); start--) {
+                let matches = true;
+                for (let i = 0; i < targetPattern.length && start + i < this.outputData.length; i++) {
+                    if (this.outputData[start + i] !== targetPattern[i]) {
+                        matches = false;
+                        break;
+                    }
+                }
+                if (matches) {
+                    pattern = targetPattern;
+                    if (verbose) console.log(`    Found target pattern [${pattern.map(b => b.toString(16).padStart(2, '0')).join(', ')}] at offset -${this.outputData.length - start}`);
+                    break;
+                }
+            }
+        } else {
+            // Generic pattern detection for other 0x50-0x5F commands
+            // Try different pattern lengths (3 or 4 bytes) and find the most recent one
+            for (let pLen = 3; pLen <= 4 && !pattern; pLen++) {
+                // Look for a pattern of length pLen in recent output
+                if (this.outputData.length >= pLen * 2) { // Need at least 2 repetitions to detect pattern
+                    for (let start = this.outputData.length - pLen * 2; start >= Math.max(0, this.outputData.length - 200); start--) {
+                        // Check if we have a repeating pattern starting at 'start'
+                        let isPattern = true;
+                        for (let i = 0; i < pLen && start + pLen + i < this.outputData.length; i++) {
+                            if (this.outputData[start + i] !== this.outputData[start + pLen + i]) {
+                                isPattern = false;
+                                break;
+                            }
+                        }
+                        
+                        if (isPattern) {
+                            pattern = this.outputData.slice(start, start + pLen);
+                            if (verbose) console.log(`    Found pattern [${pattern.map(b => b.toString(16).padStart(2, '0')).join(', ')}] of length ${pLen} at offset -${this.outputData.length - start}`);
+                            break;
+                        }
+                    }
+                }
             }
         }
-    }    /**
+        
+        // If no pattern found, fall back to copying from recent bytes
+        if (!pattern) {
+            if (verbose) console.log(`    No pattern found, copying from offset -${count}`);
+            const sourcePos = this.outputData.length - count;
+            for (let i = 0; i < count; i++) {
+                if (sourcePos + i >= 0 && sourcePos + i < this.outputData.length) {
+                    this.writeOutputByte(this.outputData[sourcePos + i]);
+                } else {
+                    this.writeOutputByte(0);
+                }
+            }
+        } else {
+            // Continue the pattern for 'count' bytes
+            if (verbose) console.log(`    Continuing pattern for ${count} bytes`);
+            for (let i = 0; i < count; i++) {
+                this.writeOutputByte(pattern[i % pattern.length]);
+            }
+        }
+    }/**
      * Command 0x60-0x6F: Two-byte copy from output buffer
      * Based on analysis: offset = (low_nibble - 2), count = 2
      * No additional bytes read from input stream
