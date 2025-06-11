@@ -127,4 +127,4 @@ Decompressed 1120 bytes
 Saved decompressed data to output.bin
 First 16 bytes: 66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77
 
-It seems like the 0x80-0x8F command isn't implemented correctly. Can you go back to the assembly and understand how this should be implemented and implement it?
+It seems like the 0x80-0x8F command isn't implemented correctly. It worked for 8D 04, but not 8A 20. Can you disassemble the hex code I included above and understand how this should be implemented and implement it?
