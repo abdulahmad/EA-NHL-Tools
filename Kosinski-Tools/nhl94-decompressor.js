@@ -421,27 +421,39 @@ class NHL94Decompressor {
                     for (let i = 0; i < copyLength * copyLength; i++) {
                         this.writeOutputByte(0);
                     }
+                }            } else {
+                // Other 0x88-0x8F commands - copy operations with different byte counts
+                // Pattern analysis:
+                // 8A 20 copies 13 bytes from offset -32
+                // 89 20 copies 12 bytes from offset -32  
+                // The low nibble seems to determine the byte count
+                
+                const baseOffset = parameter;
+                let bytesToCopy;
+                
+                // Determine bytes to copy based on low nibble
+                switch (lowNibble) {
+                    case 0x8: bytesToCopy = 11; break;
+                    case 0x9: bytesToCopy = 12; break;
+                    case 0xA: bytesToCopy = 13; break; // Already handled above, but for completeness
+                    case 0xB: bytesToCopy = 14; break;
+                    case 0xC: bytesToCopy = 15; break;
+                    case 0xE: bytesToCopy = 17; break;
+                    case 0xF: bytesToCopy = 18; break;
+                    default: bytesToCopy = lowNibble + 3; break; // Fallback pattern
                 }
-            } else {
-                // Other 0x88-0x8F commands - use generic approach for now
-                const copyLength = parameter;
                 
-                if (verbose) console.log(`  Long copy (8${lowNibble.toString(16)}): copy last ${copyLength} bytes and repeat ${copyLength} times`);
+                if (verbose) console.log(`  Long copy (8${lowNibble.toString(16)}): copy ${bytesToCopy} bytes from offset -${baseOffset} (parameter=0x${parameter.toString(16)})`);
                 
-                if (this.outputData.length >= copyLength) {
-                    const startPos = this.outputData.length - copyLength;
-                    const pattern = this.outputData.slice(startPos);
-                    
-                    // Repeat the pattern 'copyLength' times
-                    for (let rep = 0; rep < copyLength; rep++) {
-                        for (let i = 0; i < pattern.length; i++) {
-                            this.writeOutputByte(pattern[i]);
-                        }
-                    }
-                } else {
-                    // Not enough data in output buffer, fill with zeros
-                    if (verbose) console.log(`    Warning: Not enough output data (${this.outputData.length}) for copy length ${copyLength}`);
-                    for (let i = 0; i < copyLength * copyLength; i++) {
+                // Copy the pattern sequentially
+                const startPos = this.outputData.length - baseOffset;
+                
+                for (let i = 0; i < bytesToCopy; i++) {
+                    const sourcePos = startPos + i;
+                    if (sourcePos >= 0 && sourcePos < this.outputData.length) {
+                        this.writeOutputByte(this.outputData[sourcePos]);
+                    } else {
+                        if (verbose) console.log(`    Warning: Invalid offset ${sourcePos} for output length ${this.outputData.length}`);
                         this.writeOutputByte(0);
                     }
                 }
