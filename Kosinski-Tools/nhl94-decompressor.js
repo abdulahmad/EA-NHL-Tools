@@ -429,23 +429,29 @@ class NHL94Decompressor {
      * Based on assembly analysis - these handle extended length repeats
      */
     handleLongRepeat(commandByte, verbose = false) {
+        console.log('AA TEST HANDLE LONG REPEAT 0x8');
         const lowNibble = commandByte & 0x0F;
         console.log(lowNibble);
         if (lowNibble === 0) {
-            console.log('AA TEST 1');
-            // 0x80: Simple extended repeat - single byte count, single byte data
-            const count = this.readSourceByte();
-            console.log('AA TEST 1aa');
-            const byte = this.readSourceByte();
-            console.log('AA TEST 1a');
+            console.log('AA TEST 0x80 -- should unify this code with 0x80-0x88');
+            const parameter = this.readSourceByte();
 
-            if (verbose) console.log(`  Long repeat (80): 0x${byte.toString(16).padStart(2, '0')} × ${count}`);
-            console.log('AA TEST 1b');
+            // Based on analysis: 82 80 should copy 5 bytes from offset 128
+            const count = lowNibble+3; // Fixed count for 0x82 based on expected output
+            const offset = parameter; // Use parameter directly as offset (128 for 0x80)
+
+            if (verbose) console.log(`  Long copy (82): copy ${count} bytes from offset -${offset} (parameter=0x${parameter.toString(16)})`);
+
+            // Copy from output buffer
+            const sourcePos = this.outputData.length - offset;
             for (let i = 0; i < count; i++) {
-                this.writeOutputByte(byte);
-                console.log('AA TEST 1c');
+                if (sourcePos + i >= 0 && sourcePos + i < this.outputData.length) {
+                    this.writeOutputByte(this.outputData[sourcePos + i]);
+                } else {
+                    if (verbose) console.log(`    Warning: Invalid offset ${sourcePos + i} for output length ${this.outputData.length}`);
+                    this.writeOutputByte(0);
+                }
             }
-            console.log('AA TEST 1 closed')
         } else if (lowNibble < 8) {
             console.log('AA TEST');
             // 0x81-0x87: Variable length count with different encoding
@@ -454,7 +460,7 @@ class NHL94Decompressor {
                 const parameter = this.readSourceByte();
 
                 // Based on analysis: 82 80 should copy 5 bytes from offset 128
-                const count = 5; // Fixed count for 0x82 based on expected output
+                const count = lowNibble+3; // Fixed count for 0x82 based on expected output
                 const offset = parameter; // Use parameter directly as offset (128 for 0x80)
 
                 if (verbose) console.log(`  Long copy (82): copy ${count} bytes from offset -${offset} (parameter=0x${parameter.toString(16)})`);
