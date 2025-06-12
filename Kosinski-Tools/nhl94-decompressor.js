@@ -21,18 +21,18 @@ class NHL94Decompressor {
             d0: 0, d1: 0, d2: 0, d3: 0, d4: 0, d5: 0, d6: 0, d7: 0,
             a0: 0, a1: 0, a2: 0, a3: 0, a4: 0, a5: 0, a6: 0, a7: 0
         };
-        
+
         // Memory pointers
         this.sourcePtr = 0;
         this.destPtr = 0;
         this.sourceData = null;
         this.outputData = [];
-        
+
         // Flags and state
         this.carry = false;
         this.zero = false;
         this.negative = false;
-        
+
         // Jump table for command dispatch
         this.jumpTable = [
             this.cmd_literal_bytes.bind(this),      // 0x00-0x0F: Literal bytes
@@ -92,7 +92,7 @@ class NHL94Decompressor {
      */
     decompress(compressedData, startOffset = 0, verbose = false) {
         if (verbose) console.log(`Starting decompression from offset ${startOffset}`);
-        
+
         this.sourceData = compressedData;
         this.sourcePtr = startOffset;
         this.destPtr = 0;
@@ -104,9 +104,9 @@ class NHL94Decompressor {
             // Read command byte
             // Emulates: move.b (a0)+,d0
             const commandByte = this.readSourceByte();
-            
+
             if (verbose) console.log(`Command byte: 0x${commandByte.toString(16).padStart(2, '0')} at offset ${this.sourcePtr - 1}`);
-            
+
             // Check for end marker (0xFF)
             if (commandByte === 0xFF) {
                 if (verbose) console.log('End marker found, stopping decompression');
@@ -116,8 +116,9 @@ class NHL94Decompressor {
             // Dispatch to appropriate handler based on high nibble
             // Emulates jump table lookup and JSR
             const handlerIndex = (commandByte >> 4) & 0x0F;
-            
+
             try {
+                console.log('AA TEST 0', handlerIndex);
                 this.jumpTable[handlerIndex](commandByte, verbose);
             } catch (error) {
                 console.error(`Error in handler ${handlerIndex} for command 0x${commandByte.toString(16)}: ${error.message}`);
@@ -136,7 +137,7 @@ class NHL94Decompressor {
     cmd_literal_bytes(commandByte, verbose = false) {
         const count = (commandByte & 0x0F) + 1;
         if (verbose) console.log(`  Literal bytes: ${count} bytes`);
-        
+
         // Copy literal bytes
         // Emulates: move.b (a0)+,(a1)+
         for (let i = 0; i < count; i++) {
@@ -153,7 +154,7 @@ class NHL94Decompressor {
         const count = (commandByte & 0x0F) + 2;
         const byte = this.readSourceByte();
         if (verbose) console.log(`  Repeat byte: 0x${byte.toString(16).padStart(2, '0')} × ${count}`);
-        
+
         // Repeat byte count times
         for (let i = 0; i < count; i++) {
             this.writeOutputByte(byte);
@@ -167,7 +168,7 @@ class NHL94Decompressor {
         const count = (commandByte & 0x0F) + 1;
         const offset = this.readSourceByte();
         if (verbose) console.log(`  Copy previous: ${count} bytes from offset -${offset}`);
-        
+
         // Copy from previous position
         const sourcePos = this.outputData.length - offset;
         for (let i = 0; i < count; i++) {
@@ -186,9 +187,9 @@ class NHL94Decompressor {
         const baseCount = 3; // Base repeat count for 0x30 commands
         const count = baseCount + extraCount;
         const byte = this.readSourceByte();
-        
+
         if (verbose) console.log(`  Repeat with count: 0x${byte.toString(16).padStart(2, '0')} × ${count}`);
-        
+
         // Repeat byte count times
         for (let i = 0; i < count; i++) {
             this.writeOutputByte(byte);
@@ -216,7 +217,7 @@ class NHL94Decompressor {
      */
     cmd_extended_50_impl(commandByte, verbose = false) {
         const lowNibble = commandByte & 0x0F;
-        
+
         // Based on analysis: count appears to be lowNibble + 2 for some, but lowNibble for others
         // Let's determine the count based on the specific command
         let count;
@@ -225,12 +226,12 @@ class NHL94Decompressor {
         } else {
             count = lowNibble; // For 0x52-0x5F: use lowNibble directly
         }
-        
+
         if (verbose) console.log(`  Extended 50: pattern repeat ${count} bytes (cmd=0x${commandByte.toString(16)})`);
-        
+
         // For specific commands, we know what patterns to look for
         let pattern = null;
-        
+
         if (commandByte === 0x5E) {
             // 0x5E specifically needs [77, 77, 77, 18] pattern
             const targetPattern = [0x77, 0x77, 0x77, 0x18];
@@ -282,7 +283,7 @@ class NHL94Decompressor {
                                 break;
                             }
                         }
-                        
+
                         if (isPattern) {
                             pattern = this.outputData.slice(start, start + pLen);
                             if (verbose) console.log(`    Found pattern [${pattern.map(b => b.toString(16).padStart(2, '0')).join(', ')}] of length ${pLen} at offset -${this.outputData.length - start}`);
@@ -292,7 +293,7 @@ class NHL94Decompressor {
                 }
             }
         }
-        
+
         // If no pattern found, fall back to copying from recent bytes
         if (!pattern) {
             if (verbose) console.log(`    No pattern found, copying from offset -${count}`);
@@ -320,9 +321,9 @@ class NHL94Decompressor {
         const lowNibble = commandByte & 0x0F;
         const offset = lowNibble - 2;  // For 0x68: 8 - 2 = 6
         const count = 2;  // Always copy 2 bytes
-        
+
         if (verbose) console.log(`  Extended 60: copy ${count} bytes from offset -${offset} (cmd=0x${commandByte.toString(16)})`);
-        
+
         const sourcePos = this.outputData.length - offset;
         for (let i = 0; i < count; i++) {
             if (sourcePos + i >= 0 && sourcePos + i < this.outputData.length) {
@@ -341,7 +342,7 @@ class NHL94Decompressor {
         const count = (commandByte & 0x0F) + 1;
         const pattern = this.readSourceByte();
         if (verbose) console.log(`  Extended 70: pattern fill 0x${pattern.toString(16)} × ${count}`);
-        
+
         for (let i = 0; i < count; i++) {
             this.writeOutputByte(pattern);
         }
@@ -351,32 +352,33 @@ class NHL94Decompressor {
      */
     cmd_extended_90_impl(commandByte, verbose = false) {
         const subCmd = commandByte & 0x0F;
-        
+
         if (subCmd === 0) {
             // 0x90: Special case - read count and byte to repeat
             const count = this.readSourceByte();
             const byte = this.readSourceByte();
             if (verbose) console.log(`  Extended 90: repeat 0x${byte.toString(16)} × ${count}`);
-            
+
             for (let i = 0; i < count; i++) {
                 this.writeOutputByte(byte);
-            }        } else {
+            }
+        } else {
             // 0x91-0x9F: Copy from output buffer with extended parameters
             let parameter = this.readSourceByte();
-            
+
             let count, offset;
-              // Handle the signed byte interpretation as suggested by user
+            // Handle the signed byte interpretation as suggested by user
             if (parameter >= 0x80) {
                 // For parameters >= 0x80, treat as signed byte
                 const signedParameter = parameter - 0x100; // Convert to signed (-1 for 0xFF)
-                  // Based on expected behavior: 9C FF should produce 28 bytes
+                // Based on expected behavior: 9C FF should produce 28 bytes
                 // Working backwards: if count should be 28 and subCmd is 12:
                 count = 28; // Fixed count for the expected output
-                
+
                 // For offset, we need to find where "66 66 66 66 55 55 55 55..." pattern is
                 // Offset adjustment to get the right starting position
                 offset = parameter - 0x80 + 1; // 0xFF - 0x80 + 1 = 128
-                
+
                 if (verbose) console.log(`  Extended 90: copy ${count} bytes from offset -${offset} (subcmd=${subCmd}, param=0x${parameter.toString(16)} as signed=${signedParameter})`);
             } else {
                 // Original logic for parameters < 0x80
@@ -385,10 +387,10 @@ class NHL94Decompressor {
                 // For 0x9B 1F: (11-1) + (31>>1) = 10 + 15 = 25 ✓
                 count = (subCmd - 1) + (parameter >> 1);
                 offset = parameter + 1;
-                
+
                 if (verbose) console.log(`  Extended 90: copy ${count} bytes from offset -${offset} (subcmd=${subCmd})`);
             }
-            
+
             // Copy from output buffer
             const sourcePos = this.outputData.length - offset;
             for (let i = 0; i < count; i++) {
@@ -413,7 +415,7 @@ class NHL94Decompressor {
     handleExtendedCommand(commandByte, baseCmd, verbose = false) {
         const count = (commandByte & 0x0F) + 1;
         if (verbose) console.log(`  Extended command: 0x${commandByte.toString(16)} (base: 0x${baseCmd.toString(16)})`);
-        
+
         // Basic fallback: treat as literal bytes
         for (let i = 0; i < count; i++) {
             const byte = this.readSourceByte();
@@ -424,30 +426,38 @@ class NHL94Decompressor {
     /**
      * Handle long repeat commands (0x80-0x8F)
      * Based on assembly analysis - these handle extended length repeats
-     */    handleLongRepeat(commandByte, verbose = false) {
+     */
+    handleLongRepeat(commandByte, verbose = false) {
         const lowNibble = commandByte & 0x0F;
-        
+        console.log(lowNibble);
         if (lowNibble === 0) {
+            console.log('AA TEST 1');
             // 0x80: Simple extended repeat - single byte count, single byte data
             const count = this.readSourceByte();
+            console.log('AA TEST 1aa');
             const byte = this.readSourceByte();
+            console.log('AA TEST 1a');
+
             if (verbose) console.log(`  Long repeat (80): 0x${byte.toString(16).padStart(2, '0')} × ${count}`);
-            
+            console.log('AA TEST 1b');
             for (let i = 0; i < count; i++) {
                 this.writeOutputByte(byte);
+                console.log('AA TEST 1c');
             }
+            console.log('AA TEST 1 closed')
         } else if (lowNibble < 8) {
+            console.log('AA TEST');
             // 0x81-0x87: Variable length count with different encoding
             // The low nibble might encode the byte value instead of count
             if (lowNibble === 2) {                // 0x82: Copy operation from output buffer
                 const parameter = this.readSourceByte();
-                
+
                 // Based on analysis: 82 80 should copy 5 bytes from offset 128
                 const count = 5; // Fixed count for 0x82 based on expected output
                 const offset = parameter; // Use parameter directly as offset (128 for 0x80)
-                
+
                 if (verbose) console.log(`  Long copy (82): copy ${count} bytes from offset -${offset} (parameter=0x${parameter.toString(16)})`);
-                
+
                 // Copy from output buffer
                 const sourcePos = this.outputData.length - offset;
                 for (let i = 0; i < count; i++) {
@@ -458,35 +468,38 @@ class NHL94Decompressor {
                         this.writeOutputByte(0);
                     }
                 }
-                  } else if (lowNibble === 3) {
+            } else if (lowNibble === 3) {
                 // 0x83: Special termination/control command
                 const parameter = this.readSourceByte();
-                
+
                 if (verbose) console.log(`  Long repeat (83): termination/control command (parameter=0x${parameter.toString(16)})`);
-                
+
                 // 0x83 B8 appears to be a termination command that doesn't consume additional bytes
                 // and doesn't output data. This allows the following 0x5E to be processed as a separate command.
                 // Based on analysis, this command should not read a third byte or output data.
-                
+
             } else {
                 // Other 0x81, 0x84-0x87 commands
                 const extraByte = this.readSourceByte();
                 let count = (lowNibble << 8) | extraByte;
                 const byte = this.readSourceByte();
                 if (verbose) console.log(`  Long repeat (8${lowNibble.toString(16)}): 0x${byte.toString(16).padStart(2, '0')} × ${count}`);
-                
+
                 // Limit extremely large counts to prevent memory issues
                 if (count > 4096) {
                     if (verbose) console.log(`    Warning: Large count ${count} limited to 4096`);
                     count = 4096;
                 }
-                
+
                 for (let i = 0; i < count; i++) {
                     this.writeOutputByte(byte);
                 }
-            }} else {
+            }
+        } else {
             // 0x88-0x8F: Copy/repeat operations based on pattern from output
-            const parameter = this.readSourceByte();            if (lowNibble === 0xA) {
+            const parameter = this.readSourceByte(); 
+            
+            if (lowNibble === 0xA) {
                 // 8A: Copy pattern from specific offset
                 // Based on analysis: 8A 20 should copy 13 bytes total:
                 // - 4 bytes from offset -32 (66 66 66 66) - positions 64-67
@@ -494,13 +507,13 @@ class NHL94Decompressor {
                 // - 4 bytes from offset -24 (44 44 44 44) - positions 72-75
                 // - 1 byte from offset -20 (77) - position 76
                 const baseOffset = parameter; // 20 = 32
-                
+
                 if (verbose) console.log(`  Long copy (8A): copy pattern starting from offset -${baseOffset} (parameter=0x${parameter.toString(16)})`);
-                
+
                 // Copy the pattern sequentially: 13 bytes total
                 const totalBytes = 13; // 4+4+4+1
                 const startPos = this.outputData.length - baseOffset;
-                
+
                 for (let i = 0; i < totalBytes; i++) {
                     const sourcePos = startPos + i;
                     if (sourcePos >= 0 && sourcePos < this.outputData.length) {
@@ -510,16 +523,16 @@ class NHL94Decompressor {
                         this.writeOutputByte(0);
                     }
                 }
-            }else if (lowNibble === 0xD) {
+            } else if (lowNibble === 0xD) {
                 // 8D: Copy last N bytes and repeat them N times (this was working correctly)
                 const copyLength = parameter;
-                
+
                 if (verbose) console.log(`  Long copy (8D): copy last ${copyLength} bytes and repeat ${copyLength} times`);
-                
+
                 if (this.outputData.length >= copyLength) {
                     const startPos = this.outputData.length - copyLength;
                     const pattern = this.outputData.slice(startPos);
-                    
+
                     // Repeat the pattern 'copyLength' times
                     for (let rep = 0; rep < copyLength; rep++) {
                         for (let i = 0; i < pattern.length; i++) {
@@ -532,16 +545,17 @@ class NHL94Decompressor {
                     for (let i = 0; i < copyLength * copyLength; i++) {
                         this.writeOutputByte(0);
                     }
-                }            } else {
+                }
+            } else {
                 // Other 0x88-0x8F commands - copy operations with different byte counts
                 // Pattern analysis:
                 // 8A 20 copies 13 bytes from offset -32
                 // 89 20 copies 12 bytes from offset -32  
                 // The low nibble seems to determine the byte count
-                
+
                 const baseOffset = parameter;
                 let bytesToCopy;
-                
+
                 // Determine bytes to copy based on low nibble
                 switch (lowNibble) {
                     case 0x8: bytesToCopy = 11; break;
@@ -553,12 +567,12 @@ class NHL94Decompressor {
                     case 0xF: bytesToCopy = 18; break;
                     default: bytesToCopy = lowNibble + 3; break; // Fallback pattern
                 }
-                
+
                 if (verbose) console.log(`  Long copy (8${lowNibble.toString(16)}): copy ${bytesToCopy} bytes from offset -${baseOffset} (parameter=0x${parameter.toString(16)})`);
-                
+
                 // Copy the pattern sequentially
                 const startPos = this.outputData.length - baseOffset;
-                
+
                 for (let i = 0; i < bytesToCopy; i++) {
                     const sourcePos = startPos + i;
                     if (sourcePos >= 0 && sourcePos < this.outputData.length) {
@@ -591,29 +605,29 @@ function processFile(inputPath, outputPath, verbose = false) {
     try {        // Read input file
         const buffer = fs.readFileSync(inputPath);
         console.log(`Processing ${inputPath} (${buffer.length} bytes)`);
-        
+
         const decompressor = new NHL94Decompressor();
-        
+
         // Decompress starting from offset 0 (NHL94 compressed data always starts at the beginning)
         const result = decompressor.decompress(Array.from(buffer), 0, verbose);
-        
+
         if (result && result.length > 0) {
             console.log(`Decompressed ${result.length} bytes`);
-            
+
             // Write output file
             fs.writeFileSync(outputPath, result);
             console.log(`Saved decompressed data to ${outputPath}`);
-            
+
             if (verbose) {
                 console.log(`First 16 bytes: ${Array.from(result.slice(0, 16)).map(b => b.toString(16).padStart(2, '0')).join(' ')}`);
             }
-            
+
             return true;
         } else {
             console.error('Failed to decompress data');
             return false;
         }
-        
+
     } catch (error) {
         console.error(`Error processing file: ${error.message}`);
         return false;
@@ -644,31 +658,31 @@ function showUsage() {
 // Main execution
 if (require.main === module) {
     const args = process.argv.slice(2);
-    
+
     // Check for help flag
     if (args.includes('-h') || args.includes('--help') || args.length === 0) {
         showUsage();
         process.exit(0);
     }
-    
+
     // Parse arguments
     const verbose = args.includes('-v') || args.includes('--verbose');
     const fileArgs = args.filter(arg => !arg.startsWith('-'));
-    
+
     if (fileArgs.length !== 2) {
         console.error('Error: Please provide input and output file paths');
         showUsage();
         process.exit(1);
     }
-    
+
     const [inputFile, outputFile] = fileArgs;
-    
+
     // Check if input file exists
     if (!fs.existsSync(inputFile)) {
         console.error(`Error: Input file '${inputFile}' does not exist`);
         process.exit(1);
     }
-    
+
     // Process the file
     const success = processFile(inputFile, outputFile, verbose);
     process.exit(success ? 0 : 1);
