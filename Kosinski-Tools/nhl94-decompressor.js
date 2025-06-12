@@ -59,7 +59,7 @@ class NHL94Decompressor {
      * Emulates: move.b (a0)+,d0
      */
     readSourceByte() {
-        console.log(this.sourcePtr, this.sourceData.length);
+        // console.log(this.sourcePtr, this.sourceData.length);
         if (this.sourcePtr >= this.sourceData.length) {
             throw new Error(`Source pointer ${this.sourcePtr} beyond data length ${this.sourceData.length}`);
         }
@@ -119,7 +119,7 @@ class NHL94Decompressor {
             const handlerIndex = (commandByte >> 4) & 0x0F;
 
             try {
-                console.log('AA TEST 0', handlerIndex);
+                // console.log('AA TEST 0', handlerIndex);
                 this.jumpTable[handlerIndex](commandByte, verbose);
             } catch (error) {
                 console.error(`Error in handler ${handlerIndex} for command 0x${commandByte.toString(16)}: ${error.message}`);
@@ -429,11 +429,11 @@ class NHL94Decompressor {
      * Based on assembly analysis - these handle extended length repeats
      */
     handleLongRepeat(commandByte, verbose = false) {
-        console.log('AA TEST HANDLE LONG REPEAT 0x8');
+        // console.log('AA TEST HANDLE LONG REPEAT 0x8');
         const lowNibble = commandByte & 0x0F;
-        console.log(lowNibble);
+        // console.log(lowNibble);
         if (lowNibble === 0) {
-            console.log('AA TEST 0x80 -- should unify this code with 0x80-0x88');
+            // console.log('AA TEST 0x80 -- should unify this code with 0x80-0x88');
             const parameter = this.readSourceByte();
 
             // Based on analysis: 82 80 should copy 5 bytes from offset 128
@@ -453,7 +453,7 @@ class NHL94Decompressor {
                 }
             }
         } else if (lowNibble < 8) {
-            console.log('AA TEST');
+            // console.log('AA TEST');
             // 0x81-0x87: Variable length count with different encoding
             // The low nibble might encode the byte value instead of count
             if (lowNibble === 2) {                // 0x82: Copy operation from output buffer
