@@ -56,332 +56,170 @@ $F9C68-$F9CA3: 08 B8 00 06 C2 F8 48 E7 FF FE 22 3C 00 00 00 80 20 3C 00 00 0D A0
 
 $FCC76-$FCF85: 4E B9 00 0F 9C 68 4E B9 00 0F 71 A2 42 78 D5 A4 3F 3C 00 7A 4E B9 00 01 11 56 21 FC 00 01 5E 4C B0 3A 4E B9 00 01 71 02 2F 08 20 7C FF FF C6 CE 4E B9 00 0F 70 A2 20 7C FF FF CA 32 4E B9 00 0F 70 A2 20 5F 4E B9 00 0F 71 A2 08 B8 00 01 BF 78 31 FC 00 06 B0 06 31 FC 00 06 B0 0A 30 3C 00 00 4E B9 00 01 15 94 38 3C 00 02 31 C4 D4 30 06 44 00 24 31 C4 D4 32 06 44 00 24 31 C4 B0 10 24 7C 00 0A 9A 18 4E B9 00 01 17 2C 05 43 15 67 79 AB CD EF 4E B9 00 01 1F 04 31 C4 B0 14 24 7C 00 0A AC 5A 4E B9 00 01 17 2C 0A 23 45 67 89 AB CD EF 24 7C 00 05 5B 86 31 C4 B0 1E 4E B9 00 01 17 2C 05 42 25 61 89 AB CD EF 4E B9 00 01 1B 92 00 06 FE 00 00 00 20 7C 00 05 4E 24 22 48 24 48 D1 DA D3 DA 42 40 42 41 74 28 76 1C 7A 03 4E B9 00 01 16 9A 4E B9 00 01 1D E2 00 0E DF 0C 0D 4D 41 54 43 48 55 50 53 00 31 FC 00 00 B0 30 4E B9 00 01 1B 92 00 10 FF 10 11 41 44 56 41 4E 54 41 47 45 3A 00 4E B9 00 01 1B 92 00 06 DE 06 03 00 70 21 72 09 4E B9 00 01 19 B8 4E B9 00 01 1B 92 00 06 DE 01 0E 00 30 3C 00 08 32 3C 00 08 4E B9 00 01 19 B8 4E B9 00 01 1B 92 00 06 DE 1F 0E 00 30 3C 00 08 32 3C 00 08 4E B9 00 01 19 B8 4E B9 00 01 1B 92 00 06 FF 01 01 00 20 7C 00 0B 38 9C 22 48 24 48 D1 DA D3 DA 42 40 42 41 34 11 36 29 00 02 7A 0C 4E B9 00 01 16 9A 24 7C 00 0F 5A FE 31 C4 DE E4 4E B9 00 01 17 38 24 7C 00 0F 5D 24 31 C4 DE E6 4E B9 00 01 17 38 42 78 D5 98 42 78 D5 9A 33 FC 01 0D FF FF D5 A8 61 00 06 2C 61 00 02 40 61 00 03 B6 31 FC 00 18 BD 26 21 FC 00 01 5E 4C B0 3A 46 FC 25 00 4E B9 00 01 77 18 30 FC 00 1B 30 FC 00 1D 30 FC 00 1A 30 FC 00 1D 4E B9 00 0F 73 18 4A 40 6B 00 00 08 30 C0 30 FC 00 1D 30 38 C3 30 30 FC 00 1E 30 FC 00 1D B0 78 C3 32 67 00 00 06 30 FC 00 1F 30 FC 00 1D 30 FC 00 20 30 FC 00 1D 30 FC 00 21 30 BC FF FF 42 78 B0 44 31 FC 7F FF D5 B6 21 FC 00 00 8C A0 DE EC 70 00 4E B9 00 01 11 76 53 78 D5 A8 6A 00 00 0A 33 FC 01 0E FF FF D5 A8 61 00 05 EE 08 01 00 07 66 00 00 9A 0C 78 01 0E D5 A8 67 00 00 18 08 01 00 05 67 00 00 20 31 FC 7F FF D5 B6 21 FC 00 00 8C A0 DE EC 61 00 05 B8 30 3C 00 01 61 00 00 76 60 00 00 38 08 01 00 06 67 00 00 20 31 FC 7F FF D5 B6 21 FC 00 00 8C A0 DE EC 61 00 05 92 30 3C FF FF 61 00 00 50 60 00 00 12 42 78 B0 44 08 01 00 01 67 00 00 06 50 F8 B0 44 08 38 00 01 DE D5 67 00 00 06 50 F8 B0 44 4E B9 00 01 77 30 53 78 D5 B6 6A 00 FF 5C 4A 78 D0 4A 67 00 00 10 31 FC FF FF D5 B6 53 B8 DE EC 6A 00 FF 46 31 FC 00 00 B0 30 4E 75
 
-I had you write this script but there are some issues. The main one I want to focus on now is that the 0x80-0x8F command seems broken. I have a file that has the following in it:
+I had you write this script but there are some issues. The main one I want to focus on now is that the 0xC0-0xCF command has not been implemented. I have a file that has the following in it:
 
-31 66 00 65 30 55 00 65 30 44 03 65 47 77 77 8D 04 31 66 31 55 31 44 3F 77 9B 1F 00 18 51 00 88 51 00 92 8A 20 31 11 0E 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 89 20 00 11 30 77 01 99 88 68 04 98 11 18 77 81 34 11 9C FF 01 82 87 82 80 00 61 30 55 07 21 44 44 43 21 77 77 73 8E 04 8F D4 8B 04 38 77 00 71 83 B8 5E 00 71
+31 66 00 65 30 55 00 65 30 44 03 65 47 77 77 8D 04 31 66 31 55 31 44 3F 77 9B 1F 00 18 51 00 88 51 00 92 8A 20 31 11 0E 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 89 20 00 11 30 77 01 99 88 68 04 98 11 18 77 81 34 11 9C FF 01 82 87 82 80 00 61 30 55 07 21 44 44 43 21 77 77 73 8E 04 8F D4 8B 04 38 77 00 71 83 B8 5E 00 71 80 8F 00 11
 
 it correctly outputs the following as expected:
-66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 18 77 77 18 88 77 77 18 92 66 66 66 66 55 55 55 55 44 44 44 44 77 11 11 11 11 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 66 66 66 66 55 55 55 55 44 44 44 44 11 77 77 77 99 88 11 77 98 11 18 77 81 11 11 11 11 11 11 11 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 82 87 77 77 66 66 66 61 55 55 55 21 44 44 43 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 77 77 77 77 77 77 77 77 77 77 77 71 77 77 77 18 77 77 77 18 77 77 77 18 77 77 71
+66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 18 77 77 18 88 77 77 18 92 66 66 66 66 55 55 55 55 44 44 44 44 77 11 11 11 11 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 66 66 66 66 55 55 55 55 44 44 44 44 11 77 77 77 99 88 11 77 98 11 18 77 81 11 11 11 11 11 11 11 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 82 87 77 77 66 66 66 61 55 55 55 21 44 44 43 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 77 77 77 77 77 77 77 77 77 77 77 71 77 77 77 18 77 77 77 18 77 77 77 18 77 77 71 11 77 77 11
 
 I have another file which has the following in it:
-31 66 00 65 30 55 00 65 30 44 03 65 47 77 77 8D 04 31 66 31 55 31 44 3F 77 9B 1F 00 18 51 00 88 51 00 92 8A 20 31 11 0E 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 89 20 00 11 30 77 01 99 88 68 04 98 11 18 77 81 34 11 9C FF 01 82 87 82 80 00 61 30 55 07 21 44 44 43 21 77 77 73 8E 04 8F D4 8B 04 38 77 00 71 83 B8 5E 00 71 80 8F
+31 66 00 65 30 55 00 65 30 44 03 65 47 77 77 8D 04 31 66 31 55 31 44 3F 77 9B 1F 00 18 51 00 88 51 00 92 8A 20 31 11 0E 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 89 20 00 11 30 77 01 99 88 68 04 98 11 18 77 81 34 11 9C FF 01 82 87 82 80 00 61 30 55 07 21 44 44 43 21 77 77 73 8E 04 8F D4 8B 04 38 77 00 71 83 B8 5E 00 71 80 8F 00 11 CC
 
 I would expect it to output:
-66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 18 77 77 18 88 77 18 88 92 66 66 66 66 55 55 55 55 44 44 44 44 77 11 11 11 11 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 66 66 66 66 55 55 55 55 44 44 44 44 11 77 77 77 99 88 11 77 98 11 18 77 81 11 11 11 11 11 11 11 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 82 87 77 77 66 66 66 61 55 55 55 21 44 44 43 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 77 77 77 77 77 77 77 77 77 77 77 71 77 77 77 18 77 77 77 18 77 77 77 18 77 77 71 11 77 77
+66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 18 77 77 18 88 77 77 18 92 66 66 66 66 55 55 55 55 44 44 44 44 77 11 11 11 11 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 66 66 66 66 55 55 55 55 44 44 44 44 11 77 77 77 99 88 11 77 98 11 18 77 81 11 11 11 11 11 11 11 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 82 87 77 77 66 66 66 61 55 55 55 21 44 44 43 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 77 77 77 77 77 77 77 77 77 77 77 71 77 77 77 18 77 77 77 18 77 77 77 18 77 77 71 11 77 77 11 11 71
 
 But what it outputs is:
-66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 18 77 77 18 88 77 18 88 92 66 66 66 66 55 55 55 55 44 44 44 44 77 11 11 11 11 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 66 66 66 66 55 55 55 55 44 44 44 44 11 77 77 77 99 88 11 77 98 11 18 77 81 11 11 11 11 11 11 11 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 82 87 77 77 66 66 66 61 55 55 55 21 44 44 43 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 77 77 77 77 77 77 77 77 77 77 77 71 77 77 77 18 77 77 77 18 77 77 77 18 77 77 71
+66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 18 77 77 18 88 77 77 18 92 66 66 66 66 55 55 55 55 44 44 44 44 77 11 11 11 11 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 66 66 66 66 55 55 55 55 44 44 44 44 11 77 77 77 99 88 11 77 98 11 18 77 81 11 11 11 11 11 11 11 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 82 87 77 77 66 66 66 61 55 55 55 21 44 44 43 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 77 77 77 77 77 77 77 77 77 77 77 71 77 77 77 18 77 77 77 18 77 77 77 18 77 77 71 11 77 77 11
 
 Here is the script output:
 C:\repository\EA-NHL-Tools\Kosinski-Tools> node .\nhl94-decompressor.js .\ronbarr_short.bin output.bin --verbose
-Processing .\ronbarr_short.bin (110 bytes)
+Processing .\ronbarr_short.bin (113 bytes)
 Starting decompression from offset 0
-0 110
 Command byte: 0x31 at offset 0
-AA TEST 0 3
-1 110
   Repeat with count: 0x66 × 4
-2 110
 Command byte: 0x00 at offset 2
-AA TEST 0 0
   Literal bytes: 1 bytes
-3 110
     Byte 0: 0x65
-4 110
 Command byte: 0x30 at offset 4
-AA TEST 0 3
-5 110
   Repeat with count: 0x55 × 3
-6 110
 Command byte: 0x00 at offset 6
-AA TEST 0 0
   Literal bytes: 1 bytes
-7 110
     Byte 0: 0x65
-8 110
 Command byte: 0x30 at offset 8
-AA TEST 0 3
-9 110
   Repeat with count: 0x44 × 3
-10 110
 Command byte: 0x03 at offset 10
-AA TEST 0 0
   Literal bytes: 4 bytes
-11 110
     Byte 0: 0x65
-12 110
     Byte 1: 0x47
-13 110
     Byte 2: 0x77
-14 110
     Byte 3: 0x77
-15 110
 Command byte: 0x8d at offset 15
-AA TEST 0 8
-13
-16 110
   Long copy (8D): copy last 4 bytes and repeat 4 times
-17 110
 Command byte: 0x31 at offset 17
-AA TEST 0 3
-18 110
   Repeat with count: 0x66 × 4
-19 110
 Command byte: 0x31 at offset 19
-AA TEST 0 3
-20 110
   Repeat with count: 0x55 × 4
-21 110
 Command byte: 0x31 at offset 21
-AA TEST 0 3
-22 110
   Repeat with count: 0x44 × 4
-23 110
 Command byte: 0x3f at offset 23
-AA TEST 0 3
-24 110
   Repeat with count: 0x77 × 18
-25 110
 Command byte: 0x9b at offset 25
-AA TEST 0 9
-26 110
   Extended 90: copy 25 bytes from offset -32 (subcmd=11)
-27 110
 Command byte: 0x00 at offset 27
-AA TEST 0 0
   Literal bytes: 1 bytes
-28 110
     Byte 0: 0x18
-29 110
 Command byte: 0x51 at offset 29
-AA TEST 0 5
   Extended 50: pattern repeat 3 bytes (cmd=0x51)
     Found target pattern [77, 77, 18] at offset -3
     Continuing pattern for 3 bytes
-30 110
 Command byte: 0x00 at offset 30
-AA TEST 0 0
   Literal bytes: 1 bytes
-31 110
     Byte 0: 0x88
-32 110
 Command byte: 0x51 at offset 32
-AA TEST 0 5
   Extended 50: pattern repeat 3 bytes (cmd=0x51)
     Found target pattern [77, 77, 18] at offset -4
     Continuing pattern for 3 bytes
-33 110
 Command byte: 0x00 at offset 33
-AA TEST 0 0
   Literal bytes: 1 bytes
-34 110
     Byte 0: 0x92
-35 110
 Command byte: 0x8a at offset 35
-AA TEST 0 8
-10
-36 110
   Long copy (8A): copy pattern starting from offset -32 (parameter=0x20)
-37 110
 Command byte: 0x31 at offset 37
-AA TEST 0 3
-38 110
   Repeat with count: 0x11 × 4
-39 110
 Command byte: 0x0e at offset 39
-AA TEST 0 0
   Literal bytes: 15 bytes
-40 110
     Byte 0: 0x22
-41 110
     Byte 1: 0x28
-42 110
     Byte 2: 0x82
-43 110
     Byte 3: 0x22
-44 110
     Byte 4: 0x33
-45 110
     Byte 5: 0x32
-46 110
     Byte 6: 0x22
-47 110
     Byte 7: 0x34
-48 110
     Byte 8: 0x44
-49 110
     Byte 9: 0x32
-50 110
     Byte 10: 0x98
-51 110
     Byte 11: 0x22
-52 110
     Byte 12: 0x99
-53 110
     Byte 13: 0x98
-54 110
     Byte 14: 0x88
-55 110
 Command byte: 0x89 at offset 55
-AA TEST 0 8
-9
-56 110
   Long copy (89): copy 12 bytes from offset -32 (parameter=0x20)
-57 110
 Command byte: 0x00 at offset 57
-AA TEST 0 0
   Literal bytes: 1 bytes
-58 110
     Byte 0: 0x11
-59 110
 Command byte: 0x30 at offset 59
-AA TEST 0 3
-60 110
   Repeat with count: 0x77 × 3
-61 110
 Command byte: 0x01 at offset 61
-AA TEST 0 0
   Literal bytes: 2 bytes
-62 110
     Byte 0: 0x99
-63 110
     Byte 1: 0x88
-64 110
 Command byte: 0x68 at offset 64
-AA TEST 0 6
   Extended 60: copy 2 bytes from offset -6 (cmd=0x68)
-65 110
 Command byte: 0x04 at offset 65
-AA TEST 0 0
   Literal bytes: 5 bytes
-66 110
     Byte 0: 0x98
-67 110
     Byte 1: 0x11
-68 110
     Byte 2: 0x18
-69 110
     Byte 3: 0x77
-70 110
     Byte 4: 0x81
-71 110
 Command byte: 0x34 at offset 71
-AA TEST 0 3
-72 110
   Repeat with count: 0x11 × 7
-73 110
 Command byte: 0x9c at offset 73
-AA TEST 0 9
-74 110
   Extended 90: copy 28 bytes from offset -128 (subcmd=12, param=0xff as signed=-1)
-75 110
 Command byte: 0x01 at offset 75
-AA TEST 0 0
   Literal bytes: 2 bytes
-76 110
     Byte 0: 0x82
-77 110
     Byte 1: 0x87
-78 110
 Command byte: 0x82 at offset 78
-AA TEST 0 8
-2
-AA TEST
-79 110
   Long copy (82): copy 5 bytes from offset -128 (parameter=0x80)
-80 110
 Command byte: 0x00 at offset 80
-AA TEST 0 0
   Literal bytes: 1 bytes
-81 110
     Byte 0: 0x61
-82 110
 Command byte: 0x30 at offset 82
-AA TEST 0 3
-83 110
   Repeat with count: 0x55 × 3
-84 110
 Command byte: 0x07 at offset 84
-AA TEST 0 0
   Literal bytes: 8 bytes
-85 110
     Byte 0: 0x21
-86 110
     Byte 1: 0x44
-87 110
     Byte 2: 0x44
-88 110
     Byte 3: 0x43
-89 110
     Byte 4: 0x21
-90 110
     Byte 5: 0x77
-91 110
     Byte 6: 0x77
-92 110
     Byte 7: 0x73
-93 110
 Command byte: 0x8e at offset 93
-AA TEST 0 8
-14
-94 110
   Long copy (8e): copy 17 bytes from offset -4 (parameter=0x4)
-95 110
 Command byte: 0x8f at offset 95
-AA TEST 0 8
-15
-96 110
   Long copy (8f): copy 18 bytes from offset -212 (parameter=0xd4)
-97 110
 Command byte: 0x8b at offset 97
-AA TEST 0 8
-11
-98 110
   Long copy (8b): copy 14 bytes from offset -4 (parameter=0x4)
-99 110
 Command byte: 0x38 at offset 99
-AA TEST 0 3
-100 110
   Repeat with count: 0x77 × 11
-101 110
 Command byte: 0x00 at offset 101
-AA TEST 0 0
   Literal bytes: 1 bytes
-102 110
     Byte 0: 0x71
-103 110
 Command byte: 0x83 at offset 103
-AA TEST 0 8
-3
-AA TEST
-104 110
   Long repeat (83): termination/control command (parameter=0xb8)
-105 110
 Command byte: 0x5e at offset 105
-AA TEST 0 5
   Extended 50: pattern repeat 14 bytes (cmd=0x5e)
     Found target pattern [77, 77, 77, 18] at offset -184
     Continuing pattern for 14 bytes
-106 110
 Command byte: 0x00 at offset 106
-AA TEST 0 0
   Literal bytes: 1 bytes
-107 110
     Byte 0: 0x71
-108 110
 Command byte: 0x80 at offset 108
-AA TEST 0 8
-0
-AA TEST 1
-109 110
-AA TEST 1aa
-110 110
-Error in handler 8 for command 0x80: Source pointer 110 beyond data length 110
-Decompression complete. Output length: 283
-Decompressed 283 bytes
+  Long copy (82): copy 3 bytes from offset -143 (parameter=0x8f)
+Command byte: 0x00 at offset 110
+  Literal bytes: 1 bytes
+    Byte 0: 0x11
+Command byte: 0xcc at offset 112
+  Extended command: 0xcc (base: 0xc0)
+Error in handler 12 for command 0xcc: Source pointer 113 beyond data length 113
+Decompression complete. Output length: 287
+Decompressed 287 bytes
 Saved decompressed data to output.bin
 First 16 bytes: 66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77
-
-I believe 80 8F means: command 0x8: copy 0+3 bytes from currentOffset-0x8F
 
 Can you disassemble the hex code I included above and understand how this should be implemented and implement it?
