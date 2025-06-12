@@ -59,6 +59,7 @@ class NHL94Decompressor {
      * Emulates: move.b (a0)+,d0
      */
     readSourceByte() {
+        console.log(this.sourcePtr, this.sourceData.length);
         if (this.sourcePtr >= this.sourceData.length) {
             throw new Error(`Source pointer ${this.sourcePtr} beyond data length ${this.sourceData.length}`);
         }
