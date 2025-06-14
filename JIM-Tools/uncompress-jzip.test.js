@@ -34,11 +34,12 @@ function testCommand(initialOutput, commandByte, additionalBytes, expectedResult
     
     // Convert hex strings to byte arrays if needed
     const initialBytes = hexToBytes(initialOutput);
+    const additionalBytesArray = hexToBytes(additionalBytes);
     const expectedBytes = hexToBytes(expectedResult);
     
     decompressor.setOutput(initialBytes);
     
-    const result = decompressor.processCommand(commandByte, additionalBytes);
+    const result = decompressor.processCommand(commandByte, additionalBytesArray);
     const actualOutput = Array.from(decompressor.getOutput().slice(initialBytes.length));
     
     // Custom assertion with hex display
@@ -322,7 +323,7 @@ describe('ronbarr.map.jzip decompression', () => {
         );
     });
     
-    test('00 65 - Literal Copy single byte', () => {
+    test('00 65 - Literal Copy, 1 byte', () => {
         testCommand(
             "66 66 66 66",
             0x00, // command: 0x0, param: 0 (1 byte)
@@ -334,13 +335,30 @@ describe('ronbarr.map.jzip decompression', () => {
     test('30 55 - RLE (repeat 55, 3 times)', () => {
         testCommand(
             "66 66 66 66 65", // empty initial output
-            0x30, // command: 0x3, param: 3 (4 times)
+            0x30,
             [0x55], // byte to repeat
             "55 55 55" // expected result
         );
     });
+
+    test('03 65 47 77 77 - Literal Copy, 3 bytes', () => {
+        testCommand(
+            "66 66 66 66 65 55 55 55 65 44 44 44",
+            0x03,
+            "65 47 77 77", // bytes to copy
+            "65 47 77 77"
+        );
+    });
+
+    test('8D 04 - Back Reference with offset (0xD+3 bytes from 4 back)', () => {
+        testCommand(
+            "66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77", // initial output
+            0x8D, // command: 0x8, param: D (D+3 bytes)
+            [0x04], // offset: 4 bytes back
+            "65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77" // expected result
+        );
+    });
     
-    // 03 65 47 77 77 
     // 8D 04 
     // 3F 77 
     // 9B 1F 
