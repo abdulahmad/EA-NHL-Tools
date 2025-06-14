@@ -360,9 +360,24 @@ describe('ronbarr.map.jzip decompression', () => {
         );
     });
     
-    // 8D 04 
-    // 3F 77 
+    test('3F 77 - RLE (repeat 77, 0xF+3 times)', () => {
+        testCommand(
+            "", // empty initial output
+            0x3F,
+            [0x77], // byte to repeat
+            "77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77" // expected result
+        );
+    });
+
     // 9B 1F 
+    // test('0x9 - Alternative Back Reference (1 byte from 2 back)', () => {
+    //     testCommand(
+    //         [0x11, 0x22, 0x33], // initial output
+    //         0x90, // command: 0x9, param: 0 (1 byte)
+    //         [0x02], // offset: 2 bytes back
+    //         [0x22] // expected result
+    //     );
+    // });
     // 51 
     // 8A 20 
     // 0E 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 
