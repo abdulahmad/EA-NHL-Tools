@@ -97,12 +97,12 @@ describe('Tile Decompressor', () => {
         );
     });
     
-    test('0x9 - Alternative Back Reference (1 byte from 2 back)', () => {
+    test('0x9 - Copy Back Reference ( (0*2)+1 bytes from offset 2+1 back)', () => {
         testCommand(
             [0x11, 0x22, 0x33], // initial output
             0x90, // command: 0x9, param: 0 (1 byte)
             [0x02], // offset: 2 bytes back
-            [0x22] // expected result
+            [0x11] // expected result
         );
     });
     
@@ -216,8 +216,8 @@ describe('Tile Decompressor', () => {
             decompressor.setOutput([0x11, 0x22, 0x33, 0x44]);
             const result = decompressor.processCommand(0x91, [0x02]);
             expect(result.command).toBe('back_ref_9');
-            expect(result.offset).toBe(2);
-            expect(result.count).toBe(2);
+            expect(result.offset).toBe(3);
+            expect(result.count).toBe(3);
         });
 
         test('should correctly parse command 0xCX (fixed back ref)', () => {
@@ -369,16 +369,25 @@ describe('ronbarr.map.jzip decompression', () => {
         );
     });
 
-    // 9B 1F 
-    // test('0x9 - Alternative Back Reference (1 byte from 2 back)', () => {
+    test('9B 1F - Copy Back Reference ( (B*2)+1 bytes from offset 1F+1 back)', () => {
+        testCommand(
+            "66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77", // initial output
+            0x9B, // command: 0x9, param: 0 (1 byte)
+            [0x1F], // offset: 2 bytes back
+            "66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77" // expected result
+        );
+    });
+
+    // 51 
+    // test('0x5 - Short Back Reference minimum values', () => {
     //     testCommand(
-    //         [0x11, 0x22, 0x33], // initial output
-    //         0x90, // command: 0x9, param: 0 (1 byte)
-    //         [0x02], // offset: 2 bytes back
-    //         [0x22] // expected result
+    //         [0xFF, 0xEE],
+    //         0x50, // command: 0x5, offset: 1 byte back, count: 1 byte
+    //         [],
+    //         [0xEE]
     //     );
     // });
-    // 51 
+
     // 8A 20 
     // 0E 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 
     // 89 20 

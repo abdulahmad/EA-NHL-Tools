@@ -125,11 +125,11 @@ class TileDecompressor {
                     consumed: 1
                 };
             case 0x9: // Back reference with byte offset (alternative)
-                const backRefCountAlt = param + 1;
+                const backRefCountAlt = (param*2) + 1;
                 if (additionalBytes.length < 1) {
                     throw new Error('Not enough bytes for back reference command');
                 }
-                const backRefOffsetAlt = additionalBytes[0];
+                const backRefOffsetAlt = additionalBytes[0]+1;
                 const backRefBytesAlt = this.copyBackReference(backRefOffsetAlt, backRefCountAlt);
                 return {
                     command: 'back_ref_9',
