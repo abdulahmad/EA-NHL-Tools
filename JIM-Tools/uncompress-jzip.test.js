@@ -24,6 +24,11 @@ function hexToBytes(hexString) {
     return bytes;
 }
 
+// Helper function to convert byte array to hex string for display
+function bytesToHex(bytes) {
+    return bytes.map(b => b.toString(16).padStart(2, '0').toUpperCase()).join(' ');
+}
+
 function testCommand(initialOutput, commandByte, additionalBytes, expectedResult) {
     const decompressor = new TileDecompressor();
     
@@ -36,7 +41,19 @@ function testCommand(initialOutput, commandByte, additionalBytes, expectedResult
     const result = decompressor.processCommand(commandByte, additionalBytes);
     const actualOutput = Array.from(decompressor.getOutput().slice(initialBytes.length));
     
-    expect(actualOutput).toEqual(expectedBytes);
+    // Custom assertion with hex display
+    if (!actualOutput.every((b, i) => b === expectedBytes[i]) || actualOutput.length !== expectedBytes.length) {
+        const actualHex = bytesToHex(actualOutput);
+        const expectedHex = bytesToHex(expectedBytes);
+        
+        throw new Error(
+            `Byte mismatch:\n` +
+            `Expected: [${expectedHex}]\n` +
+            `Actual:   [${actualHex}]\n` +
+            `Expected length: ${expectedBytes.length}, Actual length: ${actualOutput.length}`
+        );
+    }
+    
     return result;
 }
 
@@ -54,7 +71,7 @@ describe('Tile Decompressor', () => {
     test('0x3 - RLE (repeat byte 4 times)', () => {
         testCommand(
             [],
-            0x33, // command: 0x3, param: 3 (4 times)
+            0x31, // command: 0x3, param: 3 (4 times)
             [0xAA], // byte to repeat
             [0xAA, 0xAA, 0xAA, 0xAA] // expected result
         );
@@ -97,12 +114,12 @@ describe('Tile Decompressor', () => {
     //     );
     // });
     
-    test('RLE Single Byte (repeat 1 time)', () => {
+    test('RLE Single Byte (repeat 3 times)', () => {
         testCommand(
             [],
             0x30, // command: 0x3, param: 0 (1 time)
             [0xFF],
-            [0xFF]
+            "FF FF FF"
         );
     });
     
@@ -170,7 +187,7 @@ describe('Tile Decompressor', () => {
             const decompressor = new TileDecompressor();
             const result = decompressor.processCommand(0x32, [0xFF]);
             expect(result.command).toBe('rle');
-            expect(result.count).toBe(3);
+            expect(result.count).toBe(5);
             expect(result.byte).toBe(0xFF);
         });
 
@@ -228,7 +245,7 @@ describe('Hex String Input Tests', () => {
     test('RLE using hex strings', () => {
         testCommand(
             "",
-            0x33, // command: 0x3, param: 3 (4 times)
+            0x31, // command: 0x3, param: 3 (4 times)
             [0xAA], // byte to repeat
             "AAAAAAAA" // expected result as hex string
         );

@@ -58,7 +58,7 @@ class TileDecompressor {
                 };
 
             case 0x3: // RLE
-                const rleCount = param + 1;
+                const rleCount = param + 3;
                 if (additionalBytes.length < 1) {
                     throw new Error('Not enough bytes for RLE command');
                 }
