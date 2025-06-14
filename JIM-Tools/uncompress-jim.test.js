@@ -1,4 +1,4 @@
-const { TileDecompressor } = require('./uncompress-jim');
+import { TileDecompressor } from './uncompress-jim.js';
 
 function runTest(testName, initialOutput, commandByte, additionalBytes, expectedResult) {
     console.log(`\n--- Testing: ${testName} ---`);
@@ -127,9 +127,7 @@ function runAllTests() {
     return passed === total;
 }
 
-// If run directly
-if (require.main === module) {
-    runAllTests();
-}
+// Run tests automatically when this file is executed
+runAllTests();
 
-module.exports = { runTest, runAllTests };
+export { runTest, runAllTests };

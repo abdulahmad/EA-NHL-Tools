@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 class TileDecompressor {
     constructor() {
@@ -238,12 +238,12 @@ function decompressJZipFile(inputPath, outputPath) {
     console.log(`Final size: ${finalOutput.length} bytes`);
 }
 
-module.exports = { TileDecompressor, decompressJZipFile };
+export { TileDecompressor, decompressJZipFile };
 
 // If run directly
-if (require.main === module) {
+if (process.argv[1] === new URL(import.meta.url).pathname) {
     if (process.argv.length < 4) {
-        console.log('Usage: node decompressor.js <input.jzip> <output.jim>');
+        console.log('Usage: node uncompress-jim.js <input.jzip> <output.jim>');
         process.exit(1);
     }
     
