@@ -76,24 +76,57 @@ node exJim-to-jim.js input_3bit_reduced_exjim/metadata.json
 
 The final output will be a `rebuilt.jim` file that can be imported into the game.
 
-## NHL92 .map.jim file details (Big Endian)
-| Byte (All values in hexadecimal)              | Value         | Description |
-| --------                                      | -------       | -------     |
-| `0x00..0x03`                                  | `<uint32>`    | Palette Section Offset |
-| `0x04..0x07`                                  | `<uint32>`    | Map Section Offset |
-| `0x08..0x09`                                  | `<uint16>`    | Number of Tiles/Stamps |
-| `0x0A..0x0A+numTiles*32`                      | `Tile Data`   | Raw 8x8 tile data, 4 bits per pixel, 32 bytes per tile. |
-| `0xPaletteSectionOffset..0xPaletteSectionOffset+80`| `Palette Data`| 128 bytes of Palette Data. 4 palettes of 16 colors. Each color is 2 bytes in Genesis format (0000BBB0GGG0RRR0, where BBB=Blue bits, GGG=Green bits, RRR=Red bits). |
-| `0xMapSectionOffset..0xMapSectionOffset+1`  | `<uint16>`    | Map Width |
-| `0xMapSectionOffset+2..0xMapSectionOffset+3`| `<uint16>`    | Map Height |
-| `0xMapSectionOffset+4..0x(MapSectionOffset+4)+(mapWidth*mapHeight*2)`| `Map Data Section`    | Map Data |
+## NHL92-94 .map.jim file details (Big Endian)
+| Byte (All values in hexadecimal)                    | Value         | Description                                              |
+| --------                                            | -------       | -------                                                  |
+| `0x00..0x03`                                        | `<uint32>`    | Palette Section Offset                                   |
+| `0x04..0x07`                                        | `<uint32>`    | Map Section Offset                                       |
+| `0x08..0x09`                                        | `<uint16>`    | Number of Tiles/Stamps                                   |
+| `0x0A..0x0A+numTiles*32`                            | `Tile Data`   | Raw 8x8 tile data, 4 bits per pixel, 32 bytes per tile.  |
+| `0xPaletteSectionOffset..0xPaletteSectionOffset+80` | `Palette Data`| 128 bytes of Palette Data. 4 palettes of 16 colors. Each color is 2 bytes in Genesis format (0000BBB0GGG0RRR0, where BBB=Blue bits, GGG=Green bits, RRR=Red bits).                                         |
+| `0xMapSectionOffset..0xMapSectionOffset+1`          | `<uint16>`    | Map Width                                                |
+| `0xMapSectionOffset+2..0xMapSectionOffset+3`        | `<uint16>`    | Map Height                                               |
+| `0xMapSectionOffset+4..0x(MapSectionOffset+4)+(mapWidth*mapHeight*2)` | `Map Data Section`| Map Data                           |
 
-## Map Data Section
-| Byte (All values in hexadecimal)              | Value         | Description |
-| --------                                      | -------       | -------     |
-| `0x00..0x01`  | `<uint16>:Bits 0-10` | Tile Index |
-| `0x00..0x01`  | `<uint16>:Bit 11`    | Horizontal flip |
-| `0x00..0x01`  | `<uint16>:Bit 12`    | Vertical flip |
-| `0x00..0x01`  | `<uint16>:Bit 13-14` | Palette Index (0–3, selects one of 4 CRAM palettes). |
-| `0x00..0x01`  | `<uint16>:Bit 15` | Priority (0=low, 1=high) |
+### Map Data Section
+| Byte (All values in hex) | Value                | Description                                          |
+| --------                 | -------              | -------                                              |
+| `0x00..0x01`             | `<uint16>:Bits 0-10` | Tile Index                                           |
+| `0x00..0x01`             | `<uint16>:Bit 11`    | Horizontal flip                                      |
+| `0x00..0x01`             | `<uint16>:Bit 12`    | Vertical flip                                        |
+| `0x00..0x01`             | `<uint16>:Bit 13-14` | Palette Index (0–3, selects one of 4 CRAM palettes). |
+| `0x00..0x01`             | `<uint16>:Bit 15`    | Priority (0=low, 1=high)                             |
 
+NHLPA93 introduced a variant of the JIM image format which has compressed tiles.
+
+## NHL93-94 .map.jzip file details (Big Endian)
+| Byte (All values in hexadecimal)                    | Value         | Description                                              |
+| --------                                            | -------       | -------                                                  |
+| `0x00..0x03`                                        | `<uint32>`    | Palette Section Offset                                   |
+| `0x04..0x07`                                        | `<uint32>`    | Map Section Offset                                       |
+| `0x08`                                              | `<uint8>`     | Palette Size                                             |
+| `0x09`                                              | `<uint8>`     | Number of Tiles/Stamps                                   |
+| `0x0A..0xPaletteSectionOffset-1`                      | `Compressed Tile Data` | Compressed tile data. Uses combination of Run Length Encoding, Pattern Repeat, and back reference schemes for compression. When uncompressed, this is raw 8x8 tile data, 4 bits per pixel, 32 bytes per tile.  |
+| `0xPaletteSectionOffset..0xPaletteSectionOffset+PaletteSize` | `Palette Data`| Typically 128 bytes of Palette Data. 4 palettes of 16 colors. Each color is 2 bytes in Genesis format (0000BBB0GGG0RRR0, where BBB=Blue bits, GGG=Green bits, RRR=Red bits). |
+| `0xMapSectionOffset..0xMapSectionOffset+1`          | `<uint16>`      | Map Width                                              |
+| `0xMapSectionOffset+2..0xMapSectionOffset+3`        | `<uint16>`      | Map Height                                             |
+| `0xMapSectionOffset+4..0x(MapSectionOffset+4)+(mapWidth*mapHeight*2)` | `Map Data Section`| Map Data                           |
+
+### Compressed Tile Section
+| Command | Format                                                        | Description                             | 
+| ------- | ------                                                        | -----------                             |
+| `0x0`     | `0x0 <4bit: numBytes> <byte 0> <byte 1> .. <byte numBytes>` | Write next `n` bytes to Output          |
+| `0x3`     | `0x3 <4bit: numBytes> <repeated byte>`                      | Write next byte `n+3` times to output   | 
+| `0x8`     | `0x8 <4bit: numBytes> <count>`                              | Undefined                               | 
+| `0x9`     | `0x9 <4bit: numBytes> <count>`                              | Undefined                               | 
+| `0x5`     | `0x5 <2bit: numBytes> <2bit: count>`                        | Undefined                               | 
+| `0xC`     | `0xC <4bit: numBytes>                                       | Undefined                               | 
+
+### Map Data Section
+| Byte (All values in hex) | Value                | Description                                          |
+| --------                 | -------              | -------                                              |
+| `0x00..0x01`             | `<uint16>:Bits 0-10` | Tile Index                                           |
+| `0x00..0x01`             | `<uint16>:Bit 11`    | Horizontal flip                                      |
+| `0x00..0x01`             | `<uint16>:Bit 12`    | Vertical flip                                        |
+| `0x00..0x01`             | `<uint16>:Bit 13-14` | Palette Index (0–3, selects one of 4 CRAM palettes). |
+| `0x00..0x01`             | `<uint16>:Bit 15`    | Priority (0=low, 1=high)                             |
