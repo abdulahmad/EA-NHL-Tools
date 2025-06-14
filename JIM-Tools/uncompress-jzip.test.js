@@ -324,14 +324,22 @@ describe('ronbarr.map.jzip decompression', () => {
     
     test('00 65 - Literal Copy single byte', () => {
         testCommand(
-            "31 66",
+            "66 66 66 66",
             0x00, // command: 0x0, param: 0 (1 byte)
             [0x65],
             "65"
         );
     });
 
-    // 30 55 
+    test('30 55 - RLE (repeat 55, 3 times)', () => {
+        testCommand(
+            "66 66 66 66 65", // empty initial output
+            0x30, // command: 0x3, param: 3 (4 times)
+            [0x55], // byte to repeat
+            "55 55 55" // expected result
+        );
+    });
+    
     // 03 65 47 77 77 
     // 8D 04 
     // 3F 77 
