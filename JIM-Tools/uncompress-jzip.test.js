@@ -1,14 +1,42 @@
 import { test, describe, expect } from 'vitest';
 import { TileDecompressor } from './uncompress-jzip.js';
 
+// Helper function to convert hex string to byte array
+function hexToBytes(hexString) {
+    if (typeof hexString !== 'string') {
+        return hexString; // Return as-is if not a string
+    }
+    
+    // Remove spaces and ensure even length
+    const cleanHex = hexString.replace(/\s+/g, '');
+    if (cleanHex.length % 2 !== 0) {
+        throw new Error(`Invalid hex string length: ${cleanHex.length}`);
+    }
+    
+    const bytes = [];
+    for (let i = 0; i < cleanHex.length; i += 2) {
+        const byte = parseInt(cleanHex.substr(i, 2), 16);
+        if (isNaN(byte)) {
+            throw new Error(`Invalid hex byte: ${cleanHex.substr(i, 2)}`);
+        }
+        bytes.push(byte);
+    }
+    return bytes;
+}
+
 function testCommand(initialOutput, commandByte, additionalBytes, expectedResult) {
     const decompressor = new TileDecompressor();
-    decompressor.setOutput(initialOutput);
+    
+    // Convert hex strings to byte arrays if needed
+    const initialBytes = hexToBytes(initialOutput);
+    const expectedBytes = hexToBytes(expectedResult);
+    
+    decompressor.setOutput(initialBytes);
     
     const result = decompressor.processCommand(commandByte, additionalBytes);
-    const actualOutput = Array.from(decompressor.getOutput().slice(initialOutput.length));
+    const actualOutput = Array.from(decompressor.getOutput().slice(initialBytes.length));
     
-    expect(actualOutput).toEqual(expectedResult);
+    expect(actualOutput).toEqual(expectedBytes);
     return result;
 }
 
@@ -186,14 +214,94 @@ describe('Tile Decompressor', () => {
 
 });
 
+describe('Hex String Input Tests', () => {
+    
+    test('Literal Copy using hex strings', () => {
+        testCommand(
+            "", // empty initial output as hex string
+            0x02, // command: 0x0, param: 2 (3 bytes)
+            [0x66, 0x77, 0x88], // bytes to copy
+            "667788" // expected result as hex string
+        );
+    });
+    
+    test('RLE using hex strings', () => {
+        testCommand(
+            "",
+            0x33, // command: 0x3, param: 3 (4 times)
+            [0xAA], // byte to repeat
+            "AAAAAAAA" // expected result as hex string
+        );
+    });
+    
+    test('Short Back Reference using hex strings', () => {
+        testCommand(
+            "11223344", // initial output as hex string
+            0x55, // command: 0x5, offset bits: 01 (2 bytes back), count bits: 01 (2 bytes)
+            [], // no additional bytes
+            "3344" // expected result as hex string
+        );
+    });
+    
+    test('Back Reference with hex strings and spaces', () => {
+        testCommand(
+            "AA BB CC DD", // initial output with spaces
+            0x81, // command: 0x8, param: 1 (2 bytes)
+            [0x03], // offset: 3 bytes back
+            "BB CC" // expected result with spaces
+        );
+    });
+    
+    // test('Complex pattern with hex strings', () => {
+    //     testCommand(
+    //         "66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77",
+    //         0x83, // copy 4 bytes from 2 bytes back
+    //         [0x02],
+    //         "77 77 77 77" // should repeat the last two 77s
+    //     );
+    // });
+    
+    test('Mixed array and hex string inputs', () => {
+        testCommand(
+            [0x11, 0x22, 0x33, 0x44], // initial output as array
+            0x55,
+            [],
+            "3344" // expected result as hex string
+        );
+    });
+    
+    test('Error handling for invalid hex strings', () => {
+        expect(() => {
+            testCommand(
+                "ZZ", // invalid hex
+                0x30,
+                [0xFF],
+                "FF"
+            );
+        }).toThrow(/Invalid hex byte/);
+    });
+    
+    test('Error handling for odd length hex strings', () => {
+        expect(() => {
+            testCommand(
+                "ABC", // odd length
+                0x30,
+                [0xFF],
+                "FF"
+            );
+        }).toThrow(/Invalid hex string length/);
+    });
+    
+});
+
 describe('ronbarr.map.jzip decompression', () => {
     
     test('31 66 - RLE (repeat 66, 4 times)', () => {
         testCommand(
-            [],
+            "", // empty initial output
             0x31, // command: 0x3, param: 3 (4 times)
             [0x66], // byte to repeat
-            [0x66, 0x66, 0x66, 0x66] // expected result
+            "66 66 66 66" // expected result
         );
     });
     
