@@ -86,18 +86,35 @@ class TileDecompressor {
                 };
 
             case 0x8: // Back reference with byte offset
-            case 0x9: // Back reference with byte offset (alternative)
-                const backRefCount = param + 1;
+                const backRefCount = param + 3;
                 if (additionalBytes.length < 1) {
                     throw new Error('Not enough bytes for back reference command');
                 }
                 const backRefOffset = additionalBytes[0];
-                const backRefBytes = this.copyBackReference(backRefOffset, backRefCount);
+                const backRefBytes = this.copyBackReference(backRefOffset, backRefOffset); // Grab last X bytes
+                const backRefSequence;
+                for (let i=0; i<backRefCount; i++) {
+                    
+                }
                 return {
-                    command: cmd === 0x8 ? 'back_ref_8' : 'back_ref_9',
+                    command: 'back_ref_8',
                     offset: backRefOffset,
                     count: backRefCount,
                     bytes: backRefBytes,
+                    consumed: 1
+                };
+            case 0x9: // Back reference with byte offset (alternative)
+                const backRefCountAlt = param + 1;
+                if (additionalBytes.length < 1) {
+                    throw new Error('Not enough bytes for back reference command');
+                }
+                const backRefOffsetAlt = additionalBytes[0];
+                const backRefBytesAlt = this.copyBackReference(backRefOffsetAlt, backRefCountAlt);
+                return {
+                    command: 'back_ref_9',
+                    offset: backRefOffsetAlt,
+                    count: backRefCountAlt,
+                    bytes: backRefBytesAlt,
                     consumed: 1
                 };
 
