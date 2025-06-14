@@ -7,9 +7,9 @@ export default defineConfig({
     // Environment for running tests
     environment: 'node',
     // Test file patterns
-    include: ['**/*.test.js', '**/*.spec.js'],
-    // Reporter options
-    reporter: ['verbose', 'json'],
+    include: ['**/*.test.js', '**/*.spec.js'],    // Reporter options
+    // reporter: ['verbose', 'json'],
+    reporter: ['verbose'],
     // Coverage options (optional)
     coverage: {
       provider: 'v8',

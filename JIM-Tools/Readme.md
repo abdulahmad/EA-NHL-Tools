@@ -55,6 +55,38 @@ npm install
 
 The tools require Node.js and use ES modules. Make sure you have Node.js version 14.0.0 or higher installed.
 
+## Testing
+
+This project includes comprehensive tests for the decompression algorithms. The tests use Vitest for fast and reliable testing.
+
+### Running Tests
+
+```bash
+# Run tests once
+npm run test:run
+
+# Run tests in watch mode (re-runs on file changes)
+npm test
+
+# Run tests with UI (opens a web interface)
+npm run test:ui
+```
+
+### Test Coverage
+
+The test suite covers:
+- All decompression command types (0x0, 0x3, 0x5, 0x8, 0x9, 0xC)
+- Edge cases and boundary conditions  
+- Error handling for malformed data
+- Command parsing and parameter extraction
+- Back reference algorithms including overlapping copies
+
+Tests are located in `uncompress-jim.test.js` and can be run individually:
+
+```bash
+npx vitest uncompress-jim.test.js
+```
+
 ## Example Workflow
 
 ```bash
