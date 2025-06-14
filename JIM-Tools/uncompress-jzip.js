@@ -38,6 +38,29 @@ class TileDecompressor {
         return result;
     }
 
+    repeatPattern(offset, count) {
+        // First, get the source bytes without writing to output
+        const sourceBytes = [];
+        console.log('AA4', count);
+        for (let i = 0; i < offset; i++) {
+            const srcPos = this.position - offset + i;
+            if (srcPos < 0 || srcPos >= this.output.length) {
+                throw new Error(`Back reference out of bounds: pos=${this.position}, offset=${offset}, count=${count}, srcPos=${srcPos}`);
+            }
+            sourceBytes.push(this.output[srcPos]);
+        }
+        
+        // Now repeat the pattern to get the full sequence
+        const result = [];
+        for (let i = 0; i < count; i++) {
+            result.push(sourceBytes[i % sourceBytes.length]);
+        }
+        
+        // Write the full sequence to output (only once)
+        this.writeBytes(result);
+        return result;
+    }
+
     processCommand(commandByte, additionalBytes = []) {
         const cmd = commandByte >> 4;
         const param = commandByte & 0xF;
@@ -91,16 +114,14 @@ class TileDecompressor {
                     throw new Error('Not enough bytes for back reference command');
                 }
                 const backRefOffset = additionalBytes[0];
-                const backRefBytes = this.copyBackReference(backRefOffset, backRefOffset); // Grab last X bytes
-                const backRefSequence;
-                for (let i=0; i<backRefCount; i++) {
-                    
-                }
+                // const backRefBytes = this.copyBackReference(backRefOffset, backRefOffset); // Grab last X bytes
+                const backRefSequence = this.repeatPattern(backRefOffset, backRefCount);
+                console.log('AA TEST', backRefSequence);
                 return {
                     command: 'back_ref_8',
                     offset: backRefOffset,
                     count: backRefCount,
-                    bytes: backRefBytes,
+                    bytes: backRefSequence,
                     consumed: 1
                 };
             case 0x9: // Back reference with byte offset (alternative)

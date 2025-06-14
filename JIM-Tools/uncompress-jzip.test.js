@@ -40,8 +40,9 @@ function testCommand(initialOutput, commandByte, additionalBytes, expectedResult
     decompressor.setOutput(initialBytes);
     
     const result = decompressor.processCommand(commandByte, additionalBytesArray);
+    console.log('AA2',result);
     const actualOutput = Array.from(decompressor.getOutput().slice(initialBytes.length));
-    
+    console.log('AA3',actualOutput, decompressor.getOutput(), initialBytes.length);
     // Custom assertion with hex display
     if (!actualOutput.every((b, i) => b === expectedBytes[i]) || actualOutput.length !== expectedBytes.length) {
         const actualHex = bytesToHex(actualOutput);
@@ -87,12 +88,12 @@ describe('Tile Decompressor', () => {
         );
     });
     
-    test('0x8 - Back Reference with offset (2 bytes from 3 back)', () => {
+    test('0x8 - Copy Back Reference Pattern (Sequence is 1+3 bytes long, copy pattern from 3 bytes back)', () => {
         testCommand(
             [0xAA, 0xBB, 0xCC, 0xDD], // initial output
             0x81, // command: 0x8, param: 1 (2 bytes)
             [0x03], // offset: 3 bytes back
-            [0xBB, 0xCC] // expected result
+            [0xBB, 0xCC, 0xDD, 0xBB] // expected result
         );
     });
     
@@ -207,7 +208,7 @@ describe('Tile Decompressor', () => {
             const result = decompressor.processCommand(0x81, [0x02]);
             expect(result.command).toBe('back_ref_8');
             expect(result.offset).toBe(2);
-            expect(result.count).toBe(2);
+            expect(result.count).toBe(4);
         });
 
         test('should correctly parse command 0x9X (alt back ref with offset)', () => {
@@ -261,12 +262,12 @@ describe('Hex String Input Tests', () => {
         );
     });
     
-    test('Back Reference with hex strings and spaces', () => {
+    test('Copy Back Reference Pattern with hex strings and spaces', () => {
         testCommand(
             "AA BB CC DD", // initial output with spaces
             0x81, // command: 0x8, param: 1 (2 bytes)
             [0x03], // offset: 3 bytes back
-            "BB CC" // expected result with spaces
+            "BB CC DD BB" // expected result with spaces
         );
     });
     
@@ -350,7 +351,7 @@ describe('ronbarr.map.jzip decompression', () => {
         );
     });
 
-    test('8D 04 - Back Reference with offset (0xD+3 bytes from 4 back)', () => {
+    test('8D 04 - Copy Back Reference Pattern (Sequence is 0xD+3 bytes long, copy pattern from 4 bytes back)', () => {
         testCommand(
             "66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77", // initial output
             0x8D, // command: 0x8, param: D (D+3 bytes)
