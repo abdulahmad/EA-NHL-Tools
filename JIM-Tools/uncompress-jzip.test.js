@@ -79,12 +79,12 @@ describe('Tile Decompressor', () => {
         );
     });
     
-    test('0x5 - Short Back Reference (2 bytes from 2 back)', () => {
+    test('0x5 - Short Back Reference (copy last 2+2 bytes)', () => {
         testCommand(
             [0x11, 0x22, 0x33, 0x44], // initial output
-            0x55, // command: 0x5, offset bits: 01 (2 bytes back), count bits: 01 (2 bytes)
+            0x52, // command: 0x5, offset bits: 01 (2 bytes back), count bits: 01 (2 bytes)
             [], // no additional bytes
-            [0x33, 0x44] // expected result (bytes at positions -2 and -1)
+            [0x11, 0x22, 0x33, 0x44] // expected result (bytes at positions -2 and -1)
         );
     });
     
@@ -148,7 +148,7 @@ describe('Tile Decompressor', () => {
             [0xFF, 0xEE],
             0x50, // command: 0x5, offset: 1 byte back, count: 1 byte
             [],
-            [0xEE]
+            [0xFF, 0xEE]
         );
     });
     
@@ -195,11 +195,11 @@ describe('Tile Decompressor', () => {
 
         test('should correctly parse command 0x5X (short back ref)', () => {
             const decompressor = new TileDecompressor();
-            decompressor.setOutput([0x11, 0x22, 0x33, 0x44]);
+            decompressor.setOutput([0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77]);
             const result = decompressor.processCommand(0x55, []);
             expect(result.command).toBe('short_back_ref');
-            expect(result.offset).toBe(2);
-            expect(result.count).toBe(2);
+            expect(result.offset).toBe(7);
+            expect(result.count).toBe(7);
         });
 
         test('should correctly parse command 0x8X (back ref with offset)', () => {
@@ -255,10 +255,10 @@ describe('Hex String Input Tests', () => {
     
     test('Short Back Reference using hex strings', () => {
         testCommand(
-            "11223344", // initial output as hex string
+            "11223344556677", // initial output as hex string
             0x55, // command: 0x5, offset bits: 01 (2 bytes back), count bits: 01 (2 bytes)
             [], // no additional bytes
-            "3344" // expected result as hex string
+            "11223344556677" // expected result as hex string
         );
     });
     
@@ -282,10 +282,10 @@ describe('Hex String Input Tests', () => {
     
     test('Mixed array and hex string inputs', () => {
         testCommand(
-            [0x11, 0x22, 0x33, 0x44], // initial output as array
+            [0x11, 0x22, 0x33, 0x44, 0x11, 0x22, 0x33, 0x44], // initial output as array
             0x55,
             [],
-            "3344" // expected result as hex string
+            "22334411223344" // expected result as hex string
         );
     });
     
@@ -379,14 +379,14 @@ describe('ronbarr.map.jzip decompression', () => {
     });
 
     // 51 
-    // test('0x5 - Short Back Reference minimum values', () => {
-    //     testCommand(
-    //         [0xFF, 0xEE],
-    //         0x50, // command: 0x5, offset: 1 byte back, count: 1 byte
-    //         [],
-    //         [0xEE]
-    //     );
-    // });
+    test('0x51 - Short Back Reference (copy last 1+2 bytes)', () => {
+        testCommand(
+            "66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 18",
+            0x51, // command: 0x5, offset: 1 byte back, count: 1 byte
+            [],
+            "77 77 18"
+        );
+    });
 
     // 8A 20 
     // 0E 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 

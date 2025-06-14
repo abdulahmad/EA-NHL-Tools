@@ -97,8 +97,11 @@ class TileDecompressor {
                 };
 
             case 0x5: // Short back reference
-                const shortOffset = ((param & 0xC) >> 2) + 1;
-                const shortCount = (param & 0x3) + 1;
+                // const shortOffset = ((param & 0xC) >> 2) + 1;
+                // const shortCount = (param & 0x3) + 1;
+                const shortOffset = param + 2;
+                const shortCount = param + 2;
+                console.log('AA SHORT', param, shortOffset, shortCount);
                 const shortBytes = this.copyBackReference(shortOffset, shortCount);
                 return {
                     command: 'short_back_ref',
