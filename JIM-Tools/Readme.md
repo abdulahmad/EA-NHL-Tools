@@ -106,11 +106,12 @@ NHLPA93 introduced a variant of the JIM image format which has compressed tiles.
 | `0x04..0x07`                                        | `<uint32>`    | Map Section Offset                                       |
 | `0x08`                                              | `<uint8>`     | Palette Size                                             |
 | `0x09`                                              | `<uint8>`     | Number of Tiles/Stamps                                   |
-| `0x0A..0xPaletteSectionOffset-1`                      | `Compressed Tile Data` | Compressed tile data. Uses combination of Run Length Encoding, Pattern Repeat, and back reference schemes for compression. When uncompressed, this is raw 8x8 tile data, 4 bits per pixel, 32 bytes per tile.  |
-| `0xPaletteSectionOffset..0xPaletteSectionOffset+PaletteSize` | `Palette Data`| Typically 128 bytes of Palette Data. 4 palettes of 16 colors. Each color is 2 bytes in Genesis format (0000BBB0GGG0RRR0, where BBB=Blue bits, GGG=Green bits, RRR=Red bits). |
+| `0x0A..0xPaletteSectionOffset-1`                    | `Compressed Tile Data` | Compressed tile data. Uses combination of Run Length Encoding, Pattern Repeat, and back reference schemes for compression. When uncompressed, this is raw 8x8 tile data, 4 bits per pixel, 32 bytes per tile.  |
+| `0xPaletteSectionOffset..0xPaletteSectionOffset+PaletteSize` | `Palette Data`| Typically 128 bytes of Palette Data. 4 palettes of 16 colors. Each color is 2 bytes in Genesis format (0000BBB0GGG0RRR0, where BBB=Blue bits, GGG=Green bits, RRR=Red bits).                   |
 | `0xMapSectionOffset..0xMapSectionOffset+1`          | `<uint16>`      | Map Width                                              |
 | `0xMapSectionOffset+2..0xMapSectionOffset+3`        | `<uint16>`      | Map Height                                             |
 | `0xMapSectionOffset+4..0x(MapSectionOffset+4)+(mapWidth*mapHeight*2)` | `Map Data Section`| Map Data                           |
+| `0xMapSectionEnd+1..0xMapSectionEnd+5`              | `FF FF FF FF`   | End of compressed file marker                          |
 
 ### Compressed Tile Section
 | Command | Format                                                        | Description                             | 
