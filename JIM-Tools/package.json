@@ -3,7 +3,16 @@
     "version": "1.0.0",
     "type": "module",
     "main": "JimTool.js",
+    "scripts": {
+        "test": "vitest",
+        "test:run": "vitest run",
+        "test:ui": "vitest --ui",
+        "dev": "vitest --watch"
+    },
     "dependencies": {
         "sharp": "^0.32.1"
+    },
+    "devDependencies": {
+        "vitest": "^1.0.0"
     }
 }
