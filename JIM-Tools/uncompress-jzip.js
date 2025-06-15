@@ -152,10 +152,15 @@ class TileDecompressor {
                     count: fixedCount,
                     bytes: fixedBytes,
                     consumed: 0
+                };            default:
+                return {
+                    command: 'unknown',
+                    commandByte: commandByte,
+                    cmd: cmd,
+                    param: param,
+                    consumed: 0,
+                    error: `Unknown command: 0x${cmd.toString(16)}`
                 };
-
-            default:
-                throw new Error(`Unknown command: 0x${cmd.toString(16)}`);
         }
     }
 }
@@ -196,8 +201,7 @@ function decompressJZipFile(inputPath, outputPath) {
         // Determine how many additional bytes this command needs
         const cmd = commandByte >> 4;
         let additionalBytesNeeded = 0;
-        
-        switch (cmd) {
+          switch (cmd) {
             case 0x0: // Literal copy
                 additionalBytesNeeded = (commandByte & 0xF) + 1;
                 break;
@@ -211,7 +215,14 @@ function decompressJZipFile(inputPath, outputPath) {
                 additionalBytesNeeded = 0;
                 break;
             default:
-                throw new Error(`Unknown command: 0x${cmd.toString(16)}`);
+                console.error(`Unknown command: 0x${cmd.toString(16)} at position ${pos - 1}`);
+                console.log('Stopping decompression and saving partial result...');
+                break;
+        }
+        
+        // If we hit an unknown command, break out of the main loop
+        if (cmd !== 0x0 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x5 && cmd !== 0xC) {
+            break;
         }
         
         const additionalBytes = [];
@@ -222,18 +233,26 @@ function decompressJZipFile(inputPath, outputPath) {
             additionalBytes.push(input.readUInt8(pos));
             pos++;
         }
-        
-        try {
+          try {
             const result = decompressor.processCommand(commandByte, additionalBytes);
+            if (result.command === 'unknown') {
+                console.error(`${result.error} at position ${pos - 1}`);
+                console.log('Stopping decompression and saving partial result...');
+                break;
+            }
             console.log(`Command 0x${commandByte.toString(16).padStart(2, '0')}: ${result.command}, count: ${result.count}, consumed: ${result.consumed}`);
         } catch (error) {
             console.error(`Error processing command 0x${commandByte.toString(16)} at position ${pos - 1}:`, error.message);
             break;
         }
     }
-    
-    const decompressedTiles = decompressor.getOutput();
+      const decompressedTiles = decompressor.getOutput();
     console.log(`Decompressed ${decompressedTiles.length} bytes of tile data (expected: ${numTiles * 32})`);
+    
+    if (decompressedTiles.length < numTiles * 32) {
+        console.warn(`WARNING: Only partially decompressed ${decompressedTiles.length} of ${numTiles * 32} expected bytes`);
+        console.warn('Saving partial result - the output file may be incomplete');
+    }
     
     // Create output file
     const output = Buffer.alloc(8 + decompressedTiles.length + paletteSize + (input.length - mapOffset));
