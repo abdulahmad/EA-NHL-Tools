@@ -111,7 +111,7 @@ class TileDecompressor {
                     consumed: 0
                 };
 
-            case 0x8: // Back reference with byte offset
+            case 0x8: // Back reference Pattern with byte offset
                 const backRefCount = param + 3;
                 if (additionalBytes.length < 1) {
                     throw new Error('Not enough bytes for back reference command');

@@ -116,7 +116,7 @@ describe('Tile Decompressor', () => {
     //     );
     // });
     
-    test('RLE Single Byte (repeat 3 times)', () => {
+    test('0x3 - RLE Single Byte (repeat 3 times)', () => {
         testCommand(
             [],
             0x30, // command: 0x3, param: 0 (1 time)
@@ -229,6 +229,21 @@ describe('Tile Decompressor', () => {
             expect(result.offset).toBe(32);
             expect(result.count).toBe(2);
         });
+    });
+
+    describe('Command Bytes Consumed test', () => {
+        // 0x0 command followed by consumed = 0 command
+        // 0x0 command followed by consumed = 1 command
+        // 0x3 command followed by consumed = 0 command
+        // 0x3 command followed by consumed = 1 command
+        // 0x5 command followed by consumed = 0 command
+        // 0x5 command followed by consumed = 1 command
+        // 0x8 command followed by consumed = 0 command
+        // 0x8 command followed by consumed = 1 command
+        // 0x9 command followed by consumed = 0 command
+        // 0x9 command followed by consumed = 1 command
+ 
+
     });
 
 });
