@@ -281,10 +281,17 @@ function decompressJZipFile(inputPath, outputPath) {
 
 export { TileDecompressor, decompressJZipFile };
 
-// If run directly
-if (process.argv[1] === new URL(import.meta.url).pathname) {
+// If run directly (handle cross-platform path differences)
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const isMainModule = process.argv[1] === __filename || 
+                   path.resolve(process.argv[1]) === path.resolve(__filename);
+
+if (isMainModule) {
     if (process.argv.length < 4) {
-        console.log('Usage: node uncompress-jim.js <input.jzip> <output.jim>');
+        console.log('Usage: node uncompress-jzip.js <input.jzip> <output.jim>');
         process.exit(1);
     }
     
