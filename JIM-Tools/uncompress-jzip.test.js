@@ -549,7 +549,6 @@ describe('ronbarr.map.jzip decompression', () => {
         );
     });
 
-    // 51 
     test('0x51 - Short Back Reference (copy last 1+2 bytes)', () => {
         testCommand(
             "66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 18",
@@ -559,7 +558,15 @@ describe('ronbarr.map.jzip decompression', () => {
         );
     });
 
-    // 8A 20 
+    test('8A 20 - Copy Back Reference Pattern (Sequence is A+3 bytes long, copy pattern from 20 bytes back)', () => {
+        testCommand(
+            "66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 18 77 77 18 88 77 18 88 92", // initial output
+            0x8A, // command: 0x8, param: 0xA (0xA+3 = 0xD = 13 bytes)
+            [0x20], // offset: 0x20 = 32 bytes back
+            "66 66 66 66 55 55 55 55 44 44 44 44 77" // expected result
+        );
+    });
+
     // 0E 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 
     // 89 20 
     // 01 99 88 
