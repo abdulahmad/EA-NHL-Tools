@@ -41,7 +41,7 @@ class TileDecompressor {
     repeatPattern(offset, count) {
         // First, get the source bytes without writing to output
         const sourceBytes = [];
-        console.log('AA4', count);
+        // console.log('AA4', count);
         for (let i = 0; i < offset; i++) {
             const srcPos = this.position - offset + i;
             if (srcPos < 0 || srcPos >= this.output.length) {
@@ -101,7 +101,7 @@ class TileDecompressor {
                 // const shortCount = (param & 0x3) + 1;
                 const shortOffset = param + 2;
                 const shortCount = param + 2;
-                console.log('AA SHORT', param, shortOffset, shortCount);
+                // console.log('AA SHORT', param, shortOffset, shortCount);
                 const shortBytes = this.copyBackReference(shortOffset, shortCount);
                 return {
                     command: 'short_back_ref',
@@ -119,7 +119,7 @@ class TileDecompressor {
                 const backRefOffset = additionalBytes[0];
                 // const backRefBytes = this.copyBackReference(backRefOffset, backRefOffset); // Grab last X bytes
                 const backRefSequence = this.repeatPattern(backRefOffset, backRefCount);
-                console.log('AA TEST', backRefSequence);
+                // console.log('AA TEST', backRefSequence);
                 return {
                     command: 'back_ref_8',
                     offset: backRefOffset,
