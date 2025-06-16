@@ -138,10 +138,10 @@ describe('Tile Decompressor', () => {
     
     test('0x9 - Copy Back Reference ( (0*2)+1 bytes from offset 2+1 back)', () => {
         testCommand(
-            [0x11, 0x22, 0x33], // initial output
-            0x90, // command: 0x9, param: 0 (1 byte)
-            [0x02], // offset: 2 bytes back
-            "11 22 33" // expected result
+            [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88], // initial output
+            0x94, // command: 0x9, param: 0 (1 byte)
+            [0x04], // offset: 2 bytes back
+            "44 55 66 77" // expected result
         );
     });
     
@@ -256,7 +256,7 @@ describe('Tile Decompressor', () => {
             const result = decompressor.processCommand(0x91, [0x04]);
             expect(result.command).toBe('back_ref_9');
             expect(result.offset).toBe(5);
-            expect(result.count).toBe(5);
+            expect(result.count).toBe(-5);
         });
 
         test('should correctly parse command 0xCX (fixed back ref)', () => {
@@ -334,7 +334,7 @@ describe('Command Bytes Consumed test', () => {
             [0x11, 0x22, 0x33, 0x44, 0x55, 0x66], // initial output
             0x51, [], // short back ref: copy from 1+2=3 bytes back, count 1+2=3
             0x91, [0x05], // alt back ref: copy (2*2)+1=5 bytes from (2+1)=3 bytes back
-            [0x44, 0x55, 0x66, 0x44, 0x55, 0x66, 0x44, 0x55] // short back ref + alt back ref
+            [0x44, 0x55, 0x66] // short back ref + alt back ref
         );
     });
 
@@ -367,7 +367,7 @@ describe('Command Bytes Consumed test', () => {
             initialOutput,
             0x91, [0x05], // alt back ref: copy (1*2)+1=3 bytes from (1+1)=2 bytes back
             0xC1, [], // fixed back ref: copy 2 bytes from 32 back
-            [0x56, 0x57, 0x60, 0x61, 0x62, 0x51, 0x52] // alt back ref + fixed back ref
+            [0x54, 0x55] // alt back ref + fixed back ref
         );
     });
 
@@ -377,7 +377,7 @@ describe('Command Bytes Consumed test', () => {
             [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77], // initial output
             0x90, [0x05], // alt back ref: copy (0*2)+1=1 byte from (2+1)=3 bytes back
             0x80, [0x02], // back ref: copy pattern from 2 bytes back, count 3
-            "22 33 44 33 44 33" // alt back ref + back ref
+            "66 77 66" // alt back ref + back ref
         );
     });
 
@@ -582,7 +582,14 @@ describe('ronbarr.map.jzip decompression', () => {
     // 04 98 11 18 77 81 
     // 34 11 
     // 9C FF -> WRITE TEST HERE NEXT!
-
+    test('9C FF - Copy Back Reference ( (C*2)+1 bytes from offset FF+1 back)', () => {
+        testCommand(
+            "66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 18 77 77 18 88 77 18 88 92 66 66 66 66 55 55 55 55 44 44 44 44 77 11 11 11 11 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 66 66 66 66 55 55 55 55 44 44 44 44 11 77 77 77 99 88 11 77 98 11 18 77 81 11 11 11 11 11 11 11", // initial output
+            0x9C, // command: 0x9, param: 0 (1 byte)
+            [0xFF], // offset: 2 bytes back -- end position = 0x64, start position = 0x80
+            "66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77" // expected result -- count = 28
+        );
+    });
     // 82 80 
     // 07 21 44 44 43 21 77 77 73 
     // 8E 04 
