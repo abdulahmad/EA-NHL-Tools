@@ -141,7 +141,7 @@ describe('Tile Decompressor', () => {
             [0x11, 0x22, 0x33], // initial output
             0x90, // command: 0x9, param: 0 (1 byte)
             [0x02], // offset: 2 bytes back
-            [0x11] // expected result
+            "11 22 33" // expected result
         );
     });
     
@@ -252,11 +252,11 @@ describe('Tile Decompressor', () => {
 
         test('should correctly parse command 0x9X (alt back ref with offset)', () => {
             const decompressor = new TileDecompressor();
-            decompressor.setOutput([0x11, 0x22, 0x33, 0x44]);
-            const result = decompressor.processCommand(0x91, [0x02]);
+            decompressor.setOutput([0x11, 0x22, 0x33, 0x44, 0x55, 0x66]);
+            const result = decompressor.processCommand(0x91, [0x04]);
             expect(result.command).toBe('back_ref_9');
-            expect(result.offset).toBe(3);
-            expect(result.count).toBe(3);
+            expect(result.offset).toBe(5);
+            expect(result.count).toBe(5);
         });
 
         test('should correctly parse command 0xCX (fixed back ref)', () => {
@@ -333,7 +333,7 @@ describe('Command Bytes Consumed test', () => {
         testCommandSequence(
             [0x11, 0x22, 0x33, 0x44, 0x55, 0x66], // initial output
             0x51, [], // short back ref: copy from 1+2=3 bytes back, count 1+2=3
-            0x92, [0x05], // alt back ref: copy (2*2)+1=5 bytes from (2+1)=3 bytes back
+            0x91, [0x05], // alt back ref: copy (2*2)+1=5 bytes from (2+1)=3 bytes back
             [0x44, 0x55, 0x66, 0x44, 0x55, 0x66, 0x44, 0x55] // short back ref + alt back ref
         );
     });
@@ -365,19 +365,19 @@ describe('Command Bytes Consumed test', () => {
         console.log('Initial Output:', initialOutput);
         testCommandSequence(
             initialOutput,
-            0x91, [0x02], // alt back ref: copy (1*2)+1=3 bytes from (1+1)=2 bytes back
+            0x91, [0x05], // alt back ref: copy (1*2)+1=3 bytes from (1+1)=2 bytes back
             0xC1, [], // fixed back ref: copy 2 bytes from 32 back
-            [0x61, 0x62, 0x63, 0x57, 0x50] // alt back ref + fixed back ref
+            [0x56, 0x57, 0x60, 0x61, 0x62, 0x51, 0x52] // alt back ref + fixed back ref
         );
     });
 
     // 0x9 (alt back ref) command followed by consumed = 1 command (0x8 back ref)
     test('0x9 alt back ref -> 0x8 back ref (consumed 1)', () => {
         testCommandSequence(
-            [0x11, 0x22, 0x33, 0x44, 0x55], // initial output
-            0x90, [0x02], // alt back ref: copy (0*2)+1=1 byte from (2+1)=3 bytes back
+            [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77], // initial output
+            0x90, [0x05], // alt back ref: copy (0*2)+1=1 byte from (2+1)=3 bytes back
             0x80, [0x02], // back ref: copy pattern from 2 bytes back, count 3
-            [0x33, 0x55, 0x33, 0x55] // alt back ref + back ref
+            "22 33 44 33 44 33" // alt back ref + back ref
         );
     });
 
