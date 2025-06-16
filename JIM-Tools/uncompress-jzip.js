@@ -149,14 +149,7 @@ class TileDecompressor {
                     bytes: fixedBytes,
                     consumed: 0
                 };            default:
-                return {
-                    command: 'unknown',
-                    commandByte: commandByte,
-                    cmd: cmd,
-                    param: param,
-                    consumed: 0,
-                    error: `Unknown command: 0x${cmd.toString(16)}`
-                };
+                throw new Error(`Unknown command: 0x${cmd.toString(16)}`);
         }
     }
 }
@@ -255,17 +248,12 @@ function decompressJZipFile(inputPath, outputPath) {
             }
             additionalBytes.push(input.readUInt8(pos));
             pos++;
-        }
-          try {
+        }          try {
             const result = decompressor.processCommand(commandByte, additionalBytes);
-            if (result.command === 'unknown') {
-                console.error(`${result.error} at position ${pos - 1}`);
-                console.log('Stopping decompression and saving partial result...');
-                break;
-            }
             console.log(`Command 0x${commandByte.toString(16).padStart(2, '0')}: ${result.command}, count: ${result.count}, consumed: ${result.consumed}`);
         } catch (error) {
             console.error(`Error processing command 0x${commandByte.toString(16)} at position ${pos - 1}:`, error.message);
+            console.log('Stopping decompression and saving partial result...');
             break;
         }
     }
