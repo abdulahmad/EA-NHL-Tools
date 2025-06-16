@@ -23,9 +23,7 @@ class TileDecompressor {
     writeBytes(bytes) {
         this.output = Buffer.concat([this.output, Buffer.from(bytes)]);
         this.position += bytes.length;
-    }
-
-    copyBackReference(offset, count) {
+    }    copyBackReference(offset, count) {
         const result = [];
         for (let i = 0; i < count; i++) {
             const srcPos = this.position - offset + i;
@@ -36,9 +34,7 @@ class TileDecompressor {
         }
         this.writeBytes(result);
         return result;
-    }
-
-    repeatPattern(offset, count) {
+    }    repeatPattern(offset, count) {
         // First, get the source bytes without writing to output
         const sourceBytes = [];
         // console.log('AA4', count);
@@ -168,24 +164,45 @@ class TileDecompressor {
 function decompressJZipFile(inputPath, outputPath) {
     const input = fs.readFileSync(inputPath);
     
+    console.log(`Input file size: ${input.length} bytes`);
+    
+    // Check if we have enough bytes for the header
+    if (input.length < 10) {
+        console.error(`File too small: ${input.length} bytes, need at least 10 bytes for header`);
+        process.exit(1);
+    }
+    
     // Read header
     const paletteOffset = input.readUInt32BE(0);
     const mapOffset = input.readUInt32BE(4);
     const paletteSize = input.readUInt8(8);
     const numTiles = input.readUInt8(9);
     
-    console.log(`Palette offset: 0x${paletteOffset.toString(16)}`);
-    console.log(`Map offset: 0x${mapOffset.toString(16)}`);
+    console.log(`Palette offset: 0x${paletteOffset.toString(16)} (${paletteOffset})`);
+    console.log(`Map offset: 0x${mapOffset.toString(16)} (${mapOffset})`);
     console.log(`Palette size: ${paletteSize}`);
     console.log(`Number of tiles: ${numTiles}`);
     
-    // Find end of compressed data (before palette)
-    const compressedDataStart = 10;
-    const compressedDataEnd = paletteOffset;
+    // Check if the offsets are reasonable given the file size
+    if (paletteOffset >= input.length) {
+        console.warn(`WARNING: Palette offset ${paletteOffset} is beyond file size ${input.length}`);
+        console.warn('File appears to be truncated - will decompress what we can');
+    }
     
-    // Check for end marker
+    if (mapOffset >= input.length) {
+        console.warn(`WARNING: Map offset ${mapOffset} is beyond file size ${input.length}`);
+        console.warn('File appears to be truncated - will decompress what we can');
+    }
+    
+    // Find end of compressed data (before palette, or end of file if truncated)
+    const compressedDataStart = 10;
+    const compressedDataEnd = Math.min(paletteOffset, input.length);
+    
+    console.log(`Compressed data range: ${compressedDataStart} to ${compressedDataEnd} (${compressedDataEnd - compressedDataStart} bytes)`);
+    
+    // Check for end marker (only if we have enough data)
     let actualEnd = compressedDataEnd;
-    if (input.readUInt32BE(compressedDataEnd - 4) === 0xFFFFFFFF) {
+    if (compressedDataEnd >= 4 && input.readUInt32BE(compressedDataEnd - 4) === 0xFFFFFFFF) {
         actualEnd = compressedDataEnd - 4;
         console.log('Found end marker, adjusting compressed data end');
     }
@@ -224,11 +241,17 @@ function decompressJZipFile(inputPath, outputPath) {
         if (cmd !== 0x0 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x5 && cmd !== 0xC) {
             break;
         }
-        
-        const additionalBytes = [];
+          const additionalBytes = [];
         for (let i = 0; i < additionalBytesNeeded; i++) {
             if (pos >= actualEnd) {
-                throw new Error('Unexpected end of compressed data');
+                console.warn(`WARNING: Unexpected end of compressed data at position ${pos}`);
+                console.warn(`Need ${additionalBytesNeeded} additional bytes, but only got ${i}`);
+                console.warn('Stopping decompression and saving partial result...');
+                // Fill remaining bytes with zeros
+                for (let j = i; j < additionalBytesNeeded; j++) {
+                    additionalBytes.push(0);
+                }
+                break;
             }
             additionalBytes.push(input.readUInt8(pos));
             pos++;
@@ -253,10 +276,13 @@ function decompressJZipFile(inputPath, outputPath) {
         console.warn(`WARNING: Only partially decompressed ${decompressedTiles.length} of ${numTiles * 32} expected bytes`);
         console.warn('Saving partial result - the output file may be incomplete');
     }
-    
-    // Create output file
-    const output = Buffer.alloc(8 + decompressedTiles.length + paletteSize + (input.length - mapOffset));
+      // Create output file
+    const mapDataSize = Math.max(0, input.length - Math.min(mapOffset, input.length));
+    const outputSize = 8 + 2 + decompressedTiles.length + paletteSize + mapDataSize;
+    const output = Buffer.alloc(outputSize);
     let outputPos = 0;
+    
+    console.log(`Output buffer size: ${outputSize} bytes (header: 10, tiles: ${decompressedTiles.length}, palette: ${paletteSize}, map: ${mapDataSize})`);
     
     // Write new header
     const newPaletteOffset = 8 + 2 + decompressedTiles.length; // 8 byte header + 2 byte tile count + tiles
@@ -273,22 +299,51 @@ function decompressJZipFile(inputPath, outputPath) {
     // Write decompressed tile data
     decompressedTiles.copy(output, outputPos);
     outputPos += decompressedTiles.length;
+      // Copy palette data (if available)
+    if (paletteOffset < input.length) {
+        const actualPaletteSize = Math.min(paletteSize, input.length - paletteOffset);
+        if (actualPaletteSize > 0) {
+            input.copy(output, outputPos, paletteOffset, paletteOffset + actualPaletteSize);
+            outputPos += actualPaletteSize;
+            console.log(`Copied ${actualPaletteSize} bytes of palette data (expected ${paletteSize})`);
+        } else {
+            console.warn(`WARNING: Palette offset ${paletteOffset} is at end of file, no palette data available`);
+        }
+        
+        // Fill remaining palette space with zeros if needed
+        if (actualPaletteSize < paletteSize) {
+            const missingBytes = paletteSize - actualPaletteSize;
+            output.fill(0, outputPos, outputPos + missingBytes);
+            outputPos += missingBytes;
+            console.warn(`WARNING: Filled ${missingBytes} missing palette bytes with zeros`);
+        }
+    } else {
+        console.warn(`WARNING: Palette offset ${paletteOffset} is beyond file size ${input.length}, filling with zeros`);
+        output.fill(0, outputPos, outputPos + paletteSize);
+        outputPos += paletteSize;
+    }
     
-    // Copy palette data
-    input.copy(output, outputPos, paletteOffset, paletteOffset + paletteSize);
-    outputPos += paletteSize;
-    
-    // Copy map data (excluding any trailing FF FF FF FF)
+    // Copy map data (if available)
     const mapDataStart = mapOffset;
     let mapDataEnd = input.length;
     
-    // Check if there's an end marker at the very end
-    if (input.readUInt32BE(input.length - 4) === 0xFFFFFFFF) {
-        mapDataEnd = input.length - 4;
+    if (mapDataStart < input.length) {
+        // Check if there's an end marker at the very end
+        if (input.length >= 4 && input.readUInt32BE(input.length - 4) === 0xFFFFFFFF) {
+            mapDataEnd = input.length - 4;
+        }
+        
+        const actualMapSize = mapDataEnd - mapDataStart;
+        if (actualMapSize > 0) {
+            input.copy(output, outputPos, mapDataStart, mapDataEnd);
+            outputPos += actualMapSize;
+            console.log(`Copied ${actualMapSize} bytes of map data`);
+        } else {
+            console.warn(`WARNING: Map offset ${mapDataStart} is at end of file, no map data available`);
+        }
+    } else {
+        console.warn(`WARNING: Map offset ${mapDataStart} is beyond file size ${input.length}, no map data to copy`);
     }
-    
-    input.copy(output, outputPos, mapDataStart, mapDataEnd);
-    outputPos += (mapDataEnd - mapDataStart);
     
     // Trim output to actual size
     const finalOutput = output.slice(0, outputPos);
