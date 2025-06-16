@@ -106,7 +106,23 @@ class TileDecompressor {
                     bytes: shortBytes,
                     consumed: 0
                 };
-
+            case 0x6: // back reference
+                // 68 -> copy 2 bytes from 4-6 bytes back
+                // 8 -> 10 00 -> 0+2 bytes from 2+2 bytes back (end offset)
+                const paramUpperBits = (param >> 2) & 0x3 // Shift right 2, mask with 0b11
+                const paramLowerBits = param & 0x3; // Mask with 0b11
+                const shortOffset6 = paramUpperBits + 2;
+                const shortCount6 = paramLowerBits + 2;
+                // console.log('AA SHORT', param, shortOffset, shortCount);
+                console.log('AA6', param, paramUpperBits, paramLowerBits, shortOffset6, shortCount6);
+                const shortBytes6 = this.copyBackReference(shortOffset6+shortCount6, shortCount6);
+                return {
+                    command: 'short_back_ref6',
+                    offset: shortOffset6+shortCount6,
+                    count: shortCount6,
+                    bytes: shortBytes6,
+                    consumed: 0
+                }
             case 0x8: // Back reference Pattern with byte offset
                 const backRefCount = param + 3;
                 if (additionalBytes.length < 1) {
@@ -221,6 +237,7 @@ function decompressJZipFile(inputPath, outputPath) {
                 additionalBytesNeeded = 1;
                 break;
             case 0x5: // Short back reference
+            case 0x6: // Short back reference
             case 0xC: // Fixed back reference
                 additionalBytesNeeded = 0;
                 break;
@@ -231,7 +248,7 @@ function decompressJZipFile(inputPath, outputPath) {
         }
         
         // If we hit an unknown command, break out of the main loop
-        if (cmd !== 0x0 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x5 && cmd !== 0xC) {
+        if (cmd !== 0x0 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x5 && cmd !== 0x6 &&cmd !== 0xC) {
             break;
         }
           const additionalBytes = [];
