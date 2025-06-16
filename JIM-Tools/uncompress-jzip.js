@@ -124,7 +124,7 @@ class TileDecompressor {
                     consumed: 1
                 };
             case 0x9: // Back reference with byte offset (alternative)
-                const backRefCountAlt = (param*2) + 1; // added additional 2 bytes-- question if this should be in or out of bracket
+                const backRefCountAlt = (param*2) + 1 + 2; // added additional 2 bytes-- question if this should be in or out of bracket
                 if (additionalBytes.length < 1) {
                     throw new Error('Not enough bytes for back reference command');
                 }
