@@ -23,7 +23,9 @@ class TileDecompressor {
     writeBytes(bytes) {
         this.output = Buffer.concat([this.output, Buffer.from(bytes)]);
         this.position += bytes.length;
-    }    copyBackReference(offset, count) {
+    }    
+    
+    copyBackReference(offset, count) {
         const result = [];
         for (let i = 0; i < count; i++) {
             const srcPos = this.position - offset + i;
@@ -34,7 +36,22 @@ class TileDecompressor {
         }
         this.writeBytes(result);
         return result;
-    }    repeatPattern(offset, count) {
+    }
+    
+    copyBackReferenceBackwards(offset, count) {
+        const result = [];
+        for (let i = 0; i < count; i++) {
+            const srcPos = this.position - offset - i;
+            if (srcPos < 0 || srcPos >= this.output.length) {
+                throw new Error(`Back reference out of bounds: pos=${this.position}, offset=${offset}, count=${count}, srcPos=${srcPos}`);
+            }
+            result.push(this.output[srcPos]);
+        }
+        this.writeBytes(result);
+        return result;
+    }
+    
+    repeatPattern(offset, count) {
         // First, get the source bytes without writing to output
         const sourceBytes = [];
         // console.log('AA4', count);
@@ -179,9 +196,12 @@ class TileDecompressor {
                 };
 
             case 0xC: // Fixed offset back reference
-                const fixedCount = param + 1;
-                const fixedOffset = 32; // Fixed 32-byte offset for tile patterns
-                const fixedBytes = this.copyBackReference(fixedOffset, fixedCount);
+                const paramUpperBitsC = (param >> 2) & 0x3 // Shift right 2, mask with 0b11
+                const paramLowerBitsC = param & 0x3; // Mask with 0b11
+
+                const fixedCount = paramLowerBitsC + 2;;
+                const fixedOffset = paramUpperBitsC + 1;
+                const fixedBytes = this.copyBackReferenceBackwards(fixedOffset, fixedCount);
                 return {
                     command: 'fixed_back_ref',
                     offset: fixedOffset,
