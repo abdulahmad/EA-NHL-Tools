@@ -92,6 +92,20 @@ class TileDecompressor {
                     bytes: literalBytes,
                     consumed: literalCount
                 };
+            
+            case 0x1: // Extended Literal copy
+                const literalCountExt = param + 17;
+                if (additionalBytes.length < literalCountExt) {
+                    throw new Error(`Not enough bytes for literal copy: need ${literalCountExt}, got ${additionalBytes.length}`);
+                }
+                const literalBytesExt = additionalBytes.slice(0, literalCountExt);
+                this.writeBytes(literalBytesExt);
+                return {
+                    command: 'literal',
+                    count: literalCountExt,
+                    bytes: literalBytesExt,
+                    consumed: literalCountExt
+                };
 
             case 0x3: // RLE
                 const rleCount = param + 3;
@@ -284,6 +298,9 @@ function decompressJZipFile(inputPath, outputPath) {
             case 0x0: // Literal copy
                 additionalBytesNeeded = (commandByte & 0xF) + 1;
                 break;
+            case 0x1: // Extended Literal copy
+                additionalBytesNeeded = (commandByte & 0xF) + 17;
+                break;
             case 0x3: // RLE
             case 0x8: // Back reference
             case 0x9: // Back reference alternative
@@ -302,7 +319,7 @@ function decompressJZipFile(inputPath, outputPath) {
         }
         
         // If we hit an unknown command, break out of the main loop
-        if (cmd !== 0x0 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x4 && cmd !== 0x5 && cmd !== 0x6 &&cmd !== 0xC) {
+        if (cmd !== 0x0 && cmd !== 0x1 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x4 && cmd !== 0x5 && cmd !== 0x6 &&cmd !== 0xC) {
             break;
         }
           const additionalBytes = [];

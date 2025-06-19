@@ -146,20 +146,98 @@ NHLPA93 introduced a variant of the JIM image format which has compressed tiles.
 | `0xMapSectionEnd+1..0xMapSectionEnd+5`              | `FF FF FF FF`   | End of compressed file marker                          |
 
 ### Compressed Tile Section
+
+The JZIP compression algorithm uses a variety of commands to efficiently compress tile data. Each command is encoded as a single byte where the upper 4 bits specify the command type and the lower 4 bits contain parameters.
+
+#### Command Structure
+```
+Command Byte: CCCCPPPP
+- CCCC: 4-bit command type (0x0-0xF)  
+- PPPP: 4-bit parameter value (0x0-0xF)
+```
+
+#### Decompression Algorithm
+
+The decompressor maintains an output buffer and current position. Commands are processed sequentially, with some commands requiring additional bytes following the command byte.
+
+#### Command Types
+
+| Command | Format | Description | Algorithm |
+| ------- | ------ | ----------- | --------- |
+| **0x0 - Literal Copy** | `0x0P <P+1 bytes>` | Copy next P+1 literal bytes to output | Directly copies bytes to output buffer |
+| **0x3 - Run Length Encoding (RLE)** | `0x3P <byte>` | Repeat byte P+3 times | Creates array of repeated byte and writes to output |
+| **0x4 - Short Back Reference** | `0x4P` | Copy from recent output | Uses bit manipulation: `offset = (P>>2) & 0x3`, `count = (P&0x3) + 2` |
+| **0x5 - Pattern Repeat** | `0x5P` | Repeat recent pattern | Complex pattern extraction and repetition based on parameter bits |
+| **0x6 - Back Reference with Offset** | `0x6P` | Copy from output with calculated offset | `offset = ((P>>2) & 0x3) + 2`, `count = (P&0x3) + 2` |
+| **0x8 - Pattern Back Reference** | `0x8P <offset>` | Repeat pattern from back reference | Takes offset byte, repeats last `offset` bytes `P+3` times |
+| **0x9 - Signed Offset Back Reference** | `0x9P <signed_offset>` | Back reference with signed offset | Converts unsigned byte to signed (-128 to +127), calculates count as `3*P - 8` |
+| **0xC - Fixed Offset Back Reference** | `0xCP` | Back reference with fixed calculation | `offset = ((P>>2) & 0x3) + 1`, `count = (P&0x3) + 2` |
+
+#### Back Reference Types
+
+The algorithm uses three different back reference mechanisms:
+
+1. **Forward Back Reference** (`copyBackReference`): 
+   - Copies bytes from `position - offset + i` for each byte
+   - Used for non-overlapping copies where source is before current position
+
+2. **Backward Back Reference** (`copyBackReferenceBackwards`):
+   - Copies bytes from `position - offset - i` for each byte  
+   - Used for copying in reverse order
+
+3. **Pattern Repeat** (`repeatPattern`):
+   - Extracts a pattern of `offset` bytes from recent output
+   - Repeats this pattern to generate `count` total bytes
+   - Handles cases where count > pattern length by cycling through pattern
+
+#### Signed Byte Conversion (Command 0x9)
+
+Command 0x9 uses signed offset calculation:
+```javascript
+// Convert unsigned byte to signed 8-bit value
+const signedOffset = additionalByte > 127 ? additionalByte - 256 : additionalByte;
+```
+
+Examples:
+- `0xFF` (255) → -1 signed
+- `0x80` (128) → -128 signed  
+- `0x7F` (127) → 127 signed
+
+#### Error Handling
+
+The decompressor includes bounds checking to prevent:
+- Reading beyond input data
+- Back references to invalid positions
+- Buffer overflows during decompression
+
+Common errors:
+- "Back reference out of bounds" - attempting to copy from invalid source position
+- "Not enough bytes" - insufficient input data for command requirements
+
+#### Decompression Process
+
+1. **Header Parsing**: Extract palette offset, map offset, and tile count
+2. **Command Processing**: Read command bytes sequentially and decode
+3. **Buffer Management**: Maintain output buffer with position tracking
+4. **Validation**: Check bounds and data integrity during decompression
+5. **Output Generation**: Combine decompressed tiles with palette and map data
+
+The algorithm achieves compression by:
+- **RLE**: Eliminating repeated byte sequences
+- **Back References**: Reusing previously output data patterns
+- **Pattern Repetition**: Efficiently encoding recurring tile patterns
+- **Literal Copying**: Handling unique data that doesn't compress well
+
+This multi-faceted approach allows the JZIP format to achieve significant compression ratios on tile-based graphics data while maintaining fast decompression speeds suitable for real-time game use.
+
+#### Original Command Reference Table (Deprecated)
+The following table shows the original incomplete command documentation:
+
 | Command | Format                                                        | Description                             | 
 | ------- | ------                                                        | -----------                             |
 | `0x0`     | `0x0 <4bit: numBytes> <byte 0> <byte 1> .. <byte numBytes>` | Write next `n` bytes to Output          |
 | `0x3`     | `0x3 <4bit: numBytes> <repeated byte>`                      | Write next byte `n+3` times to output   | 
-| `0x8`     | `0x8 <4bit: numBytes> <count>`                              | Undefined                               | 
-| `0x9`     | `0x9 <4bit: numBytes> <count>`                              | Undefined                               | 
-| `0x5`     | `0x5 <2bit: numBytes> <2bit: count>`                        | Undefined                               | 
-| `0xC`     | `0xC <4bit: numBytes>                                       | Undefined                               | 
-
-### Map Data Section
-| Byte (All values in hex) | Value                | Description                                          |
-| --------                 | -------              | -------                                              |
-| `0x00..0x01`             | `<uint16>:Bits 0-10` | Tile Index                                           |
-| `0x00..0x01`             | `<uint16>:Bit 11`    | Horizontal flip                                      |
-| `0x00..0x01`             | `<uint16>:Bit 12`    | Vertical flip                                        |
-| `0x00..0x01`             | `<uint16>:Bit 13-14` | Palette Index (0–3, selects one of 4 CRAM palettes). |
-| `0x00..0x01`             | `<uint16>:Bit 15`    | Priority (0=low, 1=high)                             |
+| `0x8`     | `0x8 <4bit: numBytes> <count>`                              | Pattern back reference with byte offset | 
+| `0x9`     | `0x9 <4bit: numBytes> <signed_offset>`                     | Back reference with signed offset calculation | 
+| `0x5`     | `0x5 <4bit: encoded_params>`                               | Pattern repeat with parameter encoding | 
+| `0xC`     | `0xC <4bit: encoded_params>`                               | Fixed offset back reference |
