@@ -109,6 +109,23 @@ class TileDecompressor {
                     consumed: 1
                 };
 
+            case 0x4: // back reference
+                // 8 -> 10 00 -> 0+2 bytes from 2+2 bytes back (end offset)
+                const paramUpperBits4 = (param >> 2) & 0x3 // Shift right 2, mask with 0b11
+                const paramLowerBits4 = param & 0x3; // Mask with 0b11
+                const shortOffset4 = paramUpperBits4;
+                const shortCount4 = paramLowerBits4 + 2;
+                // console.log('AA SHORT', param, shortOffset, shortCount);
+                // console.log('AA6', param, paramUpperBits, paramLowerBits, shortOffset6, shortCount6);
+                const shortBytes4 = this.copyBackReference(shortOffset4, shortCount4);
+                return {
+                    command: 'short_back_ref4',
+                    offset: shortOffset4+shortCount4,
+                    count: shortCount4,
+                    bytes: shortBytes4,
+                    consumed: 0
+                }
+
             case 0x5: // Short back reference
                 /**
                  * Computes the number of bytes for offset and length based on the 4-bit parameter X.
@@ -272,6 +289,7 @@ function decompressJZipFile(inputPath, outputPath) {
             case 0x9: // Back reference alternative
                 additionalBytesNeeded = 1;
                 break;
+            case 0x4: // Short back reference
             case 0x5: // Short back reference
             case 0x6: // Short back reference
             case 0xC: // Fixed back reference
@@ -284,7 +302,7 @@ function decompressJZipFile(inputPath, outputPath) {
         }
         
         // If we hit an unknown command, break out of the main loop
-        if (cmd !== 0x0 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x5 && cmd !== 0x6 &&cmd !== 0xC) {
+        if (cmd !== 0x0 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x4 && cmd !== 0x5 && cmd !== 0x6 &&cmd !== 0xC) {
             break;
         }
           const additionalBytes = [];
