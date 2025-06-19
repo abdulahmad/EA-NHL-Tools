@@ -111,27 +111,18 @@ class TileDecompressor {
 
             case 0x5: // Short back reference
                 /**
-                 * Takes a 4-bit parameter X and returns Y and Z for the decompression algorithm.
-                 * Y is the number of bytes to copy (3 or 4), based on bit 2 of X.
-                 * Z is the number of times to copy (0 to 3), based on the lower 2 bits of X.
-                 *
-                 * @param {number} X - The 4-bit input parameter (0 to 15).
-                 * @returns {Object} An object containing Y and Z.
-                 *
-                 * @example
-                 * // getCopyParameters(1) returns { Y: 3, Z: 1 }
-                 * // getCopyParameters(14) returns { Y: 4, Z: 2 }
+                 * Computes the number of bytes for offset and length based on the 4-bit parameter X.
+                 * @param {number} X - The 4-bit parameter (0 to 15).
+                 * @returns {Object} An object with properties Y (offset bytes) and Z (length bytes).
                  */
-                function getCopyParameters(X) {
-                    const maskedX = X & 0xF;         // Ensure X is 4-bit by masking
-                    const Y = 3 + ((maskedX >> 2) & 1); // Y is 3 or 4 based on bit 2
-                    const Z = (maskedX & 3) == 0 ? 1 : maskedX & 3;           // Z is lower 2 bits (0 to 3)
-                    console.log('AA5', maskedX & 3, Y, Z);
+                function getOffsetAndLengthBytes(X) {
+                    const Y = 3 + ((X >> 3) & 1);
+                    const Z = 2 + (X & 7);
                     return { Y, Z };
                 }
-                const copyParams = getCopyParameters(param);
+                const copyParams = getOffsetAndLengthBytes(param);
                 const shortOffset = copyParams.Y;
-                const shortCount = copyParams.Y * copyParams.Z;
+                const shortCount = copyParams.Z;
                 // console.log('AA SHORT', param, shortOffset, shortCount);
                 const shortBytes = this.repeatPattern(shortOffset, shortCount);
                 return {
