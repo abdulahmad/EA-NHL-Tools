@@ -235,14 +235,15 @@ class TileDecompressor {
                 
             case 0xE: // Fixed offset back reference
                 const fixedCountExt = param + 3;
-                const fixedOffsetExt = param + 2;
+                const fixedOffsetExt = additionalBytes[0];
+                console.log('AA E', param, fixedOffsetExt, fixedCountExt);
                 const fixedBytesExt = this.copyBackReferenceBackwards(fixedOffsetExt, fixedCountExt);
                 return {
                     command: 'backwards_ref_ext',
                     offset: fixedOffsetExt,
                     count: fixedCountExt,
                     bytes: fixedBytesExt,
-                    consumed: 0
+                    consumed: 1
                 };
             
             default:
