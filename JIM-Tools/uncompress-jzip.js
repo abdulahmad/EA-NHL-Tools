@@ -123,14 +123,15 @@ class TileDecompressor {
                  * // getCopyParameters(14) returns { Y: 4, Z: 2 }
                  */
                 function getCopyParameters(X) {
-                const maskedX = X & 0xF;         // Ensure X is 4-bit by masking
-                const Y = 3 + ((maskedX >> 2) & 1); // Y is 3 or 4 based on bit 2
-                const Z = maskedX & 3;           // Z is lower 2 bits (0 to 3)
-                return { Y, Z };
+                    const maskedX = X & 0xF;         // Ensure X is 4-bit by masking
+                    const Y = 3 + ((maskedX >> 2) & 1); // Y is 3 or 4 based on bit 2
+                    const Z = (maskedX & 3) == 0 ? 1 : maskedX & 3;           // Z is lower 2 bits (0 to 3)
+                    console.log('AA5', maskedX & 3, Y, Z);
+                    return { Y, Z };
                 }
                 const copyParams = getCopyParameters(param);
                 const shortOffset = copyParams.Y;
-                const shortCount = copyParams.Y * copyParams.Z;;
+                const shortCount = copyParams.Y * copyParams.Z;
                 // console.log('AA SHORT', param, shortOffset, shortCount);
                 const shortBytes = this.repeatPattern(shortOffset, shortCount);
                 return {
