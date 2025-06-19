@@ -226,12 +226,26 @@ class TileDecompressor {
                 const fixedOffset = paramUpperBitsC + 1;
                 const fixedBytes = this.copyBackReferenceBackwards(fixedOffset, fixedCount);
                 return {
-                    command: 'fixed_back_ref',
+                    command: 'backwards_ref',
                     offset: fixedOffset,
                     count: fixedCount,
                     bytes: fixedBytes,
                     consumed: 0
-                };            default:
+                };
+                
+            case 0xE: // Fixed offset back reference
+                const fixedCountExt = param + 3;
+                const fixedOffsetExt = param + 2;
+                const fixedBytesExt = this.copyBackReferenceBackwards(fixedOffsetExt, fixedCountExt);
+                return {
+                    command: 'backwards_ref_ext',
+                    offset: fixedOffsetExt,
+                    count: fixedCountExt,
+                    bytes: fixedBytesExt,
+                    consumed: 0
+                };
+            
+            default:
                 throw new Error(`Unknown command: 0x${cmd.toString(16)}`);
         }
     }
@@ -304,6 +318,7 @@ function decompressJZipFile(inputPath, outputPath) {
             case 0x3: // RLE
             case 0x8: // Back reference
             case 0x9: // Back reference alternative
+            case 0xE: // Copy backwards Extended
                 additionalBytesNeeded = 1;
                 break;
             case 0x4: // Short back reference
