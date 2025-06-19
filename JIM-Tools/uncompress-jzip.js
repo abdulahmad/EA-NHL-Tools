@@ -93,12 +93,29 @@ class TileDecompressor {
                 };
 
             case 0x5: // Short back reference
-                // const shortOffset = ((param & 0xC) >> 2) + 1;
-                // const shortCount = (param & 0x3) + 1;
-                const shortOffset = param + 2;
-                const shortCount = param + 2;
+                /**
+                 * Takes a 4-bit parameter X and returns Y and Z for the decompression algorithm.
+                 * Y is the number of bytes to copy (3 or 4), based on bit 2 of X.
+                 * Z is the number of times to copy (0 to 3), based on the lower 2 bits of X.
+                 *
+                 * @param {number} X - The 4-bit input parameter (0 to 15).
+                 * @returns {Object} An object containing Y and Z.
+                 *
+                 * @example
+                 * // getCopyParameters(1) returns { Y: 3, Z: 1 }
+                 * // getCopyParameters(14) returns { Y: 4, Z: 2 }
+                 */
+                function getCopyParameters(X) {
+                const maskedX = X & 0xF;         // Ensure X is 4-bit by masking
+                const Y = 3 + ((maskedX >> 2) & 1); // Y is 3 or 4 based on bit 2
+                const Z = maskedX & 3;           // Z is lower 2 bits (0 to 3)
+                return { Y, Z };
+                }
+                const copyParams = getCopyParameters(param);
+                const shortOffset = copyParams.Y;
+                const shortCount = copyParams.Y * copyParams.Z;;
                 // console.log('AA SHORT', param, shortOffset, shortCount);
-                const shortBytes = this.copyBackReference(shortOffset, shortCount);
+                const shortBytes = this.repeatPattern(shortOffset, shortCount);
                 return {
                     command: 'short_back_ref',
                     offset: shortOffset,
