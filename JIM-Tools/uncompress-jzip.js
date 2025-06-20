@@ -180,6 +180,18 @@ class TileDecompressor {
                     bytes: shortBytes6,
                     consumed: 0
                 }
+            case 0x7: // Back reference Pattern with byte offset
+                const backRefCount7 = 3;
+                const backRefOffset7 = param-1;
+                const backRefSequence7 = this.repeatPattern(backRefOffset7, backRefCount7);
+                // console.log('AA TEST', backRefSequence);
+                return {
+                    command: 'back_ref_7',
+                    offset: backRefOffset7,
+                    count: backRefCount7,
+                    bytes: backRefSequence7,
+                    consumed: 0
+                };
             case 0x8: // Back reference Pattern with byte offset
                 const backRefCount = param + 3;
                 if (additionalBytes.length < 1) {
@@ -209,7 +221,7 @@ class TileDecompressor {
                 const signedAdditionalBytes = additionalBytes[0] > 127 ? (additionalBytes[0] - 128) : additionalBytes[0]
                 console.log('AA9', param, additionalBytes[0], signedAdditionalBytes, backRefCountAlt);
                 const backRefOffsetAlt = signedAdditionalBytes+1;
-                const backRefBytesAlt = this.copyBackReference(backRefOffsetAlt, backRefCountAlt);
+                const backRefBytesAlt = this.repeatPattern(backRefOffsetAlt, backRefCountAlt);
                 return {
                     command: 'back_ref_9',
                     offset: backRefOffsetAlt,
@@ -325,6 +337,7 @@ function decompressJZipFile(inputPath, outputPath) {
             case 0x4: // Short back reference
             case 0x5: // Short back reference
             case 0x6: // Short back reference
+            case 0x7: // Back reference Pattern with byte offset
             case 0xC: // Fixed back reference
                 additionalBytesNeeded = 0;
                 break;
@@ -335,7 +348,7 @@ function decompressJZipFile(inputPath, outputPath) {
         }
         
         // If we hit an unknown command, break out of the main loop
-        if (cmd !== 0x0 && cmd !== 0x1 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x4 && cmd !== 0x5 && cmd !== 0x6 && cmd !== 0xC && cmd !== 0xE) {
+        if (cmd !== 0x0 && cmd !== 0x1 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x4 && cmd !== 0x5 && cmd !== 0x6 && cmd !== 0x7 && cmd !== 0xC && cmd !== 0xE) {
             break;
         }
           const additionalBytes = [];
