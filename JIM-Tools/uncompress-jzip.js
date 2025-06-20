@@ -181,8 +181,10 @@ class TileDecompressor {
                     consumed: 0
                 }
             case 0x7: // Back reference Pattern with byte offset
-                const backRefCount7 = 3;
-                const backRefOffset7 = param-1;
+                const paramUpperBits7 = (param >> 2) & 0x3 // Shift right 2, mask with 0b11
+                const paramLowerBits7 = param & 0x3; // Mask with 0b11
+                const backRefCount7 = paramLowerBits7 + 2;
+                const backRefOffset7 = paramUpperBits7 + 6;
                 const backRefSequence7 = this.repeatPattern(backRefOffset7, backRefCount7);
                 // console.log('AA TEST', backRefSequence);
                 return {
