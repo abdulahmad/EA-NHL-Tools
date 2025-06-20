@@ -335,7 +335,7 @@ function decompressJZipFile(inputPath, outputPath) {
         }
         
         // If we hit an unknown command, break out of the main loop
-        if (cmd !== 0x0 && cmd !== 0x1 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x4 && cmd !== 0x5 && cmd !== 0x6 &&cmd !== 0xC) {
+        if (cmd !== 0x0 && cmd !== 0x1 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x4 && cmd !== 0x5 && cmd !== 0x6 && cmd !== 0xC && cmd !== 0xE) {
             break;
         }
           const additionalBytes = [];
