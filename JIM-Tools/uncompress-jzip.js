@@ -52,6 +52,7 @@ class TileDecompressor {
     }
     
     repeatPattern(offset, count) {
+        console.log('AA3', offset, count);
         // First, get the source bytes without writing to output
         const sourceBytes = [];
         // console.log('AA4', count);
@@ -129,9 +130,10 @@ class TileDecompressor {
                 const paramLowerBits4 = param & 0x3; // Mask with 0b11
                 // const shortOffset4 = paramUpperBits4;
                 const shortOffset4 = paramUpperBits4 == 0 ? 1 : paramUpperBits4;
-                const shortCount4 = paramLowerBits4 + 2;
+                // const shortCount4 = paramLowerBits4 + 2;
+                const shortCount4 = (param == 4 ? 4 : paramLowerBits4) + 2;
                 // console.log('AA SHORT', param, shortOffset, shortCount);
-                // console.log('AA6', param, paramUpperBits, paramLowerBits, shortOffset6, shortCount6);
+                // console.log('AA6', param, paramUpperBits4, paramLowerBits4, shortOffset4, shortCount4);
                 const shortBytes4 = this.repeatPattern(shortOffset4, shortCount4);
                 return {
                     command: 'short_back_ref4',
@@ -169,7 +171,7 @@ class TileDecompressor {
                 // 8 -> 10 00 -> 0+2 bytes from 2+2 bytes back (end offset)
                 const paramUpperBits = (param >> 2) & 0x3 // Shift right 2, mask with 0b11
                 const paramLowerBits = param & 0x3; // Mask with 0b11
-                const shortOffset6 = paramUpperBits + 2;
+                const shortOffset6 = (param == 0 ? 1 : paramUpperBits) + 2;
                 const shortCount6 = paramLowerBits + 2;
                 // console.log('AA SHORT', param, shortOffset, shortCount);
                 console.log('AA6', param, paramUpperBits, paramLowerBits, shortOffset6, shortCount6);
@@ -239,7 +241,7 @@ class TileDecompressor {
                 if (additionalBytes.length < 1) {
                     throw new Error('Not enough bytes for back reference command');
                 }
-                const backRefOffsetA = param + 2;
+                const backRefOffsetA = param + 1;
                 const additionalBytesUpperBits = (additionalBytes[0] >> 4) & 0xF // Shift right 2, mask with 0b11
                 const additionalBytesLowerBits = additionalBytes[0] & 0xF; // Mask with 0b11
                 const backRefCountA = additionalBytesUpperBits * backRefOffsetA;
