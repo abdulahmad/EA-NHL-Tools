@@ -239,7 +239,7 @@ class TileDecompressor {
                 if (additionalBytes.length < 1) {
                     throw new Error('Not enough bytes for back reference command');
                 }
-                const backRefOffsetA = param + 1;
+                const backRefOffsetA = param + 2;
                 const additionalBytesUpperBits = (additionalBytes[0] >> 4) & 0xF // Shift right 2, mask with 0b11
                 const additionalBytesLowerBits = additionalBytes[0] & 0xF; // Mask with 0b11
                 const backRefCountA = additionalBytesUpperBits * backRefOffsetA;
@@ -258,7 +258,7 @@ class TileDecompressor {
                 const paramUpperBitsC = (param >> 2) & 0x3 // Shift right 2, mask with 0b11
                 const paramLowerBitsC = param & 0x3; // Mask with 0b11
 
-                const fixedCount = paramLowerBitsC + 2;;
+                const fixedCount = paramLowerBitsC + 2;
                 const fixedOffset = paramUpperBitsC + 1;
                 const fixedBytes = this.copyBackReferenceBackwards(fixedOffset, fixedCount);
                 return {
@@ -266,6 +266,21 @@ class TileDecompressor {
                     offset: fixedOffset,
                     count: fixedCount,
                     bytes: fixedBytes,
+                    consumed: 0
+                };
+
+            case 0xD: // Fixed offset back reference
+                const paramUpperBitsD = (param >> 2) & 0x3 // Shift right 2, mask with 0b11
+                const paramLowerBitsD = param & 0x3; // Mask with 0b11
+
+                const fixedCountD = paramUpperBitsD + 3;
+                const fixedOffsetD = paramLowerBitsD + 4;
+                const fixedBytesD = this.copyBackReferenceBackwards(fixedOffsetD, fixedCountD);
+                return {
+                    command: 'backwards_ref_D',
+                    offset: fixedOffsetD,
+                    count: fixedCountD,
+                    bytes: fixedBytesD,
                     consumed: 0
                 };
                 
@@ -364,6 +379,7 @@ function decompressJZipFile(inputPath, outputPath) {
             case 0x6: // Short back reference
             case 0x7: // Back reference Pattern with byte offset
             case 0xC: // Fixed back reference
+            case 0xD: // Fixed back reference
                 additionalBytesNeeded = 0;
                 break;
             default:
@@ -373,7 +389,7 @@ function decompressJZipFile(inputPath, outputPath) {
         }
         
         // If we hit an unknown command, break out of the main loop
-        if (cmd !== 0x0 && cmd !== 0x1 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x4 && cmd !== 0x5 && cmd !== 0x6 && cmd !== 0x7 && cmd !== 0xA && cmd !== 0xC && cmd !== 0xE) {
+        if (cmd !== 0x0 && cmd !== 0x1 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x4 && cmd !== 0x5 && cmd !== 0x6 && cmd !== 0x7 && cmd !== 0xA && cmd !== 0xC && cmd !== 0xD && cmd !== 0xE) {
             break;
         }
           const additionalBytes = [];
