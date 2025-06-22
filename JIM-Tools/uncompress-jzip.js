@@ -127,11 +127,12 @@ class TileDecompressor {
                 // 8 -> 10 00 -> 0+2 bytes from 2+2 bytes back (end offset)
                 const paramUpperBits4 = (param >> 2) & 0x3 // Shift right 2, mask with 0b11
                 const paramLowerBits4 = param & 0x3; // Mask with 0b11
-                const shortOffset4 = paramUpperBits4;
+                // const shortOffset4 = paramUpperBits4;
+                const shortOffset4 = paramUpperBits4 == 0 ? 1 : paramUpperBits4;
                 const shortCount4 = paramLowerBits4 + 2;
                 // console.log('AA SHORT', param, shortOffset, shortCount);
                 // console.log('AA6', param, paramUpperBits, paramLowerBits, shortOffset6, shortCount6);
-                const shortBytes4 = this.copyBackReference(shortOffset4, shortCount4);
+                const shortBytes4 = this.repeatPattern(shortOffset4, shortCount4);
                 return {
                     command: 'short_back_ref4',
                     offset: shortOffset4+shortCount4,
