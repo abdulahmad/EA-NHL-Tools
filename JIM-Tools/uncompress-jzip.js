@@ -52,7 +52,7 @@ class TileDecompressor {
     }
     
     repeatPattern(offset, count) {
-        console.log('AA3', offset, count);
+        // console.log('AA3', offset, count);
         // First, get the source bytes without writing to output
         const sourceBytes = [];
         // console.log('AA4', count);
@@ -214,11 +214,13 @@ class TileDecompressor {
                     consumed: 1
                 };
             case 0x9: // Back reference with byte offset (alternative)
+                console.log('AA TEST 0x9', param.toString(16), additionalBytes[0].toString(16));
                 // const backRefCountAlt = 2 * param + Math.floor(param / 4) + 1;
                 let backRefCountAlt;
                 switch (param) {
+                    case 0x8: backRefCountAlt = 20; break;
                     case 0x9: backRefCountAlt = 21; break;
-                    case 0xA: backRefCountAlt = 23; break;
+                    case 0xA: backRefCountAlt = 24; break; // it could be that 0xA is 23 and 0xF is 35 instead of 24 and 34
                     case 0xB: backRefCountAlt = 25; break;
                     case 0xC: backRefCountAlt = 28; break;
                     case 0xF: backRefCountAlt = 34; break;
@@ -290,7 +292,7 @@ class TileDecompressor {
             case 0xE: // Fixed offset back reference
                 const fixedCountExt = param + 3;
                 const fixedOffsetExt = additionalBytes[0];
-                console.log('AA E', param, fixedOffsetExt, fixedCountExt);
+                // console.log('AA E', param, fixedOffsetExt, fixedCountExt);
                 const fixedBytesExt = this.copyBackReferenceBackwards(fixedOffsetExt, fixedCountExt);
                 return {
                     command: 'backwards_ref_ext',
