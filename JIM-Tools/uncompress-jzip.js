@@ -235,6 +235,25 @@ class TileDecompressor {
                     consumed: 1
                 };
 
+            case 0xA: // Back reference Pattern with byte offset
+                if (additionalBytes.length < 1) {
+                    throw new Error('Not enough bytes for back reference command');
+                }
+                const backRefOffsetA = param + 1;
+                const additionalBytesUpperBits = (additionalBytes[0] >> 4) & 0xF // Shift right 2, mask with 0b11
+                const additionalBytesLowerBits = additionalBytes[0] & 0xF; // Mask with 0b11
+                const backRefCountA = additionalBytesUpperBits * backRefOffsetA;
+                console.log(backRefOffsetA, backRefCountA, additionalBytes[0], additionalBytesUpperBits, additionalBytesLowerBits);
+                const backRefSequenceA = this.repeatPattern(backRefOffsetA, backRefCountA);
+                // console.log('AA TEST', backRefSequence);
+                return {
+                    command: 'back_ref_A',
+                    offset: backRefOffsetA,
+                    count: backRefCountA,
+                    bytes: backRefSequenceA,
+                    consumed: 1
+                };
+
             case 0xC: // Fixed offset back reference
                 const paramUpperBitsC = (param >> 2) & 0x3 // Shift right 2, mask with 0b11
                 const paramLowerBitsC = param & 0x3; // Mask with 0b11
@@ -336,6 +355,7 @@ function decompressJZipFile(inputPath, outputPath) {
             case 0x3: // RLE
             case 0x8: // Back reference
             case 0x9: // Back reference alternative
+            case 0xA: // Back reference Pattern with byte offset
             case 0xE: // Copy backwards Extended
                 additionalBytesNeeded = 1;
                 break;
@@ -353,7 +373,7 @@ function decompressJZipFile(inputPath, outputPath) {
         }
         
         // If we hit an unknown command, break out of the main loop
-        if (cmd !== 0x0 && cmd !== 0x1 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x4 && cmd !== 0x5 && cmd !== 0x6 && cmd !== 0x7 && cmd !== 0xC && cmd !== 0xE) {
+        if (cmd !== 0x0 && cmd !== 0x1 && cmd !== 0x3 && cmd !== 0x8 && cmd !== 0x9 && cmd !== 0x4 && cmd !== 0x5 && cmd !== 0x6 && cmd !== 0x7 && cmd !== 0xA && cmd !== 0xC && cmd !== 0xE) {
             break;
         }
           const additionalBytes = [];
