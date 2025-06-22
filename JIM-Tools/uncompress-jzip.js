@@ -214,6 +214,7 @@ class TileDecompressor {
                     consumed: 1
                 };
             case 0x9: // Back reference with byte offset (alternative)
+                // const backRefCountAlt = 2 * param + Math.floor(param / 4) + 1;
                 let backRefCountAlt;
                 switch (param) {
                     case 0x9: backRefCountAlt = 21; break;
