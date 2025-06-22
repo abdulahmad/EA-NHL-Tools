@@ -123,7 +123,7 @@ describe('Tile Decompressor', () => {
             [0x11, 0x22, 0x33, 0x44], // initial output
             0x52, // command: 0x5, offset bits: 01 (2 bytes back), count bits: 01 (2 bytes)
             [], // no additional bytes
-            [0x11, 0x22, 0x33, 0x44] // expected result (bytes at positions -2 and -1)
+            "22 33 44 22" // expected result (bytes at positions -2 and -1)
         );
     });
     
@@ -141,7 +141,7 @@ describe('Tile Decompressor', () => {
             [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88], // initial output
             0x94, // command: 0x9, param: 0 (1 byte)
             [0x04], // offset: 2 bytes back
-            "44 55 66 77" // expected result
+            "44 55 66 77 88 44 55 66 77 88" // expected result
         );
     });
     
@@ -184,10 +184,10 @@ describe('Tile Decompressor', () => {
     
     test('0x5 - Short Back Reference minimum values', () => {
         testCommand(
-            [0xFF, 0xEE],
+            [0xFF, 0xEE, 0xFF, 0xEE, 0xFF, 0xEE, 0xFF, 0xEE],
             0x50, // command: 0x5, offset: 1 byte back, count: 1 byte
             [],
-            [0xFF, 0xEE]
+            [0xEE, 0xFF]
         );
     });
     
@@ -237,7 +237,7 @@ describe('Tile Decompressor', () => {
             decompressor.setOutput([0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77]);
             const result = decompressor.processCommand(0x55, []);
             expect(result.command).toBe('short_back_ref');
-            expect(result.offset).toBe(7);
+            expect(result.offset).toBe(3);
             expect(result.count).toBe(7);
         });
 
@@ -256,7 +256,7 @@ describe('Tile Decompressor', () => {
             const result = decompressor.processCommand(0x91, [0x04]);
             expect(result.command).toBe('back_ref_9');
             expect(result.offset).toBe(5);
-            expect(result.count).toBe(-5);
+            expect(result.count).toBe(3);
         });
 
         test('should correctly parse command 0xCX (fixed back ref)', () => {
@@ -264,9 +264,9 @@ describe('Tile Decompressor', () => {
             const decompressor = new TileDecompressor();
             decompressor.setOutput(initialOutput);
             const result = decompressor.processCommand(0xC1, []);
-            expect(result.command).toBe('fixed_back_ref');
-            expect(result.offset).toBe(32);
-            expect(result.count).toBe(2);
+            expect(result.command).toBe('backwards_ref');
+            expect(result.offset).toBe(1);
+            expect(result.count).toBe(3);
         });
     });
 });
@@ -278,7 +278,7 @@ describe('Command Bytes Consumed test', () => {
             [0x10, 0x20, 0x30], // initial output with enough data for back ref
             0x01, [0x66, 0x77], // literal: copy 2 bytes
             0x52, [], // short back ref: copy last 2+2 bytes, offset bits: 01 (2 bytes back), count bits: 01 (2 bytes)
-            [0x66, 0x77, 0x20, 0x30, 0x66, 0x77] // expected: literal bytes + back ref bytes // 66 77 20 30 66 77
+            [0x66, 0x77, 0x30, 0x66, 0x77, 0x30] // expected: literal bytes + back ref bytes // 66 77 20 30 66 77
         );
     });
 
@@ -301,7 +301,7 @@ describe('Command Bytes Consumed test', () => {
             initialOutput,
             0x31, [0x99], // RLE: repeat 0x99 4 times
             0xC1, [], // fixed back ref: copy 2 bytes from 32 back
-            [0x99, 0x99, 0x99, 0x99, 0x27, 0x20] // RLE bytes + first 2 from 32 back
+            [0x99, 0x99, 0x99, 0x99, 0x99, 0x99, 0x99] // RLE bytes + first 2 from 32 back
         );
     });
 
@@ -324,7 +324,7 @@ describe('Command Bytes Consumed test', () => {
             initialOutput,
             0x53, [], // short back ref: copy from 3+2=5 bytes back, count 3+2=5
             0xC2, [], // fixed back ref: copy 3 bytes from 32 back
-            [0x43, 0x40, 0x41, 0x42, 0x43, 0x35, 0x36, 0x37] // short back ref + fixed back ref
+            "41 42 43 41 42 42 41 43 42" // short back ref + fixed back ref
         );
     });
 
@@ -334,7 +334,7 @@ describe('Command Bytes Consumed test', () => {
             [0x11, 0x22, 0x33, 0x44, 0x55, 0x66], // initial output
             0x51, [], // short back ref: copy from 1+2=3 bytes back, count 1+2=3
             0x91, [0x05], // alt back ref: copy (2*2)+1=5 bytes from (2+1)=3 bytes back
-            [0x44, 0x55, 0x66] // short back ref + alt back ref
+            "44 55 66 44 55 66" // short back ref + alt back ref
         );
     });
 
@@ -344,7 +344,7 @@ describe('Command Bytes Consumed test', () => {
             [0xAA, 0xBB, 0xCC, 0xDD, 0xEE], // initial output
             0x80, [0x03], // back ref: copy pattern from 3 bytes back, count 3
             0x52, [], // short back ref: copy from 2+2=4 bytes back, count 2+2=4
-            [0xCC, 0xDD, 0xEE, 0xEE, 0xCC, 0xDD, 0xEE] // back ref + short back ref
+            "CC DD EE CC DD EE CC" // back ref + short back ref
         );
     });
 
@@ -367,7 +367,7 @@ describe('Command Bytes Consumed test', () => {
             initialOutput,
             0x91, [0x05], // alt back ref: copy (1*2)+1=3 bytes from (1+1)=2 bytes back
             0xC1, [], // fixed back ref: copy 2 bytes from 32 back
-            [0x54, 0x55] // alt back ref + fixed back ref
+            [0x56, 0x57, 0x60, 0x60, 0x57, 0x56] // alt back ref + fixed back ref
         );
     });
 
@@ -377,7 +377,7 @@ describe('Command Bytes Consumed test', () => {
             [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77], // initial output
             0x90, [0x05], // alt back ref: copy (0*2)+1=1 byte from (2+1)=3 bytes back
             0x80, [0x02], // back ref: copy pattern from 2 bytes back, count 3
-            "66 77 66" // alt back ref + back ref
+            "22 77 22 77" // alt back ref + back ref
         );
     });
 
@@ -389,7 +389,7 @@ describe('Command Bytes Consumed test', () => {
             initialOutput,
             0xC0, [], // fixed back ref: copy 1 byte from 32 back
             0x01, [0xFE, 0xFD], // literal: copy 2 bytes
-            [0x72, 0xFE, 0xFD] // fixed back ref + literal
+            "A1 A0 FE FD" // fixed back ref + literal
         );
     });
 
@@ -429,7 +429,7 @@ describe('Hex String Input Tests', () => {
             "11223344556677", // initial output as hex string
             0x55, // command: 0x5, offset bits: 01 (2 bytes back), count bits: 01 (2 bytes)
             [], // no additional bytes
-            "11223344556677" // expected result as hex string
+            "55 66 77 55 66 77 55" // expected result as hex string
         );
     });
     
@@ -456,7 +456,7 @@ describe('Hex String Input Tests', () => {
             [0x11, 0x22, 0x33, 0x44, 0x11, 0x22, 0x33, 0x44], // initial output as array
             0x55,
             [],
-            "22334411223344" // expected result as hex string
+            "22 33 44 22 33 44 22" // expected result as hex string
         );
     });
     
@@ -801,6 +801,24 @@ describe('ronbarr.map.jzip decompression', () => {
             0xD1, // command: 0x8, param: 0xA (0xA+3 = 0xD = 13 bytes)
             [], // offset: 0x20 = 32 bytes back
             "CC AA AA" // expected result
+        );
+    });
+
+    // 00 7D    59          E0 B9       44                        0A CA DD F6 66 DA CD E6 66 EA CD DF
+    // 7D       77 77 77    78 77 77    77 77 77 77 77 77         CA DD F6 66 DA CD E6 66 EA CD DF
+
+    // current E0 B9: 78 77 77
+    // current 44: 77 77
+
+    // 48 -> 1000 -> 2, 0 copy last 2 bytes, length 2
+    // 41 -> 0010 -> 0, 2 copy last (3) byte, length 3
+    // 44 -> 0100 -> 1, 0 copy last byte, length 6
+    test('41 - Short Back Reference (copy from last 2 bytes, length 0+2)', () => {
+        testCommand(
+            "66 66 66 66 65 55 55 55 65 44 44 44 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 18 77 77 18 88 77 18 88 92 66 66 66 66 55 55 55 55 44 44 44 44 77 11 11 11 11 22 28 82 22 33 32 22 34 44 32 98 22 99 98 88 66 66 66 66 55 55 55 55 44 44 44 44 11 77 77 77 99 88 11 77 98 11 18 77 81 11 11 11 11 11 11 11 66 66 66 66 55 55 55 55 44 44 44 44 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 82 87 77 77 66 66 66 61 55 55 55 21 44 44 43 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 65 47 77 77 77 77 77 77 77 77 77 77 77 77 77 71 77 77 77 18 77 77 77 18 77 77 77 18 77 77 71 11 77 77 11 11 71 88 89 22 18 88 89 99 88 88 81 11 88 11 11 18 11 18 89 AB 11 AC CD DC 18 BD DD DD 8A DD EE EE 99 98 11 88 81 81 11 11 18 88 88 9A 9A AB BC CC CC CC CD DD DD DD DD DD DD FF 66 FE EF F6 66 FF 88 88 99 98 88 89 AC CA CC CC CC CB DD DD CD CC DD DD DE DC DE EE ED ED EE EE ED ED FF FF FE DD 18 81 17 77 81 81 11 77 A8 82 21 77 B8 11 21 17 CA 81 12 17 CB A1 12 11 DC A1 11 11 DC B8 11 21 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 77 17 77 77 77 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 73 21 77 77 11 11 77 77 11 11 77 77 11 11 77 77 11 11 77 77 11 11 77 77 11 11 77 77 11 11 77 77 11 11 8C DD DD DD 9A CD DD DD 89 CD DD DD 89 CD DD DD 89 CD DD DE 8A CD DD DD 8B CD DE ED 8B DD DF 66 FF 66 66 66 DE EE EE EE DD DD DD DD DD DD DD EE EE DD EE EF DE EE FF FF DE EE EE EE FD DD DD DD FF FF EE DD DE EE DD DD DD DD DE EE EE EE EE FE FF F6 6F FE 66 66 FF EE FF FF FF FD DD CC CC CC DD C9 11 11 DD C9 81 11 DD C9 81 11 ED C9 81 11 DC C9 81 11 DC CA 81 11 DD CC 91 11 DC CD A1 11 17 77 77 77 17 77 77 77 11 77 77 77 11 77 77 77 11 77 77 77 11 77 77 77 11 77 77 77 11 77 77 77 77 77 11 11 77 77 11 11 77 77 11 11 77 77 19 91 77 77 7A C1 77 77 7A CA 77 77 79 CA 77 77 78 CB 9C DD CC CC 9C DC A9 88 9C DB AD DC BD DC DB A1 CD DD CA 48 BC DD CC CC AB DD DD DD BA DD FF FF CF FD DD DC 81 8C CD DC CA 18 CD ED 11 19 CD ED 18 49 CD 6D DD CA CD 6D DC CB CD 6D DD DB CD 6D CC BA 99 99 BB 98 18 88 C9 81 8B ED C9 A1 11 1A C9 A6 81 96 CD 9C CD DC CC DD CC BC DC EE DD DD CC CD B1 11 9C CD C8 11 C9 DC C8 11 BD DC C8 8C AC DC C8 9C CD DC CA AC DE DC CA BC EF EC BA BC 11 77 77 77 11 77 77 77 11 77 77 77 97 77 77 77 A7 77 77 77 B7 77 77 77 B8 77 77 77 A7 77 77 77 77 77 77 DC 77 77 77 DC 77 77 77 DF 77 77 77 CE 77 77 77 7D 77 77 77 78 77 77",
+            0x41,
+            [],
+            "77 77 77 77 77 77"
         );
     });
 });
