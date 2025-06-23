@@ -217,9 +217,14 @@ class TileDecompressor {
                 console.log('AA TEST 0x9', param.toString(16), additionalBytes[0].toString(16));
                 // const backRefCountAlt = 2 * param + Math.floor(param / 4) + 1;
                 let backRefCountAlt;
-                switch (param) {
+                switch (param) { // maybe there is something about length = first 5 bits
                     case 0x8: backRefCountAlt = 20; break;
-                    case 0x9: backRefCountAlt = 21; break;
+                    case 0x9:
+                        if (additionalBytes[0] == 0x80) {
+                            backRefCountAlt = 22; // 0x9 with additional byte 80 is 22
+                        } else {
+                            backRefCountAlt = 21; 
+                        } break;
                     case 0xA: backRefCountAlt = 24; break; // it could be that 0xA is 23 and 0xF is 35 instead of 24 and 34
                     case 0xB: backRefCountAlt = 25; break;
                     case 0xC: backRefCountAlt = 28; break;
