@@ -162,16 +162,21 @@ The decompressor maintains an output buffer and current position. Commands are p
 
 #### Command Types
 
-| Command | Format | Description | Algorithm |
-| ------- | ------ | ----------- | --------- |
-| **0x0 - Literal Copy** | `0x0P <P+1 bytes>` | Copy next P+1 literal bytes to output | Directly copies bytes to output buffer |
-| **0x3 - Run Length Encoding (RLE)** | `0x3P <byte>` | Repeat byte P+3 times | Creates array of repeated byte and writes to output |
-| **0x4 - Short Back Reference** | `0x4P` | Copy from recent output | Uses bit manipulation: `offset = (P>>2) & 0x3`, `count = (P&0x3) + 2` |
-| **0x5 - Pattern Repeat** | `0x5P` | Repeat recent pattern | Complex pattern extraction and repetition based on parameter bits |
-| **0x6 - Back Reference with Offset** | `0x6P` | Copy from output with calculated offset | `offset = ((P>>2) & 0x3) + 2`, `count = (P&0x3) + 2` |
-| **0x8 - Pattern Back Reference** | `0x8P <offset>` | Repeat pattern from back reference | Takes offset byte, repeats last `offset` bytes `P+3` times |
-| **0x9 - Signed Offset Back Reference** | `0x9P <signed_offset>` | Back reference with signed offset | Converts unsigned byte to signed (-128 to +127), calculates count as `3*P - 8` |
-| **0xC - Fixed Offset Back Reference** | `0xCP` | Back reference with fixed calculation | `offset = ((P>>2) & 0x3) + 1`, `count = (P&0x3) + 2` |
+| Command | Format | Description | Algorithm | Confidence in Implmentation |
+| ------- | ------ | ----------- | --------- | --------------------------- |
+| **0x0 - Literal Copy** | `0x0P <P+1 bytes>` | Copy next P+1 literal bytes to output | Directly copies bytes to output buffer | 100% |
+| **0x1 - Extended Literal Copy** | `0x1P <P+17 bytes>` | Copy next P+17 literal bytes to output | Extended version of literal copy for larger blocks | 100% |
+| **0x3 - Run Length Encoding (RLE)** | `0x3P <byte>` | Repeat byte P+3 times | Creates array of repeated byte and writes to output | 100% |
+| **0x4 - Short Back Reference** | `0x4P` | Copy from recent output using bit manipulation | `offset = (P>>2) == 0 ? 1 : (P>>2)`, `count = (P == 4 ? 4 : (P&0x3)) + 2`, uses pattern repeat | 95% |
+| **0x5 - Pattern Repeat** | `0x5P` | Repeat recent pattern with computed parameters | `offset = 3 + ((P>>3) & 1)`, `count = 2 + (P & 7)`, uses pattern repeat | 100% |
+| **0x6 - Back Reference with Offset** | `0x6P` | Copy from output with calculated offset | `offset = (P == 0 ? 1 : (P>>2)) + 2`, `count = (P&0x3) + 2`, uses forward back reference | 50% - will break in some cases |
+| **0x7 - Pattern Back Reference (2-bit params) ** | `0x7P` | Pattern repeat with bit-split parameters | `offset = ((P>>3) & 0x1) + 7`, `count = (P & 0x7) + 2`, uses pattern repeat | 90% |
+| **0x8 - Pattern Back Reference (4-bit params) ** | `0x8P <offset>` | Repeat pattern from back reference | Takes offset byte, repeats last `offset` bytes `P+3` times using pattern repeat | 100% |
+| **0x9 - Signed Offset Back Reference** | `0x9P <signed_offset>` | Back reference with signed offset | Converts unsigned byte to signed, count varies by parameter (20-34 range), uses pattern repeat | 5% - extremely hardcoded currently |
+| **0xA - Variable Pattern Reference** | `0xAP <params>` | Pattern reference with variable parameters | `offset = P + 1`, `count = ((params>>4) & 0xF) * offset`, uses pattern repeat | 50% - needs more uses to confirm |
+| **0xC - Fixed Offset Backwards Back Reference** | `0xCP` | Back reference with fixed calculation | `offset = ((P>>2) & 0x3) + 1`, `count = (P&0x3) + 2`, uses backward back reference | 100% |
+| **0xD - Extended Fixed Backwards Back Reference** | `0xDP` | Extended version of fixed back reference | `offset = (P & 0x3) + 4`, `count = ((P>>2) & 0x3) + 3`, uses backward back reference | 70% - needs more uses to confirm |
+| **0xE - Extended Backwards Back Reference** | `0xEP <offset>` | Extended back reference with byte offset | Takes offset byte, `count = P + 3`, uses backward back reference | 80% - needs more uses to confirm |
 
 #### Back Reference Types
 
@@ -180,28 +185,34 @@ The algorithm uses three different back reference mechanisms:
 1. **Forward Back Reference** (`copyBackReference`): 
    - Copies bytes from `position - offset + i` for each byte
    - Used for non-overlapping copies where source is before current position
+   - Used by commands 0x6
 
 2. **Backward Back Reference** (`copyBackReferenceBackwards`):
    - Copies bytes from `position - offset - i` for each byte  
    - Used for copying in reverse order
+   - Used by commands 0xC, 0xD, 0xE
 
 3. **Pattern Repeat** (`repeatPattern`):
    - Extracts a pattern of `offset` bytes from recent output
    - Repeats this pattern to generate `count` total bytes
    - Handles cases where count > pattern length by cycling through pattern
+   - Used by commands 0x4, 0x5, 0x7, 0x8, 0x9, 0xA
 
 #### Signed Byte Conversion (Command 0x9)
 
-Command 0x9 uses signed offset calculation:
+Command 0x9 uses a modified signed offset calculation:
 ```javascript
-// Convert unsigned byte to signed 8-bit value
-const signedOffset = additionalByte > 127 ? additionalByte - 256 : additionalByte;
+// Special handling - not standard signed conversion
+const signedAdditionalBytes = additionalBytes[0] > 127 ? (additionalBytes[0] - 128) : additionalBytes[0];
+const backRefOffsetAlt = signedAdditionalBytes + 1;
 ```
 
-Examples:
-- `0xFF` (255) → -1 signed
-- `0x80` (128) → -128 signed  
-- `0x7F` (127) → 127 signed
+#### Command Implementation Notes
+
+- **Commands 0x4, 0x5, 0x7**: Use no additional bytes, all parameters encoded in command byte
+- **Commands 0x3, 0x8, 0x9, 0xA, 0xE**: Require 1 additional byte
+- **Commands 0x0, 0x1**: Require P+1 and P+17 additional bytes respectively
+- **Commands 0x6, 0xC, 0xD**: Use no additional bytes, parameters encoded in command byte
 
 #### Error Handling
 
@@ -229,15 +240,3 @@ The algorithm achieves compression by:
 - **Literal Copying**: Handling unique data that doesn't compress well
 
 This multi-faceted approach allows the JZIP format to achieve significant compression ratios on tile-based graphics data while maintaining fast decompression speeds suitable for real-time game use.
-
-#### Original Command Reference Table (Deprecated)
-The following table shows the original incomplete command documentation:
-
-| Command | Format                                                        | Description                             | 
-| ------- | ------                                                        | -----------                             |
-| `0x0`     | `0x0 <4bit: numBytes> <byte 0> <byte 1> .. <byte numBytes>` | Write next `n` bytes to Output          |
-| `0x3`     | `0x3 <4bit: numBytes> <repeated byte>`                      | Write next byte `n+3` times to output   | 
-| `0x8`     | `0x8 <4bit: numBytes> <count>`                              | Pattern back reference with byte offset | 
-| `0x9`     | `0x9 <4bit: numBytes> <signed_offset>`                     | Back reference with signed offset calculation | 
-| `0x5`     | `0x5 <4bit: encoded_params>`                               | Pattern repeat with parameter encoding | 
-| `0xC`     | `0xC <4bit: encoded_params>`                               | Fixed offset back reference |
