@@ -170,8 +170,8 @@ The decompressor maintains an output buffer and current position. Commands are p
 | **0x4 - Short Back Reference** | `0x4P` | Copy from recent output using bit manipulation | `offset = (P>>2) == 0 ? 1 : (P>>2)`, `count = (P == 4 ? 4 : (P&0x3)) + 2`, uses pattern repeat | 95% |
 | **0x5 - Pattern Repeat** | `0x5P` | Repeat recent pattern with computed parameters | `offset = 3 + ((P>>3) & 1)`, `count = 2 + (P & 7)`, uses pattern repeat | 100% |
 | **0x6 - Back Reference with Offset** | `0x6P` | Copy from output with calculated offset | `offset = (P == 0 ? 1 : (P>>2)) + 2`, `count = (P&0x3) + 2`, uses forward back reference | 50% - will break in some cases |
-| **0x7 - Pattern Back Reference (2-bit params) ** | `0x7P` | Pattern repeat with bit-split parameters | `offset = ((P>>3) & 0x1) + 7`, `count = (P & 0x7) + 2`, uses pattern repeat | 90% |
-| **0x8 - Pattern Back Reference (4-bit params) ** | `0x8P <offset>` | Repeat pattern from back reference | Takes offset byte, repeats last `offset` bytes `P+3` times using pattern repeat | 100% |
+| **0x7 - Pattern Back Reference (2-bit params)** | `0x7P` | Pattern repeat with bit-split parameters | `offset = ((P>>3) & 0x1) + 7`, `count = (P & 0x7) + 2`, uses pattern repeat | 90% |
+| **0x8 - Pattern Back Reference (4-bit params)** | `0x8P <offset>` | Repeat pattern from back reference | Takes offset byte, repeats last `offset` bytes `P+3` times using pattern repeat | 100% |
 | **0x9 - Signed Offset Back Reference** | `0x9P <signed_offset>` | Back reference with signed offset | Converts unsigned byte to signed, count varies by parameter (20-34 range), uses pattern repeat | 5% - extremely hardcoded currently |
 | **0xA - Variable Pattern Reference** | `0xAP <params>` | Pattern reference with variable parameters | `offset = P + 1`, `count = ((params>>4) & 0xF) * offset`, uses pattern repeat | 50% - needs more uses to confirm |
 | **0xC - Fixed Offset Backwards Back Reference** | `0xCP` | Back reference with fixed calculation | `offset = ((P>>2) & 0x3) + 1`, `count = (P&0x3) + 2`, uses backward back reference | 100% |
