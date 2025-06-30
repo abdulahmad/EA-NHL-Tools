@@ -91,7 +91,8 @@ class TileDecompressor {
                     command: 'literal',
                     count: literalCount,
                     bytes: literalBytes,
-                    consumed: literalCount
+                    consumed: literalCount,
+                    eof: false
                 };
             
             case 0x1: // Extended Literal copy
@@ -105,7 +106,8 @@ class TileDecompressor {
                     command: 'literal',
                     count: literalCountExt,
                     bytes: literalBytesExt,
-                    consumed: literalCountExt
+                    consumed: literalCountExt,
+                    eof: false
                 };
 
             case 0x3: // RLE
@@ -121,7 +123,8 @@ class TileDecompressor {
                     count: rleCount,
                     byte: rleByte,
                     bytes: rleBytes,
-                    consumed: 1
+                    consumed: 1,
+                    eof: false
                 };
 
             case 0x4: // back reference
@@ -140,7 +143,8 @@ class TileDecompressor {
                     offset: shortOffset4+shortCount4,
                     count: shortCount4,
                     bytes: shortBytes4,
-                    consumed: 0
+                    consumed: 0,
+                    eof: false
                 }
 
             case 0x5: // Short back reference
@@ -164,7 +168,8 @@ class TileDecompressor {
                     offset: shortOffset,
                     count: shortCount,
                     bytes: shortBytes,
-                    consumed: 0
+                    consumed: 0,
+                    eof: false
                 };
             case 0x6: // back reference
                 // 68 -> copy 2 bytes from 4-6 bytes back
@@ -181,7 +186,8 @@ class TileDecompressor {
                     offset: shortOffset6+shortCount6,
                     count: shortCount6,
                     bytes: shortBytes6,
-                    consumed: 0
+                    consumed: 0,
+                    eof: false
                 }
             case 0x7: // Back reference Pattern with byte offset
                 const paramUpperBits7 = (param >> 3) & 0x1 // Upper 1 bit
@@ -195,7 +201,8 @@ class TileDecompressor {
                     offset: backRefOffset7,
                     count: backRefCount7,
                     bytes: backRefSequence7,
-                    consumed: 0
+                    consumed: 0,
+                    eof: false
                 };
             case 0x8: // Back reference Pattern with byte offset
                 const backRefCount = param + 3;
@@ -211,7 +218,8 @@ class TileDecompressor {
                     offset: backRefOffset,
                     count: backRefCount,
                     bytes: backRefSequence,
-                    consumed: 1
+                    consumed: 1,
+                    eof: false
                 };
             case 0x9: // Back reference with byte offset (alternative)
                 console.log('AA TEST 0x9', param.toString(16), additionalBytes[0].toString(16));
@@ -242,7 +250,8 @@ class TileDecompressor {
                     offset: backRefOffsetAlt,
                     count: backRefCountAlt,
                     bytes: backRefBytesAlt,
-                    consumed: 1
+                    consumed: 1,
+                    eof: false
                 };
 
             case 0xA: // Back reference Pattern with byte offset
@@ -261,7 +270,8 @@ class TileDecompressor {
                     offset: backRefOffsetA,
                     count: backRefCountA,
                     bytes: backRefSequenceA,
-                    consumed: 1
+                    consumed: 1,
+                    eof: false
                 };
 
             case 0xC: // Fixed offset back reference
@@ -276,7 +286,8 @@ class TileDecompressor {
                     offset: fixedOffset,
                     count: fixedCount,
                     bytes: fixedBytes,
-                    consumed: 0
+                    consumed: 0,
+                    eof: false
                 };
 
             case 0xD: // Fixed offset back reference
@@ -291,20 +302,25 @@ class TileDecompressor {
                     offset: fixedOffsetD,
                     count: fixedCountD,
                     bytes: fixedBytesD,
-                    consumed: 0
+                    consumed: 0,
+                    eof: false
                 };
                 
             case 0xE: // Fixed offset back reference
                 const fixedCountExt = param + 3;
                 const fixedOffsetExt = additionalBytes[0];
                 // console.log('AA E', param, fixedOffsetExt, fixedCountExt);
-                const fixedBytesExt = this.copyBackReferenceBackwards(fixedOffsetExt, fixedCountExt);
+                let fixedBytesExt = [];
+                if (additionalBytes[0] != 0x00) { // if this is not an EOF command
+                    fixedBytesExt = this.copyBackReferenceBackwards(fixedOffsetExt, fixedCountExt);
+                }
                 return {
                     command: 'backwards_ref_ext',
                     offset: fixedOffsetExt,
                     count: fixedCountExt,
                     bytes: fixedBytesExt,
-                    consumed: 1
+                    consumed: 1,
+                    eof: additionalBytes[0] == 0x00 // Check if the additional byte is 0x00, indicating end of file
                 };
             
             default:
@@ -416,9 +432,15 @@ function decompressJZipFile(inputPath, outputPath) {
             }
             additionalBytes.push(input.readUInt8(pos));
             pos++;
-        }          try {
+        }          
+        try {
             const result = decompressor.processCommand(commandByte, additionalBytes);
-            console.log(`Command 0x${commandByte.toString(16).padStart(2, '0')}: ${result.command}, count: ${result.count}, consumed: ${result.consumed}`);
+            if(result.eof) {
+                console.log(`End of file reached at command 0x${commandByte.toString(16).padStart(2, '0')}`);
+                pos = actualEnd; // Stop processing further commands
+            } else {
+                console.log(`Command 0x${commandByte.toString(16).padStart(2, '0')}: ${result.command}, count: ${result.count}, consumed: ${result.consumed}`);
+            }
         } catch (error) {
             console.error(`Error processing command 0x${commandByte.toString(16)} at position ${pos - 1}:`, error.message);
             console.log('Stopping decompression and saving partial result...');
