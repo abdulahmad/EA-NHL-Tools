@@ -118,7 +118,7 @@ function extractSingleTile(bmpData, dataOffset, bmpWidth, bmpHeight, bitsPerPixe
             }
             
             // Output format: upper nibble = first pixel, lower nibble = second pixel
-            const outputByte = (pixel1 << 4) | pixel2;
+            const outputByte = (pixel2 << 4) | pixel1;
             outputBuffer.writeUInt8(outputByte, outputOffset + (row * 4) + Math.floor(col / 2));
         }
     }
