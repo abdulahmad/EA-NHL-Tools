@@ -11,7 +11,7 @@ const __filename = fileURLToPath(import.meta.url);
  * @param {string} bmpPath - Path to the VRAM BMP file (128x1000, 16 colors)
  * @param {number} startTileIndex - Starting tile index in the BMP (0-based)
  * @param {number} numTiles - Number of tiles to extract
- * @returns {Buffer} - Raw tile data in 4bpp Genesis format
+ * @returns {Buffer} - Raw tile data in 4bpp format
  */
 function extractTilesFromVRAM(bmpPath, startTileIndex, numTiles) {
     const bmpData = fs.readFileSync(bmpPath);
@@ -47,7 +47,7 @@ function extractTilesFromVRAM(bmpPath, startTileIndex, numTiles) {
     
     console.log(`Extracting ${numTiles} tiles starting from tile ${startTileIndex}`);
     
-    // Prepare output buffer for Genesis 4bpp format (32 bytes per tile)
+    // Prepare output buffer for 4bpp format (32 bytes per tile)
     const outputTiles = Buffer.alloc(numTiles * 32);
     let outputOffset = 0;
     
@@ -70,7 +70,7 @@ function extractTilesFromVRAM(bmpPath, startTileIndex, numTiles) {
 }
 
 /**
- * Extracts a single 8x8 tile from BMP and converts to Genesis 4bpp format
+ * Extracts a single 8x8 tile from BMP and converts to 4bpp tile format
  */
 function extractSingleTile(bmpData, dataOffset, bmpWidth, bmpHeight, bitsPerPixel, 
                           startX, startY, outputBuffer, outputOffset) {
@@ -79,8 +79,8 @@ function extractSingleTile(bmpData, dataOffset, bmpWidth, bmpHeight, bitsPerPixe
     const rowPadding = (4 - (bytesPerRow % 4)) % 4;
     const actualRowSize = bytesPerRow + rowPadding;
     
-    // Genesis tile format: 4 bytes per row, 8 rows = 32 bytes per tile
-    // Each byte contains 2 pixels (4 bits each)
+    // Tile format: 4 bytes per row, 8 rows = 32 bytes per tile
+    // Each byte contains 2 pixels: upper nibble = first pixel, lower nibble = second pixel
     
     for (let row = 0; row < 8; row++) {
         // BMP is stored bottom-to-top, so flip Y coordinate
@@ -88,30 +88,38 @@ function extractSingleTile(bmpData, dataOffset, bmpWidth, bmpHeight, bitsPerPixe
         const rowOffset = dataOffset + (bmpY * actualRowSize);
         
         for (let col = 0; col < 8; col += 2) {
-            const bmpX = startX + col;
+            const bmpX1 = startX + col;
+            const bmpX2 = startX + col + 1;
             let pixel1, pixel2;
             
             if (bitsPerPixel === 4) {
                 // 4bpp BMP: 2 pixels per byte
-                const byteOffset = rowOffset + Math.floor(bmpX / 2);
-                const pixelByte = bmpData.readUInt8(byteOffset);
-                
-                if (bmpX % 2 === 0) {
-                    pixel1 = pixelByte & 0x0F;        // Lower nibble
-                    pixel2 = (pixelByte & 0xF0) >> 4; // Upper nibble
+                // Extract first pixel
+                const byteOffset1 = rowOffset + Math.floor(bmpX1 / 2);
+                const pixelByte1 = bmpData.readUInt8(byteOffset1);
+                if (bmpX1 % 2 === 0) {
+                    pixel1 = pixelByte1 & 0x0F;        // Lower nibble (first pixel in byte)
                 } else {
-                    pixel1 = (pixelByte & 0xF0) >> 4; // Upper nibble
-                    pixel2 = col + 1 < 8 ? bmpData.readUInt8(byteOffset + 1) & 0x0F : 0;
+                    pixel1 = (pixelByte1 & 0xF0) >> 4; // Upper nibble (second pixel in byte)
+                }
+                
+                // Extract second pixel
+                const byteOffset2 = rowOffset + Math.floor(bmpX2 / 2);
+                const pixelByte2 = bmpData.readUInt8(byteOffset2);
+                if (bmpX2 % 2 === 0) {
+                    pixel2 = pixelByte2 & 0x0F;        // Lower nibble (first pixel in byte)
+                } else {
+                    pixel2 = (pixelByte2 & 0xF0) >> 4; // Upper nibble (second pixel in byte)
                 }
             } else {
                 // 8bpp BMP: 1 pixel per byte (take lower 4 bits)
-                pixel1 = bmpData.readUInt8(rowOffset + bmpX) & 0x0F;
-                pixel2 = col + 1 < 8 ? bmpData.readUInt8(rowOffset + bmpX + 1) & 0x0F : 0;
+                pixel1 = bmpData.readUInt8(rowOffset + bmpX1) & 0x0F;
+                pixel2 = bmpData.readUInt8(rowOffset + bmpX2) & 0x0F;
             }
             
-            // Genesis format: upper nibble = first pixel, lower nibble = second pixel
-            const genesisByte = (pixel1 << 4) | pixel2;
-            outputBuffer.writeUInt8(genesisByte, outputOffset + (row * 4) + Math.floor(col / 2));
+            // Output format: upper nibble = first pixel, lower nibble = second pixel
+            const outputByte = (pixel1 << 4) | pixel2;
+            outputBuffer.writeUInt8(outputByte, outputOffset + (row * 4) + Math.floor(col / 2));
         }
     }
 }
