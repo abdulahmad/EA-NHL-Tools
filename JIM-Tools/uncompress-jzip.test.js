@@ -907,8 +907,8 @@ describe('ronbarr.map.jzip decompression', () => {
 
 
 */
-// 30 DD        00 DC   51          00 BB   51          00 CD   51          D8 50
-// DD DD DD     DC      DD DD DC    BB      DD DC BB    CD      DC BB CD
+// 30 DD        00 DC   51          00 BB   51          00 CD   51          D8              50     C0     38 DD 
+// DD DD DD     DC      DD DD DC    BB      DD DC BB    CD      DC BB CD    DD BB CD DD DD  CD DD  DD CD  DD DD DD DD DD DD DD DD DD DD DD
 
 // invalid D8 50: CD BB DC DD BB
 // valid   D8 50: DD BB CD DD DD
@@ -926,3 +926,4 @@ describe('eabg.map.jzip decompression', () => {
         );
     });
 });
+
