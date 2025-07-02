@@ -47,12 +47,27 @@ function calculateJzipFileEnd(startOffset, paletteOffset, mapOffset, paletteSize
         const mapDataEnd = startOffset + mapOffset + 4 + (mapWidth * mapHeight * 2);
         
         // JZIP files have a 4-byte end marker (FF FF FF FF) after the map data
-        const endMarkerOffset = mapDataEnd + 4;
+        const endMarkerOffset = mapDataEnd;
+        const fileEndOffset = endMarkerOffset + 4;
+        
+        // Verify the end marker exists
+        if (endMarkerOffset + 4 <= buffer.length) {
+            const endMarker = buffer.readUInt32BE(endMarkerOffset);
+            if (endMarker === 0xFFFFFFFF) {
+                return {
+                    mapWidth,
+                    mapHeight,
+                    endOffset: fileEndOffset,
+                    hasValidEndMarker: true
+                };
+            }
+        }
         
         return {
             mapWidth,
             mapHeight,
-            endOffset: endMarkerOffset
+            endOffset: fileEndOffset,
+            hasValidEndMarker: false
         };
     } catch (error) {
         return null;
@@ -130,11 +145,23 @@ function searchMapFiles(filePath, options = {}) {
                     if (numberOfTiles > 0 && numberOfTiles < 255 && paletteOffset > 10) {
                         const fileEndInfo = calculateJzipFileEnd(i, paletteOffset, mapOffset, paletteSize, buffer);
                         
-                        if (fileEndInfo && fileEndInfo.endOffset <= fileLength) {
+                        if (fileEndInfo && fileEndInfo.endOffset <= fileLength && 
+                            fileEndInfo.mapWidth > 0 && fileEndInfo.mapHeight > 0 &&
+                            fileEndInfo.mapWidth < 1000 && fileEndInfo.mapHeight < 1000) {
+                            
                             logEntry.push(`    Map Dimensions: ${fileEndInfo.mapWidth} x ${fileEndInfo.mapHeight}`);
-                            logEntry.push(`    ✅ LIKELY .map.jzip file`);
-                            logEntry.push(`    File Range: 0x${i.toString(16)} - 0x${fileEndInfo.endOffset.toString(16)} (${fileEndInfo.endOffset - i} bytes)`);
-                            isJzip = true;
+                            
+                            if (fileEndInfo.hasValidEndMarker) {
+                                logEntry.push(`    End Marker (0xFFFFFFFF): ✅ Found at expected location`);
+                                logEntry.push(`    ✅ LIKELY .map.jzip file`);
+                                logEntry.push(`    File Range: 0x${i.toString(16)} - 0x${fileEndInfo.endOffset.toString(16)} (${fileEndInfo.endOffset - i} bytes)`);
+                                isJzip = true;
+                            } else {
+                                logEntry.push(`    End Marker (0xFFFFFFFF): ❌ Not found at expected location`);
+                                logEntry.push(`    ❌ Invalid .map.jzip file (missing end marker)`);
+                            }
+                        } else {
+                            logEntry.push(`    ❌ Map data extends beyond file or invalid dimensions`);
                         }
                     }
                 } catch (error) {
