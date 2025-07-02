@@ -139,9 +139,9 @@ describe('Tile Decompressor', () => {
     test('0x9 - Copy Back Reference ( (0*2)+1 bytes from offset 2+1 back)', () => {
         testCommand(
             [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88], // initial output
-            0x94, // command: 0x9, param: 0 (1 byte)
+            0x98, // command: 0x9, param: 0 (1 byte)
             [0x04], // offset: 2 bytes back
-            "44 55 66 77 88 44 55 66 77 88" // expected result
+            "44 55 66 77 88 44 55 66 77 88 44 55 66 77 88 44 55 66 77 88" // expected result
         );
     });
     
@@ -253,10 +253,10 @@ describe('Tile Decompressor', () => {
         test('should correctly parse command 0x9X (alt back ref with offset)', () => {
             const decompressor = new TileDecompressor();
             decompressor.setOutput([0x11, 0x22, 0x33, 0x44, 0x55, 0x66]);
-            const result = decompressor.processCommand(0x91, [0x04]);
+            const result = decompressor.processCommand(0x98, [0x04]);
             expect(result.command).toBe('back_ref_9');
             expect(result.offset).toBe(5);
-            expect(result.count).toBe(3);
+            expect(result.count).toBe(20);
         });
 
         test('should correctly parse command 0xCX (fixed back ref)', () => {
@@ -905,4 +905,24 @@ describe('ronbarr.map.jzip decompression', () => {
 0x98 83, count: 20
 0x99 80, count: 21 -> should be 22
 
+
 */
+// 30 DD        00 DC   51          00 BB   51          00 CD   51          D8 50
+// DD DD DD     DC      DD DD DC    BB      DD DC BB    CD      DC BB CD
+
+// invalid D8 50: CD BB DC DD BB
+// valid   D8 50: DD BB CD DD DD
+
+//
+describe('eabg.map.jzip decompression', () => {
+    // D1 -> 00 01 -> 0, 1 Copy 0+3=3 bytes from ???=4 bytes ago
+    // D8 -> 10 00 -> 2, 0 Copy 2+3=5 bytes from ???=6 bytes ago
+    test('D8 - Copy Back Reference Backwards (Copy 2+3 bytes from 0+3 bytes ago)', () => {
+        testCommand(
+            "DD DD DD DC DD DD DC BB DD DC BB CD DC BB CD", // initial output
+            0xD8, // command: 0x8, param: 0xA (0xA+3 = 0xD = 13 bytes)
+            [], // offset: 0x20 = 32 bytes back
+            "DD BB CD DD DD" // expected result
+        );
+    });
+});

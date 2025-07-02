@@ -294,8 +294,11 @@ class TileDecompressor {
                 const paramUpperBitsD = (param >> 2) & 0x3 // Shift right 2, mask with 0b11
                 const paramLowerBitsD = param & 0x3; // Mask with 0b11
 
+                // D1 -> 00 01 -> 0, 1 Copy 0+3=3 bytes from 0+4=4 bytes ago
+                // D8 -> 10 00 -> 2, 0 Copy 2+3=5 bytes from 2+4=6 bytes ago --> maybe lower decides to flip upper and lower nibbles?
                 const fixedCountD = paramUpperBitsD + 3;
-                const fixedOffsetD = paramLowerBitsD + 4;
+                const fixedOffsetD = paramUpperBitsD + 5;
+                 console.log('AA FIXED', param, fixedOffsetD, fixedCountD);
                 const fixedBytesD = this.copyBackReferenceBackwards(fixedOffsetD, fixedCountD);
                 return {
                     command: 'backwards_ref_D',
