@@ -38,14 +38,20 @@ class TileDecompressor {
         return result;
     }
     
-    copyBackReferenceBackwards(offset, count) {
+    copyBackReferenceBackwards(offset, count, reverseByte) {
         const result = [];
         for (let i = 0; i < count; i++) {
             const srcPos = this.position - offset - i;
             if (srcPos < 0 || srcPos >= this.output.length) {
                 throw new Error(`Back reference out of bounds: pos=${this.position}, offset=${offset}, count=${count}, srcPos=${srcPos}`);
             }
-            result.push(this.output[srcPos]);
+            if (reverseByte) {
+                const byte = this.output[srcPos];
+                const reversedByte = ((byte & 0x0F) << 4) | ((byte & 0xF0) >> 4);
+                result.push(reversedByte);
+            } else {
+                result.push(this.output[srcPos]);
+            }
         }
         this.writeBytes(result);
         return result;
@@ -280,7 +286,7 @@ class TileDecompressor {
 
                 const fixedCount = paramLowerBitsC + 2;
                 const fixedOffset = paramUpperBitsC + 1;
-                const fixedBytes = this.copyBackReferenceBackwards(fixedOffset, fixedCount);
+                const fixedBytes = this.copyBackReferenceBackwards(fixedOffset, fixedCount, false);
                 return {
                     command: 'backwards_ref',
                     offset: fixedOffset,
@@ -294,12 +300,14 @@ class TileDecompressor {
                 const paramUpperBitsD = (param >> 2) & 0x3 // Shift right 2, mask with 0b11
                 const paramLowerBitsD = param & 0x3; // Mask with 0b11
 
+                const reverseByte = paramLowerBitsD == 0 ? true : false;
+
                 // D1 -> 00 01 -> 0, 1 Copy 0+3=3 bytes from 0+4=4 bytes ago
                 // D8 -> 10 00 -> 2, 0 Copy 2+3=5 bytes from 2+4=6 bytes ago --> maybe lower decides to flip upper and lower nibbles?
                 const fixedCountD = paramUpperBitsD + 3;
                 const fixedOffsetD = paramUpperBitsD + 5;
                  console.log('AA FIXED', param, fixedOffsetD, fixedCountD);
-                const fixedBytesD = this.copyBackReferenceBackwards(fixedOffsetD, fixedCountD);
+                const fixedBytesD = this.copyBackReferenceBackwards(fixedOffsetD, fixedCountD, reverseByte);
                 return {
                     command: 'backwards_ref_D',
                     offset: fixedOffsetD,
@@ -315,7 +323,7 @@ class TileDecompressor {
                 // console.log('AA E', param, fixedOffsetExt, fixedCountExt);
                 let fixedBytesExt = [];
                 if (additionalBytes[0] != 0x00) { // if this is not an EOF command
-                    fixedBytesExt = this.copyBackReferenceBackwards(fixedOffsetExt, fixedCountExt);
+                    fixedBytesExt = this.copyBackReferenceBackwards(fixedOffsetExt, fixedCountExt, false);
                 }
                 return {
                     command: 'backwards_ref_ext',
