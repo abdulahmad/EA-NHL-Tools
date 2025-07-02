@@ -1047,3 +1047,5 @@ describe('eabg.map.jzip decompression', () => {
     });
 });
 
+// 30 DD 00 DC 51 00 BB 51 00 CD 51 D8 50                   C0      38 DD                             8D 10 41                                                     00 DE
+// DD DD DD DC DD DD DC BB DD DC BB CD DC BB CD DD BB CD DD DD CD   DD DD DD DD DD DD DD DD DD DD DD  BB CD DD DD CD DD DD DD DD DD DD DD DD DD DD DD DD DD DD     DE
