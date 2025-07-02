@@ -91,6 +91,11 @@ function searchMapFiles(filePath, options = {}) {
                 if (paletteOffset >= mapOffset) continue;
                 if (paletteOffset < 10) continue; // Must have at least header + some data
                 
+                // Additional filtering to reduce false positives
+                if (paletteOffset > 0x10000) continue; // Reasonable palette offset limit
+                if (mapOffset > 0x20000) continue; // Reasonable map offset limit
+                if (mapOffset - paletteOffset < 4) continue; // Map should be after palette with some gap
+                
                 const logEntry = [];
                 logEntry.push(`\nPotential file at offset 0x${i.toString(16)} (${i})`);
                 logEntry.push(`  Palette Section Offset: 0x${paletteOffset.toString(16)} (${paletteOffset})`);
@@ -150,7 +155,9 @@ function searchMapFiles(filePath, options = {}) {
                     if (expectedPaletteOffset === paletteOffset && numberOfTiles > 0 && numberOfTiles < 1000) {
                         const fileEndInfo = calculateJimFileEnd(i, paletteOffset, mapOffset, buffer);
                         
-                        if (fileEndInfo && fileEndInfo.endOffset <= fileLength) {
+                        if (fileEndInfo && fileEndInfo.endOffset <= fileLength && 
+                            fileEndInfo.mapWidth > 0 && fileEndInfo.mapHeight > 0 &&
+                            fileEndInfo.mapWidth < 1000 && fileEndInfo.mapHeight < 1000) {
                             logEntry.push(`    Map Dimensions: ${fileEndInfo.mapWidth} x ${fileEndInfo.mapHeight}`);
                             logEntry.push(`    ✅ LIKELY .map.jim file`);
                             logEntry.push(`    File Range: 0x${i.toString(16)} - 0x${fileEndInfo.endOffset.toString(16)} (${fileEndInfo.endOffset - i} bytes)`);
@@ -179,7 +186,16 @@ function searchMapFiles(filePath, options = {}) {
                             calculateJzipFileEnd(i, paletteOffset, mapOffset, readUInt8(buffer, i + 8), buffer)?.endOffset :
                             calculateJimFileEnd(i, paletteOffset, mapOffset, buffer)?.endOffset
                     });
+                    
+                    // Limit output to avoid overwhelming console
+                    if (foundCount >= 50) {
+                        console.log(`\n⚠️  Found ${foundCount} files so far, stopping output to avoid overwhelming console...`);
+                        console.log(`Use --output flag to save all results to a file.`);
+                        break;
+                    }
                 } else if (verbose) {
+                    // Only show failed attempts in verbose mode
+                    console.log(logEntry.join('\n'));
                     output.push(...logEntry);
                 }
                 
