@@ -62,14 +62,14 @@ const assets = [
     { name: 'capitalsh.pal', folder: 'NHL93/Graphics/Pals', start: 0x4666, end: 0x4686 },
     { name: 'capitalsv.pal', folder: 'NHL93/Graphics/Pals', start: 0x4686, end: 0x46A6 },
     // START OF DATA FILES
-    { name: 'Unknown93-1.map.jzip', folder: 'NHL93/Graphics', start: 0x2E1FC, end: 0x2EFA6 },
+    { name: 'GameSetUp93.map.jzip', folder: 'NHL93/Graphics', start: 0x2E1FC, end: 0x2EFA6 },
     { name: 'Unknown93-2.map.jzip2', folder: 'NHL93/Graphics', start: 0x2EFA6, end: 0x2F0B0 },
     { name: 'Unknown93-3.map.jzip', folder: 'NHL93/Graphics', start: 0x2F0B0, end: 0x3128C },
     { name: 'Unknown93-4.map.jzip2', folder: 'NHL93/Graphics', start: 0x3128C, end: 0x31F14 },
     { name: 'Unknown93-5.map.jzip2', folder: 'NHL93/Graphics', start: 0x31F14, end: 0x322CE },
     { name: 'Unknown93-6.map.jzip2', folder: 'NHL93/Graphics', start: 0x322CE, end: 0x32860 },
     { name: 'EABkgd93.map.jzip', folder: 'NHL93/Graphics', start: 0x32860, end: 0x3338C },
-    { name: 'Unknown93-7.map.jzip2', folder: 'NHL93/Graphics', start: 0x3338C, end: 0x33864 },
+    { name: 'Framer93.map.jzip2', folder: 'NHL93/Graphics', start: 0x3338C, end: 0x33864 }, // theres more files in this area!
     { name: 'Unknown93-8.map.jzip', folder: 'NHL93/Graphics', start: 0x33864, end: 0x3890A }, // likely IceRank94.map.jzip2
     { name: 'Unknown93-9.map.jzip2', folder: 'NHL93/Graphics', start: 0x3890A, end: 0x39466 },
     { name: 'Unknown93-10.map.jzip2', folder: 'NHL93/Graphics', start: 0x39466, end: 0x3A37C },
