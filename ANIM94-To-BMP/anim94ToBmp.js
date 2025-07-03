@@ -12,7 +12,7 @@ const ROM_CONFIG = {
       //spaList: { start:0x4D8E, end: 0x6446, length: 0xA }, // 5816 bytes -> should be 5810 or 5820
       spaList: { start:0x4D8E, end: 0x6440, length: 0xA },
       paletteOffset: { start: 0x35E50 }, // 0x4560 before spriteTiles
-      spriteTiles: { start: 0x3A3B0, end: 0x6FAF0 },
+      spriteTiles: { start: 0x3A3B0, end: 0x6FAF0 }, // note that header starts at 0x3A3AA
       frameOffsets: { start: 0x6FAF2, end: 0x70006 }, // 0x514 bytes
       spriteData: { start: 0x70006, end: 0x743FC },
       hotlist: { start: 0x743FC, end: 0x74910 },
