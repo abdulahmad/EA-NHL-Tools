@@ -57,9 +57,8 @@ const assets = [
     { name: 'Walesv.pal', folder: 'NHL93/Graphics/Pals', start: 0x6A0, end: 0x6C0 },
     { name: 'Unknown1.map.jzip', folder: 'NHL93/Graphics', start: 0x2e1fc, end: 0x2efa6 },
     { name: 'Unknown2.map.jzip', folder: 'NHL93/Graphics', start: 0x2f0b0, end: 0x3128c },
-    { name: 'Unknown3.map.jzip', folder: 'NHL93/Graphics', start: 0x32860, end: 0x3338c },
+    { name: 'EABkgd.map.jzip', folder: 'NHL93/Graphics', start: 0x32860, end: 0x3338c },
     { name: 'Unknown4.map.jzip', folder: 'NHL93/Graphics', start: 0x33864, end: 0x3890a },
-    { name: 'Unknown5.map.jzip', folder: 'NHL93/Graphics', start: 0x7c946, end: 0x7cf22 },
     // { name: 'Hockey.snd', folder: 'NHL93/Sound', start: 0x0000F4C8, end: 0x00024214 },
     // { name: 'GameSetUp.map.jim', folder: 'NHL93/Graphics', start: 0x00024214, end: 0x00025642 },
     // { name: 'Title1.map.jim', folder: 'NHL93/Graphics', start: 0x00025642, end: 0x0002ADF0 },
@@ -75,8 +74,9 @@ const assets = [
     // { name: 'Crowd.anim', folder: 'NHL93/Graphics', start: 0x0007216C, end: 0x00075790 },
     // { name: 'FaceOff.anim', folder: 'NHL93/Graphics', start: 0x00075790, end: 0x0007716C },
     // { name: 'Zam.anim', folder: 'NHL93/Graphics', start: 0x0007716C, end: 0x000778D2 },
-    { name: 'BigFont.map.jim', folder: 'NHL93/Graphics', start: 0x000795B8, end: 0x0007A286 },
-    // { name: 'SmallFont.map.jim', folder: 'NHL93/Graphics', start: 0x00078C20, end: 0x00079C2E },
+    // { name: 'BigFont.map.jim', folder: 'NHL93/Graphics', start: 0x000778D2, end: 0x00078C20 },
+    { name: 'SmallFont.map.jim', folder: 'NHL93/Graphics', start: 0x000795B8, end: 0x0007A286 },
+    { name: 'Ronbarr.map.jzip', folder: 'NHL93/Graphics', start: 0x7c946, end: 0x7cf22 },
     // { name: 'TeamBlocks.map.jim', folder: 'NHL93/Graphics', start: 0x00079C2E, end: 0x0007E79C },
     // { name: 'Arrows.map.jim', folder: 'NHL93/Graphics', start: 0x0007E79C, end: 0x0007EB12 },
     // { name: 'Stanley.map.jim', folder: 'NHL93/Graphics', start: 0x0007EB12, end: 0x0007FC20 },
@@ -84,7 +84,7 @@ const assets = [
 ];
 
 // Expected CRC32 checksum (996931775 in hexadecimal)
-const EXPECTED_CRC32 = 0x2641653F;
+const EXPECTED_CRC32 = 0xCBBF4262;
 
 async function verifyCRC32(filePath) {
     try {
@@ -142,7 +142,7 @@ async function extractAssets(romPath, options = {}) {
         }
 
         console.log('Extraction completed successfully.');
-        console.log(`Extracted ${assets.length} assets from NHL 92 ROM.`);
+        console.log(`Extracted ${assets.length} assets from NHLPA 93 ROM.`);
     } catch (error) {
         console.error(`Error during extraction: ${error.message}`);
     }
