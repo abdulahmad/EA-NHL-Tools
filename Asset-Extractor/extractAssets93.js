@@ -62,17 +62,17 @@ const assets = [
     { name: 'capitalsh.pal', folder: 'NHL93/Graphics/Pals', start: 0x4666, end: 0x4686 },
     { name: 'capitalsv.pal', folder: 'NHL93/Graphics/Pals', start: 0x4686, end: 0x46A6 },
     // START OF DATA FILES
-    { name: 'GameSetUp93.map.jzip', folder: 'NHL93/Graphics', start: 0x2E1FC, end: 0x2EFA6 },
-    { name: 'Unknown93-2.map.jzip2', folder: 'NHL93/Graphics', start: 0x2EFA6, end: 0x2F0B0 },
-    { name: 'Unknown93-3.map.jzip', folder: 'NHL93/Graphics', start: 0x2F0B0, end: 0x3128C },
-    { name: 'Unknown93-4.map.jzip2', folder: 'NHL93/Graphics', start: 0x3128C, end: 0x31F14 },
-    { name: 'Unknown93-5.map.jzip2', folder: 'NHL93/Graphics', start: 0x31F14, end: 0x322CE },
-    { name: 'Unknown93-6.map.jzip2', folder: 'NHL93/Graphics', start: 0x322CE, end: 0x32860 },
-    { name: 'EABkgd93.map.jzip', folder: 'NHL93/Graphics', start: 0x32860, end: 0x3338C },
-    { name: 'Framer93.map.jzip2', folder: 'NHL93/Graphics', start: 0x3338C, end: 0x33864 }, // theres more files in this area!
-    { name: 'Unknown93-8.map.jzip', folder: 'NHL93/Graphics', start: 0x33864, end: 0x3890A }, // likely IceRank94.map.jzip2
-    { name: 'Unknown93-9.map.jzip2', folder: 'NHL93/Graphics', start: 0x3890A, end: 0x39466 },
-    { name: 'Unknown93-10.map.jzip2', folder: 'NHL93/Graphics', start: 0x39466, end: 0x3A37C },
+    { name: 'GameSetUp93.map.jzip', folder: 'NHL93/Graphics', start: 0x02E1FC, end: 0x02EFA6 }, // 1.0: ref@0x13A01; 1.1: starts: 0x02E22A ref@0x13A19
+    { name: 'Unknown93-2.map.jzip2', folder: 'NHL93/Graphics', start: 0x02EFA6, end: 0x02F0B0 }, // ref is offset
+    { name: 'Unknown93-3.map.jzip', folder: 'NHL93/Graphics', start: 0x02F0B0, end: 0x03128C }, // 1.0: ref@0x134E3; 1.1: starts: 0x02F0DE
+    { name: 'Unknown93-4.map.jzip2', folder: 'NHL93/Graphics', start: 0x03128C, end: 0x031F14 }, // ref is offset
+    { name: 'Unknown93-5.map.jzip2', folder: 'NHL93/Graphics', start: 0x031F14, end: 0x0322CE },
+    { name: 'Unknown93-6.map.jzip2', folder: 'NHL93/Graphics', start: 0x0322CE, end: 0x032860 },
+    { name: 'EABkgd93.map.jzip', folder: 'NHL93/Graphics', start: 0x032860, end: 0x03338C },
+    { name: 'Framer93.map.jzip2', folder: 'NHL93/Graphics', start: 0x03338C, end: 0x033864 }, // theres more files in this area!
+    { name: 'Unknown93-8.map.jzip', folder: 'NHL93/Graphics', start: 0x033864, end: 0x03890A }, // likely IceRank94.map.jzip2
+    { name: 'Unknown93-9.map.jzip2', folder: 'NHL93/Graphics', start: 0x03890A, end: 0x039466 },
+    { name: 'Unknown93-10.map.jzip2', folder: 'NHL93/Graphics', start: 0x039466, end: 0x03A37C },
     // { name: 'Hockey.snd', folder: 'NHL93/Sound', start: 0x0000F4C8, end: 0x00024214 },
     // { name: 'GameSetUp.map.jim', folder: 'NHL93/Graphics', start: 0x00024214, end: 0x00025642 },
     // { name: 'Title1.map.jim', folder: 'NHL93/Graphics', start: 0x00025642, end: 0x0002ADF0 },
@@ -84,24 +84,24 @@ const assets = [
     // { name: 'FaceOff.map.jim', folder: 'NHL93/Graphics', start: 0x000336B0, end: 0x00033AAE },
     // { name: 'IceRink.map.jim', folder: 'NHL93/Graphics', start: 0x00033AAE, end: 0x0003A3DC },
     // { name: 'Refs.map.jim', folder: 'NHL93/Graphics', start: 0x0003A3DC, end: 0x0003D5EE },
-    { name: 'Sprites93.anim', folder: 'NHL93/Graphics', start: 0x3A37C, end: 0x748E6 },
-    { name: 'Unknown93-1.anim', folder: 'NHL93/Graphics', start: 0x748E6, end: 0x77174 }, // likely Crowd.anim
-    { name: 'Unknown93-2.anim', folder: 'NHL93/Graphics', start: 0x77174, end: 0x781E8 }, // likely FaceOff.anim
-    { name: 'Unknown93-3.anim', folder: 'NHL93/Graphics', start: 0x781E8, end: 0x78D02 }, // likely Zam.anim
-    { name: 'Unknown93-11.jzip2', folder: 'NHL93/Graphics', start: 0x78D02, end: 0x795B8 }, // likely BigFont93.map.jzip2
+    { name: 'Sprites93.anim', folder: 'NHL93/Graphics', start: 0x03A37C, end: 0x0748E6 },
+    { name: 'Unknown93-1.anim', folder: 'NHL93/Graphics', start: 0x0748E6, end: 0x077174 }, // likely Crowd.anim
+    { name: 'Unknown93-2.anim', folder: 'NHL93/Graphics', start: 0x077174, end: 0x0781E8 }, // likely FaceOff.anim
+    { name: 'Unknown93-3.anim', folder: 'NHL93/Graphics', start: 0x0781E8, end: 0x078D02 }, // likely Zam.anim
+    { name: 'Unknown93-11.jzip2', folder: 'NHL93/Graphics', start: 0x078D02, end: 0x0795B8 }, // likely BigFont93.map.jzip2
     // { name: 'Crowd.anim', folder: 'NHL93/Graphics', start: 0x0007216C, end: 0x00075790 },
     // { name: 'FaceOff.anim', folder: 'NHL93/Graphics', start: 0x00075790, end: 0x0007716C },
     // { name: 'Zam.anim', folder: 'NHL93/Graphics', start: 0x0007716C, end: 0x000778D2 },
     // { name: 'BigFont.map.jim', folder: 'NHL93/Graphics', start: 0x000778D2, end: 0x00078C20 },
-    { name: 'SmallFont93.map.jim', folder: 'NHL93/Graphics', start: 0x795B8, end: 0x7A286 },
-    { name: 'Unknown93-12.map.jzip2', folder: 'NHL93/Graphics', start: 0x7A286, end: 0x7A375 },
-    { name: 'Unknown93-13.map.jzip2', folder: 'NHL93/Graphics', start: 0x7A375, end: 0x7C552 },
-    { name: 'Unknown93-14.map.jzip2', folder: 'NHL93/Graphics', start: 0x7C552, end: 0x7C7AD },
-    { name: 'Unknown93-15.bin', folder: 'NHL93/Graphics', start: 0x7C7AD, end: 0x7C946 },
-    { name: 'Ronbarr.map.jzip', folder: 'NHL93/Graphics', start: 0x7C946, end: 0x7CF22 },
-    { name: 'Unknown93-16.map.jzip2', folder: 'NHL93/Graphics', start: 0x7CF22, end: 0x7D308 },
-    { name: 'Unknown93-17.map.jzip2', folder: 'NHL93/Graphics', start: 0x7D308, end: 0x7F4F6 },
-    { name: 'Unknown93-18.map.jzip2', folder: 'NHL93/Graphics', start: 0x7F4F6, end: 0x7FBCC },
+    { name: 'SmallFont93.map.jim', folder: 'NHL93/Graphics', start: 0x0795B8, end: 0x07A286 },
+    { name: 'Unknown93-12.map.jzip2', folder: 'NHL93/Graphics', start: 0x07A286, end: 0x07A375 },
+    { name: 'Unknown93-13.map.jzip2', folder: 'NHL93/Graphics', start: 0x07A375, end: 0x07C552 },
+    { name: 'Unknown93-14.map.jzip2', folder: 'NHL93/Graphics', start: 0x07C552, end: 0x07C7AD },
+    { name: 'Unknown93-15.bin', folder: 'NHL93/Graphics', start: 0x07C7AD, end: 0x07C946 },
+    { name: 'Ronbarr.map.jzip', folder: 'NHL93/Graphics', start: 0x07C946, end: 0x07CF22 },
+    { name: 'Unknown93-16.map.jzip2', folder: 'NHL93/Graphics', start: 0x07CF22, end: 0x07D308 },
+    { name: 'Unknown93-17.map.jzip2', folder: 'NHL93/Graphics', start: 0x07D308, end: 0x07F4F6 },
+    { name: 'Unknown93-18.map.jzip2', folder: 'NHL93/Graphics', start: 0x07F4F6, end: 0x07FBCC },
     // { name: 'TeamBlocks.map.jim', folder: 'NHL93/Graphics', start: 0x00079C2E, end: 0x0007E79C },
     // { name: 'Arrows.map.jim', folder: 'NHL93/Graphics', start: 0x0007E79C, end: 0x0007EB12 },
     // { name: 'Stanley.map.jim', folder: 'NHL93/Graphics', start: 0x0007EB12, end: 0x0007FC20 },
