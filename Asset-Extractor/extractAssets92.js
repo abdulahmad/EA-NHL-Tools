@@ -5,6 +5,11 @@ const crc32 = require('crc-32'); // Requires 'crc-32' package: npm install crc-3
 // Asset definitions from the .lst file
 const assets = [
     { name: 'EALogo.bin', folder: 'NHL92/Graphics', start: 0x00000306, end: 0x00001164 },
+    { name: 'EALogo.WordmarkAnimationTable.bin', folder: 'NHL92/Graphics', start: 0x00000D58, end: 0x0000D61 },
+    { name: 'EALogo.WordmarkPositionTable.bin', folder: 'NHL92/Graphics', start: 0x00000D61, end: 0x0000D7C },
+    { name: 'EALogo.WordmarkOffsetTable.bin', folder: 'NHL92/Graphics', start: 0x00000D7C, end: 0x0000D85 },
+    { name: 'EALogo.WordmarkFadeTable.bin', folder: 'NHL92/Graphics', start: 0x00000D85, end: 0x0000D8E },
+    { name: 'EALogo.LogoAnimationTable.bin', folder: 'NHL92/Graphics', start: 0x00000D8E, end: 0x00001164 },
     { name: 'Bruinsh.pal', folder: 'NHL92/Graphics/Pals', start: 0x000011DA, end: 0x000011FA },
     { name: 'Bruinsv.pal', folder: 'NHL92/Graphics/Pals', start: 0x000011FA, end: 0x0000121A },
     { name: 'sabresh.pal', folder: 'NHL92/Graphics/Pals', start: 0x00001320, end: 0x00001340 },
