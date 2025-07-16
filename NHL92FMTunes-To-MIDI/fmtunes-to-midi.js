@@ -28,7 +28,7 @@ function ymFreqToMidiNote(freqHigh, freqLow, pitchBend = 0) {
   const block = (freqHigh >> 3) & 0x07;
   const freqHz = (7670454 / 144 / 32) * fnum / (1 << (21 - block)); // YM2612 freq formula
   let midiNote = Math.round(69 + 12 * Math.log2(freqHz / 440));
-  midiNote += Math.round(pitchBend / 8); // Apply bend approximation
+  midiNote += Math.round(pitchBend / 8) * 500; // Apply bend approximation
   return Math.max(0, Math.min(127, midiNote));
 }
 
@@ -83,7 +83,7 @@ function parseChannelSequence(buffer, seqStart, durationMult, track) {
         track.addEvent(new MidiWriter.NoteEvent({
           pitch: midiNote,
           duration: `T${noteDuration}`,
-          velocity: 100
+          velocity: 127  // Max velocity for louder notes
         }));
 
         if (envelopeId > 0) {
