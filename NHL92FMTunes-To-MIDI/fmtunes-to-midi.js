@@ -79,25 +79,26 @@ function parseChannelSequence(buffer, seqStart, durationMult, track) {
         const freqLow = (freqByte & 0x07) | (octave << 3);
         const midiNote = ymFreqToMidiNote(freqHigh, freqLow, pitchBend);
 
+        const noteDuration = Math.max(1, currentDuration);
         track.addEvent(new MidiWriter.NoteEvent({
           pitch: midiNote,
-          duration: `T${currentDuration}`,
+          duration: `T${noteDuration}`,
           velocity: 100
         }));
 
         if (envelopeId > 0) {
           const envPtr = readLong(buffer, ENVELOPE_TABLE_OFFSET + envelopeId * 4) + SOUND_BASE;
-          applyEnvelope(track, buffer, envPtr, 1, currentDuration); // Level=1 placeholder
+          applyEnvelope(track, buffer, envPtr, 1, noteDuration); // Level=1 placeholder
         }
       }
     } else {
       switch (byte) {
         case 0x80: // Instrument
           instrument = buffer[pos++];
-          const patchOffset = INSTRUMENT_TABLE_OFFSET + instrument * 32;
-          const patchData = Array.from(buffer.slice(patchOffset, patchOffset + 32));
-          track.addEvent(new MidiWriter.SysexEvent({data: [0x43, 0x00, ...patchData]})); // Yamaha SysEx
-          track.addEvent(new MidiWriter.ProgramChangeEvent({instrument: instrument % 128})); // GM approx
+          // const patchOffset = INSTRUMENT_TABLE_OFFSET + instrument * 32;
+          // const patchData = Array.from(buffer.slice(patchOffset, patchOffset + 32));
+          // track.addEvent(new MidiWriter.Event({data: [0xF0, 0x43, 0x00, ...patchData, 0xF7]})); // Removed due to lack of support
+          track.addEvent(new MidiWriter.ProgramChangeEvent({programNumber: instrument % 128})); // GM approx only
           break;
         case 0x81: // Modulation
           modulationDelay = buffer[pos++];
