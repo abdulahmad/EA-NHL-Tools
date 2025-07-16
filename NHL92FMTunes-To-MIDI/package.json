@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "fs": "^0.0.1-security",
+    "midi-writer-js": "^3.1.1"
+  }
+}
