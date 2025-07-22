@@ -214,6 +214,7 @@ const convertToBMP = (fileName, palFile) => {
     }
     console.log('original canvas dimensions',minX,maxX,minY,maxY);
     var frameDimensions = adjustCanvasDimensions(minX,maxX,minY,maxY);
+    frames[currentFrame].dimensions = frameDimensions;
     console.log('adjusted canvas',frameDimensions);
 
     var spriteCanvas = Array(frameDimensions.maxY).fill().map(() => Array(frameDimensions.maxX).fill(0));
