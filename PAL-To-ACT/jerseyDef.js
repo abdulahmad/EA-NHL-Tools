@@ -1,4 +1,4 @@
-{
+const jerseyDef = {
     "global": {
         "palette": {
             "brown": "144 108 0",
@@ -25,8 +25,8 @@
         "name": "Chicago Blackhawks",
         "palette": {
             "red": "144 0 0",
-            "yellow": "180 180 0",
-            "chiWhite": "216 216 216"
+            "yellow": "180 180 0"
+            // "chiWhite": "216 216 216"
         },
         "home": {
             "template": "classic",
@@ -52,9 +52,17 @@
             "armStripe3": "white",
             // "forearm": "0 0 0",
             "goalieMask": "white",
-        }
+        }, crest: [
+            "red",   "black", "black", "black",     "red",
+            "red",   "brown", "black", "black",     "brightRed",
+            "brown", "brown", "brown", "brightRed", "yellow",
+            "red",   "brown", "black", "brown",     "red",
+        ],
     }
 }
+
+module.exports = jerseyDef;
+
 /* template names
     - classic
     - armBand
