@@ -1,0 +1,57 @@
+{
+    global: {
+        "stick": "0 0 0",
+        "equipment": "0 0 0",
+        "eyes": "0 0 0",
+        "skin1": "0 0 0",
+        "skin2": "0 0 0",
+        "skin3": "0 0 0",
+        "skateBlade": "0 0 0",
+    }
+    0: {
+        "name": "New Jersey Devils",
+        "home": {
+            "template": "classic",
+            "helmet": "0 0 0",
+            "yolk1": "0 0 0",
+            "yolk2": "0 0 0",
+            "yolk3": "0 0 0",
+            "yolkCorner": "0 0 0",
+            "shoulderPatch": "0 0 0",
+            "jersey": "0 0 0",
+            "waist1": "0 0 0",
+            "waist2": "0 0 0",
+            "waist3": "0 0 0",
+            "pants": "0 0 0",
+            "pantsStripe1": "0 0 0",
+            "pantsStripe2": "0 0 0",
+            "socks": "0 0 0",
+            "socksStripe1": "0 0 0",
+            "socksStripe2": "0 0 0",
+            "armUpper": "0 0 0",
+            "armStripe1": "0 0 0",
+            "armStripe2": "0 0 0",
+            "armStripe3": "0 0 0",
+            "forearm": "0 0 0",
+            "goalieMask": "0 0 0",
+        }
+    }
+}
+/* template names
+    - classic
+    - armBand
+    - checkWaist
+    - vWaist
+    - vWaistWide
+    - upSlope
+    - downSlope
+    - sharpYolk
+    - star
+    - fisherman
+    = tampaStorm
+    - wildWing
+    - pedestal
+    - bear
+    - vanCheck
+
+*/

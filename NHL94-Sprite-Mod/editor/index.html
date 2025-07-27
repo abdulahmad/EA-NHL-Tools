@@ -1,0 +1,80 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>NHL95 Jersey Editor</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 10px;
+    }
+    #controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    #main {
+      display: flex;
+      min-height: 600px;
+    }
+    #image-container {
+      flex: 1;
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #palette-container {
+      width: 300px;
+      background: #e0e0e0;
+      padding: 10px;
+      border-left: 1px solid #ccc;
+      display: flex;
+      flex-wrap: wrap;
+      box-sizing: border-box;
+    }
+    .swatch {
+      width: 30px;
+      height: 30px;
+      margin: 5px;
+      border: 1px solid black;
+      cursor: pointer;
+    }
+    .selected {
+      border: 3px solid red;
+    }
+    #image {
+      image-rendering: pixelated;
+    }
+    #status {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <button id="open-folder">Open Folder</button>
+    <button id="prev"><</button>
+    <input id="frame-input" type="number" min="0" max="1133" value="0">
+    <button id="next">></button>
+    <button id="save">Save</button>
+  </div>
+  <div id="main">
+    <div id="image-container">
+      <canvas id="image"></canvas>
+    </div>
+    <div id="palette-container">
+      <div>Palette will appear here</div>
+    </div>
+  </div>
+  <div id="status"></div>
+  <script src="renderer.js"></script>
+</body>
+</html>

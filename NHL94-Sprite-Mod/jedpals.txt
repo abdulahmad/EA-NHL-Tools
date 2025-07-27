@@ -1,0 +1,67 @@
+NHL94 Original AWAYPALS                 178EDFD0
+NHL94 Original HOMEPALS                 169FB9CD
+NHL95 Original AWAYPALS                 C555EC5E
+NHL95 Original HOMEPALS                 F2C34FA0
+Alan Learoff Nov 97 AWAYPALS            502C37B1
+Alan Learoff Nov 97 AWAYPALS.3RD        3F586367
+Alan Learoff Nov 97 HOMEPALS            D4B81106
+Alan Learoff Nov 97 HOMEPALS.3RD        7C7207EC
+JED Jan 1998 AWAYPALS.BIN               F04711DC
+JED Jan 1998 HOMEPALS.BIN               BEFAC716
+Johan Emanuelsson Mar 98 AWAYPALS       D74C8294
+Johan Emanuelsson Mar 98 AWAYPALS.3RD   60778298
+Johan Emanuelsson Mar 98 HOMEPALS       7A907C7A
+Johan Emanuelsson Mar 98 HOMEPALS.3RD   ECCF72E1
+RTM Nov 1997 AWAYPALS                   B80F2B28
+RTM Nov 1997 AWAYPALS.3RD               6EF8406D
+RTM Nov 1997 HOMEPALS                   89555847
+RTM Nov 1997 HOMEPALS.3RD               3F76201D
+RTM Jan 1998 AWAYPALS                   AE740C64
+RTM Jan 1998 AWAYPALS.3RD               36A104F9
+RTM Jan 1998 HOMEPALS                   44817017
+RTM Jan 1998 HOMEPALS.3RD               3294D459
+RTM Nov 1998 AWAYPALS                   39AF28CF
+RTM Nov 1998 AWAYPALS.3RD               8A8BF55C
+RTM Nov 1998 HOMEPALS                   6077C559
+RTM Nov 1998 HOMEPALS.3RD               7CF8DA86
+
+---
+
+Chicago Away 94
+0: 0 0 0
+1: 5 34 0
+2: 7 7 7
+3: 7 59 6
+4: 11 11 11
+5: 14 14 14
+6: 18 18 18
+7: 21 21 21
+8: 22 22 22
+9: 24 24 24
+10: 26 0 0
+11: 28 28 28
+12: 33 0 0
+13: 33 29 0
+14: 34 34 34
+15: 37 24 15
+16: 40 0 0
+17: 42 33 0
+18: 44 29 11
+19: 44 44 44
+20: 45 41 0
+2!: 46 23 7
+22: 46 30 20
+23: 50 33 23
+24: 50 40 29
+25: 51 51 51
+26: 55 37 26
+27: 55 55 55
+28: 57 0 0
+29: 58 43 33
+30: 58 58 58
+31: 59 46 37
+32: 63 23 23
+33: 63 31 31
+34: 53 63 45
+35: 63 61 51
+36: 63 63 63
