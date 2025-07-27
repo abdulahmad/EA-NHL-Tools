@@ -1,5 +1,5 @@
 {
-    global: {
+    "global": {
         "stick": "0 0 0",
         "equipment": "0 0 0",
         "eyes": "0 0 0",
@@ -7,8 +7,8 @@
         "skin2": "0 0 0",
         "skin3": "0 0 0",
         "skateBlade": "0 0 0",
-    }
-    0: {
+    },
+    "0": {
         "name": "New Jersey Devils",
         "home": {
             "template": "classic",
