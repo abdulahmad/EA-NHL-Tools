@@ -1,5 +1,78 @@
 # Palette Tools 0.2
 
+## HOMEPALS/AWAYPALS.BIN File Format Definition
+TBD
+Based on the script analysis and the color mapping information you provided, here's the detailed HOMEPALS.BIN/AWAYPALS.BIN file format:
+
+HOMEPALS.BIN / AWAYPALS.BIN File Format
+File Structure Overview
+Total teams: 28 teams
+Data per team: 448 bytes
+Total file size: 12,544 bytes (28 × 448)
+Per-Team Data Block (448 bytes)
+Each team's 448-byte block contains:
+
+1. Team Palette Data (192 bytes)
+Offset: 0-191 within team block
+Size: 64 colors × 3 bytes (RGB)
+Format: 6-bit RGB values (0-63 range)
+Note: Values are multiplied by 4 during conversion to get 8-bit RGB (0-252)
+2. Color Mapping Data (128 bytes)
+Offset: 320-447 within team block
+Size: 128 bytes
+Purpose: Maps sprite palette indices to team/rink palette indices
+Target range: Maps to palette indices 128-255 in the final ACT file
+3. Reserved/Unknown Data (128 bytes)
+Offset: 192-319 within team block
+Size: 128 bytes
+Purpose: Unknown/reserved data
+Final ACT Palette Layout (256 colors)
+The script creates ACT files with this structure:
+
+Colors 0-127: Rink Palette
+Static rink/ice colors from rinkpal.act
+Colors 128-143: Skin Tones (16 colors)
+Dedicated flesh/skin tone colors
+Colors 144-191: Jersey Components (48 colors)
+Mapped as follows:
+
+144-146: forearm (dark, medium, light)
+147-149: armStripe3 (light, medium, dark)
+150-152: armStripe2 (dark, medium, light)
+153-155: armStripe1 (light, medium, dark)
+156-158: armUpper (light, medium, dark)
+159-163: yolk components (yolkCorner, shoulderPatch, yolk3, yolk1, yolk2)
+164-166: jersey (goalieMask, light, medium, dark)
+167-169: waist1 (odd, even, hidden)
+170-172: waist2 (light, medium, dark)
+173-175: waist3 (light, medium, dark)
+176-179: pants (dark, pantsStripe2, pantsStripe1, medium)
+180-182: socks (light, medium, dark)
+183-185: socksStripe1 (light, medium, dark)
+186-188: socksStripe2 (light, medium, dark)
+189-191: helmet (medium, dark, unused)
+Colors 192-255: Crest and Logo Data (64 colors)
+Organized in 4 rows of 16 colors each:
+
+Each 16-color row contains:
+
+5 colors: Crest row pixels (5×4 crest grid)
+6 colors: Ice logo colors
+5 colors: Unused/padding
+Row breakdown:
+
+192-207: Crest row 1 + ice logo + padding
+208-223: Crest row 2 + ice logo + padding
+224-239: Crest row 3 + ice logo + padding
+240-255: Crest row 4 + ice logo + padding
+Processing Notes
+The BIN file stores team palettes at offset 384 in the 256-color ACT structure
+Color mapping data redirects sprite indices 128-255 to appropriate palette positions
+The script merges multiple palettes: rink + team + createjersey.act
+Final output includes both game palettes and editing palettes for each team
+
+TBD
+
 ## Act-To-BIN
 Converts PAL file to a .bin segment. All the colours from 144 to 255 should be taken as unique colours and stored from 144 onwards. 
 
