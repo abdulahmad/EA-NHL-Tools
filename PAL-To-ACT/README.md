@@ -5,6 +5,33 @@ TBD
 Based on the script analysis and the color mapping information you provided, here's the detailed HOMEPALS.BIN/AWAYPALS.BIN file format:
 
 HOMEPALS.BIN / AWAYPALS.BIN File Format
+## HOMEPALS/AWAAYPALS file details
+| Byte (All values in hexadecimal)      | Value                      | Description |
+| --------                              | -------                    | -------     |
+| `0x000-0x1BF`                         | `<Team 1 Palette Section>` | Boston Bruins Palette section. 448 bytes in total. |
+| `0x1C0-0x37F`                         | `<Team 2 Palette Section>` | Buffalo Sabres Palette section. 448 bytes in total. |
+| ...                                   | ...                        | ... |
+| `0x2840-0x29FF`                       | `<Team 24 Palette Section>`| Winnipeg Jets Palette section. 448 bytes in total. |
+| `0x2A00-0x2BBF`                       | `<Team 25 Palette Section>`| Anaheim Mighty Ducks section. 448 bytes in total. |
+| `0x2BC0-0x2D7F`                       | `<Team 26 Palette Section>`| Florida Panthers Palette section. 448 bytes in total. |
+| `0x2D80-0x2F3F`                       | `<Team 27 Palette Section>`| Eastern Conference All-Stars Palette section. 448 bytes in total. |
+| `0x2F40-0x30FF`                       | `<Team 28 Palette Section>`| Western Conference All-Stars Palette section. 448 bytes in total. |
+
+## Team Palette Section
+| Byte (All values in hexadecimal)      | Value                      | Description |
+| --------                              | -------                    | -------     |
+| `0x000-0x0BF`                         | `<Palette Section>`        | Colors to be used for Team's Jersey & In-game Logo. 192 bytes. |
+| `0x1C0-0x37F`                         | `<Color Mapping Section>`  | Maps Colors from Palette Section to Sections on the sprite. 128 bytes. |
+| `0x1C0-0x37F`                         | `<Logo Palette Section?>`  | ???. 128 bytes. |
+| ...                                   | ...                        | ... |
+| `0x2840-0x29FF`                       | `<Team 24 Palette Section>`| Winnipeg Jets Palette section. 448 bytes in total. |
+| `0x2A00-0x2BBF`                       | `<Team 25 Palette Section>`| Anaheim Mighty Ducks section. 448 bytes in total. |
+| `0x2BC0-0x2D7F`                       | `<Team 26 Palette Section>`| Florida Panthers Palette section. 448 bytes in total. |
+| `0x2D80-0x2F3F`                       | `<Team 27 Palette Section>`| Eastern Conference All-Stars Palette section. 448 bytes in total. |
+| `0x2F40-0x30FF`                       | `<Team 28 Palette Section>`| Western Conference All-Stars Palette section. 448 bytes in total. |
+
+
+
 File Structure Overview
 Total teams: 28 teams
 Data per team: 448 bytes
