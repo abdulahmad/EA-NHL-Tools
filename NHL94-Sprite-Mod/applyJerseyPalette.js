@@ -74,32 +74,27 @@ function createJerseyPalette(templatePath, outputPath, teamId = "0") {
         { name: 'yolk1', indices: [162] },
         // 163: yolk2
         { name: 'yolk2', indices: [163] },
-        // 164: goalieMask
+        // 164-167: jersey (goalieMask, light, medium, dark)
         { name: 'goalieMask', indices: [164] },
-        // 165-166: jersey (light, medium, dark)
         { name: 'jersey', indices: [165, 166, 167] },
-        // 167-169: waist1 (odd, even, hidden) - note: overlapping with jersey
-        { name: 'waist1', indices: [167, 168, 169] },
-        // 170-172: waist2 (light, medium, dark)
-        { name: 'waist2', indices: [170, 171, 172] },
-        // 173-175: waist3 (light, medium, dark)
-        { name: 'waist3', indices: [173, 174, 175] },
-        // 176: pants dark
-        { name: 'pants', indices: [176] },
-        // 177: pantsStripe2
-        { name: 'pantsStripe2', indices: [177] },
-        // 178: pantsStripe1
-        { name: 'pantsStripe1', indices: [178] },
-        // 179: pants medium
-        { name: 'pants', indices: [179] },
-        // 180-182: socks (light, medium, dark)
-        { name: 'socks', indices: [180, 181, 182] },
-        // 183-185: socksStripe1 (light, medium, dark)
-        { name: 'socksStripe1', indices: [183, 184, 185] },
-        // 186-188: socksStripe2 (light, medium, dark)
-        { name: 'socksStripe2', indices: [186, 187, 188] },
-        // 189-190: helmet (medium, dark)
-        { name: 'helmet', indices: [189, 190] }
+        // 168-170: waist1 (odd, even, hidden)
+        { name: 'waist1', indices: [168, 169, 170] },
+        // 171-173: waist2 (light, medium, dark)
+        { name: 'waist2', indices: [171, 172, 173] },
+        // 174-176: waist3 (light, medium, dark)
+        { name: 'waist3', indices: [174, 175, 176] },
+        // 177-180: pants (dark, pantsStripe2, pantsStripe1, medium)
+        { name: 'pants', indices: [177, 180] }, // 177 and 180 for dark and medium
+        { name: 'pantsStripe2', indices: [178] },
+        { name: 'pantsStripe1', indices: [179] },
+        // 181-183: socks (light, medium, dark)
+        { name: 'socks', indices: [181, 182, 183] },
+        // 184-186: socksStripe1 (light, medium, dark)
+        { name: 'socksStripe1', indices: [184, 185, 186] },
+        // 187-189: socksStripe2 (light, medium, dark)
+        { name: 'socksStripe2', indices: [187, 188, 189] },
+        // 190-191: helmet (medium, dark)
+        { name: 'helmet', indices: [190, 191] }
     ];
     
     // Apply jersey colors
