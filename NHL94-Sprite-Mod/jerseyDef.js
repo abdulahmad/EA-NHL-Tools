@@ -25,8 +25,8 @@ const jerseyDef = {
         "name": "Chicago Blackhawks",
         "palette": {
             "red": "144 0 0",
-            "yellow": "180 180 0"
-            // "chiWhite": "216 216 216"
+            "yellow": "180 180 0",
+            "brightRed": "180 0 0"
         },
         "home": {
             "template": "classic",
@@ -52,59 +52,14 @@ const jerseyDef = {
             "armStripe3": "white",
             // "forearm": "0 0 0",
             "goalieMask": "white",
-        }, crest: [
+        }, 
+        "crest": [
             "red",   "black", "black", "black",     "red",
             "red",   "brown", "black", "black",     "brightRed",
             "brown", "brown", "brown", "brightRed", "yellow",
             "red",   "brown", "black", "brown",     "red",
-        ],
+        ]
     }
 }
 
 module.exports = jerseyDef;
-
-// Color index 144-191 (48 colors)
-colorZoneMapping: [
-    "forearm-dark", "forearm-medium", "forearm-light",
-    "armStripe3-light", "armStripe3-medium", "armStripe3-dark",
-    "armStripe2-dark", "armStripe2-medium", "armStripe2-light",
-    "armStripe1-light", "armStripe1-medium", "armStripe1-dark",
-    "armUpper-light", "armUpper-medium", "armUpper-dark",
-    "yolkCorner", "shoulderPatch", "yolk3", "yolk1", "yolk2",
-    "goalieMask", "jersey-light", "jersey-medium", "jersey-dark",
-    "waist1-odd", "waist1-even", "waist1-hidden",
-    "waist2-light", "waist2-medium", "waist2-dark",
-    "waist3-light", "waist3-medium", "waist3-dark",
-    "pants-dark", "pantsStripe2", "pantsStripe1", "pants-medium",
-    "socks-light", "socks-medium", "socks-dark",
-    "socksStripe1-light", "socksStripe1-medium", "socksStripe1-dark",
-    "socksStripe2-light", "socksStripe2-medium", "socksStripe2-dark",
-    "helmet-medium", "helmet-dark"];
-/* template names
-    - classic
-    - armBand
-    - checkWaist
-    - vWaist
-    - vWaistWide
-    - upSlope
-    - downSlope
-    - sharpYolk
-    - star
-    - fisherman
-    - tampaStorm
-    - wildWing
-    - burgerKing
-    - pedestal
-    - bear
-    - checkChest (mid chest check)
-    - nordiques (fleur de lis)
-    - Flyers (arm curves)
-    - Canadiens (mid chest stripe)
-    - Predators (curved arm stripe)
-*/
-
-/* TODO:
-- document bin format
-- document act format
-- write script which converts jerseyDef to bin segment
-- update binToAct script to accept bin segment and convert to act
