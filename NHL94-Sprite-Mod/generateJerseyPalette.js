@@ -102,6 +102,21 @@ function createJerseyPalette(templatePath, outputPath, teamId = "0") {
     
     // Apply jersey colors
     console.log(`Applying colors for ${teamData.name}...`);
+    
+    // Get the base jersey color for defaults
+    let defaultJerseyColor = null;
+    if (homeUniform.jersey) {
+        try {
+            defaultJerseyColor = resolveColor(homeUniform.jersey, teamData, globalData);
+            console.log(`  Base jersey color: ${homeUniform.jersey} -> RGB(${defaultJerseyColor.r}, ${defaultJerseyColor.g}, ${defaultJerseyColor.b})`);
+        } catch (error) {
+            console.warn(`Warning: Could not resolve base jersey color: ${error.message}`);
+        }
+    }
+    
+    // Create a set to track which indices have been mapped
+    const mappedIndices = new Set();
+    
     for (const mapping of jerseyMapping) {
         const colorName = homeUniform[mapping.name];
         if (colorName) {
@@ -115,9 +130,23 @@ function createJerseyPalette(templatePath, outputPath, teamId = "0") {
                     paletteBuffer[offset] = color.r;
                     paletteBuffer[offset + 1] = color.g;
                     paletteBuffer[offset + 2] = color.b;
+                    mappedIndices.add(index);
                 }
             } catch (error) {
                 console.warn(`Warning: Could not resolve color for ${mapping.name}: ${error.message}`);
+            }
+        }
+    }
+    
+    // Fill any unmapped indices in the jersey range (144-191) with the base jersey color
+    if (defaultJerseyColor) {
+        for (let index = 144; index <= 191; index++) {
+            if (!mappedIndices.has(index)) {
+                const offset = index * 3;
+                paletteBuffer[offset] = defaultJerseyColor.r;
+                paletteBuffer[offset + 1] = defaultJerseyColor.g;
+                paletteBuffer[offset + 2] = defaultJerseyColor.b;
+                console.log(`  Unmapped index ${index} defaulted to jersey color`);
             }
         }
     }

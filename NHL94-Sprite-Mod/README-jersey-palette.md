@@ -94,4 +94,5 @@ const jerseyDef = {
 - For v1, all color variants (light/medium/dark) use the same flat color
 - Colors are resolved first from team palette, then global palette
 - RGB values are specified as "R G B" strings (e.g., "144 0 0")
+- **Any unmapped jersey segments (colors 144-191) default to the "jersey" color** - this ensures consistent base color coverage
 - Generated ACT files are 768 bytes (256 colors × 3 bytes RGB)

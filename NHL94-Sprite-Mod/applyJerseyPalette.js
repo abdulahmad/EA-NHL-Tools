@@ -122,6 +122,33 @@ function createJerseyPalette(templatePath, outputPath, teamId = "0") {
         }
     }
     
+    // Fill any unmapped indices in the jersey range (144-191) with the base jersey color
+    if (homeUniform.jersey) {
+        try {
+            const defaultJerseyColor = resolveColor(homeUniform.jersey, teamData, globalData);
+            
+            // Create a set to track which indices have been mapped
+            const mappedIndices = new Set();
+            for (const mapping of jerseyMapping) {
+                if (homeUniform[mapping.name]) {
+                    mapping.indices.forEach(index => mappedIndices.add(index));
+                }
+            }
+            
+            // Fill unmapped indices with jersey color
+            for (let index = 144; index <= 191; index++) {
+                if (!mappedIndices.has(index)) {
+                    const offset = index * 3;
+                    paletteBuffer[offset] = defaultJerseyColor.r;
+                    paletteBuffer[offset + 1] = defaultJerseyColor.g;
+                    paletteBuffer[offset + 2] = defaultJerseyColor.b;
+                }
+            }
+        } catch (error) {
+            console.warn(`Warning: Could not resolve base jersey color: ${error.message}`);
+        }
+    }
+    
     // Apply skin tones (colors 128-143) from global mapping
     const skinMapping = [
         { global: 'skin1', index: 128 },
