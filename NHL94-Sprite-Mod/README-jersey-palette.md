@@ -40,6 +40,7 @@ The script maps colors according to the NHL95 palette structure:
 
 - **Colors 0-127**: Rink Palette (unchanged from template)
 - **Colors 128-143**: Skin Tones (16 colors)
+  - 133-136: skin colors (136 is shared between neck & stick)
 - **Colors 144-191**: Jersey Components (48 colors)
   - 144-146: forearm (dark, medium, light)
   - 147-149: armStripe3 (light, medium, dark)
@@ -96,3 +97,43 @@ const jerseyDef = {
 - RGB values are specified as "R G B" strings (e.g., "144 0 0")
 - **Any unmapped jersey segments (colors 144-191) default to the "jersey" color** - this ensures consistent base color coverage
 - Generated ACT files are 768 bytes (256 colors × 3 bytes RGB)
+
+## Color index 144-191 (48 colors)
+colorZoneMapping: [
+    "forearm-dark", "forearm-medium", "forearm-light",
+    "armStripe3-light", "armStripe3-medium", "armStripe3-dark",
+    "armStripe2-dark", "armStripe2-medium", "armStripe2-light",
+    "armStripe1-light", "armStripe1-medium", "armStripe1-dark",
+    "armUpper-light", "armUpper-medium", "armUpper-dark",
+    "yolkCorner", "shoulderPatch", "yolk3", "yolk1", "yolk2",
+    "goalieMask", "jersey-light", "jersey-medium", "jersey-dark",
+    "waist1-odd", "waist1-even", "waist1-hidden",
+    "waist2-light", "waist2-medium", "waist2-dark",
+    "waist3-light", "waist3-medium", "waist3-dark",
+    "pants-dark", "pantsStripe2", "pantsStripe1", "pants-medium",
+    "socks-light", "socks-medium", "socks-dark",
+    "socksStripe1-light", "socksStripe1-medium", "socksStripe1-dark",
+    "socksStripe2-light", "socksStripe2-medium", "socksStripe2-dark",
+    "helmet-medium", "helmet-dark"];
+
+## template names
+    - classic
+    - armBand
+    - checkWaist
+    - vWaist
+    - vWaistWide
+    - upSlope
+    - downSlope
+    - sharpYolk
+    - star
+    - fisherman
+    - tampaStorm
+    - wildWing
+    - burgerKing
+    - pedestal
+    - bear
+    - checkChest (mid chest check)
+    - nordiques (fleur de lis)
+    - Flyers (arm curves)
+    - Canadiens (mid chest stripe)
+    - Predators (curved arm stripe)

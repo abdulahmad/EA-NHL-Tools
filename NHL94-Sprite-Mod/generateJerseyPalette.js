@@ -151,9 +151,9 @@ function createJerseyPalette(templatePath, outputPath, teamId = "0") {
     // Apply skin tones (colors 128-143) from global mapping
     console.log('Applying skin tones...');
     const skinMapping = [
-        { global: 'skin1', indices: [128, 129, 130, 131] },
-        { global: 'skin2', indices: [132, 133, 134, 135] },
-        { global: 'skin3', indices: [136, 137, 138, 139] }
+        { global: 'skin1', indices: [133, 134] },
+        { global: 'skin2', indices: [135, 136] }
+        // { global: 'skin3', indices: [136, 137, 138, 139] }
     ];
     
     for (const skin of skinMapping) {
