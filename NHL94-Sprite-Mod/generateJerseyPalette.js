@@ -28,26 +28,35 @@ function applyShading(baseColor, shade) {
     const originalG = g;
     const originalB = b;
     
+    // Count how many channels have base value of 0
+    const zeroChannels = (originalR === 0 ? 1 : 0) + (originalG === 0 ? 1 : 0) + (originalB === 0 ? 1 : 0);
+    
     if (shade === 'light') {
-        r += 36;
-        g += 36;
-        b += 36;
+        // If all 3 channels are 0 (pure black), adjust all channels normally
+        // If 1 or 2 channels are 0, don't adjust those specific channels
+        if (zeroChannels === 3 || originalR !== 0) r += 36;
+        if (zeroChannels === 3 || originalG !== 0) g += 36;
+        if (zeroChannels === 3 || originalB !== 0) b += 36;
     } else if (shade === 'dark') {
-        r -= 36;
-        g -= 36;
-        b -= 36;
+        // If all 3 channels are 0 (pure black), adjust all channels normally
+        // If 1 or 2 channels are 0, don't adjust those specific channels
+        if (zeroChannels === 3 || originalR !== 0) r -= 36;
+        if (zeroChannels === 3 || originalG !== 0) g -= 36;
+        if (zeroChannels === 3 || originalB !== 0) b -= 36;
     }
     // 'medium' uses the base color unchanged
     
-    // Check for out-of-range values before clamping
+    // Check for out-of-range values before clamping (only for channels that were actually adjusted)
     const outOfRange = [];
-    if (r < 0) outOfRange.push(`R: ${originalR}-36=${r} (clamped to 0)`);
-    if (g < 0) outOfRange.push(`G: ${originalG}-36=${g} (clamped to 0)`);
-    if (b < 0) outOfRange.push(`B: ${originalB}-36=${b} (clamped to 0)`);
-    if (r > 252) outOfRange.push(`R: ${originalR}+36=${r} (clamped to 252)`);
-    if (g > 252) outOfRange.push(`G: ${originalG}+36=${g} (clamped to 252)`);
-    if (b > 252) outOfRange.push(`B: ${originalB}+36=${b} (clamped to 252)`);
-    
+    if (shade === 'light') {
+        if ((zeroChannels === 3 || originalR !== 0) && r > 252) outOfRange.push(`R: ${originalR}+36=${r} (clamped to 252)`);
+        if ((zeroChannels === 3 || originalG !== 0) && g > 252) outOfRange.push(`G: ${originalG}+36=${g} (clamped to 252)`);
+        if ((zeroChannels === 3 || originalB !== 0) && b > 252) outOfRange.push(`B: ${originalB}+36=${b} (clamped to 252)`);
+    } else if (shade === 'dark') {
+        if ((zeroChannels === 3 || originalR !== 0) && r < 0) outOfRange.push(`R: ${originalR}-36=${r} (clamped to 0)`);
+        if ((zeroChannels === 3 || originalG !== 0) && g < 0) outOfRange.push(`G: ${originalG}-36=${g} (clamped to 0)`);
+        if ((zeroChannels === 3 || originalB !== 0) && b < 0) outOfRange.push(`B: ${originalB}-36=${b} (clamped to 0)`);
+    }
     // Clamp values to valid 3-bit range
     r = Math.max(0, Math.min(252, r));
     g = Math.max(0, Math.min(252, g));
