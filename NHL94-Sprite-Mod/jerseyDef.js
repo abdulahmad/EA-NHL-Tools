@@ -4,9 +4,9 @@ const jerseyDef = {
             "brown": "144 108 0",
             "black": "0 0 0",
             "darkBrown": "108 72 36",
-            "flesh": "220 148 104",
-            "flesh2": "200 132 92",
-            "flesh3": "164 108 72",
+            "flesh": "216 144 108",
+            "flesh2": "216 144 108",
+            "flesh3": "180 108 72",
             "flesh3bit": "216 144 108",
             "flesh3bit2": "180 108 72",
             "white": "252 252 252"

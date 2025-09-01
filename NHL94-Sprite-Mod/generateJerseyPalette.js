@@ -9,6 +9,62 @@ function parseColor(colorString) {
     return { r, g, b };
 }
 
+function validate3BitColor(color) {
+    const validValues = [0, 36, 72, 108, 144, 180, 216, 252];
+    return validValues.includes(color.r) && 
+           validValues.includes(color.g) && 
+           validValues.includes(color.b);
+}
+
+function validateColorPalette(jerseyData) {
+    const validValues = [0, 36, 72, 108, 144, 180, 216, 252];
+    const errors = [];
+    
+    // Check global palette
+    if (jerseyData.global && jerseyData.global.palette) {
+        for (const [colorName, colorValue] of Object.entries(jerseyData.global.palette)) {
+            const color = parseColor(colorValue);
+            if (!validate3BitColor(color)) {
+                errors.push(`Global color '${colorName}': ${colorValue} - Invalid 3-bit RGB values`);
+                const suggested = {
+                    r: validValues.reduce((prev, curr) => 
+                        Math.abs(curr - color.r) < Math.abs(prev - color.r) ? curr : prev),
+                    g: validValues.reduce((prev, curr) => 
+                        Math.abs(curr - color.g) < Math.abs(prev - color.g) ? curr : prev),
+                    b: validValues.reduce((prev, curr) => 
+                        Math.abs(curr - color.b) < Math.abs(prev - color.b) ? curr : prev)
+                };
+                errors.push(`  Suggested: "${suggested.r} ${suggested.g} ${suggested.b}"`);
+            }
+        }
+    }
+    
+    // Check team-specific palettes
+    for (const [teamId, teamData] of Object.entries(jerseyData)) {
+        if (teamId === 'global') continue;
+        
+        if (teamData.palette) {
+            for (const [colorName, colorValue] of Object.entries(teamData.palette)) {
+                const color = parseColor(colorValue);
+                if (!validate3BitColor(color)) {
+                    errors.push(`Team ${teamId} (${teamData.name}) color '${colorName}': ${colorValue} - Invalid 3-bit RGB values`);
+                    const suggested = {
+                        r: validValues.reduce((prev, curr) => 
+                            Math.abs(curr - color.r) < Math.abs(prev - color.r) ? curr : prev),
+                        g: validValues.reduce((prev, curr) => 
+                            Math.abs(curr - color.g) < Math.abs(prev - color.g) ? curr : prev),
+                        b: validValues.reduce((prev, curr) => 
+                            Math.abs(curr - color.b) < Math.abs(prev - color.b) ? curr : prev)
+                    };
+                    errors.push(`  Suggested: "${suggested.r} ${suggested.g} ${suggested.b}"`);
+                }
+            }
+        }
+    }
+    
+    return errors;
+}
+
 function resolveColor(colorName, teamData, globalData) {
     // First check team-specific palette
     if (teamData.palette && teamData.palette[colorName]) {
@@ -29,6 +85,19 @@ function resolveColor(colorName, teamData, globalData) {
 }
 
 function createJerseyPalette(templatePath, outputPath, teamId = "0") {
+    // Validate 3-bit color compliance first
+    console.log('Validating 3-bit color compliance...');
+    const validationErrors = validateColorPalette(jerseyDef);
+    
+    if (validationErrors.length > 0) {
+        console.error('\n❌ 3-bit Color Validation Errors:');
+        console.error('Valid RGB values are: 0, 36, 72, 108, 144, 180, 216, 252');
+        console.error('');
+        validationErrors.forEach(error => console.error(error));
+        throw new Error('Color validation failed. Please fix the invalid colors in jerseyDef.js');
+    }
+    console.log('✅ All colors are 3-bit compliant');
+    
     // Read the template ACT file
     const templateBuffer = fs.readFileSync(templatePath);
     
@@ -209,13 +278,18 @@ function createJerseyPalette(templatePath, outputPath, teamId = "0") {
 
 // Command line interface
 function printUsage() {
-    console.log('Usage: node generateJerseyPalette.js [teamId] [outputName]');
+    console.log('Usage: node generateJerseyPalette.js [options] [teamId] [outputName]');
+    console.log('');
+    console.log('Options:');
+    console.log('  --validate     Validate all colors in jerseyDef.js for 3-bit compliance');
+    console.log('  --help, -h     Show this help message');
     console.log('');
     console.log('Arguments:');
     console.log('  teamId     - Team ID from jerseyDef.js (default: "0")');
     console.log('  outputName - Output filename without extension (default: "NHL95{teamName}")');
     console.log('');
-    console.log('Example:');
+    console.log('Examples:');
+    console.log('  node generateJerseyPalette.js --validate');
     console.log('  node generateJerseyPalette.js 0 blackhawks-home');
     console.log('');
     console.log('Available teams:');
@@ -235,6 +309,22 @@ if (require.main === module) {
     if (args.includes('--help') || args.includes('-h')) {
         printUsage();
         process.exit(0);
+    }
+    
+    if (args.includes('--validate')) {
+        console.log('Validating 3-bit color compliance...');
+        const validationErrors = validateColorPalette(jerseyDef);
+        
+        if (validationErrors.length > 0) {
+            console.error('\n❌ 3-bit Color Validation Errors:');
+            console.error('Valid RGB values are: 0, 36, 72, 108, 144, 180, 216, 252');
+            console.error('');
+            validationErrors.forEach(error => console.error(error));
+            process.exit(1);
+        } else {
+            console.log('✅ All colors are 3-bit compliant');
+            process.exit(0);
+        }
     }
     
     const teamId = args[0] || "0";

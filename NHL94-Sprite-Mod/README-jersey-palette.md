@@ -17,6 +17,12 @@ node generateJerseyPalette.js
 ```
 This generates a palette for team "0" (Chicago Blackhawks) with default filename.
 
+### Validate 3-bit Color Compliance
+```bash
+node generateJerseyPalette.js --validate
+```
+This validates all colors in `jerseyDef.js` to ensure they use only valid 3-bit RGB values.
+
 ### Specify Team and Output
 ```bash
 node generateJerseyPalette.js [teamId] [outputName]
@@ -24,6 +30,9 @@ node generateJerseyPalette.js [teamId] [outputName]
 
 ### Examples
 ```bash
+# Validate all colors for 3-bit compliance
+node generateJerseyPalette.js --validate
+
 # Generate Chicago Blackhawks palette
 node generateJerseyPalette.js 0
 
@@ -95,8 +104,10 @@ const jerseyDef = {
 - For v1, all color variants (light/medium/dark) use the same flat color
 - Colors are resolved first from team palette, then global palette
 - RGB values are specified as "R G B" strings (e.g., "144 0 0")
+- **All RGB values must be 3-bit compliant**: Valid values are 0, 36, 72, 108, 144, 180, 216, 252
 - **Any unmapped jersey segments (colors 144-191) default to the "jersey" color** - this ensures consistent base color coverage
 - Generated ACT files are 768 bytes (256 colors × 3 bytes RGB)
+- Use `--validate` to check all colors for 3-bit compliance before generating palettes
 
 ## Color index 144-191 (48 colors)
 colorZoneMapping: [
