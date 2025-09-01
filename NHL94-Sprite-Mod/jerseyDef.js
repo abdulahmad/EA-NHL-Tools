@@ -21,44 +21,78 @@ const jerseyDef = {
             "skateBlade": "white"
         }
     },
-    "0": {
+    "3": {
         "name": "Chicago Blackhawks",
+        "abbreviation": "CHI",
         "palette": {
             "red": "144 0 0",
             "yellow": "180 180 0",
             "brightRed": "180 0 0"
         },
-        "home": {
-            "template": "classic",
-            "helmet": "black",
-            // "yolk1": "0 0 0",
-            // "yolk2": "0 0 0",
-            // "yolk3": "0 0 0",
-            // "yolkCorner": "0 0 0",
-            "shoulderPatch": "yellow",
-            "jersey": "red",
-            "waist1": "white",
-            "waist2": "black",
-            "waist3": "white",
-            "pants": "black",
-            "pantsStripe1": "white",
-            "pantsStripe2": "red",
-            // "socks": "0 0 0",
-            "socksStripe1": "white",
-            "socksStripe2": "black",
-            // "armUpper": "0 0 0",
-            "armStripe1": "white",
-            "armStripe2": "black",
-            "armStripe3": "white",
-            // "forearm": "0 0 0",
-            "goalieMask": "white",
-        }, 
-        "crest": [
-            "red",   "black", "black", "black",     "red",
-            "red",   "brown", "black", "black",     "brightRed",
-            "brown", "brown", "brown", "brightRed", "yellow",
-            "red",   "brown", "black", "brown",     "red",
-        ]
+        "jerseys": {
+            "home": {
+                "template": "classic",
+                "helmet": "white",
+                // "yolk1": "0 0 0",
+                // "yolk2": "0 0 0",
+                // "yolk3": "0 0 0",
+                // "yolkCorner": "0 0 0",
+                "shoulderPatch": "yellow",
+                "jersey": "white",
+                "waist1": "red",
+                "waist2": "white",
+                "waist3": "black",
+                "pants": "black",
+                "pantsStripe1": "white",
+                "pantsStripe2": "red",
+                // "socks": "0 0 0",
+                "socksStripe1": "red",
+                "socksStripe2": "black",
+                // "armUpper": "0 0 0",
+                "armStripe1": "red",
+                "armStripe2": "white",
+                "armStripe3": "white",
+                // "forearm": "0 0 0",
+                "goalieMask": "white",
+                "crest": [
+                    "white",   "black", "black", "black",     "white",
+                    "white",   "brown", "black", "black",     "brightRed",
+                    "brown",   "brown", "brown", "brightRed", "yellow",
+                    "white",   "brown", "black", "brown",     "white",
+                ]
+            },
+            "away": {
+                "template": "classic",
+                "helmet": "black",
+                // "yolk1": "0 0 0",
+                // "yolk2": "0 0 0",
+                // "yolk3": "0 0 0",
+                // "yolkCorner": "0 0 0",
+                "shoulderPatch": "yellow",
+                "jersey": "red",
+                "waist1": "white",
+                "waist2": "black",
+                "waist3": "white",
+                "pants": "black",
+                "pantsStripe1": "white",
+                "pantsStripe2": "red",
+                // "socks": "0 0 0",
+                "socksStripe1": "white",
+                "socksStripe2": "black",
+                // "armUpper": "0 0 0",
+                "armStripe1": "white",
+                "armStripe2": "black",
+                "armStripe3": "white",
+                // "forearm": "0 0 0",
+                "goalieMask": "white",
+                "crest": [
+                    "red",   "black", "black", "black",     "red",
+                    "red",   "brown", "black", "black",     "brightRed",
+                    "brown", "brown", "brown", "brightRed", "yellow",
+                    "red",   "brown", "black", "brown",     "red",
+                ]
+            }
+        } 
     }
 }
 
