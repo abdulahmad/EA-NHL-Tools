@@ -84,7 +84,7 @@ function resolveColor(colorName, teamData, globalData) {
     throw new Error(`Color '${colorName}' not found in palette`);
 }
 
-function createJerseyPalette(templatePath, outputPath, teamId = "0") {
+function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
     // Validate 3-bit color compliance first
     console.log('Validating 3-bit color compliance...');
     const validationErrors = validateColorPalette(jerseyDef);
@@ -116,10 +116,11 @@ function createJerseyPalette(templatePath, outputPath, teamId = "0") {
         throw new Error(`Team ID '${teamId}' not found in jersey definition`);
     }
     
-    const homeUniform = teamData.home;
-    if (!homeUniform) {
-        throw new Error(`Home uniform not found for team '${teamId}'`);
+    if (!teamData.jerseys || !teamData.jerseys[jerseyName]) {
+        throw new Error(`Jersey '${jerseyName}' not found for team '${teamId}' (${teamData.name})`);
     }
+    
+    const jersey = teamData.jerseys[jerseyName];
     
     // Jersey component mapping (colors 144-191)
     const jerseyMapping = [
@@ -167,14 +168,14 @@ function createJerseyPalette(templatePath, outputPath, teamId = "0") {
     ];
     
     // Apply jersey colors
-    console.log(`Applying colors for ${teamData.name}...`);
+    console.log(`Applying colors for ${teamData.name} - ${jerseyName} jersey...`);
     
     // Get the base jersey color for defaults
     let defaultJerseyColor = null;
-    if (homeUniform.jersey) {
+    if (jersey.jersey) {
         try {
-            defaultJerseyColor = resolveColor(homeUniform.jersey, teamData, globalData);
-            console.log(`  Base jersey color: ${homeUniform.jersey} -> RGB(${defaultJerseyColor.r}, ${defaultJerseyColor.g}, ${defaultJerseyColor.b})`);
+            defaultJerseyColor = resolveColor(jersey.jersey, teamData, globalData);
+            console.log(`  Base jersey color: ${jersey.jersey} -> RGB(${defaultJerseyColor.r}, ${defaultJerseyColor.g}, ${defaultJerseyColor.b})`);
         } catch (error) {
             console.warn(`Warning: Could not resolve base jersey color: ${error.message}`);
         }
@@ -184,7 +185,7 @@ function createJerseyPalette(templatePath, outputPath, teamId = "0") {
     const mappedIndices = new Set();
     
     for (const mapping of jerseyMapping) {
-        const colorName = homeUniform[mapping.name];
+        const colorName = jersey[mapping.name];
         if (colorName) {
             try {
                 const color = resolveColor(colorName, teamData, globalData);
@@ -245,9 +246,9 @@ function createJerseyPalette(templatePath, outputPath, teamId = "0") {
     }
     
     // Apply crest colors (colors 192-255)
-    if (teamData.crest && Array.isArray(teamData.crest)) {
+    if (jersey.crest && Array.isArray(jersey.crest)) {
         console.log('Applying crest colors...');
-        const crestColors = teamData.crest;
+        const crestColors = jersey.crest;
         
         // Each row has 5 crest colors + 6 ice logo colors + 5 padding
         for (let row = 0; row < 4; row++) {
@@ -276,28 +277,92 @@ function createJerseyPalette(templatePath, outputPath, teamId = "0") {
     console.log(`\nJersey palette applied successfully! Saved as: ${outputPath}`);
 }
 
+function generateAllJerseys(templatePath) {
+    console.log('Generating all jerseys for all teams...\n');
+    let generatedCount = 0;
+    
+    for (const [teamId, teamData] of Object.entries(jerseyDef)) {
+        if (teamId === 'global' || !teamData.jerseys) continue;
+        
+        for (const [jerseyName, jerseyData] of Object.entries(teamData.jerseys)) {
+            const abbreviation = teamData.abbreviation || teamData.name.replace(/[^a-zA-Z0-9]/g, '').substring(0, 3).toUpperCase();
+            const outputName = `${teamId}_${abbreviation}_${jerseyName}`;
+            const outputPath = path.join(path.dirname(templatePath), `${outputName}.act`);
+            
+            try {
+                console.log(`\n=== Generating ${teamData.name} - ${jerseyName} jersey ===`);
+                createJerseyPalette(templatePath, outputPath, teamId, jerseyName);
+                generatedCount++;
+            } catch (error) {
+                console.error(`Error generating ${teamData.name} ${jerseyName}: ${error.message}`);
+            }
+        }
+    }
+    
+    console.log(`\n🎉 Generated ${generatedCount} jersey palette(s) successfully!`);
+}
+
+function generateTeamJerseys(templatePath, teamId) {
+    const teamData = jerseyDef[teamId];
+    if (!teamData || teamId === 'global') {
+        throw new Error(`Team ID '${teamId}' not found.`);
+    }
+    
+    if (!teamData.jerseys) {
+        throw new Error(`No jerseys found for team '${teamId}' (${teamData.name}).`);
+    }
+    
+    console.log(`Generating all jerseys for ${teamData.name}...\n`);
+    let generatedCount = 0;
+    
+    for (const [jerseyName, jerseyData] of Object.entries(teamData.jerseys)) {
+        const abbreviation = teamData.abbreviation || teamData.name.replace(/[^a-zA-Z0-9]/g, '').substring(0, 3).toUpperCase();
+        const outputName = `${teamId}_${abbreviation}_${jerseyName}`;
+        const outputPath = path.join(path.dirname(templatePath), `${outputName}.act`);
+        
+        try {
+            console.log(`\n=== Generating ${teamData.name} - ${jerseyName} jersey ===`);
+            createJerseyPalette(templatePath, outputPath, teamId, jerseyName);
+            generatedCount++;
+        } catch (error) {
+            console.error(`Error generating ${teamData.name} ${jerseyName}: ${error.message}`);
+        }
+    }
+    
+    console.log(`\n🎉 Generated ${generatedCount} jersey palette(s) for ${teamData.name}!`);
+}
+
 // Command line interface
 function printUsage() {
-    console.log('Usage: node generateJerseyPalette.js [options] [teamId] [outputName]');
+    console.log('Usage: node generateJerseyPalette.js [options] [teamId] [jerseyName] [outputName]');
     console.log('');
     console.log('Options:');
     console.log('  --validate     Validate all colors in jerseyDef.js for 3-bit compliance');
     console.log('  --help, -h     Show this help message');
     console.log('');
     console.log('Arguments:');
-    console.log('  teamId     - Team ID from jerseyDef.js (default: "0")');
-    console.log('  outputName - Output filename without extension (default: "NHL95{teamName}")');
+    console.log('  teamId     - Team ID from jerseyDef.js (generates all teams if omitted)');
+    console.log('  jerseyName - Jersey type (e.g., "home", "away") (generates all jerseys if omitted)');
+    console.log('  outputName - Output filename without extension (default: <teamId>_<abbreviation>_<jerseyName>.act)');
     console.log('');
     console.log('Examples:');
     console.log('  node generateJerseyPalette.js --validate');
-    console.log('  node generateJerseyPalette.js 0 blackhawks-home');
+    console.log('  node generateJerseyPalette.js                    # Generate all jerseys for all teams');
+    console.log('  node generateJerseyPalette.js 3                  # Generate all jerseys for team 3');
+    console.log('  node generateJerseyPalette.js 3 home             # Generate home jersey for team 3');
+    console.log('  node generateJerseyPalette.js 3 home chi-home    # Custom filename');
     console.log('');
-    console.log('Available teams:');
+    console.log('Available teams and jerseys:');
     
-    // List available teams
+    // List available teams and their jerseys
     for (const [id, team] of Object.entries(jerseyDef)) {
         if (id !== 'global' && team.name) {
-            console.log(`  ${id}: ${team.name}`);
+            console.log(`  ${id}: ${team.name} (${team.abbreviation || 'N/A'})`);
+            if (team.jerseys) {
+                for (const jerseyName of Object.keys(team.jerseys)) {
+                    console.log(`    - ${jerseyName}`);
+                }
+            }
         }
     }
 }
@@ -327,32 +392,51 @@ if (require.main === module) {
         }
     }
     
-    const teamId = args[0] || "0";
-    const teamData = jerseyDef[teamId];
-    
-    if (!teamData || teamId === 'global') {
-        console.error(`Error: Team ID '${teamId}' not found.`);
-        printUsage();
-        process.exit(1);
-    }
-    
-    const defaultOutputName = `NHL95${teamData.name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}`;
-    const outputName = args[1] || defaultOutputName;
-    
     const templatePath = path.join(__dirname, 'NHL95universaltemplate.act');
-    const outputPath = path.join(__dirname, `${outputName}.act`);
     
     if (!fs.existsSync(templatePath)) {
         console.error(`Error: Template file not found: ${templatePath}`);
         process.exit(1);
     }
     
+    const teamId = args[0];
+    const jerseyName = args[1];
+    const customOutputName = args[2];
+    
     try {
-        createJerseyPalette(templatePath, outputPath, teamId);
+        if (!teamId) {
+            // Generate all jerseys for all teams
+            generateAllJerseys(templatePath);
+        } else if (!jerseyName) {
+            // Generate all jerseys for specified team
+            generateTeamJerseys(templatePath, teamId);
+        } else {
+            // Generate specific jersey for specific team
+            const teamData = jerseyDef[teamId];
+            if (!teamData || teamId === 'global') {
+                console.error(`Error: Team ID '${teamId}' not found.`);
+                printUsage();
+                process.exit(1);
+            }
+            
+            if (!teamData.jerseys || !teamData.jerseys[jerseyName]) {
+                console.error(`Error: Jersey '${jerseyName}' not found for team '${teamId}' (${teamData.name}).`);
+                printUsage();
+                process.exit(1);
+            }
+            
+            // Create output filename
+            const abbreviation = teamData.abbreviation || teamData.name.replace(/[^a-zA-Z0-9]/g, '').substring(0, 3).toUpperCase();
+            const outputName = customOutputName || `${teamId}_${abbreviation}_${jerseyName}`;
+            const outputPath = path.join(__dirname, `${outputName}.act`);
+            
+            console.log(`\n=== Generating ${teamData.name} - ${jerseyName} jersey ===`);
+            createJerseyPalette(templatePath, outputPath, teamId, jerseyName);
+        }
     } catch (error) {
         console.error('Error:', error.message);
         process.exit(1);
     }
 }
 
-module.exports = { createJerseyPalette, resolveColor, parseColor };
+module.exports = { createJerseyPalette, generateAllJerseys, generateTeamJerseys, resolveColor, parseColor };

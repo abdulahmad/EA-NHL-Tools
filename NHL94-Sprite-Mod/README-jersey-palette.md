@@ -6,7 +6,7 @@ This tool generates NHL95 ACT palette files from the jersey definitions in `jers
 
 - `jerseyDef.js` - Jersey color definitions for teams
 - `generateJerseyPalette.js` - Main script to generate ACT files
-- `applyJerseyPalette.js` - Simple version for Chicago Blackhawks
+- `applyJerseyPalette.js` - Simple version for Chicago Blackhawks (legacy)
 - `NHL95universaltemplate.act` - Template ACT file
 
 ## Usage
@@ -15,7 +15,7 @@ This tool generates NHL95 ACT palette files from the jersey definitions in `jers
 ```bash
 node generateJerseyPalette.js
 ```
-This generates a palette for team "0" (Chicago Blackhawks) with default filename.
+This generates all jerseys for all teams in jerseyDef.js with default filenames.
 
 ### Validate 3-bit Color Compliance
 ```bash
@@ -23,9 +23,9 @@ node generateJerseyPalette.js --validate
 ```
 This validates all colors in `jerseyDef.js` to ensure they use only valid 3-bit RGB values.
 
-### Specify Team and Output
+### Generate Specific Team or Jersey
 ```bash
-node generateJerseyPalette.js [teamId] [outputName]
+node generateJerseyPalette.js [teamId] [jerseyName] [outputName]
 ```
 
 ### Examples
@@ -33,11 +33,17 @@ node generateJerseyPalette.js [teamId] [outputName]
 # Validate all colors for 3-bit compliance
 node generateJerseyPalette.js --validate
 
-# Generate Chicago Blackhawks palette
-node generateJerseyPalette.js 0
+# Generate all jerseys for all teams
+node generateJerseyPalette.js
 
-# Generate with custom filename
-node generateJerseyPalette.js 0 blackhawks-home
+# Generate all jerseys for team 3 (Chicago Blackhawks)
+node generateJerseyPalette.js 3
+
+# Generate home jersey for team 3
+node generateJerseyPalette.js 3 home
+
+# Generate home jersey with custom filename
+node generateJerseyPalette.js 3 home chi-home-custom
 
 # Show help and available teams
 node generateJerseyPalette.js --help
@@ -84,20 +90,39 @@ const jerseyDef = {
             // Global mappings for skin tones, equipment, etc.
         }
     },
-    "0": {
-        "name": "Team Name",
+    "3": {
+        "name": "Chicago Blackhawks",
+        "abbreviation": "CHI",
         "palette": {
             // Team-specific colors
         },
-        "home": {
-            // Home uniform color mappings
-        },
-        "crest": [
-            // 20 colors for 5x4 crest grid
-        ]
+        "jerseys": {
+            "home": {
+                "template": "classic",
+                // Home uniform color mappings
+                "crest": [
+                    // 20 colors for 5x4 crest grid
+                ]
+            },
+            "away": {
+                "template": "classic", 
+                // Away uniform color mappings
+                "crest": [
+                    // 20 colors for 5x4 crest grid
+                ]
+            }
+        }
     }
 }
 ```
+
+## Output Filenames
+
+Generated ACT files use the format: `<teamId>_<abbreviation>_<jerseyName>.act`
+
+Examples:
+- `3_CHI_home.act` - Chicago Blackhawks home jersey
+- `3_CHI_away.act` - Chicago Blackhawks away jersey
 
 ## Notes
 

@@ -51,7 +51,7 @@ const jerseyDef = {
                 // "armUpper": "0 0 0",
                 "armStripe1": "red",
                 "armStripe2": "white",
-                "armStripe3": "white",
+                "armStripe3": "black",
                 // "forearm": "0 0 0",
                 "goalieMask": "white",
                 "crest": [
