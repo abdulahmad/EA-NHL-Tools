@@ -3,13 +3,15 @@ const jerseyDef = {
         "palette": {
             "brown": "144 108 0",
             "black": "0 0 0",
+            "blackMedium": "36 36 36",
             "darkBrown": "108 72 36",
             "flesh": "216 144 108",
             "flesh2": "216 144 108",
             "flesh3": "180 108 72",
             "flesh3bit": "216 144 108",
             "flesh3bit2": "180 108 72",
-            "white": "252 252 252"
+            "white": "252 252 252",
+            "whiteMedium": "216 216 216",
         },
         "mapping": {
             "stick": "brown",
@@ -40,8 +42,8 @@ const jerseyDef = {
                 "shoulderPatch": "yellow",
                 "jersey": "white",
                 "waist1": "red",
-                "waist2": "white",
-                "waist3": "black",
+                "waist2": "whiteMedium",
+                "waist3": "blackMedium",
                 "pants": "black",
                 "pantsStripe1": "white",
                 "pantsStripe2": "red",
@@ -50,8 +52,8 @@ const jerseyDef = {
                 "socksStripe2": "black",
                 // "armUpper": "0 0 0",
                 "armStripe1": "red",
-                "armStripe2": "white",
-                "armStripe3": "black",
+                "armStripe2": "whiteMedium",
+                "armStripe3": "blackMedium",
                 // "forearm": "0 0 0",
                 "goalieMask": "white",
                 "crest": [
