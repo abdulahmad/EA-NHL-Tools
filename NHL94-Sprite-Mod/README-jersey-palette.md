@@ -6,7 +6,6 @@ This tool generates NHL95 ACT palette files from the jersey definitions in `jers
 
 - `jerseyDef.js` - Jersey color definitions for teams
 - `generateJerseyPalette.js` - Main script to generate ACT files
-- `applyJerseyPalette.js` - Simple version for Chicago Blackhawks (legacy)
 - `NHL95universaltemplate.act` - Template ACT file
 
 ## Usage
@@ -39,14 +38,39 @@ node generateJerseyPalette.js
 # Generate all jerseys for team 3 (Chicago Blackhawks)
 node generateJerseyPalette.js 3
 
-# Generate home jersey for team 3
+# Generate ONLY the home jersey for team 3 (useful for testing/fixing warnings)
 node generateJerseyPalette.js 3 home
+
+# Generate ONLY the away jersey for team 3
+node generateJerseyPalette.js 3 away
 
 # Generate home jersey with custom filename
 node generateJerseyPalette.js 3 home chi-home-custom
 
 # Show help and available teams
 node generateJerseyPalette.js --help
+```
+
+### Testing and Fixing Color Warnings
+
+When you see color clamping warnings, use specific jersey generation to test fixes:
+
+1. **Identify the problem jersey**: Look for ⚠️ warnings in the output
+2. **Generate only that jersey**: `node generateJerseyPalette.js [teamId] [jerseyName]`
+3. **Adjust colors in jerseyDef.js**: Choose colors with more "headroom" for shading
+4. **Re-test**: Generate the same jersey again to verify warnings are gone
+
+**Example workflow:**
+```bash
+# See warnings on Chicago away jersey
+node generateJerseyPalette.js 3 away
+
+# Edit jerseyDef.js to fix problematic colors
+# Re-test just that jersey
+node generateJerseyPalette.js 3 away
+
+# When satisfied, generate all jerseys
+node generateJerseyPalette.js
 ```
 
 ## NHL95 Palette Structure
@@ -116,6 +140,36 @@ const jerseyDef = {
 }
 ```
 
+## Color Shading System
+
+The generator automatically creates light/medium/dark variants for each jersey component with **automatic warning system**.
+
+### Shading Rules
+- **Light**: Base color + 36 per RGB channel
+- **Medium**: Base color (unchanged) 
+- **Dark**: Base color - 36 per RGB channel
+
+### Warning System
+The generator warns when color adjustments occur:
+- **Range clamping**: When values go below 0 or above 252
+- **3-bit snapping**: When values are adjusted to nearest valid 3-bit value
+
+Example warnings:
+```
+⚠️  Color adjustments: R: 252+36=288 (clamped to 252), G: 252+36=288 (clamped to 252)
+⚠️  Color adjustments: R: 0-36=-36 (clamped to 0), B: 108 snapped to 108
+```
+
+### Example
+If a jersey component uses `red: "144 0 0"`:
+- **Light variant**: RGB(180, 36, 36) 
+- **Medium variant**: RGB(144, 0, 0)
+- **Dark variant**: RGB(108, 0, 0) ⚠️ G and B channels clamped to 0
+
+All values are automatically:
+- Clamped to 0-252 range
+- Snapped to nearest valid 3-bit values (0, 36, 72, 108, 144, 180, 216, 252)
+
 ## Output Filenames
 
 Generated ACT files use the format: `<teamId>_<abbreviation>_<jerseyName>.act`
@@ -124,13 +178,43 @@ Examples:
 - `3_CHI_home.act` - Chicago Blackhawks home jersey
 - `3_CHI_away.act` - Chicago Blackhawks away jersey
 
+## Testing Specific Jerseys
+
+When developing and testing color combinations, you can generate individual jerseys instead of all teams:
+
+```bash
+# Generate specific team's home jersey (by team ID)
+node generateJerseyPalette.js 3 home
+
+# Generate specific team's away jersey  
+node generateJerseyPalette.js 15 away
+
+# Examples for common teams:
+node generateJerseyPalette.js 1 home    # Anaheim Mighty Ducks home
+node generateJerseyPalette.js 10 away   # Edmonton Oilers away
+node generateJerseyPalette.js 21 home   # New York Rangers home
+```
+
+The script will output detailed color processing information and any warnings about color adjustments. At the end, you'll see a **Warning Summary** that lists which jersey components had color clamping/snapping issues:
+
+```
+⚠️  Warning Summary: Color clamping/snapping occurred in: armStripe3, jersey, waist1, pants
+Consider using colors with more headroom for better shading results.
+```
+
+This helps you identify which colors might need refinement - typically pure black (0,0,0) and pure white (252,252,252) will always trigger warnings when shaded because they're at the RGB limits.
+
 ## Notes
 
-- For v1, all color variants (light/medium/dark) use the same flat color
+- **Automatic Color Shading**: Each jersey component has light/medium/dark variants
+  - **Light variants**: +36 to each RGB channel  
+  - **Dark variants**: -36 to each RGB channel
+  - **Medium variants**: Base color unchanged
+  - All values are clamped to valid 3-bit ranges and snapped to nearest valid values
 - Colors are resolved first from team palette, then global palette
 - RGB values are specified as "R G B" strings (e.g., "144 0 0")
 - **All RGB values must be 3-bit compliant**: Valid values are 0, 36, 72, 108, 144, 180, 216, 252
-- **Any unmapped jersey segments (colors 144-191) default to the "jersey" color** - this ensures consistent base color coverage
+- **Any unmapped jersey segments (colors 144-191) default to the "jersey" color** with appropriate shading applied
 - Generated ACT files are 768 bytes (256 colors × 3 bytes RGB)
 - Use `--validate` to check all colors for 3-bit compliance before generating palettes
 

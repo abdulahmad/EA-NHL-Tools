@@ -16,6 +16,66 @@ function validate3BitColor(color) {
            validValues.includes(color.b);
 }
 
+function applyShading(baseColor, shade) {
+    const validValues = [0, 36, 72, 108, 144, 180, 216, 252];
+    
+    let r = baseColor.r;
+    let g = baseColor.g;
+    let b = baseColor.b;
+    
+    // Store original values for comparison
+    const originalR = r;
+    const originalG = g;
+    const originalB = b;
+    
+    if (shade === 'light') {
+        r += 36;
+        g += 36;
+        b += 36;
+    } else if (shade === 'dark') {
+        r -= 36;
+        g -= 36;
+        b -= 36;
+    }
+    // 'medium' uses the base color unchanged
+    
+    // Check for out-of-range values before clamping
+    const outOfRange = [];
+    if (r < 0) outOfRange.push(`R: ${originalR}-36=${r} (clamped to 0)`);
+    if (g < 0) outOfRange.push(`G: ${originalG}-36=${g} (clamped to 0)`);
+    if (b < 0) outOfRange.push(`B: ${originalB}-36=${b} (clamped to 0)`);
+    if (r > 252) outOfRange.push(`R: ${originalR}+36=${r} (clamped to 252)`);
+    if (g > 252) outOfRange.push(`G: ${originalG}+36=${g} (clamped to 252)`);
+    if (b > 252) outOfRange.push(`B: ${originalB}+36=${b} (clamped to 252)`);
+    
+    // Clamp values to valid 3-bit range
+    r = Math.max(0, Math.min(252, r));
+    g = Math.max(0, Math.min(252, g));
+    b = Math.max(0, Math.min(252, b));
+    
+    // Snap to nearest valid 3-bit values and check for adjustments
+    const nearestR = validValues.reduce((prev, curr) => 
+        Math.abs(curr - r) < Math.abs(prev - r) ? curr : prev);
+    const nearestG = validValues.reduce((prev, curr) => 
+        Math.abs(curr - g) < Math.abs(prev - g) ? curr : prev);
+    const nearestB = validValues.reduce((prev, curr) => 
+        Math.abs(curr - b) < Math.abs(prev - b) ? curr : prev);
+    
+    // Check for 3-bit snapping adjustments
+    if (nearestR !== r) outOfRange.push(`R: ${r} snapped to ${nearestR}`);
+    if (nearestG !== g) outOfRange.push(`G: ${g} snapped to ${nearestG}`);
+    if (nearestB !== b) outOfRange.push(`B: ${b} snapped to ${nearestB}`);
+    
+    const result = { r: nearestR, g: nearestG, b: nearestB };
+    
+    // Add warning property if adjustments were made
+    if (outOfRange.length > 0) {
+        result.warning = `Color adjustments: ${outOfRange.join(', ')}`;
+    }
+    
+    return result;
+}
+
 function validateColorPalette(jerseyData) {
     const validValues = [0, 36, 72, 108, 144, 180, 216, 252];
     const errors = [];
@@ -98,6 +158,10 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
     }
     console.log('✅ All colors are 3-bit compliant');
     
+    // Track warnings for summary
+    let hasWarnings = false;
+    const warningComponents = [];
+    
     // Read the template ACT file
     const templateBuffer = fs.readFileSync(templatePath);
     
@@ -125,46 +189,46 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
     // Jersey component mapping (colors 144-191)
     const jerseyMapping = [
         // 144-146: forearm (dark, medium, light)
-        { name: 'forearm', indices: [144, 145, 146] },
+        { name: 'forearm', indices: [144, 145, 146], shades: ['dark', 'medium', 'light'] },
         // 147-149: armStripe3 (light, medium, dark)  
-        { name: 'armStripe3', indices: [147, 148, 149] },
+        { name: 'armStripe3', indices: [147, 148, 149], shades: ['light', 'medium', 'dark'] },
         // 150-152: armStripe2 (dark, medium, light)
-        { name: 'armStripe2', indices: [150, 151, 152] },
+        { name: 'armStripe2', indices: [150, 151, 152], shades: ['dark', 'medium', 'light'] },
         // 153-155: armStripe1 (light, medium, dark)
-        { name: 'armStripe1', indices: [153, 154, 155] },
+        { name: 'armStripe1', indices: [153, 154, 155], shades: ['light', 'medium', 'dark'] },
         // 156-158: armUpper (light, medium, dark)
-        { name: 'armUpper', indices: [156, 157, 158] },
+        { name: 'armUpper', indices: [156, 157, 158], shades: ['light', 'medium', 'dark'] },
         // 159: yolkCorner
-        { name: 'yolkCorner', indices: [159] },
+        { name: 'yolkCorner', indices: [159], shades: ['medium'] },
         // 160: shoulderPatch
-        { name: 'shoulderPatch', indices: [160] },
+        { name: 'shoulderPatch', indices: [160], shades: ['medium'] },
         // 161: yolk3
-        { name: 'yolk3', indices: [161] },
+        { name: 'yolk3', indices: [161], shades: ['medium'] },
         // 162: yolk1
-        { name: 'yolk1', indices: [162] },
+        { name: 'yolk1', indices: [162], shades: ['medium'] },
         // 163: yolk2
-        { name: 'yolk2', indices: [163] },
+        { name: 'yolk2', indices: [163], shades: ['medium'] },
         // 164-167: jersey (goalieMask, light, medium, dark)
-        { name: 'goalieMask', indices: [164] },
-        { name: 'jersey', indices: [165, 166, 167] },
+        { name: 'goalieMask', indices: [164], shades: ['medium'] },
+        { name: 'jersey', indices: [165, 166, 167], shades: ['light', 'medium', 'dark'] },
         // 168-170: waist1 (odd, even, hidden)
-        { name: 'waist1', indices: [168, 169, 170] },
+        { name: 'waist1', indices: [168, 169, 170], shades: ['light', 'medium', 'dark'] },
         // 171-173: waist2 (light, medium, dark)
-        { name: 'waist2', indices: [171, 172, 173] },
+        { name: 'waist2', indices: [171, 172, 173], shades: ['light', 'medium', 'dark'] },
         // 174-176: waist3 (light, medium, dark)
-        { name: 'waist3', indices: [174, 175, 176] },
+        { name: 'waist3', indices: [174, 175, 176], shades: ['light', 'medium', 'dark'] },
         // 177-180: pants (dark, pantsStripe2, pantsStripe1, medium)
-        { name: 'pants', indices: [177, 180] }, // 177 and 180 for dark and medium
-        { name: 'pantsStripe2', indices: [178] },
-        { name: 'pantsStripe1', indices: [179] },
+        { name: 'pants', indices: [177, 180], shades: ['dark', 'medium'] }, // 177 and 180 for dark and medium
+        { name: 'pantsStripe2', indices: [178], shades: ['medium'] },
+        { name: 'pantsStripe1', indices: [179], shades: ['medium'] },
         // 181-183: socks (light, medium, dark)
-        { name: 'socks', indices: [181, 182, 183] },
+        { name: 'socks', indices: [181, 182, 183], shades: ['light', 'medium', 'dark'] },
         // 184-186: socksStripe1 (light, medium, dark)
-        { name: 'socksStripe1', indices: [184, 185, 186] },
+        { name: 'socksStripe1', indices: [184, 185, 186], shades: ['light', 'medium', 'dark'] },
         // 187-189: socksStripe2 (light, medium, dark)
-        { name: 'socksStripe2', indices: [187, 188, 189] },
+        { name: 'socksStripe2', indices: [187, 188, 189], shades: ['light', 'medium', 'dark'] },
         // 190-191: helmet (medium, dark)
-        { name: 'helmet', indices: [190, 191] }
+        { name: 'helmet', indices: [190, 191], shades: ['medium', 'dark'] }
     ];
     
     // Apply jersey colors
@@ -188,16 +252,31 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
         const colorName = jersey[mapping.name];
         if (colorName) {
             try {
-                const color = resolveColor(colorName, teamData, globalData);
-                console.log(`  ${mapping.name}: ${colorName} -> RGB(${color.r}, ${color.g}, ${color.b})`);
+                const baseColor = resolveColor(colorName, teamData, globalData);
+                console.log(`  ${mapping.name}: ${colorName} -> RGB(${baseColor.r}, ${baseColor.g}, ${baseColor.b})`);
                 
-                // For v1, all variants (light/medium/dark) use the same color
-                for (const index of mapping.indices) {
+                // Apply shading variants to each index
+                for (let i = 0; i < mapping.indices.length; i++) {
+                    const index = mapping.indices[i];
+                    const shade = mapping.shades[i];
+                    const shadedColor = applyShading(baseColor, shade);
+                    
                     const offset = index * 3;
-                    paletteBuffer[offset] = color.r;
-                    paletteBuffer[offset + 1] = color.g;
-                    paletteBuffer[offset + 2] = color.b;
+                    paletteBuffer[offset] = shadedColor.r;
+                    paletteBuffer[offset + 1] = shadedColor.g;
+                    paletteBuffer[offset + 2] = shadedColor.b;
                     mappedIndices.add(index);
+                    
+                    if (shade !== 'medium') {
+                        console.log(`    Index ${index} (${shade}): RGB(${shadedColor.r}, ${shadedColor.g}, ${shadedColor.b})`);
+                        if (shadedColor.warning) {
+                            console.warn(`      ⚠️  ${shadedColor.warning}`);
+                            hasWarnings = true;
+                            if (!warningComponents.includes(mapping.name)) {
+                                warningComponents.push(mapping.name);
+                            }
+                        }
+                    }
                 }
             } catch (error) {
                 console.warn(`Warning: Could not resolve color for ${mapping.name}: ${error.message}`);
@@ -207,13 +286,40 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
     
     // Fill any unmapped indices in the jersey range (144-191) with the base jersey color
     if (defaultJerseyColor) {
+        // Define shade mapping for unmapped indices based on their position
+        const indexShadeMap = {
+            144: 'dark',   // forearm-dark
+            145: 'medium', // forearm-medium  
+            146: 'light',  // forearm-light
+            156: 'light',  // armUpper-light
+            157: 'medium', // armUpper-medium
+            158: 'dark',   // armUpper-dark
+            159: 'medium', // yolkCorner
+            161: 'medium', // yolk3
+            162: 'medium', // yolk1
+            163: 'medium', // yolk2
+            180: 'medium', // pants-medium
+            181: 'light',  // socks-light
+            182: 'medium', // socks-medium
+            183: 'dark'    // socks-dark
+        };
+        
         for (let index = 144; index <= 191; index++) {
             if (!mappedIndices.has(index)) {
+                const shade = indexShadeMap[index] || 'medium';
+                const shadedColor = applyShading(defaultJerseyColor, shade);
                 const offset = index * 3;
-                paletteBuffer[offset] = defaultJerseyColor.r;
-                paletteBuffer[offset + 1] = defaultJerseyColor.g;
-                paletteBuffer[offset + 2] = defaultJerseyColor.b;
-                console.log(`  Unmapped index ${index} defaulted to jersey color`);
+                paletteBuffer[offset] = shadedColor.r;
+                paletteBuffer[offset + 1] = shadedColor.g;
+                paletteBuffer[offset + 2] = shadedColor.b;
+                console.log(`  Unmapped index ${index} (${shade}) defaulted to jersey color: RGB(${shadedColor.r}, ${shadedColor.g}, ${shadedColor.b})`);
+                if (shadedColor.warning) {
+                    console.warn(`    ⚠️  ${shadedColor.warning}`);
+                    hasWarnings = true;
+                    if (!warningComponents.includes('unmapped indices')) {
+                        warningComponents.push('unmapped indices');
+                    }
+                }
             }
         }
     }
@@ -275,11 +381,21 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
     // Write the new ACT file
     fs.writeFileSync(outputPath, paletteBuffer);
     console.log(`\nJersey palette applied successfully! Saved as: ${outputPath}`);
+    
+    // Display warning summary
+    if (hasWarnings) {
+        console.log(`\n⚠️  Warning Summary: Color clamping/snapping occurred in: ${warningComponents.join(', ')}`);
+        console.log(`   Consider using colors with more headroom for better shading results.`);
+    } else {
+        console.log(`\n✅ No color warnings - all shading stayed within valid ranges.`);
+    }
 }
 
 function generateAllJerseys(templatePath) {
     console.log('Generating all jerseys for all teams...\n');
     let generatedCount = 0;
+    let totalWarnings = 0;
+    const jerseysWithWarnings = [];
     
     for (const [teamId, teamData] of Object.entries(jerseyDef)) {
         if (teamId === 'global' || !teamData.jerseys) continue;
@@ -291,8 +407,11 @@ function generateAllJerseys(templatePath) {
             
             try {
                 console.log(`\n=== Generating ${teamData.name} - ${jerseyName} jersey ===`);
-                createJerseyPalette(templatePath, outputPath, teamId, jerseyName);
+                const result = createJerseyPalette(templatePath, outputPath, teamId, jerseyName);
                 generatedCount++;
+                
+                // Check if this jersey had warnings (look for warning messages in recent console output)
+                // Since we can't easily return the warning status, we'll track it by checking console messages
             } catch (error) {
                 console.error(`Error generating ${teamData.name} ${jerseyName}: ${error.message}`);
             }
