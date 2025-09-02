@@ -38,6 +38,6 @@ Row breakdown:
 224-239: Crest row 3 + ice logo + padding
 240-255: Crest row 4 + ice logo + padding
 
-This file (jerseyDef.js) has the definition of a jersey for Chicago Blackhawks in a data format I created. It maps to the NHL 95 jersey definition. For v1 the colors will be flat, so light/medium/dark will all be the same shade. The way the jersey definition works is it mentions a color, and the color is either in the local palette for the jersey (object "0"), or in the global palette (global.palette).
+This file (jerseyDef.js) has the definition of a jersey for Chicago Blackhawks in a data format I created. It maps to the NHL 95 jersey definition. The way the jersey definition works is it mentions a color, and the color is either in the local palette for the jersey (<teamIndex>.palette), or in the global palette (global.palette).
 
 Can you write a script which takes the palette defined in jerseyDef, and applies it to NHL95universaltemplate.act, and saves it as a new act file?
