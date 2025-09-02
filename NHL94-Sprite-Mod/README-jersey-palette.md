@@ -211,6 +211,13 @@ This helps you identify which colors might need refinement - typically pure blac
   - **Dark variants**: -36 to each RGB channel
   - **Medium variants**: Base color unchanged
   - All values are clamped to valid 3-bit ranges and snapped to nearest valid values
+- **Yolk Color Defaults**: If yolk1, yolk2, or yolk3 are not explicitly defined:
+  - **yolk1**: Automatically uses light shade of jersey color
+  - **yolk2**: Automatically uses medium shade of jersey color (same as base)
+  - **yolk3**: Automatically uses dark shade of jersey color
+- **Zero Channel Protection**: When shading colors, channels with base value 0 are preserved (except pure black)
+  - Pure colors like red (144,0,0) keep their zero channels when shaded
+  - Pure black (0,0,0) gets normal shading since all channels are zero
 - Colors are resolved first from team palette, then global palette
 - RGB values are specified as "R G B" strings (e.g., "144 0 0")
 - **All RGB values must be 3-bit compliant**: Valid values are 0, 36, 72, 108, 144, 180, 216, 252

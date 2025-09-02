@@ -259,7 +259,39 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
     
     for (const mapping of jerseyMapping) {
         const colorName = jersey[mapping.name];
-        if (colorName) {
+        let resolvedColor = null;
+        
+        // Handle yolk defaults if not explicitly defined
+        if (!colorName && (mapping.name === 'yolk1' || mapping.name === 'yolk2' || mapping.name === 'yolk3')) {
+            if (defaultJerseyColor) {
+                console.log(`  ${mapping.name}: not defined, using jersey color shading`);
+                
+                // Apply the appropriate shading to the jersey color
+                let shade = 'medium';
+                if (mapping.name === 'yolk1') shade = 'light';
+                else if (mapping.name === 'yolk2') shade = 'light';
+                else if (mapping.name === 'yolk3') shade = 'medium';
+                
+                resolvedColor = applyShading(defaultJerseyColor, shade);
+                console.log(`    ${mapping.name} (${shade}): RGB(${resolvedColor.r}, ${resolvedColor.g}, ${resolvedColor.b})`);
+                
+                // Apply to the mapping index
+                const index = mapping.indices[0]; // yolk colors have single indices
+                const offset = index * 3;
+                paletteBuffer[offset] = resolvedColor.r;
+                paletteBuffer[offset + 1] = resolvedColor.g;
+                paletteBuffer[offset + 2] = resolvedColor.b;
+                mappedIndices.add(index);
+                
+                if (resolvedColor.warning) {
+                    console.warn(`      ⚠️  ${resolvedColor.warning}`);
+                    hasWarnings = true;
+                    if (!warningComponents.includes(mapping.name)) {
+                        warningComponents.push(mapping.name);
+                    }
+                }
+            }
+        } else if (colorName) {
             try {
                 const baseColor = resolveColor(colorName, teamData, globalData);
                 console.log(`  ${mapping.name}: ${colorName} -> RGB(${baseColor.r}, ${baseColor.g}, ${baseColor.b})`);
