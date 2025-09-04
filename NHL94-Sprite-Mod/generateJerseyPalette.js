@@ -205,6 +205,18 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
         { name: 'armStripe2', indices: [150, 151, 152], shades: ['dark', 'medium', 'light'] },
         // 153-155: armStripe1 (light, medium, dark)
         { name: 'armStripe1', indices: [153, 154, 155], shades: ['light', 'medium', 'dark'] },
+        // vArmStripe3 (light, medium)  
+        { name: 'vArmStripe3', indices: [147, 148], shades: ['light', 'medium'] },
+        // vArmStripe2 (dark, medium, light)
+        { name: 'vArmStripe2', indices: [149, 151, 152], shades: ['dark', 'medium', 'light'] },
+        // vArmStripe1 (light, medium, dark)
+        { name: 'vArmStripe1', indices: [153, 154, 150], shades: ['light', 'medium', 'dark'] },
+        // aArmStripe3 (medium, dark)  
+        { name: 'aArmStripe3', indices: [148, 149], shades: ['medium', 'dark'] },
+        // aArmStripe2 (dark, medium, light)
+        { name: 'aArmStripe2', indices: [150, 151, 147], shades: ['dark', 'medium', 'light'] },
+        // aArmStripe1 (light, medium, dark)
+        { name: 'aArmStripe1', indices: [152, 154, 155], shades: ['light', 'medium', 'dark'] },
         // 156-158: armUpper (light, medium, dark)
         { name: 'armUpper', indices: [156, 157, 158], shades: ['light', 'medium', 'dark'] },
         // 159: yolkCorner
