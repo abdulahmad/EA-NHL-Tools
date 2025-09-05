@@ -211,6 +211,7 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
         { name: 'armSwoop', 
           components: ['armSwoopInner', 'armSwoopBorder', 'armSwoopOuter', 'vArmStripe1', 'vArmStripe2', 'vArmStripe3', 'armUpper', 'yolkCorner', 'shoulderPatch', 'yolk3', 'yolk1', 'yolk2', 'goalieMask', 'jersey', 
             'waist1', 'waist2', 'waist3', 'pants', 'pantsStripe2', 'pantsStripe1', 'socks', 'socksStripe1', 'socksStripe2', 'helmet'] },
+        // AA TODO: Create star template
     ];
 
     // Jersey component mapping (colors 144-191)

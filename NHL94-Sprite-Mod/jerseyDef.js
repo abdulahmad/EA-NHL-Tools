@@ -98,4 +98,35 @@ const jerseyDef = {
     }
 }
 
+const homePals = [ 
+    { name: 'BOS', template: 'universal'}, 
+    { name: 'BUF', template: 'universal'}, 
+    { name: 'CGY', template: 'universal'}, 
+    { name: 'CHI', template: 'universal'}, 
+    { name: 'DET', template: 'universal'}, 
+    { name: 'EDM', template: 'universal'}, 
+    { name: 'HFD', template: 'universal'}, 
+    { name: 'LA', template: 'universal'}, 
+    { name: 'DAL', template: 'universal'}, 
+    { name: 'MTL', template: 'universal'}, 
+    { name: 'NJ', template: 'universal'}, 
+    { name: 'NYI', template: 'universal'}, 
+    { name: 'NYR', template: 'universal'}, 
+    { name: 'OTT', template: 'universal'}, 
+    { name: 'PHI', template: 'universal'}, 
+    { name: 'PIT', template: 'universal'}, 
+    { name: 'QUE', template: 'universal'}, 
+    { name: 'STL', template: 'universal'}, 
+    { name: 'SJ', template: 'universal'}, 
+    { name: 'TB', template: 'universal'}, 
+    { name: 'TOR', template: 'universal'}, 
+    { name: 'VAN', template: 'universal'}, 
+    { name: 'WSH', template: 'universal'}, 
+    { name: 'WPG', template: 'universal'}, 
+    { name: 'ANA', template: 'universal'}, 
+    { name: 'FLA', template: 'universal'}, 
+    { name: 'ASW', template: 'universal'}, 
+    { name: 'ASE', template: 'universal'}, 
+]
+
 module.exports = jerseyDef;
