@@ -195,6 +195,21 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
     
     const jersey = teamData.jerseys[jerseyName];
     
+    const templates = [
+        { name: 'universal', 
+          components: ['forearm', 'armStripe1', 'armStripe2', 'armStripe3', 'armUpper', 'yolkCorner', 'shoulderPatch', 'yolk3', 'yolk1', 'yolk2', 'goalieMask', 'jersey', 
+            'waist1', 'waist2', 'waist3', 'pants', 'pantsStripe2', 'pantsStripe1', 'socks', 'socksStripe1', 'socksStripe2', 'helmet'] },
+        { name: 'vArm', 
+          components: ['forearm', 'vArmStripe1', 'vArmStripe2', 'vArmStripe3', 'armUpper', 'yolkCorner', 'shoulderPatch', 'yolk3', 'yolk1', 'yolk2', 'goalieMask', 'jersey', 
+            'waist1', 'waist2', 'waist3', 'pants', 'pantsStripe2', 'pantsStripe1', 'socks', 'socksStripe1', 'socksStripe2', 'helmet'] },
+        { name: 'aArm', 
+          components: ['forearm', 'aArmStripe1', 'aArmStripe2', 'aArmStripe3', 'armUpper', 'yolkCorner', 'shoulderPatch', 'yolk3', 'yolk1', 'yolk2', 'goalieMask', 'jersey', 
+            'waist1', 'waist2', 'waist3', 'pants', 'pantsStripe2', 'pantsStripe1', 'socks', 'socksStripe1', 'socksStripe2', 'helmet'] },
+        { name: 'armSwoop', 
+          components: ['armSwoopInner', 'armSwoopBorder', 'armSwoopOuter', 'vArmStripe1', 'vArmStripe2', 'vArmStripe3', 'armUpper', 'yolkCorner', 'shoulderPatch', 'yolk3', 'yolk1', 'yolk2', 'goalieMask', 'jersey', 
+            'waist1', 'waist2', 'waist3', 'pants', 'pantsStripe2', 'pantsStripe1', 'socks', 'socksStripe1', 'socksStripe2', 'helmet'] },
+    ];
+
     // Jersey component mapping (colors 144-191)
     const jerseyMapping = [
         // 144-146: forearm (dark, medium, light)
