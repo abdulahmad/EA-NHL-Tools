@@ -219,6 +219,12 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
         { name: 'aArmStripe1', indices: [152, 154, 155], shades: ['light', 'medium', 'dark'] },
         // 156-158: armUpper (light, medium, dark)
         { name: 'armUpper', indices: [156, 157, 158], shades: ['light', 'medium', 'dark'] },
+        // armSwoopInner
+        { name: 'armSwoopInner', indices: [158], shades: ['dark'] },
+        // armSwoopBorder
+        { name: 'armSwoopBorder', indices: [157, 155], shades: ['medium', 'dark'] },
+        // armSwoopOuter
+        { name: 'armSwoopOuter', indices: [156], shades: ['light'] },
         // 159: yolkCorner
         { name: 'yolkCorner', indices: [159], shades: ['medium'] },
         // 160: shoulderPatch
