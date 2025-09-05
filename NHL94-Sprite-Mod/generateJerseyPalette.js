@@ -199,6 +199,9 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
         { name: 'universal', 
           components: ['forearm', 'armStripe1', 'armStripe2', 'armStripe3', 'armUpper', 'yolkCorner', 'shoulderPatch', 'yolk3', 'yolk1', 'yolk2', 'goalieMask', 'jersey', 
             'waist1', 'waist2', 'waist3', 'pants', 'pantsStripe2', 'pantsStripe1', 'socks', 'socksStripe1', 'socksStripe2', 'helmet'] },
+        { name: 'waistDots', 
+          components: ['forearm', 'armStripe1', 'armStripe2', 'armStripe3', 'armUpper', 'yolkCorner', 'shoulderPatch', 'yolk3', 'yolk1', 'yolk2', 'goalieMask', 'jersey', 
+            'waistDots', 'waist2', 'waist3', 'pants', 'pantsStripe2', 'pantsStripe1', 'socks', 'socksStripe1', 'socksStripe2', 'helmet'] },
         { name: 'vArm', 
           components: ['forearm', 'vArmStripe1', 'vArmStripe2', 'vArmStripe3', 'armUpper', 'yolkCorner', 'shoulderPatch', 'yolk3', 'yolk1', 'yolk2', 'goalieMask', 'jersey', 
             'waist1', 'waist2', 'waist3', 'pants', 'pantsStripe2', 'pantsStripe1', 'socks', 'socksStripe1', 'socksStripe2', 'helmet'] },
@@ -220,6 +223,12 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
         { name: 'armStripe2', indices: [150, 151, 152], shades: ['dark', 'medium', 'light'] },
         // 153-155: armStripe1 (light, medium, dark)
         { name: 'armStripe1', indices: [153, 154, 155], shades: ['light', 'medium', 'dark'] },
+        // 147-149: armDot3 (light, medium, dark)  
+        { name: 'armDot3', indices: [147], shades: ['light'] },
+        // 150-152: armDot2 (dark, medium, light)
+        { name: 'armDot2', indices: [152], shades: ['light'] },
+        // 153-155: armDot1 (light, medium, dark)
+        { name: 'armDot1', indices: [153], shades: ['light'] },
         // vArmStripe3 (light, medium)  
         { name: 'vArmStripe3', indices: [147, 148], shades: ['light', 'medium'] },
         // vArmStripe2 (dark, medium, light)
@@ -253,6 +262,8 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
         // 164-167: jersey (goalieMask, light, medium, dark)
         { name: 'goalieMask', indices: [164], shades: ['medium'] },
         { name: 'jersey', indices: [165, 166, 167], shades: ['light', 'medium', 'dark'] },
+        // waistDots (odd, even, hidden)
+        { name: 'waistDots', indices: [168], shades: ['light'] },
         // 168-170: waist1 (odd, even, hidden)
         { name: 'waist1', indices: [168, 169, 170], shades: ['light', 'medium', 'dark'] },
         // 171-173: waist2 (light, medium, dark)
