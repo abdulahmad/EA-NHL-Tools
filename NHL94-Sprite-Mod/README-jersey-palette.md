@@ -264,3 +264,11 @@ colorZoneMapping: [
     - Flyers (arm curves)
     - Canadiens (mid chest stripe)
     - Predators (curved arm stripe)
+
+
+    ## TODO
+    - generate act palettes from homepals/awaypals
+    - create script to parse act palettes in jerseyDefs -- convert to 3bit
+    - create script to generate new full valid 3bit act
+    - crests
+    - generate new sprite data

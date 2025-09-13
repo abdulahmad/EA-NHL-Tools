@@ -214,9 +214,16 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
         { name: 'star', 
           components: ['forearm', 'starArmLower', 'starArmInnerStripe', 'starArmOuterStripe', 'starArmUpper', 'yolkCorner', 'shoulderPatch', 'yolk3', 'yolk1', 'yolk2', 'goalieMask', 'jersey', 
             'waist1', 'starWaist2', 'starWaist3', 'starWaist4','pants', 'pantsStripe2', 'pantsStripe1', 'socks', 'socksStripe1', 'socksStripe2', 'helmet'] },
-        // create longArms (dallas home, caps)
+        { name: 'longArms',
+            components: ['armOuterStripe', 'armMiddleStripe', 'armInnerStripe', 'yolkCorner', 'shoulderPatch', 'yolk3', 'yolk1', 'yolk2', 'goalieMask', 'jersey', 
+            'waist1', 'waist2', 'waist3', 'pants', 'pantsStripe2', 'pantsStripe1', 'socks', 'socksStripe1', 'socksStripe2', 'helmet'] },
+        // armDots
+        { name: 'armDots', 
+          components: ['forearm', 'armDot1', 'armDot2', 'armDot3', 'armUpper', 'yolkCorner', 'shoulderPatch', 'yolk3', 'yolk1', 'yolk2', 'goalieMask', 'jersey', 
+            'waist1', 'waist2', 'waist3', 'pants', 'pantsStripe2', 'pantsStripe1', 'socks', 'socksStripe1', 'socksStripe2', 'helmet'] },
     ];
 
+   
     // Jersey component mapping (colors 144-191)
     const jerseyMapping = [
         // 144-146: forearm (dark, medium, light)
@@ -253,6 +260,12 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
         { name: 'armSwoopBorder', indices: [157, 155], shades: ['medium', 'dark'] },
         // armSwoopOuter
         { name: 'armSwoopOuter', indices: [156], shades: ['light'] },
+        // armOuterStripe 146l, 147l, 152l, 153l, 156l,
+        { name: 'armOuterStripe', indices: [146, 147, 152, 153, 156], shades: ['light', 'light', 'light', 'light', 'light'] },
+        // armMiddleStripe 145m, 148m, 151m, 154m, 157m,
+        { name: 'armMiddleStripe', indices: [145, 148, 151, 154, 157], shades: ['medium', 'medium', 'medium', 'medium', 'medium'] },
+        // armInnerStripe 144d, 149d, 150d, 155d, 158d
+        { name: 'armInnerStripe', indices: [144, 149, 150, 155, 158], shades: ['dark', 'dark', 'dark', 'dark', 'dark'] },
         // 148m, 149d, 150d  - starArmLower
         { name: 'starArmLower', indices: [148, 149, 150], shades: ['medium', 'dark', 'dark'] },
         // 155d, 151m, 147l, 158d - starArmInnerStripe
