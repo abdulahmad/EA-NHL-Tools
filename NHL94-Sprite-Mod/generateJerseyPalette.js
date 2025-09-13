@@ -214,6 +214,7 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
         { name: 'star', 
           components: ['forearm', 'starArmLower', 'starArmInnerStripe', 'starArmOuterStripe', 'starArmUpper', 'yolkCorner', 'shoulderPatch', 'yolk3', 'yolk1', 'yolk2', 'goalieMask', 'jersey', 
             'waist1', 'starWaist2', 'starWaist3', 'starWaist4','pants', 'pantsStripe2', 'pantsStripe1', 'socks', 'socksStripe1', 'socksStripe2', 'helmet'] },
+        // create longArms (dallas home, caps)
     ];
 
     // Jersey component mapping (colors 144-191)
