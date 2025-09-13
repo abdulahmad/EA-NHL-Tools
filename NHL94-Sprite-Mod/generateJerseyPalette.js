@@ -211,7 +211,9 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
         { name: 'armSwoop', 
           components: ['armSwoopInner', 'armSwoopBorder', 'armSwoopOuter', 'vArmStripe1', 'vArmStripe2', 'vArmStripe3', 'armUpper', 'yolkCorner', 'shoulderPatch', 'yolk3', 'yolk1', 'yolk2', 'goalieMask', 'jersey', 
             'waist1', 'waist2', 'waist3', 'pants', 'pantsStripe2', 'pantsStripe1', 'socks', 'socksStripe1', 'socksStripe2', 'helmet'] },
-        // AA TODO: Create star template
+        { name: 'star', 
+          components: ['forearm', 'starArmLower', 'starArmInnerStripe', 'starArmOuterStripe', 'starArmUpper', 'yolkCorner', 'shoulderPatch', 'yolk3', 'yolk1', 'yolk2', 'goalieMask', 'jersey', 
+            'waist1', 'starWaist2', 'starWaist3', 'starWaist4','pants', 'pantsStripe2', 'pantsStripe1', 'socks', 'socksStripe1', 'socksStripe2', 'helmet'] },
     ];
 
     // Jersey component mapping (colors 144-191)
@@ -250,6 +252,20 @@ function createJerseyPalette(templatePath, outputPath, teamId, jerseyName) {
         { name: 'armSwoopBorder', indices: [157, 155], shades: ['medium', 'dark'] },
         // armSwoopOuter
         { name: 'armSwoopOuter', indices: [156], shades: ['light'] },
+        // 148m, 149d, 150d  - starArmLower
+        { name: 'starArmLower', indices: [148, 149, 150], shades: ['medium', 'dark', 'dark'] },
+        // 155d, 151m, 147l, 158d - starArmInnerStripe
+        { name: 'starArmInnerStripe', indices: [155, 151, 147, 158], shades: ['dark', 'medium', 'light', 'dark'] },
+        // 152l, 154m - starArmOuterStripe
+        { name: 'starArmOuterStripe', indices: [152, 154], shades: ['light', 'medium'] },
+        // 153l, 156l, 157m - armcolor -- starArmUpper
+        { name: 'starArmUpper', indices: [153, 156, 157], shades: ['light', 'light', 'medium'] },
+        // starWaist2 - 172m, 173d
+        { name: 'starWaist2', indices: [172, 173], shades: ['medium', 'dark'] },
+        // starWaist3 - 171l, 175m, 176d
+        { name: 'starWaist3', indices: [171, 175, 176], shades: ['light', 'medium', 'dark'] },
+        // starWaist4 - 174l
+        { name: 'starWaist4', indices: [174], shades: ['light'] },
         // 159: yolkCorner
         { name: 'yolkCorner', indices: [159], shades: ['medium'] },
         // 160: shoulderPatch
