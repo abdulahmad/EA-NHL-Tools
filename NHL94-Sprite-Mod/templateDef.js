@@ -85,4 +85,4 @@ const awayPals = [
     { name: 'ASE', template: 'star'}, 
 ];
 
-module.exports = [global, homePals, awayPals];
+module.exports = [global, homePals, awayP];
