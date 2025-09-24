@@ -268,7 +268,9 @@ colorZoneMapping: [
 
     ## TODO
     - create script which reads template style + homepals/awaypals and -> converts to 3 bit flat shaded
-    - create script to parse act palettes in jerseyDefs -- convert to 3bit
-    - create script to generate new full valid 3bit act
-    - crests
+        - binTo3BitJerseyDef
+    - create script to parse act palettes in jerseyDefs -- validate 3bit, generate new full valid 3bit act with shading
+        - expand generateJerseyPalette?
     - generate new sprite data
+    - generate crests
+    - generate sprites.anim
