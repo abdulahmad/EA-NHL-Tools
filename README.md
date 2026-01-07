@@ -13,6 +13,8 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 
 `ANIM94-To-BMP` - Extracts NHL93/94 Genesis `.ANIM` Sprite Animation files (directly from the ROM) to `.BMP`
 
+`ANIM94SNES-To-BMP` - Extracts NHL94 SNES `.ANIM` Sprite Animation files (directly from the ROM) to `.BMP`
+
 `ANIM95-To-BMP` - Extracts NHL95/96/97 Genesis `.ANIM` Sprite Animation files (directly from the ROM) to `.BMP`
 
 `Asset-Extractor` - Extracts assets from the various EA NHL Genesis rom files. WIP.
