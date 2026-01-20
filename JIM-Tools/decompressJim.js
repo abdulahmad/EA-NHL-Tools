@@ -149,6 +149,8 @@ function MOVE(srcValue, dstReg, size = 'l') {
     CCR.V = false;
     CCR.C = false;
     // X unchanged
+
+    console.log(`[MOVE.${size}] ${dstReg === d0 ? 'd0' : 'other'} = 0x${value.toString(16).padStart(8, '0')}`);
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -182,12 +184,12 @@ function MOVEA(srcValue, dstAn, size = 'l') {
     else if (dstAn === a6) a6 = value;
     else if (dstAn === a7) a7 = value;
     else {
-    console.warn("MOVEA: destination must be A0–A7");
-
-    return;
+        console.warn("MOVEA: destination must be A0–A7");
+        return;
     }
 
     // Flags unchanged
+    console.log(`[MOVEA.${size}] ${dstAn === a0 ? 'a0' : 'other'} = 0x${value.toString(16).padStart(8, '0')}`);
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -293,6 +295,8 @@ function MOVEDATAINC(srcValue, dstReg, size = 'w') {  // srcValue = a0, dstReg =
     return;
     }
 
+    const bytesPerReg = size === 'b' ? 1 : size === 'w' ? 2 : 4;
+
     // 1. Get current address from address register
     const addr = srcValue;                     // e.g. current value of a0
     console.log(`MOVEDATAINC: reading from address 0x${addr.toString(16)}`);
@@ -319,7 +323,7 @@ function MOVEDATAINC(srcValue, dstReg, size = 'w') {  // srcValue = a0, dstReg =
     // ... add other d3–d7 if needed
 
     // 4. Post-increment the address register by 2 bytes
-    srcValue += 2;
+    srcValue += bytesPerReg;
 
     // Write back the incremented value
     if (srcValue === a0)      a0 = srcValue;
@@ -341,6 +345,118 @@ function MOVEDATAINC(srcValue, dstReg, size = 'w') {  // srcValue = a0, dstReg =
     CCR.V = false;
     CCR.C = false;
     // X unchanged
+}
+
+// ────────────────────────────────────────────────────────────────
+// andi.<size> #immValue, register   → AND Immediate with register
+// Parameters:
+//   - immValue: Immediate value (e.g. 0x7FFF)
+//   - register: The register to operate on (e.g. d0)
+//   - size: Optional ('b', 'w', 'l') — defaults to 'w'
+// ────────────────────────────────────────────────────────────────
+function ANDI(immValue, register, size = 'w') {
+  // Opcode + immediate size (2 + 2 or 4 bytes)
+  const immBytes = size === 'l' ? 4 : 2;
+  advancePC(2 + immBytes);
+
+  // Validate register (only data registers supported for now)
+  if (register !== d0 && register !== d1 && register !== d2 && register !== d3 &&
+      register !== d4 && register !== d5 && register !== d6 && register !== d7) {
+    console.warn("ANDI: Only data registers (d0-d7) supported");
+    return;
+  }
+
+  // Mask immediate to size
+  const immMask = MASK[size];
+  const maskedImm = immValue & immMask;
+
+  // Perform AND
+  register &= maskedImm;
+
+  // Update flags (AND affects N, Z, V=0, C=0)
+  const result = register & immMask;
+  const negative = (result & SIGN_BIT[size]) !== 0;
+  const zero = result === 0;
+
+  CCR.N = negative;
+  CCR.Z = zero;
+  CCR.V = false;
+  CCR.C = false;
+  // X unchanged
+
+  console.log(`[ANDI.${size} #$${immValue.toString(16).padStart(4,'0')},${register === d0 ? 'd0' : 'reg'}] result = 0x${register.toString(16).padStart(8, '0')} (N=${CCR.N ? 1 : 0}, Z=${CCR.Z ? 1 : 0})`);
+}
+
+// ────────────────────────────────────────────────────────────────
+// add.<size> srcReg, destReg   → Add srcReg to destReg
+// Parameters:
+//   - srcReg: Source register (e.g. d0)
+//   - destReg: Destination register (e.g. d4)
+//   - size: Optional ('b', 'w', 'l') — defaults to 'w'
+// ────────────────────────────────────────────────────────────────
+function ADD(srcReg, destReg, size = 'w') {
+  advancePC(2); // add.<size> Dn,Dm is 2 bytes
+
+  // Validate registers (data registers only for simplicity)
+  if (srcReg !== d0 && srcReg !== d1 && srcReg !== d2 && srcReg !== d3 &&
+      srcReg !== d4 && srcReg !== d5 && srcReg !== d6 && srcReg !== d7) {
+    console.warn("ADD: Source must be data register");
+    return;
+  }
+  if (destReg !== d0 && destReg !== d1 && destReg !== d2 && destReg !== d3 &&
+      destReg !== d4 && destReg !== d5 && destReg !== d6 && destReg !== d7) {
+    console.warn("ADD: Destination must be data register");
+    return;
+  }
+
+  // Mask to size
+  const mask = MASK[size];
+  const src = srcReg & mask;
+  const dstBefore = destReg & mask;
+
+  // Perform addition
+  const result = (dstBefore + src) & mask;
+
+  // Write back (preserve upper bits if size < 'l')
+  destReg = (destReg & ~mask) | result;
+
+  // Update flags
+  const negative = (result & SIGN_BIT[size]) !== 0;
+  const zero = result === 0;
+  const overflow = ((dstBefore ^ result) & ~(dstBefore ^ src) & SIGN_BIT[size]) !== 0;
+  const carry = (dstBefore + src) > mask;
+
+  CCR.N = negative;
+  CCR.Z = zero;
+  CCR.V = overflow;
+  CCR.C = carry;
+  CCR.X = carry; // X gets same as C for ADD
+
+  console.log(`[ADD.${size} ${srcReg === d0 ? 'd0' : 'src'},${destReg === d4 ? 'd4' : 'dest'}] result = 0x${destReg.toString(16).padStart(8, '0')} (N=${CCR.N ? 1 : 0}, Z=${CCR.Z ? 1 : 0}, V=${CCR.V ? 1 : 0}, C=${CCR.C ? 1 : 0}, X=${CCR.X ? 1 : 0})`);
+}
+
+// ────────────────────────────────────────────────────────────────
+// bsr.<size> label   → Branch Subroutine
+// Parameters:
+//   - targetCallback: The function to call (subroutine)
+//   - size: Optional ('s', 'w', 'l') — defaults to 'w'
+// ────────────────────────────────────────────────────────────────
+function BSR(targetCallback, size = 'w') {
+  // Size affects displacement bytes
+  const pcAdvance = size === 's' ? 2 : size === 'w' ? 4 : 6;
+  advancePC(pcAdvance);
+
+  // Push current PC (return address) onto stack (always 4 bytes for 68k)
+  a7 -= 4;
+  memory[a7 + 0] = (pc >>> 24) & 0xFF;
+  memory[a7 + 1] = (pc >>> 16) & 0xFF;
+  memory[a7 + 2] = (pc >>>  8) & 0xFF;
+  memory[a7 + 3] = (pc >>>  0) & 0xFF;
+
+  console.log(`[BSR.${size}] Pushed return address 0x${pc.toString(16).padStart(8, '0')} to stack at 0x${a7.toString(16).padStart(8, '0')}`);
+
+  // Call the target subroutine
+  targetCallback();
 }
 
 // Global Program Counter (starts at 0 or ROM entry point)
@@ -556,21 +672,30 @@ function decompressGraphics() {
 
 // ────────────────────────────────────────────────────────────────
 // Target blocks as functions (they can set pc if they want)
-function _endDecompression() {
-  console.log("=== END OF DECOMPRESSION ===");
-  // You could set pc to some exit address or just return
-  // For now, we can leave pc as-is or advance it
-  jumpTo(0xDDC8); // set to next instruction after enddecompression label
+function _decompress() {
+    jumpTo(0xDDBE);  // Jump to decompression logic
+    console.log("=== ENTERING REAL DECOMPRESSION MODE ===");
+    
+    // Main decompression logic goes here
+    // When done, you could set pc to next instruction if needed
+    ANDI(0x7FFF, d0);                // andi.<w> #$7FFF,d0
+    ADD(d0, d4);                     // add.<w> d0,d4
+    BSR(decompressBytecode);         // bsr.<w> decompressBytecode
 }
 
-function _decompress() {
-  console.log("=== ENTERING REAL DECOMPRESSION MODE ===");
-  jumpTo(0xDDBE);  // Jump to decompression logic
-  // Main decompression logic goes here
-  // When done, you could set pc to next instruction if needed
+function _endDecompression() {
+    jumpTo(0xDDC8); // set to next instruction after enddecompression label
+    console.log("=== END OF DECOMPRESSION ===");
+    // You could set pc to some exit address or just return
+    // For now, we can leave pc as-is or advance it
+  
 }
 
 function decompressBytecode(data, pos) {
+    jumpTo(0xDDCE);  // Jump to bytecode decompression logic
+    console.log("=== DECOMPRESSING BYTECODE ===");
+    
+    // Example of setting up registers for bytecode decompression
     // a1 = -1;
     // a3 = -1;
     // d3 = d1; // (tile byte offset)
