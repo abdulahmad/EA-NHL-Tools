@@ -3,6 +3,32 @@ import path from 'path';
 // const fs = require('fs');          // only needed in Node.js
 // const path = require('path');
 
+function readb(addr) { //1 byte, 8 bits
+    return memory[addr];
+}
+function readw(addr) { //2 bytes, 16 bits
+    return (memory[addr] << 8) | memory[addr + 1];
+}
+function readl(addr) { //4 bytes, 32 bits
+    console.log(`readl: reading 4 bytes from address 0x${addr.toString(16)}`);
+    console.log(`  bytes: ${memory[addr].toString(16).padStart(2,'0')} ${memory[addr+1].toString(16).padStart(2,'0')} ${memory[addr+2].toString(16).padStart(2,'0')} ${memory[addr+3].toString(16).padStart(2,'0')}`);
+    return (
+        (memory[addr]     << 24) |
+        (memory[addr + 1] << 16) |
+        (memory[addr + 2] <<  8) |
+        (memory[addr + 3] <<  0)
+    );
+}
+function incb(pos) {
+    return pos + 1;
+}
+function incw(pos) {
+    return pos + 2;
+}
+function incl(pos) {
+    return pos + 4;
+}
+
 // ────────────────────────────────────────────────────────────────
 // Your existing global memory (example: 16 MB, typical for MD emulator)
 // ────────────────────────────────────────────────────────────────
@@ -552,32 +578,6 @@ function decompressBytecode(data, pos) {
     // d2 = 0;
 
     // Main decompression loop
-}
-
-function readb(addr) { //1 byte, 8 bits
-    return memory[addr];
-}
-function readw(addr) { //2 bytes, 16 bits
-    return (memory[addr] << 8) | memory[addr + 1];
-}
-function readl(addr) { //4 bytes, 32 bits
-    console.log(`readl: reading 4 bytes from address 0x${addr.toString(16)}`);
-    console.log(`  bytes: ${memory[addr].toString(16).padStart(2,'0')} ${memory[addr+1].toString(16).padStart(2,'0')} ${memory[addr+2].toString(16).padStart(2,'0')} ${memory[addr+3].toString(16).padStart(2,'0')}`);
-    return (
-        (memory[addr]     << 24) |
-        (memory[addr + 1] << 16) |
-        (memory[addr + 2] <<  8) |
-        (memory[addr + 3] <<  0)
-    );
-}
-function incb(pos) {
-    return pos + 1;
-}
-function incw(pos) {
-    return pos + 2;
-}
-function incl(pos) {
-    return pos + 4;
 }
 
 startDecompression(0x7C974);
