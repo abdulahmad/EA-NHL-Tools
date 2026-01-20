@@ -301,6 +301,47 @@ function MOVEDATAINC(srcValue, dstReg, size = 'w') {  // srcValue = a0, dstReg =
     // X unchanged
 }
 
+// Global Program Counter (starts at 0 or ROM entry point)
+let pc = 0x00000000;  // We'll set this later to the reset vector
+
+// Helper to advance PC past the current instruction (for when branch NOT taken)
+function advancePC(size = 'w') {
+  // Opcode is 2 bytes + displacement
+  // .s = byte displacement → +2 bytes total
+  // .w = word displacement → +4 bytes total
+  // .l = long displacement → +6 bytes total (rare for Bcc)
+  const advance = size === 's' ? 2 : size === 'w' ? 4 : 6;
+  pc += advance;
+  console.log(`[PC] Advanced to 0x${pc.toString(16).padStart(8, '0')}`);
+}
+
+// ────────────────────────────────────────────────────────────────
+// BEQ   Branch if Equal (Z == 1)
+// ────────────────────────────────────────────────────────────────
+function BEQ(targetCallback, size = 'w') {
+  if (CCR.Z) {
+    console.log(`[BEQ.${size}] Branch TAKEN (Z=1)`);
+    targetCallback();  // Execute the target code block
+    // Note: We do NOT advance PC here — the callback is responsible for setting pc if needed
+  } else {
+    console.log(`[BEQ.${size}] Branch NOT taken`);
+    advancePC(size);
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
+// BMI   Branch if Minus (N == 1)
+// ────────────────────────────────────────────────────────────────
+function BMI(targetCallback, size = 'w') {
+  if (CCR.N) {
+    console.log(`[BMI.${size}] Branch TAKEN (N=1)`);
+    targetCallback();  // Execute the decompression block
+  } else {
+    console.log(`[BMI.${size}] Branch NOT taken`);
+    advancePC(size);
+  }
+}
+
 
 function startDecompression(jimDataPtr) {
     loadROM();
@@ -318,6 +359,7 @@ function startDecompression(jimDataPtr) {
     a2 = pos;
     let tileOffset = 0;
     d4 = tileOffset;
+    pc=0xDD94;
     decompressGraphics();
 }
 
@@ -331,14 +373,22 @@ function decompressGraphics() {
     console.log(`Tile byte offset: 0x${d1.toString(16)}`);
     MOVEDATAINC(a0,d0,'w'); // read first opcode (80 3D)
     console.log(`First opcode: 0x${d0.toString(16)}`);
+    BEQ(_endDecompression, 'w');    // beq.w _enddecompression
+    BMI(_decompress, 'w');          // bmi.w _decompress
 }
 
-function decompress(data, pos) {
-    // d0 = -d0; // make positive, number of tiles to decompress
-    // console.log(`Compressed block: ${d0} tiles expected`);
+// ────────────────────────────────────────────────────────────────
+// Target blocks as functions (they can set pc if they want)
+function _endDecompression() {
+  console.log("=== END OF DECOMPRESSION ===");
+  // You could set pc to some exit address or just return
+  // For now, we can leave pc as-is or advance it
+}
 
-    // d4 = d4+d0; // advance tile index by this many tiles
-    // decompressBytecode(data, pos);
+function _decompress() {
+  console.log("=== ENTERING REAL DECOMPRESSION MODE ===");
+  // Main decompression logic goes here
+  // When done, you could set pc to next instruction if needed
 }
 
 function decompressBytecode(data, pos) {
