@@ -337,6 +337,131 @@ function jumpTo(address) {
 }
 
 // ────────────────────────────────────────────────────────────────
+// MOVEM register list constants (for passing to MOVEM_TO_SP)
+// These represent common ranges like "d0-d1/a0-a6" from your ROM
+// Each is a 16-bit mask where:
+//   bits 0-7  = D0 to D7
+//   bits 8-15 = A0 to A7
+// ────────────────────────────────────────────────────────────────
+
+// Data registers only
+const D0_D7      = 0x00FF;  // All D0–D7
+const D0_D1      = 0x0003;  // D0–D1
+const D2_D7      = 0x00FC;  // D2–D7
+const D0_D3      = 0x000F;  // D0–D3
+
+// Address registers only
+const A0_A7      = 0xFF00;  // All A0–A7
+const A0_A6      = 0x7F00;  // A0–A6 (excludes A7/SP)
+const A0_A3      = 0x0F00;  // A0–A3
+const A4_A6      = 0x7000;  // A4–A6
+
+// Mixed data + address (most common in prologues/epilogues)
+const D0_D1_A0_A6   = 0xC003;  // D0–D1 + A0–A6 (exactly your ROM instruction!)
+const D0_D7_A0_A6   = 0xFF03;  // All D0–D7 + A0–A6
+const D2_D7_A0_A6   = 0xFFFC;  // D2–D7 + A0–A6
+const D0_D3_A0_A3   = 0x0F0F;  // D0–D3 + A0–A3
+
+// Full save/restore (all caller-saved regs)
+const FULL_SAVE  = 0xFFFF;  // D0–D7 + A0–A7 (rare, includes SP)
+
+// ────────────────────────────────────────────────────────────────
+// MOVEM   registers, -(sp)    → Push multiple registers to stack
+// Parameters:
+//   - maskOrList: Either a 16-bit mask (like real 68k) OR array of register references
+//   - size: 'b', 'w', or 'l' (default 'l')
+// ────────────────────────────────────────────────────────────────
+function MOVEM_TO_SP(maskOrList, size = 'l') {
+    const bytesNeeded = 36; // for 9 longs
+    if (a7 < bytesNeeded) {
+        console.error(`[STACK ERROR] Not enough stack space! a7=0x${a7.toString(16)}`);
+        return;
+    }
+
+  advancePC(4);  // opcode + mask = 4 bytes
+
+  const bytesPerReg = size === 'b' ? 1 : size === 'w' ? 2 : 4;
+
+  let registers = [];
+
+  // Option 1: Pass a 16-bit mask (real 68k style)
+  if (typeof maskOrList === 'number') {
+    const mask = maskOrList;
+
+    // Data registers D0-D7 (bits 0-7, pushed lowest to highest)
+    for (let i = 0; i < 8; i++) {
+      if (mask & (1 << i)) {
+        const value = [d0, d1, d2, d3, d4, d5, d6, d7][i];
+        registers.push({ value, name: `d${i}` });
+      }
+    }
+
+    // Address registers A0-A7 (bits 8-15)
+    for (let i = 0; i < 8; i++) {
+      if (mask & (1 << (i + 8))) {
+        const value = [a0, a1, a2, a3, a4, a5, a6, a7][i];
+        registers.push({ value, name: `a${i}` });
+      }
+    }
+  }
+
+  // Option 2: Pass an array of register references (for easy testing)
+  else if (Array.isArray(maskOrList)) {
+    registers = maskOrList.map(reg => ({
+      value: reg,
+      name: reg === d0 ? 'd0' : reg === d1 ? 'd1' : /* add more mappings as needed */
+            reg === a0 ? 'a0' : reg === a1 ? 'a1' : /* ... */ 'unknown'
+    }));
+  }
+
+  else {
+    console.error("MOVEM_TO_SP: Invalid maskOrList (must be number or array)");
+    return;
+  }
+
+  // Push in order (lowest to highest number)
+  registers.forEach(({ value, name }) => {
+    a7 -= bytesPerReg;  // Pre-decrement SP
+
+    // Write big-endian to memory
+    if (size === 'l') {
+      memory[a7 + 0] = (value >>> 24) & 0xFF;
+      memory[a7 + 1] = (value >>> 16) & 0xFF;
+      memory[a7 + 2] = (value >>>  8) & 0xFF;
+      memory[a7 + 3] = (value >>>  0) & 0xFF;
+    } else if (size === 'w') {
+      memory[a7 + 0] = (value >>>  8) & 0xFF;
+      memory[a7 + 1] = (value >>>  0) & 0xFF;
+    } else if (size === 'b') {
+      memory[a7 + 0] = value & 0xFF;
+    }
+
+    console.log(`[MOVEM.${size}] Pushed ${name} = 0x${value.toString(16).padStart(8, '0')} to 0x${a7.toString(16).padStart(8, '0')}`);
+  });
+
+  // MOVEM does NOT affect CCR
+  console.log(`[MOVEM.${size}] Flags unchanged`);
+}
+
+// ────────────────────────────────────────────────────────────────
+// Debugging: Dump current stack contents (from SP upward)
+// ────────────────────────────────────────────────────────────────
+function dumpStack(numEntries = 10) {
+  console.log(`[STACK DUMP] Current SP (A7) = 0x${a7.toString(16).padStart(8, '0')}`);
+  console.log("Stack (from SP upward, showing longwords):");
+
+  for (let i = 0; i < numEntries; i++) {
+    const addr = a7 + (i * 4);
+    if (addr >= MEMORY_SIZE) break;
+
+    const val = readl(addr);  // Use your existing readl() function
+    console.log(`  0x${addr.toString(16).padStart(8, '0')}: 0x${val.toString(16).padStart(8, '0')}`);
+  }
+
+  console.log("────────────────────────────────────────");
+}
+
+// ────────────────────────────────────────────────────────────────
 // BEQ   Branch if Equal (Z == 1)
 // ────────────────────────────────────────────────────────────────
 function BEQ(targetCallback, size = 'w') {
@@ -372,6 +497,10 @@ function startDecompression(jimDataPtr) {
     console.log("Starting with clean flags:");
     resetCCR();
     console.log("Initial CCR:", { ...CCR });
+
+    // IMPORTANT: Set stack pointer BEFORE any stack operations!
+    a7 = 0x00FFE000;   // ← Add this! Safe Genesis WRAM stack top
+
     // var pos = jimDataPtr;
     let paletteOffset = readl(pos); pos = incl(pos);
     console.log(`Palette offset: 0x${paletteOffset.toString(16)}`);
@@ -380,13 +509,16 @@ function startDecompression(jimDataPtr) {
     a2 = pos;
     let tileOffset = 0;
     d4 = tileOffset;
-    jumpTo(0xDD94);
     decompressGraphics();
 }
 
 function decompressGraphics() {
+    jumpTo(0xDD90);
     console.log("Decompressing graphics...");
     console.log(`[PC] Starting at 0x${pc.toString(16).padStart(8, '0')}`);
+    // At the start of decompressGraphics()
+    MOVEM_TO_SP(D0_D1_A0_A6, 'l');   // movem.l d0-d1/a0-a6,-(sp)
+    dumpStack(12);   // Shows the 9 pushed registers + 3 more above them (good buffer)
 
     MOVEA(a2,a0,'l'); // current position in data
     console.log(`Data start at 0x${a0.toString(16)}`);
