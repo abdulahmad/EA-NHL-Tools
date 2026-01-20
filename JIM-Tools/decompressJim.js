@@ -83,6 +83,11 @@ const BIT_WIDTH = {
 // MOVE  src, dst    (register → register only for now)
 // ────────────────────────────────────────────────────────────────
 function MOVE(srcValue, dstReg, size = 'l') {
+    // For register-to-register MOVE.L: usually 2 bytes
+    // For MOVE.W: 2 bytes
+    // (if src is immediate: 4 or 6 bytes — but here it's reg→reg)
+    advancePC(2);
+
     const mask = MASK[size];
     const value = srcValue & mask;
 
@@ -124,6 +129,10 @@ function MOVE(srcValue, dstReg, size = 'l') {
 // MOVEA  src, An    (only to address registers)
 // ────────────────────────────────────────────────────────────────
 function MOVEA(srcValue, dstAn, size = 'l') {
+    // Typical MOVEA.L is 4 bytes (opcode 2 + 32-bit immediate/reg)
+    // MOVEA.W is also usually 4 bytes
+    advancePC(2);
+
     if (size === 'b') {
     console.error("MOVEA .b is illegal");
     return;
@@ -148,6 +157,7 @@ function MOVEA(srcValue, dstAn, size = 'l') {
     else if (dstAn === a7) a7 = value;
     else {
     console.warn("MOVEA: destination must be A0–A7");
+
     return;
     }
 
@@ -158,6 +168,9 @@ function MOVEA(srcValue, dstAn, size = 'l') {
 // ASL   #count / reg, Dn    (shift left, destination must be data reg)
 // ────────────────────────────────────────────────────────────────
 function ASL(count, dstReg, size = 'l') {
+    // ASL #imm, Dn is usually 4 bytes (opcode 2 + imm/reg field)
+    advancePC(2);
+    
     if (count < 0) {
     console.error("ASL: negative shift count");
     return;
@@ -246,6 +259,9 @@ function ASL(count, dstReg, size = 'l') {
 // move.w (a0)+, d0
 // ────────────────────────────────────────────────────────────────
 function MOVEDATAINC(srcValue, dstReg, size = 'w') {  // srcValue = a0, dstReg = d0
+    // move.w (An)+,Dn is 4 bytes (opcode 2 + reg fields)
+    advancePC(4);
+
     if (size !== 'w') {
     console.warn("This helper is for .w only");
     return;
@@ -305,14 +321,19 @@ function MOVEDATAINC(srcValue, dstReg, size = 'w') {  // srcValue = a0, dstReg =
 let pc = 0x00000000;  // We'll set this later to the reset vector
 
 // Helper to advance PC past the current instruction (for when branch NOT taken)
-function advancePC(size = 'w') {
+function advancePC(bytes) {
   // Opcode is 2 bytes + displacement
   // .s = byte displacement → +2 bytes total
   // .w = word displacement → +4 bytes total
   // .l = long displacement → +6 bytes total (rare for Bcc)
-  const advance = size === 's' ? 2 : size === 'w' ? 4 : 6;
-  pc += advance;
+//   const advance = size === 's' ? 2 : size === 'w' ? 4 : 6;
+  pc += bytes;
   console.log(`[PC] Advanced to 0x${pc.toString(16).padStart(8, '0')}`);
+}
+
+function jumpTo(address) {
+  pc = address;
+  console.log(`[PC] Jumping to 0x${pc.toString(16).padStart(8, '0')}`);
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -325,7 +346,7 @@ function BEQ(targetCallback, size = 'w') {
     // Note: We do NOT advance PC here — the callback is responsible for setting pc if needed
   } else {
     console.log(`[BEQ.${size}] Branch NOT taken`);
-    advancePC(size);
+    advancePC(2);
   }
 }
 
@@ -338,7 +359,7 @@ function BMI(targetCallback, size = 'w') {
     targetCallback();  // Execute the decompression block
   } else {
     console.log(`[BMI.${size}] Branch NOT taken`);
-    advancePC(size);
+    advancePC(4);
   }
 }
 
@@ -359,12 +380,14 @@ function startDecompression(jimDataPtr) {
     a2 = pos;
     let tileOffset = 0;
     d4 = tileOffset;
-    pc=0xDD94;
+    jumpTo(0xDD94);
     decompressGraphics();
 }
 
 function decompressGraphics() {
     console.log("Decompressing graphics...");
+    console.log(`[PC] Starting at 0x${pc.toString(16).padStart(8, '0')}`);
+
     MOVEA(a2,a0,'l'); // current position in data
     console.log(`Data start at 0x${a0.toString(16)}`);
     MOVE(d4,d1,'w'); // tile offset in bytes
@@ -373,8 +396,14 @@ function decompressGraphics() {
     console.log(`Tile byte offset: 0x${d1.toString(16)}`);
     MOVEDATAINC(a0,d0,'w'); // read first opcode (80 3D)
     console.log(`First opcode: 0x${d0.toString(16)}`);
+
+    // Now PC should be pointing right after the move.w (a0)+,d0
+    console.log(`[PC] Before branches: 0x${pc.toString(16).padStart(8, '0')}`);
+
     BEQ(_endDecompression, 'w');    // beq.w _enddecompression
     BMI(_decompress, 'w');          // bmi.w _decompress
+
+    console.log("[POSITIVE LITERAL COUNT] d0 =", d0 & 0xFFFF);
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -383,10 +412,12 @@ function _endDecompression() {
   console.log("=== END OF DECOMPRESSION ===");
   // You could set pc to some exit address or just return
   // For now, we can leave pc as-is or advance it
+  jumpTo(0xDDC8); // set to next instruction after enddecompression label
 }
 
 function _decompress() {
   console.log("=== ENTERING REAL DECOMPRESSION MODE ===");
+  jumpTo(0xDDBE);  // Jump to decompression logic
   // Main decompression logic goes here
   // When done, you could set pc to next instruction if needed
 }
