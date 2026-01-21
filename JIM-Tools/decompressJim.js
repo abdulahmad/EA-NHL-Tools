@@ -1007,6 +1007,92 @@ function LEA(srcAddr, dstAn) {
 }
 
 // ────────────────────────────────────────────────────────────────
+// PEA   Push Effective Address onto stack
+// ────────────────────────────────────────────────────────────────
+function PEA(targetAddr) {
+  advancePC(4);
+  
+  // Push 32-bit address onto stack
+  a7 -= 4;
+  memory[a7 + 0] = (targetAddr >>> 24) & 0xFF;
+  memory[a7 + 1] = (targetAddr >>> 16) & 0xFF;
+  memory[a7 + 2] = (targetAddr >>>  8) & 0xFF;
+  memory[a7 + 3] = (targetAddr >>>  0) & 0xFF;
+  
+  console.log(`[PEA] Pushed address 0x${targetAddr.toString(16).padStart(8, '0')} to stack at 0x${a7.toString(16).padStart(8, '0')}`);
+}
+
+// ────────────────────────────────────────────────────────────────
+// move.<size> (An,Dn.w),Dm  → Read from indexed address to register
+// ────────────────────────────────────────────────────────────────
+function MOVEDATAINDEXED_TO_REG(baseAn, indexDn, dstDn, size = 'w') {
+  advancePC(4);
+  
+  let baseAddr;
+  if (baseAn === a0) baseAddr = a0;
+  else if (baseAn === a1) baseAddr = a1;
+  else if (baseAn === a2) baseAddr = a2;
+  else if (baseAn === a3) baseAddr = a3;
+  else if (baseAn === a4) baseAddr = a4;
+  else if (baseAn === a5) baseAddr = a5;
+  else if (baseAn === a6) baseAddr = a6;
+  else if (baseAn === a7) baseAddr = a7;
+  else {
+    console.warn("MOVEDATAINDEXED_TO_REG: base must be A0–A7");
+    return;
+  }
+  
+  let index;
+  if (indexDn === d0) index = d0;
+  else if (indexDn === d1) index = d1;
+  else if (indexDn === d2) index = d2;
+  else if (indexDn === d3) index = d3;
+  else if (indexDn === d4) index = d4;
+  else if (indexDn === d5) index = d5;
+  else if (indexDn === d6) index = d6;
+  else if (indexDn === d7) index = d7;
+  else {
+    console.warn("MOVEDATAINDEXED_TO_REG: index must be D0–D7");
+    return;
+  }
+  
+  const srcAddr = (baseAddr + (index & 0xFFFF)) & 0xFFFFFFFF;
+  
+  let value;
+  if (size === 'b') {
+    value = memory[srcAddr & 0xFFFFFFFF];
+  } else if (size === 'w') {
+    value = (memory[srcAddr & 0xFFFFFFFF] << 8) | memory[(srcAddr + 1) & 0xFFFFFFFF];
+  } else {
+    value = readl(srcAddr);
+  }
+  
+  const mask = MASK[size];
+  value &= mask;
+  
+  if (dstDn === d0) d0 = value;
+  else if (dstDn === d1) d1 = value;
+  else if (dstDn === d2) d2 = value;
+  else if (dstDn === d3) d3 = value;
+  else if (dstDn === d4) d4 = value;
+  else if (dstDn === d5) d5 = value;
+  else if (dstDn === d6) d6 = value;
+  else if (dstDn === d7) d7 = value;
+  else {
+    console.warn("MOVEDATAINDEXED_TO_REG: destination must be D0–D7");
+    return;
+  }
+  
+  // Update flags
+  const negative = (value & SIGN_BIT[size]) !== 0;
+  const zero = value === 0;
+  CCR.N = negative;
+  CCR.Z = zero;
+  CCR.V = false;
+  CCR.C = false;
+}
+
+// ────────────────────────────────────────────────────────────────
 // BNE   Branch if Not Equal (Z == 0)
 // ────────────────────────────────────────────────────────────────
 function BNE(targetCallback, size = 'w') {
@@ -1503,7 +1589,36 @@ function decompressGraphics() {
     BEQ(_endDecompression, 'w');    // beq.w _enddecompression
     BMI(_decompress, 'w');          // bmi.w _decompress
 
-    console.log("[POSITIVE LITERAL COUNT] d0 =", d0 & 0xFFFF);
+    // Positive literal count path
+    // add.w d0,d4
+    ADD(d0, d4, 'w');
+    
+    // asl.w #4,d0
+    ASL(4, d0, 'w');
+    
+    // pea (_enddecompression).l
+    PEA(0xDDC8); // Address of _enddecompression
+    
+    // tst.l (callbackPtr).w
+    // Note: callbackPtr is at address in a4, but we need to read from memory
+    // For now, we'll check if callbackPtr variable is set
+    TST(a4, 'l');
+    
+    // beq.w DoDMApro
+    if (CCR.Z) {
+        // DoDMApro
+        JSR(DoDMApro);
+    } else {
+        // movea.l (a4),a1
+        const callbackAddr = readl(a4);
+        MOVEA(callbackAddr, a1, 'l');
+        
+        // bra.w ConvertAndWriteToVDP
+        JSR(ConvertAndWriteToVDP);
+    }
+    
+    // After the JSR returns, we'll continue to _enddecompression
+    _endDecompression();
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -1522,9 +1637,12 @@ function _decompress() {
 function _endDecompression() {
     jumpTo(0xDDC8); // set to next instruction after enddecompression label
     console.log("=== END OF DECOMPRESSION ===");
-    // You could set pc to some exit address or just return
-    // For now, we can leave pc as-is or advance it
-  
+    
+    // movem.l (sp)+,d0-d1/a0-a6
+    MOVEM_FROM_SP(D0_D1_A0_A6, 'l');
+    
+    // rts - return from subroutine
+    // (In JavaScript, this just returns from the function)
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -1563,73 +1681,77 @@ function decompressBytecode() {
     // clr.w d2
     CLR(d2, 'w');
     
+    // lea jump_table(pc),a2 - get jump table base address
+    // In JS, we'll use the JUMP_TABLE array address (simulated)
+    const jumpTableBase = 0xDE06; // Simulated address of jump table
+    LEA(jumpTableBase, a2);
+    
     // Main interpreter loop
+    main_bytecode_interpreter_loop:
     while (true) {
         // move.b (a0)+,d0
         MOVEDATAINC(a0, d0, 'b');
         
-        // Save original opcode for handlers that need it
-        const originalOpcode = d0 & 0xFF;
-        
-        // andi.w #$F0,d0
+        // andi.w #$F0,d0 - Extract upper nibble (opcode type)
         ANDI(0xF0, d0, 'w');
         
-        // lsr.w #3,d0 - creates index into jump table
+        // lsr.w #3,d0 - Shift right 3 to create index into jump table
         LSR(3, d0, 'w');
         
-        // Get opcode index (d0 now contains the index after LSR)
+        // move.w (a2,d0.w),d0 - Read jump table entry (offset to handler)
+        // Note: In assembly, this reads a word offset from the jump table
+        // We'll simulate this by reading from our JUMP_TABLE array
         const opcodeIndex = d0 & 0x1F;
-        
-        // Get jump table offset (not used in JS, but kept for reference)
         const jumpOffset = JUMP_TABLE[opcodeIndex];
+        d0 = jumpOffset;
         
-        // Dispatch to opcode handler
-        switch (opcodeIndex) {
-            case 0:
-            case 1:
-                Opcode_CopyLiteral();
-                break;
-            case 2:
-                Opcode_ClearBytes();
-                break;
-            case 3:
-                Opcode_FillBytes();
-                break;
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-                Opcode_CopyBackwardShort();
-                break;
-            case 8:
-                Opcode_CopyBackwardMedium();
-                break;
-            case 9:
-                Opcode_CopyBackwardLong();
-                break;
-            case 10: // 0xA
-                Opcode_CopyBackwardExtended1();
-                break;
-            case 11: // 0xB
-                Opcode_CopyBackwardExtended2();
-                break;
-            case 12: // 0xC
-            case 13: // 0xD
-                Opcode_CopyBackwardReverseShort();
-                break;
-            case 14: // 0xE
-                const result = Opcode_CopyBackwardReverseMedium();
-                if (result === 'end') {
-                    // End of decompression - restore registers and return
-                    // movem.l (sp)+,d0-d3/a0-a2
-                    // (In real code, this would restore from stack)
-                    console.log("=== BYTECODE DECOMPRESSION COMPLETE ===");
-                    return;
-                }
-                break;
-            case 15: // 0xF
-                Opcode_CopyBackwardReverseLong();
-                break;
+        // jsr (a2,d0.w) - Jump to opcode handler
+        // Calculate handler address: a2 (jump table base) + d0 (offset)
+        const handlerAddr = (a2 + d0) & 0xFFFFFFFF;
+        
+        // Dispatch to opcode handler based on jump offset
+        // The jump offsets point to specific handler functions
+        let handlerResult = null;
+        
+        if (jumpOffset === 0x0020) {
+            // Opcode 0, 1: CopyLiteral
+            Opcode_CopyLiteral();
+        } else if (jumpOffset === 0x003C) {
+            // Opcode 2: ClearBytes
+            Opcode_ClearBytes();
+        } else if (jumpOffset === 0x0058) {
+            // Opcode 3: FillBytes
+            Opcode_FillBytes();
+        } else if (jumpOffset === 0x0078) {
+            // Opcode 4-7: CopyBackwardShort
+            Opcode_CopyBackwardShort();
+        } else if (jumpOffset === 0x00AA) {
+            // Opcode 8: CopyBackwardMedium
+            Opcode_CopyBackwardMedium();
+        } else if (jumpOffset === 0x00B8) {
+            // Opcode 9: CopyBackwardLong
+            Opcode_CopyBackwardLong();
+        } else if (jumpOffset === 0x00D2) {
+            // Opcode A: CopyBackwardExtended1
+            Opcode_CopyBackwardExtended1();
+        } else if (jumpOffset === 0x00EC) {
+            // Opcode B: CopyBackwardExtended2
+            Opcode_CopyBackwardExtended2();
+        } else if (jumpOffset === 0x0106) {
+            // Opcode C, D: CopyBackwardReverseShort
+            Opcode_CopyBackwardReverseShort();
+        } else if (jumpOffset === 0x0138) {
+            // Opcode E: CopyBackwardReverseMedium
+            handlerResult = Opcode_CopyBackwardReverseMedium();
+            if (handlerResult === 'end') {
+                // End of decompression - restore registers and return
+                MOVEM_FROM_SP(D0_D3_A0_A2, 'l');
+                console.log("=== BYTECODE DECOMPRESSION COMPLETE ===");
+                return;
+            }
+        } else if (jumpOffset === 0x0158) {
+            // Opcode F: CopyBackwardReverseLong
+            Opcode_CopyBackwardReverseLong();
         }
         
         // bra.s main_bytecode_intepreter_loop
@@ -1955,14 +2077,18 @@ function Opcode_CopyBackwardReverseMedium() {
         
         // beq.w _copybackwardsreversemedium_end
         if (CCR.Z) {
+            // addq.w #4,sp - skip return address on stack
+            ADDQ(4, a7, 'w');
             return 'end'; // End of decompression
         }
         
         // bsr.w FlushOutputBuffer
         BSR(FlushOutputBuffer, 'w');
         
-        // Return from function (skip return address on stack)
-        // In real code: addq.w #4,sp then return
+        // addq.w #4,sp - skip return address on stack
+        ADDQ(4, a7, 'w');
+        
+        // Return from function
         return 'end';
     }
 }
@@ -2103,7 +2229,7 @@ function FlushOutputBuffer() {
     a0 = a1; // Direct register copy
     
     // tst.l (a4)
-    TST_MEM(a4, 'l');
+    TST(a4, 'l');
     
     // beq.w _nocallback
     if (CCR.Z) {
