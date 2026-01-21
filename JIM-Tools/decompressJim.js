@@ -535,27 +535,38 @@ function dumpStack(numEntries = 10) {
 // ────────────────────────────────────────────────────────────────
 // BEQ   Branch if Equal (Z == 1)
 // ────────────────────────────────────────────────────────────────
-function BEQ(targetCallback, size = 'w') {
+function BEQ(targetAddr, size = 'w') {
+  // Opcode is 2 bytes, displacement size depends on size parameter
+  const dispBytes = size === 's' ? 1 : size === 'w' ? 2 : 4;
+  advancePC(2 + dispBytes);
+  
   if (CCR.Z) {
-    console.log(`[BEQ.${size}] Branch TAKEN (Z=1)`);
-    targetCallback();  // Execute the target code block
-    // Note: We do NOT advance PC here — the callback is responsible for setting pc if needed
+    console.log(`[BEQ.${size}] Branch TAKEN (Z=1) to 0x${targetAddr.toString(16).padStart(8, '0')}`);
+    jumpTo(targetAddr);
+    executeAtAddress(targetAddr);
+    return true; // Indicates branch was taken
   } else {
     console.log(`[BEQ.${size}] Branch NOT taken`);
-    advancePC(2);
+    // PC already advanced above
+    return false; // Indicates branch was not taken
   }
 }
 
 // ────────────────────────────────────────────────────────────────
 // BMI   Branch if Minus (N == 1)
 // ────────────────────────────────────────────────────────────────
-function BMI(targetCallback, size = 'w') {
+function BMI(targetAddr, size = 'w') {
+  // Opcode is 2 bytes, displacement size depends on size parameter
+  const dispBytes = size === 's' ? 1 : size === 'w' ? 2 : 4;
+  advancePC(2 + dispBytes);
+  
   if (CCR.N) {
-    console.log(`[BMI.${size}] Branch TAKEN (N=1)`);
-    targetCallback();  // Execute the decompression block
+    console.log(`[BMI.${size}] Branch TAKEN (N=1) to 0x${targetAddr.toString(16).padStart(8, '0')}`);
+    jumpTo(targetAddr);
+    executeAtAddress(targetAddr);
   } else {
     console.log(`[BMI.${size}] Branch NOT taken`);
-    advancePC(4);
+    // PC already advanced above
   }
 }
 
@@ -1095,22 +1106,33 @@ function MOVEDATAINDEXED_TO_REG(baseAn, indexDn, dstDn, size = 'w') {
 // ────────────────────────────────────────────────────────────────
 // BNE   Branch if Not Equal (Z == 0)
 // ────────────────────────────────────────────────────────────────
-function BNE(targetCallback, size = 'w') {
+function BNE(targetAddr, size = 'w') {
+  // Opcode is 2 bytes, displacement size depends on size parameter
+  const dispBytes = size === 's' ? 1 : size === 'w' ? 2 : 4;
+  advancePC(2 + dispBytes);
+  
   if (!CCR.Z) {
-    console.log(`[BNE.${size}] Branch TAKEN (Z=0)`);
-    targetCallback();
+    console.log(`[BNE.${size}] Branch TAKEN (Z=0) to 0x${targetAddr.toString(16).padStart(8, '0')}`);
+    jumpTo(targetAddr);
+    executeAtAddress(targetAddr);
   } else {
     console.log(`[BNE.${size}] Branch NOT taken`);
-    advancePC(size === 's' ? 2 : 4);
+    // PC already advanced above
   }
 }
 
 // ────────────────────────────────────────────────────────────────
 // BRA   Branch Always
 // ────────────────────────────────────────────────────────────────
-function BRA(targetCallback, size = 's') {
-  console.log(`[BRA.${size}] Branch always`);
-  targetCallback();
+function BRA(targetAddr, size = 's') {
+  // Opcode is 2 bytes, displacement size depends on size parameter
+  const dispBytes = size === 's' ? 1 : size === 'w' ? 2 : 4;
+  advancePC(2 + dispBytes);
+  
+  console.log(`[BRA.${size}] Branch always to 0x${targetAddr.toString(16).padStart(8, '0')}`);
+  jumpTo(targetAddr);
+  executeAtAddress(targetAddr);
+  return true; // Always branches
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -1605,20 +1627,18 @@ function decompressGraphics() {
     TST(a4, 'l');
     
     // beq.w DoDMApro
-    if (CCR.Z) {
-        // DoDMApro
-        JSR(DoDMApro);
-    } else {
+    BEQ(DoDMApro, 'w') || (() => {
         // movea.l (a4),a1
         const callbackAddr = readl(a4);
         MOVEA(callbackAddr, a1, 'l');
         
         // bra.w ConvertAndWriteToVDP
-        JSR(ConvertAndWriteToVDP);
-    }
+        BRA(ConvertAndWriteToVDP, 'w');
+    })();
     
-    // After the JSR returns, we'll continue to _enddecompression
-    _endDecompression();
+    // After the branch, we'll continue to _enddecompression
+    // (In assembly, the PEA pushes the return address, so execution continues there)
+    // The branches above will execute the target code, so we don't need to call it again
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -1772,6 +1792,33 @@ let callbackPtr = 0; // Set to non-zero if callback exists
 // Function pointers (simulated)
 const ConvertAndWriteToVDP = 0xD642;
 const DoDMApro = 0xDA98;
+
+// Label addresses
+const _endDecompression = 0xDDC8;
+const _decompress = 0xDDBE;
+
+// Label dispatch table - maps addresses to functions
+const LABEL_DISPATCH = {
+    0xDDC8: () => { _endDecompression(); },
+    0xDDBE: () => { _decompress(); },
+    0xD642: () => { 
+        console.log(`[ConvertAndWriteToVDP] Called with a0=0x${a0.toString(16)}, d0=${d0} words, d1=0x${d1.toString(16)}`);
+        // Simulated: would convert and write to VDP
+    },
+    0xDA98: () => { 
+        console.log(`[DoDMApro] Called with a0=0x${a0.toString(16)}, d0=${d0} words`);
+        // Simulated: would do DMA transfer
+    }
+};
+
+// Helper function to execute code at a label address
+function executeAtAddress(addr) {
+    if (LABEL_DISPATCH[addr]) {
+        LABEL_DISPATCH[addr]();
+    } else {
+        console.warn(`[executeAtAddress] No handler for address 0x${addr.toString(16).padStart(8, '0')}`);
+    }
+}
 
 // ────────────────────────────────────────────────────────────────
 // Jump table for opcode dispatch
