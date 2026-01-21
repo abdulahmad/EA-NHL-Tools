@@ -296,9 +296,20 @@ function ANDI(immValue, register, size = 'w') {
   const immBytes = size === 'l' ? 4 : 2;
   advancePC(2 + immBytes);
 
-  // Validate register (only data registers supported for now)
-  if (register !== d0 && register !== d1 && register !== d2 && register !== d3 &&
-      register !== d4 && register !== d5 && register !== d6 && register !== d7) {
+  // Identify which register by comparing value
+  let currentValue;
+  let isD0 = false, isD1 = false, isD2 = false, isD3 = false;
+  let isD4 = false, isD5 = false, isD6 = false, isD7 = false;
+  
+  if (register === d0) { currentValue = d0; isD0 = true; }
+  else if (register === d1) { currentValue = d1; isD1 = true; }
+  else if (register === d2) { currentValue = d2; isD2 = true; }
+  else if (register === d3) { currentValue = d3; isD3 = true; }
+  else if (register === d4) { currentValue = d4; isD4 = true; }
+  else if (register === d5) { currentValue = d5; isD5 = true; }
+  else if (register === d6) { currentValue = d6; isD6 = true; }
+  else if (register === d7) { currentValue = d7; isD7 = true; }
+  else {
     console.warn("ANDI: Only data registers (d0-d7) supported");
     return;
   }
@@ -308,10 +319,19 @@ function ANDI(immValue, register, size = 'w') {
   const maskedImm = immValue & immMask;
 
   // Perform AND
-  register &= maskedImm;
+  const result = (currentValue & maskedImm) & immMask;
+
+  // Write back to the correct register
+  if (isD0) d0 = result;
+  else if (isD1) d1 = result;
+  else if (isD2) d2 = result;
+  else if (isD3) d3 = result;
+  else if (isD4) d4 = result;
+  else if (isD5) d5 = result;
+  else if (isD6) d6 = result;
+  else if (isD7) d7 = result;
 
   // Update flags (AND affects N, Z, V=0, C=0)
-  const result = register & immMask;
   const negative = (result & SIGN_BIT[size]) !== 0;
   const zero = result === 0;
 
@@ -321,7 +341,7 @@ function ANDI(immValue, register, size = 'w') {
   CCR.C = false;
   // X unchanged
 
-  console.log(`[ANDI.${size} #$${immValue.toString(16).padStart(4,'0')},${register === d0 ? 'd0' : 'reg'}] result = 0x${register.toString(16).padStart(8, '0')} (N=${CCR.N ? 1 : 0}, Z=${CCR.Z ? 1 : 0})`);
+  console.log(`[ANDI.${size} #$${immValue.toString(16).padStart(4,'0')},${isD0 ? 'd0' : isD1 ? 'd1' : isD2 ? 'd2' : isD3 ? 'd3' : isD4 ? 'd4' : isD5 ? 'd5' : isD6 ? 'd6' : isD7 ? 'd7' : 'reg'}] result = 0x${result.toString(16).padStart(8, '0')} (N=${CCR.N ? 1 : 0}, Z=${CCR.Z ? 1 : 0})`);
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -334,34 +354,63 @@ function ANDI(immValue, register, size = 'w') {
 function ADD(srcReg, destReg, size = 'w') {
   advancePC(2); // add.<size> Dn,Dm is 2 bytes
 
-  // Validate registers (data registers only for simplicity)
-  if (srcReg !== d0 && srcReg !== d1 && srcReg !== d2 && srcReg !== d3 &&
-      srcReg !== d4 && srcReg !== d5 && srcReg !== d6 && srcReg !== d7) {
+  // Get source value
+  let srcValue;
+  if (srcReg === d0) srcValue = d0;
+  else if (srcReg === d1) srcValue = d1;
+  else if (srcReg === d2) srcValue = d2;
+  else if (srcReg === d3) srcValue = d3;
+  else if (srcReg === d4) srcValue = d4;
+  else if (srcReg === d5) srcValue = d5;
+  else if (srcReg === d6) srcValue = d6;
+  else if (srcReg === d7) srcValue = d7;
+  else {
     console.warn("ADD: Source must be data register");
     return;
   }
-  if (destReg !== d0 && destReg !== d1 && destReg !== d2 && destReg !== d3 &&
-      destReg !== d4 && destReg !== d5 && destReg !== d6 && destReg !== d7) {
+
+  // Get destination value and identify which register
+  let dstBefore;
+  let isD0 = false, isD1 = false, isD2 = false, isD3 = false;
+  let isD4 = false, isD5 = false, isD6 = false, isD7 = false;
+  
+  if (destReg === d0) { dstBefore = d0; isD0 = true; }
+  else if (destReg === d1) { dstBefore = d1; isD1 = true; }
+  else if (destReg === d2) { dstBefore = d2; isD2 = true; }
+  else if (destReg === d3) { dstBefore = d3; isD3 = true; }
+  else if (destReg === d4) { dstBefore = d4; isD4 = true; }
+  else if (destReg === d5) { dstBefore = d5; isD5 = true; }
+  else if (destReg === d6) { dstBefore = d6; isD6 = true; }
+  else if (destReg === d7) { dstBefore = d7; isD7 = true; }
+  else {
     console.warn("ADD: Destination must be data register");
     return;
   }
 
   // Mask to size
   const mask = MASK[size];
-  const src = srcReg & mask;
-  const dstBefore = destReg & mask;
+  const src = srcValue & mask;
+  const dstMasked = dstBefore & mask;
 
   // Perform addition
-  const result = (dstBefore + src) & mask;
+  const result = (dstMasked + src) & mask;
 
   // Write back (preserve upper bits if size < 'l')
-  destReg = (destReg & ~mask) | result;
+  const finalValue = (dstBefore & ~mask) | result;
+  if (isD0) d0 = finalValue;
+  else if (isD1) d1 = finalValue;
+  else if (isD2) d2 = finalValue;
+  else if (isD3) d3 = finalValue;
+  else if (isD4) d4 = finalValue;
+  else if (isD5) d5 = finalValue;
+  else if (isD6) d6 = finalValue;
+  else if (isD7) d7 = finalValue;
 
   // Update flags
   const negative = (result & SIGN_BIT[size]) !== 0;
   const zero = result === 0;
-  const overflow = ((dstBefore ^ result) & ~(dstBefore ^ src) & SIGN_BIT[size]) !== 0;
-  const carry = (dstBefore + src) > mask;
+  const overflow = ((dstMasked ^ result) & ~(dstMasked ^ src) & SIGN_BIT[size]) !== 0;
+  const carry = (dstMasked + src) > mask;
 
   CCR.N = negative;
   CCR.Z = zero;
@@ -369,7 +418,8 @@ function ADD(srcReg, destReg, size = 'w') {
   CCR.C = carry;
   CCR.X = carry; // X gets same as C for ADD
 
-  console.log(`[ADD.${size} ${srcReg === d0 ? 'd0' : 'src'},${destReg === d4 ? 'd4' : 'dest'}] result = 0x${destReg.toString(16).padStart(8, '0')} (N=${CCR.N ? 1 : 0}, Z=${CCR.Z ? 1 : 0}, V=${CCR.V ? 1 : 0}, C=${CCR.C ? 1 : 0}, X=${CCR.X ? 1 : 0})`);
+  const regName = isD0 ? 'd0' : isD1 ? 'd1' : isD2 ? 'd2' : isD3 ? 'd3' : isD4 ? 'd4' : isD5 ? 'd5' : isD6 ? 'd6' : isD7 ? 'd7' : 'dest';
+  console.log(`[ADD.${size} ${srcReg === d0 ? 'd0' : 'src'},${regName}] result = 0x${finalValue.toString(16).padStart(8, '0')} (N=${CCR.N ? 1 : 0}, Z=${CCR.Z ? 1 : 0}, V=${CCR.V ? 1 : 0}, C=${CCR.C ? 1 : 0}, X=${CCR.X ? 1 : 0})`);
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -1650,11 +1700,9 @@ function _decompressFn() {
     // Main decompression logic goes here
     // When done, you could set pc to next instruction if needed
     ANDI(0x7FFF, d0);                // andi.<w> #$7FFF,d0
-    console.log(`d0: 0x${d0.toString(16)}`);
-    console.log(`d4: 0x${d4.toString(16)}`);
     ADD(d0, d4);                     // add.<w> d0,d4
-    return; // TODO: Remove this
     BSR(decompressBytecode);         // bsr.<w> decompressBytecode
+    return; // TODO: Remove this
 }
 
 function _endDecompressionFn() {
@@ -1678,7 +1726,7 @@ function decompressBytecode() {
     // movea.w #(DispAttribCtr-M68K_RAM),a1
     const dispAttribCtr = OUTPUT_BUFFER_ADDR;
     MOVEA(dispAttribCtr, a1, 'w');
-    
+    return; // TODO: Remove this
     // movea.w #(DispAttribCtr-M68K_RAM),a3
     MOVEA(dispAttribCtr, a3, 'w');
     
