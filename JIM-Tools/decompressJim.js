@@ -1746,7 +1746,8 @@ function decompressBytecode() {
     // movea.w #(callbackPtr-M68K_RAM),a4
     const callbackPtrAddr = 0; // Will be set if callback exists
     MOVEA(callbackPtrAddr, a4, 'w');
-    return; // TODO: Remove this
+    jumpTo(0xDDDA);
+    
     // movea.l #$D642,a5 - ConvertAndWriteToVDP
     MOVEA(ConvertAndWriteToVDP, a5, 'l');
     
@@ -1764,6 +1765,7 @@ function decompressBytecode() {
     
     // clr.w d2
     CLR(d2, 'w');
+    return; // TODO: Remove this
     
     // lea jump_table(pc),a2 - get jump table base address
     // In JS, we'll use the JUMP_TABLE array address (simulated)
