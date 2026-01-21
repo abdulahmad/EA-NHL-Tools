@@ -1604,13 +1604,13 @@ function decompressGraphics() {
     console.log(`Tile byte offset: 0x${d1.toString(16)}`);
     MOVEDATAINC(a0,d0,'w'); // read first opcode (80 3D)
     console.log(`First opcode: 0x${d0.toString(16)}`);
-
+    
     // Now PC should be pointing right after the move.w (a0)+,d0
     console.log(`[PC] Before branches: 0x${pc.toString(16).padStart(8, '0')}`);
 
     BEQ(_endDecompression, 'w');    // beq.w _enddecompression
     BMI(_decompress, 'w');          // bmi.w _decompress
-
+    return; // TODO: Remove this
     // Positive literal count path
     // add.w d0,d4
     ADD(d0, d4, 'w');
@@ -1643,7 +1643,7 @@ function decompressGraphics() {
 
 // ────────────────────────────────────────────────────────────────
 // Target blocks as functions (they can set pc if they want)
-function _decompress() {
+function _decompressFn() {
     jumpTo(0xDDBE);  // Jump to decompression logic
     console.log("=== ENTERING REAL DECOMPRESSION MODE ===");
     
@@ -1651,10 +1651,11 @@ function _decompress() {
     // When done, you could set pc to next instruction if needed
     ANDI(0x7FFF, d0);                // andi.<w> #$7FFF,d0
     ADD(d0, d4);                     // add.<w> d0,d4
+    return; // TODO: Remove this
     BSR(decompressBytecode);         // bsr.<w> decompressBytecode
 }
 
-function _endDecompression() {
+function _endDecompressionFn() {
     jumpTo(0xDDC8); // set to next instruction after enddecompression label
     console.log("=== END OF DECOMPRESSION ===");
     
@@ -1799,8 +1800,8 @@ const _decompress = 0xDDBE;
 
 // Label dispatch table - maps addresses to functions
 const LABEL_DISPATCH = {
-    0xDDC8: () => { _endDecompression(); },
-    0xDDBE: () => { _decompress(); },
+    0xDDC8: () => { _endDecompressionFn(); },
+    0xDDBE: () => { _decompressFn(); },
     0xD642: () => { 
         console.log(`[ConvertAndWriteToVDP] Called with a0=0x${a0.toString(16)}, d0=${d0} words, d1=0x${d1.toString(16)}`);
         // Simulated: would convert and write to VDP
