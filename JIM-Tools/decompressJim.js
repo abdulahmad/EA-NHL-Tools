@@ -157,13 +157,26 @@ function MOVE(srcValue, dstReg, size = 'l') {
 // MOVEA  src, An    (only to address registers)
 // ────────────────────────────────────────────────────────────────
 function MOVEA(srcValue, dstAn, size = 'l') {
-    // Typical MOVEA.L is 4 bytes (opcode 2 + 32-bit immediate/reg)
-    // MOVEA.W is also usually 4 bytes
-    advancePC(2);
-
     if (size === 'b') {
     console.error("MOVEA .b is illegal");
     return;
+    }
+
+    // Detect if srcValue is an immediate (constant) or a register
+    // If it matches any register value, it's register-to-register (2 bytes)
+    // Otherwise, it's an immediate (2 + immediate size bytes)
+    const isImmediate = !(srcValue === a0 || srcValue === a1 || srcValue === a2 || srcValue === a3 ||
+                          srcValue === a4 || srcValue === a5 || srcValue === a6 || srcValue === a7 ||
+                          srcValue === d0 || srcValue === d1 || srcValue === d2 || srcValue === d3 ||
+                          srcValue === d4 || srcValue === d5 || srcValue === d6 || srcValue === d7);
+
+    if (isImmediate) {
+        // Immediate addressing: opcode (2) + immediate value
+        const immBytes = size === 'w' ? 2 : 4;
+        advancePC(2 + immBytes);
+    } else {
+        // Register-to-register: just opcode (2 bytes)
+        advancePC(2);
     }
 
     let value;
@@ -1726,14 +1739,14 @@ function decompressBytecode() {
     // movea.w #(DispAttribCtr-M68K_RAM),a1
     const dispAttribCtr = OUTPUT_BUFFER_ADDR;
     MOVEA(dispAttribCtr, a1, 'w');
-    return; // TODO: Remove this
+    
     // movea.w #(DispAttribCtr-M68K_RAM),a3
     MOVEA(dispAttribCtr, a3, 'w');
     
     // movea.w #(callbackPtr-M68K_RAM),a4
     const callbackPtrAddr = 0; // Will be set if callback exists
     MOVEA(callbackPtrAddr, a4, 'w');
-    
+    return; // TODO: Remove this
     // movea.l #$D642,a5 - ConvertAndWriteToVDP
     MOVEA(ConvertAndWriteToVDP, a5, 'l');
     
