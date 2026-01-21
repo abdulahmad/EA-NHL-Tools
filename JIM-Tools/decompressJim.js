@@ -1047,7 +1047,11 @@ function DBF(counterReg, targetCallback) {
 // ────────────────────────────────────────────────────────────────
 // JSR   Jump to Subroutine
 // ────────────────────────────────────────────────────────────────
-function JSR(targetAddr) {
+// Usage:
+//   JSR(targetAddr) - Direct address: jsr $D642
+//   JSR(baseAn) - Register indirect: jsr (a6)
+//   JSR(baseAn, indexDn, size) - Indexed: jsr (a2,d0.w)
+function JSR(targetAddrOrBase, indexDn = null, size = null) {
   advancePC(2);
   
   // Push return address (PC) onto stack
@@ -1056,6 +1060,61 @@ function JSR(targetAddr) {
   memory[a7 + 1] = (pc >>> 16) & 0xFF;
   memory[a7 + 2] = (pc >>>  8) & 0xFF;
   memory[a7 + 3] = (pc >>>  0) & 0xFF;
+  
+  let targetAddr;
+  
+  // Check if this is indexed addressing (jsr (An,Dn.w))
+  if (indexDn !== null && size !== null) {
+    // Indexed addressing: jsr (baseAn,indexDn.size)
+    let baseAddr;
+    if (targetAddrOrBase === a0) baseAddr = a0;
+    else if (targetAddrOrBase === a1) baseAddr = a1;
+    else if (targetAddrOrBase === a2) baseAddr = a2;
+    else if (targetAddrOrBase === a3) baseAddr = a3;
+    else if (targetAddrOrBase === a4) baseAddr = a4;
+    else if (targetAddrOrBase === a5) baseAddr = a5;
+    else if (targetAddrOrBase === a6) baseAddr = a6;
+    else if (targetAddrOrBase === a7) baseAddr = a7;
+    else {
+      console.warn("JSR: base must be A0–A7 for indexed addressing");
+      return;
+    }
+    
+    let index;
+    if (indexDn === d0) index = d0;
+    else if (indexDn === d1) index = d1;
+    else if (indexDn === d2) index = d2;
+    else if (indexDn === d3) index = d3;
+    else if (indexDn === d4) index = d4;
+    else if (indexDn === d5) index = d5;
+    else if (indexDn === d6) index = d6;
+    else if (indexDn === d7) index = d7;
+    else {
+      console.warn("JSR: index must be D0–D7 for indexed addressing");
+      return;
+    }
+    
+    // Calculate target address: base + index (sign-extended based on size)
+    const mask = MASK[size];
+    const indexMasked = index & mask;
+    // Sign extend if needed
+    let indexValue = indexMasked;
+    if (size === 'w' && (indexMasked & 0x8000)) {
+      indexValue = indexMasked | 0xFFFF0000; // Sign extend word
+    } else if (size === 'b' && (indexMasked & 0x80)) {
+      indexValue = indexMasked | 0xFFFFFF00; // Sign extend byte
+    }
+    
+    targetAddr = (baseAddr + indexValue) & 0xFFFFFFFF;
+  } else if (targetAddrOrBase === a0 || targetAddrOrBase === a1 || targetAddrOrBase === a2 ||
+             targetAddrOrBase === a3 || targetAddrOrBase === a4 || targetAddrOrBase === a5 ||
+             targetAddrOrBase === a6 || targetAddrOrBase === a7) {
+    // Register indirect addressing: jsr (An)
+    targetAddr = targetAddrOrBase;
+  } else {
+    // Direct addressing: jsr $address
+    targetAddr = targetAddrOrBase;
+  }
   
   jumpTo(targetAddr);
   
@@ -1312,6 +1371,9 @@ function MOVEDATAINC(srcAn, dstDn, size = 'b') {
     CCR.Z = zero;
     CCR.V = false;
     CCR.C = false;
+
+    console.log(`MOVEDATAINC: ${srcAn} + ${bytesPerReg} = ${a0}`);
+    console.log(`d0: 0x${d0.toString(16)}`);
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -1771,7 +1833,7 @@ function decompressBytecode() {
     
     // clr.w d2
     CLR(d2, 'w');
-    return; // TODO: Remove this
+  
 
     
     // Main interpreter loop
@@ -1779,7 +1841,7 @@ function decompressBytecode() {
     while (true) {
         // move.b (a0)+,d0
         MOVEDATAINC(a0, d0, 'b');
-        
+        return; // TODO: Remove this
         // andi.w #$F0,d0 - Extract upper nibble (opcode type)
         ANDI(0xF0, d0, 'w');
         
@@ -1788,19 +1850,13 @@ function decompressBytecode() {
 
         // lea jump_table(pc),a2 - get jump table base address
         // In JS, we'll use the JUMP_TABLE array address (simulated)
-        const jumpTableBase = 0xDE06; // Simulated address of jump table
-        LEA(jumpTableBase, a2);
+        LEA(jumpTable, a2);
         
         // move.w (a2,d0.w),d0 - Read jump table entry (offset to handler)
         MOVEDATAINDEXED_TO_REG(a2, d0, d0, 'w');
         
         // jsr (a2,d0.w) - Jump to opcode handler
-        // Calculate handler address: a2 (jump table base) + d0 (offset)
-        const handlerOffset = d0 & 0xFFFF;
-        const handlerAddr = (a2 + handlerOffset) & 0xFFFFFFFF;
-        
-        // JSR to the handler address
-        JSR(handlerAddr);
+        JSR(a2, d0, 'w');
         
         // bra.s main_bytecode_intepreter_loop
         // Loop continues...
@@ -1892,6 +1948,7 @@ function executeAtAddress(addr) {
 // ────────────────────────────────────────────────────────────────
 // Jump table for opcode dispatch
 // ────────────────────────────────────────────────────────────────
+const jumpTable = 0xDE06; // Simulated address of jump table
 const JUMP_TABLE = [
     0x0020, // 0: CopyLiteral
     0x0020, // 1: CopyLiteral
