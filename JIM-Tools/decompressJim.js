@@ -283,69 +283,6 @@ function ASL(count, dstReg, size = 'l') {
     CCR.X = carry;
 }
 
-// ────────────────────────────────────────────────────────────────
-// move.w (a0)+, d0
-// ────────────────────────────────────────────────────────────────
-function MOVEDATAINC(srcValue, dstReg, size = 'w') {  // srcValue = a0, dstReg = d0
-    // move.w (An)+,Dn is 4 bytes (opcode 2 + reg fields)
-    advancePC(4);
-
-    if (size !== 'w') {
-    console.warn("This helper is for .w only");
-    return;
-    }
-
-    const bytesPerReg = size === 'b' ? 1 : size === 'w' ? 2 : 4;
-
-    // 1. Get current address from address register
-    const addr = srcValue;                     // e.g. current value of a0
-    console.log(`MOVEDATAINC: reading from address 0x${addr.toString(16)}`);
-    // 2. Read 16-bit value from memory (big-endian = Motorola 68k style)
-    //    Two ways — choose one:
-
-    // Way A: using byte array (most accurate)
-    const value =
-    (memory[addr]     << 8) |
-    (memory[addr + 1] << 0);
-
-    // Way B: using Uint16Array view (faster, assumes aligned access)
-    // const value = memory16[addr >>> 1];   // addr must be even
-
-    // 3. Write value to d0 (zero-extend to 32 bits)
-    if (dstReg === d0)      d0 = value & 0xFFFF;
-    else if (dstReg === d1) d1 = value & 0xFFFF;
-    else if (dstReg === d2) d2 = value & 0xFFFF;
-    else if (dstReg === d3) d3 = value & 0xFFFF;
-    else if (dstReg === d4) d4 = value & 0xFFFF;
-    else if (dstReg === d5) d5 = value & 0xFFFF;
-    else if (dstReg === d6) d6 = value & 0xFFFF;
-    else if (dstReg === d7) d7 = value & 0xFFFF;
-    // ... add other d3–d7 if needed
-
-    // 4. Post-increment the address register by 2 bytes
-    srcValue += bytesPerReg;
-
-    // Write back the incremented value
-    if (srcValue === a0)      a0 = srcValue;
-    else if (srcValue === a1) a1 = srcValue;
-    else if (srcValue === a2) a2 = srcValue;
-    else if (srcValue === a3) a3 = srcValue;
-    else if (srcValue === a4) a4 = srcValue;
-    else if (srcValue === a5) a5 = srcValue;
-    else if (srcValue === a6) a6 = srcValue;
-    else if (srcValue === a7) a7 = srcValue;
-    // ... etc.
-
-    // 5. Update condition codes (MOVE affects N/Z/V/C)
-    const negative = (value & 0x8000) !== 0;   // bit 15 set
-    const zero     = (value & 0xFFFF) === 0;
-
-    CCR.N = negative;
-    CCR.Z = zero;
-    CCR.V = false;
-    CCR.C = false;
-    // X unchanged
-}
 
 // ────────────────────────────────────────────────────────────────
 // andi.<size> #immValue, register   → AND Immediate with register
@@ -503,6 +440,8 @@ const D0_D1_A0_A6   = 0x7F03;  // D0–D1 + A0–A6 (exactly your ROM instructio
 const D0_D7_A0_A6   = 0xFF03;  // All D0–D7 + A0–A6
 const D2_D7_A0_A6   = 0xFFFC;  // D2–D7 + A0–A6
 const D0_D3_A0_A3   = 0x0F0F;  // D0–D3 + A0–A3
+const D0_D3_A0_A2   = 0x070F;  // D0–D3 + A0–A2
+const D0_D1_A0_A1   = 0x0303;  // D0–D1 + A0–A1
 
 // Full save/restore (all caller-saved regs)
 const FULL_SAVE  = 0xFFFF;  // D0–D7 + A0–A7 (rare, includes SP)
@@ -620,6 +559,887 @@ function BMI(targetCallback, size = 'w') {
   }
 }
 
+// ────────────────────────────────────────────────────────────────
+// LSR   Logical Shift Right
+// ────────────────────────────────────────────────────────────────
+function LSR(count, dstReg, size = 'w') {
+  advancePC(2);
+  
+  let value;
+  if (dstReg === d0) value = d0;
+  else if (dstReg === d1) value = d1;
+  else if (dstReg === d2) value = d2;
+  else if (dstReg === d3) value = d3;
+  else if (dstReg === d4) value = d4;
+  else if (dstReg === d5) value = d5;
+  else if (dstReg === d6) value = d6;
+  else if (dstReg === d7) value = d7;
+  else {
+    console.warn("LSR: destination must be D0–D7");
+    return;
+  }
+
+  const mask = MASK[size];
+  const bits = BIT_WIDTH[size];
+  value &= mask;
+
+  if (count >= bits) {
+    const result = 0;
+    if (dstReg === d0) d0 = result;
+    else if (dstReg === d1) d1 = result;
+    else if (dstReg === d2) d2 = result;
+    else if (dstReg === d3) d3 = result;
+    else if (dstReg === d4) d4 = result;
+    else if (dstReg === d5) d5 = result;
+    else if (dstReg === d6) d6 = result;
+    else if (dstReg === d7) d7 = result;
+    
+    CCR.N = false;
+    CCR.Z = true;
+    CCR.C = false;
+    CCR.X = false;
+    return;
+  }
+
+  if (count === 0) {
+    const neg = (value & SIGN_BIT[size]) !== 0;
+    CCR.N = neg;
+    CCR.Z = value === 0;
+    CCR.C = false;
+    return;
+  }
+
+  const result = (value >>> count) & mask;
+  const carry = ((value >>> (count - 1)) & 1) !== 0;
+
+  if (dstReg === d0) d0 = result;
+  else if (dstReg === d1) d1 = result;
+  else if (dstReg === d2) d2 = result;
+  else if (dstReg === d3) d3 = result;
+  else if (dstReg === d4) d4 = result;
+  else if (dstReg === d5) d5 = result;
+  else if (dstReg === d6) d6 = result;
+  else if (dstReg === d7) d7 = result;
+
+  CCR.N = (result & SIGN_BIT[size]) !== 0;
+  CCR.Z = result === 0;
+  CCR.C = carry;
+  CCR.X = carry;
+}
+
+// ────────────────────────────────────────────────────────────────
+// ROXL  Rotate Left with Extend
+// ────────────────────────────────────────────────────────────────
+function ROXL(count, dstReg, size = 'b') {
+  advancePC(2);
+  
+  let value;
+  if (dstReg === d0) value = d0;
+  else if (dstReg === d1) value = d1;
+  else if (dstReg === d2) value = d2;
+  else if (dstReg === d3) value = d3;
+  else if (dstReg === d4) value = d4;
+  else if (dstReg === d5) value = d5;
+  else if (dstReg === d6) value = d6;
+  else if (dstReg === d7) value = d7;
+  else {
+    console.warn("ROXL: destination must be D0–D7");
+    return;
+  }
+
+  const mask = MASK[size];
+  const bits = BIT_WIDTH[size];
+  value &= mask;
+
+  if (count === 0) {
+    const neg = (value & SIGN_BIT[size]) !== 0;
+    CCR.N = neg;
+    CCR.Z = value === 0;
+    return;
+  }
+
+  let result = value;
+  for (let i = 0; i < count; i++) {
+    const oldX = CCR.X ? 1 : 0;
+    const msb = (result & SIGN_BIT[size]) !== 0;
+    result = ((result << 1) & mask) | oldX;
+    CCR.X = msb;
+    CCR.C = msb;
+  }
+
+  if (dstReg === d0) d0 = result;
+  else if (dstReg === d1) d1 = result;
+  else if (dstReg === d2) d2 = result;
+  else if (dstReg === d3) d3 = result;
+  else if (dstReg === d4) d4 = result;
+  else if (dstReg === d5) d5 = result;
+  else if (dstReg === d6) d6 = result;
+  else if (dstReg === d7) d7 = result;
+
+  CCR.N = (result & SIGN_BIT[size]) !== 0;
+  CCR.Z = result === 0;
+  CCR.V = false;
+}
+
+// ────────────────────────────────────────────────────────────────
+// SUBQ  Subtract Quick (immediate 1-7)
+// ────────────────────────────────────────────────────────────────
+function SUBQ(imm, dstReg, size = 'b') {
+  advancePC(2);
+  
+  if (imm < 1 || imm > 7) {
+    console.warn("SUBQ: immediate must be 1-7");
+    return;
+  }
+
+  let value;
+  if (dstReg === d0) value = d0;
+  else if (dstReg === d1) value = d1;
+  else if (dstReg === d2) value = d2;
+  else if (dstReg === d3) value = d3;
+  else if (dstReg === d4) value = d4;
+  else if (dstReg === d5) value = d5;
+  else if (dstReg === d6) value = d6;
+  else if (dstReg === d7) value = d7;
+  else if (dstReg === a0) value = a0;
+  else if (dstReg === a1) value = a1;
+  else if (dstReg === a2) value = a2;
+  else if (dstReg === a3) value = a3;
+  else if (dstReg === a4) value = a4;
+  else if (dstReg === a5) value = a5;
+  else if (dstReg === a6) value = a6;
+  else if (dstReg === a7) value = a7;
+  else {
+    console.warn("SUBQ: unsupported register");
+    return;
+  }
+
+  const mask = MASK[size];
+  const dstBefore = value & mask;
+  const result = (dstBefore - imm) & mask;
+
+  if (dstReg === d0) d0 = result;
+  else if (dstReg === d1) d1 = result;
+  else if (dstReg === d2) d2 = result;
+  else if (dstReg === d3) d3 = result;
+  else if (dstReg === d4) d4 = result;
+  else if (dstReg === d5) d5 = result;
+  else if (dstReg === d6) d6 = result;
+  else if (dstReg === d7) d7 = result;
+  else if (dstReg === a0) a0 = result;
+  else if (dstReg === a1) a1 = result;
+  else if (dstReg === a2) a2 = result;
+  else if (dstReg === a3) a3 = result;
+  else if (dstReg === a4) a4 = result;
+  else if (dstReg === a5) a5 = result;
+  else if (dstReg === a6) a6 = result;
+  else if (dstReg === a7) a7 = result;
+
+  if (size !== 'l' || (dstReg >= d0 && dstReg <= d7)) {
+    const negative = (result & SIGN_BIT[size]) !== 0;
+    const zero = result === 0;
+    const overflow = ((dstBefore ^ result) & (imm ^ result) & SIGN_BIT[size]) !== 0;
+    const carry = dstBefore < imm;
+
+    CCR.N = negative;
+    CCR.Z = zero;
+    CCR.V = overflow;
+    CCR.C = carry;
+    CCR.X = carry;
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
+// ADDQ  Add Quick (immediate 1-7)
+// ────────────────────────────────────────────────────────────────
+function ADDQ(imm, dstReg, size = 'b') {
+  advancePC(2);
+  
+  if (imm < 1 || imm > 7) {
+    console.warn("ADDQ: immediate must be 1-7");
+    return;
+  }
+
+  let value;
+  if (dstReg === d0) value = d0;
+  else if (dstReg === d1) value = d1;
+  else if (dstReg === d2) value = d2;
+  else if (dstReg === d3) value = d3;
+  else if (dstReg === d4) value = d4;
+  else if (dstReg === d5) value = d5;
+  else if (dstReg === d6) value = d6;
+  else if (dstReg === d7) value = d7;
+  else if (dstReg === a0) value = a0;
+  else if (dstReg === a1) value = a1;
+  else if (dstReg === a2) value = a2;
+  else if (dstReg === a3) value = a3;
+  else if (dstReg === a4) value = a4;
+  else if (dstReg === a5) value = a5;
+  else if (dstReg === a6) value = a6;
+  else if (dstReg === a7) value = a7;
+  else {
+    console.warn("ADDQ: unsupported register");
+    return;
+  }
+
+  const mask = MASK[size];
+  const dstBefore = value & mask;
+  const result = (dstBefore + imm) & mask;
+
+  if (dstReg === d0) d0 = result;
+  else if (dstReg === d1) d1 = result;
+  else if (dstReg === d2) d2 = result;
+  else if (dstReg === d3) d3 = result;
+  else if (dstReg === d4) d4 = result;
+  else if (dstReg === d5) d5 = result;
+  else if (dstReg === d6) d6 = result;
+  else if (dstReg === d7) d7 = result;
+  else if (dstReg === a0) a0 = result;
+  else if (dstReg === a1) a1 = result;
+  else if (dstReg === a2) a2 = result;
+  else if (dstReg === a3) a3 = result;
+  else if (dstReg === a4) a4 = result;
+  else if (dstReg === a5) a5 = result;
+  else if (dstReg === a6) a6 = result;
+  else if (dstReg === a7) a7 = result;
+
+  if (size !== 'l' || (dstReg >= d0 && dstReg <= d7)) {
+    const negative = (result & SIGN_BIT[size]) !== 0;
+    const zero = result === 0;
+    const overflow = ((dstBefore ^ result) & ~(dstBefore ^ imm) & SIGN_BIT[size]) !== 0;
+    const carry = (dstBefore + imm) > mask;
+
+    CCR.N = negative;
+    CCR.Z = zero;
+    CCR.V = overflow;
+    CCR.C = carry;
+    CCR.X = carry;
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
+// CLR   Clear register
+// ────────────────────────────────────────────────────────────────
+function CLR(dstReg, size = 'w') {
+  advancePC(2);
+  
+  const result = 0;
+  
+  if (dstReg === d0) d0 = result;
+  else if (dstReg === d1) d1 = result;
+  else if (dstReg === d2) d2 = result;
+  else if (dstReg === d3) d3 = result;
+  else if (dstReg === d4) d4 = result;
+  else if (dstReg === d5) d5 = result;
+  else if (dstReg === d6) d6 = result;
+  else if (dstReg === d7) d7 = result;
+  else {
+    console.warn("CLR: destination must be D0–D7");
+    return;
+  }
+
+  CCR.N = false;
+  CCR.Z = true;
+  CCR.V = false;
+  CCR.C = false;
+}
+
+// ────────────────────────────────────────────────────────────────
+// NEG   Negate (two's complement)
+// ────────────────────────────────────────────────────────────────
+function NEG(dstReg, size = 'b') {
+  advancePC(2);
+  
+  let value;
+  if (dstReg === d0) value = d0;
+  else if (dstReg === d1) value = d1;
+  else if (dstReg === d2) value = d2;
+  else if (dstReg === d3) value = d3;
+  else if (dstReg === d4) value = d4;
+  else if (dstReg === d5) value = d5;
+  else if (dstReg === d6) value = d6;
+  else if (dstReg === d7) value = d7;
+  else {
+    console.warn("NEG: destination must be D0–D7");
+    return;
+  }
+
+  const mask = MASK[size];
+  value &= mask;
+  const result = (-value) & mask;
+
+  if (dstReg === d0) d0 = result;
+  else if (dstReg === d1) d1 = result;
+  else if (dstReg === d2) d2 = result;
+  else if (dstReg === d3) d3 = result;
+  else if (dstReg === d4) d4 = result;
+  else if (dstReg === d5) d5 = result;
+  else if (dstReg === d6) d6 = result;
+  else if (dstReg === d7) d7 = result;
+
+  const negative = (result & SIGN_BIT[size]) !== 0;
+  const zero = result === 0;
+  const overflow = value === SIGN_BIT[size]; // -128/-32768/-2147483648
+  const carry = value !== 0;
+
+  CCR.N = negative;
+  CCR.Z = zero;
+  CCR.V = overflow;
+  CCR.C = carry;
+  CCR.X = carry;
+}
+
+// ────────────────────────────────────────────────────────────────
+// TST   Test (set flags without storing)
+// ────────────────────────────────────────────────────────────────
+function TST(srcReg, size = 'w') {
+  advancePC(2);
+  
+  let value;
+  if (srcReg === d0) value = d0;
+  else if (srcReg === d1) value = d1;
+  else if (srcReg === d2) value = d2;
+  else if (srcReg === d3) value = d3;
+  else if (srcReg === d4) value = d4;
+  else if (srcReg === d5) value = d5;
+  else if (srcReg === d6) value = d6;
+  else if (srcReg === d7) value = d7;
+  else {
+    console.warn("TST: source must be D0–D7");
+    return;
+  }
+
+  const mask = MASK[size];
+  value &= mask;
+
+  CCR.N = (value & SIGN_BIT[size]) !== 0;
+  CCR.Z = value === 0;
+  CCR.V = false;
+  CCR.C = false;
+}
+
+// ────────────────────────────────────────────────────────────────
+// DBF   Decrement and Branch if False (d0 = d0 - 1, branch if d0 != -1)
+// ────────────────────────────────────────────────────────────────
+function DBF(counterReg, targetCallback) {
+  advancePC(2);
+  
+  let value;
+  if (counterReg === d0) value = d0;
+  else if (counterReg === d1) value = d1;
+  else if (counterReg === d2) value = d2;
+  else if (counterReg === d3) value = d3;
+  else if (counterReg === d4) value = d4;
+  else if (counterReg === d5) value = d5;
+  else if (counterReg === d6) value = d6;
+  else if (counterReg === d7) value = d7;
+  else {
+    console.warn("DBF: counter must be D0–D7");
+    return;
+  }
+
+  value = (value - 1) & 0xFFFF;
+  
+  if (counterReg === d0) d0 = value;
+  else if (counterReg === d1) d1 = value;
+  else if (counterReg === d2) d2 = value;
+  else if (counterReg === d3) d3 = value;
+  else if (counterReg === d4) d4 = value;
+  else if (counterReg === d5) d5 = value;
+  else if (counterReg === d6) d6 = value;
+  else if (counterReg === d7) d7 = value;
+
+  if (value !== 0xFFFF) {
+    targetCallback();
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
+// JSR   Jump to Subroutine
+// ────────────────────────────────────────────────────────────────
+function JSR(targetAddr) {
+  advancePC(2);
+  
+  // Push return address (PC) onto stack
+  a7 -= 4;
+  memory[a7 + 0] = (pc >>> 24) & 0xFF;
+  memory[a7 + 1] = (pc >>> 16) & 0xFF;
+  memory[a7 + 2] = (pc >>>  8) & 0xFF;
+  memory[a7 + 3] = (pc >>>  0) & 0xFF;
+  
+  jumpTo(targetAddr);
+}
+
+// ────────────────────────────────────────────────────────────────
+// LEA   Load Effective Address
+// ────────────────────────────────────────────────────────────────
+function LEA(srcAddr, dstAn) {
+  advancePC(4);
+  
+  if (dstAn === a0) a0 = srcAddr;
+  else if (dstAn === a1) a1 = srcAddr;
+  else if (dstAn === a2) a2 = srcAddr;
+  else if (dstAn === a3) a3 = srcAddr;
+  else if (dstAn === a4) a4 = srcAddr;
+  else if (dstAn === a5) a5 = srcAddr;
+  else if (dstAn === a6) a6 = srcAddr;
+  else if (dstAn === a7) a7 = srcAddr;
+  else {
+    console.warn("LEA: destination must be A0–A7");
+    return;
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
+// BNE   Branch if Not Equal (Z == 0)
+// ────────────────────────────────────────────────────────────────
+function BNE(targetCallback, size = 'w') {
+  if (!CCR.Z) {
+    console.log(`[BNE.${size}] Branch TAKEN (Z=0)`);
+    targetCallback();
+  } else {
+    console.log(`[BNE.${size}] Branch NOT taken`);
+    advancePC(size === 's' ? 2 : 4);
+  }
+}
+
+// ────────────────────────────────────────────────────────────────
+// BRA   Branch Always
+// ────────────────────────────────────────────────────────────────
+function BRA(targetCallback, size = 's') {
+  console.log(`[BRA.${size}] Branch always`);
+  targetCallback();
+}
+
+// ────────────────────────────────────────────────────────────────
+// move.b -1(An),Dn  → Read byte from address register - 1
+// ────────────────────────────────────────────────────────────────
+function MOVEDATAPREDEC(srcAn, dstDn, size = 'b') {
+    advancePC(2);
+    
+    let addr;
+    if (srcAn === a0) addr = (a0 - 1) & 0xFFFFFFFF;
+    else if (srcAn === a1) addr = (a1 - 1) & 0xFFFFFFFF;
+    else if (srcAn === a2) addr = (a2 - 1) & 0xFFFFFFFF;
+    else if (srcAn === a3) addr = (a3 - 1) & 0xFFFFFFFF;
+    else if (srcAn === a4) addr = (a4 - 1) & 0xFFFFFFFF;
+    else if (srcAn === a5) addr = (a5 - 1) & 0xFFFFFFFF;
+    else if (srcAn === a6) addr = (a6 - 1) & 0xFFFFFFFF;
+    else if (srcAn === a7) addr = (a7 - 1) & 0xFFFFFFFF;
+    else {
+        console.warn("MOVEDATAPREDEC: source must be A0–A7");
+        return;
+    }
+    
+    const value = memory[addr & 0xFFFFFFFF];
+    
+    if (dstDn === d0) d0 = value;
+    else if (dstDn === d1) d1 = value;
+    else if (dstDn === d2) d2 = value;
+    else if (dstDn === d3) d3 = value;
+    else if (dstDn === d4) d4 = value;
+    else if (dstDn === d5) d5 = value;
+    else if (dstDn === d6) d6 = value;
+    else if (dstDn === d7) d7 = value;
+    else {
+        console.warn("MOVEDATAPREDEC: destination must be D0–D7");
+        return;
+    }
+    
+    // Update flags
+    const negative = (value & 0x80) !== 0;
+    const zero = value === 0;
+    CCR.N = negative;
+    CCR.Z = zero;
+    CCR.V = false;
+    CCR.C = false;
+}
+
+// ────────────────────────────────────────────────────────────────
+// move.<size> (An)+,Dn  → Read from address register and increment
+// ────────────────────────────────────────────────────────────────
+function MOVEDATAINC(srcAn, dstDn, size = 'b') {
+    advancePC(2);
+    
+    let addr;
+    if (srcAn === a0) addr = a0;
+    else if (srcAn === a1) addr = a1;
+    else if (srcAn === a2) addr = a2;
+    else if (srcAn === a3) addr = a3;
+    else if (srcAn === a4) addr = a4;
+    else if (srcAn === a5) addr = a5;
+    else if (srcAn === a6) addr = a6;
+    else if (srcAn === a7) addr = a7;
+    else {
+        console.warn("MOVEDATAINC: source must be A0–A7");
+        return;
+    }
+    
+    let value;
+    const bytesPerReg = size === 'b' ? 1 : size === 'w' ? 2 : 4;
+    
+    if (size === 'b') {
+        value = memory[addr & 0xFFFFFFFF];
+    } else if (size === 'w') {
+        value = (memory[addr & 0xFFFFFFFF] << 8) | memory[(addr + 1) & 0xFFFFFFFF];
+    } else {
+        value = readl(addr);
+    }
+    
+    // Post-increment
+    if (srcAn === a0) a0 = (a0 + bytesPerReg) & 0xFFFFFFFF;
+    else if (srcAn === a1) a1 = (a1 + bytesPerReg) & 0xFFFFFFFF;
+    else if (srcAn === a2) a2 = (a2 + bytesPerReg) & 0xFFFFFFFF;
+    else if (srcAn === a3) a3 = (a3 + bytesPerReg) & 0xFFFFFFFF;
+    else if (srcAn === a4) a4 = (a4 + bytesPerReg) & 0xFFFFFFFF;
+    else if (srcAn === a5) a5 = (a5 + bytesPerReg) & 0xFFFFFFFF;
+    else if (srcAn === a6) a6 = (a6 + bytesPerReg) & 0xFFFFFFFF;
+    else if (srcAn === a7) a7 = (a7 + bytesPerReg) & 0xFFFFFFFF;
+    
+    const mask = MASK[size];
+    value &= mask;
+    
+    if (dstDn === d0) d0 = value;
+    else if (dstDn === d1) d1 = value;
+    else if (dstDn === d2) d2 = value;
+    else if (dstDn === d3) d3 = value;
+    else if (dstDn === d4) d4 = value;
+    else if (dstDn === d5) d5 = value;
+    else if (dstDn === d6) d6 = value;
+    else if (dstDn === d7) d7 = value;
+    else {
+        console.warn("MOVEDATAINC: destination must be D0–D7");
+        return;
+    }
+    
+    // Update flags
+    const negative = (value & SIGN_BIT[size]) !== 0;
+    const zero = value === 0;
+    CCR.N = negative;
+    CCR.Z = zero;
+    CCR.V = false;
+    CCR.C = false;
+}
+
+// ────────────────────────────────────────────────────────────────
+// move.<size> (An)+,(Am,Dn.w)  → Read from An+, write to indexed address
+// ────────────────────────────────────────────────────────────────
+function MOVEDATAINC_TO_INDEXED(srcAn, baseAn, indexDn, size = 'b') {
+    advancePC(4);
+    
+    let srcAddr;
+    if (srcAn === a0) srcAddr = a0;
+    else if (srcAn === a1) srcAddr = a1;
+    else if (srcAn === a2) srcAddr = a2;
+    else if (srcAn === a3) srcAddr = a3;
+    else if (srcAn === a4) srcAddr = a4;
+    else if (srcAn === a5) srcAddr = a5;
+    else if (srcAn === a6) srcAddr = a6;
+    else if (srcAn === a7) srcAddr = a7;
+    else {
+        console.warn("MOVEDATAINC_TO_INDEXED: source must be A0–A7");
+        return;
+    }
+    
+    const bytesPerReg = size === 'b' ? 1 : size === 'w' ? 2 : 4;
+    let value;
+    
+    if (size === 'b') {
+        value = memory[srcAddr & 0xFFFFFFFF];
+    } else if (size === 'w') {
+        value = (memory[srcAddr & 0xFFFFFFFF] << 8) | memory[(srcAddr + 1) & 0xFFFFFFFF];
+    } else {
+        value = readl(srcAddr);
+    }
+    
+    // Post-increment source
+    if (srcAn === a0) a0 = (a0 + bytesPerReg) & 0xFFFFFFFF;
+    else if (srcAn === a1) a1 = (a1 + bytesPerReg) & 0xFFFFFFFF;
+    else if (srcAn === a2) a2 = (a2 + bytesPerReg) & 0xFFFFFFFF;
+    else if (srcAn === a3) a3 = (a3 + bytesPerReg) & 0xFFFFFFFF;
+    else if (srcAn === a4) a4 = (a4 + bytesPerReg) & 0xFFFFFFFF;
+    else if (srcAn === a5) a5 = (a5 + bytesPerReg) & 0xFFFFFFFF;
+    else if (srcAn === a6) a6 = (a6 + bytesPerReg) & 0xFFFFFFFF;
+    else if (srcAn === a7) a7 = (a7 + bytesPerReg) & 0xFFFFFFFF;
+    
+    // Calculate destination address
+    let baseAddr;
+    if (baseAn === a0) baseAddr = a0;
+    else if (baseAn === a1) baseAddr = a1;
+    else if (baseAn === a2) baseAddr = a2;
+    else if (baseAn === a3) baseAddr = a3;
+    else if (baseAn === a4) baseAddr = a4;
+    else if (baseAn === a5) baseAddr = a5;
+    else if (baseAn === a6) baseAddr = a6;
+    else if (baseAn === a7) baseAddr = a7;
+    else {
+        console.warn("MOVEDATAINC_TO_INDEXED: base must be A0–A7");
+        return;
+    }
+    
+    let index;
+    if (indexDn === d0) index = d0;
+    else if (indexDn === d1) index = d1;
+    else if (indexDn === d2) index = d2;
+    else if (indexDn === d3) index = d3;
+    else if (indexDn === d4) index = d4;
+    else if (indexDn === d5) index = d5;
+    else if (indexDn === d6) index = d6;
+    else if (indexDn === d7) index = d7;
+    else {
+        console.warn("MOVEDATAINC_TO_INDEXED: index must be D0–D7");
+        return;
+    }
+    
+    const dstAddr = (baseAddr + (index & 0xFFFF)) & 0xFFFFFFFF;
+    
+    // Write to output buffer if within range
+    if (baseAddr === OUTPUT_BUFFER_ADDR && dstAddr < OUTPUT_BUFFER_ADDR + OUTPUT_BUFFER_SIZE) {
+        if (size === 'b') {
+            outputBuffer[index & 0xFF] = value & 0xFF;
+        } else if (size === 'w') {
+            outputBuffer[index & 0xFF] = (value >>> 8) & 0xFF;
+            outputBuffer[(index + 1) & 0xFF] = value & 0xFF;
+        } else {
+            outputBuffer[index & 0xFF] = (value >>> 24) & 0xFF;
+            outputBuffer[(index + 1) & 0xFF] = (value >>> 16) & 0xFF;
+            outputBuffer[(index + 2) & 0xFF] = (value >>> 8) & 0xFF;
+            outputBuffer[(index + 3) & 0xFF] = value & 0xFF;
+        }
+    } else {
+        if (size === 'b') {
+            memory[dstAddr & 0xFFFFFFFF] = value & 0xFF;
+        } else if (size === 'w') {
+            memory[dstAddr & 0xFFFFFFFF] = (value >>> 8) & 0xFF;
+            memory[(dstAddr + 1) & 0xFFFFFFFF] = value & 0xFF;
+        } else {
+            memory[dstAddr & 0xFFFFFFFF] = (value >>> 24) & 0xFF;
+            memory[(dstAddr + 1) & 0xFFFFFFFF] = (value >>> 16) & 0xFF;
+            memory[(dstAddr + 2) & 0xFFFFFFFF] = (value >>> 8) & 0xFF;
+            memory[(dstAddr + 3) & 0xFFFFFFFF] = value & 0xFF;
+        }
+    }
+}
+
+// ────────────────────────────────────────────────────────────────
+// move.b Dn,(Am,Dn2.w)  → Write byte from register to indexed address
+// ────────────────────────────────────────────────────────────────
+function MOVEDATAREG_TO_INDEXED(srcDn, baseAn, indexDn2, size = 'b') {
+    advancePC(4);
+    
+    let srcValue;
+    if (srcDn === d0) srcValue = d0;
+    else if (srcDn === d1) srcValue = d1;
+    else if (srcDn === d2) srcValue = d2;
+    else if (srcDn === d3) srcValue = d3;
+    else if (srcDn === d4) srcValue = d4;
+    else if (srcDn === d5) srcValue = d5;
+    else if (srcDn === d6) srcValue = d6;
+    else if (srcDn === d7) srcValue = d7;
+    else {
+        console.warn("MOVEDATAREG_TO_INDEXED: source must be D0–D7");
+        return;
+    }
+    
+    let baseAddr;
+    if (baseAn === a0) baseAddr = a0;
+    else if (baseAn === a1) baseAddr = a1;
+    else if (baseAn === a2) baseAddr = a2;
+    else if (baseAn === a3) baseAddr = a3;
+    else if (baseAn === a4) baseAddr = a4;
+    else if (baseAn === a5) baseAddr = a5;
+    else if (baseAn === a6) baseAddr = a6;
+    else if (baseAn === a7) baseAddr = a7;
+    else {
+        console.warn("MOVEDATAREG_TO_INDEXED: base must be A0–A7");
+        return;
+    }
+    
+    let index;
+    if (indexDn2 === d0) index = d0;
+    else if (indexDn2 === d1) index = d1;
+    else if (indexDn2 === d2) index = d2;
+    else if (indexDn2 === d3) index = d3;
+    else if (indexDn2 === d4) index = d4;
+    else if (indexDn2 === d5) index = d5;
+    else if (indexDn2 === d6) index = d6;
+    else if (indexDn2 === d7) index = d7;
+    else {
+        console.warn("MOVEDATAREG_TO_INDEXED: index must be D0–D7");
+        return;
+    }
+    
+    const dstAddr = (baseAddr + (index & 0xFFFF)) & 0xFFFFFFFF;
+    const byteValue = srcValue & 0xFF;
+    
+    // Write to output buffer if within range
+    if (baseAddr === OUTPUT_BUFFER_ADDR && dstAddr < OUTPUT_BUFFER_ADDR + OUTPUT_BUFFER_SIZE) {
+        outputBuffer[index & 0xFF] = byteValue;
+    } else {
+        memory[dstAddr & 0xFFFFFFFF] = byteValue;
+    }
+}
+
+// ────────────────────────────────────────────────────────────────
+// move.b (Am,Dn.w),(Am2,Dn2.w)  → Copy from indexed to indexed
+// ────────────────────────────────────────────────────────────────
+function MOVEDATAINDEXED_TO_INDEXED(srcBaseAn, srcIndexDn, dstBaseAn, dstIndexDn, size = 'b') {
+    advancePC(6);
+    
+    let srcBaseAddr;
+    if (srcBaseAn === a0) srcBaseAddr = a0;
+    else if (srcBaseAn === a1) srcBaseAddr = a1;
+    else if (srcBaseAn === a2) srcBaseAddr = a2;
+    else if (srcBaseAn === a3) srcBaseAddr = a3;
+    else if (srcBaseAn === a4) srcBaseAddr = a4;
+    else if (srcBaseAn === a5) srcBaseAddr = a5;
+    else if (srcBaseAn === a6) srcBaseAddr = a6;
+    else if (srcBaseAn === a7) srcBaseAddr = a7;
+    else {
+        console.warn("MOVEDATAINDEXED_TO_INDEXED: src base must be A0–A7");
+        return;
+    }
+    
+    let srcIndex;
+    if (srcIndexDn === d0) srcIndex = d0;
+    else if (srcIndexDn === d1) srcIndex = d1;
+    else if (srcIndexDn === d2) srcIndex = d2;
+    else if (srcIndexDn === d3) srcIndex = d3;
+    else if (srcIndexDn === d4) srcIndex = d4;
+    else if (srcIndexDn === d5) srcIndex = d5;
+    else if (srcIndexDn === d6) srcIndex = d6;
+    else if (srcIndexDn === d7) srcIndex = d7;
+    else {
+        console.warn("MOVEDATAINDEXED_TO_INDEXED: src index must be D0–D7");
+        return;
+    }
+    
+    let dstBaseAddr;
+    if (dstBaseAn === a0) dstBaseAddr = a0;
+    else if (dstBaseAn === a1) dstBaseAddr = a1;
+    else if (dstBaseAn === a2) dstBaseAddr = a2;
+    else if (dstBaseAn === a3) dstBaseAddr = a3;
+    else if (dstBaseAn === a4) dstBaseAddr = a4;
+    else if (dstBaseAn === a5) dstBaseAddr = a5;
+    else if (dstBaseAn === a6) dstBaseAddr = a6;
+    else if (dstBaseAn === a7) dstBaseAddr = a7;
+    else {
+        console.warn("MOVEDATAINDEXED_TO_INDEXED: dst base must be A0–A7");
+        return;
+    }
+    
+    let dstIndex;
+    if (dstIndexDn === d0) dstIndex = d0;
+    else if (dstIndexDn === d1) dstIndex = d1;
+    else if (dstIndexDn === d2) dstIndex = d2;
+    else if (dstIndexDn === d3) dstIndex = d3;
+    else if (dstIndexDn === d4) dstIndex = d4;
+    else if (dstIndexDn === d5) dstIndex = d5;
+    else if (dstIndexDn === d6) dstIndex = d6;
+    else if (dstIndexDn === d7) dstIndex = d7;
+    else {
+        console.warn("MOVEDATAINDEXED_TO_INDEXED: dst index must be D0–D7");
+        return;
+    }
+    
+    const srcAddr = (srcBaseAddr + (srcIndex & 0xFFFF)) & 0xFFFFFFFF;
+    const dstAddr = (dstBaseAddr + (dstIndex & 0xFFFF)) & 0xFFFFFFFF;
+    
+    let value;
+    if (srcBaseAddr === OUTPUT_BUFFER_ADDR && srcAddr < OUTPUT_BUFFER_ADDR + OUTPUT_BUFFER_SIZE) {
+        value = outputBuffer[srcIndex & 0xFF];
+    } else {
+        value = memory[srcAddr & 0xFFFFFFFF];
+    }
+    
+    if (dstBaseAddr === OUTPUT_BUFFER_ADDR && dstAddr < OUTPUT_BUFFER_ADDR + OUTPUT_BUFFER_SIZE) {
+        outputBuffer[dstIndex & 0xFF] = value;
+    } else {
+        memory[dstAddr & 0xFFFFFFFF] = value;
+    }
+}
+
+
+// ────────────────────────────────────────────────────────────────
+// MOVEM   (sp)+, registers    → Pop multiple registers from stack
+// ────────────────────────────────────────────────────────────────
+function MOVEM_FROM_SP(maskOrList, size = 'l') {
+  advancePC(4);
+
+  const bytesPerReg = size === 'b' ? 1 : size === 'w' ? 2 : 4;
+
+  let registersToPop = [];
+
+  if (typeof maskOrList === 'number') {
+    const mask = maskOrList;
+
+    // Collect registers in NORMAL order: D0→D7, A0→A7
+    for (let i = 0; i < 8; i++) {
+      if (mask & (1 << i)) {
+        registersToPop.push({ reg: `d${i}`, index: i, isData: true });
+      }
+    }
+
+    for (let i = 0; i < 8; i++) {
+      if (mask & (1 << (i + 8))) {
+        registersToPop.push({ reg: `a${i}`, index: i, isData: false });
+      }
+    }
+  } else {
+    console.error("MOVEM_FROM_SP: Only mask number supported");
+    return;
+  }
+
+  // Pop in order (lowest reg first)
+  registersToPop.forEach(({ reg, index, isData }) => {
+    let value = 0;
+
+    if (size === 'l') {
+      value = (memory[a7 + 0] << 24) | (memory[a7 + 1] << 16) | 
+              (memory[a7 + 2] << 8) | memory[a7 + 3];
+    } else if (size === 'w') {
+      value = (memory[a7 + 0] << 8) | memory[a7 + 1];
+      if (isData) {
+        // Sign extend for data registers
+        value = (value & 0x8000) ? (value | 0xFFFF0000) : value;
+      }
+    } else if (size === 'b') {
+      value = memory[a7 + 0];
+      if (isData) {
+        // Sign extend for data registers
+        value = (value & 0x80) ? (value | 0xFFFFFF00) : value;
+      }
+    }
+
+    a7 += bytesPerReg;
+
+    if (isData) {
+      const regs = [d0, d1, d2, d3, d4, d5, d6, d7];
+      if (index === 0) d0 = value;
+      else if (index === 1) d1 = value;
+      else if (index === 2) d2 = value;
+      else if (index === 3) d3 = value;
+      else if (index === 4) d4 = value;
+      else if (index === 5) d5 = value;
+      else if (index === 6) d6 = value;
+      else if (index === 7) d7 = value;
+    } else {
+      if (index === 0) a0 = value;
+      else if (index === 1) a1 = value;
+      else if (index === 2) a2 = value;
+      else if (index === 3) a3 = value;
+      else if (index === 4) a4 = value;
+      else if (index === 5) a5 = value;
+      else if (index === 6) a6 = value;
+      else if (index === 7) a7 = value;
+    }
+
+    console.log(`[MOVEM.${size}] Popped ${reg} = 0x${value.toString(16).padStart(8, '0')} from 0x${(a7 - bytesPerReg).toString(16).padStart(8, '0')}`);
+  });
+
+  console.log(`[MOVEM.${size}] Flags unchanged`);
+}
+
 
 function startDecompression(jimDataPtr) {
     loadROM();
@@ -691,18 +1511,644 @@ function _endDecompression() {
   
 }
 
-function decompressBytecode(data, pos) {
-    jumpTo(0xDDCE);  // Jump to bytecode decompression logic
+// ────────────────────────────────────────────────────────────────
+// Output buffer (simulated RAM addresses)
+// ────────────────────────────────────────────────────────────────
+const OUTPUT_BUFFER_SIZE = 0x100; // 256 bytes
+const OUTPUT_BUFFER_ADDR = 0x00FF0000; // Simulated RAM address
+let outputBuffer = new Uint8Array(OUTPUT_BUFFER_SIZE);
+
+// Callback pointer (simulated)
+let callbackPtr = 0; // Set to non-zero if callback exists
+
+// Function pointers (simulated)
+const ConvertAndWriteToVDP = 0xD642;
+const DoDMApro = 0xDA98;
+
+// ────────────────────────────────────────────────────────────────
+// Jump table for opcode dispatch
+// ────────────────────────────────────────────────────────────────
+const JUMP_TABLE = [
+    0x0020, // 0: CopyLiteral
+    0x0020, // 1: CopyLiteral
+    0x003C, // 2: ClearBytes
+    0x0058, // 3: FillBytes
+    0x0078, // 4: CopyBackwardShort
+    0x0078, // 5: CopyBackwardShort
+    0x0078, // 6: CopyBackwardShort
+    0x0078, // 7: CopyBackwardShort
+    0x00AA, // 8: CopyBackwardMedium
+    0x00B8, // 9: CopyBackwardLong
+    0x00D2, // A: CopyBackwardExtended1
+    0x00EC, // B: CopyBackwardExtended2
+    0x0106, // C: CopyBackwardReverseShort
+    0x0106, // D: CopyBackwardReverseShort
+    0x0138, // E: CopyBackwardReverseMedium
+    0x0158  // F: CopyBackwardReverseLong
+];
+
+// ────────────────────────────────────────────────────────────────
+// Opcode handlers
+// ────────────────────────────────────────────────────────────────
+
+function Opcode_CopyLiteral() {
+    // move.b -1(a0),d0
+    MOVEDATAPREDEC(a0, d0, 'b');
+    
+    // andi.w #$1F,d0
+    ANDI(0x1F, d0, 'w');
+    
+    let count = d0 & 0xFFFF;
+    
+    // Copy_bytes_loop:
+    while (count >= 0) {
+        // move.b (a0)+,(a1,d1.w)
+        MOVEDATAINC_TO_INDEXED(a0, a1, d1, 'b');
+        
+        // addq.b #1,d1
+        ADDQ(1, d1, 'b');
+        
+        // bne.w loop_for_count
+        if (d1 === 0) {
+            FlushOutputBuffer();
+        }
+        
+        // dbf d0,Copy_bytes_loop
+        if (count === 0) break;
+        count--;
+        d0 = count; // Update d0 for DBF
+    }
+}
+
+function Opcode_ClearBytes() {
+    // move.b -1(a0),d0
+    MOVEDATAPREDEC(a0, d0, 'b');
+    
+    // andi.w #$F,d0
+    ANDI(0xF, d0, 'w');
+    
+    let count = d0 & 0xFFFF;
+    
+    // Clear_bytes_loop:
+    while (count >= 0) {
+        // clr.b (a1,d1.w) - write 0 to indexed address
+        d2 = 0;
+        MOVEDATAREG_TO_INDEXED(d2, a1, d1, 'b');
+        
+        // addq.b #1,d1
+        ADDQ(1, d1, 'b');
+        
+        // bne.w loop_for_count2
+        if (d1 === 0) {
+            FlushOutputBuffer();
+        }
+        
+        // dbf d0,Clear_bytes_loop
+        if (count === 0) break;
+        count--;
+        d0 = count;
+    }
+}
+
+function Opcode_FillBytes() {
+    // move.b -1(a0),d0
+    MOVEDATAPREDEC(a0, d0, 'b');
+    
+    // andi.w #$F,d0
+    ANDI(0xF, d0, 'w');
+    
+    // addq.w #2,d0
+    ADDQ(2, d0, 'w');
+    
+    // move.b (a0)+,d2
+    MOVEDATAINC(a0, d2, 'b');
+    
+    let count = d0 & 0xFFFF;
+    
+    // Fill_bytes_loop:
+    while (count >= 0) {
+        // move.b d2,(a1,d1.w)
+        MOVEDATAREG_TO_INDEXED(d2, a1, d1, 'b');
+        
+        // addq.b #1,d1
+        ADDQ(1, d1, 'b');
+        
+        // bne.w loop_for_count3
+        if (d1 === 0) {
+            FlushOutputBuffer();
+        }
+        
+        // dbf d0,Fill_bytes_loop
+        if (count === 0) break;
+        count--;
+        d0 = count;
+    }
+}
+
+function Opcode_CopyBackwardShort() {
+    // move.b -1(a0),d0
+    MOVEDATAPREDEC(a0, d0, 'b');
+    
+    // andi.w #7,d0
+    ANDI(0x7, d0, 'w');
+    
+    // addq.w #1,d0
+    ADDQ(1, d0, 'w');
+    
+    // move.b -1(a0),d2 - read opcode again
+    MOVEDATAPREDEC(a0, d2, 'b');
+    
+    // lsr.w #3,d2
+    LSR(3, d2, 'w');
+    
+    // andi.w #7,d2
+    ANDI(0x7, d2, 'w');
+    
+    // addq.w #1,d2
+    ADDQ(1, d2, 'w');
+    
+    _copybackwardloop1();
+}
+
+function Opcode_CopyBackwardMedium() {
+    // move.b -1(a0),d0
+    MOVEDATAPREDEC(a0, d0, 'b');
+    
+    // andi.w #$F,d0
+    ANDI(0xF, d0, 'w');
+    
+    // addq.w #2,d0
+    ADDQ(2, d0, 'w');
+    
+    // move.b (a0)+,d2
+    MOVEDATAINC(a0, d2, 'b');
+    
+    _copybackwardloop1();
+}
+
+function Opcode_CopyBackwardLong() {
+    // move.b (a0),d0 - read byte at current position
+    MOVEDATAINC(a0, d0, 'b');
+    
+    // asl.b #1,d0
+    ASL(1, d0, 'b');
+    
+    // move.b -1(a0),d0 - read opcode byte (overwrites d0)
+    MOVEDATAPREDEC(a0, d0, 'b');
+    
+    // roxl.b #1,d0
+    ROXL(1, d0, 'b');
+    
+    // andi.w #$1F,d0
+    ANDI(0x1F, d0, 'w');
+    
+    // addq.w #2,d0
+    ADDQ(2, d0, 'w');
+    
+    // move.b (a0)+,d2
+    MOVEDATAINC(a0, d2, 'b');
+    
+    // andi.w #$7F,d2
+    ANDI(0x7F, d2, 'w');
+    
+    // addq.w #1,d2
+    ADDQ(1, d2, 'w');
+    
+    _copybackwardloop1();
+}
+
+function Opcode_CopyBackwardExtended1() {
+    // move.b -1(a0),d0
+    MOVEDATAPREDEC(a0, d0, 'b');
+    
+    // asl.w #8,d0
+    ASL(8, d0, 'w');
+    
+    // move.b (a0),d0 - read next byte and combine
+    const nextByte = memory[a0 & 0xFFFFFFFF];
+    d0 = (d0 | nextByte) & 0xFFFF;
+    
+    // lsr.w #6,d0
+    LSR(6, d0, 'w');
+    
+    // andi.w #$3F,d0
+    ANDI(0x3F, d0, 'w');
+    
+    // addq.w #2,d0
+    ADDQ(2, d0, 'w');
+    
+    // move.b (a0)+,d2
+    MOVEDATAINC(a0, d2, 'b');
+    
+    // andi.w #$3F,d2
+    ANDI(0x3F, d2, 'w');
+    
+    // addq.w #1,d2
+    ADDQ(1, d2, 'w');
+    
+    _copybackwardloop1();
+}
+
+function Opcode_CopyBackwardExtended2() {
+    // move.b -1(a0),d0
+    MOVEDATAPREDEC(a0, d0, 'b');
+    
+    // asl.w #8,d0
+    ASL(8, d0, 'w');
+    
+    // move.b (a0),d0 - read next byte and combine
+    const nextByte = memory[a0 & 0xFFFFFFFF];
+    d0 = (d0 | nextByte) & 0xFFFF;
+    
+    // lsr.w #5,d0
+    LSR(5, d0, 'w');
+    
+    // andi.w #$7F,d0
+    ANDI(0x7F, d0, 'w');
+    
+    // addq.w #2,d0
+    ADDQ(2, d0, 'w');
+    
+    // move.b (a0)+,d2
+    MOVEDATAINC(a0, d2, 'b');
+    
+    // andi.w #$1F,d2
+    ANDI(0x1F, d2, 'w');
+    
+    // addq.w #1,d2
+    ADDQ(1, d2, 'w');
+    
+    _copybackwardloop1();
+}
+
+function Opcode_CopyBackwardReverseShort() {
+    // move.b -1(a0),d0
+    MOVEDATAPREDEC(a0, d0, 'b');
+    
+    // andi.w #3,d0
+    ANDI(0x3, d0, 'w');
+    
+    // addq.w #1,d0
+    ADDQ(1, d0, 'w');
+    
+    // move.b -1(a0),d2 - read opcode again
+    MOVEDATAPREDEC(a0, d2, 'b');
+    
+    // lsr.w #2,d2
+    LSR(2, d2, 'w');
+    
+    // andi.w #7,d2
+    ANDI(0x7, d2, 'w');
+    
+    // addq.w #1,d2
+    ADDQ(1, d2, 'w');
+    
+    _copybackwardsreverseloop1();
+}
+
+function Opcode_CopyBackwardReverseMedium() {
+    // move.b -1(a0),d0
+    MOVEDATAPREDEC(a0, d0, 'b');
+    
+    // andi.w #$F,d0
+    ANDI(0xF, d0, 'w');
+    
+    // addq.w #2,d0
+    ADDQ(2, d0, 'w');
+    
+    // move.b (a0)+,d2
+    MOVEDATAINC(a0, d2, 'b');
+    
+    // bne.s _copybackwardsreverseloop1
+    if (d2 !== 0) {
+        _copybackwardsreverseloop1();
+        return null;
+    } else {
+        // tst.w d1
+        TST(d1, 'w');
+        
+        // beq.w _copybackwardsreversemedium_end
+        if (CCR.Z) {
+            return 'end'; // End of decompression
+        }
+        
+        // bsr.w FlushOutputBuffer
+        BSR(FlushOutputBuffer, 'w');
+        
+        // Return from function (skip return address on stack)
+        // In real code: addq.w #4,sp then return
+        return 'end';
+    }
+}
+
+function Opcode_CopyBackwardReverseLong() {
+    // move.b (a0),d0 - read byte at current position
+    MOVEDATAINC(a0, d0, 'b');
+    
+    // asl.b #1,d0
+    ASL(1, d0, 'b');
+    
+    // move.b -1(a0),d0 - read opcode byte (overwrites d0)
+    MOVEDATAPREDEC(a0, d0, 'b');
+    
+    // roxl.b #1,d0
+    ROXL(1, d0, 'b');
+    
+    // andi.w #$1F,d0
+    ANDI(0x1F, d0, 'w');
+    
+    // addq.w #2,d0
+    ADDQ(2, d0, 'w');
+    
+    // move.b (a0)+,d2
+    MOVEDATAINC(a0, d2, 'b');
+    
+    // andi.w #$7F,d2
+    ANDI(0x7F, d2, 'w');
+    
+    // addq.w #1,d2
+    ADDQ(1, d2, 'w');
+    
+    _copybackwardsreverseloop1();
+}
+
+// ────────────────────────────────────────────────────────────────
+// Helper functions for copy operations
+// ────────────────────────────────────────────────────────────────
+
+function _copybackwardloop1() {
+    // neg.b d2
+    NEG(d2, 'b');
+    
+    // add.b d1,d2
+    ADD(d1, d2, 'b');
+    
+    let count = d0 & 0xFFFF;
+    
+    // _copybackwardloop2:
+    while (count >= 0) {
+        // move.b (a1,d2.w),(a1,d1.w)
+        MOVEDATAINDEXED_TO_INDEXED(a1, d2, a1, d1, 'b');
+        
+        // addq.b #1,d2
+        ADDQ(1, d2, 'b');
+        
+        // addq.b #1,d1
+        ADDQ(1, d1, 'b');
+        
+        // bne.w _copybackwardcheckbuffer
+        if (d1 === 0) {
+            FlushOutputBuffer();
+        }
+        
+        // dbf d0,_copybackwardloop2
+        if (count === 0) break;
+        count--;
+        d0 = count;
+    }
+}
+
+function _copybackwardsreverseloop1() {
+    // neg.b d2
+    NEG(d2, 'b');
+    
+    // add.b d1,d2
+    ADD(d1, d2, 'b');
+    
+    let count = d0 & 0xFFFF;
+    
+    // _copybackwardsreverseloop2:
+    while (count >= 0) {
+        // move.b (a1,d2.w),(a1,d1.w)
+        MOVEDATAINDEXED_TO_INDEXED(a1, d2, a1, d1, 'b');
+        
+        // subq.b #1,d2
+        SUBQ(1, d2, 'b');
+        
+        // addq.b #1,d1
+        ADDQ(1, d1, 'b');
+        
+        // bne.w _chkbuf
+        if (d1 === 0) {
+            FlushOutputBuffer();
+        }
+        
+        // dbf d0,_copybackwardsreverseloop2
+        if (count === 0) break;
+        count--;
+        d0 = count;
+    }
+}
+
+// ────────────────────────────────────────────────────────────────
+// TST   Test memory at address register
+// ────────────────────────────────────────────────────────────────
+function TST_MEM(addrAn, size = 'l') {
+    advancePC(2);
+    
+    let addr;
+    if (addrAn === a0) addr = a0;
+    else if (addrAn === a1) addr = a1;
+    else if (addrAn === a2) addr = a2;
+    else if (addrAn === a3) addr = a3;
+    else if (addrAn === a4) addr = a4;
+    else if (addrAn === a5) addr = a5;
+    else if (addrAn === a6) addr = a6;
+    else if (addrAn === a7) addr = a7;
+    else {
+        console.warn("TST_MEM: address must be A0–A7");
+        return;
+    }
+    
+    let value;
+    if (size === 'l') {
+        value = readl(addr);
+    } else if (size === 'w') {
+        value = readw(addr);
+    } else {
+        value = readb(addr);
+    }
+    
+    const mask = MASK[size];
+    value &= mask;
+    
+    CCR.N = (value & SIGN_BIT[size]) !== 0;
+    CCR.Z = value === 0;
+    CCR.V = false;
+    CCR.C = false;
+}
+
+// ────────────────────────────────────────────────────────────────
+// FlushOutputBuffer - Write output buffer to VDP or callback
+// ────────────────────────────────────────────────────────────────
+function FlushOutputBuffer() {
+    // movem.l d0-d1/a0-a1,-(sp)
+    MOVEM_TO_SP(D0_D1_A0_A1, 'l');
+    
+    // move.w d1,d0
+    MOVE(d1, d0, 'w');
+    
+    // bne.w _checksize
+    if (!CCR.Z) {
+        // _checksize:
+        // lsr.w #1,d0
+        LSR(1, d0, 'w');
+    } else {
+        // move.w #$100,d0
+        MOVE(0x100, d0, 'w');
+        
+        // _checksize:
+        // lsr.w #1,d0
+        LSR(1, d0, 'w');
+    }
+    
+    // move.w d3,d1
+    MOVE(d3, d1, 'w');
+    
+    // add.w d0,d3
+    ADD(d0, d3, 'w');
+    
+    // add.w d0,d3
+    ADD(d0, d3, 'w');
+    
+    // movea.l a1,a0
+    a0 = a1; // Direct register copy
+    
+    // tst.l (a4)
+    TST_MEM(a4, 'l');
+    
+    // beq.w _nocallback
+    if (CCR.Z) {
+        // _nocallback:
+        // jsr (a6) - DoDMApro
+        JSR(a6);
+        console.log(`[FlushOutputBuffer] Called DoDMApro with ${d0} words`);
+    } else {
+        // movea.l (a4),a1
+        const callbackAddr = readl(a4);
+        MOVEA(callbackAddr, a1, 'l');
+        
+        // jsr (a5) - ConvertAndWriteToVDP
+        JSR(a5);
+        console.log(`[FlushOutputBuffer] Called ConvertAndWriteToVDP with ${d0} words`);
+    }
+    
+    // _done:
+    // movem.l (sp)+,d0-d1/a0-a1
+    MOVEM_FROM_SP(D0_D1_A0_A1, 'l');
+    
+    // Reset output buffer position
+    CLR(d1, 'w');
+}
+
+// ────────────────────────────────────────────────────────────────
+// Main bytecode interpreter
+// ────────────────────────────────────────────────────────────────
+function decompressBytecode() {
+    jumpTo(0xDDCE);
     console.log("=== DECOMPRESSING BYTECODE ===");
     
-    // Example of setting up registers for bytecode decompression
-    // a1 = -1;
-    // a3 = -1;
-    // d3 = d1; // (tile byte offset)
-    // d1 = 0;
-    // d2 = 0;
-
-    // Main decompression loop
+    // movea.w #(DispAttribCtr-M68K_RAM),a1
+    const dispAttribCtr = OUTPUT_BUFFER_ADDR;
+    MOVEA(dispAttribCtr, a1, 'w');
+    
+    // movea.w #(DispAttribCtr-M68K_RAM),a3
+    MOVEA(dispAttribCtr, a3, 'w');
+    
+    // movea.w #(callbackPtr-M68K_RAM),a4
+    const callbackPtrAddr = 0; // Will be set if callback exists
+    MOVEA(callbackPtrAddr, a4, 'w');
+    
+    // movea.l #$D642,a5 - ConvertAndWriteToVDP
+    MOVEA(ConvertAndWriteToVDP, a5, 'l');
+    
+    // movea.l #$DA98,a6 - DoDMApro
+    MOVEA(DoDMApro, a6, 'l');
+    
+    // movem.l d0-d3/a0-a2,-(sp)
+    MOVEM_TO_SP(D0_D3_A0_A2, 'l');
+    
+    // move.w d1,d3
+    MOVE(d1, d3, 'w');
+    
+    // clr.w d1
+    CLR(d1, 'w');
+    
+    // clr.w d2
+    CLR(d2, 'w');
+    
+    // Main interpreter loop
+    while (true) {
+        // move.b (a0)+,d0
+        MOVEDATAINC(a0, d0, 'b');
+        
+        // Save original opcode for handlers that need it
+        const originalOpcode = d0 & 0xFF;
+        
+        // andi.w #$F0,d0
+        ANDI(0xF0, d0, 'w');
+        
+        // lsr.w #3,d0 - creates index into jump table
+        LSR(3, d0, 'w');
+        
+        // Get opcode index (d0 now contains the index after LSR)
+        const opcodeIndex = d0 & 0x1F;
+        
+        // Get jump table offset (not used in JS, but kept for reference)
+        const jumpOffset = JUMP_TABLE[opcodeIndex];
+        
+        // Dispatch to opcode handler
+        switch (opcodeIndex) {
+            case 0:
+            case 1:
+                Opcode_CopyLiteral();
+                break;
+            case 2:
+                Opcode_ClearBytes();
+                break;
+            case 3:
+                Opcode_FillBytes();
+                break;
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+                Opcode_CopyBackwardShort();
+                break;
+            case 8:
+                Opcode_CopyBackwardMedium();
+                break;
+            case 9:
+                Opcode_CopyBackwardLong();
+                break;
+            case 10: // 0xA
+                Opcode_CopyBackwardExtended1();
+                break;
+            case 11: // 0xB
+                Opcode_CopyBackwardExtended2();
+                break;
+            case 12: // 0xC
+            case 13: // 0xD
+                Opcode_CopyBackwardReverseShort();
+                break;
+            case 14: // 0xE
+                const result = Opcode_CopyBackwardReverseMedium();
+                if (result === 'end') {
+                    // End of decompression - restore registers and return
+                    // movem.l (sp)+,d0-d3/a0-a2
+                    // (In real code, this would restore from stack)
+                    console.log("=== BYTECODE DECOMPRESSION COMPLETE ===");
+                    return;
+                }
+                break;
+            case 15: // 0xF
+                Opcode_CopyBackwardReverseLong();
+                break;
+        }
+        
+        // bra.s main_bytecode_intepreter_loop
+        // Loop continues...
+    }
 }
 
 startDecompression(0x7C974);
