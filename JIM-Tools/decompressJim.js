@@ -1766,11 +1766,7 @@ function decompressBytecode() {
     // clr.w d2
     CLR(d2, 'w');
     return; // TODO: Remove this
-    
-    // lea jump_table(pc),a2 - get jump table base address
-    // In JS, we'll use the JUMP_TABLE array address (simulated)
-    const jumpTableBase = 0xDE06; // Simulated address of jump table
-    LEA(jumpTableBase, a2);
+
     
     // Main interpreter loop
     main_bytecode_interpreter_loop:
@@ -1783,6 +1779,11 @@ function decompressBytecode() {
         
         // lsr.w #3,d0 - Shift right 3 to create index into jump table
         LSR(3, d0, 'w');
+
+        // lea jump_table(pc),a2 - get jump table base address
+        // In JS, we'll use the JUMP_TABLE array address (simulated)
+        const jumpTableBase = 0xDE06; // Simulated address of jump table
+        LEA(jumpTableBase, a2);
         
         // move.w (a2,d0.w),d0 - Read jump table entry (offset to handler)
         // Note: In assembly, this reads a word offset from the jump table
