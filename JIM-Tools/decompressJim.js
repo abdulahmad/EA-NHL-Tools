@@ -892,30 +892,46 @@ function NEG(dstReg, size = 'b') {
 // ────────────────────────────────────────────────────────────────
 // TST   Test (set flags without storing)
 // ────────────────────────────────────────────────────────────────
-function TST(srcReg, size = 'w') {
-  advancePC(2);
-  
-  let value;
-  if (srcReg === d0) value = d0;
-  else if (srcReg === d1) value = d1;
-  else if (srcReg === d2) value = d2;
-  else if (srcReg === d3) value = d3;
-  else if (srcReg === d4) value = d4;
-  else if (srcReg === d5) value = d5;
-  else if (srcReg === d6) value = d6;
-  else if (srcReg === d7) value = d7;
-  else {
-    console.warn("TST: source must be D0–D7");
-    return;
-  }
-
-  const mask = MASK[size];
-  value &= mask;
-
-  CCR.N = (value & SIGN_BIT[size]) !== 0;
-  CCR.Z = value === 0;
-  CCR.V = false;
-  CCR.C = false;
+function TST(src, size = 'w') {
+    advancePC(2);
+    
+    let value;
+    let isMemory = false;
+    
+    // Check if it's an address register (memory indirect)
+    if (src === a0 || src === a1 || src === a2 || src === a3 || 
+        src === a4 || src === a5 || src === a6 || src === a7) {
+        isMemory = true;
+        const addr = src;
+        if (size === 'l') {
+            value = readl(addr);
+        } else if (size === 'w') {
+            value = readw(addr);
+        } else {
+            value = readb(addr);
+        }
+    } 
+    // Otherwise it's a data register
+    else if (src === d0) value = d0;
+    else if (src === d1) value = d1;
+    else if (src === d2) value = d2;
+    else if (src === d3) value = d3;
+    else if (src === d4) value = d4;
+    else if (src === d5) value = d5;
+    else if (src === d6) value = d6;
+    else if (src === d7) value = d7;
+    else {
+        console.warn("TST: source must be D0–D7 or A0–A7");
+        return;
+    }
+    
+    const mask = MASK[size];
+    value &= mask;
+    
+    CCR.N = (value & SIGN_BIT[size]) !== 0;
+    CCR.Z = value === 0;
+    CCR.V = false;
+    CCR.C = false;
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -1512,6 +1528,116 @@ function _endDecompression() {
 }
 
 // ────────────────────────────────────────────────────────────────
+// Main bytecode interpreter
+// ────────────────────────────────────────────────────────────────
+function decompressBytecode() {
+    jumpTo(0xDDCE);
+    console.log("=== DECOMPRESSING BYTECODE ===");
+    
+    // movea.w #(DispAttribCtr-M68K_RAM),a1
+    const dispAttribCtr = OUTPUT_BUFFER_ADDR;
+    MOVEA(dispAttribCtr, a1, 'w');
+    
+    // movea.w #(DispAttribCtr-M68K_RAM),a3
+    MOVEA(dispAttribCtr, a3, 'w');
+    
+    // movea.w #(callbackPtr-M68K_RAM),a4
+    const callbackPtrAddr = 0; // Will be set if callback exists
+    MOVEA(callbackPtrAddr, a4, 'w');
+    
+    // movea.l #$D642,a5 - ConvertAndWriteToVDP
+    MOVEA(ConvertAndWriteToVDP, a5, 'l');
+    
+    // movea.l #$DA98,a6 - DoDMApro
+    MOVEA(DoDMApro, a6, 'l');
+    
+    // movem.l d0-d3/a0-a2,-(sp)
+    MOVEM_TO_SP(D0_D3_A0_A2, 'l');
+    
+    // move.w d1,d3
+    MOVE(d1, d3, 'w');
+    
+    // clr.w d1
+    CLR(d1, 'w');
+    
+    // clr.w d2
+    CLR(d2, 'w');
+    
+    // Main interpreter loop
+    while (true) {
+        // move.b (a0)+,d0
+        MOVEDATAINC(a0, d0, 'b');
+        
+        // Save original opcode for handlers that need it
+        const originalOpcode = d0 & 0xFF;
+        
+        // andi.w #$F0,d0
+        ANDI(0xF0, d0, 'w');
+        
+        // lsr.w #3,d0 - creates index into jump table
+        LSR(3, d0, 'w');
+        
+        // Get opcode index (d0 now contains the index after LSR)
+        const opcodeIndex = d0 & 0x1F;
+        
+        // Get jump table offset (not used in JS, but kept for reference)
+        const jumpOffset = JUMP_TABLE[opcodeIndex];
+        
+        // Dispatch to opcode handler
+        switch (opcodeIndex) {
+            case 0:
+            case 1:
+                Opcode_CopyLiteral();
+                break;
+            case 2:
+                Opcode_ClearBytes();
+                break;
+            case 3:
+                Opcode_FillBytes();
+                break;
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+                Opcode_CopyBackwardShort();
+                break;
+            case 8:
+                Opcode_CopyBackwardMedium();
+                break;
+            case 9:
+                Opcode_CopyBackwardLong();
+                break;
+            case 10: // 0xA
+                Opcode_CopyBackwardExtended1();
+                break;
+            case 11: // 0xB
+                Opcode_CopyBackwardExtended2();
+                break;
+            case 12: // 0xC
+            case 13: // 0xD
+                Opcode_CopyBackwardReverseShort();
+                break;
+            case 14: // 0xE
+                const result = Opcode_CopyBackwardReverseMedium();
+                if (result === 'end') {
+                    // End of decompression - restore registers and return
+                    // movem.l (sp)+,d0-d3/a0-a2
+                    // (In real code, this would restore from stack)
+                    console.log("=== BYTECODE DECOMPRESSION COMPLETE ===");
+                    return;
+                }
+                break;
+            case 15: // 0xF
+                Opcode_CopyBackwardReverseLong();
+                break;
+        }
+        
+        // bra.s main_bytecode_intepreter_loop
+        // Loop continues...
+    }
+}
+
+// ────────────────────────────────────────────────────────────────
 // Output buffer (simulated RAM addresses)
 // ────────────────────────────────────────────────────────────────
 const OUTPUT_BUFFER_SIZE = 0x100; // 256 bytes
@@ -1941,44 +2067,6 @@ function _copybackwardsreverseloop1() {
 }
 
 // ────────────────────────────────────────────────────────────────
-// TST   Test memory at address register
-// ────────────────────────────────────────────────────────────────
-function TST_MEM(addrAn, size = 'l') {
-    advancePC(2);
-    
-    let addr;
-    if (addrAn === a0) addr = a0;
-    else if (addrAn === a1) addr = a1;
-    else if (addrAn === a2) addr = a2;
-    else if (addrAn === a3) addr = a3;
-    else if (addrAn === a4) addr = a4;
-    else if (addrAn === a5) addr = a5;
-    else if (addrAn === a6) addr = a6;
-    else if (addrAn === a7) addr = a7;
-    else {
-        console.warn("TST_MEM: address must be A0–A7");
-        return;
-    }
-    
-    let value;
-    if (size === 'l') {
-        value = readl(addr);
-    } else if (size === 'w') {
-        value = readw(addr);
-    } else {
-        value = readb(addr);
-    }
-    
-    const mask = MASK[size];
-    value &= mask;
-    
-    CCR.N = (value & SIGN_BIT[size]) !== 0;
-    CCR.Z = value === 0;
-    CCR.V = false;
-    CCR.C = false;
-}
-
-// ────────────────────────────────────────────────────────────────
 // FlushOutputBuffer - Write output buffer to VDP or callback
 // ────────────────────────────────────────────────────────────────
 function FlushOutputBuffer() {
@@ -2039,116 +2127,6 @@ function FlushOutputBuffer() {
     
     // Reset output buffer position
     CLR(d1, 'w');
-}
-
-// ────────────────────────────────────────────────────────────────
-// Main bytecode interpreter
-// ────────────────────────────────────────────────────────────────
-function decompressBytecode() {
-    jumpTo(0xDDCE);
-    console.log("=== DECOMPRESSING BYTECODE ===");
-    
-    // movea.w #(DispAttribCtr-M68K_RAM),a1
-    const dispAttribCtr = OUTPUT_BUFFER_ADDR;
-    MOVEA(dispAttribCtr, a1, 'w');
-    
-    // movea.w #(DispAttribCtr-M68K_RAM),a3
-    MOVEA(dispAttribCtr, a3, 'w');
-    
-    // movea.w #(callbackPtr-M68K_RAM),a4
-    const callbackPtrAddr = 0; // Will be set if callback exists
-    MOVEA(callbackPtrAddr, a4, 'w');
-    
-    // movea.l #$D642,a5 - ConvertAndWriteToVDP
-    MOVEA(ConvertAndWriteToVDP, a5, 'l');
-    
-    // movea.l #$DA98,a6 - DoDMApro
-    MOVEA(DoDMApro, a6, 'l');
-    
-    // movem.l d0-d3/a0-a2,-(sp)
-    MOVEM_TO_SP(D0_D3_A0_A2, 'l');
-    
-    // move.w d1,d3
-    MOVE(d1, d3, 'w');
-    
-    // clr.w d1
-    CLR(d1, 'w');
-    
-    // clr.w d2
-    CLR(d2, 'w');
-    
-    // Main interpreter loop
-    while (true) {
-        // move.b (a0)+,d0
-        MOVEDATAINC(a0, d0, 'b');
-        
-        // Save original opcode for handlers that need it
-        const originalOpcode = d0 & 0xFF;
-        
-        // andi.w #$F0,d0
-        ANDI(0xF0, d0, 'w');
-        
-        // lsr.w #3,d0 - creates index into jump table
-        LSR(3, d0, 'w');
-        
-        // Get opcode index (d0 now contains the index after LSR)
-        const opcodeIndex = d0 & 0x1F;
-        
-        // Get jump table offset (not used in JS, but kept for reference)
-        const jumpOffset = JUMP_TABLE[opcodeIndex];
-        
-        // Dispatch to opcode handler
-        switch (opcodeIndex) {
-            case 0:
-            case 1:
-                Opcode_CopyLiteral();
-                break;
-            case 2:
-                Opcode_ClearBytes();
-                break;
-            case 3:
-                Opcode_FillBytes();
-                break;
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-                Opcode_CopyBackwardShort();
-                break;
-            case 8:
-                Opcode_CopyBackwardMedium();
-                break;
-            case 9:
-                Opcode_CopyBackwardLong();
-                break;
-            case 10: // 0xA
-                Opcode_CopyBackwardExtended1();
-                break;
-            case 11: // 0xB
-                Opcode_CopyBackwardExtended2();
-                break;
-            case 12: // 0xC
-            case 13: // 0xD
-                Opcode_CopyBackwardReverseShort();
-                break;
-            case 14: // 0xE
-                const result = Opcode_CopyBackwardReverseMedium();
-                if (result === 'end') {
-                    // End of decompression - restore registers and return
-                    // movem.l (sp)+,d0-d3/a0-a2
-                    // (In real code, this would restore from stack)
-                    console.log("=== BYTECODE DECOMPRESSION COMPLETE ===");
-                    return;
-                }
-                break;
-            case 15: // 0xF
-                Opcode_CopyBackwardReverseLong();
-                break;
-        }
-        
-        // bra.s main_bytecode_intepreter_loop
-        // Loop continues...
-    }
 }
 
 startDecompression(0x7C974);
