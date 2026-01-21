@@ -1650,6 +1650,8 @@ function _decompressFn() {
     // Main decompression logic goes here
     // When done, you could set pc to next instruction if needed
     ANDI(0x7FFF, d0);                // andi.<w> #$7FFF,d0
+    console.log(`d0: 0x${d0.toString(16)}`);
+    console.log(`d4: 0x${d4.toString(16)}`);
     ADD(d0, d4);                     // add.<w> d0,d4
     return; // TODO: Remove this
     BSR(decompressBytecode);         // bsr.<w> decompressBytecode
