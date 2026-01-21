@@ -1058,6 +1058,12 @@ function JSR(targetAddr) {
   memory[a7 + 3] = (pc >>>  0) & 0xFF;
   
   jumpTo(targetAddr);
+  
+  // Execute code at target address
+  const result = executeAtAddress(targetAddr);
+  if (result === 'end') {
+    return 'end';
+  }
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -1786,60 +1792,15 @@ function decompressBytecode() {
         LEA(jumpTableBase, a2);
         
         // move.w (a2,d0.w),d0 - Read jump table entry (offset to handler)
-        // Note: In assembly, this reads a word offset from the jump table
-        // We'll simulate this by reading from our JUMP_TABLE array
-        const opcodeIndex = d0 & 0x1F;
-        const jumpOffset = JUMP_TABLE[opcodeIndex];
-        d0 = jumpOffset;
+        MOVEDATAINDEXED_TO_REG(a2, d0, d0, 'w');
         
         // jsr (a2,d0.w) - Jump to opcode handler
         // Calculate handler address: a2 (jump table base) + d0 (offset)
-        const handlerAddr = (a2 + d0) & 0xFFFFFFFF;
+        const handlerOffset = d0 & 0xFFFF;
+        const handlerAddr = (a2 + handlerOffset) & 0xFFFFFFFF;
         
-        // Dispatch to opcode handler based on jump offset
-        // The jump offsets point to specific handler functions
-        let handlerResult = null;
-        
-        if (jumpOffset === 0x0020) {
-            // Opcode 0, 1: CopyLiteral
-            Opcode_CopyLiteral();
-        } else if (jumpOffset === 0x003C) {
-            // Opcode 2: ClearBytes
-            Opcode_ClearBytes();
-        } else if (jumpOffset === 0x0058) {
-            // Opcode 3: FillBytes
-            Opcode_FillBytes();
-        } else if (jumpOffset === 0x0078) {
-            // Opcode 4-7: CopyBackwardShort
-            Opcode_CopyBackwardShort();
-        } else if (jumpOffset === 0x00AA) {
-            // Opcode 8: CopyBackwardMedium
-            Opcode_CopyBackwardMedium();
-        } else if (jumpOffset === 0x00B8) {
-            // Opcode 9: CopyBackwardLong
-            Opcode_CopyBackwardLong();
-        } else if (jumpOffset === 0x00D2) {
-            // Opcode A: CopyBackwardExtended1
-            Opcode_CopyBackwardExtended1();
-        } else if (jumpOffset === 0x00EC) {
-            // Opcode B: CopyBackwardExtended2
-            Opcode_CopyBackwardExtended2();
-        } else if (jumpOffset === 0x0106) {
-            // Opcode C, D: CopyBackwardReverseShort
-            Opcode_CopyBackwardReverseShort();
-        } else if (jumpOffset === 0x0138) {
-            // Opcode E: CopyBackwardReverseMedium
-            handlerResult = Opcode_CopyBackwardReverseMedium();
-            if (handlerResult === 'end') {
-                // End of decompression - restore registers and return
-                MOVEM_FROM_SP(D0_D3_A0_A2, 'l');
-                console.log("=== BYTECODE DECOMPRESSION COMPLETE ===");
-                return;
-            }
-        } else if (jumpOffset === 0x0158) {
-            // Opcode F: CopyBackwardReverseLong
-            Opcode_CopyBackwardReverseLong();
-        }
+        // JSR to the handler address
+        JSR(handlerAddr);
         
         // bra.s main_bytecode_intepreter_loop
         // Loop continues...
@@ -1864,6 +1825,42 @@ const DoDMApro = 0xDA98;
 const _endDecompression = 0xDDC8;
 const _decompress = 0xDDBE;
 
+// Opcode handler addresses (jump table base + offset)
+const Opcode_CopyLiteral_Addr = 0xDE26;
+const Opcode_ClearBytes_Addr = 0xDE42;
+const Opcode_FillBytes_Addr = 0xDE5E;
+const Opcode_CopyBackwardShort_Addr = 0xDE7E;
+const Opcode_CopyBackwardMedium_Addr = 0xDEB0;
+const Opcode_CopyBackwardLong_Addr = 0xDEBE;
+const Opcode_CopyBackwardExtended1_Addr = 0xDED8;
+const Opcode_CopyBackwardExtended2_Addr = 0xDEF2;
+const Opcode_CopyBackwardReverseShort_Addr = 0xDF0C;
+const Opcode_CopyBackwardReverseMedium_Addr = 0xDF3E;
+const Opcode_CopyBackwardReverseLong_Addr = 0xDF5E;
+
+// Opcode handler dispatch table - maps handler addresses to functions
+const OPCODE_HANDLER_DISPATCH = {
+    0xDE26: () => { Opcode_CopyLiteral(); },
+    0xDE42: () => { Opcode_ClearBytes(); },
+    0xDE5E: () => { Opcode_FillBytes(); },
+    0xDE7E: () => { Opcode_CopyBackwardShort(); },
+    0xDEB0: () => { Opcode_CopyBackwardMedium(); },
+    0xDEBE: () => { Opcode_CopyBackwardLong(); },
+    0xDED8: () => { Opcode_CopyBackwardExtended1(); },
+    0xDEF2: () => { Opcode_CopyBackwardExtended2(); },
+    0xDF0C: () => { Opcode_CopyBackwardReverseShort(); },
+    0xDF3E: () => { 
+        const result = Opcode_CopyBackwardReverseMedium();
+        if (result === 'end') {
+            // End of decompression - restore registers and return
+            MOVEM_FROM_SP(D0_D3_A0_A2, 'l');
+            console.log("=== BYTECODE DECOMPRESSION COMPLETE ===");
+            return 'end';
+        }
+    },
+    0xDF5E: () => { Opcode_CopyBackwardReverseLong(); }
+};
+
 // Label dispatch table - maps addresses to functions
 const LABEL_DISPATCH = {
     0xDDC8: () => { _endDecompressionFn(); },
@@ -1882,6 +1879,11 @@ const LABEL_DISPATCH = {
 function executeAtAddress(addr) {
     if (LABEL_DISPATCH[addr]) {
         LABEL_DISPATCH[addr]();
+    } else if (OPCODE_HANDLER_DISPATCH[addr]) {
+        const result = OPCODE_HANDLER_DISPATCH[addr]();
+        if (result === 'end') {
+            return 'end';
+        }
     } else {
         console.warn(`[executeAtAddress] No handler for address 0x${addr.toString(16).padStart(8, '0')}`);
     }
