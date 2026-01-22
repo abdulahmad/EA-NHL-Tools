@@ -861,7 +861,7 @@ function ADDQ(imm, dstReg, size = 'b') {
   const dstBefore = value & mask;
   const result = (dstBefore + imm) & mask;
 
-  if (dstReg === d0) d0 = result;
+  if (dstReg === d0) {d0 = result; console.log(`ADDQ: d0 = ${result.toString(16)}`);}
   else if (dstReg === d1) d1 = result;
   else if (dstReg === d2) d2 = result;
   else if (dstReg === d3) d3 = result;
@@ -1053,6 +1053,7 @@ function DBF(counterReg, targetCallback) {
 //   JSR(baseAn) - Register indirect: jsr (a6)
 //   JSR(baseAn, indexDn, size) - Indexed: jsr (a2,d0.w)
 function JSR(targetAddrOrBase, indexDn = null, size = null) {
+  console.log(`JSR: ${targetAddrOrBase.toString(16)} ${indexDn.toString(16)} ${size}`);
   advancePC(2);
   
   // Push return address (PC) onto stack
@@ -1288,14 +1289,14 @@ function MOVEDATAPREDEC(srcAn, dstDn, size = 'b') {
     
     const value = memory[addr & 0xFFFFFFFF];
     
-    if (dstDn === d0) d0 = value;
-    else if (dstDn === d1) d1 = value;
-    else if (dstDn === d2) d2 = value;
-    else if (dstDn === d3) d3 = value;
-    else if (dstDn === d4) d4 = value;
-    else if (dstDn === d5) d5 = value;
-    else if (dstDn === d6) d6 = value;
-    else if (dstDn === d7) d7 = value;
+    if (dstDn === d0) { d0 = value; console.log(`MOVEDATAPREDEC: d0 = ${value.toString(16)}`);}
+    else if (dstDn === d1) {d1 = value; console.log(`MOVEDATAPREDEC: d1 = ${value.toString(16)}`);}
+    else if (dstDn === d2) {d2 = value; console.log(`MOVEDATAPREDEC: d2 = ${value.toString(16)}`);}
+    else if (dstDn === d3) {d3 = value; console.log(`MOVEDATAPREDEC: d3 = ${value.toString(16)}`);}
+    else if (dstDn === d4) {d4 = value; console.log(`MOVEDATAPREDEC: d4 = ${value.toString(16)}`);}
+    else if (dstDn === d5) {d5 = value; console.log(`MOVEDATAPREDEC: d5 = ${value.toString(16)}`);}
+    else if (dstDn === d6) {d6 = value; console.log(`MOVEDATAPREDEC: d6 = ${value.toString(16)}`);}
+    else if (dstDn === d7) {d7 = value; console.log(`MOVEDATAPREDEC: d7 = ${value.toString(16)}`);}
     else {
         console.warn("MOVEDATAPREDEC: destination must be D0–D7");
         return;
@@ -1375,7 +1376,7 @@ function MOVEDATAINC(srcAn, dstDn, size = 'b') {
     CCR.V = false;
     CCR.C = false;
 
-    console.log(`MOVEDATAINC: ${srcAn} + ${bytesPerReg} = ${a0}`);
+    console.log(`MOVEDATAINC: ${srcAn.toString(16)} + ${bytesPerReg} = ${a0.toString(16)}`);
     console.log(`d0: 0x${d0.toString(16)}`);
 }
 
@@ -1857,10 +1858,10 @@ function decompressBytecode() {
         
         // move.w (a2,d0.w),d0 - Read jump table entry (offset to handler)
         MOVEDATAINDEXED_TO_REG(a2, d0, d0, 'w');
-        return; // TODO: Remove this
+        
         // jsr (a2,d0.w) - Jump to opcode handler
         JSR(a2, d0, 'w');
-        
+        return; // TODO: Remove this
         // bra.s main_bytecode_intepreter_loop
         // Loop continues...
     }
@@ -1936,9 +1937,12 @@ const LABEL_DISPATCH = {
 
 // Helper function to execute code at a label address
 function executeAtAddress(addr) {
+    console.log(`executeAtAddress: ${addr.toString(16)}`);
     if (LABEL_DISPATCH[addr]) {
+        console.log(`LABEL_DISPATCH[${addr.toString(16)}]`);
         LABEL_DISPATCH[addr]();
     } else if (OPCODE_HANDLER_DISPATCH[addr]) {
+        console.log(`OPCODE_HANDLER_DISPATCH[${addr.toString(16)}]`);
         const result = OPCODE_HANDLER_DISPATCH[addr]();
         if (result === 'end') {
             return 'end';
@@ -2035,6 +2039,8 @@ function Opcode_ClearBytes() {
 }
 
 function Opcode_FillBytes() {
+    console.log(`Opcode_FillBytes`);
+    
     // move.b -1(a0),d0
     MOVEDATAPREDEC(a0, d0, 'b');
     
@@ -2048,12 +2054,13 @@ function Opcode_FillBytes() {
     MOVEDATAINC(a0, d2, 'b');
     
     let count = d0 & 0xFFFF;
+    console.log(`Opcode_FillBytes: count = ${count}`);
     
     // Fill_bytes_loop:
     while (count >= 0) {
         // move.b d2,(a1,d1.w)
         MOVEDATAREG_TO_INDEXED(d2, a1, d1, 'b');
-        
+        return; // TODO: Remove this
         // addq.b #1,d1
         ADDQ(1, d1, 'b');
         
