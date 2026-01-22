@@ -699,6 +699,7 @@ function LSR(count, dstReg, size = 'w') {
   CCR.Z = result === 0;
   CCR.C = carry;
   CCR.X = carry;
+  console.log(`LSR: ${count} of ${value} = ${result}`);
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -1131,14 +1132,14 @@ function JSR(targetAddrOrBase, indexDn = null, size = null) {
 function LEA(srcAddr, dstAn) {
   advancePC(4);
   
-  if (dstAn === a0) a0 = srcAddr;
-  else if (dstAn === a1) a1 = srcAddr;
-  else if (dstAn === a2) a2 = srcAddr;
-  else if (dstAn === a3) a3 = srcAddr;
-  else if (dstAn === a4) a4 = srcAddr;
-  else if (dstAn === a5) a5 = srcAddr;
-  else if (dstAn === a6) a6 = srcAddr;
-  else if (dstAn === a7) a7 = srcAddr;
+  if (dstAn === a0) {a0 = srcAddr; console.log(`LEA: ${srcAddr.toString(16)} to ${dstAn.toString(16)} = ${a0.toString(16)}`);}
+  else if (dstAn === a1) {a1 = srcAddr; console.log(`LEA: ${srcAddr.toString(16)} to ${dstAn.toString(16)} = ${a1.toString(16)}`);}
+  else if (dstAn === a2) {a2 = srcAddr; console.log(`LEA: ${srcAddr.toString(16)} to ${dstAn.toString(16)} = ${a2.toString(16)}`);}
+  else if (dstAn === a3) {a3 = srcAddr; console.log(`LEA: ${srcAddr.toString(16)} to ${dstAn.toString(16)} = ${a3.toString(16)}`);}
+  else if (dstAn === a4) {a4 = srcAddr; console.log(`LEA: ${srcAddr.toString(16)} to ${dstAn.toString(16)} = ${a4.toString(16)}`);}
+  else if (dstAn === a5) {a5 = srcAddr; console.log(`LEA: ${srcAddr.toString(16)} to ${dstAn.toString(16)} = ${a5.toString(16)}`);}
+  else if (dstAn === a6) {a6 = srcAddr; console.log(`LEA: ${srcAddr.toString(16)} to ${dstAn.toString(16)} = ${a6.toString(16)}`);}
+  else if (dstAn === a7) {a7 = srcAddr; console.log(`LEA: ${srcAddr.toString(16)} to ${dstAn.toString(16)} = ${a7.toString(16)}`);}
   else {
     console.warn("LEA: destination must be A0–A7");
     return;
@@ -1229,6 +1230,8 @@ function MOVEDATAINDEXED_TO_REG(baseAn, indexDn, dstDn, size = 'w') {
   CCR.Z = zero;
   CCR.V = false;
   CCR.C = false;
+
+  console.log(`MOVEDATAINDEXED_TO_REG: ${baseAn.toString(16)} + ${index.toString(16)} = ${srcAddr.toString(16)}`);
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -1841,20 +1844,20 @@ function decompressBytecode() {
     while (true) {
         // move.b (a0)+,d0
         MOVEDATAINC(a0, d0, 'b');
-        return; // TODO: Remove this
+        
         // andi.w #$F0,d0 - Extract upper nibble (opcode type)
         ANDI(0xF0, d0, 'w');
         
         // lsr.w #3,d0 - Shift right 3 to create index into jump table
         LSR(3, d0, 'w');
-
+        
         // lea jump_table(pc),a2 - get jump table base address
         // In JS, we'll use the JUMP_TABLE array address (simulated)
         LEA(jumpTable, a2);
         
         // move.w (a2,d0.w),d0 - Read jump table entry (offset to handler)
         MOVEDATAINDEXED_TO_REG(a2, d0, d0, 'w');
-        
+        return; // TODO: Remove this
         // jsr (a2,d0.w) - Jump to opcode handler
         JSR(a2, d0, 'w');
         
