@@ -861,22 +861,26 @@ function ADDQ(imm, dstReg, size = 'b') {
   const dstBefore = value & mask;
   const result = (dstBefore + imm) & mask;
 
-  if (dstReg === d0) {d0 = result; console.log(`ADDQ: d0 = ${result.toString(16)}`);}
-  else if (dstReg === d1) d1 = result;
-  else if (dstReg === d2) d2 = result;
-  else if (dstReg === d3) d3 = result;
-  else if (dstReg === d4) d4 = result;
-  else if (dstReg === d5) d5 = result;
-  else if (dstReg === d6) d6 = result;
-  else if (dstReg === d7) d7 = result;
-  else if (dstReg === a0) a0 = result;
-  else if (dstReg === a1) a1 = result;
-  else if (dstReg === a2) a2 = result;
-  else if (dstReg === a3) a3 = result;
-  else if (dstReg === a4) a4 = result;
-  else if (dstReg === a5) a5 = result;
-  else if (dstReg === a6) a6 = result;
-  else if (dstReg === a7) a7 = result;
+  // Determine register name for logging
+  let regName;
+  if (dstReg === d0) { d0 = result; regName = 'd0'; }
+  else if (dstReg === d1) { d1 = result; regName = 'd1'; }
+  else if (dstReg === d2) { d2 = result; regName = 'd2'; }
+  else if (dstReg === d3) { d3 = result; regName = 'd3'; }
+  else if (dstReg === d4) { d4 = result; regName = 'd4'; }
+  else if (dstReg === d5) { d5 = result; regName = 'd5'; }
+  else if (dstReg === d6) { d6 = result; regName = 'd6'; }
+  else if (dstReg === d7) { d7 = result; regName = 'd7'; }
+  else if (dstReg === a0) { a0 = result; regName = 'a0'; }
+  else if (dstReg === a1) { a1 = result; regName = 'a1'; }
+  else if (dstReg === a2) { a2 = result; regName = 'a2'; }
+  else if (dstReg === a3) { a3 = result; regName = 'a3'; }
+  else if (dstReg === a4) { a4 = result; regName = 'a4'; }
+  else if (dstReg === a5) { a5 = result; regName = 'a5'; }
+  else if (dstReg === a6) { a6 = result; regName = 'a6'; }
+  else if (dstReg === a7) { a7 = result; regName = 'a7'; }
+
+  console.log(`[ADDQ.${size} #${imm},${regName}] result = 0x${result.toString(16).padStart(8, '0')}`);
 
   if (size !== 'l' || (dstReg >= d0 && dstReg <= d7)) {
     const negative = (result & SIGN_BIT[size]) !== 0;
@@ -890,7 +894,7 @@ function ADDQ(imm, dstReg, size = 'b') {
     CCR.C = carry;
     CCR.X = carry;
   }
-  console.log(`ADDQ: ${dstReg} = ${result.toString(16)}`);  
+  console.log(`ADDQ: ${regName} = ${result.toString(16)}`);  
 }
 
 // ────────────────────────────────────────────────────────────────
