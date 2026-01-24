@@ -1021,7 +1021,7 @@ function TST(src, size = 'w') {
 // DBF   Decrement and Branch if False (d0 = d0 - 1, branch if d0 != -1)
 // ────────────────────────────────────────────────────────────────
 function DBF(counterReg, targetAddr) {
-  advancePC(2);
+  advancePC(4);
   
   let value;
   if (counterReg === d0) value = d0;
@@ -2115,13 +2115,13 @@ function Fill_bytes_loop_handler() {
     
     // addq.b #1,d1
     ADDQ(1, d1, 'b');
-    return; // TODO: Remove this
+    
     // bne.w loop_for_count3
     if (!BNE(loop_for_count3, 'w')) {
         // bsr.w FlushOutputBuffer
         BSR(FlushOutputBuffer, 'w');
     }
-    
+    return; // TODO: Remove this
     // loop_for_count3:
     loop_for_count3_handler();
 }
@@ -2442,29 +2442,11 @@ function _chkbuf_handler() {
 // FlushOutputBuffer - Write output buffer to VDP or callback
 // ────────────────────────────────────────────────────────────────
 function FlushOutputBuffer() {
-    // movem.l d0-d1/a0-a1,-(sp)
-    MOVEM_TO_SP(D0_D1_A0_A1, 'l');
-    
-    // move.w d1,d0
-    MOVE(d1, d0, 'w');
-    
-    // bne.w _checksize
-    if (!CCR.Z) {
-        // _checksize:
-        // lsr.w #1,d0
-        LSR(1, d0, 'w');
-    } else {
-        // move.w #$100,d0
-        MOVE(0x100, d0, 'w');
-        
-        // _checksize:
-        // lsr.w #1,d0
-        LSR(1, d0, 'w');
-    }
+    console.log(`[FlushOutputBuffer] Called`);
     
     // move.w d3,d1
     MOVE(d3, d1, 'w');
-    
+    return; // TODO: Remove this
     // add.w d0,d3
     ADD(d0, d3, 'w');
     
