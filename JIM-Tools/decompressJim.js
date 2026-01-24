@@ -1012,7 +1012,10 @@ function TST(src, size = 'w') {
 // ────────────────────────────────────────────────────────────────
 // DBF   Decrement and Branch if False (d0 = d0 - 1, branch if d0 != -1)
 // ────────────────────────────────────────────────────────────────
-function DBF(counterReg, targetCallback) {
+// ────────────────────────────────────────────────────────────────
+// DBF   Decrement and Branch if False (d0 = d0 - 1, branch if d0 != -1)
+// ────────────────────────────────────────────────────────────────
+function DBF(counterReg, targetAddr) {
   advancePC(2);
   
   let value;
@@ -1041,7 +1044,13 @@ function DBF(counterReg, targetCallback) {
   else if (counterReg === d7) d7 = value;
 
   if (value !== 0xFFFF) {
-    targetCallback();
+    console.log(`[DBF] Branch to 0x${targetAddr.toString(16).padStart(8, '0')} (counter=${value})`);
+    jumpTo(targetAddr);
+    executeAtAddress(targetAddr);
+    return true; // Branch taken
+  } else {
+    console.log(`[DBF] No branch (counter=-1)`);
+    return false; // No branch
   }
 }
 
@@ -1537,6 +1546,8 @@ function MOVEDATAREG_TO_INDEXED(srcDn, baseAn, indexDn2, size = 'b') {
     } else {
         memory[dstAddr & 0xFFFFFFFF] = byteValue;
     }
+    console.log(`MOVEDATAREG_TO_INDEXED: ${srcDn.toString(16)} to ${baseAn.toString(16)}, ${indexDn2.toString(16)} = ${dstAddr.toString(16)}`);
+    console.log(`byteValue: ${byteValue.toString(16)}`);
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -1885,6 +1896,18 @@ const DoDMApro = 0xDA98;
 const _endDecompression = 0xDDC8;
 const _decompress = 0xDDBE;
 
+// Loop label addresses (simulated)
+const Copy_bytes_loop = 0xDE2E;
+const loop_for_count = 0xDE3C;
+const Clear_bytes_loop = 0xDE4A;
+const loop_for_count2 = 0xDE58;
+const Fill_bytes_loop = 0xDE6A;
+const loop_for_count3 = 0xDE78;
+const _copybackwardloop2 = 0xDE98;
+const _copybackwardcheckbuffer = 0xDEAA;
+const _copybackwardsreverseloop2 = 0xDF26;
+const _chkbuf = 0xDF38;
+
 // Opcode handler addresses (jump table base + offset)
 const Opcode_CopyLiteral_Addr = 0xDE26;
 const Opcode_ClearBytes_Addr = 0xDE42;
@@ -1921,6 +1944,20 @@ const OPCODE_HANDLER_DISPATCH = {
     0xDF5E: () => { Opcode_CopyBackwardReverseLong(); }
 };
 
+// Loop label dispatch table
+const LOOP_LABEL_DISPATCH = {
+    0xDE2E: () => { Copy_bytes_loop_handler(); },
+    0xDE3C: () => { loop_for_count_handler(); },
+    0xDE4A: () => { Clear_bytes_loop_handler(); },
+    0xDE58: () => { loop_for_count2_handler(); },
+    0xDE6A: () => { Fill_bytes_loop_handler(); },
+    0xDE78: () => { loop_for_count3_handler(); },
+    0xDE98: () => { _copybackwardloop2_handler(); },
+    0xDEAA: () => { _copybackwardcheckbuffer_handler(); },
+    0xDF26: () => { _copybackwardsreverseloop2_handler(); },
+    0xDF38: () => { _chkbuf_handler(); }
+};
+
 // Label dispatch table - maps addresses to functions
 const LABEL_DISPATCH = {
     0xDDC8: () => { _endDecompressionFn(); },
@@ -1947,6 +1984,9 @@ function executeAtAddress(addr) {
         if (result === 'end') {
             return 'end';
         }
+    } else if (LOOP_LABEL_DISPATCH[addr]) {
+        console.log(`LOOP_LABEL_DISPATCH[${addr.toString(16)}]`);
+        LOOP_LABEL_DISPATCH[addr]();
     } else {
         console.warn(`[executeAtAddress] No handler for address 0x${addr.toString(16).padStart(8, '0')}`);
     }
@@ -1986,26 +2026,30 @@ function Opcode_CopyLiteral() {
     // andi.w #$1F,d0
     ANDI(0x1F, d0, 'w');
     
-    let count = d0 & 0xFFFF;
-    
     // Copy_bytes_loop:
-    while (count >= 0) {
-        // move.b (a0)+,(a1,d1.w)
-        MOVEDATAINC_TO_INDEXED(a0, a1, d1, 'b');
-        
-        // addq.b #1,d1
-        ADDQ(1, d1, 'b');
-        
-        // bne.w loop_for_count
-        if (d1 === 0) {
-            FlushOutputBuffer();
-        }
-        
-        // dbf d0,Copy_bytes_loop
-        if (count === 0) break;
-        count--;
-        d0 = count; // Update d0 for DBF
+    Copy_bytes_loop_handler();
+}
+
+function Copy_bytes_loop_handler() {
+    // move.b (a0)+,(a1,d1.w)
+    MOVEDATAINC_TO_INDEXED(a0, a1, d1, 'b');
+    
+    // addq.b #1,d1
+    ADDQ(1, d1, 'b');
+    
+    // bne.w loop_for_count
+    if (!BNE(loop_for_count, 'w')) {
+        // bsr.w FlushOutputBuffer
+        BSR(FlushOutputBuffer, 'w');
     }
+    
+    // loop_for_count:
+    loop_for_count_handler();
+}
+
+function loop_for_count_handler() {
+    // dbf d0,Copy_bytes_loop
+    DBF(d0, Copy_bytes_loop);
 }
 
 function Opcode_ClearBytes() {
@@ -2015,27 +2059,31 @@ function Opcode_ClearBytes() {
     // andi.w #$F,d0
     ANDI(0xF, d0, 'w');
     
-    let count = d0 & 0xFFFF;
-    
     // Clear_bytes_loop:
-    while (count >= 0) {
-        // clr.b (a1,d1.w) - write 0 to indexed address
-        d2 = 0;
-        MOVEDATAREG_TO_INDEXED(d2, a1, d1, 'b');
-        
-        // addq.b #1,d1
-        ADDQ(1, d1, 'b');
-        
-        // bne.w loop_for_count2
-        if (d1 === 0) {
-            FlushOutputBuffer();
-        }
-        
-        // dbf d0,Clear_bytes_loop
-        if (count === 0) break;
-        count--;
-        d0 = count;
+    Clear_bytes_loop_handler();
+}
+
+function Clear_bytes_loop_handler() {
+    // clr.b (a1,d1.w) - write 0 to indexed address
+    d2 = 0;
+    MOVEDATAREG_TO_INDEXED(d2, a1, d1, 'b');
+    
+    // addq.b #1,d1
+    ADDQ(1, d1, 'b');
+    
+    // bne.w loop_for_count2
+    if (!BNE(loop_for_count2, 'w')) {
+        // bsr.w FlushOutputBuffer
+        BSR(FlushOutputBuffer, 'w');
     }
+    
+    // loop_for_count2:
+    loop_for_count2_handler();
+}
+
+function loop_for_count2_handler() {
+    // dbf d0,Clear_bytes_loop
+    DBF(d0, Clear_bytes_loop);
 }
 
 function Opcode_FillBytes() {
@@ -2318,29 +2366,33 @@ function _copybackwardloop1() {
     // add.b d1,d2
     ADD(d1, d2, 'b');
     
-    let count = d0 & 0xFFFF;
-    
     // _copybackwardloop2:
-    while (count >= 0) {
-        // move.b (a1,d2.w),(a1,d1.w)
-        MOVEDATAINDEXED_TO_INDEXED(a1, d2, a1, d1, 'b');
-        
-        // addq.b #1,d2
-        ADDQ(1, d2, 'b');
-        
-        // addq.b #1,d1
-        ADDQ(1, d1, 'b');
-        
-        // bne.w _copybackwardcheckbuffer
-        if (d1 === 0) {
-            FlushOutputBuffer();
-        }
-        
-        // dbf d0,_copybackwardloop2
-        if (count === 0) break;
-        count--;
-        d0 = count;
+    _copybackwardloop2_handler();
+}
+
+function _copybackwardloop2_handler() {
+    // move.b (a1,d2.w),(a1,d1.w)
+    MOVEDATAINDEXED_TO_INDEXED(a1, d2, a1, d1, 'b');
+    
+    // addq.b #1,d2
+    ADDQ(1, d2, 'b');
+    
+    // addq.b #1,d1
+    ADDQ(1, d1, 'b');
+    
+    // bne.w _copybackwardcheckbuffer
+    if (!BNE(_copybackwardcheckbuffer, 'w')) {
+        // bsr.w FlushOutputBuffer
+        BSR(FlushOutputBuffer, 'w');
     }
+    
+    // _copybackwardcheckbuffer:
+    _copybackwardcheckbuffer_handler();
+}
+
+function _copybackwardcheckbuffer_handler() {
+    // dbf d0,_copybackwardloop2
+    DBF(d0, _copybackwardloop2);
 }
 
 function _copybackwardsreverseloop1() {
@@ -2350,29 +2402,33 @@ function _copybackwardsreverseloop1() {
     // add.b d1,d2
     ADD(d1, d2, 'b');
     
-    let count = d0 & 0xFFFF;
-    
     // _copybackwardsreverseloop2:
-    while (count >= 0) {
-        // move.b (a1,d2.w),(a1,d1.w)
-        MOVEDATAINDEXED_TO_INDEXED(a1, d2, a1, d1, 'b');
-        
-        // subq.b #1,d2
-        SUBQ(1, d2, 'b');
-        
-        // addq.b #1,d1
-        ADDQ(1, d1, 'b');
-        
-        // bne.w _chkbuf
-        if (d1 === 0) {
-            FlushOutputBuffer();
-        }
-        
-        // dbf d0,_copybackwardsreverseloop2
-        if (count === 0) break;
-        count--;
-        d0 = count;
+    _copybackwardsreverseloop2_handler();
+}
+
+function _copybackwardsreverseloop2_handler() {
+    // move.b (a1,d2.w),(a1,d1.w)
+    MOVEDATAINDEXED_TO_INDEXED(a1, d2, a1, d1, 'b');
+    
+    // subq.b #1,d2
+    SUBQ(1, d2, 'b');
+    
+    // addq.b #1,d1
+    ADDQ(1, d1, 'b');
+    
+    // bne.w _chkbuf
+    if (!BNE(_chkbuf, 'w')) {
+        // bsr.w FlushOutputBuffer
+        BSR(FlushOutputBuffer, 'w');
     }
+    
+    // _chkbuf:
+    _chkbuf_handler();
+}
+
+function _chkbuf_handler() {
+    // dbf d0,_copybackwardsreverseloop2
+    DBF(d0, _copybackwardsreverseloop2);
 }
 
 // ────────────────────────────────────────────────────────────────
