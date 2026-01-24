@@ -890,6 +890,7 @@ function ADDQ(imm, dstReg, size = 'b') {
     CCR.C = carry;
     CCR.X = carry;
   }
+  console.log(`ADDQ: ${dstReg} = ${result.toString(16)}`);  
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -1280,7 +1281,7 @@ function BRA(targetAddr, size = 's') {
 // move.b -1(An),Dn  → Read byte from address register - 1
 // ────────────────────────────────────────────────────────────────
 function MOVEDATAPREDEC(srcAn, dstDn, size = 'b') {
-    advancePC(2);
+    advancePC(4);
     
     let addr;
     if (srcAn === a0) addr = (a0 - 1) & 0xFFFFFFFF;
@@ -2087,7 +2088,6 @@ function loop_for_count2_handler() {
 }
 
 function Opcode_FillBytes() {
-    console.log(`Opcode_FillBytes`);
     
     // move.b -1(a0),d0
     MOVEDATAPREDEC(a0, d0, 'b');
@@ -2101,27 +2101,30 @@ function Opcode_FillBytes() {
     // move.b (a0)+,d2
     MOVEDATAINC(a0, d2, 'b');
     
-    let count = d0 & 0xFFFF;
-    console.log(`Opcode_FillBytes: count = ${count}`);
-    
     // Fill_bytes_loop:
-    while (count >= 0) {
-        // move.b d2,(a1,d1.w)
-        MOVEDATAREG_TO_INDEXED(d2, a1, d1, 'b');
-        return; // TODO: Remove this
-        // addq.b #1,d1
-        ADDQ(1, d1, 'b');
-        
-        // bne.w loop_for_count3
-        if (d1 === 0) {
-            FlushOutputBuffer();
-        }
-        
-        // dbf d0,Fill_bytes_loop
-        if (count === 0) break;
-        count--;
-        d0 = count;
+    Fill_bytes_loop_handler();
+}
+
+function Fill_bytes_loop_handler() {
+    // move.b d2,(a1,d1.w)
+    MOVEDATAREG_TO_INDEXED(d2, a1, d1, 'b');
+    
+    // addq.b #1,d1
+    ADDQ(1, d1, 'b');
+    return; // TODO: Remove this
+    // bne.w loop_for_count3
+    if (!BNE(loop_for_count3, 'w')) {
+        // bsr.w FlushOutputBuffer
+        BSR(FlushOutputBuffer, 'w');
     }
+    
+    // loop_for_count3:
+    loop_for_count3_handler();
+}
+
+function loop_for_count3_handler() {
+    // dbf d0,Fill_bytes_loop
+    DBF(d0, Fill_bytes_loop);
 }
 
 function Opcode_CopyBackwardShort() {
