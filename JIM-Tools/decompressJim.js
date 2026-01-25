@@ -117,23 +117,24 @@ function MOVE(srcValue, dstReg, size = 'l') {
     const mask = MASK[size];
     const value = srcValue & mask;
 
-    // Write to destination register
-    if (dstReg === d0) d0 = value;
-    else if (dstReg === d1) d1 = value;
-    else if (dstReg === d2) d2 = value;
-    else if (dstReg === d3) d3 = value;
-    else if (dstReg === d4) d4 = value;
-    else if (dstReg === d5) d5 = value;
-    else if (dstReg === d6) d6 = value;
-    else if (dstReg === d7) d7 = value;
-    else if (dstReg === a0) a0 = value;
-    else if (dstReg === a1) a1 = value;
-    else if (dstReg === a2) a2 = value;
-    else if (dstReg === a3) a3 = value;
-    else if (dstReg === a4) a4 = value;
-    else if (dstReg === a5) a5 = value;
-    else if (dstReg === a6) a6 = value;
-    else if (dstReg === a7) a7 = value;
+    // Write to destination register and determine register name
+    let regName;
+    if (dstReg === d0) { d0 = value; regName = 'd0'; }
+    else if (dstReg === d1) { d1 = value; regName = 'd1'; }
+    else if (dstReg === d2) { d2 = value; regName = 'd2'; }
+    else if (dstReg === d3) { d3 = value; regName = 'd3'; }
+    else if (dstReg === d4) { d4 = value; regName = 'd4'; }
+    else if (dstReg === d5) { d5 = value; regName = 'd5'; }
+    else if (dstReg === d6) { d6 = value; regName = 'd6'; }
+    else if (dstReg === d7) { d7 = value; regName = 'd7'; }
+    else if (dstReg === a0) { a0 = value; regName = 'a0'; }
+    else if (dstReg === a1) { a1 = value; regName = 'a1'; }
+    else if (dstReg === a2) { a2 = value; regName = 'a2'; }
+    else if (dstReg === a3) { a3 = value; regName = 'a3'; }
+    else if (dstReg === a4) { a4 = value; regName = 'a4'; }
+    else if (dstReg === a5) { a5 = value; regName = 'a5'; }
+    else if (dstReg === a6) { a6 = value; regName = 'a6'; }
+    else if (dstReg === a7) { a7 = value; regName = 'a7'; }
     else {
     console.warn("MOVE: unsupported destination");
     return;
@@ -150,7 +151,7 @@ function MOVE(srcValue, dstReg, size = 'l') {
     CCR.C = false;
     // X unchanged
 
-    console.log(`[MOVE.${size}] ${dstReg === d0 ? 'd0' : 'other'} = 0x${value.toString(16).padStart(8, '0')}`);
+    console.log(`[MOVE.${size}] ${regName} = 0x${value.toString(16).padStart(8, '0')}`);
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -2443,7 +2444,7 @@ function _chkbuf_handler() {
 // ────────────────────────────────────────────────────────────────
 function FlushOutputBuffer() {
     console.log(`[FlushOutputBuffer] Called`);
-    
+    jumpTo(0xDF78);
     // move.w d3,d1
     MOVE(d3, d1, 'w');
     return; // TODO: Remove this
