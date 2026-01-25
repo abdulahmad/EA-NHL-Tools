@@ -2440,48 +2440,53 @@ function _chkbuf_handler() {
 }
 
 // ────────────────────────────────────────────────────────────────
-// FlushOutputBuffer - Write output buffer to VDP or callback
+// FlushOutputBuffer (0xDF78) - Write output buffer to VDP or callback
+// 1:1 with ROM:0000DF78 FlushOutputBuffer
 // ────────────────────────────────────────────────────────────────
 function FlushOutputBuffer() {
     console.log(`[FlushOutputBuffer] Called`);
     jumpTo(0xDF78);
+    return; // TODO: Remove this
+    // movem.l d0-d1/a0-a1,-(sp)
+    MOVEM_TO_SP(D0_D1_A0_A1, 'l');
+    // move.w d1,d0
+    MOVE(d1, d0, 'w');
+    // bne.w _checksize  (0xDF86)
+    if (!CCR.Z) {
+        // branch taken -> skip next, go to _checksize
+    } else {
+        // move.w #$100,d0
+        MOVE(0x100, d0, 'w');
+    }
+    // _checksize: (0xDF86)
+    // lsr.w #1,d0
+    LSR(1, d0, 'w');
     // move.w d3,d1
     MOVE(d3, d1, 'w');
-    return; // TODO: Remove this
     // add.w d0,d3
     ADD(d0, d3, 'w');
-    
     // add.w d0,d3
     ADD(d0, d3, 'w');
-    
     // movea.l a1,a0
-    a0 = a1; // Direct register copy
-    
+    MOVEA(a1, a0, 'l');
     // tst.l (a4)
     TST(a4, 'l');
-    
-    // beq.w _nocallback
+    // beq.w _nocallback (0xDF9E)
     if (CCR.Z) {
         // _nocallback:
-        // jsr (a6) - DoDMApro
+        // jsr (a6)  DoDMApro
         JSR(a6);
-        console.log(`[FlushOutputBuffer] Called DoDMApro with ${d0} words`);
     } else {
         // movea.l (a4),a1
-        const callbackAddr = readl(a4);
-        MOVEA(callbackAddr, a1, 'l');
-        
-        // jsr (a5) - ConvertAndWriteToVDP
+        MOVEA(readl(a4), a1, 'l');
+        // jsr (a5)  ConvertAndWriteToVDP
         JSR(a5);
-        console.log(`[FlushOutputBuffer] Called ConvertAndWriteToVDP with ${d0} words`);
+        // bra.w _done  (skip _nocallback)
     }
-    
-    // _done:
+    // _done: (0xDFA0)
     // movem.l (sp)+,d0-d1/a0-a1
     MOVEM_FROM_SP(D0_D1_A0_A1, 'l');
-    
-    // Reset output buffer position
-    CLR(d1, 'w');
+    // rts
 }
 
 startDecompression(0x7C974);
