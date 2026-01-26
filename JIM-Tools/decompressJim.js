@@ -507,6 +507,10 @@ function jumpTo(address) {
   console.log(`[PC] Jumping to 0x${pc.toString(16).padStart(8, '0')}`);
 }
 
+// Addresses that are "loop back" targets (e.g. after bne.w in body). BNE must not
+// call executeAtAddress for these, or we get unbounded recursion from body->BNE->executeAtAddress->handler->body...
+const LOOP_BACK_ADDRESSES = new Set([0xDE3C, 0xDE58, 0xDE78, 0xDEAA, 0xDF38]);
+
 // ────────────────────────────────────────────────────────────────
 // MOVEM register list constants (for passing to MOVEM_TO_SP)
 // These represent common ranges like "d0-d1/a0-a6" from your ROM
@@ -1080,7 +1084,7 @@ function DBF(counterReg, targetAddr) {
   if (value !== 0xFFFF) {
     console.log(`[DBF] Branch to 0x${targetAddr.toString(16).padStart(8, '0')} (counter=${value})`);
     jumpTo(targetAddr);
-    executeAtAddress(targetAddr);
+    // Do NOT call executeAtAddress here — caller must loop to avoid stack overflow
     return true; // Branch taken
   } else {
     console.log(`[DBF] No branch (counter=-1)`);
@@ -1289,7 +1293,12 @@ function BNE(targetAddr, size = 'w') {
   if (!CCR.Z) {
     console.log(`[BNE.${size}] Branch TAKEN (Z=0) to 0x${targetAddr.toString(16).padStart(8, '0')}`);
     jumpTo(targetAddr);
-    executeAtAddress(targetAddr);
+    // Do not call executeAtAddress for loop-back labels — their handlers are
+    // driven by while(DBF){body} in the caller; calling executeAtAddress here
+    // would recurse and overflow the stack.
+    if (!LOOP_BACK_ADDRESSES.has(targetAddr)) {
+      executeAtAddress(targetAddr);
+    }
   } else {
     console.log(`[BNE.${size}] Branch NOT taken`);
     // PC already advanced above
@@ -1881,12 +1890,12 @@ function decompressBytecode() {
     jumpTo(0xDDCE);
     console.log("=== DECOMPRESSING BYTECODE ===");
     
-    // movea.w #(DispAttribCtr-M68K_RAM),a1
+    // movea.w #(DispAttribCtr-M68K_RAM),a1 - use .l so 0x00FF0000 is not truncated
     const dispAttribCtr = OUTPUT_BUFFER_ADDR;
-    MOVEA(dispAttribCtr, a1, 'w');
+    MOVEA(dispAttribCtr, a1, 'l');
     
     // movea.w #(DispAttribCtr-M68K_RAM),a3
-    MOVEA(dispAttribCtr, a3, 'w');
+    MOVEA(dispAttribCtr, a3, 'l');
     
     // movea.w #(callbackPtr-M68K_RAM),a4
     const callbackPtrAddr = 0; // Will be set if callback exists
@@ -2144,26 +2153,26 @@ function Opcode_CopyLiteral() {
     Copy_bytes_loop_handler();
 }
 
-function Copy_bytes_loop_handler() {
+function Copy_bytes_loop_body() {
     // move.b (a0)+,(a1,d1.w)
     MOVEDATAINC_TO_INDEXED(a0, a1, d1, 'b');
-    
     // addq.b #1,d1
     ADDQ(1, d1, 'b');
-    
-    // bne.w loop_for_count
-    if (!BNE(loop_for_count, 'w')) {
-        // bsr.w FlushOutputBuffer
-        BSR(FlushOutputBuffer, 'w');
-    }
-    
+    // bne.w loop_for_count — skip flush when d1!=0; use CCR.Z to avoid BNE→executeAtAddress re-entry
+    if (CCR.Z) { BSR(FlushOutputBuffer, 'w'); }
+}
+
+function Copy_bytes_loop_handler() {
+    Copy_bytes_loop_body();
     // loop_for_count:
     loop_for_count_handler();
 }
 
 function loop_for_count_handler() {
-    // dbf d0,Copy_bytes_loop
-    DBF(d0, Copy_bytes_loop);
+    // dbf d0,Copy_bytes_loop — loop in JS so we don't stack overflow
+    while (DBF(d0, Copy_bytes_loop)) {
+        Copy_bytes_loop_body();
+    }
 }
 
 function Opcode_ClearBytes() {
@@ -2177,27 +2186,27 @@ function Opcode_ClearBytes() {
     Clear_bytes_loop_handler();
 }
 
-function Clear_bytes_loop_handler() {
+function Clear_bytes_loop_body() {
     // clr.b (a1,d1.w) - write 0 to indexed address
     d2 = 0;
     MOVEDATAREG_TO_INDEXED(d2, a1, d1, 'b');
-    
     // addq.b #1,d1
     ADDQ(1, d1, 'b');
-    
-    // bne.w loop_for_count2
-    if (!BNE(loop_for_count2, 'w')) {
-        // bsr.w FlushOutputBuffer
-        BSR(FlushOutputBuffer, 'w');
-    }
-    
+    // bne.w loop_for_count2 — skip flush when d1!=0; use CCR.Z to avoid BNE→executeAtAddress re-entry
+    if (CCR.Z) { BSR(FlushOutputBuffer, 'w'); }
+}
+
+function Clear_bytes_loop_handler() {
+    Clear_bytes_loop_body();
     // loop_for_count2:
     loop_for_count2_handler();
 }
 
 function loop_for_count2_handler() {
-    // dbf d0,Clear_bytes_loop
-    DBF(d0, Clear_bytes_loop);
+    // dbf d0,Clear_bytes_loop — loop in JS so we don't stack overflow
+    while (DBF(d0, Clear_bytes_loop)) {
+        Clear_bytes_loop_body();
+    }
 }
 
 function Opcode_FillBytes() {
@@ -2218,26 +2227,26 @@ function Opcode_FillBytes() {
     Fill_bytes_loop_handler();
 }
 
-function Fill_bytes_loop_handler() {
+function Fill_bytes_loop_body() {
     // move.b d2,(a1,d1.w)
     MOVEDATAREG_TO_INDEXED(d2, a1, d1, 'b');
-    
     // addq.b #1,d1
     ADDQ(1, d1, 'b');
-    
-    // bne.w loop_for_count3
-    if (!BNE(loop_for_count3, 'w')) {
-        // bsr.w FlushOutputBuffer
-        BSR(FlushOutputBuffer, 'w');
-    }
-    // return; // TODO: Remove this
+    // bne.w loop_for_count3 — skip flush when d1!=0; use CCR.Z to avoid BNE→executeAtAddress re-entry
+    if (CCR.Z) { BSR(FlushOutputBuffer, 'w'); }
+}
+
+function Fill_bytes_loop_handler() {
+    Fill_bytes_loop_body();
     // loop_for_count3:
     loop_for_count3_handler();
 }
 
 function loop_for_count3_handler() {
-    // dbf d0,Fill_bytes_loop
-    DBF(d0, Fill_bytes_loop);
+    // dbf d0,Fill_bytes_loop — loop in JS so we don't stack overflow
+    while (DBF(d0, Fill_bytes_loop)) {
+        Fill_bytes_loop_body();
+    }
 }
 
 function Opcode_CopyBackwardShort() {
@@ -2486,29 +2495,28 @@ function _copybackwardloop1() {
     _copybackwardloop2_handler();
 }
 
-function _copybackwardloop2_handler() {
+function _copybackwardloop2_body() {
     // move.b (a1,d2.w),(a1,d1.w)
     MOVEDATAINDEXED_TO_INDEXED(a1, d2, a1, d1, 'b');
-    
     // addq.b #1,d2
     ADDQ(1, d2, 'b');
-    
     // addq.b #1,d1
     ADDQ(1, d1, 'b');
-    
-    // bne.w _copybackwardcheckbuffer
-    if (!BNE(_copybackwardcheckbuffer, 'w')) {
-        // bsr.w FlushOutputBuffer
-        BSR(FlushOutputBuffer, 'w');
-    }
-    
+    // bne.w _copybackwardcheckbuffer — skip flush when d1!=0; use CCR.Z to avoid BNE→executeAtAddress re-entry
+    if (CCR.Z) { BSR(FlushOutputBuffer, 'w'); }
+}
+
+function _copybackwardloop2_handler() {
+    _copybackwardloop2_body();
     // _copybackwardcheckbuffer:
     _copybackwardcheckbuffer_handler();
 }
 
 function _copybackwardcheckbuffer_handler() {
-    // dbf d0,_copybackwardloop2
-    DBF(d0, _copybackwardloop2);
+    // dbf d0,_copybackwardloop2 — loop in JS so we don't stack overflow
+    while (DBF(d0, _copybackwardloop2)) {
+        _copybackwardloop2_body();
+    }
 }
 
 function _copybackwardsreverseloop1() {
@@ -2522,29 +2530,28 @@ function _copybackwardsreverseloop1() {
     _copybackwardsreverseloop2_handler();
 }
 
-function _copybackwardsreverseloop2_handler() {
+function _copybackwardsreverseloop2_body() {
     // move.b (a1,d2.w),(a1,d1.w)
     MOVEDATAINDEXED_TO_INDEXED(a1, d2, a1, d1, 'b');
-    
     // subq.b #1,d2
     SUBQ(1, d2, 'b');
-    
     // addq.b #1,d1
     ADDQ(1, d1, 'b');
-    
-    // bne.w _chkbuf
-    if (!BNE(_chkbuf, 'w')) {
-        // bsr.w FlushOutputBuffer
-        BSR(FlushOutputBuffer, 'w');
-    }
-    
+    // bne.w _chkbuf — skip flush when d1!=0; use CCR.Z to avoid BNE→executeAtAddress re-entry
+    if (CCR.Z) { BSR(FlushOutputBuffer, 'w'); }
+}
+
+function _copybackwardsreverseloop2_handler() {
+    _copybackwardsreverseloop2_body();
     // _chkbuf:
     _chkbuf_handler();
 }
 
 function _chkbuf_handler() {
-    // dbf d0,_copybackwardsreverseloop2
-    DBF(d0, _copybackwardsreverseloop2);
+    // dbf d0,_copybackwardsreverseloop2 — loop in JS so we don't stack overflow
+    while (DBF(d0, _copybackwardsreverseloop2)) {
+        _copybackwardsreverseloop2_body();
+    }
 }
 
 // ────────────────────────────────────────────────────────────────
