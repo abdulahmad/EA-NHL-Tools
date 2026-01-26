@@ -86,6 +86,20 @@ function resetCCR() {
   CCR.N = CCR.Z = CCR.V = CCR.C = CCR.X = false;
 }
 
+// ────────────────────────────────────────────────────────────────
+// dumpRegisterState - Log all D0–D7, A0–A7, PC, and CCR
+// ────────────────────────────────────────────────────────────────
+function dumpRegisterState(label = '') {
+  const prefix = label ? `[${label}] ` : '';
+  console.log(`${prefix}─── Registers ───`);
+  console.log(`${prefix}D0=0x${(d0 >>> 0).toString(16).padStart(8, '0')}  D1=0x${(d1 >>> 0).toString(16).padStart(8, '0')}  D2=0x${(d2 >>> 0).toString(16).padStart(8, '0')}  D3=0x${(d3 >>> 0).toString(16).padStart(8, '0')}`);
+  console.log(`${prefix}D4=0x${(d4 >>> 0).toString(16).padStart(8, '0')}  D5=0x${(d5 >>> 0).toString(16).padStart(8, '0')}  D6=0x${(d6 >>> 0).toString(16).padStart(8, '0')}  D7=0x${(d7 >>> 0).toString(16).padStart(8, '0')}`);
+  console.log(`${prefix}A0=0x${(a0 >>> 0).toString(16).padStart(8, '0')}  A1=0x${(a1 >>> 0).toString(16).padStart(8, '0')}  A2=0x${(a2 >>> 0).toString(16).padStart(8, '0')}  A3=0x${(a3 >>> 0).toString(16).padStart(8, '0')}`);
+  console.log(`${prefix}A4=0x${(a4 >>> 0).toString(16).padStart(8, '0')}  A5=0x${(a5 >>> 0).toString(16).padStart(8, '0')}  A6=0x${(a6 >>> 0).toString(16).padStart(8, '0')}  A7=0x${(a7 >>> 0).toString(16).padStart(8, '0')}`);
+  console.log(`${prefix}PC=0x${(pc >>> 0).toString(16).padStart(8, '0')}`);
+  console.log(`${prefix}CCR: N=${CCR.N ? 1 : 0} Z=${CCR.Z ? 1 : 0} V=${CCR.V ? 1 : 0} C=${CCR.C ? 1 : 0} X=${CCR.X ? 1 : 0}`);
+}
+
 // Size masks and sign bit positions
 const MASK = {
   b: 0xFF,
@@ -2446,6 +2460,7 @@ function _chkbuf_handler() {
 function FlushOutputBuffer() {
     console.log(`[FlushOutputBuffer] Called`);
     jumpTo(0xDF78);
+    
     return; // TODO: Remove this
     // movem.l d0-d1/a0-a1,-(sp)
     MOVEM_TO_SP(D0_D1_A0_A1, 'l');
