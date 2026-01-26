@@ -1096,7 +1096,7 @@ function DBF(counterReg, targetAddr) {
 //   JSR(baseAn) - Register indirect: jsr (a6)
 //   JSR(baseAn, indexDn, size) - Indexed: jsr (a2,d0.w)
 function JSR(targetAddrOrBase, indexDn = null, size = null) {
-  console.log(`JSR: ${targetAddrOrBase.toString(16)} ${indexDn.toString(16)} ${size}`);
+  console.log(`JSR: ${targetAddrOrBase? targetAddrOrBase.toString(16) : ''} ${indexDn? indexDn.toString(16) : ''} ${size? size : ''}`);
   advancePC(2);
   
   // Push return address (PC) onto stack
@@ -1817,7 +1817,7 @@ function decompressGraphics() {
 
     BEQ(_endDecompression, 'w');    // beq.w _enddecompression
     BMI(_decompress, 'w');          // bmi.w _decompress
-    return; // TODO: Remove this
+    // return; // TODO: Remove this
     // Positive literal count path
     // add.w d0,d4
     ADD(d0, d4, 'w');
@@ -1859,7 +1859,7 @@ function _decompressFn() {
     ANDI(0x7FFF, d0);                // andi.<w> #$7FFF,d0
     ADD(d0, d4);                     // add.<w> d0,d4
     BSR(decompressBytecode);         // bsr.<w> decompressBytecode
-    return; // TODO: Remove this
+    // return; // TODO: Remove this
 }
 
 function _endDecompressionFn() {
@@ -1934,7 +1934,7 @@ function decompressBytecode() {
         
         // jsr (a2,d0.w) - Jump to opcode handler
         JSR(a2, d0, 'w');
-        return; // TODO: Remove this
+        // return; // TODO: Remove this
         // bra.s main_bytecode_intepreter_loop
         // Loop continues...
     }
@@ -1958,6 +1958,7 @@ function openDecompressedOutputFile(filePath = DECOMPRESSED_OUTPUT_PATH) {
 }
 
 function writeDecompressedByte(b) {
+    console.log(`*************writing to decompressed output file: ${b.toString(16)}`);
     if (decompressedOutputStream) decompressedOutputStream.write(Buffer.from([b & 0xFF]));
 }
 
@@ -1980,6 +1981,7 @@ function openMemoryWritesFile(filePath = MEMORY_WRITES_PATH) {
 }
 
 function writeMemoryByte(b) {
+    console.log(`*************writing to memory writes file: ${b.toString(16)}`);
     if (memoryWritesOutputStream) memoryWritesOutputStream.write(Buffer.from([b & 0xFF]));
 }
 
@@ -2228,7 +2230,7 @@ function Fill_bytes_loop_handler() {
         // bsr.w FlushOutputBuffer
         BSR(FlushOutputBuffer, 'w');
     }
-    return; // TODO: Remove this
+    // return; // TODO: Remove this
     // loop_for_count3:
     loop_for_count3_handler();
 }
@@ -2553,7 +2555,7 @@ function FlushOutputBuffer() {
     console.log(`[FlushOutputBuffer] Called`);
     jumpTo(0xDF78);
     
-    return; // TODO: Remove this
+    // return; // TODO: Remove this
     // movem.l d0-d1/a0-a1,-(sp)
     MOVEM_TO_SP(D0_D1_A0_A1, 'l');
     // move.w d1,d0
@@ -2587,9 +2589,10 @@ function FlushOutputBuffer() {
         // movea.l (a4),a1
         MOVEA(readl(a4), a1, 'l');
         // jsr (a5)  ConvertAndWriteToVDP
-        JSR(a5);
+        // JSR(a5); -- there is no VDP, so we don't need to call this
         // bra.w _done  (skip _nocallback)
     }
+    // return; // TODO: Remove this
     // _done: (0xDFA0)
     // movem.l (sp)+,d0-d1/a0-a1
     MOVEM_FROM_SP(D0_D1_A0_A1, 'l');
