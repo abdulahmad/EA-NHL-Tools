@@ -1779,6 +1779,9 @@ function MOVEM_FROM_SP(maskOrList, size = 'l') {
 }
 
 
+// Set by startDecompression; bytecode loop stops when a0 >= this (palette section start).
+let bytecodeStreamEnd = 0;
+
 function startDecompression(jimDataPtr) {
     loadROM();
     openDecompressedOutputFile();
@@ -1798,6 +1801,8 @@ function startDecompression(jimDataPtr) {
     console.log(`Palette offset: 0x${paletteOffset.toString(16)}`);
     let tileMapHeaderOffset = readl(pos); pos = incl(pos);
     console.log(`Tile map header offset: 0x${tileMapHeaderOffset.toString(16)}`);
+    bytecodeStreamEnd = (jimDataPtr + paletteOffset) >>> 0;  // tile data ends, palette starts here
+    console.log(`Bytecode stream end (jimDataPtr+paletteOffset): 0x${bytecodeStreamEnd.toString(16)}`);
     a2 = pos;
     let tileOffset = 0;
     d4 = tileOffset;
@@ -1922,16 +1927,30 @@ function decompressBytecode() {
   
 
     
-    // Main interpreter loop
+    // Main interpreter loop. Stops when: (1) a0 reaches jimDataPtr+paletteOffset (palette section),
+    // (2) an opcode returns 'end', or (3) the safety opcode cap is hit.
+    const MAX_OPCODES = 12; // safety cap if stream has no end sentinel
+    let opcodeCount = 0;
     main_bytecode_interpreter_loop:
     while (true) {
+        if (bytecodeStreamEnd && (a0 >>> 0) >= bytecodeStreamEnd) {
+            console.log(`[decompressBytecode] Reached palette section (a0=0x${a0.toString(16)} >= 0x${bytecodeStreamEnd.toString(16)})`);
+            closeAllOutputFiles();
+            break;
+        }
+        if (++opcodeCount > MAX_OPCODES) {
+            console.warn(`[decompressBytecode] Stopped after ${MAX_OPCODES} opcodes (no end sentinel). a0=0x${a0.toString(16)}`);
+            closeAllOutputFiles();
+            break;
+        }
         // move.b (a0)+,d0
+        console.log(`[opcode read] 0x${(a0 >>> 0).toString(16).padStart(8, '0')}`);
         MOVEDATAINC(a0, d0, 'b');
         
         // andi.w #$F0,d0 - Extract upper nibble (opcode type)
         ANDI(0xF0, d0, 'w');
         
-        // lsr.w #3,d0 - Shift right 3 to create index into jump table
+        // lsr.w #3,d0 - Shift right 3 to create index into jump table (0,2,4,...,30 for word table)
         LSR(3, d0, 'w');
         
         // lea jump_table(pc),a2 - get jump table base address
@@ -1942,10 +1961,11 @@ function decompressBytecode() {
         MOVEDATAINDEXED_TO_REG(a2, d0, d0, 'w');
         
         // jsr (a2,d0.w) - Jump to opcode handler
-        JSR(a2, d0, 'w');
-        // return; // TODO: Remove this
-        // bra.s main_bytecode_intepreter_loop
-        // Loop continues...
+        const result = JSR(a2, d0, 'w');
+        if (result === 'end') {
+            break; // End of decompression (handled inside the opcode wrapper: close files, etc.)
+        }
+        // bra.s main_bytecode_interpreter_loop
     }
 }
 
