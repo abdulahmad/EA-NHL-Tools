@@ -1944,8 +1944,10 @@ function decompressBytecode() {
             break;
         }
         // move.b (a0)+,d0
-        console.log(`[opcode read] 0x${(a0 >>> 0).toString(16).padStart(8, '0')}`);
+        const opcodeAddr = a0 >>> 0;
         MOVEDATAINC(a0, d0, 'b');
+        const opcodeByte = d0 & 0xFF;
+        console.log(`[opcode read] #${opcodeCount} addr=0x${opcodeAddr.toString(16).padStart(8, '0')} byte=0x${opcodeByte.toString(16).padStart(2, '0')}`);
         
         // andi.w #$F0,d0 - Extract upper nibble (opcode type)
         ANDI(0xF0, d0, 'w');
