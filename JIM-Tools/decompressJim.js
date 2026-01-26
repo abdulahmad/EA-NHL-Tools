@@ -1501,26 +1501,40 @@ function MOVEDATAINC_TO_INDEXED(srcAn, baseAn, indexDn, size = 'b') {
     if (baseAddr === OUTPUT_BUFFER_ADDR && dstAddr < OUTPUT_BUFFER_ADDR + OUTPUT_BUFFER_SIZE) {
         if (size === 'b') {
             outputBuffer[index & 0xFF] = value & 0xFF;
+            writeDecompressedByte(value);
         } else if (size === 'w') {
             outputBuffer[index & 0xFF] = (value >>> 8) & 0xFF;
             outputBuffer[(index + 1) & 0xFF] = value & 0xFF;
+            writeDecompressedByte((value >>> 8) & 0xFF);
+            writeDecompressedByte(value & 0xFF);
         } else {
             outputBuffer[index & 0xFF] = (value >>> 24) & 0xFF;
             outputBuffer[(index + 1) & 0xFF] = (value >>> 16) & 0xFF;
             outputBuffer[(index + 2) & 0xFF] = (value >>> 8) & 0xFF;
             outputBuffer[(index + 3) & 0xFF] = value & 0xFF;
+            writeDecompressedByte((value >>> 24) & 0xFF);
+            writeDecompressedByte((value >>> 16) & 0xFF);
+            writeDecompressedByte((value >>> 8) & 0xFF);
+            writeDecompressedByte(value & 0xFF);
         }
     } else {
         if (size === 'b') {
             memory[dstAddr & 0xFFFFFFFF] = value & 0xFF;
+            writeMemoryByte(value);
         } else if (size === 'w') {
             memory[dstAddr & 0xFFFFFFFF] = (value >>> 8) & 0xFF;
             memory[(dstAddr + 1) & 0xFFFFFFFF] = value & 0xFF;
+            writeMemoryByte((value >>> 8) & 0xFF);
+            writeMemoryByte(value & 0xFF);
         } else {
             memory[dstAddr & 0xFFFFFFFF] = (value >>> 24) & 0xFF;
             memory[(dstAddr + 1) & 0xFFFFFFFF] = (value >>> 16) & 0xFF;
             memory[(dstAddr + 2) & 0xFFFFFFFF] = (value >>> 8) & 0xFF;
             memory[(dstAddr + 3) & 0xFFFFFFFF] = value & 0xFF;
+            writeMemoryByte((value >>> 24) & 0xFF);
+            writeMemoryByte((value >>> 16) & 0xFF);
+            writeMemoryByte((value >>> 8) & 0xFF);
+            writeMemoryByte(value & 0xFF);
         }
     }
 }
@@ -1579,11 +1593,11 @@ function MOVEDATAREG_TO_INDEXED(srcDn, baseAn, indexDn2, size = 'b') {
     // Write to output buffer if within range
     // console.log('killing process at MOVEDATAREG_TO_INDEXED');
     if (baseAddr === OUTPUT_BUFFER_ADDR && dstAddr < OUTPUT_BUFFER_ADDR + OUTPUT_BUFFER_SIZE) {
-        console.log('writing to output buffer');
         outputBuffer[index & 0xFF] = byteValue;
+        writeDecompressedByte(byteValue);
     } else {
-        console.log(`writing to memory at address 0x${dstAddr.toString(16)}`);
         memory[dstAddr & 0xFFFFFFFF] = byteValue;
+        writeMemoryByte(byteValue);
     }
     console.log(`MOVEDATAREG_TO_INDEXED: ${srcDn.toString(16)} to ${baseAn.toString(16)}, ${indexDn2.toString(16)} = ${dstAddr.toString(16)}`);
     console.log(`byteValue: ${byteValue.toString(16)}`);
@@ -1667,8 +1681,10 @@ function MOVEDATAINDEXED_TO_INDEXED(srcBaseAn, srcIndexDn, dstBaseAn, dstIndexDn
     
     if (dstBaseAddr === OUTPUT_BUFFER_ADDR && dstAddr < OUTPUT_BUFFER_ADDR + OUTPUT_BUFFER_SIZE) {
         outputBuffer[dstIndex & 0xFF] = value;
+        writeDecompressedByte(value);
     } else {
         memory[dstAddr & 0xFFFFFFFF] = value;
+        writeMemoryByte(value);
     }
 }
 
@@ -1756,6 +1772,8 @@ function MOVEM_FROM_SP(maskOrList, size = 'l') {
 
 function startDecompression(jimDataPtr) {
     loadROM();
+    openDecompressedOutputFile();
+    openMemoryWritesFile();
     console.log(`Starting decompression at 0x${jimDataPtr.toString(16)}`);
     let pos = jimDataPtr
     console.log(`Data pointer at 0x${pos.toString(16)}`);
@@ -1847,6 +1865,7 @@ function _decompressFn() {
 function _endDecompressionFn() {
     jumpTo(0xDDC8); // set to next instruction after enddecompression label
     console.log("=== END OF DECOMPRESSION ===");
+    closeAllOutputFiles();
     
     // movem.l (sp)+,d0-d1/a0-a6
     MOVEM_FROM_SP(D0_D1_A0_A6, 'l');
@@ -1928,6 +1947,55 @@ const OUTPUT_BUFFER_SIZE = 0x100; // 256 bytes
 const OUTPUT_BUFFER_ADDR = 0x00FF0000; // Simulated RAM address
 let outputBuffer = new Uint8Array(OUTPUT_BUFFER_SIZE);
 
+// Decompressed output file: every byte written to the output buffer is also written here
+let decompressedOutputStream = null;
+const DECOMPRESSED_OUTPUT_PATH = 'decompressed_output.bin';
+
+function openDecompressedOutputFile(filePath = DECOMPRESSED_OUTPUT_PATH) {
+    decompressedOutputStream = fs.createWriteStream(filePath, { flags: 'w' });
+    console.log(`[Output] Writing decompressed data to ${filePath}`);
+    return decompressedOutputStream;
+}
+
+function writeDecompressedByte(b) {
+    if (decompressedOutputStream) decompressedOutputStream.write(Buffer.from([b & 0xFF]));
+}
+
+function closeDecompressedOutputFile() {
+    if (decompressedOutputStream) {
+        decompressedOutputStream.end();
+        decompressedOutputStream = null;
+        console.log(`[Output] Closed ${DECOMPRESSED_OUTPUT_PATH}`);
+    }
+}
+
+// Memory writes file: every byte written to RAM (non–output-buffer) is also written here
+let memoryWritesOutputStream = null;
+const MEMORY_WRITES_PATH = 'memory_writes.bin';
+
+function openMemoryWritesFile(filePath = MEMORY_WRITES_PATH) {
+    memoryWritesOutputStream = fs.createWriteStream(filePath, { flags: 'w' });
+    console.log(`[Output] Writing memory writes to ${filePath}`);
+    return memoryWritesOutputStream;
+}
+
+function writeMemoryByte(b) {
+    if (memoryWritesOutputStream) memoryWritesOutputStream.write(Buffer.from([b & 0xFF]));
+}
+
+function closeMemoryWritesFile() {
+    if (memoryWritesOutputStream) {
+        memoryWritesOutputStream.end();
+        memoryWritesOutputStream = null;
+        console.log(`[Output] Closed ${MEMORY_WRITES_PATH}`);
+    }
+}
+
+function closeAllOutputFiles() {
+    closeDecompressedOutputFile();
+    closeMemoryWritesFile();
+}
+
 // Callback pointer (simulated)
 let callbackPtr = 0; // Set to non-zero if callback exists
 
@@ -1979,6 +2047,7 @@ const OPCODE_HANDLER_DISPATCH = {
         const result = Opcode_CopyBackwardReverseMedium();
         if (result === 'end') {
             // End of decompression - restore registers and return
+            closeAllOutputFiles();
             MOVEM_FROM_SP(D0_D3_A0_A2, 'l');
             console.log("=== BYTECODE DECOMPRESSION COMPLETE ===");
             return 'end';
