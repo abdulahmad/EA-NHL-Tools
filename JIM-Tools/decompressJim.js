@@ -100,6 +100,20 @@ function dumpRegisterState(label = '') {
   console.log(`${prefix}CCR: N=${CCR.N ? 1 : 0} Z=${CCR.Z ? 1 : 0} V=${CCR.V ? 1 : 0} C=${CCR.C ? 1 : 0} X=${CCR.X ? 1 : 0}`);
 }
 
+// ────────────────────────────────────────────────────────────────
+// dumpOutputBuffer - Log the full output buffer as hex (16 bytes per line)
+// label: optional prefix (e.g. 'FlushOutputBuffer'); usedBytes: optional (defaults to d1)
+// ────────────────────────────────────────────────────────────────
+function dumpOutputBuffer(label = '', usedBytes = (d1 & 0xFFFF)) {
+  const prefix = label ? `[${label}] ` : '';
+  console.log(`${prefix}outputBuffer (${outputBuffer.length} bytes, used=${usedBytes}):`);
+  for (let i = 0; i < outputBuffer.length; i += 16) {
+    const row = outputBuffer.slice(i, Math.min(i + 16, outputBuffer.length));
+    const hex = Array.from(row).map(b => b.toString(16).padStart(2, '0')).join(' ');
+    console.log(`${prefix}  ${i.toString(16).padStart(3, '0')}: ${hex}`);
+  }
+}
+
 // Size masks and sign bit positions
 const MASK = {
   b: 0xFF,
@@ -1482,6 +1496,8 @@ function MOVEDATAINC_TO_INDEXED(srcAn, baseAn, indexDn, size = 'b') {
     const dstAddr = (baseAddr + (index & 0xFFFF)) & 0xFFFFFFFF;
     
     // Write to output buffer if within range
+    // console.log('killing process at MOVEDATAINC_TO_INDEXED');
+    // process.exit(1); // TODO: Remove this
     if (baseAddr === OUTPUT_BUFFER_ADDR && dstAddr < OUTPUT_BUFFER_ADDR + OUTPUT_BUFFER_SIZE) {
         if (size === 'b') {
             outputBuffer[index & 0xFF] = value & 0xFF;
@@ -1561,13 +1577,18 @@ function MOVEDATAREG_TO_INDEXED(srcDn, baseAn, indexDn2, size = 'b') {
     const byteValue = srcValue & 0xFF;
     
     // Write to output buffer if within range
+    // console.log('killing process at MOVEDATAREG_TO_INDEXED');
     if (baseAddr === OUTPUT_BUFFER_ADDR && dstAddr < OUTPUT_BUFFER_ADDR + OUTPUT_BUFFER_SIZE) {
+        console.log('writing to output buffer');
         outputBuffer[index & 0xFF] = byteValue;
     } else {
+        console.log(`writing to memory at address 0x${dstAddr.toString(16)}`);
         memory[dstAddr & 0xFFFFFFFF] = byteValue;
     }
     console.log(`MOVEDATAREG_TO_INDEXED: ${srcDn.toString(16)} to ${baseAn.toString(16)}, ${indexDn2.toString(16)} = ${dstAddr.toString(16)}`);
     console.log(`byteValue: ${byteValue.toString(16)}`);
+
+    // process.exit(1); // TODO: Remove this
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -1636,6 +1657,8 @@ function MOVEDATAINDEXED_TO_INDEXED(srcBaseAn, srcIndexDn, dstBaseAn, dstIndexDn
     const dstAddr = (dstBaseAddr + (dstIndex & 0xFFFF)) & 0xFFFFFFFF;
     
     let value;
+    // console.log('killing process at MOVEDATAINDEXED_TO_INDEXED');
+    // process.exit(1); // TODO: Remove this
     if (srcBaseAddr === OUTPUT_BUFFER_ADDR && srcAddr < OUTPUT_BUFFER_ADDR + OUTPUT_BUFFER_SIZE) {
         value = outputBuffer[srcIndex & 0xFF];
     } else {
