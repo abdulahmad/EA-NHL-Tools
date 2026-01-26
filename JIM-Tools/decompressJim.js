@@ -1947,7 +1947,11 @@ function decompressBytecode() {
         const opcodeAddr = a0 >>> 0;
         MOVEDATAINC(a0, d0, 'b');
         const opcodeByte = d0 & 0xFF;
-        console.log(`[opcode read] #${opcodeCount} addr=0x${opcodeAddr.toString(16).padStart(8, '0')} byte=0x${opcodeByte.toString(16).padStart(2, '0')}`);
+        const opcodeIndex = (opcodeByte & 0xF0) >> 3;
+        // console.log(`opcodeIndex: ${opcodeIndex}`);
+        // console.log(`OPCODE_HANDLER_NAMES: ${OPCODE_HANDLER_NAMES}`);
+        const handlerName = OPCODE_HANDLER_NAMES[opcodeIndex/2] ?? '?';
+        console.log(`[opcode read] #${opcodeCount} addr=0x${opcodeAddr.toString(16).padStart(8, '0')} byte=0x${opcodeByte.toString(16).padStart(2, '0')} handler=${handlerName}`);
         
         // andi.w #$F0,d0 - Extract upper nibble (opcode type)
         ANDI(0xF0, d0, 'w');
@@ -2158,6 +2162,13 @@ const JUMP_TABLE = [
     0x0106, // D: CopyBackwardReverseShort
     0x0138, // E: CopyBackwardReverseMedium
     0x0158  // F: CopyBackwardReverseLong
+];
+// Handler name for each opcode index (upper nibble >> 3); used for opcode read logging.
+const OPCODE_HANDLER_NAMES = [
+    'CopyLiteral', 'CopyLiteral', 'ClearBytes', 'FillBytes',
+    'CopyBackwardShort', 'CopyBackwardShort', 'CopyBackwardShort', 'CopyBackwardShort',
+    'CopyBackwardMedium', 'CopyBackwardLong', 'CopyBackwardExtended1', 'CopyBackwardExtended2',
+    'CopyBackwardReverseShort', 'CopyBackwardReverseShort', 'CopyBackwardReverseMedium', 'CopyBackwardReverseLong'
 ];
 
 // ────────────────────────────────────────────────────────────────
