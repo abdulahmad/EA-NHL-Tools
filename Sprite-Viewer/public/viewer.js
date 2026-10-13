@@ -78,8 +78,12 @@ function currentAnim() {
 function activeColors() {
   const anim = currentAnim();
   if (!anim) return null;
-  const colors = anim.combined.map((c) => c.slice());
   const override = paletteFiles.get(state.paletteName);
+  if (gameInfo && gameInfo.paletteKind === 'pc') {
+    if (override && override.length >= 256) return override.map((c) => c.slice());
+    return anim.combined.map((c) => c.slice());
+  }
+  const colors = anim.combined.map((c) => c.slice());
   if (override) {
     const base = ((gameInfo && gameInfo.jerseyRow) || 2) * 16;
     for (let i = 0; i < 16; i++) colors[base + i] = override[i].slice();
@@ -151,6 +155,16 @@ function buildSequence(anim) {
       loopDefault: true,
       title: spf.name,
       blurb: spf.blurb
+    };
+  }
+  if (!catalog.anims.length) {
+    return {
+      key: 'spa:none',
+      steps: [],
+      directions: false,
+      spin: false,
+      loopDefault: false,
+      title: 'No SPA table'
     };
   }
   const spa = catalog.anims.find((s) => s.name === state.spa) || catalog.anims[0];
@@ -422,7 +436,7 @@ function rotate(delta) {
     const dir = (state.dir + delta * i + 8) % 8;
     if (state.mode === 'spa') {
       const spa = catalog.anims.find((s) => s.name === state.spa);
-      if (spa.directions[dir].unused) continue;
+      if (!spa || spa.directions[dir].unused) continue;
     }
     state.dir = dir;
     const next = sequence();
@@ -496,7 +510,9 @@ function renderImageList(box, q) {
   if (!images.length) {
     const note = document.createElement('p');
     note.className = 'empty-note';
-    note.textContent = 'This game has no extra pictures in the viewer yet.';
+    note.textContent = gameInfo && gameInfo.hint
+      ? 'No picture files in Sprite-Viewer/pc95/ yet.'
+      : 'This game has no extra pictures in the viewer yet.';
     box.appendChild(note);
     return;
   }
@@ -586,7 +602,7 @@ function renderList() {
     note.textContent = anim
       ? anim.numFrames + ' frames in ' + spriteBank() + '. Scrub the frame slider, or pick an SPF or SPA.'
       : (gameInfo && !gameInfo.pixels
-        ? 'Pictures need the ROM at Sprite-Viewer/' + gameInfo.romHint + '.'
+        ? (gameInfo.hint || ('Pictures need the ROM at Sprite-Viewer/' + gameInfo.romHint + '.'))
         : 'Loading ' + state.bank + '…');
     box.appendChild(note);
     return;
@@ -606,7 +622,9 @@ function renderList() {
   if (!visible.length) {
     const note = document.createElement('p');
     note.className = 'empty-note';
-    note.textContent = 'Nothing matches that search.';
+    note.textContent = !entries.length && state.mode === 'spa' && !catalog.anims.length
+      ? 'No SPA table for this game. The frame ranges are under SPF.'
+      : 'Nothing matches that search.';
     box.appendChild(note);
     return;
   }
@@ -779,7 +797,11 @@ function renderMeta() {
   const table = el('sprites');
   table.replaceChildren();
   if (!frame || frame.picture || !frame.sprites.length) {
-    table.textContent = frame && frame.picture ? 'This is a picture, not a sprite frame.' : 'No sprites in this frame.';
+    table.textContent = frame && frame.picture
+      ? 'This is a picture, not a sprite frame.'
+      : frame && frame.width
+        ? 'This frame is one picture, not a stack of Genesis sprites.'
+        : 'No sprites in this frame.';
     return;
   }
   const html = document.createElement('table');
@@ -819,6 +841,7 @@ function renderSwatches() {
 }
 
 function romHint() {
+  if (gameInfo && gameInfo.hint) return gameInfo.hint;
   if (gameInfo && gameInfo.romHint) {
     return 'Add the ROM at Sprite-Viewer/' + gameInfo.romHint + ' to draw this picture.';
   }
@@ -831,7 +854,9 @@ function renderCaption() {
   const cap = el('caption');
   if (!step) {
     cap.textContent = loadError || (state.mode === 'spa'
-      ? 'This facing has no sequence of its own. The table runs off the end of the animation.'
+      ? (catalog && !catalog.anims.length
+        ? 'No SPA table for this game. The frame ranges are under SPF.'
+        : 'This facing has no sequence of its own. The table runs off the end of the animation.')
       : state.mode === 'image'
         ? romHint()
         : 'No frame.');
@@ -844,7 +869,7 @@ function renderCaption() {
       return;
     }
     cap.textContent = gameInfo && !gameInfo.pixels
-      ? gameInfo.title + ' names are loaded. Add the ROM at Sprite-Viewer/' + gameInfo.romHint + ' and restart the server to draw the frames.'
+      ? (gameInfo.hint || (gameInfo.title + ' names are loaded. Add the ROM at Sprite-Viewer/' + gameInfo.romHint + ' and restart the server to draw the frames.'))
       : 'Frame ' + step.frame + ' is outside this bank.';
     return;
   }
@@ -1235,6 +1260,11 @@ async function ensureBank(name) {
     const rom = await ensureRom();
     if (!rom) throw new Error('Could not load the ' + gameInfo.title + ' ROM');
     parsed = Nhl92Sheet.parseSheet(rom, gameInfo.sheet);
+  } else if (gameInfo.kind === 'pc95') {
+    if (!gameInfo.pixels) return null;
+    const response = await fetch('/api/games/' + gameInfo.id + '/sprites');
+    if (!response.ok) return null;
+    parsed = Nhl95Pc.openSpriteBundle(new Uint8Array(await response.arrayBuffer()));
   } else if (gameInfo.kind === 'snes93' || gameInfo.kind === 'snes94') {
     if (!gameInfo.pixels) return null;
     const rom = await ensureRom();
@@ -1268,6 +1298,15 @@ async function ensureImage(id) {
     const bytes = await bytesFor(image);
     if (!bytes) return null;
     parsed = Nhl92Jim.decodeJim(bytes);
+  } else if (image.kind === 'pc95') {
+    const response = await fetch('/api/games/' + gameInfo.id + '/file?path=' + encodeURIComponent(image.id));
+    if (!response.ok) return null;
+    let donor = null;
+    if (image.palette) {
+      const pal = await fetch('/api/games/' + gameInfo.id + '/file?path=' + encodeURIComponent(image.palette));
+      if (pal.ok) donor = new Uint8Array(await pal.arrayBuffer());
+    }
+    parsed = Nhl95Pc.openImage(new Uint8Array(await response.arrayBuffer()), donor);
   } else if (image.kind && image.kind.indexOf('snes') === 0) {
     const rom = await ensureRom();
     if (!rom) return null;
@@ -1286,9 +1325,11 @@ async function ensurePalette(name) {
   const response = await fetch('/api/games/' + gameInfo.id + '/palettes/' + encodeURIComponent(name));
   if (!response.ok) return;
   const buf = await response.arrayBuffer();
-  const colors = gameInfo.paletteKind === 'snes'
-    ? Nhl92Snes.decodeTeamPalette(buf)
-    : Nhl92Anim.decodePaletteFile(buf);
+  const colors = gameInfo.paletteKind === 'pc'
+    ? Nhl95Pc.decodeAct(new Uint8Array(buf))
+    : gameInfo.paletteKind === 'snes'
+      ? Nhl92Snes.decodeTeamPalette(buf)
+      : Nhl92Anim.decodePaletteFile(buf);
   paletteFiles.set(name, colors);
 }
 
@@ -1379,18 +1420,21 @@ async function loadGame(id, keepSelection) {
   }
   const spaMatch = named(catalog.anims, previous.spa) || named(catalog.anims, 'SPAskatewp') || catalog.anims[0];
   const spfMatch = named(catalog.spfs, previous.spf) || catalog.spfs[0];
-  state.spa = spaMatch.name;
-  state.spf = spfMatch.name;
+  state.spa = spaMatch ? spaMatch.name : '';
+  state.spf = spfMatch ? spfMatch.name : '';
+  if (!catalog.anims.length && state.mode === 'spa' && catalog.spfs.length) state.mode = 'spf';
   const imageMatch = images.find((image) => image.id === previous.image)
     || images.find((image) => previous.imageLabel && image.label.toLowerCase() === previous.imageLabel.toLowerCase())
     || images[0];
   state.image = imageMatch ? imageMatch.id : '';
-  if (state.mode === 'image' && !state.image) state.mode = 'spa';
-  el('palette').parentElement.querySelector('span').textContent = 'Palette slot ' + (info.jerseyRow || 2);
+  if (state.mode === 'image' && !state.image) {
+    state.mode = catalog.anims.length ? 'spa' : (catalog.spfs.length ? 'spf' : 'frame');
+  }
+  el('palette').parentElement.querySelector('span').textContent = info.paletteLabel || ('Palette slot ' + (info.jerseyRow || 2));
   el('title').textContent = info.title + ' Sprite Viewer';
-  el('tagline').textContent = info.pixels
+  el('tagline').textContent = info.tagline || (info.pixels
     ? 'Frame index, SPF groups, SPA sequences, and other pictures'
-    : 'SPF and SPA names from ' + info.source + '. Pictures need the ROM.';
+    : 'SPF and SPA names from ' + info.source + '. Pictures need the ROM.');
   document.title = info.title + ' Sprite Viewer';
   if (info.pixels) {
     await ensureBank(spritesBankId());

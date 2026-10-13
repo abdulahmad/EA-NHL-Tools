@@ -5,6 +5,7 @@
  * the retail ROM. NHLPA 93, NHL 94 and NHL 95 Genesis keep the SPF/SPA tables
  * but the player pictures are a sprite sheet in the ROM. The two SNES ports
  * use planar 4bpp tiles; their animation names come from the disassemblies.
+ * NHL 95 PC reads SHPP shape banks (PPV and RefPack QFS) of SPIT pictures.
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
@@ -189,6 +190,24 @@
       images: [
         { id: 'rink', label: 'Ice rink', group: 'Ice', kind: 'snes94-rink' }
       ]
+    },
+    {
+      id: 'nhl95pc',
+      title: 'NHL 95 (PC)',
+      frames: 'frames95pc.asm',
+      source: 'NHL95PC',
+      platform: 'pc',
+      kind: 'pc95',
+      paletteKind: 'pc',
+      jerseyRow: 9,
+      paletteLabel: 'Team colors',
+      tagline: 'DOS sprite ranges, QFS and PPV pictures, and team colors from HOMEPALS.BIN',
+      hint: 'Add PPV, QFS, or SPIT files under Sprite-Viewer/pc95/, plus HOMEPALS.BIN and AWAYPALS.BIN for jerseys. A file named sprites.ppv, or anything in pc95/sprites/, is the player bank. Restart the server after adding files.',
+      banks: [{ id: 'sprites', label: 'Sprites' }],
+      images: [],
+      palettes: 'pc95',
+      romNames: [],
+      romBytes: 0
     }
   ];
 

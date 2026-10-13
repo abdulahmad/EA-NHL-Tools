@@ -10,6 +10,7 @@ const { decodeJim } = require('./lib/jim');
 const { unpack93 } = require('./lib/snespak');
 const { parse93, parse94, openImage } = require('./lib/snes');
 const { GAMES } = require('./lib/games');
+const pc95 = require('./lib/pc95');
 
 const root = __dirname;
 const framesSrc = fs.readFileSync(path.join(root, 'data', 'frames.asm'), 'utf8');
@@ -355,6 +356,156 @@ if (retail94) {
   assert.strictEqual(rink.renderFrame(1).width, 384);
   assert.strictEqual(rink.renderFrame(1).height, 904);
 }
+
+function spitHeader(type, width, height, xOffset, yOffset, xPos, yPos) {
+  const header = Buffer.alloc(16);
+  header[0] = type;
+  header.writeInt16LE(width, 4);
+  header.writeInt16LE(height, 6);
+  header.writeInt16LE(xOffset, 8);
+  header.writeInt16LE(yOffset, 10);
+  header.writeInt16LE(xPos, 12);
+  header.writeInt16LE(yPos, 14);
+  return header;
+}
+
+const rleSpit = Buffer.concat([
+  spitHeader(0, 4, 1, 0, 0, 5, 6),
+  Buffer.from([3, 9, 0xFF, 8, 0])
+]);
+const rle = pc95.decodeSpit(rleSpit);
+assert.deepStrictEqual(Array.from(rle.pixels), [9, 9, 9, 8]);
+assert.strictEqual(rle.xPos, 5);
+assert.strictEqual(rle.yPos, 6);
+
+const rawSpit = Buffer.concat([
+  spitHeader(123, 2, 2, -1, 16, 0, 0),
+  Buffer.from([1, 2, 3, 4])
+]);
+const raw = pc95.decodeSpit(rawSpit);
+assert.deepStrictEqual(Array.from(raw.pixels), [1, 2, 3, 4]);
+assert.strictEqual(raw.xOffset, -1);
+assert.strictEqual(raw.yOffset, 16);
+
+const shortPack = Buffer.from([
+  0x10, 0xFB, 0x00, 0x00, 0x06,
+  0x03, 0x02, 0x61, 0x62, 0x63,
+  0xFC
+]);
+assert.strictEqual(Buffer.from(pc95.decompressRefPack(shortPack)).toString('ascii'), 'abcabc');
+
+const sizedPack = Buffer.from([
+  0x11, 0xFB, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x04,
+  0xE0, 0x41, 0x42, 0x43, 0x44,
+  0xFC
+]);
+assert.strictEqual(Buffer.from(pc95.decompressRefPack(sizedPack)).toString('ascii'), 'ABCD');
+
+const mediumPack = Buffer.from([
+  0x10, 0xFB, 0x00, 0x00, 0x08,
+  0xE0, 0x61, 0x62, 0x63, 0x64,
+  0x80, 0x00, 0x03,
+  0xFC
+]);
+assert.strictEqual(Buffer.from(pc95.decompressRefPack(mediumPack)).toString('ascii'), 'abcdabcd');
+
+const longPack = Buffer.from([
+  0x10, 0xFB, 0x00, 0x00, 0x06,
+  0xC1, 0x00, 0x00, 0x00, 0x5A,
+  0xFC
+]);
+assert.strictEqual(Buffer.from(pc95.decompressRefPack(longPack)).toString('ascii'), 'ZZZZZZ');
+
+function shapeBank(tag, spit) {
+  const bank = Buffer.alloc(24 + spit.length);
+  bank.write('SHPP', 0);
+  bank.writeUInt32LE(bank.length, 4);
+  bank.writeUInt32LE(1, 8);
+  bank.write('DIR ', 12);
+  bank.write(tag, 16);
+  bank.writeUInt32LE(24, 20);
+  spit.copy(bank, 24);
+  return bank;
+}
+
+const packedBank = Buffer.concat([
+  Buffer.from([0x10, 0xFB, 0x00, 0x00, 0x2C, 0xEA]),
+  shapeBank('0000', rawSpit),
+  Buffer.from([0xFC])
+]);
+assert.strictEqual(shapeBank('0000', rawSpit).length, 0x2C);
+const packedShapes = pc95.openBytes(packedBank);
+assert.strictEqual(packedShapes.shapes.length, 1);
+assert.strictEqual(packedShapes.shapes[0].tag, '0000');
+assert.deepStrictEqual(Array.from(packedShapes.shapes[0].pixels), [1, 2, 3, 4]);
+
+const spriteBundle = pc95.encodeBundle([
+  { name: 'sprites/000', data: rawSpit },
+  { name: 'players.ppv', data: shapeBank('0005', rawSpit) }
+]);
+const spriteAnim = pc95.openSpriteBundle(spriteBundle);
+assert.strictEqual(spriteAnim.numFrames, 1134);
+assert.deepStrictEqual(Array.from(spriteAnim.renderFrame(1).pixels), [1, 2, 3, 4]);
+assert.strictEqual(spriteAnim.renderFrame(1).minX, -1);
+assert.strictEqual(spriteAnim.renderFrame(6).tag, '0005');
+assert.strictEqual(spriteAnim.renderFrame(2).width, 0);
+
+const numbered = [];
+for (let i = 0; i < 200; i++) numbered.push({ tag: String(i).padStart(4, '0') });
+assert.strictEqual(pc95.isSpriteBank({ shapes: numbered }, 'bank.ppv'), true);
+assert.strictEqual(pc95.isSpriteBank({ shapes: numbered.slice(0, 105) }, 'F000149.PPV'), false);
+assert.strictEqual(pc95.isSpriteBank({ shapes: [] }, 'sprites.ppv'), true);
+
+const team = Buffer.alloc(448);
+team[0] = 10;
+team[1] = 20;
+team[2] = 30;
+team[320] = 128;
+team[321] = 0;
+const rink = [];
+for (let i = 0; i < 128; i++) rink.push([i, 0, 1]);
+const teamColors = pc95.buildTeamPalette(team, rink);
+assert.deepStrictEqual(teamColors[128], [40, 80, 120]);
+assert.deepStrictEqual(teamColors[129], [0, 0, 1]);
+assert.deepStrictEqual(teamColors[0], [0, 0, 1]);
+
+const pcCatalog = parseFrames(fs.readFileSync(path.join(root, 'data', 'frames95pc.asm'), 'utf8'));
+assert.strictEqual(pcCatalog.anims.length, 0);
+assert.ok(!pcCatalog.spfs.some((spf) => spf.name.toLowerCase() === 'spflimit'));
+let cursor = 1;
+for (const spf of pcCatalog.spfs) {
+  assert.strictEqual(spf.start, cursor, spf.name);
+  cursor = spf.end + 1;
+}
+assert.strictEqual(cursor, 1135);
+assert.strictEqual(pcCatalog.spfs[0].name, 'SPFskaters');
+assert.strictEqual(pcCatalog.spfs[0].end, 352);
+assert.strictEqual(pcCatalog.spfs.find((spf) => spf.name === 'SPFref95').start, 1129);
+assert.strictEqual(pcCatalog.spfs.find((spf) => spf.name === 'SPFbenchcheck').group, 'Players');
+assert.strictEqual(pcCatalog.spfs.find((spf) => spf.name === 'SPFref').group, 'Other');
+assert.ok(pcCatalog.spfs.find((spf) => spf.name === 'SPFskaters').blurb.includes('000-351'));
+
+const pcGame = GAMES.find((game) => game.id === 'nhl95pc');
+assert.strictEqual(pcGame.kind, 'pc95');
+assert.strictEqual(pcGame.paletteKind, 'pc');
+assert.strictEqual(pcGame.jerseyRow, 9);
+assert.strictEqual(defaultPaletteFile(['bosh.pal', 'bufh.pal', 'bufv.pal']), 'bufh.pal');
+
+const pcDir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'pc95-'));
+fs.mkdirSync(path.join(pcDir, 'sprites'));
+fs.writeFileSync(path.join(pcDir, 'sprites', '000'), rawSpit);
+fs.writeFileSync(path.join(pcDir, 'LOGO.QFS'), packedBank);
+const home = Buffer.alloc(28 * 448);
+home.set(team, 448);
+fs.writeFileSync(path.join(pcDir, 'HOMEPALS.BIN'), home);
+const listed = pc95.catalogDirectory(pcDir);
+assert.deepStrictEqual(listed.spriteFiles, ['sprites/000']);
+assert.strictEqual(listed.images.length, 1);
+assert.strictEqual(listed.images[0].id, 'LOGO.QFS');
+assert.strictEqual(listed.hasHome, true);
+assert.ok(listed.paletteNames.includes('bufh.pal'));
+assert.ok(!listed.paletteNames.includes('bufv.pal'));
 
 console.log('catalog', catalog.spfs.length, 'SPF groups,', catalog.anims.length, 'SPA animations');
 console.log('banks', {

@@ -1,6 +1,6 @@
 # Sprite Viewer
 
-Browse sprite frames and the animations that play them for NHL 92, NHLPA 93, NHL 94, and NHL 95 on the Genesis, plus NHLPA 93 and NHL 94 on the SNES.
+Browse sprite frames and the animations that play them for NHL 92, NHLPA 93, NHL 94, and NHL 95 on the Genesis, NHLPA 93 and NHL 94 on the SNES, and NHL 95 on PC.
 
 NHL 92 pictures come from the `.ANIM` files in `ANIM-To-BMP`, or from the same bytes in a retail ROM when one is present. NHLPA 93, NHL 94, and NHL 95 Genesis read a player sprite sheet out of the ROM. The SNES ports read planar 4bpp tiles from their ROMs. Names come from each game's `frames.asm`: an **SPF** symbol is a run of frames, and an **SPA** entry is an 8-facing sequence of those frames. Genesis pixels are 4bpp column-major tiles, nibble 0 transparent, four Genesis palettes.
 
@@ -24,7 +24,8 @@ Open http://localhost:8732
 - **SPF** shows one named run. Runs laid out as eight facings get the compass.
 - **SPA** plays a sequence. Q and E turn the facing, S spins.
 - **Images** lists the other pictures in that game: titles, the rink, fonts, and the animation banks that are not the player sheet. Color 0 is opaque on those pictures.
-- Jersey colors replace the home-jersey palette. That is slot 2 on the Genesis games and on NHLPA 93 SNES, and slot 4 on NHL 94 SNES. The menu uses the city and home or away, and it opens on Buffalo home so the jersey zones are all visible. Embedded stays in the menu for games whose own palette is trustworthy. NHL 92 uses the `ANIM-To-BMP` palettes. NHLPA 93 and NHL 94 Genesis use the `ANIM94-To-BMP` palettes. NHL 95 uses `ANIM95-To-BMP/Palettes/NHL95`. Both SNES games use the team `.snespal` files from the NHLPA 93 SNES disassembly. Switching games keeps the same city and side, and stays on an SPA or SPF of the same name when the new game has one.
+- Jersey colors replace the home-jersey palette. That is slot 2 on the Genesis games and on NHLPA 93 SNES, and slot 4 on NHL 94 SNES. The menu uses the city and home or away, and it opens on Buffalo home so the jersey zones are all visible. Embedded stays in the menu for games whose own palette is trustworthy. NHL 92 uses the `ANIM-To-BMP` palettes. NHLPA 93 and NHL 94 Genesis use the `ANIM94-To-BMP` palettes. NHL 95 Genesis uses `ANIM95-To-BMP/Palettes/NHL95`. Both SNES games use the team `.snespal` files from the NHLPA 93 SNES disassembly. Switching games keeps the same city and side, and stays on an SPA or SPF of the same name when the new game has one.
+- **NHL 95 (PC)** lists the DOS sprite ranges (frame 1 is docs index 0, through frame 1134). SPF browses those ranges. The SPA scripts live in `HOCKEY.EXE` and are not in the picture files, so that tab stays empty. Pictures are drawn when you put the game's `PPV`, `QFS`, or unpacked SPIT files in `pc95/` and restart the server. A shape bank with 200 or more numbered shapes, a file named `sprites.ppv` or `players.ppv`, or anything under `pc95/sprites/`, fills the sprite frames. Tag `0000` is frame 1. Other QFS and PPV files show up under Images. QFS is EA RefPack (`10 FB`), the same unpacker as `sub_97CE0` in NHL95PC. The bytes inside are an SHPP bank of SPIT shapes, which is what `sub_B30B4` looks up. `HOMEPALS.BIN` and `AWAYPALS.BIN` supply the 28 team palettes (Buffalo is team 1). Colors 0–127 come from `rinkpal` or `RINKPAL.QFS` when that file is present, and the 128 mapping bytes in each team block recolor sprite indexes 128–255. Pictures keep the `!pal` stored with them. Index 0 is transparent on sprites and opaque on pictures.
 - The game menu switches catalogs. NHL 92 draws its sprite banks from `ANIM-To-BMP` immediately, and from `roms/nhl92.bin` when that file is there (the ROM also supplies the title, rink, and other pictures). The other games need a ROM. A 512-byte SMD or SNES copier header is stripped. Put the file in `roms/` and restart the server:
 
 ```
@@ -36,4 +37,13 @@ roms/nhlpa93snes.sfc
 roms/nhl94snes.sfc
 ```
 
-`data/frames.asm` is from NHL92Genesis. `frames93.asm`, `frames94.asm`, and `frames95.asm` are from the matching Genesis disassemblies. `frames93snes.asm` is generated from NHLPA93SNES. `frames94snes.asm` is generated from the animation tables in the NHL 94 SNES ROM; sequences whose vblank list matches NHLPA 93 SNES keep that name, and the rest are `SPAextra`. Goalie poses on that ROM sit in `SPFlater` rather than the Genesis goalie names. The NHL 94 SNES rink reuses the NHLPA 93 SNES rink palette. `node test.js` checks the parsers and checks every NHL 92 frame against BMPs written by `ANIM-To-BMP`.
+NHL 95 PC art is not a ROM. Put it here instead:
+
+```
+pc95/HOMEPALS.BIN
+pc95/AWAYPALS.BIN
+pc95/sprites.ppv
+pc95/RINK.QFS
+```
+
+`data/frames.asm` is from NHL92Genesis. `frames93.asm`, `frames94.asm`, and `frames95.asm` are from the matching Genesis disassemblies. `frames95pc.asm` is the NHL 95 DOS sprite index from `Docs/Sprites/Readme.md`. `frames93snes.asm` is generated from NHLPA93SNES. `frames94snes.asm` is generated from the animation tables in the NHL 94 SNES ROM; sequences whose vblank list matches NHLPA 93 SNES keep that name, and the rest are `SPAextra`. Goalie poses on that ROM sit in `SPFlater` rather than the Genesis goalie names. The NHL 94 SNES rink reuses the NHLPA 93 SNES rink palette. `node test.js` checks the parsers and checks every NHL 92 frame against BMPs written by `ANIM-To-BMP`.

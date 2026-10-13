@@ -117,8 +117,9 @@
   function classifySpf(name) {
     const n = keyOf(name);
     if (/gready|goalie|glove|gdive|gextra|ghigh|gslam|gblock|gcatch|ghold/.test(n)) return 'Goalies';
-    if (/^spfgoal$/.test(n) || /arrow|pad|puck|logo|siren|replay|star/.test(n)) return 'Ice';
+    if (/^spfgoal$/.test(n) || /arrow|pad|puck|logo|siren|replay|star|mouse|faceoff|net/.test(n)) return 'Ice';
     if (/later|font|crowd|zamboni/.test(n)) return 'Other';
+    if (/^spfref|anthem|glass|cupaccept|cupskate|between/.test(n)) return 'Other';
     return 'Players';
   }
 
@@ -377,7 +378,7 @@
           }
           if (!started) {
             const value = toInt16(evalExpr(expr, (n) => lookupName(n, null)));
-            globals.set(keyOf(name), { name, value });
+            globals.set(keyOf(name), { name, value, comment });
             if (/^spf/i.test(name)) spfOrder.push(name);
             continue;
           }
@@ -429,15 +430,18 @@
       const next = index + 1 < spfOrder.length ? globals.get(keyOf(spfOrder[index + 1])).value : null;
       const end = next == null ? null : next - 1;
       const info = spfInfo(name);
+      const stored = globals.get(keyOf(name));
       return {
         name,
         start,
         end,
         count: end == null ? null : end - start + 1,
-        blurb: info.blurb,
+        blurb: info.blurb || (stored && stored.comment) || '',
         group: info.group
       };
     });
+    const limitAt = spfs.findIndex((spf) => keyOf(spf.name) === 'spflimit');
+    if (limitAt >= 0) spfs.splice(limitAt, 1);
 
     for (const spf of spfs) {
       if (spf.end == null) {
