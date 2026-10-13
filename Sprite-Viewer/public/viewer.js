@@ -81,7 +81,8 @@ function activeColors() {
   const colors = anim.combined.map((c) => c.slice());
   const override = paletteFiles.get(state.paletteName);
   if (override) {
-    for (let i = 0; i < 16; i++) colors[32 + i] = override[i].slice();
+    const base = ((gameInfo && gameInfo.jerseyRow) || 2) * 16;
+    for (let i = 0; i < 16; i++) colors[base + i] = override[i].slice();
   }
   return colors;
 }
@@ -810,7 +811,7 @@ function renderSwatches() {
   if (!colors) return;
   for (let i = 0; i < 16; i++) {
     const chip = document.createElement('i');
-    const rgb = colors[32 + i];
+    const rgb = colors[((gameInfo && gameInfo.jerseyRow) || 2) * 16 + i];
     chip.style.background = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
     chip.title = 'Jersey color ' + i;
     box.appendChild(chip);
@@ -1385,6 +1386,7 @@ async function loadGame(id, keepSelection) {
     || images[0];
   state.image = imageMatch ? imageMatch.id : '';
   if (state.mode === 'image' && !state.image) state.mode = 'spa';
+  el('palette').parentElement.querySelector('span').textContent = 'Palette slot ' + (info.jerseyRow || 2);
   el('title').textContent = info.title + ' Sprite Viewer';
   el('tagline').textContent = info.pixels
     ? 'Frame index, SPF groups, SPA sequences, and other pictures'

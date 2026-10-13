@@ -88,6 +88,7 @@ function gameStatus(game) {
     platform: game.platform,
     kind: game.kind,
     paletteKind: game.paletteKind,
+    jerseyRow: game.jerseyRow || 2,
     frames: game.frames,
     banks: game.banks,
     images: game.images || [],

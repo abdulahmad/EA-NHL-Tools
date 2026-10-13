@@ -320,7 +320,7 @@ for (const bank of nhl92.banks) {
 }
 assert.ok(nhl92.images.some((image) => image.kind === 'jim'));
 assert.ok(GAMES.some((game) => game.id === 'nhlpa93snes' && game.kind === 'snes93'));
-assert.ok(GAMES.some((game) => game.id === 'nhl94snes' && game.kind === 'snes94'));
+assert.ok(GAMES.some((game) => game.id === 'nhl94snes' && game.kind === 'snes94' && game.jerseyRow === 4));
 
 function romIf(file) {
   return fs.existsSync(file) ? fs.readFileSync(file) : null;

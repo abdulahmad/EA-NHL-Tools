@@ -175,6 +175,7 @@
       platform: 'snes',
       kind: 'snes94',
       paletteKind: 'snes',
+      jerseyRow: 4,
       banks: [{ id: 'sprites', label: 'Sprites' }],
       palettes: 'snes',
       romNames: ['nhl94snes.sfc', 'nhl94snes.smc', 'nhl94snes.bin'],
