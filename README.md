@@ -39,6 +39,8 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 
 `SPIT-To-BMP` - Converts NHL95 PC SPIT format files to `.RAW` & `.BMP`, with ability to pass in .ACT palette
 
+`Sprite-Viewer` - Browser viewer for NHL 92 Genesis frames, SPF groups, and SPA animations (run `node server.js` in that folder)
+
 `TIL-To-BMP` - WIP Converts NHL95 PC TIL/MAP format to .BMP (centre ice logos)
 
 `VIV-To-WAV` - Converts NHL95 PC `.VIV` files to `.WAV` (menu & rink announcer sound)
