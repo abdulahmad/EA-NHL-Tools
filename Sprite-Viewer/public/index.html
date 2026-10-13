@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NHL 92 Sprite Viewer</title>
+  <link rel="stylesheet" href="/viewer.css">
+</head>
+<body>
+  <div class="app">
+    <header class="head">
+      <div class="brand">
+        <span class="lamp" id="lamp" aria-hidden="true"></span>
+        <div>
+          <h1>NHL 92 Sprite Viewer</h1>
+          <p>Frame index, SPF groups, and SPA sequences from <span class="mono">Sprites.anim</span></p>
+        </div>
+      </div>
+      <div class="head-controls">
+        <label class="field">
+          <span>Bank</span>
+          <select id="bank"></select>
+        </label>
+        <label class="field">
+          <span>Scale <b id="scale-readout">6×</b></span>
+          <input id="scale" type="range" min="1" max="12" value="8">
+        </label>
+      </div>
+    </header>
+
+    <aside class="list-panel">
+      <div class="modes" role="tablist" aria-label="Browse by">
+        <button type="button" id="mode-frame" role="tab" aria-selected="false">Frame</button>
+        <button type="button" id="mode-spf" role="tab" aria-selected="false">SPF</button>
+        <button type="button" id="mode-spa" role="tab" aria-selected="true">SPA</button>
+      </div>
+      <label class="search">
+        <span class="sr">Search</span>
+        <input id="search" type="search" placeholder="Search names" autocomplete="off">
+      </label>
+      <div id="catalog" class="catalog" role="listbox" aria-label="Catalog"></div>
+      <p class="keys">← → step · Q E face · Space play · S spin</p>
+    </aside>
+
+    <main class="stage-panel">
+      <div class="stage-wrap">
+        <canvas id="stage" aria-label="Sprite stage"></canvas>
+        <div class="compass" id="compass" aria-label="Facing">
+          <button type="button" data-dir="7" title="Northwest">↖</button>
+          <button type="button" data-dir="0" title="North">↑</button>
+          <button type="button" data-dir="1" title="Northeast">↗</button>
+          <button type="button" data-dir="6" title="West">←</button>
+          <button type="button" id="spin" class="spin" title="Spin through facings">Spin</button>
+          <button type="button" data-dir="2" title="East">→</button>
+          <button type="button" data-dir="5" title="Southwest">↙</button>
+          <button type="button" data-dir="4" title="South">↓</button>
+          <button type="button" data-dir="3" title="Southeast">↘</button>
+        </div>
+        <p id="caption" class="caption"></p>
+      </div>
+      <div class="transport">
+        <button type="button" id="prev" title="Previous step">Prev</button>
+        <button type="button" id="play" class="play" title="Play or pause">Play</button>
+        <button type="button" id="next" title="Next step">Next</button>
+        <label class="check"><input id="loop" type="checkbox"> Loop</label>
+        <label class="field slim">
+          <span>Speed</span>
+          <select id="speed">
+            <option value="0.5">½×</option>
+            <option value="1" selected>1×</option>
+            <option value="2">2×</option>
+            <option value="4">4×</option>
+          </select>
+        </label>
+        <label class="check" title="The game refuses to swap frames faster than 4 vblanks"><input id="min-gap" type="checkbox"> Min 4 ticks</label>
+        <label class="field grow" id="frame-field">
+          <span>Frame <b id="frame-readout">1</b></span>
+          <input id="frame" type="range" min="1" max="1" value="1">
+        </label>
+        <label class="field slim" id="dwell-field">
+          <span>Spin dwell</span>
+          <input id="dwell" type="range" min="250" max="1800" step="50" value="700">
+        </label>
+      </div>
+      <div id="filmstrip" class="filmstrip" aria-label="Frames in this sequence"></div>
+    </main>
+
+    <aside class="meta-panel">
+      <section>
+        <h2>Jersey</h2>
+        <label class="field block">
+          <span>Palette slot 2</span>
+          <select id="palette"></select>
+        </label>
+        <div id="swatches" class="swatches"></div>
+      </section>
+      <section>
+        <h2 id="detail-title">Frame</h2>
+        <dl id="detail" class="detail"></dl>
+      </section>
+      <section>
+        <h2>Sprites in frame</h2>
+        <div id="sprites" class="sprite-table"></div>
+      </section>
+      <section class="about">
+        <h2>How the numbers work</h2>
+        <p><b>Frame</b> is the 1-based picture in the ANIM file. The docs count the same pictures from 0, shown here as the index.</p>
+        <p><b>SPF</b> names a run of those pictures in <span class="mono">frames.asm</span>. When the run is eight facings side by side, the compass steps through them.</p>
+        <p><b>SPA</b> is an animation. Each of the eight facings has its own list of frame and vblank pairs. A negative time is the last step. Bit 0 of the flags word loops it.</p>
+        <p>Facing 0 is north on a vertical rink, then clockwise. A horizontal rink subtracts 2 from the facing before this lookup.</p>
+      </section>
+    </aside>
+  </div>
+  <script src="/lib/parse-frames.js"></script>
+  <script src="/lib/anim.js"></script>
+  <script src="/viewer.js"></script>
+</body>
+</html>
