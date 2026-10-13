@@ -1,13 +1,20 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { GAMES, gameById } = require('./lib/games');
 
 const ROOT = __dirname;
 const PUBLIC = path.join(ROOT, 'public');
 const LIB = path.join(ROOT, 'lib');
 const DATA = path.join(ROOT, 'data');
 const ANIM_DIR = path.join(ROOT, '..', 'ANIM-To-BMP');
-const PAL_DIR = path.join(ANIM_DIR, 'Palettes');
+const PAL_DIRS = {
+  '92': path.join(ANIM_DIR, 'Palettes'),
+  '94': path.join(ROOT, '..', 'ANIM94-To-BMP', 'Palettes'),
+  '95': path.join(ROOT, '..', 'ANIM95-To-BMP', 'Palettes', 'NHL95')
+};
+const PAL_DIR = PAL_DIRS['92'];
+const ROM_DIR = path.join(ROOT, 'roms');
 const BANKS = new Set(['Sprites.anim', 'Puck.anim', 'Crowd.anim', 'Zam.anim']);
 
 const MIME = {
@@ -43,19 +50,98 @@ function serveFile(res, file) {
   });
 }
 
+function listPals(dir) {
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir).filter((name) => name.toLowerCase().endsWith('.pal')).sort();
+}
+
+function findRom(game) {
+  if (!game.romNames.length) return null;
+  if (!fs.existsSync(ROM_DIR)) return null;
+  const wanted = new Set(game.romNames.map((name) => name.toLowerCase()));
+  const names = fs.readdirSync(ROM_DIR);
+  const named = names.find((name) => wanted.has(name.toLowerCase()));
+  if (named) return path.join(ROM_DIR, named);
+  return null;
+}
+
+function readRom(file) {
+  const buf = fs.readFileSync(file);
+  if (buf.length >= 0x304 && buf.slice(0x300, 0x304).toString('ascii') === 'SEGA' &&
+      buf.slice(0x100, 0x104).toString('ascii') !== 'SEGA') {
+    return buf.subarray(0x200);
+  }
+  return buf;
+}
+
+function gameStatus(game) {
+  const rom = findRom(game);
+  const pixels = game.kind === 'anim' || Boolean(rom);
+  return {
+    id: game.id,
+    title: game.title,
+    source: game.source,
+    kind: game.kind,
+    frames: game.frames,
+    banks: game.banks,
+    pixels,
+    sheet: game.sheet || null,
+    romHint: game.kind === 'sheet' ? 'roms/' + game.romNames[0] : null
+  };
+}
+
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, 'http://localhost');
   const pathname = decodeURIComponent(url.pathname);
 
   if (pathname === '/api/palettes') {
-    fs.readdir(PAL_DIR, (err, names) => {
-      if (err) {
-        send(res, 500, 'Cannot read palettes', 'text/plain; charset=utf-8');
-        return;
-      }
-      const pals = names.filter((n) => n.toLowerCase().endsWith('.pal')).sort();
-      send(res, 200, JSON.stringify(pals), MIME['.json']);
-    });
+    send(res, 200, JSON.stringify(listPals(PAL_DIR)), MIME['.json']);
+    return;
+  }
+
+  if (pathname === '/api/games') {
+    send(res, 200, JSON.stringify(GAMES.map(gameStatus)), MIME['.json']);
+    return;
+  }
+
+  const gameFrames = /^\/api\/games\/([a-z0-9]+)\/frames$/.exec(pathname);
+  if (gameFrames) {
+    const game = gameById(gameFrames[1]);
+    if (!game) { send(res, 404, 'Unknown game', 'text/plain; charset=utf-8'); return; }
+    serveFile(res, path.join(DATA, game.frames));
+    return;
+  }
+
+  const gamePals = /^\/api\/games\/([a-z0-9]+)\/palettes$/.exec(pathname);
+  if (gamePals) {
+    const game = gameById(gamePals[1]);
+    if (!game) { send(res, 404, 'Unknown game', 'text/plain; charset=utf-8'); return; }
+    send(res, 200, JSON.stringify(listPals(PAL_DIRS[game.palettes])), MIME['.json']);
+    return;
+  }
+
+  const gamePal = /^\/api\/games\/([a-z0-9]+)\/palettes\/([^/]+)$/.exec(pathname);
+  if (gamePal) {
+    const game = gameById(gamePal[1]);
+    const file = game && safeFile(PAL_DIRS[game.palettes], gamePal[2]);
+    if (!file || !file.toLowerCase().endsWith('.pal')) {
+      send(res, 404, 'Unknown palette', 'text/plain; charset=utf-8');
+      return;
+    }
+    serveFile(res, file);
+    return;
+  }
+
+  const gameRom = /^\/api\/games\/([a-z0-9]+)\/rom$/.exec(pathname);
+  if (gameRom) {
+    const game = gameById(gameRom[1]);
+    const file = game && findRom(game);
+    if (!file) { send(res, 404, 'ROM not found', 'text/plain; charset=utf-8'); return; }
+    try {
+      send(res, 200, readRom(file), 'application/octet-stream');
+    } catch (err) {
+      send(res, 500, 'Could not read ROM', 'text/plain; charset=utf-8');
+    }
     return;
   }
 
@@ -97,5 +183,5 @@ const server = http.createServer((req, res) => {
 
 const port = Number(process.env.PORT) || 8732;
 server.listen(port, () => {
-  console.log('NHL 92 sprite viewer at http://localhost:' + port);
+  console.log('Sprite viewer at http://localhost:' + port);
 });

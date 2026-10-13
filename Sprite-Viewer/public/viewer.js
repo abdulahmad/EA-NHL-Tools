@@ -1,9 +1,5 @@
-const BANKS = [
-  { file: 'Sprites.anim', label: 'Sprites' },
-  { file: 'Puck.anim', label: 'Puck' },
-  { file: 'Crowd.anim', label: 'Crowd' },
-  { file: 'Zam.anim', label: 'Zamboni' }
-];
+let games = [];
+let gameInfo = null;
 
 const SPA_ORDER = ['Skating', 'Shooting', 'Checking', 'Falls', 'Fight', 'Celebrate', 'Goalies', 'Puck', 'Special', 'Other'];
 const SPF_ORDER = ['Players', 'Goalies', 'Ice', 'Other'];
@@ -33,10 +29,14 @@ const state = {
   pin: 'origin',
   spin: false,
   spinMs: 700,
-  minGap: false,
+  minGap: true,
+  sort: 'group',
+  game: 'nhl92',
   paletteName: '',
   query: '',
   acc: 0,
+  holdKey: '',
+  holdLeft: null,
   lastClock: 0,
   lastSpin: 0
 };
@@ -63,8 +63,17 @@ function spfAt(frame) {
   return catalog.spfs.find((s) => frame >= s.start && frame <= s.end) || null;
 }
 
+function spriteBank() {
+  if (gameInfo && gameInfo.banks.length) {
+    if (state.mode === 'frame') return state.bank;
+    const sprites = gameInfo.banks.find((bank) => /sprite/i.test(bank.id));
+    return (sprites || gameInfo.banks[0]).id;
+  }
+  return state.mode === 'frame' ? state.bank : 'Sprites.anim';
+}
+
 function currentAnim() {
-  return banks.get(state.mode === 'frame' ? state.bank : 'Sprites.anim') || null;
+  return banks.get(spriteBank()) || null;
 }
 
 function activeColors() {
@@ -81,7 +90,7 @@ function activeColors() {
 function sequence() {
   const anim = currentAnim();
   const token = [
-    state.mode, state.bank, state.spf, state.spa, state.dir,
+    state.game, state.mode, state.bank, state.spf, state.spa, state.dir,
     catalog ? 1 : 0,
     anim ? anim.numFrames : 0
   ].join('|');
@@ -92,10 +101,13 @@ function sequence() {
 }
 
 function buildSequence(anim) {
-  if (!anim || !catalog) {
+  if (!catalog) {
     return { key: 'empty', steps: [], directions: false, spin: false, loopDefault: true, title: 'Loading' };
   }
   if (state.mode === 'frame') {
+    if (!anim) {
+      return { key: 'frame:none', steps: [], directions: false, spin: false, loopDefault: true, title: state.bank };
+    }
     const steps = [];
     for (let f = 1; f <= anim.numFrames; f++) steps.push({ frame: f, ticks: 8 });
     return {
@@ -166,7 +178,7 @@ function placement(frame) {
 }
 
 function bitmapFor(frame, colors) {
-  const key = (state.mode === 'frame' ? state.bank : 'Sprites.anim') + ':' + frame.frame + ':' + (state.paletteName || 'embedded');
+  const key = state.game + ':' + spriteBank() + ':' + frame.frame + ':' + (state.paletteName || 'embedded');
   let canvas = bitmaps.get(key);
   if (!canvas) {
     canvas = document.createElement('canvas');
@@ -359,9 +371,7 @@ function paintThumb(canvas, frame, colors) {
 
 function stepTicks(step) {
   if (!step) return null;
-  if (step.ticks >= 1000) return null;
-  const floor = state.minGap ? 4 : 1;
-  return Math.max(floor, step.ticks || 1);
+  return Nhl92Playback.holdVblanks(step.ticks, state.minGap);
 }
 
 function advance() {
@@ -373,6 +383,7 @@ function advance() {
   if (state.step + 1 < seq.steps.length) state.step += 1;
   else if (state.loop) state.step = 0;
   else state.playing = false;
+  state.holdKey = '';
   if (state.mode === 'frame') state.frame = seq.steps[state.step].frame;
   refreshPlaybackChrome();
 }
@@ -394,23 +405,41 @@ function rotate(delta) {
   }
 }
 
+function armHold() {
+  const seq = sequence();
+  const step = seq.steps[state.step];
+  const key = seq.key + ':' + state.step + ':' + (state.minGap ? 1 : 0);
+  if (state.holdKey === key) return state.holdLeft;
+  state.holdKey = key;
+  state.holdLeft = stepTicks(step);
+  return state.holdLeft;
+}
+
 function clock(now) {
   if (!state.lastClock) state.lastClock = now;
   const dt = now - state.lastClock;
   state.lastClock = now;
   if (state.playing) {
-    const seq = sequence();
-    const ticks = stepTicks(seq.steps[state.step]);
-    if (ticks == null) state.playing = false;
-    else {
-      state.acc += dt * state.speed;
-      const need = ticks * (1000 / 60);
-      if (state.acc >= need) {
+    state.acc += dt * state.speed;
+    let advanced = false;
+    let steps = 0;
+    while (state.acc >= Nhl92Playback.VBLANK_MS && steps < 8) {
+      const hold = armHold();
+      if (hold == null) {
+        state.playing = false;
         state.acc = 0;
+        break;
+      }
+      state.acc -= Nhl92Playback.VBLANK_MS;
+      steps += 1;
+      state.holdLeft -= 1;
+      if (state.holdLeft <= 0) {
         advance();
-        paintStage();
+        advanced = true;
       }
     }
+    if (steps === 8) state.acc = 0;
+    if (advanced) paintStage();
   }
   if (state.spin && sequence().spin) {
     if (!state.lastSpin) state.lastSpin = now;
@@ -443,36 +472,44 @@ function renderList() {
     note.className = 'empty-note';
     const anim = banks.get(state.bank);
     note.textContent = anim
-      ? anim.numFrames + ' frames in ' + state.bank + '. Scrub the frame slider, or pick an SPF or SPA.'
-      : 'Loading ' + state.bank + '…';
+      ? anim.numFrames + ' frames in ' + spriteBank() + '. Scrub the frame slider, or pick an SPF or SPA.'
+      : (gameInfo && !gameInfo.pixels
+        ? 'Pictures need the ROM at Sprite-Viewer/' + gameInfo.romHint + '.'
+        : 'Loading ' + state.bank + '…');
     box.appendChild(note);
     return;
   }
   const entries = state.mode === 'spf' ? catalog.spfs : catalog.anims;
   const order = state.mode === 'spf' ? SPF_ORDER : SPA_ORDER;
+  const visible = [];
   const groups = new Map();
   for (const entry of entries) {
     const hay = (entry.name + ' ' + (entry.blurb || '') + ' ' + (entry.comment || '')).toLowerCase();
     if (q && !hay.includes(q)) continue;
+    visible.push(entry);
     const group = entry.group || 'Other';
     if (!groups.has(group)) groups.set(group, []);
     groups.get(group).push(entry);
   }
-  if (!groups.size) {
+  if (!visible.length) {
     const note = document.createElement('p');
     note.className = 'empty-note';
     note.textContent = 'Nothing matches that search.';
     box.appendChild(note);
     return;
   }
-  for (const group of order) {
-    const items = groups.get(group);
-    if (!items) continue;
-    const label = document.createElement('div');
-    label.className = 'group-label';
-    label.textContent = group;
-    box.appendChild(label);
-    for (const entry of items) {
+  const extraGroups = [...groups.keys()].filter((group) => !order.includes(group));
+  const sections = state.sort === 'file'
+    ? [{ label: '', items: visible }]
+    : order.concat(extraGroups).filter((group) => groups.has(group)).map((group) => ({ label: group, items: groups.get(group) }));
+  for (const section of sections) {
+    if (section.label) {
+      const label = document.createElement('div');
+      label.className = 'group-label';
+      label.textContent = section.label;
+      box.appendChild(label);
+    }
+    for (const entry of section.items) {
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'item';
@@ -486,8 +523,10 @@ function renderList() {
       const sub = document.createElement('span');
       sub.className = 'sub';
       if (state.mode === 'spf') {
-        sub.textContent = entry.start + '–' + entry.end + ' · ' + entry.count + ' frames' +
-          (entry.stride ? ' · 8 facings' : '');
+        sub.textContent = entry.end == null
+          ? 'from ' + entry.start
+          : entry.start + '–' + entry.end + ' · ' + entry.count + ' frames' +
+            (entry.stride ? ' · 8 facings' : '');
       } else {
         const faces = entry.uniqueDirections === 1 ? '1 shared sequence' : entry.uniqueDirections + ' facings';
         sub.textContent = (entry.comment || '') + (entry.comment ? ' · ' : '') + faces + (entry.loop ? ' · loops' : '');
@@ -499,6 +538,7 @@ function renderList() {
         state.dir = 0;
         state.step = 0;
         state.acc = 0;
+        state.holdKey = '';
         state.playing = true;
         refreshAll();
       });
@@ -607,7 +647,8 @@ function renderMeta() {
     }
     rows.push(['Hotspot', frame.hotspotX + ', ' + frame.hotspotY]);
     if (step) {
-      rows.push(['Hold', step.ticks >= 1000 ? 'forever (' + step.ticks + ')' : step.ticks + ' vblanks']);
+      const shown = stepTicks(step);
+      rows.push(['Hold', shown == null ? 'forever (' + step.ticks + ')' : step.ticks + ' in the table · ' + shown + ' on screen']);
     }
   }
   for (const [k, v] of rows) {
@@ -673,7 +714,9 @@ function renderCaption() {
   }
   const frame = renderedFrame(step.frame);
   if (!frame) {
-    cap.textContent = 'Frame ' + step.frame + ' is outside this bank.';
+    cap.textContent = gameInfo && !gameInfo.pixels
+      ? gameInfo.title + ' names are loaded. Add the ROM at Sprite-Viewer/' + gameInfo.romHint + ' and restart the server to draw the frames.'
+      : 'Frame ' + step.frame + ' is outside this bank.';
     return;
   }
   const facing = catalog.directions[state.dir];
@@ -683,7 +726,8 @@ function renderCaption() {
   bits.push('step ' + (state.step + 1) + '/' + seq.steps.length);
   bits.push('frame ' + step.frame);
   if (state.mode === 'spa') {
-    bits.push(step.ticks >= 1000 ? 'holds' : step.ticks + ' vblanks');
+    const shown = stepTicks(step);
+    bits.push(shown == null ? 'holds' : shown + ' vblanks');
   }
   cap.textContent = bits.join(' · ');
 }
@@ -719,11 +763,14 @@ function renderTransport() {
   }
   el('play').textContent = state.playing ? 'Pause' : 'Play';
   el('loop').checked = state.loop;
+  el('min-gap').checked = state.minGap;
   el('scale-readout').textContent = state.scale + '×';
   el('pin-origin').setAttribute('aria-pressed', state.pin === 'hotspot' ? 'false' : 'true');
   el('pin-hotspot').setAttribute('aria-pressed', state.pin === 'hotspot' ? 'true' : 'false');
-  el('bank').value = state.mode === 'frame' ? state.bank : 'Sprites.anim';
-  el('bank').disabled = state.mode !== 'frame';
+  el('sort-group').setAttribute('aria-pressed', state.sort === 'group' ? 'true' : 'false');
+  el('sort-file').setAttribute('aria-pressed', state.sort === 'file' ? 'true' : 'false');
+  if ([...el('bank').options].some((option) => option.value === state.bank)) el('bank').value = state.bank;
+  el('bank').disabled = state.mode !== 'frame' || !gameInfo || gameInfo.banks.length < 2;
   for (const mode of ['frame', 'spf', 'spa']) {
     el('mode-' + mode).setAttribute('aria-selected', state.mode === mode ? 'true' : 'false');
   }
@@ -749,6 +796,7 @@ function refreshAll() {
 
 function writeHash() {
   const params = new URLSearchParams();
+  params.set('game', state.game);
   params.set('mode', state.mode);
   if (state.mode === 'frame') {
     params.set('bank', state.bank);
@@ -771,7 +819,10 @@ function readHash() {
   const params = new URLSearchParams(location.hash.replace(/^#/, ''));
   const mode = params.get('mode');
   if (mode === 'frame' || mode === 'spf' || mode === 'spa') state.mode = mode;
-  if (params.get('bank') && BANKS.some((b) => b.file === params.get('bank'))) state.bank = params.get('bank');
+  if (params.get('game') && games.some((game) => game.id === params.get('game'))) state.game = params.get('game');
+  if (params.get('bank') && gameInfo && gameInfo.banks.some((bank) => bank.id === params.get('bank'))) {
+    state.bank = params.get('bank');
+  }
   if (params.get('spf')) state.spf = params.get('spf');
   if (params.get('spa')) state.spa = params.get('spa');
   if (params.get('dir')) state.dir = Math.max(0, Math.min(7, Number(params.get('dir')) || 0));
@@ -800,7 +851,7 @@ function wire() {
     const shown = sequence().steps[state.step];
     state.mode = 'frame';
     if (from !== 'frame') {
-      state.bank = 'Sprites.anim';
+      state.bank = spriteBank();
       if (shown) state.frame = shown.frame;
     }
     state.step = state.frame - 1;
@@ -855,7 +906,7 @@ function wire() {
   el('frame').addEventListener('input', async () => {
     const from = state.mode;
     state.mode = 'frame';
-    if (from !== 'frame') state.bank = 'Sprites.anim';
+    if (from !== 'frame') state.bank = spriteBank();
     state.frame = Number(el('frame').value);
     state.step = state.frame - 1;
     state.acc = 0;
@@ -866,6 +917,7 @@ function wire() {
   el('play').addEventListener('click', () => {
     state.playing = !state.playing;
     state.acc = 0;
+    state.holdKey = '';
     if (state.playing) {
       const seq = sequence();
       const ticks = stepTicks(seq.steps[state.step]);
@@ -877,7 +929,24 @@ function wire() {
   el('next').addEventListener('click', () => nudge(1));
   el('loop').addEventListener('change', () => { state.loop = el('loop').checked; });
   el('speed').addEventListener('change', () => { state.speed = Number(el('speed').value); });
-  el('min-gap').addEventListener('change', () => { state.minGap = el('min-gap').checked; });
+  el('min-gap').addEventListener('change', () => {
+    state.minGap = el('min-gap').checked;
+    state.holdKey = '';
+    state.acc = 0;
+  });
+  function setSort(sort) {
+    if (state.sort === sort) return;
+    state.sort = sort;
+    renderList();
+    renderTransport();
+  }
+  el('sort-group').addEventListener('click', () => setSort('group'));
+  el('sort-file').addEventListener('click', () => setSort('file'));
+  el('game').addEventListener('change', () => {
+    loadGame(el('game').value, false).catch((err) => {
+      el('caption').textContent = err.message;
+    });
+  });
   el('dwell').addEventListener('input', () => { state.spinMs = Number(el('dwell').value); });
   el('spin').addEventListener('click', () => {
     if (!sequence().spin) return;
@@ -936,83 +1005,157 @@ function nudge(delta) {
   state.step = next;
   if (state.mode === 'frame') state.frame = seq.steps[state.step].frame;
   state.acc = 0;
+  state.holdKey = '';
   refreshPlaybackChrome();
   paintStage();
   writeHash();
 }
 
+function fillSelect(select, items, selected) {
+  select.replaceChildren();
+  for (const item of items) {
+    const option = document.createElement('option');
+    option.value = item.value;
+    option.textContent = item.label;
+    select.appendChild(option);
+  }
+  if (selected != null && [...select.options].some((option) => option.value === selected)) {
+    select.value = selected;
+  }
+}
+
 async function ensureBank(name) {
   if (banks.has(name)) return banks.get(name);
+  if (!gameInfo || !gameInfo.pixels) return null;
   const token = ++loadToken;
-  const response = await fetch('/anim/' + name);
-  if (!response.ok) throw new Error('Could not load ' + name);
-  const parsed = Nhl92Anim.parseAnim(await response.arrayBuffer());
-  if (token !== loadToken && name !== 'Sprites.anim') return parsed;
+  let parsed;
+  if (gameInfo.kind === 'sheet') {
+    const response = await fetch('/api/games/' + gameInfo.id + '/rom');
+    if (!response.ok) throw new Error('Could not load the ' + gameInfo.title + ' ROM');
+    parsed = Nhl92Sheet.parseSheet(await response.arrayBuffer(), gameInfo.sheet);
+  } else {
+    const response = await fetch('/anim/' + name);
+    if (!response.ok) throw new Error('Could not load ' + name);
+    parsed = Nhl92Anim.parseAnim(await response.arrayBuffer());
+  }
+  if (token !== loadToken && name !== spriteBank()) return parsed;
   banks.set(name, parsed);
   bitmaps.clear();
   return parsed;
 }
 
 async function ensurePalette(name) {
-  if (!name || paletteFiles.has(name)) return;
-  const response = await fetch('/palettes/' + encodeURIComponent(name));
+  if (!name || paletteFiles.has(name) || !gameInfo) return;
+  const response = await fetch('/api/games/' + gameInfo.id + '/palettes/' + encodeURIComponent(name));
   if (!response.ok) return;
   paletteFiles.set(name, Nhl92Anim.decodePaletteFile(await response.arrayBuffer()));
 }
 
-async function boot() {
-  const bankSelect = el('bank');
-  for (const bank of BANKS) {
-    const option = document.createElement('option');
-    option.value = bank.file;
-    option.textContent = bank.label + ' · ' + bank.file;
-    bankSelect.appendChild(option);
-  }
+async function loadGame(id, keepSelection) {
+  const info = games.find((game) => game.id === id) || games[0];
+  state.game = info.id;
+  gameInfo = info;
+  loadToken += 1;
+  banks.clear();
+  bitmaps.clear();
+  paletteFiles.clear();
+  fitCache.clear();
+  seqCache = null;
+  seqCacheToken = '';
+  state.holdKey = '';
+  state.acc = 0;
+  const saved = keepSelection ? {
+    mode: state.mode,
+    bank: state.bank,
+    frame: state.frame,
+    spf: state.spf,
+    spa: state.spa,
+    dir: state.dir,
+    step: state.step,
+    paletteName: state.paletteName
+  } : null;
   const [asm, pals] = await Promise.all([
-    fetch('/data/frames.asm').then((r) => r.text()),
-    fetch('/api/palettes').then((r) => r.json()),
-    ensureBank('Sprites.anim')
+    fetch('/api/games/' + info.id + '/frames').then((response) => {
+      if (!response.ok) throw new Error('Could not load ' + info.frames);
+      return response.text();
+    }),
+    fetch('/api/games/' + info.id + '/palettes').then((response) => response.json())
   ]);
   catalog = Nhl92Frames.parseFrames(asm);
-  bindSpfEnd();
-  const paletteSelect = el('palette');
-  const embedded = document.createElement('option');
-  embedded.value = '';
-  embedded.textContent = 'Embedded palette';
-  paletteSelect.appendChild(embedded);
+  fillSelect(el('bank'), info.banks.map((bank) => ({
+    value: bank.id,
+    label: bank.label + (info.kind === 'anim' ? ' · ' + bank.id : '')
+  })), saved ? saved.bank : info.banks[0].id);
+  state.bank = el('bank').value || info.banks[0].id;
+  const paletteItems = [{ value: '', label: 'Embedded palette' }];
   const labeled = pals.map((file) => ({ file, label: paletteLabel(file) }));
   labeled.sort((a, b) => a.label.localeCompare(b.label));
-  for (const item of labeled) {
-    const option = document.createElement('option');
-    option.value = item.file;
-    option.textContent = item.label;
-    paletteSelect.appendChild(option);
+  for (const item of labeled) paletteItems.push({ value: item.file, label: item.label });
+  fillSelect(el('palette'), paletteItems, saved ? saved.paletteName : '');
+  state.paletteName = el('palette').value;
+  if (saved) {
+    state.mode = saved.mode;
+    state.frame = saved.frame;
+    state.spf = saved.spf;
+    state.spa = saved.spa;
+    state.dir = saved.dir;
+    state.step = saved.step;
+  } else {
+    state.mode = 'spa';
+    state.dir = 0;
+    state.step = 0;
+    state.frame = 1;
+    const skate = catalog.anims.find((anim) => anim.name.toLowerCase() === 'spaskatewp');
+    state.spa = skate ? skate.name : catalog.anims[0].name;
+    state.spf = catalog.spfs[0].name;
+    state.playing = true;
   }
-  readHash();
-  if (!catalog.spfs.some((s) => s.name === state.spf)) state.spf = catalog.spfs[0].name;
-  if (!catalog.anims.some((s) => s.name === state.spa)) state.spa = 'SPAskatewp';
-  bankSelect.value = state.bank;
-  if (state.paletteName) {
-    paletteSelect.value = state.paletteName;
-    await ensurePalette(state.paletteName);
+  if (!catalog.spfs.some((spf) => spf.name === state.spf)) state.spf = catalog.spfs[0].name;
+  if (!catalog.anims.some((spa) => spa.name === state.spa)) {
+    const skate = catalog.anims.find((anim) => anim.name.toLowerCase() === 'spaskatewp');
+    state.spa = skate ? skate.name : catalog.anims[0].name;
   }
-  if (state.mode === 'frame' && state.bank !== 'Sprites.anim') await ensureBank(state.bank);
+  el('title').textContent = info.title + ' Sprite Viewer';
+  el('tagline').textContent = info.pixels
+    ? 'Frame index, SPF groups, and SPA sequences'
+    : 'SPF and SPA names from ' + info.source + '. Pictures need the ROM.';
+  document.title = info.title + ' Sprite Viewer';
+  if (info.pixels) {
+    await ensureBank(spriteBank());
+    if (state.mode === 'frame' && state.bank !== spriteBank()) await ensureBank(state.bank);
+    bindSpfEnd();
+  }
+  if (state.paletteName) await ensurePalette(state.paletteName);
   const anim = currentAnim();
-  if (state.mode === 'frame') {
+  if (state.mode === 'frame' && anim) {
     state.frame = Math.max(1, Math.min(anim.numFrames, state.frame));
     state.step = state.frame - 1;
   } else if (state.mode === 'spa') {
-    const spa = catalog.anims.find((s) => s.name === state.spa);
+    const spa = catalog.anims.find((entry) => entry.name === state.spa);
     if (spa && spa.directions[state.dir].unused) {
-      state.dir = Math.max(0, spa.directions.findIndex((d) => !d.unused));
+      state.dir = Math.max(0, spa.directions.findIndex((dir) => !dir.unused));
     }
     seqCache = null;
     if (state.step >= sequence().steps.length) state.step = 0;
   } else if (state.step >= sequence().steps.length) {
     state.step = 0;
   }
-  wire();
   refreshAll();
+}
+
+async function boot() {
+  games = await fetch('/api/games').then((response) => response.json());
+  fillSelect(el('game'), games.map((game) => ({ value: game.id, label: game.title })), 'nhl92');
+  const params = new URLSearchParams(location.hash.replace(/^#/, ''));
+  if (params.get('game') && games.some((game) => game.id === params.get('game'))) {
+    state.game = params.get('game');
+  }
+  gameInfo = games.find((game) => game.id === state.game) || games[0];
+  readHash();
+  gameInfo = games.find((game) => game.id === state.game) || games[0];
+  el('game').value = state.game;
+  wire();
+  await loadGame(state.game, true);
   requestAnimationFrame(clock);
 }
 

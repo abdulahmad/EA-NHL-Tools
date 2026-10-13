@@ -127,6 +127,15 @@ select:focus, input:focus, button:focus-visible {
   font-weight: 650;
 }
 
+.order {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
 .modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 12px 12px 0; }
 .modes button {
   background: var(--bg);

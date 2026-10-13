@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NHL 92 Sprite Viewer</title>
+  <title>NHL Sprite Viewer</title>
   <link rel="stylesheet" href="/viewer.css">
 </head>
 <body>
@@ -12,11 +12,15 @@
       <div class="brand">
         <span class="lamp" id="lamp" aria-hidden="true"></span>
         <div>
-          <h1>NHL 92 Sprite Viewer</h1>
-          <p>Frame index, SPF groups, and SPA sequences from <span class="mono">Sprites.anim</span></p>
+          <h1 id="title">NHL 92 Sprite Viewer</h1>
+          <p id="tagline">Frame index, SPF groups, and SPA sequences</p>
         </div>
       </div>
       <div class="head-controls">
+        <label class="field">
+          <span>Game</span>
+          <select id="game"></select>
+        </label>
         <label class="field">
           <span>Bank</span>
           <select id="bank"></select>
@@ -40,6 +44,13 @@
         <button type="button" id="mode-frame" role="tab" aria-selected="false">Frame</button>
         <button type="button" id="mode-spf" role="tab" aria-selected="false">SPF</button>
         <button type="button" id="mode-spa" role="tab" aria-selected="true">SPA</button>
+      </div>
+      <div class="order">
+        <span>Order</span>
+        <div class="pin-options" role="group" aria-label="List order">
+          <button type="button" id="sort-group" aria-pressed="true">Groups</button>
+          <button type="button" id="sort-file" aria-pressed="false" title="The order of the SPF and SPA symbols in frames.asm">File</button>
+        </div>
       </div>
       <label class="search">
         <span class="sr">Search</span>
@@ -79,7 +90,7 @@
             <option value="4">4×</option>
           </select>
         </label>
-        <label class="check" title="The game refuses to swap frames faster than 4 vblanks"><input id="min-gap" type="checkbox"> Min 4 ticks</label>
+        <label class="check" title="Matches updateanim: the expiring vblank still shows this picture, and a new picture cannot appear until 4 vblanks after the last change."><input id="min-gap" type="checkbox" checked> Game timing</label>
         <label class="field grow" id="frame-field">
           <span>Frame <b id="frame-readout">1</b></span>
           <input id="frame" type="range" min="1" max="1" value="1">
@@ -113,7 +124,7 @@
         <h2>How the numbers work</h2>
         <p><b>Frame</b> is the 1-based picture in the ANIM file. The docs count the same pictures from 0, shown here as the index.</p>
         <p><b>SPF</b> names a run of those pictures in <span class="mono">frames.asm</span>. When the run is eight facings side by side, the compass steps through them.</p>
-        <p><b>SPA</b> is an animation. Each of the eight facings has its own list of frame and vblank pairs. A negative time is the last step. Bit 0 of the flags word loops it.</p>
+        <p><b>SPA</b> is an animation. Each of the eight facings has its own list of frame and vblank pairs. A negative time is the last step. The picture stays up for one extra vblank, the one that expires the counter, and never changes faster than every 4 vblanks. Bit 0 of the flags word loops it. <b>Groups</b> follows the sidebar categories. <b>File</b> is the order in frames.asm.</p>
         <p>Facing 0 is north on a vertical rink, then clockwise. A horizontal rink subtracts 2 from the facing before this lookup.</p>
         <p>The dashed box is the frame's canvas. <b>Pin</b> chooses the point held in the middle of the stage. <b>0, 0</b> is the player's position, at the skates, and <b>Hotspot</b> is where the puck sits. The amber mark is 0, 0. The red cross is the hotspot.</p>
       </section>
@@ -121,6 +132,8 @@
   </div>
   <script src="/lib/parse-frames.js"></script>
   <script src="/lib/anim.js"></script>
+  <script src="/lib/playback.js"></script>
+  <script src="/lib/sheet.js"></script>
   <script src="/viewer.js"></script>
 </body>
 </html>

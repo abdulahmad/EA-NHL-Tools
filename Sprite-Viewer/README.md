@@ -1,8 +1,12 @@
 # Sprite Viewer
 
-Browse NHL 92 Genesis sprite frames and the animations that play them.
+Browse Genesis sprite frames and the animations that play them for NHL 92, NHLPA 93, NHL 94, and NHL 95.
 
-The pictures come from the `.ANIM` files in `ANIM-To-BMP`. The names come from [`frames.asm`](data/frames.asm) in [NHL92Genesis](https://github.com/abdulahmad/NHL92Genesis): an **SPF** symbol is a run of frames, and an **SPA** entry is an 8-facing sequence of those frames. Pixels are decoded the same way as `ANIM-To-BMP` (4bpp column-major tiles, nibble 0 transparent, four Genesis palettes). Timing is in vblanks, 1/60 of a second. A negative time is the last step. Flags bit 0 is the loop bit from `updateanim`.
+NHL 92 pictures come from the `.ANIM` files in `ANIM-To-BMP`. The other three games read a player sprite sheet out of the ROM. Names come from each game's `frames.asm`: an **SPF** symbol is a run of frames, and an **SPA** entry is an 8-facing sequence of those frames. Pixels are 4bpp column-major tiles, nibble 0 transparent, four Genesis palettes.
+
+**Groups** sorts the list into skating, shooting, and the other sidebar categories. **File** keeps the order of the symbols in `frames.asm`.
+
+Timing follows `updateanim`. A step of N vblanks stays on screen for N + 1 vblanks, because the vblank that expires the counter still draws the old picture. The game also refuses a new picture until 4 vblanks after the last change (`glitch`). **Game timing** applies both. A negative time is the last step, so the stride back to the first frame waits out that full hold. Flags bit 0 is the loop bit.
 
 Facing 0 is north on a vertical rink (`dirtab` in `logic.asm`), then clockwise. A horizontal rink subtracts 2 from the facing before the lookup. Spin walks the compass where an animation actually has more than one sequence.
 
@@ -19,6 +23,13 @@ Open http://localhost:8732
 - **Frame** scrubs a bank by index. `Sprites.anim` frame 1 is docs index 0.
 - **SPF** shows one named run. Runs laid out as eight facings get the compass.
 - **SPA** plays a sequence. Q and E turn the facing, S spins.
-- Jersey colors replace palette slot 2, same as passing a `.pal` to `animToBmp.js`.
+- Jersey colors replace palette slot 2. NHL 92 uses the `ANIM-To-BMP` palettes. NHLPA 93 and NHL 94 use the `ANIM94-To-BMP` palettes. NHL 95 uses `ANIM95-To-BMP/Palettes/NHL95`.
+- The game menu switches catalogs. NHL 92 draws immediately. For the later games, put a headerless (or SMD) ROM in `roms/` and restart the server:
 
-`data/frames.asm` is a copy of NHL92Genesis `src/frames.asm`. `node test.js` checks the parser against that file and checks every decoded frame against BMPs written by `ANIM-To-BMP`.
+```
+roms/nhlpa93.bin
+roms/nhl94.bin
+roms/nhl95.bin
+```
+
+`data/frames.asm` is from NHL92Genesis. `frames93.asm`, `frames94.asm`, and `frames95.asm` are from the matching disassembly repos. `node test.js` checks the parsers and checks every NHL 92 frame against BMPs written by `ANIM-To-BMP`.
