@@ -85,6 +85,42 @@
     return String(name).toLowerCase();
   }
 
+  const SPF_BY_KEY = new Map(Object.entries(SPF_INFO).map(([name, info]) => [name.toLowerCase(), info]));
+  const SPA_BY_KEY = new Map(Object.entries(SPA_GROUP).map(([name, group]) => [name.toLowerCase(), group]));
+
+  function spfInfo(name) {
+    const known = SPF_BY_KEY.get(keyOf(name));
+    if (known) return known;
+    return { blurb: '', group: classifySpf(name) };
+  }
+
+  function spaGroup(name) {
+    const known = SPA_BY_KEY.get(keyOf(name));
+    if (known) return known;
+    return classifySpa(name);
+  }
+
+  function classifySpa(name) {
+    const n = keyOf(name);
+    if (/gready|goalie|glove|gstick|gstack|gswing|gskate|gdive|gcatch|ghigh|gslam|gblock|gextra|ghold/.test(n)) return 'Goalies';
+    if (/puck|pflip/.test(n)) return 'Puck';
+    if (/skate|glide|turn|stop|burst|stumble|duck|flail/.test(n)) return 'Skating';
+    if (/shot|pass|swing|hook|flip/.test(n)) return 'Shooting';
+    if (/check|hip|shoulder|sweep|hold/.test(n)) return 'Checking';
+    if (/fall/.test(n)) return 'Falls';
+    if (/fight|grab|fhigh|flow|fhit|finjur/.test(n)) return 'Fight';
+    if (/celeb|pump|cup|stanley/.test(n)) return 'Celebrate';
+    if (/face|wall|siren|injur|glass|replay/.test(n)) return 'Special';
+    return 'Other';
+  }
+
+  function classifySpf(name) {
+    const n = keyOf(name);
+    if (/gready|goalie|glove|gdive|gextra|ghigh|gslam|gblock|gcatch|ghold/.test(n)) return 'Goalies';
+    if (/^spfgoal$/.test(n) || /arrow|pad|puck|logo|siren|replay|star/.test(n)) return 'Ice';
+    return 'Players';
+  }
+
   function toInt16(n) {
     if (!Number.isInteger(n)) {
       throw new Error('expression did not resolve to an integer (' + n + ')');
@@ -301,7 +337,7 @@
       anims.push({
         name: block.name,
         comment: block.comment,
-        group: SPA_GROUP[block.name] || 'Other',
+        group: spaGroup(block.name),
         offset: block.offset,
         flags,
         loop: (flags & 1) !== 0,
@@ -321,6 +357,7 @@
           pc = 0;
           continue;
         }
+        if (/^(incbin|include|align|cnop|even|end|section)\b/i.test(code)) continue;
 
         const assign = /^([A-Za-z_.][\w.]*)\s*=\s*(.+)$/.exec(code);
         if (assign) {
@@ -390,7 +427,7 @@
       const start = globals.get(keyOf(name)).value;
       const next = index + 1 < spfOrder.length ? globals.get(keyOf(spfOrder[index + 1])).value : null;
       const end = next == null ? null : next - 1;
-      const info = SPF_INFO[name] || { blurb: '', group: 'Other' };
+      const info = spfInfo(name);
       return {
         name,
         start,

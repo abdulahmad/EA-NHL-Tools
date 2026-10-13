@@ -3,6 +3,8 @@ const path = require('path');
 const assert = require('assert');
 const { parseFrames } = require('./lib/parse-frames');
 const { parseAnim, renderFrame } = require('./lib/anim');
+const { holdVblanks } = require('./lib/playback');
+const { parseSheet } = require('./lib/sheet');
 
 const root = __dirname;
 const framesSrc = fs.readFileSync(path.join(root, 'data', 'frames.asm'), 'utf8');
@@ -157,6 +159,66 @@ for (const bank of [spritesAnim, puckAnim, zamAnim, crowdAnim]) {
     assert.strictEqual(rendered.canvasHeight, rendered.height, 'frame ' + meta.frame + ' canvas height');
   }
 }
+
+assert.strictEqual(holdVblanks(10, true), 11);
+assert.strictEqual(holdVblanks(15, true), 16);
+assert.strictEqual(holdVblanks(2, true), 4);
+assert.strictEqual(holdVblanks(4, true), 5);
+assert.strictEqual(holdVblanks(0x1000, true), null);
+assert.strictEqual(holdVblanks(10, false), 11);
+
+for (const file of ['frames93.asm', 'frames94.asm', 'frames95.asm']) {
+  const later = parseFrames(fs.readFileSync(path.join(root, 'data', file), 'utf8'));
+  assert.ok(later.spfs.length > 29, file + ' spf');
+  assert.ok(later.anims.length > 48, file + ' spa');
+  const skating = later.anims.find((anim) => anim.name.toLowerCase() === 'spaskatewp');
+  assert.ok(skating, file + ' skate');
+  assert.strictEqual(skating.group, 'Skating');
+  assert.ok(skating.directions[0].steps.length >= 4);
+  assert.ok(skating.directions[0].steps.every((step, index, all) => index < all.length - 1 ? step.rawTime > 0 : step.rawTime < 0));
+  const names = later.anims.map((anim) => anim.name);
+  assert.deepStrictEqual(names.slice().sort(), [...new Set(names)].sort(), file + ' unique spa names');
+  assert.ok(later.spfs.every((spf) => ['Players', 'Goalies', 'Ice', 'Other'].includes(spf.group)), file + ' spf group');
+}
+
+function be(buf, offset, value) {
+  buf.writeUInt16BE(value & 0xffff, offset);
+}
+
+const rom = Buffer.alloc(0x200);
+const palette = 0x00;
+const base = 0x80;
+for (let i = 0; i < 16; i++) be(rom, palette + i * 2, 0x000e);
+rom.writeUInt32BE(0x80, base + 4); // frame table at base+0x80
+const table = base + 0x80;
+be(rom, table + 0, 0);
+be(rom, table + 2, 16); // bounds, and frame 1's data starts past the index
+be(rom, table + 4, 24); // one 8-byte sprite
+const data = table + 16;
+be(rom, data + 0, 0);
+be(rom, data + 2, -8 & 0xffff);
+be(rom, data + 4, 0);
+rom[data + 6] = 0x20; // palette 1
+rom[data + 7] = 0;
+rom[base + 0x0a] = 0x10;
+const hotlist = 0x160;
+rom[hotlist + 2] = 4;
+rom[hotlist + 3] = 0xfe;
+const sheet = parseSheet(rom, {
+  record: '94',
+  boundsAt: 2,
+  sprites: base,
+  hotlist,
+  palette
+});
+assert.strictEqual(sheet.numFrames, 1);
+assert.strictEqual(sheet.frames[0].sprites[0].paletteIndex, 1);
+assert.strictEqual(sheet.frames[0].hotspotX, 4);
+assert.strictEqual(sheet.frames[0].hotspotY, -2);
+const drawn = renderFrame(sheet, 1);
+assert.strictEqual(drawn.sprites[0].ypos, -8);
+assert.strictEqual(drawn.pixels[0], 17, 'palette 1 plus color 1');
+assert.strictEqual(drawn.pixels[1], 0);
 
 console.log('catalog', catalog.spfs.length, 'SPF groups,', catalog.anims.length, 'SPA animations');
 console.log('banks', {
