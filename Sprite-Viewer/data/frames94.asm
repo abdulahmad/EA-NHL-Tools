@@ -1349,8 +1349,8 @@ SPAgslambot_table:	;Frames 407-713
 .6	dc.w	SPFGoalie+18,8,SPFGoalie+15,8,SPFGoalie+15,8,710,5,711,5,SPFslambot,10,SPFslambot+1,-5
 .7	dc.w	SPFGoalie+21,8,SPFGoalie+18,8,SPFGoalie+18,8,SPFGoalie+18,8,710,5,711,5,SPFslambot,10,SPFslambot+1,-5
 
-SPAboardtop	=	*-SPAlist	; $1776. Checked into the end boards behind the top goal line (FallDown.FallList 0)
-SPAboardtop_table:	;Frames 276-753
+SPAboardfront	=	*-SPAlist	; $1776. Checked into the end boards behind the top goal line (FallDown.FallList 0)
+SPAboardfront_table:	;Frames 276-753
 .t	;offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1393,8 +1393,8 @@ SPAboardright_table:	;Frames 284-769
 .6
 .7	dc.w	766,6,767,6,768,6,769,60,SPFfallback+27,8,SPFduck+6,-8
 
-SPAboardbot	=	*-SPAlist	; $185A. Checked into the end boards behind the bottom goal line (FallDown.FallList 2)
-SPAboardbot_table:	;Frames 292-785
+SPAboardback	=	*-SPAlist	; $185A. Checked into the end boards behind the bottom goal line (FallDown.FallList 2)
+SPAboardback_table:	;Frames 292-785
 .t	;offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1438,8 +1438,8 @@ SPAboardleft_table:	;Frames 284-801
 .6
 .7	dc.w	798,6,799,6,800,6,801,60,SPFfallback+27,8,SPFduck+6,-8
 
-SPAboardmidl	=	*-SPAlist	; $193E. Checked into the left boards near center ice (FallDown, from SPAboardleft / SPAboardright by Ypos and flip)
-SPAboardmidl_table:	;Frames 284-815
+SPAbenchcheckl	=	*-SPAlist	; $193E. Checked into the left boards near center ice (FallDown, from SPAboardleft / SPAboardright by Ypos and flip)
+SPAbenchcheckl_table:	;Frames 284-815
 .t	;offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1464,8 +1464,8 @@ SPAboardmidl_table:	;Frames 284-815
 .7	dc.w	798,6,815,6,804,6,805,6,806,6,807,6,808,6,800,6
 	dc.w	769,6,SPFfallback+27,80,SPFduck+6,-8
 
-SPAboardmidr	=	*-SPAlist	; $1A00. Checked into the right boards near center ice (FallDown, from SPAboardleft / SPAboardright by Ypos and flip)
-SPAboardmidr_table:	;Frames 284-829
+SPAbenchcheckr	=	*-SPAlist	; $1A00. Checked into the right boards near center ice (FallDown, from SPAboardleft / SPAboardright by Ypos and flip)
+SPAbenchcheckr_table:	;Frames 284-829
 .t	;offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1490,8 +1490,8 @@ SPAboardmidr_table:	;Frames 284-829
 .7	dc.w	766,6,825,6,826,6,827,6,828,6,829,6,825,6,800,6
 	dc.w	769,6,SPFfallback+27,80,SPFduck+6,-8
 
-SPAboardchk	=	*-SPAlist	; $1AC2. The checker stops after a hit into the boards away from the crease (FallDown sets it on a3)
-SPAboardchk_table:	;Frames 830-837
+SPAcrosscheck	=	*-SPAlist	; $1AC2. The checker stops after a hit into the boards away from the crease (FallDown sets it on a3)
+SPAcrosscheck_table:	;Frames 830-837
 .t	;offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
