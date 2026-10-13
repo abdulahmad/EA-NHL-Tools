@@ -136,12 +136,13 @@ select:focus, input:focus, button:focus-visible {
   font-size: 12px;
   color: var(--muted);
 }
-.modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 12px 12px 0; }
+.modes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 12px 12px 0; }
 .modes button {
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 7px 0;
+  font-size: 13px;
 }
 .modes button[aria-selected="true"] {
   background: var(--text);
