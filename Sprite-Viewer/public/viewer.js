@@ -1,5 +1,6 @@
 let games = [];
 let gameInfo = null;
+let spritePalette = '';
 
 const SPA_ORDER = ['Skating', 'Shooting', 'Checking', 'Falls', 'Fight', 'Celebrate', 'Goalies', 'Puck', 'Special', 'Other'];
 const SPF_ORDER = ['Players', 'Goalies', 'Ice', 'Other'];
@@ -78,8 +79,16 @@ function currentAnim() {
 function activeColors() {
   const anim = currentAnim();
   if (!anim) return null;
-  const colors = anim.combined.map((c) => c.slice());
   const override = paletteFiles.get(state.paletteName);
+  if (gameInfo && gameInfo.paletteKind === 'pc') {
+    if (override && override.length >= 256) {
+      const colors = override.map((c) => c.slice());
+      if (override.game) colors.game = override.game;
+      return colors;
+    }
+    return anim.combined.map((c) => c.slice());
+  }
+  const colors = anim.combined.map((c) => c.slice());
   if (override) {
     const base = ((gameInfo && gameInfo.jerseyRow) || 2) * 16;
     for (let i = 0; i < 16; i++) colors[base + i] = override[i].slice();
@@ -130,7 +139,7 @@ function buildSequence(anim) {
       directions: false,
       spin: false,
       loopDefault: true,
-      title: state.bank
+      title: ((gameInfo.banks || []).find((bank) => bank.id === state.bank) || {}).label || state.bank
     };
   }
   if (state.mode === 'spf') {
@@ -151,6 +160,16 @@ function buildSequence(anim) {
       loopDefault: true,
       title: spf.name,
       blurb: spf.blurb
+    };
+  }
+  if (!catalog.anims.length) {
+    return {
+      key: 'spa:none',
+      steps: [],
+      directions: false,
+      spin: false,
+      loopDefault: false,
+      title: 'No SPA table'
     };
   }
   const spa = catalog.anims.find((s) => s.name === state.spa) || catalog.anims[0];
@@ -193,9 +212,14 @@ function placement(frame) {
 }
 
 function bitmapFor(frame, colors) {
-  const own = Boolean(frame.colors);
-  const key = state.game + ':' + spriteBank() + ':' + frame.frame + ':' + (own ? 'own' : (state.paletteName || 'embedded'));
-  let canvas = bitmaps.get(key);
+  const named = state.paletteName;
+  const pending = Boolean(named) && !paletteFiles.has(named);
+  const team = !pending && named && paletteFiles.has(named);
+  const own = Boolean(frame.colors) && !team;
+  const key = pending
+    ? ''
+    : state.game + ':' + spriteBank() + ':' + frame.frame + ':' + (own ? 'own' : (named || 'embedded'));
+  let canvas = key && bitmaps.get(key);
   if (!canvas) {
     canvas = document.createElement('canvas');
     canvas.width = Math.max(1, frame.width);
@@ -203,12 +227,17 @@ function bitmapFor(frame, colors) {
     const ctx = canvas.getContext('2d');
     const image = ctx.createImageData(canvas.width, canvas.height);
     const data = image.data;
-    const palette = frame.colors || colors;
+    let palette = own ? frame.colors : colors;
+    if (!own && frame.dynamic === false && colors && colors.game) palette = colors.game;
     const opaque = Boolean(frame.opaque);
+    const skip = frame.transparent == null ? 0 : frame.transparent;
+    const byRow = Boolean(frame.rowTransparent) && !opaque;
     for (let i = 0; i < frame.pixels.length; i++) {
       const index = frame.pixels[i];
       const o = i * 4;
-      if (!index && !opaque) continue;
+      if (byRow) {
+        if (Nhl92Jim.picturePixelHidden(index, frame.clearIndex)) continue;
+      } else if (index === skip && !opaque) continue;
       const rgb = palette[index] || [0, 0, 0];
       data[o] = rgb[0];
       data[o + 1] = rgb[1];
@@ -216,7 +245,7 @@ function bitmapFor(frame, colors) {
       data[o + 3] = 255;
     }
     ctx.putImageData(image, 0, 0);
-    bitmaps.set(key, canvas);
+    if (key) bitmaps.set(key, canvas);
   }
   return canvas;
 }
@@ -322,7 +351,11 @@ function paintStage() {
     ctx.clearRect(0, 0, cssW, cssH);
     return;
   }
-  paintInto(ctx, cssW, cssH, frame, colors, viewScale(cssW, cssH, 46, state.scale), {
+  const fit = viewScale(cssW, cssH, 46, 64);
+  const picture = frame.picture || state.mode === 'image';
+  const base = picture ? Math.min(8, fit) : Math.min(state.scale, fit);
+  const zoom = picture ? Math.pow(2, (state.scale - 8) / 2) : 1;
+  paintInto(ctx, cssW, cssH, frame, colors, base * zoom, {
     padBottom: 46,
     exactScale: true,
     mark: !frame.picture
@@ -422,7 +455,7 @@ function rotate(delta) {
     const dir = (state.dir + delta * i + 8) % 8;
     if (state.mode === 'spa') {
       const spa = catalog.anims.find((s) => s.name === state.spa);
-      if (spa.directions[dir].unused) continue;
+      if (!spa || spa.directions[dir].unused) continue;
     }
     state.dir = dir;
     const next = sequence();
@@ -489,21 +522,24 @@ function bindSpfEnd() {
   }
 }
 
-const IMAGE_ORDER = ['Screens', 'Sprites', 'Ice', 'Fonts', 'Other'];
+const IMAGE_ORDER = ['Screens', 'Logos', 'Players', 'Sprites', 'Ice', 'Jumbotron', 'Fonts', 'Other'];
+const imageMemory = new Map();
 
 function renderImageList(box, q) {
   const images = (gameInfo && gameInfo.images) || [];
   if (!images.length) {
     const note = document.createElement('p');
     note.className = 'empty-note';
-    note.textContent = 'This game has no extra pictures in the viewer yet.';
+    note.textContent = gameInfo && gameInfo.hint
+      ? 'No picture files in Sprite-Viewer/pc95/ yet.'
+      : 'This game has no extra pictures in the viewer yet.';
     box.appendChild(note);
     return;
   }
   const groups = new Map();
   const visible = [];
   for (const image of images) {
-    const hay = (image.label + ' ' + image.id + ' ' + (image.group || '')).toLowerCase();
+    const hay = (image.label + ' ' + image.id + ' ' + (image.files || []).join(' ') + ' ' + (image.group || '')).toLowerCase();
     if (q && !hay.includes(q)) continue;
     visible.push(image);
     const group = image.group || 'Other';
@@ -541,15 +577,17 @@ function renderImageList(box, q) {
       name.textContent = image.label;
       const sub = document.createElement('span');
       sub.className = 'sub';
-      sub.textContent = image.id;
+      sub.textContent = image.files && image.files.length > 1 ? image.files.length + ' files' : image.id;
       button.append(name, sub);
       button.addEventListener('click', () => {
         state.image = image.id;
         state.step = 0;
         state.acc = 0;
         state.holdKey = '';
-        state.playing = true;
-        ensureImage(state.image).then(() => {
+        state.playing = false;
+        rememberImage();
+        closeDrawers();
+        applyImagePalette(image).then(() => ensureImage(state.image)).then(() => {
           loadError = '';
           refreshAll();
         }).catch((err) => {
@@ -586,7 +624,7 @@ function renderList() {
     note.textContent = anim
       ? anim.numFrames + ' frames in ' + spriteBank() + '. Scrub the frame slider, or pick an SPF or SPA.'
       : (gameInfo && !gameInfo.pixels
-        ? 'Pictures need the ROM at Sprite-Viewer/' + gameInfo.romHint + '.'
+        ? (gameInfo.hint || ('Pictures need the ROM at Sprite-Viewer/' + gameInfo.romHint + '.'))
         : 'Loading ' + state.bank + '…');
     box.appendChild(note);
     return;
@@ -606,7 +644,9 @@ function renderList() {
   if (!visible.length) {
     const note = document.createElement('p');
     note.className = 'empty-note';
-    note.textContent = 'Nothing matches that search.';
+    note.textContent = !entries.length && state.mode === 'spa' && !catalog.anims.length
+      ? 'No SPA table for this game. The frame ranges are under SPF.'
+      : 'Nothing matches that search.';
     box.appendChild(note);
     return;
   }
@@ -645,9 +685,13 @@ function renderList() {
       }
       button.append(name, sub);
       button.addEventListener('click', () => {
-        if (state.mode === 'spf') state.spf = entry.name;
-        else state.spa = entry.name;
-        state.dir = 0;
+        closeDrawers();
+        if (state.mode === 'spf') {
+          state.spf = entry.name;
+          state.dir = 0;
+        } else {
+          state.spa = entry.name;
+        }
         state.step = 0;
         state.acc = 0;
         state.holdKey = '';
@@ -679,7 +723,7 @@ function renderFilmstrip() {
   strip.replaceChildren();
   const colors = activeColors();
   if (!colors) return;
-  const windowed = seq.steps.length > 80;
+  const windowed = state.mode !== 'image' && seq.steps.length > 80;
   const steps = windowed
     ? seq.steps.map((step, index) => ({ step, index })).filter((item) => Math.abs(item.index - state.step) <= 8)
     : seq.steps.map((step, index) => ({ step, index }));
@@ -746,7 +790,10 @@ function renderMeta() {
   } else if (state.mode === 'image') {
     const image = ((gameInfo && gameInfo.images) || []).find((item) => item.id === state.image);
     rows.push(['Image', image ? image.label : state.image]);
-    if (image) rows.push(['File', image.id]);
+    if (image) {
+      const files = image.files && image.files.length ? image.files : [image.id];
+      rows.push(['File', files.length > 1 ? files[0] + ' … ' + files[files.length - 1] : image.id]);
+    }
   }
   if (frame) {
     const owner = spfAt(frame.frame);
@@ -779,7 +826,11 @@ function renderMeta() {
   const table = el('sprites');
   table.replaceChildren();
   if (!frame || frame.picture || !frame.sprites.length) {
-    table.textContent = frame && frame.picture ? 'This is a picture, not a sprite frame.' : 'No sprites in this frame.';
+    table.textContent = frame && frame.picture
+      ? 'This is a picture, not a sprite frame.'
+      : frame && frame.width
+        ? 'This frame is one picture, not a stack of Genesis sprites.'
+        : 'No sprites in this frame.';
     return;
   }
   const html = document.createElement('table');
@@ -808,21 +859,80 @@ function renderSwatches() {
   const colors = activeColors();
   const box = el('swatches');
   box.replaceChildren();
-  if (!colors) return;
+  if (!colors || !colors.length) return;
+  const row = ((gameInfo && gameInfo.jerseyRow) || 2) * 16;
+  const base = row + 15 < colors.length ? row : 0;
   for (let i = 0; i < 16; i++) {
+    const rgb = colors[base + i];
+    if (!rgb) continue;
     const chip = document.createElement('i');
-    const rgb = colors[((gameInfo && gameInfo.jerseyRow) || 2) * 16 + i];
     chip.style.background = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
-    chip.title = 'Jersey color ' + i;
+    chip.title = (base === row ? 'Jersey color ' : 'Color ') + i;
     box.appendChild(chip);
   }
 }
 
 function romHint() {
-  if (gameInfo && gameInfo.romHint) {
-    return 'Add the ROM at Sprite-Viewer/' + gameInfo.romHint + ' to draw this picture.';
+  const images = (gameInfo && gameInfo.images) || [];
+  if (!images.length) {
+    if (gameInfo && gameInfo.hint && !gameInfo.pixels) return gameInfo.hint;
+    return 'This game has no extra pictures in the viewer yet.';
+  }
+  if (gameInfo && !gameInfo.pixels) {
+    if (gameInfo.hint) return gameInfo.hint;
+    if (gameInfo.romHint) {
+      return 'Add the ROM at Sprite-Viewer/' + gameInfo.romHint + ' to draw this picture.';
+    }
   }
   return 'No picture loaded.';
+}
+
+function rememberImage() {
+  if (!gameInfo || !state.image) return;
+  const image = ((gameInfo.images) || []).find((item) => item.id === state.image);
+  imageMemory.set(gameInfo.id, { id: state.image, label: image ? image.label : '' });
+}
+
+function closeDrawers() {
+  const app = document.querySelector('.app');
+  if (!app) return;
+  app.classList.remove('show-list', 'show-meta');
+  const list = el('toggle-list');
+  const meta = el('toggle-meta');
+  if (list) list.setAttribute('aria-expanded', 'false');
+  if (meta) meta.setAttribute('aria-expanded', 'false');
+}
+
+function currentImage() {
+  return ((gameInfo && gameInfo.images) || []).find((image) => image.id === state.image) || null;
+}
+
+function showEmbeddedPalette() {
+  if (state.mode !== 'image' && state.paletteName) spritePalette = state.paletteName;
+  state.paletteName = '';
+  const menu = el('palette');
+  if (menu && [...menu.options].some((option) => option.value === '')) menu.value = '';
+}
+
+// Jumbotron clips and the scoreboard are indexed into the team palette.
+async function applyImagePalette(image) {
+  if (image && image.group === 'Jumbotron') {
+    if (!state.paletteName) await restoreSpritePalette();
+    return;
+  }
+  showEmbeddedPalette();
+}
+
+async function restoreSpritePalette() {
+  if (state.mode !== 'image') return;
+  const menu = el('palette');
+  const files = menu ? [...menu.options].map((option) => option.value).filter(Boolean) : [];
+  const matched = Nhl92Labels.matchPaletteFile(files, spritePalette) || '';
+  state.paletteName = matched;
+  spritePalette = matched;
+  if (menu && [...menu.options].some((option) => option.value === matched)) menu.value = matched;
+  if (state.paletteName) await ensurePalette(state.paletteName);
+  bitmaps.clear();
 }
 
 function renderCaption() {
@@ -831,7 +941,9 @@ function renderCaption() {
   const cap = el('caption');
   if (!step) {
     cap.textContent = loadError || (state.mode === 'spa'
-      ? 'This facing has no sequence of its own. The table runs off the end of the animation.'
+      ? (catalog && !catalog.anims.length
+        ? 'No SPA table for this game. The frame ranges are under SPF.'
+        : 'This facing has no sequence of its own. The table runs off the end of the animation.')
       : state.mode === 'image'
         ? romHint()
         : 'No frame.');
@@ -844,7 +956,7 @@ function renderCaption() {
       return;
     }
     cap.textContent = gameInfo && !gameInfo.pixels
-      ? gameInfo.title + ' names are loaded. Add the ROM at Sprite-Viewer/' + gameInfo.romHint + ' and restart the server to draw the frames.'
+      ? (gameInfo.hint || (gameInfo.title + ' names are loaded. Add the ROM at Sprite-Viewer/' + gameInfo.romHint + ' and restart the server to draw the frames.'))
       : 'Frame ' + step.frame + ' is outside this bank.';
     return;
   }
@@ -910,7 +1022,7 @@ function refreshPlaybackChrome() {
   renderTransport();
   renderCompass();
   renderMeta();
-  if (sequence().key !== sequenceKey || sequence().steps.length > 80) renderFilmstrip();
+  if (sequence().key !== sequenceKey || (state.mode !== 'image' && sequence().steps.length > 80)) renderFilmstrip();
   else highlightStep();
 }
 
@@ -982,6 +1094,7 @@ function wire() {
   }
   el('mode-frame').addEventListener('click', async () => {
     clearSearch();
+    await restoreSpritePalette();
     const from = state.mode;
     const shown = sequence().steps[state.step];
     state.mode = 'frame';
@@ -995,8 +1108,9 @@ function wire() {
     await ensureBank(state.bank);
     refreshAll();
   });
-  el('mode-spf').addEventListener('click', () => {
+  el('mode-spf').addEventListener('click', async () => {
     clearSearch();
+    await restoreSpritePalette();
     state.mode = 'spf';
     state.dir = 0;
     state.step = 0;
@@ -1004,8 +1118,9 @@ function wire() {
     state.acc = 0;
     refreshAll();
   });
-  el('mode-spa').addEventListener('click', () => {
+  el('mode-spa').addEventListener('click', async () => {
     clearSearch();
+    await restoreSpritePalette();
     state.mode = 'spa';
     state.step = 0;
     state.acc = 0;
@@ -1014,11 +1129,13 @@ function wire() {
   });
   el('mode-image').addEventListener('click', async () => {
     clearSearch();
+    if (state.mode !== 'image' && state.paletteName) spritePalette = state.paletteName;
     state.mode = 'image';
     if (!state.image && gameInfo && gameInfo.images.length) state.image = gameInfo.images[0].id;
+    await applyImagePalette(currentImage());
     state.step = 0;
     state.acc = 0;
-    state.playing = true;
+    state.playing = false;
     try {
       loadError = '';
       await ensureImage(state.image);
@@ -1121,13 +1238,31 @@ function wire() {
     refreshAll();
   });
   el('palette').addEventListener('change', async () => {
-    state.paletteName = el('palette').value;
+    const next = el('palette').value;
     state.paletteExplicit = true;
-    await ensurePalette(state.paletteName);
+    await ensurePalette(next);
+    state.paletteName = next;
+    if (state.paletteName || state.mode !== 'image') spritePalette = state.paletteName;
     bitmaps.clear();
     sequenceKey = '';
     refreshAll();
   });
+  function setDrawer(name, open) {
+    const app = document.querySelector('.app');
+    const showList = name === 'list' ? open : false;
+    const showMeta = name === 'meta' ? open : false;
+    app.classList.toggle('show-list', showList);
+    app.classList.toggle('show-meta', showMeta);
+    el('toggle-list').setAttribute('aria-expanded', showList ? 'true' : 'false');
+    el('toggle-meta').setAttribute('aria-expanded', showMeta ? 'true' : 'false');
+  }
+  el('toggle-list').addEventListener('click', () => {
+    setDrawer('list', !document.querySelector('.app').classList.contains('show-list'));
+  });
+  el('toggle-meta').addEventListener('click', () => {
+    setDrawer('meta', !document.querySelector('.app').classList.contains('show-meta'));
+  });
+  el('scrim').addEventListener('click', closeDrawers);
   el('stage').addEventListener('wheel', (event) => {
     event.preventDefault();
     state.scale = Math.max(1, Math.min(12, state.scale + (event.deltaY < 0 ? 1 : -1)));
@@ -1179,6 +1314,28 @@ function fillSelect(select, items, selected) {
   if (selected != null && [...select.options].some((option) => option.value === selected)) {
     select.value = selected;
   }
+}
+
+const icePalettes = new Map();
+
+async function icePaletteBytes() {
+  if (!gameInfo) return null;
+  if (icePalettes.has(gameInfo.id)) return icePalettes.get(gameInfo.id);
+  const image = (gameInfo.images || []).find((item) => item.kind === 'jim' && /^(IceRink|Rinktilelist)/i.test(item.id));
+  if (!image) {
+    icePalettes.set(gameInfo.id, null);
+    return null;
+  }
+  const bytes = await bytesFor(image);
+  const view = bytes && bytes.length >= 12 ? new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength) : null;
+  const palOff = view ? view.getUint32(0) : 0;
+  if (!view || !palOff || palOff === 0xffffffff || palOff + 128 > bytes.length) {
+    icePalettes.set(gameInfo.id, null);
+    return null;
+  }
+  const donor = bytes.slice(palOff, palOff + 128);
+  icePalettes.set(gameInfo.id, donor);
+  return donor;
 }
 
 async function ensureRom() {
@@ -1235,6 +1392,11 @@ async function ensureBank(name) {
     const rom = await ensureRom();
     if (!rom) throw new Error('Could not load the ' + gameInfo.title + ' ROM');
     parsed = Nhl92Sheet.parseSheet(rom, gameInfo.sheet);
+  } else if (gameInfo.kind === 'pc95') {
+    if (!gameInfo.pixels) return null;
+    const response = await fetch('/api/games/' + gameInfo.id + '/sprites?bank=' + encodeURIComponent(name));
+    if (!response.ok) return null;
+    parsed = Nhl95Pc.openSpriteBundle(new Uint8Array(await response.arrayBuffer()));
   } else if (gameInfo.kind === 'snes93' || gameInfo.kind === 'snes94') {
     if (!gameInfo.pixels) return null;
     const rom = await ensureRom();
@@ -1267,7 +1429,39 @@ async function ensureImage(id) {
   } else if (image.kind === 'jim') {
     const bytes = await bytesFor(image);
     if (!bytes) return null;
-    parsed = Nhl92Jim.decodeJim(bytes);
+    let donor = null;
+    if (image.paletteAt != null) {
+      const rom = await ensureRom();
+      if (rom && image.paletteAt >= 0 && image.paletteAt + 128 <= rom.length) {
+        donor = rom.subarray(image.paletteAt, image.paletteAt + 128);
+      }
+    } else if (bytes.length >= 8) {
+      const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+      const palOff = view.getUint32(0);
+      const mapOff = view.getUint32(4);
+      if (palOff === 0xffffffff || (palOff === 0 && mapOff === 0)) donor = await icePaletteBytes();
+    }
+    parsed = Nhl92Jim.decodeJim(bytes, donor);
+  } else if (image.kind === 'frames') {
+    const bytes = await bytesFor(image);
+    if (!bytes) return null;
+    const missing = bytes.length >= 4 && new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(0) === 0xffffffff;
+    parsed = Nhl92Sheet.openFrames(bytes, Nhl92Jim, missing ? await icePaletteBytes() : null);
+  } else if (image.kind === 'pc95') {
+    const paths = image.files && image.files.length ? image.files : [image.id];
+    const parts = [];
+    for (const rel of paths) {
+      const response = await fetch('/api/games/' + gameInfo.id + '/file?path=' + encodeURIComponent(rel));
+      if (!response.ok) continue;
+      parts.push({ name: rel, data: new Uint8Array(await response.arrayBuffer()) });
+    }
+    if (!parts.length) return null;
+    let donor = null;
+    if (image.palette) {
+      const pal = await fetch('/api/games/' + gameInfo.id + '/file?path=' + encodeURIComponent(image.palette));
+      if (pal.ok) donor = new Uint8Array(await pal.arrayBuffer());
+    }
+    parsed = Nhl95Pc.openImageParts(parts, donor);
   } else if (image.kind && image.kind.indexOf('snes') === 0) {
     const rom = await ensureRom();
     if (!rom) return null;
@@ -1286,9 +1480,15 @@ async function ensurePalette(name) {
   const response = await fetch('/api/games/' + gameInfo.id + '/palettes/' + encodeURIComponent(name));
   if (!response.ok) return;
   const buf = await response.arrayBuffer();
-  const colors = gameInfo.paletteKind === 'snes'
-    ? Nhl92Snes.decodeTeamPalette(buf)
-    : Nhl92Anim.decodePaletteFile(buf);
+  const bytes = new Uint8Array(buf);
+  const colors = gameInfo.paletteKind === 'pc'
+    ? Nhl95Pc.decodeAct(bytes)
+    : gameInfo.paletteKind === 'snes'
+      ? Nhl92Snes.decodeTeamPalette(buf)
+      : Nhl92Anim.decodePaletteFile(buf);
+  if (gameInfo.paletteKind === 'pc' && bytes.length >= 1536) {
+    colors.game = Nhl95Pc.decodeAct(bytes.subarray(768, 1536));
+  }
   paletteFiles.set(name, colors);
 }
 
@@ -1303,6 +1503,7 @@ function choosePalette(pals, previous, keepSelection) {
 }
 
 async function loadGame(id, keepSelection) {
+  rememberImage();
   const previous = {
     mode: state.mode,
     bank: state.bank,
@@ -1359,8 +1560,6 @@ async function loadGame(id, keepSelection) {
   const paletteItems = [{ value: '', label: 'Embedded palette' }];
   for (const item of labeled) paletteItems.push({ value: item.file, label: item.label });
   const chosen = choosePalette(jerseys, previous, keepSelection);
-  fillSelect(el('palette'), paletteItems, chosen);
-  state.paletteName = el('palette').value;
   const images = info.images || [];
   if (keepSelection) {
     state.mode = previous.mode;
@@ -1368,29 +1567,45 @@ async function loadGame(id, keepSelection) {
     state.dir = previous.dir;
     state.step = previous.step;
   } else {
-    const imageOk = previous.mode === 'image' && images.length;
-    state.mode = previous.mode === 'frame' || previous.mode === 'spf' || previous.mode === 'spa' || imageOk
+    state.mode = previous.mode === 'frame' || previous.mode === 'spf' || previous.mode === 'spa' || previous.mode === 'image'
       ? previous.mode
       : 'spa';
     state.dir = previous.dir;
     state.step = 0;
     state.frame = previous.frame || 1;
-    state.playing = true;
+    state.playing = state.mode === 'spa' || state.mode === 'spf';
   }
+  if (keepSelection && state.mode !== 'spa' && state.mode !== 'spf') state.playing = false;
   const spaMatch = named(catalog.anims, previous.spa) || named(catalog.anims, 'SPAskatewp') || catalog.anims[0];
   const spfMatch = named(catalog.spfs, previous.spf) || catalog.spfs[0];
-  state.spa = spaMatch.name;
-  state.spf = spfMatch.name;
+  state.spa = spaMatch ? spaMatch.name : '';
+  state.spf = spfMatch ? spfMatch.name : '';
+  if (!catalog.anims.length && state.mode === 'spa' && catalog.spfs.length) state.mode = 'spf';
+  const remembered = imageMemory.get(info.id);
   const imageMatch = images.find((image) => image.id === previous.image)
     || images.find((image) => previous.imageLabel && image.label.toLowerCase() === previous.imageLabel.toLowerCase())
+    || (remembered && (images.find((image) => image.id === remembered.id)
+      || images.find((image) => remembered.label && image.label.toLowerCase() === remembered.label.toLowerCase())))
     || images[0];
   state.image = imageMatch ? imageMatch.id : '';
-  if (state.mode === 'image' && !state.image) state.mode = 'spa';
-  el('palette').parentElement.querySelector('span').textContent = 'Palette slot ' + (info.jerseyRow || 2);
+  rememberImage();
+  if (state.mode !== 'image' && chosen) await ensurePalette(chosen);
+  if (state.mode === 'image') {
+    if (!spritePalette) spritePalette = chosen || Nhl92Labels.defaultPaletteFile(jerseys);
+    const teamPic = imageMatch && imageMatch.group === 'Jumbotron';
+    fillSelect(el('palette'), paletteItems, teamPic ? (spritePalette || chosen || '') : '');
+    state.paletteName = el('palette').value;
+    if (state.paletteName) await ensurePalette(state.paletteName);
+  } else {
+    fillSelect(el('palette'), paletteItems, chosen);
+    state.paletteName = el('palette').value;
+    if (state.paletteName) spritePalette = state.paletteName;
+  }
+  el('palette').parentElement.querySelector('span').textContent = info.paletteLabel || ('Palette slot ' + (info.jerseyRow || 2));
   el('title').textContent = info.title + ' Sprite Viewer';
-  el('tagline').textContent = info.pixels
+  el('tagline').textContent = info.tagline || (info.pixels
     ? 'Frame index, SPF groups, SPA sequences, and other pictures'
-    : 'SPF and SPA names from ' + info.source + '. Pictures need the ROM.';
+    : 'SPF and SPA names from ' + info.source + '. Pictures need the ROM.');
   document.title = info.title + ' Sprite Viewer';
   if (info.pixels) {
     await ensureBank(spritesBankId());
@@ -1404,7 +1619,6 @@ async function loadGame(id, keepSelection) {
       loadError = err.message;
     }
   }
-  if (state.paletteName) await ensurePalette(state.paletteName);
   const anim = currentAnim();
   if (state.mode === 'frame' && anim) {
     state.frame = Math.max(1, Math.min(anim.numFrames, state.frame));

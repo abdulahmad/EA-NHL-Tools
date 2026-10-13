@@ -4,12 +4,13 @@ const assert = require('assert');
 const { parseFrames } = require('./lib/parse-frames');
 const { parseAnim, renderFrame } = require('./lib/anim');
 const { holdVblanks } = require('./lib/playback');
-const { parseSheet } = require('./lib/sheet');
+const { parseSheet, openFrames } = require('./lib/sheet');
 const { paletteLabel, defaultPaletteFile, matchPaletteFile } = require('./lib/labels');
-const { decodeJim } = require('./lib/jim');
+const { decodeJim, decompressBytecode, picturePixelHidden } = require('./lib/jim');
 const { unpack93 } = require('./lib/snespak');
 const { parse93, parse94, openImage } = require('./lib/snes');
-const { GAMES } = require('./lib/games');
+const { GAMES, revAAdjust } = require('./lib/games');
+const pc95 = require('./lib/pc95');
 
 const root = __dirname;
 const framesSrc = fs.readFileSync(path.join(root, 'data', 'frames.asm'), 'utf8');
@@ -276,15 +277,49 @@ const picture = decodeJim(jim);
 const pictureFrame = picture.renderFrame(1);
 assert.strictEqual(picture.numFrames, 1);
 assert.strictEqual(pictureFrame.picture, true);
-assert.strictEqual(pictureFrame.opaque, true);
+assert.strictEqual(pictureFrame.opaque, false);
+assert.strictEqual(pictureFrame.rowTransparent, true);
+assert.strictEqual(picturePixelHidden(0), false);
+assert.strictEqual(picturePixelHidden(16), true);
+assert.strictEqual(picturePixelHidden(32), true);
+assert.strictEqual(picturePixelHidden(48), true);
+assert.strictEqual(picturePixelHidden(17), false);
+assert.strictEqual(picturePixelHidden(255, 255), true);
+const palJim = Buffer.alloc(jimMap + 4 + 2);
+palJim.writeUInt32BE(jimPal, 0);
+palJim.writeUInt32BE(jimMap, 4);
+palJim.writeUInt16BE(jimTiles, 8);
+palJim.writeUInt16BE(1, jimMap);
+palJim.writeUInt16BE(1, jimMap + 2);
+palJim.writeUInt16BE(0x2000, jimMap + 4);
+const palFrame = decodeJim(palJim).renderFrame(1);
+assert.strictEqual(palFrame.pixels[0], 16);
+assert.strictEqual(picturePixelHidden(palFrame.pixels[0]), true);
 assert.strictEqual(pictureFrame.width, 8);
 assert.strictEqual(pictureFrame.height, 8);
 assert.strictEqual(pictureFrame.pixels[0], 1);
-const compressed = Buffer.alloc(16);
-compressed.writeUInt32BE(0, 0);
-compressed.writeUInt32BE(20, 4);
-compressed.writeUInt16BE(1, 8);
-assert.throws(() => decodeJim(compressed), /compressed/);
+const notJim = Buffer.alloc(16);
+notJim.writeUInt32BE(100, 0);
+notJim.writeUInt32BE(200, 4);
+notJim.writeUInt16BE(1, 8);
+assert.throws(() => decodeJim(notJim), /not a JIM/);
+
+const arenaSheet = Buffer.alloc(10 + 24 * 32);
+arenaSheet.writeUInt16BE(24, 8);
+arenaSheet[10] = 0x10;
+const arenaPic = decodeJim(arenaSheet);
+assert.strictEqual(arenaPic.renderFrame(1).width, 64);
+assert.strictEqual(arenaPic.renderFrame(1).height, 24);
+assert.strictEqual(arenaPic.renderFrame(1).pixels[0], 1);
+const unpaletted = Buffer.alloc(10 + 32 + 6);
+unpaletted.writeUInt32BE(0xffffffff, 0);
+unpaletted.writeUInt32BE(42, 4);
+unpaletted.writeUInt16BE(1, 8);
+unpaletted.writeUInt16BE(1, 42);
+unpaletted.writeUInt16BE(1, 44);
+const donor = Buffer.alloc(128);
+const fromDonor = decodeJim(unpaletted, donor);
+assert.deepStrictEqual(fromDonor.combined[1], [0, 0, 0]);
 
 const snes93rom = Buffer.alloc(160);
 snes93rom.writeUInt16LE(0, 96);
@@ -321,6 +356,36 @@ for (const bank of nhl92.banks) {
 assert.ok(nhl92.images.some((image) => image.kind === 'jim'));
 assert.ok(GAMES.some((game) => game.id === 'nhlpa93snes' && game.kind === 'snes93'));
 assert.ok(GAMES.some((game) => game.id === 'nhl94snes' && game.kind === 'snes94' && game.jerseyRow === 4));
+const snes94images = GAMES.find((game) => game.id === 'nhl94snes').images.map((image) => image.id);
+for (const id of ['title', 'titlegoalie', 'titlepuck', 'easports', 'eabackdrop', 'ronbarr', 'stanley', 'window', 'logos', 'rink', 'center', 'letters', 'smallletters', 'menufont', 'icefont', 'cards']) {
+  assert.ok(snes94images.includes(id), id);
+}
+
+const pa93 = GAMES.find((game) => game.id === 'nhlpa93');
+const g94 = GAMES.find((game) => game.id === 'nhl94');
+const g95 = GAMES.find((game) => game.id === 'nhl95');
+assert.strictEqual(pa93.images.length, 25);
+assert.strictEqual(g94.images.length, 215);
+assert.strictEqual(g95.images.length, 300);
+assert.ok(pa93.images.some((image) => image.id === 'IceRink.map.jim' && image.kind === 'jim'));
+assert.ok(pa93.images.some((image) => image.id === 'Crowd.anim' && image.kind === 'frames'));
+assert.ok(g94.images.some((image) => image.id === 'logoBOS.map.jim' && image.paletteAt === 0xFF482));
+assert.ok(g94.images.some((image) => image.id === 'CardMarioLemieux.bin' && image.paletteAt === 0xC6762));
+assert.ok(g95.images.some((image) => image.id === 'CardGuyHebert.bin' && image.paletteAt));
+assert.ok(g95.images.some((image) => image.id === 'logoANA.map.jim'));
+assert.ok(!pa93.images.some((image) => /palette|sound|scouttext/i.test(image.id)));
+
+function inkCount(frame) {
+  let n = 0;
+  for (let i = 0; i < frame.pixels.length; i++) if (frame.pixels[i]) n++;
+  return n;
+}
+
+const ronbarr = decodeJim(fs.readFileSync(path.join(root, '..', 'JIM-Tools', 'ronbarr.map.jzip')));
+const ronFrame = ronbarr.renderFrame(1);
+assert.strictEqual(ronFrame.width, 64);
+assert.strictEqual(ronFrame.height, 72);
+assert.ok(inkCount(ronFrame) > 100);
 
 function romIf(file) {
   return fs.existsSync(file) ? fs.readFileSync(file) : null;
@@ -334,6 +399,67 @@ if (retail92) {
   const refs = decodeJim(retail92.subarray(0x3A3DC, 0x3D5EE));
   assert.strictEqual(refs.renderFrame(1).height, 2160);
 }
+const genesis94 = romIf('/tmp/disasm/NHL94Genesis/lst/nhl94.bin');
+if (genesis94) {
+  const boston = g94.images.find((image) => image.id === 'logoBOS.map.jim');
+  const logo = decodeJim(
+    genesis94.subarray(boston.start, boston.end),
+    genesis94.subarray(boston.paletteAt, boston.paletteAt + 32)
+  );
+  assert.ok(logo.combined.some((color) => color[0] > 180 && color[1] > 140 && color[2] < 80));
+  const titleSpec = g94.images.find((image) => image.id === 'Title94-1.map.jim');
+  const title = decodeJim(genesis94.subarray(titleSpec.start, titleSpec.end));
+  assert.ok(title.renderFrame(1).width >= 64);
+  assert.ok(inkCount(title.renderFrame(1)) > 100);
+  const card = g94.images.find((image) => image.id === 'CardMarioLemieux.bin');
+  const portrait = decodeJim(
+    genesis94.subarray(card.start, card.end),
+    genesis94.subarray(card.paletteAt, card.paletteAt + 128)
+  );
+  const face = portrait.renderFrame(1);
+  assert.strictEqual(face.width, 48);
+  assert.strictEqual(face.height, 48);
+  assert.ok(inkCount(face) > 50);
+  assert.deepStrictEqual(portrait.combined[6], [0, 0, 0]);
+  assert.deepStrictEqual(portrait.combined[5], [255, 255, 255]);
+  const crowdSpec = g94.images.find((image) => image.id === 'Crowd.anim');
+  const crowd = openFrames(genesis94.subarray(crowdSpec.start, crowdSpec.end), { decompressBytecode });
+  assert.ok(crowd.numFrames >= 2);
+  assert.ok(inkCount(crowd.renderFrame(1)) > 100);
+}
+const genesis95 = romIf('/tmp/disasm/NHL95Genesis/lst/nhl95.bin');
+if (genesis95) {
+  const logo = g95.images.find((image) => image.id === 'logoANA.map.jim');
+  const drawn = decodeJim(genesis95.subarray(logo.start, logo.end));
+  assert.ok(inkCount(drawn.renderFrame(1)) > 20);
+  const card = g95.images.find((image) => image.group === 'Players' && image.paletteAt);
+  const portrait = decodeJim(
+    genesis95.subarray(card.start, card.end),
+    genesis95.subarray(card.paletteAt, card.paletteAt + 128)
+  );
+  assert.ok(inkCount(portrait.renderFrame(1)) > 20);
+  assert.deepStrictEqual(portrait.combined[6], [0, 0, 0]);
+}
+const revA93 = romIf(path.join(root, '..', 'JIM-Tools', 'nhlpa93retailRevA.bin'));
+if (revA93) {
+  assert.strictEqual(revA93.slice(0x118, 0x120).toString('ascii'), '1992.OCT');
+  const adjusted = revAAdjust(pa93, '1992.OCT');
+  assert.strictEqual(adjusted.sheet.sprites, pa93.sheet.sprites + 0x2E);
+  assert.strictEqual(adjusted.sheet.hotlist, pa93.sheet.hotlist + 0x2E);
+  assert.strictEqual(adjusted.images[0].start, pa93.images[0].start + 0x2E);
+  assert.strictEqual(revAAdjust(pa93, '1992.JUL').sheet.sprites, pa93.sheet.sprites);
+  const sheet = parseSheet(revA93, adjusted.sheet);
+  assert.ok(sheet.numFrames > 100);
+  assert.ok(renderFrame(sheet, 1).pixels.some((pixel) => pixel));
+  const ice = adjusted.images.find((image) => image.id === 'IceRink.map.jim');
+  const rink = decodeJim(revA93.subarray(ice.start, ice.end));
+  assert.ok(rink.renderFrame(1).width > 64);
+  assert.ok(inkCount(rink.renderFrame(1)) > 100);
+  const crowdSpec = adjusted.images.find((image) => image.id === 'Crowd.anim');
+  const crowd = openFrames(revA93.subarray(crowdSpec.start, crowdSpec.end), { decompressBytecode });
+  assert.ok(crowd.numFrames >= 2);
+  assert.ok(inkCount(crowd.renderFrame(1)) > 100);
+}
 const retail93 = romIf('/tmp/snes/93/lst/nhlpa93snes.bin');
 if (retail93) {
   const drawn = parse93(retail93, GAMES.find((game) => game.id === 'nhlpa93snes').snes);
@@ -342,8 +468,21 @@ if (retail93) {
   assert.strictEqual(first.hotspotX, -4);
   assert.strictEqual(first.hotspotY, -20);
   assert.ok(first.pixels.some((pixel) => pixel));
-  const title = openImage(retail93, GAMES.find((game) => game.id === 'nhlpa93snes').images[0], null, null);
+  const snesGame = GAMES.find((game) => game.id === 'nhlpa93snes');
+  const title = openImage(retail93, snesGame.images[0], null, null);
   assert.strictEqual(title.renderFrame(1).width, 256);
+  const face = openImage(retail93, snesGame.images.find((image) => image.id === 'faceoff'), null, null);
+  assert.strictEqual(face.renderFrame(1).width, 96);
+  assert.strictEqual(face.renderFrame(1).height, 80);
+  const framer = openImage(retail93, snesGame.images.find((image) => image.id === 'framer'), null, null);
+  assert.strictEqual(framer.renderFrame(1).width, 24);
+  assert.strictEqual(framer.renderFrame(1).height, 24);
+  const blocks = openImage(retail93, snesGame.images.find((image) => image.id === 'teamblocks'), null, null);
+  assert.strictEqual(blocks.numFrames, 26);
+  assert.strictEqual(blocks.renderFrame(1).width, 72);
+  const playoff = openImage(retail93, snesGame.images.find((image) => image.id === 'playoff'), null, null);
+  assert.strictEqual(playoff.renderFrame(1).width, 96);
+  assert.strictEqual(playoff.renderFrame(1).height, 184);
 }
 const retail94 = romIf('/tmp/snes/94/lst/nhl94snes.sfc');
 if (retail94) {
@@ -351,10 +490,317 @@ if (retail94) {
   const drawn = parse94(retail94, game.snes);
   assert.strictEqual(drawn.numFrames, 976);
   assert.ok(drawn.renderFrame(2).pixels.some((pixel) => pixel));
-  const rink = openImage(retail94, game.images[0], game.snes, null);
+  const rink = openImage(retail94, game.images.find((image) => image.id === 'rink'), game.snes, null);
   assert.strictEqual(rink.renderFrame(1).width, 384);
   assert.strictEqual(rink.renderFrame(1).height, 904);
+  const logos = openImage(retail94, game.images.find((image) => image.id === 'logos'), game.snes, null);
+  assert.strictEqual(logos.numFrames, 30);
+  const bruins = logos.renderFrame(1);
+  assert.ok(bruins.pixels.some((pixel) => pixel));
+  assert.ok(bruins.colors.some((rgb) => rgb[0] !== rgb[1] || rgb[1] !== rgb[2]));
+  const title = openImage(retail94, game.images.find((image) => image.id === 'title'), game.snes, null);
+  assert.strictEqual(title.numFrames, 13);
+  assert.ok(title.renderFrame(1).pixels.some((pixel) => pixel));
+  const easports = openImage(retail94, game.images.find((image) => image.id === 'easports'), game.snes, null);
+  assert.strictEqual(easports.renderFrame(1).width, 256);
+  assert.strictEqual(easports.renderFrame(1).height, 224);
+  const letters = openImage(retail94, game.images.find((image) => image.id === 'letters'), game.snes, null);
+  assert.strictEqual(letters.numFrames, 26);
+  const small = openImage(retail94, game.images.find((image) => image.id === 'smallletters'), game.snes, null);
+  const cards = openImage(retail94, game.images.find((image) => image.id === 'cards'), game.snes, null);
+  assert.strictEqual(cards.numFrames, 160);
+  const card = cards.renderFrame(9);
+  assert.strictEqual(card.width, 48);
+  assert.strictEqual(card.height, 48);
+  assert.ok(inkCount(card) > 200);
+  const goalie = openImage(retail94, game.images.find((image) => image.id === 'titlegoalie'), game.snes, null);
+  assert.strictEqual(goalie.renderFrame(1).width, 256);
+  assert.strictEqual(goalie.renderFrame(1).height, 224);
+  assert.ok(inkCount(goalie.renderFrame(1)) > 200);
+  const ron = openImage(retail94, game.images.find((image) => image.id === 'ronbarr'), game.snes, null);
+  assert.strictEqual(ron.renderFrame(1).width, 256);
+  assert.ok(inkCount(ron.renderFrame(1)) > 200);
+  const backdrop = openImage(retail94, game.images.find((image) => image.id === 'eabackdrop'), game.snes, null);
+  assert.strictEqual(backdrop.renderFrame(1).height, 224);
+  assert.ok(inkCount(backdrop.renderFrame(1)) > 200);
+  const puck = openImage(retail94, game.images.find((image) => image.id === 'titlepuck'), game.snes, null);
+  assert.strictEqual(puck.renderFrame(1).width, 256);
+  assert.strictEqual(puck.renderFrame(1).height, 224);
+  assert.ok(inkCount(puck.renderFrame(1)) > 200);
+  const stanley = openImage(retail94, game.images.find((image) => image.id === 'stanley'), game.snes, null);
+  assert.strictEqual(stanley.renderFrame(1).width, 48);
+  assert.strictEqual(stanley.renderFrame(1).height, 104);
+  assert.ok(inkCount(stanley.renderFrame(1)) > 200);
+  const windowFrame = openImage(retail94, game.images.find((image) => image.id === 'window'), game.snes, null);
+  assert.strictEqual(windowFrame.renderFrame(1).width, 240);
+  assert.strictEqual(windowFrame.renderFrame(1).height, 96);
+  const menuFont = openImage(retail94, game.images.find((image) => image.id === 'menufont'), game.snes, null);
+  assert.strictEqual(menuFont.renderFrame(1).width, 128);
+  assert.ok(inkCount(menuFont.renderFrame(1)) > 200);
+  const iceFont = openImage(retail94, game.images.find((image) => image.id === 'icefont'), game.snes, null);
+  assert.strictEqual(iceFont.renderFrame(1).width, 128);
+  assert.ok(inkCount(iceFont.renderFrame(1)) > 50);
+  assert.strictEqual(small.numFrames, 37);
+  const center = openImage(retail94, game.images.find((image) => image.id === 'center'), game.snes, null);
+  assert.strictEqual(center.numFrames, 28);
+  const shield = center.renderFrame(27);
+  assert.strictEqual(shield.width, 48);
+  assert.strictEqual(shield.height, 32);
+  assert.ok(shield.pixels.some((pixel) => pixel));
 }
+
+function spitHeader(type, width, height, xOffset, yOffset, xPos, yPos) {
+  const header = Buffer.alloc(16);
+  header[0] = type;
+  header.writeInt16LE(width, 4);
+  header.writeInt16LE(height, 6);
+  header.writeInt16LE(xOffset, 8);
+  header.writeInt16LE(yOffset, 10);
+  header.writeInt16LE(xPos, 12);
+  header.writeInt16LE(yPos, 14);
+  return header;
+}
+
+const rleSpit = Buffer.concat([
+  spitHeader(0, 4, 1, 0, 0, 5, 6),
+  Buffer.from([3, 9, 0xFF, 8, 0])
+]);
+const rle = pc95.decodeSpit(rleSpit);
+assert.deepStrictEqual(Array.from(rle.pixels), [9, 9, 9, 8]);
+assert.strictEqual(rle.xPos, 5);
+assert.strictEqual(rle.yPos, 6);
+
+const rawSpit = Buffer.concat([
+  spitHeader(123, 2, 2, -1, 16, 0, 0),
+  Buffer.from([1, 2, 3, 4])
+]);
+const raw = pc95.decodeSpit(rawSpit);
+assert.deepStrictEqual(Array.from(raw.pixels), [1, 2, 3, 4]);
+assert.strictEqual(raw.xOffset, -1);
+assert.strictEqual(raw.yOffset, 16);
+
+const shortPack = Buffer.from([
+  0x10, 0xFB, 0x00, 0x00, 0x06,
+  0x03, 0x02, 0x61, 0x62, 0x63,
+  0xFC
+]);
+assert.strictEqual(Buffer.from(pc95.decompressRefPack(shortPack)).toString('ascii'), 'abcabc');
+
+const sizedPack = Buffer.from([
+  0x11, 0xFB, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x04,
+  0xE0, 0x41, 0x42, 0x43, 0x44,
+  0xFC
+]);
+assert.strictEqual(Buffer.from(pc95.decompressRefPack(sizedPack)).toString('ascii'), 'ABCD');
+
+const mediumPack = Buffer.from([
+  0x10, 0xFB, 0x00, 0x00, 0x08,
+  0xE0, 0x61, 0x62, 0x63, 0x64,
+  0x80, 0x00, 0x03,
+  0xFC
+]);
+assert.strictEqual(Buffer.from(pc95.decompressRefPack(mediumPack)).toString('ascii'), 'abcdabcd');
+
+const longPack = Buffer.from([
+  0x10, 0xFB, 0x00, 0x00, 0x06,
+  0xC1, 0x00, 0x00, 0x00, 0x5A,
+  0xFC
+]);
+assert.strictEqual(Buffer.from(pc95.decompressRefPack(longPack)).toString('ascii'), 'ZZZZZZ');
+
+function shapeBank(tag, spit) {
+  const bank = Buffer.alloc(24 + spit.length);
+  bank.write('SHPP', 0);
+  bank.writeUInt32LE(bank.length, 4);
+  bank.writeUInt32LE(1, 8);
+  bank.write('DIR ', 12);
+  bank.write(tag, 16);
+  bank.writeUInt32LE(24, 20);
+  spit.copy(bank, 24);
+  return bank;
+}
+
+const packedBank = Buffer.concat([
+  Buffer.from([0x10, 0xFB, 0x00, 0x00, 0x2C, 0xEA]),
+  shapeBank('0000', rawSpit),
+  Buffer.from([0xFC])
+]);
+assert.strictEqual(shapeBank('0000', rawSpit).length, 0x2C);
+const shpiBank = Buffer.from(shapeBank('0000', rawSpit));
+shpiBank.write('SHPI', 0);
+const shpiShapes = pc95.openBytes(shpiBank);
+assert.strictEqual(shpiShapes.shapes.length, 1);
+assert.strictEqual(shpiShapes.shapes[0].tag, '0000');
+assert.deepStrictEqual(Array.from(shpiShapes.shapes[0].pixels), [1, 2, 3, 4]);
+
+const packedShapes = pc95.openBytes(packedBank);
+assert.strictEqual(packedShapes.shapes.length, 1);
+assert.strictEqual(packedShapes.shapes[0].tag, '0000');
+assert.deepStrictEqual(Array.from(packedShapes.shapes[0].pixels), [1, 2, 3, 4]);
+
+const spriteBundle = pc95.encodeBundle([
+  { name: 'sprites/000', data: rawSpit },
+  { name: 'players.ppv', data: shapeBank('0005', rawSpit) }
+]);
+const spriteAnim = pc95.openSpriteBundle(spriteBundle);
+assert.strictEqual(spriteAnim.numFrames, 1134);
+assert.deepStrictEqual(Array.from(spriteAnim.renderFrame(1).pixels), [1, 2, 3, 4]);
+assert.strictEqual(spriteAnim.renderFrame(1).minX, 1);
+assert.strictEqual(spriteAnim.renderFrame(1).minY, -16);
+assert.strictEqual(spriteAnim.renderFrame(1).hotspotX, -4);
+assert.strictEqual(spriteAnim.renderFrame(1).hotspotY, -20);
+assert.strictEqual(spriteAnim.renderFrame(1).transparent, 255);
+assert.strictEqual(spriteAnim.renderFrame(1).dynamic, true);
+assert.strictEqual(spriteAnim.renderFrame(6).tag, '0005');
+assert.strictEqual(spriteAnim.renderFrame(2).width, 0);
+
+const numbered = [];
+for (let i = 0; i < 200; i++) numbered.push({ tag: String(i).padStart(4, '0') });
+assert.strictEqual(pc95.isSpriteBank({ shapes: numbered }, 'bank.ppv'), false);
+assert.strictEqual(pc95.isSpriteBank({ shapes: numbered.slice(0, 50) }, '000_049.PPV'), true);
+assert.strictEqual(pc95.isSpriteBank({ shapes: numbered.slice(0, 50) }, '10001049.PPV'), true);
+assert.strictEqual(pc95.isRinkBank({ shapes: numbered.slice(0, 50) }, 'F000_049.PPV'), true);
+assert.strictEqual(pc95.isRinkBank({ shapes: numbered.slice(0, 105) }, 'F000_149.PPV'), true);
+assert.strictEqual(pc95.isSpriteBank({ shapes: numbered.slice(0, 105) }, 'F000_149.PPV'), false);
+assert.strictEqual(pc95.isSpriteBank({ shapes: [] }, 'sprites.ppv'), true);
+
+const playerSheet = pc95.encodeBundle([
+  { name: '000_049.PPV', data: shapeBank('0000', rawSpit) },
+  { name: '050_099.PPV', data: shapeBank('0000', rawSpit) },
+  { name: '11001149.PPV', data: shapeBank('1100', rawSpit) }
+]);
+const sheets = pc95.openSpriteBundle(playerSheet);
+assert.strictEqual(sheets.numFrames, 1134);
+assert.strictEqual(sheets.renderFrame(1).tag, '0000');
+assert.strictEqual(sheets.renderFrame(51).tag, '0000');
+assert.strictEqual(sheets.renderFrame(51).index, 50);
+assert.strictEqual(sheets.renderFrame(1101).tag, '1100');
+assert.strictEqual(sheets.renderFrame(2).width, 0);
+
+const wide = Buffer.from(rawSpit);
+wide[16] = 9;
+const crowd = pc95.encodeBundle([
+  { name: 'F000_149.PPV', data: shapeBank('0000', wide) },
+  { name: 'F000_049.PPV', data: shapeBank('0000', rawSpit) },
+  { name: 'F050_099.PPV', data: shapeBank('F050', rawSpit) }
+]);
+const crowdAnimPc = pc95.openSpriteBundle(crowd);
+assert.strictEqual(crowdAnimPc.numFrames, 51);
+assert.strictEqual(crowdAnimPc.renderFrame(1).tag, '0000');
+assert.strictEqual(crowdAnimPc.renderFrame(1).dynamic, false);
+assert.strictEqual(crowdAnimPc.renderFrame(1).hotspotX, 0);
+assert.deepStrictEqual(Array.from(crowdAnimPc.renderFrame(1).pixels), [1, 2, 3, 4]);
+assert.strictEqual(crowdAnimPc.renderFrame(51).tag, 'F050');
+assert.strictEqual(crowdAnimPc.renderFrame(51).index, 50);
+
+const team = Buffer.alloc(448);
+team[0] = 10;
+team[1] = 20;
+team[2] = 30;
+team[336] = 128;
+const rink = [];
+for (let i = 0; i < 128; i++) rink.push([i, 0, 1]);
+const teamColors = pc95.buildTeamPalette(team, rink);
+const jerseyAct = fs.readFileSync(path.join(root, '..', 'PAL-To-ACT', 'createjerseyShadowfixed.act'));
+const rinkAct = fs.readFileSync(path.join(root, '..', 'PAL-To-ACT', 'rinkpal.act'));
+function actAt(buf, index) {
+  return [buf[index * 3], buf[index * 3 + 1], buf[index * 3 + 2]];
+}
+assert.deepStrictEqual(teamColors[0], actAt(jerseyAct, 0));
+assert.deepStrictEqual(teamColors[143], actAt(jerseyAct, 143));
+assert.deepStrictEqual(teamColors[144], [40, 80, 120]);
+assert.deepStrictEqual(teamColors.game[128], [40, 80, 120]);
+assert.deepStrictEqual(teamColors.game[0], actAt(rinkAct, 0));
+assert.deepStrictEqual(teamColors.game[251], actAt(rinkAct, 251));
+assert.deepStrictEqual(teamColors.game[255], actAt(rinkAct, 255));
+assert.strictEqual(pc95.hotspotFor(0).x, -4);
+assert.strictEqual(pc95.hotspotFor(0).y, -20);
+assert.strictEqual(pc95.frameIsDynamic(1), true);
+assert.strictEqual(pc95.frameIsDynamic(394), false);
+assert.strictEqual(pc95.frameIsDynamic(650), false);
+
+const pcCatalog = parseFrames(fs.readFileSync(path.join(root, 'data', 'frames95pc.asm'), 'utf8'));
+assert.strictEqual(pcCatalog.anims.length, 119);
+const pcReady = pcCatalog.anims.find((anim) => anim.name.toLowerCase() === 'spagready');
+assert.ok(pcReady.loop);
+assert.strictEqual(pcReady.directions[0].steps[0].frame, 407);
+const pcSkate = pcCatalog.anims.find((anim) => anim.name.toLowerCase() === 'spaskatewp');
+assert.strictEqual(pcSkate.directions[0].steps[0].frame, 2);
+assert.strictEqual(pcCatalog.anims[pcCatalog.anims.length - 1].name.toLowerCase(), 'sparefhistick');
+assert.ok(!pcCatalog.spfs.some((spf) => spf.name.toLowerCase() === 'spflimit'));
+let cursor = 1;
+for (const spf of pcCatalog.spfs) {
+  assert.strictEqual(spf.start, cursor, spf.name);
+  cursor = spf.end + 1;
+}
+assert.strictEqual(cursor, 1135);
+assert.strictEqual(pcCatalog.spfs[0].name, 'SPFskaters');
+assert.strictEqual(pcCatalog.spfs[0].end, 352);
+assert.strictEqual(pcCatalog.spfs.find((spf) => spf.name === 'SPFref95').start, 1129);
+assert.strictEqual(pcCatalog.spfs.find((spf) => spf.name === 'SPFbenchcheck').group, 'Players');
+assert.strictEqual(pcCatalog.spfs.find((spf) => spf.name === 'SPFref').group, 'Other');
+assert.ok(pcCatalog.spfs.find((spf) => spf.name === 'SPFskaters').blurb.includes('000-351'));
+
+const pcGame = GAMES.find((game) => game.id === 'nhl95pc');
+assert.strictEqual(pcGame.kind, 'pc95');
+assert.strictEqual(pcGame.paletteKind, 'pc');
+assert.strictEqual(pcGame.jerseyRow, 9);
+assert.strictEqual(defaultPaletteFile(['bosh.pal', 'bufh.pal', 'bufv.pal']), 'bufh.pal');
+
+const pcDir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'pc95-'));
+fs.mkdirSync(path.join(pcDir, 'sprites'));
+fs.writeFileSync(path.join(pcDir, 'sprites', '000'), rawSpit);
+fs.writeFileSync(path.join(pcDir, 'LOGO.QFS'), packedBank);
+fs.writeFileSync(path.join(pcDir, '000_049.PPV'), shapeBank('0000', rawSpit));
+fs.writeFileSync(path.join(pcDir, '050_099.PPV'), shapeBank('0055', rawSpit));
+fs.writeFileSync(path.join(pcDir, 'F000_049.PPV'), shapeBank('0000', rawSpit));
+fs.writeFileSync(path.join(pcDir, 'F050_099.PPV'), shapeBank('0050', rawSpit));
+fs.writeFileSync(path.join(pcDir, 'CREDIT00.QFS'), packedBank);
+fs.writeFileSync(path.join(pcDir, 'CREDIT01.QFS'), shapeBank('0001', rawSpit));
+fs.writeFileSync(path.join(pcDir, 'JERBUFH.QFS'), packedBank);
+const home = Buffer.alloc(28 * 448);
+home.set(team, 448);
+fs.writeFileSync(path.join(pcDir, 'HOMEPALS.BIN'), home);
+const listed = pc95.catalogDirectory(pcDir);
+assert.deepStrictEqual(listed.spriteFiles, ['000_049.PPV', 'sprites/000', '050_099.PPV']);
+assert.deepStrictEqual(listed.rinkFiles, ['F000_049.PPV', 'F050_099.PPV']);
+const credits = listed.images.find((image) => image.label === 'Credits');
+assert.ok(credits);
+assert.deepStrictEqual(credits.files, ['CREDIT00.QFS', 'CREDIT01.QFS']);
+assert.strictEqual(credits.palette, '');
+const buffalo = listed.images.find((image) => image.id === 'JERBUFH.QFS');
+assert.strictEqual(buffalo.label, 'Buffalo home jersey');
+assert.strictEqual(buffalo.group, 'Jerseys');
+assert.ok(listed.images.some((image) => image.id === 'LOGO.QFS'));
+const joined = pc95.openImageParts([
+  { name: 'CREDIT00.QFS', data: fs.readFileSync(path.join(pcDir, 'CREDIT00.QFS')) },
+  { name: 'CREDIT01.QFS', data: fs.readFileSync(path.join(pcDir, 'CREDIT01.QFS')) }
+]);
+assert.strictEqual(joined.numFrames, 2);
+if (fs.existsSync('/tmp/nhl95all/EMBBOS.QFS')) {
+  const live = pc95.catalogDirectory('/tmp/nhl95all');
+  const bos = live.images.find((image) => /EMBBOS/i.test(image.id));
+  assert.ok(bos && /EMBPAL\.QFS$/i.test(bos.palette));
+  const goal = live.images.find((image) => /GOAL\.PPV$/i.test(image.id));
+  assert.strictEqual(goal.group, 'Jumbotron');
+  const titles = live.images.find((image) => /CTTITLE\.QFS$/i.test(image.id));
+  assert.ok(titles && /CTBKGD\.QFS$/i.test(titles.palette));
+  const bar = live.images.find((image) => /PSTATBAR\.QFS$/i.test(image.id));
+  assert.ok(bar && /PREZ2\.QFS$/i.test(bar.palette));
+  const desk = live.images.find((image) => /EADESK0/i.test(image.id));
+  const parts = desk.files.map((rel) => ({
+    name: rel,
+    data: fs.readFileSync(path.join('/tmp/nhl95all', rel))
+  }));
+  const opened = pc95.openImageParts(parts);
+  assert.ok(opened.numFrames >= 3);
+  assert.notDeepStrictEqual(opened.renderFrame(1).colors[1], opened.renderFrame(2).colors[1]);
+}
+assert.strictEqual(joined.renderFrame(2).tag, '0001');
+assert.strictEqual(listed.hasHome, true);
+assert.ok(listed.paletteNames.includes('bufh.pal'));
+assert.ok(!listed.paletteNames.includes('bufv.pal'));
 
 console.log('catalog', catalog.spfs.length, 'SPF groups,', catalog.anims.length, 'SPA animations');
 console.log('banks', {

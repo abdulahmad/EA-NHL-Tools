@@ -151,5 +151,88 @@
     };
   }
 
-  return { parseSheet, parse94Sprite, parse95Sprite };
+  // Crowd, faceoff, zamboni and the title sprites are a packed (or raw) tile
+  // bank plus a word table of frame offsets. Frame 0 is unused. Sprite bytes
+  // are the 93/94 record: X, Y, tile, flags, size.
+  function openFrames(buffer, jim, donorPalette) {
+    const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    if (bytes.length < 16 || !jim) throw new Error('Frame bank is too small');
+    const noPalette = view.getUint32(0) === 0xffffffff;
+    const palOff = noPalette ? 0 : view.getUint32(0);
+    const table = view.getUint32(4);
+    const tileWord = view.getUint16(8);
+    const tiles = tileWord & 0x7fff;
+    if (!tiles || tiles > 4096 || table < 12 || table >= bytes.length) throw new Error('Frame bank header is not usable');
+    const tileBytes = (tileWord & 0x8000)
+      ? jim.decompressBytecode(bytes, 10, tiles * 32)
+      : bytes.subarray(10, 10 + tiles * 32);
+    if (tileBytes.length < tiles * 32) throw new Error('Frame bank tiles are short');
+    const frames = [];
+    for (let frame = 1; frame < 128; frame++) {
+      const wordAt = table + frame * 2;
+      if (wordAt + 4 > bytes.length) break;
+      const start = view.getUint16(wordAt);
+      const next = view.getUint16(wordAt + 2);
+      const span = next - start;
+      if (span <= 0 || span % 8 !== 0 || span / 8 > 48) break;
+      if (start < (frame + 2) * 2) break;
+      const data = table + start;
+      const count = span / 8;
+      if (data + count * 8 > bytes.length) break;
+      const sprites = [];
+      for (let s = 0; s < count; s++) sprites.push(parse94Sprite(view, data + s * 8));
+      let minX = Infinity;
+      let minY = Infinity;
+      let maxX = -Infinity;
+      let maxY = -Infinity;
+      for (const sprite of sprites) {
+        const w = sprite.dimensions.width * 8;
+        const h = sprite.dimensions.height * 8;
+        if (sprite.xpos < minX) minX = sprite.xpos;
+        if (sprite.ypos < minY) minY = sprite.ypos;
+        if (sprite.xpos + w > maxX) maxX = sprite.xpos + w;
+        if (sprite.ypos + h > maxY) maxY = sprite.ypos + h;
+      }
+      if (!sprites.length || minX === Infinity) break;
+      frames.push({
+        frame,
+        index: frame - 1,
+        header: 'SS',
+        numSprites: count,
+        canvasWidth: Math.max(1, maxX - minX),
+        canvasHeight: Math.max(1, maxY - minY),
+        hotspotX: 0,
+        hotspotY: 0,
+        sprites
+      });
+    }
+    if (!frames.length) throw new Error('Frame bank has no frames');
+    const colors = [];
+    const donor = donorPalette
+      ? (donorPalette instanceof Uint8Array ? donorPalette : new Uint8Array(donorPalette))
+      : null;
+    if (!noPalette && palOff + 128 <= bytes.length && palOff !== table) {
+      for (let p = 0; p < 4; p++) colors.push.apply(colors, decodeCram(view, palOff + p * 32));
+    } else if (donor && donor.length >= 128 && anim && anim.decodePaletteFile) {
+      for (let p = 0; p < 4; p++) colors.push.apply(colors, anim.decodePaletteFile(donor.subarray(p * 32, (p + 1) * 32)));
+    } else {
+      for (let i = 0; i < 64; i++) {
+        const ramp = i === 0 ? 0 : 32 + ((i * 37) % 224);
+        colors.push([ramp, (i * 53) % 256, (i * 17) % 256]);
+      }
+    }
+    return {
+      fileType: 'FR',
+      numFrames: frames.length,
+      picture: false,
+      frames,
+      palettes: [],
+      combined: colors,
+      tileBytes: tileBytes.subarray(0, tiles * 32),
+      renderFrame: function (frameNumber) { return anim.renderFrame(this, frameNumber); }
+    };
+  }
+
+  return { parseSheet, parse94Sprite, parse95Sprite, openFrames };
 });

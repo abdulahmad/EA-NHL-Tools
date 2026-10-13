@@ -3,13 +3,49 @@
  *
  * NHL 92 pictures are Alice .ANIM banks. They also sit at fixed offsets in
  * the retail ROM. NHLPA 93, NHL 94 and NHL 95 Genesis keep the SPF/SPA tables
- * but the player pictures are a sprite sheet in the ROM. The two SNES ports
- * use planar 4bpp tiles; their animation names come from the disassemblies.
+ * and a player sprite sheet, plus every picture the disassembly extract
+ * scripts name (screens, rink, fonts, logos, portraits, frame banks).
+ * The two SNES ports use planar 4bpp tiles; their animation names come from
+ * the disassemblies. NHL 95 PC reads SHPP shape banks (PPV and RefPack QFS)
+ * of SPIT pictures.
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
   else root.Nhl92Games = factory();
 })(typeof self !== 'undefined' ? self : this, function () {
+  const generated = (typeof require === 'function')
+    ? require('./genesis-images')
+    : { nhlpa93: [], nhl94: [], nhl95: [] };
+
+  // PicturePalette's CRAM block. Shared portraits (header longs are 0) have
+  // no colors of their own; DrawMatchupPicture uses this palette.
+  const PORTRAIT_PALETTE = { nhl94: 0xC6762, nhl95: 0xA1DC4 };
+
+  function stampPortraits(id, images) {
+    const at = PORTRAIT_PALETTE[id];
+    if (at == null) return images;
+    return images.map((image) => {
+      if (image.paletteAt != null || image.group !== 'Players' || image.kind !== 'jim') return image;
+      return Object.assign({}, image, { paletteAt: at });
+    });
+  }
+
+  // TeamLogoPalettes, one 16-color CRAM palette per team in TeamList order.
+  const LOGO_ORDER = ['ANH', 'BOS', 'BUF', 'CGY', 'CHI', 'DAL', 'DET', 'EDM', 'FLA', 'HFD', 'LA', 'MTL', 'NJ', 'NYI', 'NYR', 'OTW', 'PHI', 'PIT', 'QUE', 'SJ', 'STL', 'TB', 'TOR', 'VAN', 'WSH', 'WPG', 'ASE', 'ASW'];
+  const LOGO_PALETTE = { nhl94: 0xFF462, nhl95: 0x1A169A };
+
+  function stampLogos(id, images) {
+    const base = LOGO_PALETTE[id];
+    if (base == null) return images;
+    return images.map((image) => {
+      const match = /^logo([A-Z0-9]+)\.map\.jim$/.exec(image.id);
+      if (!match) return image;
+      const code = match[1] === 'ANA' ? 'ANH' : match[1];
+      const index = LOGO_ORDER.indexOf(code);
+      if (index < 0) return image;
+      return Object.assign({}, image, { paletteAt: base + index * 32 });
+    });
+  }
   const NHL92_IMAGES = [
     { id: 'Sprites.anim', label: 'Sprites', group: 'Sprites', kind: 'anim', file: true, start: 0x3D5EE, end: 0x7216C },
     { id: 'Puck.anim', label: 'Puck', group: 'Sprites', kind: 'anim', file: true, start: 0x2E9EC, end: 0x2F262 },
@@ -66,7 +102,7 @@
       kind: 'sheet',
       paletteKind: 'genesis',
       banks: [{ id: 'sprites', label: 'Sprites' }],
-      images: [],
+      images: generated.nhlpa93,
       palettes: '94',
       romNames: ['nhlpa93.bin', 'nhlpa93.md', 'nhlpa93.gen'],
       romBytes: 0x80000,
@@ -87,7 +123,7 @@
       kind: 'sheet',
       paletteKind: 'genesis',
       banks: [{ id: 'sprites', label: 'Sprites' }],
-      images: [],
+      images: stampLogos('nhl94', stampPortraits('nhl94', generated.nhl94)),
       palettes: '94',
       romNames: ['nhl94.bin', 'nhl94.md', 'nhl94.gen'],
       romBytes: 0x100000,
@@ -108,7 +144,12 @@
       kind: 'sheet',
       paletteKind: 'genesis',
       banks: [{ id: 'sprites', label: 'Sprites' }],
-      images: [],
+      images: stampLogos('nhl95', stampPortraits('nhl95', generated.nhl95)).map((image) => {
+        if (!/^ArenaGfx/.test(image.id)) return image;
+        const next = Object.assign({}, image);
+        delete next.paletteAt;
+        return next;
+      }),
       palettes: '95',
       romNames: ['nhl95.bin', 'nhl95.md', 'nhl95.gen'],
       romBytes: 0x200000,
@@ -159,12 +200,19 @@
       images: [
         { id: 'title', label: 'Title', group: 'Screens', kind: 'snes93-screen', start: 0x2D5C0, end: 0x2D5C0 + 9721, mapW: 32, mapH: 28, mapSize: 0x700, pal: 0x700, tiles: 0x800 },
         { id: 'setup', label: 'Game setup', group: 'Screens', kind: 'snes93-screen', start: 0x40000, end: 0x40000 + 559, mapW: 32, mapH: 32, mapSize: 0x800, pal: 0x800, tiles: 0x900 },
-        { id: 'easn', label: 'EASN', group: 'Screens', kind: 'snes93-screen', start: 0x3C3A0, end: 0x3C3A0 + 788, mapW: 32, mapH: 16, mapSize: 0x400, tiles: 0x400, noPal: true },
+        { id: 'easn', label: 'EASN', group: 'Screens', kind: 'snes93-screen', start: 0x3C3A0, end: 0x3C3A0 + 788, mapW: 32, mapH: 16, mapSize: 0x400, tiles: 0x400, useRink: true },
         { id: 'ronbarr', label: 'Ron Barr', group: 'Screens', kind: 'snes93-screen', start: 0x6D38, end: 0x6D38 + 1590, mapW: 8, mapH: 9, mapSize: 0x90, pal: 0x90, tiles: 0x190 },
         { id: 'nhlpa', label: 'NHLPA logo', group: 'Screens', kind: 'snes93-screen', start: 0x60000, end: 0x60000 + 1114, mapW: 8, mapH: 10, mapSize: 0xA0, pal: 0xA0, tiles: 0x1A0 },
         { id: 'rink', label: 'Ice rink', group: 'Ice', kind: 'snes93-map', mapStart: 0x1CCCB, mapSize: 8160, mapW: 48, mapH: 85, tilesStart: 0x14DA0, tilesEnd: 0x14DA0 + 11164 },
-        { id: 'bigfont', label: 'Big font', group: 'Fonts', kind: 'snes93-font', start: 0x6EEC8, end: 0x6EEC8 + 2496, columns: 16 },
-        { id: 'smallfont', label: 'Small font', group: 'Fonts', kind: 'snes93-font', start: 0x1C6D8, end: 0x1C6D8 + 1332, columns: 16 }
+        { id: 'horrink', label: 'Horizontal rink', group: 'Ice', kind: 'snes93-map', mapStart: 0x1ECAB, mapSize: 0xA80, mapW: 48, mapH: 28, tilesStart: 0x14DA0, tilesEnd: 0x14DA0 + 11164 },
+        { id: 'faceoff', label: 'Face off', group: 'Screens', kind: 'snes93-map', mapStart: 0x26949, mapSize: 240, mapW: 12, mapH: 10, tilesStart: 0x3C6B4, tilesEnd: 0x3CABA },
+        { id: 'framer', label: 'Framer', group: 'Screens', kind: 'snes93-map', mapStart: 0x4071C, mapSize: 18, mapW: 3, mapH: 3, tilesStart: 0x4072E, tilesEnd: 0x407AE, rawTiles: true },
+        { id: 'playoff', label: 'Playoff bracket', group: 'Screens', kind: 'snes93-playoff', mapStart: 0x578B4, mapSize: 552, mapW: 12, mapH: 23, tilesStart: 0x2779D, tilesEnd: 0x27816 },
+        { id: 'teamblocks', label: 'Team blocks', group: 'Screens', kind: 'snes93-frames', mapStart: 0x3CABA, frameBytes: 36, frames: 26, mapW: 9, mapH: 2, tilesStart: 0x41B73, tilesEnd: 0x43C56 },
+        { id: 'refs', label: 'Refs', group: 'Ice', kind: 'snes93-frames', mapStart: 0x1FAEC, frameBytes: 0x70, frames: 7, mapW: 8, mapH: 7, tilesStart: 0x3F55E, tilesEnd: 0x3FF78 },
+        { id: 'refshor', label: 'Refs horizontal', group: 'Ice', kind: 'snes93-frames', mapStart: 0x4F3FB, frameBytes: 0x70, frames: 17, mapW: 8, mapH: 7, tilesStart: 0x4EB45, tilesEnd: 0x4F3FB },
+        { id: 'bigfont', label: 'Big font', group: 'Fonts', kind: 'snes93-font', start: 0x6EEC8, end: 0x6EEC8 + 2496, columns: 16, remap: [7, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] },
+        { id: 'smallfont', label: 'Small font', group: 'Fonts', kind: 'snes93-font', start: 0x1C6D8, end: 0x1C6D8 + 1332, columns: 16, remap: [4, 3, 4, 3, 2, 1, 4] }
       ]
     },
     {
@@ -187,8 +235,41 @@
         rinkMap: 0x92E053
       },
       images: [
-        { id: 'rink', label: 'Ice rink', group: 'Ice', kind: 'snes94-rink' }
+        { id: 'title', label: 'Title letters', group: 'Screens', kind: 'snes94-sprites', addr: 0x91B188, packed: true, palRows: 2 },
+        { id: 'titlegoalie', label: 'Title goalie', group: 'Screens', kind: 'snes94-screen', tiles: 0x938000, map: 0x9AB7A1, palette: 0x9AE121, paletteCount: 16 },
+        { id: 'titlepuck', label: 'Title puck', group: 'Screens', kind: 'snes94-screen', tiles: 0x948000, map: 0x9ADDC6, palette: 0x9ACCA9, paletteCount: 16 },
+        { id: 'easports', label: 'EA Sports', group: 'Screens', kind: 'snes94-screen', tiles: 0x93B217, linear: true, map: 0x96C61F, mapW: 32, mapH: 28, palette: 0x9ADE57, palette2: 0x89FFC7, palette2At: 0x40, palette2Count: 16 },
+        { id: 'eabackdrop', label: 'EA Sports backdrop', group: 'Screens', kind: 'snes94-screen', tiles: 0x95F1AE, map: 0x9ABA95, palette: 0x9AE121 },
+        { id: 'ronbarr', label: 'Ron Barr', group: 'Screens', kind: 'snes94-screen', tiles: 0x94D6A5, map: 0x9AC0CC, palette: 0x9AE946 },
+        { id: 'stanley', label: 'Stanley Cup', group: 'Screens', kind: 'snes94-screen', tiles: 0x968C02, map: 0x95FF9B, palette: 0x9AE884, paletteCount: 16 },
+        { id: 'window', label: 'Window frame', group: 'Screens', kind: 'snes94-screen', tiles: 0x95E304, map: 0x9AE9C7 },
+        { id: 'logos', label: 'Team logos', group: 'Logos', kind: 'snes94-sprites', addr: 0x81ABDE, packed: true, palTable: 0x9C8497 },
+        { id: 'rink', label: 'Ice rink', group: 'Ice', kind: 'snes94-rink' },
+        { id: 'center', label: 'Center ice', group: 'Ice', kind: 'snes94-center' },
+        { id: 'letters', label: 'Big letters', group: 'Fonts', kind: 'snes94-sprites', addr: 0x92A7B9 },
+        { id: 'smallletters', label: 'Small letters', group: 'Fonts', kind: 'snes94-sprites', addr: 0x95A7F7 },
+        { id: 'menufont', label: 'Menu font', group: 'Fonts', kind: 'snes94-tiles', tiles: 0x96A103, columns: 16, palette: 0x9ADE57 },
+        { id: 'icefont', label: 'Ice font', group: 'Fonts', kind: 'snes94-tiles', tiles: 0x96BABD, columns: 16, useRink: true },
+        { id: 'cards', label: 'Player cards', group: 'Players', kind: 'snes94-cards' }
       ]
+    },
+    {
+      id: 'nhl95pc',
+      title: 'NHL 95 (PC)',
+      frames: 'frames95pc.asm',
+      source: 'NHL95PC',
+      platform: 'pc',
+      kind: 'pc95',
+      paletteKind: 'pc',
+      jerseyRow: 9,
+      paletteLabel: 'Team colors',
+      tagline: 'Player sheets from the sequential PPV files, rink and crowd sheets, and every QFS picture',
+      hint: 'Copy the NHL 95 PC PPV and QFS files into Sprite-Viewer/pc95/, plus HOMEPALS.BIN and AWAYPALS.BIN. Player frames are the 000_049.PPV … 11001149.PPV series. On the Frame tab, Bank → Rink and crowd opens F000_049.PPV, F050_099.PPV, F100_149.PPV, and F000_149.PPV. Every other QFS is a picture. Restart the server after adding files.',
+      banks: [{ id: 'sprites', label: 'Players' }],
+      images: [],
+      palettes: 'pc95',
+      romNames: [],
+      romBytes: 0
     }
   ];
 
@@ -196,5 +277,32 @@
     return GAMES.find((game) => game.id === id) || null;
   }
 
-  return { GAMES, gameById };
+  // NHLPA 93 Rev A (header date 1992.OCT) places every slice at or after the
+  // Z80 driver ($16E53) 0x2E bytes later than retail. That includes the
+  // pictures and the player sprite sheet.
+  function revAAdjust(game, date) {
+    const images = (game && game.images) || [];
+    const sheet = (game && game.sheet) || null;
+    if (!game || game.id !== 'nhlpa93' || date !== '1992.OCT') return { images, sheet };
+    const delta = 0x2E;
+    const floor = 0x16E53;
+    const bump = (value) => (typeof value === 'number' && value >= floor ? value + delta : value);
+    return {
+      images: images.map((image) => {
+        const next = Object.assign({}, image, {
+          start: bump(image.start),
+          end: bump(image.end)
+        });
+        if (image.paletteAt != null) next.paletteAt = bump(image.paletteAt);
+        return next;
+      }),
+      sheet: sheet ? Object.assign({}, sheet, {
+        sprites: bump(sheet.sprites),
+        hotlist: bump(sheet.hotlist),
+        palette: bump(sheet.palette)
+      }) : null
+    };
+  }
+
+  return { GAMES, gameById, revAAdjust };
 });
