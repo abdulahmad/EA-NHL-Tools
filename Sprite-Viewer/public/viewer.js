@@ -686,9 +686,12 @@ function renderList() {
       button.append(name, sub);
       button.addEventListener('click', () => {
         closeDrawers();
-        if (state.mode === 'spf') state.spf = entry.name;
-        else state.spa = entry.name;
-        state.dir = 0;
+        if (state.mode === 'spf') {
+          state.spf = entry.name;
+          state.dir = 0;
+        } else {
+          state.spa = entry.name;
+        }
         state.step = 0;
         state.acc = 0;
         state.holdKey = '';
