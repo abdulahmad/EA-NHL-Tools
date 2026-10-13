@@ -1,5 +1,6 @@
 let games = [];
 let gameInfo = null;
+let spritePalette = '';
 
 const SPA_ORDER = ['Skating', 'Shooting', 'Checking', 'Falls', 'Fight', 'Celebrate', 'Goalies', 'Puck', 'Special', 'Other'];
 const SPF_ORDER = ['Players', 'Goalies', 'Ice', 'Other'];
@@ -503,7 +504,7 @@ function bindSpfEnd() {
   }
 }
 
-const IMAGE_ORDER = ['Screens', 'Sprites', 'Ice', 'Fonts', 'Other'];
+const IMAGE_ORDER = ['Screens', 'Logos', 'Sprites', 'Ice', 'Fonts', 'Other'];
 
 function renderImageList(box, q) {
   const images = (gameInfo && gameInfo.images) || [];
@@ -841,11 +842,37 @@ function renderSwatches() {
 }
 
 function romHint() {
-  if (gameInfo && gameInfo.hint) return gameInfo.hint;
-  if (gameInfo && gameInfo.romHint) {
-    return 'Add the ROM at Sprite-Viewer/' + gameInfo.romHint + ' to draw this picture.';
+  const images = (gameInfo && gameInfo.images) || [];
+  if (!images.length) {
+    if (gameInfo && gameInfo.hint && !gameInfo.pixels) return gameInfo.hint;
+    return 'This game has no extra pictures in the viewer yet.';
+  }
+  if (gameInfo && !gameInfo.pixels) {
+    if (gameInfo.hint) return gameInfo.hint;
+    if (gameInfo.romHint) {
+      return 'Add the ROM at Sprite-Viewer/' + gameInfo.romHint + ' to draw this picture.';
+    }
   }
   return 'No picture loaded.';
+}
+
+function showEmbeddedPalette() {
+  if (state.mode !== 'image' && state.paletteName) spritePalette = state.paletteName;
+  state.paletteName = '';
+  const menu = el('palette');
+  if (menu && [...menu.options].some((option) => option.value === '')) menu.value = '';
+}
+
+async function restoreSpritePalette() {
+  if (state.mode !== 'image') return;
+  const menu = el('palette');
+  const files = menu ? [...menu.options].map((option) => option.value).filter(Boolean) : [];
+  const matched = Nhl92Labels.matchPaletteFile(files, spritePalette) || '';
+  state.paletteName = matched;
+  spritePalette = matched;
+  if (menu && [...menu.options].some((option) => option.value === matched)) menu.value = matched;
+  if (state.paletteName) await ensurePalette(state.paletteName);
+  bitmaps.clear();
 }
 
 function renderCaption() {
@@ -1007,6 +1034,7 @@ function wire() {
   }
   el('mode-frame').addEventListener('click', async () => {
     clearSearch();
+    await restoreSpritePalette();
     const from = state.mode;
     const shown = sequence().steps[state.step];
     state.mode = 'frame';
@@ -1020,8 +1048,9 @@ function wire() {
     await ensureBank(state.bank);
     refreshAll();
   });
-  el('mode-spf').addEventListener('click', () => {
+  el('mode-spf').addEventListener('click', async () => {
     clearSearch();
+    await restoreSpritePalette();
     state.mode = 'spf';
     state.dir = 0;
     state.step = 0;
@@ -1029,8 +1058,9 @@ function wire() {
     state.acc = 0;
     refreshAll();
   });
-  el('mode-spa').addEventListener('click', () => {
+  el('mode-spa').addEventListener('click', async () => {
     clearSearch();
+    await restoreSpritePalette();
     state.mode = 'spa';
     state.step = 0;
     state.acc = 0;
@@ -1039,6 +1069,7 @@ function wire() {
   });
   el('mode-image').addEventListener('click', async () => {
     clearSearch();
+    showEmbeddedPalette();
     state.mode = 'image';
     if (!state.image && gameInfo && gameInfo.images.length) state.image = gameInfo.images[0].id;
     state.step = 0;
@@ -1148,6 +1179,7 @@ function wire() {
   el('palette').addEventListener('change', async () => {
     state.paletteName = el('palette').value;
     state.paletteExplicit = true;
+    if (state.paletteName || state.mode !== 'image') spritePalette = state.paletteName;
     await ensurePalette(state.paletteName);
     bitmaps.clear();
     sequenceKey = '';
@@ -1400,8 +1432,6 @@ async function loadGame(id, keepSelection) {
   const paletteItems = [{ value: '', label: 'Embedded palette' }];
   for (const item of labeled) paletteItems.push({ value: item.file, label: item.label });
   const chosen = choosePalette(jerseys, previous, keepSelection);
-  fillSelect(el('palette'), paletteItems, chosen);
-  state.paletteName = el('palette').value;
   const images = info.images || [];
   if (keepSelection) {
     state.mode = previous.mode;
@@ -1409,8 +1439,7 @@ async function loadGame(id, keepSelection) {
     state.dir = previous.dir;
     state.step = previous.step;
   } else {
-    const imageOk = previous.mode === 'image' && images.length;
-    state.mode = previous.mode === 'frame' || previous.mode === 'spf' || previous.mode === 'spa' || imageOk
+    state.mode = previous.mode === 'frame' || previous.mode === 'spf' || previous.mode === 'spa' || previous.mode === 'image'
       ? previous.mode
       : 'spa';
     state.dir = previous.dir;
@@ -1427,8 +1456,14 @@ async function loadGame(id, keepSelection) {
     || images.find((image) => previous.imageLabel && image.label.toLowerCase() === previous.imageLabel.toLowerCase())
     || images[0];
   state.image = imageMatch ? imageMatch.id : '';
-  if (state.mode === 'image' && !state.image) {
-    state.mode = catalog.anims.length ? 'spa' : (catalog.spfs.length ? 'spf' : 'frame');
+  if (state.mode === 'image') {
+    if (!spritePalette) spritePalette = chosen || Nhl92Labels.defaultPaletteFile(jerseys);
+    fillSelect(el('palette'), paletteItems, '');
+    state.paletteName = '';
+  } else {
+    fillSelect(el('palette'), paletteItems, chosen);
+    state.paletteName = el('palette').value;
+    if (state.paletteName) spritePalette = state.paletteName;
   }
   el('palette').parentElement.querySelector('span').textContent = info.paletteLabel || ('Palette slot ' + (info.jerseyRow || 2));
   el('title').textContent = info.title + ' Sprite Viewer';

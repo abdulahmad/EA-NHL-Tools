@@ -400,11 +400,224 @@
     return renderMap(mapBytes, tiles, rinkColors || grey(128), image.mapW, image.mapH);
   }
 
+  function linearToPlanar(data) {
+    const count = (data.length / 32) | 0;
+    const out = new Uint8Array(count * 32);
+    for (let t = 0; t < count; t++) {
+      for (let y = 0; y < 8; y++) {
+        const planes = [0, 0, 0, 0];
+        for (let x = 0; x < 8; x++) {
+          const b = data[t * 32 + y * 4 + (x >> 1)];
+          const nibble = x & 1 ? b & 15 : b >> 4;
+          if (nibble & 8) planes[1] |= 0x80 >> x;
+          if (nibble & 4) planes[0] |= 0x80 >> x;
+          if (nibble & 2) planes[3] |= 0x80 >> x;
+          if (nibble & 1) planes[2] |= 0x80 >> x;
+        }
+        out[t * 32 + 2 * y] = planes[0];
+        out[t * 32 + 2 * y + 1] = planes[1];
+        out[t * 32 + 16 + 2 * y] = planes[2];
+        out[t * 32 + 17 + 2 * y] = planes[3];
+      }
+    }
+    return out;
+  }
+
+  function snesLong(rom, addr) {
+    const o = pak.lorom(addr);
+    return (rom[o] | (rom[o + 1] << 8) | ((rom[o + 2] || 0) << 16) | 0x800000) >>> 0;
+  }
+
+  function bufferView(buf) {
+    return {
+      u8: function (o) { return buf[o] || 0; },
+      u16: function (o) { return (buf[o] || 0) | ((buf[o + 1] || 0) << 8); },
+      s16: function (o) {
+        const v = this.u16(o);
+        return v & 0x8000 ? v - 0x10000 : v;
+      },
+      bytes: function (o, n) {
+        const out = new Uint8Array(n);
+        for (let i = 0; i < n; i++) out[i] = buf[o + i] || 0;
+        return out;
+      }
+    };
+  }
+
+  function romAddrView(rom, base) {
+    function at(rel) { return pak.lorom((base + rel) >>> 0); }
+    return {
+      u8: function (rel) { return rom[at(rel)] || 0; },
+      u16: function (rel) {
+        const o = at(rel);
+        return (rom[o] || 0) | ((rom[o + 1] || 0) << 8);
+      },
+      s16: function (rel) {
+        const v = this.u16(rel);
+        return v & 0x8000 ? v - 0x10000 : v;
+      },
+      bytes: function (rel, n) {
+        const out = new Uint8Array(n);
+        for (let i = 0; i < n; i++) out[i] = rom[at(rel + i)] || 0;
+        return out;
+      }
+    };
+  }
+
+  function readSpriteSet(view) {
+    const first = view.u8(0) | (view.u8(1) << 8) | (view.u8(2) << 16);
+    const numFrames = (first / 4) | 0;
+    const frames = [];
+    for (let n = 0; n < numFrames; n++) {
+      const o = view.u8(4 * n) | (view.u8(4 * n + 1) << 8) | (view.u8(4 * n + 2) << 16);
+      const count = view.u8(o);
+      const flags = view.u8(o + 1);
+      const s1 = view.u16(o + 0x0c);
+      const s2 = view.u16(o + 0x0e);
+      const src = o + view.u16(o + 0x10);
+      const vram = new Uint8Array(0x2000);
+      const firstTiles = view.bytes(src, s1);
+      for (let i = 0; i < firstTiles.length && i < vram.length; i++) vram[i] = firstTiles[i];
+      if (flags & 0x80) {
+        const t2 = ((((s1 >> 1) & 0xff00) | 0x100) >> 4);
+        const second = view.bytes(src + s1, s2);
+        const dest = t2 * 32;
+        for (let i = 0; i < second.length && dest + i < vram.length; i++) vram[dest + i] = second[i];
+      }
+      const pieces = [];
+      for (let p = 0; p < count; p++) {
+        const q = o + 0x16 + p * 7;
+        const tileWord = view.u16(q + 4);
+        pieces.push({
+          x: view.s16(q),
+          y: view.s16(q + 2),
+          tile: tileWord & 0x1ff,
+          pal: (tileWord >> 9) & 7,
+          size: view.u8(q + 6) ? 16 : 8,
+          hFlip: tileWord & 0x4000,
+          vFlip: tileWord & 0x8000
+        });
+      }
+      frames.push(blitPieces(pieces, vram));
+    }
+    return frames;
+  }
+
+  function greyRows(rows) {
+    const colors = [];
+    for (let r = 0; r < rows; r++) {
+      for (let i = 0; i < 16; i++) colors.push([i * 17, i * 17, i * 17]);
+    }
+    return colors;
+  }
+
+  function spritePicture(art, colors) {
+    const width = Math.max(1, art.width || 0);
+    const height = Math.max(1, art.height || 0);
+    const pixels = art.width && art.height ? art.pixels : new Uint8Array(width * height);
+    return {
+      picture: true,
+      opaque: false,
+      width,
+      height,
+      canvasWidth: width,
+      canvasHeight: height,
+      minX: 0,
+      minY: 0,
+      hotspotX: 0,
+      hotspotY: 0,
+      hotspotPxX: Math.floor(width / 2),
+      hotspotPxY: Math.floor(height / 2),
+      numSprites: 0,
+      sprites: [],
+      pixels,
+      colors
+    };
+  }
+
+  function pictureAnim(records) {
+    records.forEach((frame, index) => {
+      frame.frame = index + 1;
+      frame.index = index;
+    });
+    return {
+      numFrames: records.length,
+      picture: true,
+      combined: (records[0] && records[0].colors) || grey(16),
+      renderFrame: function (frame) { return records[frame - 1] || null; }
+    };
+  }
+
+  function paletteTable(rom, table, count) {
+    const pals = [];
+    for (let n = 0; n < count; n++) {
+      const ptr = snesLong(rom, table + n * 4);
+      const colors = decodeBgr555(rom, pak.lorom(ptr), 16);
+      while (colors.length < 16) colors.push([0, 0, 0]);
+      pals.push(colors);
+    }
+    return pals;
+  }
+
+  function sprites94(rom, image) {
+    const view = image.packed
+      ? bufferView(pak.unpack94(rom, pak.lorom(image.addr)))
+      : romAddrView(rom, image.addr);
+    const arts = readSpriteSet(view);
+    const table = image.palTable ? paletteTable(rom, image.palTable, arts.length) : null;
+    const shared = table ? null : greyRows(image.palRows || 1);
+    const records = arts.map((art, index) => spritePicture(art, table ? table[index] : shared));
+    return pictureAnim(records);
+  }
+
+  function screen94(rom, image, rinkColors) {
+    let tiles = pak.unpack94(rom, pak.lorom(image.tiles));
+    if (image.linear) tiles = linearToPlanar(tiles);
+    const packed = pak.unpack94(rom, pak.lorom(image.map));
+    const view = new DataView(packed.buffer, packed.byteOffset, packed.byteLength);
+    const mapW = image.mapW || view.getUint16(0, true);
+    const mapH = image.mapH || view.getUint16(2, true);
+    const mapBytes = packed.subarray(6, 6 + mapW * mapH * 2);
+    let colors;
+    if (image.palette) {
+      const block = pak.unpack94(rom, pak.lorom(image.palette));
+      colors = decodeBgr555(block, 0, Math.min(128, block.length >> 1));
+      while (colors.length < 128) colors.push([0, 0, 0]);
+      if (image.palette2) {
+        const extraBlock = pak.unpack94(rom, pak.lorom(image.palette2));
+        const extra = decodeBgr555(extraBlock, 0, image.palette2Count || 16);
+        const at = image.palette2At || 0;
+        for (let i = 0; i < extra.length && at + i < colors.length; i++) colors[at + i] = extra[i];
+      }
+    } else {
+      colors = rinkColors || grey(128);
+    }
+    return renderMap(mapBytes, tiles, colors, mapW, mapH);
+  }
+
+  function centerIce94(rom, rinkColors) {
+    const colors = rinkColors && rinkColors.length ? rinkColors : grey(128);
+    const records = [];
+    for (let i = 0; i < 28; i++) {
+      const base = 0x9C83B7 + i * 8;
+      const tiles = linearToPlanar(pak.unpack94(rom, pak.lorom(snesLong(rom, base))));
+      const mapAt = pak.lorom(snesLong(rom, base + 4));
+      const mapW = rom[mapAt] | (rom[mapAt + 1] << 8);
+      const mapH = rom[mapAt + 2] | (rom[mapAt + 3] << 8);
+      const mapBytes = rom.subarray(mapAt + 6, mapAt + 6 + mapW * mapH * 2);
+      records.push(renderMap(mapBytes, tiles, colors, mapW, mapH).renderFrame(1));
+    }
+    return pictureAnim(records);
+  }
+
   function openImage(rom, image, spec, rinkColors) {
     if (image.kind === 'snes93-screen') return screen93(rom, image, rinkColors);
     if (image.kind === 'snes93-map') return map93(rom, image, rinkColors);
     if (image.kind === 'snes93-font') return font93(rom, image);
     if (image.kind === 'snes94-rink') return rink94(rom, spec, rinkColors);
+    if (image.kind === 'snes94-sprites') return sprites94(rom, image);
+    if (image.kind === 'snes94-screen') return screen94(rom, image, rinkColors);
+    if (image.kind === 'snes94-center') return centerIce94(rom, rinkColors);
     throw new Error('Unknown picture ' + image.label);
   }
 

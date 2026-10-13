@@ -188,7 +188,13 @@
         rinkMap: 0x92E053
       },
       images: [
-        { id: 'rink', label: 'Ice rink', group: 'Ice', kind: 'snes94-rink' }
+        { id: 'title', label: 'Title letters', group: 'Screens', kind: 'snes94-sprites', addr: 0x91B188, packed: true, palRows: 2 },
+        { id: 'easports', label: 'EA Sports', group: 'Screens', kind: 'snes94-screen', tiles: 0x93B217, linear: true, map: 0x96C61F, mapW: 32, mapH: 28, palette: 0x9ADE57, palette2: 0x89FFC7, palette2At: 0x40, palette2Count: 16 },
+        { id: 'logos', label: 'Team logos', group: 'Logos', kind: 'snes94-sprites', addr: 0x81ABDE, packed: true, palTable: 0x9C8497 },
+        { id: 'rink', label: 'Ice rink', group: 'Ice', kind: 'snes94-rink' },
+        { id: 'center', label: 'Center ice', group: 'Ice', kind: 'snes94-center' },
+        { id: 'letters', label: 'Big letters', group: 'Fonts', kind: 'snes94-sprites', addr: 0x92A7B9 },
+        { id: 'smallletters', label: 'Small letters', group: 'Fonts', kind: 'snes94-sprites', addr: 0x95A7F7 }
       ]
     },
     {

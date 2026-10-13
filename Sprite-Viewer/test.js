@@ -322,6 +322,10 @@ for (const bank of nhl92.banks) {
 assert.ok(nhl92.images.some((image) => image.kind === 'jim'));
 assert.ok(GAMES.some((game) => game.id === 'nhlpa93snes' && game.kind === 'snes93'));
 assert.ok(GAMES.some((game) => game.id === 'nhl94snes' && game.kind === 'snes94' && game.jerseyRow === 4));
+const snes94images = GAMES.find((game) => game.id === 'nhl94snes').images.map((image) => image.id);
+for (const id of ['title', 'easports', 'logos', 'rink', 'center', 'letters', 'smallletters']) {
+  assert.ok(snes94images.includes(id), id);
+}
 
 function romIf(file) {
   return fs.existsSync(file) ? fs.readFileSync(file) : null;
@@ -352,9 +356,30 @@ if (retail94) {
   const drawn = parse94(retail94, game.snes);
   assert.strictEqual(drawn.numFrames, 976);
   assert.ok(drawn.renderFrame(2).pixels.some((pixel) => pixel));
-  const rink = openImage(retail94, game.images[0], game.snes, null);
+  const rink = openImage(retail94, game.images.find((image) => image.id === 'rink'), game.snes, null);
   assert.strictEqual(rink.renderFrame(1).width, 384);
   assert.strictEqual(rink.renderFrame(1).height, 904);
+  const logos = openImage(retail94, game.images.find((image) => image.id === 'logos'), game.snes, null);
+  assert.strictEqual(logos.numFrames, 30);
+  const bruins = logos.renderFrame(1);
+  assert.ok(bruins.pixels.some((pixel) => pixel));
+  assert.ok(bruins.colors.some((rgb) => rgb[0] !== rgb[1] || rgb[1] !== rgb[2]));
+  const title = openImage(retail94, game.images.find((image) => image.id === 'title'), game.snes, null);
+  assert.strictEqual(title.numFrames, 13);
+  assert.ok(title.renderFrame(1).pixels.some((pixel) => pixel));
+  const easports = openImage(retail94, game.images.find((image) => image.id === 'easports'), game.snes, null);
+  assert.strictEqual(easports.renderFrame(1).width, 256);
+  assert.strictEqual(easports.renderFrame(1).height, 224);
+  const letters = openImage(retail94, game.images.find((image) => image.id === 'letters'), game.snes, null);
+  assert.strictEqual(letters.numFrames, 26);
+  const small = openImage(retail94, game.images.find((image) => image.id === 'smallletters'), game.snes, null);
+  assert.strictEqual(small.numFrames, 37);
+  const center = openImage(retail94, game.images.find((image) => image.id === 'center'), game.snes, null);
+  assert.strictEqual(center.numFrames, 28);
+  const shield = center.renderFrame(27);
+  assert.strictEqual(shield.width, 48);
+  assert.strictEqual(shield.height, 32);
+  assert.ok(shield.pixels.some((pixel) => pixel));
 }
 
 function spitHeader(type, width, height, xOffset, yOffset, xPos, yPos) {
