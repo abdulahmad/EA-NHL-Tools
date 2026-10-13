@@ -357,7 +357,7 @@ assert.ok(nhl92.images.some((image) => image.kind === 'jim'));
 assert.ok(GAMES.some((game) => game.id === 'nhlpa93snes' && game.kind === 'snes93'));
 assert.ok(GAMES.some((game) => game.id === 'nhl94snes' && game.kind === 'snes94' && game.jerseyRow === 4));
 const snes94images = GAMES.find((game) => game.id === 'nhl94snes').images.map((image) => image.id);
-for (const id of ['title', 'easports', 'logos', 'rink', 'center', 'letters', 'smallletters']) {
+for (const id of ['title', 'titlegoalie', 'titlepuck', 'easports', 'eabackdrop', 'ronbarr', 'stanley', 'window', 'logos', 'rink', 'center', 'letters', 'smallletters', 'menufont', 'icefont', 'cards']) {
   assert.ok(snes94images.includes(id), id);
 }
 
@@ -507,6 +507,39 @@ if (retail94) {
   const letters = openImage(retail94, game.images.find((image) => image.id === 'letters'), game.snes, null);
   assert.strictEqual(letters.numFrames, 26);
   const small = openImage(retail94, game.images.find((image) => image.id === 'smallletters'), game.snes, null);
+  const cards = openImage(retail94, game.images.find((image) => image.id === 'cards'), game.snes, null);
+  assert.strictEqual(cards.numFrames, 160);
+  const card = cards.renderFrame(9);
+  assert.strictEqual(card.width, 48);
+  assert.strictEqual(card.height, 48);
+  assert.ok(inkCount(card) > 200);
+  const goalie = openImage(retail94, game.images.find((image) => image.id === 'titlegoalie'), game.snes, null);
+  assert.strictEqual(goalie.renderFrame(1).width, 256);
+  assert.strictEqual(goalie.renderFrame(1).height, 224);
+  assert.ok(inkCount(goalie.renderFrame(1)) > 200);
+  const ron = openImage(retail94, game.images.find((image) => image.id === 'ronbarr'), game.snes, null);
+  assert.strictEqual(ron.renderFrame(1).width, 256);
+  assert.ok(inkCount(ron.renderFrame(1)) > 200);
+  const backdrop = openImage(retail94, game.images.find((image) => image.id === 'eabackdrop'), game.snes, null);
+  assert.strictEqual(backdrop.renderFrame(1).height, 224);
+  assert.ok(inkCount(backdrop.renderFrame(1)) > 200);
+  const puck = openImage(retail94, game.images.find((image) => image.id === 'titlepuck'), game.snes, null);
+  assert.strictEqual(puck.renderFrame(1).width, 256);
+  assert.strictEqual(puck.renderFrame(1).height, 224);
+  assert.ok(inkCount(puck.renderFrame(1)) > 200);
+  const stanley = openImage(retail94, game.images.find((image) => image.id === 'stanley'), game.snes, null);
+  assert.strictEqual(stanley.renderFrame(1).width, 48);
+  assert.strictEqual(stanley.renderFrame(1).height, 104);
+  assert.ok(inkCount(stanley.renderFrame(1)) > 200);
+  const windowFrame = openImage(retail94, game.images.find((image) => image.id === 'window'), game.snes, null);
+  assert.strictEqual(windowFrame.renderFrame(1).width, 240);
+  assert.strictEqual(windowFrame.renderFrame(1).height, 96);
+  const menuFont = openImage(retail94, game.images.find((image) => image.id === 'menufont'), game.snes, null);
+  assert.strictEqual(menuFont.renderFrame(1).width, 128);
+  assert.ok(inkCount(menuFont.renderFrame(1)) > 200);
+  const iceFont = openImage(retail94, game.images.find((image) => image.id === 'icefont'), game.snes, null);
+  assert.strictEqual(iceFont.renderFrame(1).width, 128);
+  assert.ok(inkCount(iceFont.renderFrame(1)) > 50);
   assert.strictEqual(small.numFrames, 37);
   const center = openImage(retail94, game.images.find((image) => image.id === 'center'), game.snes, null);
   assert.strictEqual(center.numFrames, 28);

@@ -593,6 +593,125 @@
     return pals;
   }
 
+  // $9B85C2 turns a decompressed player card into SNES 4bpp tiles. The source
+  // words are pixel bits, not planar rows, which is why reading them as tiles
+  // only made stripes. Output is 36 tiles, a 48×48 picture.
+  function expandCardTiles(src) {
+    const code = [
+      0xa6,0x00,0x8b,0xe2,0x20,0xa5,0x0e,0x48,0xc2,0x20,0xab,0x64,0x04,0xa9,0xfe,0xff,
+      0x85,0x06,0xa5,0x00,0x4a,0x4a,0x85,0x00,0x80,0x0c,0x8a,0x4a,0x4a,0x4a,0x4a,0xf0,
+      0x54,0xaa,0xc8,0xc8,0x80,0x0c,0xa2,0x80,0x00,0x64,0x14,0x64,0x16,0xa5,0x04,0x0a,
+      0x0a,0xa8,0xb1,0x0c,0xf0,0xe4,0xeb,0xa8,0x98,0x0a,0x90,0x05,0xa8,0x8a,0x04,0x15,
+      0x98,0x0a,0x90,0x05,0xa8,0x8a,0x04,0x14,0x98,0x0a,0x90,0x05,0xa8,0x8a,0x04,0x17,
+      0x98,0x0a,0x90,0x05,0xa8,0x8a,0x04,0x16,0x98,0xa8,0x8a,0x4a,0xaa,0xe0,0x10,0x00,
+      0xb0,0xd6,0xe0,0x00,0x00,0xf0,0x0e,0xe0,0x08,0x00,0x90,0xcc,0xa5,0x04,0x0a,0x0a,
+      0xa8,0xc8,0xc8,0x80,0xbd,0xa5,0x06,0x1a,0x1a,0xa8,0x29,0x10,0x00,0xf0,0x06,0x98,
+      0x18,0x69,0x10,0x00,0xa8,0x84,0x06,0xa5,0x16,0x91,0x10,0x98,0x18,0x69,0x10,0x00,
+      0xa8,0xa5,0x14,0x91,0x10,0xe6,0x04,0xc6,0x00,0x10,0x8b,0xab,0x6b
+    ];
+    const mem = new Uint8Array(32);
+    const set16 = (addr, value) => {
+      mem[addr] = value & 255;
+      mem[addr + 1] = (value >> 8) & 255;
+    };
+    const get16 = (addr) => mem[addr] | (mem[addr + 1] << 8);
+    set16(0, src.length);
+    let A = 0;
+    let X = src.length;
+    let Y = 0;
+    let C = 0;
+    let N = 0;
+    let Z = 1;
+    let pc = 0;
+    const out = new Uint8Array(36 * 32);
+    function setNZ(value) {
+      const bits = value & 0xffff;
+      N = (bits & 0x8000) !== 0;
+      Z = bits === 0;
+      return bits;
+    }
+    function imm() {
+      const value = code[pc] | (code[pc + 1] << 8);
+      pc += 2;
+      return value;
+    }
+    for (let steps = 0; steps < 60000; steps++) {
+      const op = code[pc++];
+      if (op === 0xa6) { X = setNZ(get16(code[pc++])); }
+      else if (op === 0x8b || op === 0xab || op === 0x48) { /* bank and stack around the data bank */ }
+      else if (op === 0xe2 || op === 0xc2) pc++;
+      else if (op === 0xa5) A = setNZ(get16(code[pc++]));
+      else if (op === 0x64) { const addr = code[pc++]; mem[addr] = 0; mem[addr + 1] = 0; }
+      else if (op === 0xa9) A = setNZ(imm());
+      else if (op === 0x85) set16(code[pc++], A);
+      else if (op === 0x84) set16(code[pc++], Y);
+      else if (op === 0x4a) { C = A & 1; A = setNZ(A >> 1); }
+      else if (op === 0x0a) { C = (A >> 15) & 1; A = setNZ((A << 1) & 0xffff); }
+      else if (op === 0x80) { const rel = code[pc++]; pc += (rel << 24) >> 24; }
+      else if (op === 0x8a) A = setNZ(X);
+      else if (op === 0x98) A = setNZ(Y);
+      else if (op === 0xf0) { const rel = code[pc++]; if (Z) pc += (rel << 24) >> 24; }
+      else if (op === 0xaa) X = A;
+      else if (op === 0xa8) Y = A;
+      else if (op === 0xc8) Y = (Y + 1) & 0xffff;
+      else if (op === 0xa2) X = imm();
+      else if (op === 0xb1) {
+        pc++;
+        const i = Y & 0xffff;
+        A = setNZ((src[i] || 0) | ((src[i + 1] || 0) << 8));
+      } else if (op === 0xeb) A = setNZ(((A & 255) << 8) | ((A >> 8) & 255));
+      else if (op === 0x90) { const rel = code[pc++]; if (!C) pc += (rel << 24) >> 24; }
+      else if (op === 0x04) {
+        const addr = code[pc++];
+        const old = get16(addr);
+        setNZ(old & A);
+        set16(addr, old | A);
+      } else if (op === 0xe0) {
+        const value = imm();
+        C = X >= value;
+        setNZ((X - value) & 0xffff);
+      } else if (op === 0xb0) { const rel = code[pc++]; if (C) pc += (rel << 24) >> 24; }
+      else if (op === 0x29) A = setNZ(A & imm());
+      else if (op === 0x18) C = 0;
+      else if (op === 0x69) {
+        const sum = A + imm();
+        C = sum > 0xffff;
+        A = setNZ(sum);
+      } else if (op === 0x91) {
+        pc++;
+        const i = Y & 0xffff;
+        if (i + 1 < out.length) {
+          out[i] = A & 255;
+          out[i + 1] = (A >> 8) & 255;
+        }
+      } else if (op === 0xe6) { const addr = code[pc++]; set16(addr, setNZ((get16(addr) + 1) & 0xffff)); }
+      else if (op === 0xc6) { const addr = code[pc++]; set16(addr, setNZ((get16(addr) - 1) & 0xffff)); }
+      else if (op === 0x10) { const rel = code[pc++]; if (!N) pc += (rel << 24) >> 24; }
+      else if (op === 0x1a) A = setNZ((A + 1) & 0xffff);
+      else if (op === 0x6b) return out;
+      else throw new Error('card expand stopped at $' + op.toString(16));
+    }
+    throw new Error('card expand did not finish');
+  }
+
+  // $9DCD53 is 26 teams by 28 pictures. Most roster slots share a placeholder,
+  // so the filmstrip keeps each distinct picture once, in first-seen order.
+  function cards94(rom) {
+    const table = pak.lorom(0x9DCD53);
+    const gray = decodeBgr555(pak.unpack94(rom, pak.lorom(0x9AE884)), 0, 16);
+    const seen = new Set();
+    const records = [];
+    for (let i = 0; i < 26 * 28; i++) {
+      const o = table + i * 4;
+      const ptr = (rom[o] | (rom[o + 1] << 8) | ((rom[o + 2] || 0) << 16) | 0x800000) >>> 0;
+      if (seen.has(ptr)) continue;
+      seen.add(ptr);
+      const tiles = expandCardTiles(pak.unpack94(rom, pak.lorom(ptr)));
+      records.push(tileSheet(tiles, 6, gray).renderFrame(1));
+    }
+    return pictureAnim(records);
+  }
+
   function sprites94(rom, image, rinkColors) {
     const view = image.packed
       ? bufferView(pak.unpack94(rom, pak.lorom(image.addr)))
@@ -602,6 +721,21 @@
     const shared = table ? null : (rinkColors || greyRows(image.palRows || 1));
     const records = arts.map((art, index) => spritePicture(art, table ? table[index] : shared));
     return pictureAnim(records);
+  }
+
+  function tiles94(rom, image, rinkColors) {
+    const tiles = pak.unpack94(rom, pak.lorom(image.tiles));
+    let colors;
+    if (image.palette) {
+      const block = pak.unpack94(rom, pak.lorom(image.palette));
+      colors = decodeBgr555(block, 0, Math.min(128, block.length >> 1));
+      while (colors.length < 16) colors.push([0, 0, 0]);
+    } else if (image.useRink) {
+      colors = rinkColors || grey(128);
+    } else {
+      colors = grey(16);
+    }
+    return tileSheet(tiles, image.columns || 16, colors);
   }
 
   function screen94(rom, image, rinkColors) {
@@ -615,8 +749,9 @@
     let colors;
     if (image.palette) {
       const block = pak.unpack94(rom, pak.lorom(image.palette));
-      colors = decodeBgr555(block, 0, Math.min(128, block.length >> 1));
-      while (colors.length < 128) colors.push([0, 0, 0]);
+      const count = image.paletteCount || 128;
+      colors = decodeBgr555(block, 0, Math.min(count, block.length >> 1));
+      while (colors.length < count) colors.push([0, 0, 0]);
       if (image.palette2) {
         const extraBlock = pak.unpack94(rom, pak.lorom(image.palette2));
         const extra = decodeBgr555(extraBlock, 0, image.palette2Count || 16);
@@ -653,6 +788,8 @@
     if (image.kind === 'snes94-rink') return rink94(rom, spec, rinkColors);
     if (image.kind === 'snes94-sprites') return sprites94(rom, image, image.useRink ? rinkColors : null);
     if (image.kind === 'snes94-screen') return screen94(rom, image, rinkColors);
+    if (image.kind === 'snes94-tiles') return tiles94(rom, image, rinkColors);
+    if (image.kind === 'snes94-cards') return cards94(rom);
     if (image.kind === 'snes94-center') return centerIce94(rom, rinkColors);
     throw new Error('Unknown picture ' + image.label);
   }

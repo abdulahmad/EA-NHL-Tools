@@ -856,12 +856,15 @@ function renderSwatches() {
   const colors = activeColors();
   const box = el('swatches');
   box.replaceChildren();
-  if (!colors) return;
+  if (!colors || !colors.length) return;
+  const row = ((gameInfo && gameInfo.jerseyRow) || 2) * 16;
+  const base = row + 15 < colors.length ? row : 0;
   for (let i = 0; i < 16; i++) {
+    const rgb = colors[base + i];
+    if (!rgb) continue;
     const chip = document.createElement('i');
-    const rgb = colors[((gameInfo && gameInfo.jerseyRow) || 2) * 16 + i];
     chip.style.background = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
-    chip.title = 'Jersey color ' + i;
+    chip.title = (base === row ? 'Jersey color ' : 'Color ') + i;
     box.appendChild(chip);
   }
 }

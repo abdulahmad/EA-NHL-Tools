@@ -236,12 +236,21 @@
       },
       images: [
         { id: 'title', label: 'Title letters', group: 'Screens', kind: 'snes94-sprites', addr: 0x91B188, packed: true, palRows: 2 },
+        { id: 'titlegoalie', label: 'Title goalie', group: 'Screens', kind: 'snes94-screen', tiles: 0x938000, map: 0x9AB7A1, palette: 0x9AE121, paletteCount: 16 },
+        { id: 'titlepuck', label: 'Title puck', group: 'Screens', kind: 'snes94-screen', tiles: 0x948000, map: 0x9ADDC6, palette: 0x9ACCA9, paletteCount: 16 },
         { id: 'easports', label: 'EA Sports', group: 'Screens', kind: 'snes94-screen', tiles: 0x93B217, linear: true, map: 0x96C61F, mapW: 32, mapH: 28, palette: 0x9ADE57, palette2: 0x89FFC7, palette2At: 0x40, palette2Count: 16 },
+        { id: 'eabackdrop', label: 'EA Sports backdrop', group: 'Screens', kind: 'snes94-screen', tiles: 0x95F1AE, map: 0x9ABA95, palette: 0x9AE121 },
+        { id: 'ronbarr', label: 'Ron Barr', group: 'Screens', kind: 'snes94-screen', tiles: 0x94D6A5, map: 0x9AC0CC, palette: 0x9AE946 },
+        { id: 'stanley', label: 'Stanley Cup', group: 'Screens', kind: 'snes94-screen', tiles: 0x968C02, map: 0x95FF9B, palette: 0x9AE884, paletteCount: 16 },
+        { id: 'window', label: 'Window frame', group: 'Screens', kind: 'snes94-screen', tiles: 0x95E304, map: 0x9AE9C7 },
         { id: 'logos', label: 'Team logos', group: 'Logos', kind: 'snes94-sprites', addr: 0x81ABDE, packed: true, palTable: 0x9C8497 },
         { id: 'rink', label: 'Ice rink', group: 'Ice', kind: 'snes94-rink' },
         { id: 'center', label: 'Center ice', group: 'Ice', kind: 'snes94-center' },
         { id: 'letters', label: 'Big letters', group: 'Fonts', kind: 'snes94-sprites', addr: 0x92A7B9 },
-        { id: 'smallletters', label: 'Small letters', group: 'Fonts', kind: 'snes94-sprites', addr: 0x95A7F7 }
+        { id: 'smallletters', label: 'Small letters', group: 'Fonts', kind: 'snes94-sprites', addr: 0x95A7F7 },
+        { id: 'menufont', label: 'Menu font', group: 'Fonts', kind: 'snes94-tiles', tiles: 0x96A103, columns: 16, palette: 0x9ADE57 },
+        { id: 'icefont', label: 'Ice font', group: 'Fonts', kind: 'snes94-tiles', tiles: 0x96BABD, columns: 16, useRink: true },
+        { id: 'cards', label: 'Player cards', group: 'Players', kind: 'snes94-cards' }
       ]
     },
     {
