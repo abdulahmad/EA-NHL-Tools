@@ -69,8 +69,8 @@ SPFfaceoff	=	SPFgslambot+6	; 1050 The last frame a 95 table uses is 1055
 SPAlist	;Movea.l #SPAlist (#$5A34) in the replay and input code
 	dc.w	0
 
-SPAskate	=	*-SPAlist	; noturn0 move.w #2,d1. Table 0 in 95 (94 put gready here)
-SPAskate_table:	;Frames 1-330
+SPAskateburst	=	*-SPAlist	; noturn0 move.w #2,d1. Table 0 in 95 (94 put gready here)
+SPAskateburst_table:	;Frames 1-330
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -107,8 +107,8 @@ SPAskate_table:	;Frames 1-330
 	dc.w	SPFskate+56,7,SPFskate+57,7,SPFskate+58,7,SPFskate+59,7,SPFskate+60,7,SPFskate+61,7,SPFskate+62,7,SPFskate+63,7
 	dc.w	SPFburst+56,6,SPFburst+57,6,SPFburst+58,6,SPFburst+59,6,SPFburst+60,6,SPFburst+61,6,SPFburst+62,6,SPFburst+63,-6
 
-SPAskateturn	=	*-SPAlist	; noturn0.8 sets it in place of the skate tables when the current SPA is a turn
-SPAskateturn_table:	;Frames 267-330
+SPAburst	=	*-SPAlist	; noturn0.8 sets it in place of the skate tables when the current SPA is a turn
+SPAburst_table:	;Frames 267-330
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -129,8 +129,8 @@ SPAskateturn_table:	;Frames 267-330
 .6	dc.w	SPFburst+48,6,SPFburst+49,6,SPFburst+50,6,SPFburst+51,6,SPFburst+52,6,SPFburst+53,6,SPFburst+54,6,SPFburst+55,-6
 .7	dc.w	SPFburst+56,6,SPFburst+57,6,SPFburst+58,6,SPFburst+59,6,SPFburst+60,6,SPFburst+61,6,SPFburst+62,6,SPFburst+63,-6
 
-SPAskate2	=	*-SPAlist	; noturn0 uses it in place of SPAskate when sflags bit 7 is set
-SPAskate2_table:	;Frames 1-64
+SPAskate	=	*-SPAlist	; noturn0 uses it in place of SPAskateburst when sflags bit 7 is set
+SPAskate_table:	;Frames 1-64
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -205,7 +205,7 @@ SPAskatewp_table:	;Frames 331-394
 	dc.w	SPFskatewp+56,7,SPFskatewp+57,7,SPFskatewp+58,7,SPFskatewp+59,7,SPFskatewp+60,7,SPFskatewp+61,7,SPFskatewp+62,7,SPFskatewp+63,7
 	dc.w	SPFskatewp+56,6,SPFskatewp+57,6,SPFskatewp+58,6,SPFskatewp+59,6,SPFskatewp+60,6,SPFskatewp+61,6,SPFskatewp+62,6,SPFskatewp+63,-6
 
-SPAskatewp2	=	*-SPAlist	; No reference found; frames 331-394 as SPAskatewp (the with puck partner of SPAskate2)
+SPAskatewp2	=	*-SPAlist	; No reference found; frames 331-394 as SPAskatewp (the with puck partner of SPAskate)
 SPAskatewp2_table:	;Frames 331-394
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
@@ -601,8 +601,8 @@ SPAfallback_table:	;Frames 65-266
 .6	dc.w	SPFfallback+30,6,SPFfallback+31,6,SPFfallback+32,8,SPFfallback+33,100,SPFfallback+34,8,SPFfallfwd+16,8,SPFfallfwd+17,8,SPFglide+2,-8
 .7	dc.w	SPFfallback+35,6,SPFfallback+36,6,SPFfallback+37,8,SPFfallback+38,100,SPFfallback+39,8,SPFfallfwd+22,8,SPFfallfwd+23,8,SPFglide+3,-8
 
-SPAburst	=	*-SPAlist	; burst.skate, CCStart
-SPAburst_table:	;Frames 267-330
+SPAburst2	=	*-SPAlist	; burst.skate, CCStart
+SPAburst2_table:	;Frames 267-330
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -667,8 +667,8 @@ SPApassf_table:	;Frames 451-495
 .6	dc.w	SPFswing+39,4,SPFswing+40,4,SPFswing+41,-20
 .7	dc.w	SPFswing+45,4,SPFswing+46,4,SPFswing+47,-20
 
-SPApassf2	=	*-SPAlist	; The drop pass: dopass uses it in place of SPApassf when GameFlags bit 1 is set (A with the dpad back)
-SPApassf2_table:	;Frames 450-493
+SPAdroppass	=	*-SPAlist	; The drop pass: dopass uses it in place of SPApassf when GameFlags bit 1 is set (A with the dpad back)
+SPAdroppass_table:	;Frames 450-493
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -711,7 +711,7 @@ SPApassb_table:	;Frames 576-599
 .6	dc.w	SPFswingb+18,4,SPFswingb+19,4,SPFswingb+20,-20
 .7	dc.w	SPFswingb+21,4,SPFswingb+22,4,SPFswingb+23,-20
 
-SPApassb2	=	*-SPAlist	; The backhand drop pass: see SPApassf2
+SPApassb2	=	*-SPAlist	; The backhand drop pass: see SPAdroppass
 SPApassb2_table:	;Frames 576-598
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
@@ -1229,8 +1229,8 @@ SPAgswing_table:	;Frames 736-751
 .6	dc.w	SPFgstack+36,5,SPFgstack+37,8,SPFgstack+36,-16
 .7	dc.w	SPFgstack+38,5,SPFgstack+39,8,SPFgstack+38,-16
 
-SPAgstackl	=	*-SPAlist	; saveanim entries 3
-SPAgstackl_table:	;Frames 724-735
+SPAgstackr	=	*-SPAlist	; saveanim entries 3
+SPAgstackr_table:	;Frames 724-735
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1251,8 +1251,8 @@ SPAgstackl_table:	;Frames 724-735
 .6	dc.w	SPFgstack+20,8,SPFgstack+21,-32
 .7	dc.w	SPFgstack+22,8,SPFgstack+23,-32
 
-SPAgstackr	=	*-SPAlist	; saveanim entries 2
-SPAgstackr_table:	;Frames 712-723
+SPAgstackl	=	*-SPAlist	; saveanim entries 2
+SPAgstackl_table:	;Frames 712-723
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1273,8 +1273,8 @@ SPAgstackr_table:	;Frames 712-723
 .6	dc.w	SPFgstack+8,8,SPFgstack+9,-32
 .7	dc.w	SPFgstack+10,8,SPFgstack+11,-32
 
-SPAboardtop	=	*-SPAlist	; FallDown.FallList
-SPAboardtop_table:	;Frames 183-766
+SPAboardfront	=	*-SPAlist	; FallDown.FallList
+SPAboardfront_table:	;Frames 183-766
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1317,8 +1317,8 @@ SPAboardright_table:	;Frames 195-781
 .6
 .7	dc.w	SPFboard+26,6,SPFboard+27,6,SPFboard+28,6,SPFboard+29,60,SPFfallback+34,6,SPFfallfwd+16,6,SPFfallfwd+17,-6
 
-SPAboardbot	=	*-SPAlist	; FallDown.FallList
-SPAboardbot_table:	;Frames 183-793
+SPAboardback	=	*-SPAlist	; FallDown.FallList
+SPAboardback_table:	;Frames 183-793
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1361,8 +1361,8 @@ SPAboardleft_table:	;Frames 189-807
 .6
 .7	dc.w	SPFboard+53,6,SPFboard+54,6,SPFboard+55,6,SPFboard+29,60,SPFfallback+34,6,SPFfallfwd+16,6,SPFfallfwd+17,-6
 
-SPAboardchk	=	*-SPAlist	; FallDown, on the hitter
-SPAboardchk_table:	;Frames 808-815
+SPAcrosscheck	=	*-SPAlist	; FallDown, on the hitter
+SPAcrosscheck_table:	;Frames 808-815
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1427,8 +1427,8 @@ SPAcelebrate_table:	;Frames 836-851
 .6	dc.w	SPFcelebrate+12,12,SPFcelebrate+13,40,SPFcelebrate+12,-5
 .7	dc.w	SPFcelebrate+14,12,SPFcelebrate+15,40,SPFcelebrate+14,-5
 
-SPAgstackalt1	=	*-SPAlist	; goaliesave: a pad stack save becomes this or SPAgstackalt2 (random) when sflags bit 3 is set
-SPAgstackalt1_table:	;Frames 880-883
+SPAgofallback	=	*-SPAlist	; goaliesave: a pad stack save becomes this or SPAgofallglove (random) when sflags bit 3 is set
+SPAgofallback_table:	;Frames 880-883
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1449,8 +1449,8 @@ SPAgstackalt1_table:	;Frames 880-883
 .4
 .5	dc.w	SPFgstackalt+2,20,SPFgstackalt+3,20,SPFgstackalt+2,-8
 
-SPAgstackalt2	=	*-SPAlist	; goaliesave: see SPAgstackalt1
-SPAgstackalt2_table:	;Frames 884-885
+SPAgofallglove	=	*-SPAlist	; goaliesave: see SPAgofallback
+SPAgofallglove_table:	;Frames 884-885
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1581,8 +1581,8 @@ SPAbglass_table:	;Frames 1000-1004
 .6
 .7	dc.w	SPFbglass,8,SPFbglass+1,8,SPFbglass+2,8,SPFbglass+3,8,SPFbglass+4,-1000
 
-SPAshoulderchkl2	=	*-SPAlist	; The second checking list left check; FallDown skips the flip after it
-SPAshoulderchkl2_table:	;Frames 832-834
+SPAhipchkl	=	*-SPAlist	; The second checking list left check; FallDown skips the flip after it
+SPAhipchkl_table:	;Frames 832-834
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1603,8 +1603,8 @@ SPAshoulderchkl2_table:	;Frames 832-834
 .4
 .5	dc.w	SPFshoulder2+2,-24
 
-SPAshoulderchkr2	=	*-SPAlist	; The second checking list right check; FallDown skips the flip after it
-SPAshoulderchkr2_table:	;Frames 833-835
+SPAhipchkr	=	*-SPAlist	; The second checking list right check; FallDown skips the flip after it
+SPAhipchkr_table:	;Frames 833-835
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1677,8 +1677,8 @@ SPAflip_table:	;Frames 183-605
 .7	dc.w	SPFfallback+35,6,SPFflip,6,SPFflip,6,SPFflip+1,6,SPFflip+2,6,SPFfallback+38,100,SPFfallback+39,8,SPFfallfwd+46,8
 	dc.w	SPFfallfwd+47,-8
 
-SPAboardmidl	=	*-SPAlist	; FallDown
-SPAboardmidl_table:	;Frames 67-1025
+SPAbenchcheckl	=	*-SPAlist	; FallDown
+SPAbenchcheckl_table:	;Frames 67-1025
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1702,8 +1702,8 @@ SPAboardmidl_table:	;Frames 67-1025
 .7	dc.w	SPFboard+53,6,SPFboardmid+10,6,SPFboardmid+11,6,SPFboardmid+12,6,SPFboardmid+13,80,SPFboardmid+12,6,SPFboardmid+11,6,SPFboardmid+10,6
 	dc.w	SPFglide+6,-8
 
-SPAboardmidr	=	*-SPAlist	; FallDown
-SPAboardmidr_table:	;Frames 66-1039
+SPAbenchcheckr	=	*-SPAlist	; FallDown
+SPAbenchcheckr_table:	;Frames 66-1039
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1727,7 +1727,7 @@ SPAboardmidr_table:	;Frames 66-1039
 .6
 .7	dc.w	SPFboardmid+24,6,SPFboardmid+25,6,SPFboardmid+26,6,SPFboardmid+27,80,SPFboardmid+26,6,SPFboardmid+24,6,SPFglide+6,-8
 
-SPApump	=	*-SPAlist	; the word list after SPAcelebrate (label), with SPApump2
+SPApump	=	*-SPAlist	; the word list after SPAcelebrate (label), with SPApump3
 SPApump_table:	;Frames 922-937
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
@@ -1749,8 +1749,8 @@ SPApump_table:	;Frames 922-937
 .6	dc.w	SPFpump+12,12,SPFpump+13,12,SPFpump+12,12,SPFpump+13,12,SPFpump+12,12,SPFpump+13,-12
 .7	dc.w	SPFpump+14,12,SPFpump+15,12,SPFpump+14,12,SPFpump+15,12,SPFpump+14,12,SPFpump+15,-12
 
-SPAstanley	=	*-SPAlist	; before the celebrate step
-SPAstanley_table:	;Frames 938-953
+SPApump2	=	*-SPAlist	; before the celebrate step
+SPApump2_table:	;Frames 938-953
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1771,8 +1771,8 @@ SPAstanley_table:	;Frames 938-953
 .6	dc.w	SPFcup+12,12,SPFcup+13,12,SPFcup+12,12,SPFcup+13,12,SPFcup+12,12,SPFcup+13,-12
 .7	dc.w	SPFcup+14,12,SPFcup+15,12,SPFcup+14,12,SPFcup+15,12,SPFcup+14,12,SPFcup+15,-12
 
-SPApump2	=	*-SPAlist	; the word list alternates it with SPApump
-SPApump2_table:	;Frames 954-969
+SPApump3	=	*-SPAlist	; the word list alternates it with SPApump
+SPApump3_table:	;Frames 954-969
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1793,8 +1793,8 @@ SPApump2_table:	;Frames 954-969
 .6	dc.w	SPFpump2+12,12,SPFpump2+13,12,SPFpump2+12,12,SPFpump2+13,12,SPFpump2+12,12,SPFpump2+13,-12
 .7	dc.w	SPFpump2+14,12,SPFpump2+15,12,SPFpump2+14,12,SPFpump2+15,12,SPFpump2+14,12,SPFpump2+15,-12
 
-SPAgslamtop	=	*-SPAlist	; checkanim
-SPAgslamtop_table:	;Frames 898-903
+SPAgsweep	=	*-SPAlist	; checkanim
+SPAgsweep_table:	;Frames 898-903
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1817,8 +1817,8 @@ SPAgslamtop_table:	;Frames 898-903
 .5	dc.w	SPFgslamtop+3,8,SPFgslamtop+4,8,SPFgslamtop+5,8,SPFgslamtop+4,8,SPFgslamtop+3,8,SPFgslamtop+3,8,SPFgslamtop+4,8,SPFgslamtop+5,8
 	dc.w	SPFgslamtop+4,8,SPFgslamtop+3,-8
 
-SPAgextra1	=	*-SPAlist	; goaliesave: with SPAgextra2, picked by the goalie side of the puck and the glove hand ($76 bit 0)
-SPAgextra1_table:	;Frames 1040-1043
+SPAghighr	=	*-SPAlist	; goaliesave: with SPAgglovel2, picked by the goalie side of the puck and the glove hand ($76 bit 0)
+SPAghighr_table:	;Frames 1040-1043
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
@@ -1839,8 +1839,8 @@ SPAgextra1_table:	;Frames 1040-1043
 .4
 .5	dc.w	SPFgextra1+2,4,SPFgextra1+3,-24,SPFgextra1+2,-4
 
-SPAgextra2	=	*-SPAlist	; goaliesave: see SPAgextra1. puckgoalie compares SPAgextra1
-SPAgextra2_table:	;Frames 876-879
+SPAgglovel2	=	*-SPAlist	; goaliesave: see SPAghighr. puckgoalie compares SPAghighr
+SPAgglovel2_table:	;Frames 876-879
 .t	;Offset to each direction of animation (0-7)
 	dc.w	.0-.t
 	dc.w	.1-.t
