@@ -460,6 +460,13 @@ const packedBank = Buffer.concat([
   Buffer.from([0xFC])
 ]);
 assert.strictEqual(shapeBank('0000', rawSpit).length, 0x2C);
+const shpiBank = Buffer.from(shapeBank('0000', rawSpit));
+shpiBank.write('SHPI', 0);
+const shpiShapes = pc95.openBytes(shpiBank);
+assert.strictEqual(shpiShapes.shapes.length, 1);
+assert.strictEqual(shpiShapes.shapes[0].tag, '0000');
+assert.deepStrictEqual(Array.from(shpiShapes.shapes[0].pixels), [1, 2, 3, 4]);
+
 const packedShapes = pc95.openBytes(packedBank);
 assert.strictEqual(packedShapes.shapes.length, 1);
 assert.strictEqual(packedShapes.shapes[0].tag, '0000');
@@ -507,7 +514,7 @@ const crowd = pc95.encodeBundle([
   { name: 'F050_099.PPV', data: shapeBank('F050', rawSpit) }
 ]);
 const crowdAnimPc = pc95.openSpriteBundle(crowd);
-assert.strictEqual(crowdAnimPc.numFrames, 150);
+assert.strictEqual(crowdAnimPc.numFrames, 51);
 assert.strictEqual(crowdAnimPc.renderFrame(1).tag, '0000');
 assert.deepStrictEqual(Array.from(crowdAnimPc.renderFrame(1).pixels), [1, 2, 3, 4]);
 assert.strictEqual(crowdAnimPc.renderFrame(51).tag, 'F050');

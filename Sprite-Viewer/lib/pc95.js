@@ -2,10 +2,11 @@
  * NHL 95 PC pictures.
  *
  * QFS files are EA RefPack (the 10 FB / 11 FB form unpacked by sub_97CE0
- * in NHL95PC). PPV and unpacked QFS payloads are SHPP shape banks: a
- * 16-byte header, then 8-byte tag/offset entries, which is the lookup
- * sub_B30B4 does. Each shape is a SPIT picture. Type 123 is raw pixels.
- * Anything else is the ILBM-style run already decoded by SPIT-To-BMP.
+ * in NHL95PC). PPV files, and the bytes inside a QFS, are SHPI shape
+ * banks. On this PC game the size, count, and offsets are little-endian
+ * dwords, which is how sub_B30B4 reads them, even though the magic is
+ * SHPI. Each entry is a SPIT picture. Type 123 is raw pixels. Anything
+ * else is the ILBM-style run already decoded by SPIT-To-BMP.
  *
  * Player and goalie sprites use a 256-color palette. HOMEPALS.BIN and
  * AWAYPALS.BIN hold 28 teams of 448 bytes. Colors 0–127 are the rink,
@@ -54,7 +55,7 @@
   const LABELS = {
     ARENA: ['Arena', 'Screens'],
     SRLOGO: ['EA Sports logo', 'Screens'],
-    CREDITS: ['Credits', 'Screens'],
+    CREDITS: ['Credits background', 'Screens'],
     CTBKGD: ['City background', 'Screens'],
     CTLOGO: ['City logo', 'Screens'],
     CITY: ['City', 'Screens'],
@@ -311,11 +312,31 @@
     return parseInt(text, 10);
   }
 
+  function shapeIsLittle(bytes) {
+    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    function plausible(little) {
+      const size = view.getUint32(4, little);
+      const count = view.getUint32(8, little);
+      if (count <= 0 || count > 10000) return false;
+      if (16 + count * 8 > bytes.length) return false;
+      return size === bytes.length || (size > 16 && size <= bytes.length);
+    }
+    const le = plausible(true);
+    const be = plausible(false);
+    if (le && !be) return true;
+    if (be && !le) return false;
+    if (le && be) {
+      if (view.getUint32(4, true) === bytes.length) return true;
+      if (view.getUint32(4, false) === bytes.length) return false;
+    }
+    const magic = String.fromCharCode(bytes[0], bytes[1], bytes[2], bytes[3]);
+    return magic === 'SHPP' || magic === 'SHPS';
+  }
+
   function parseShapeBank(buffer) {
     const bytes = bytesOf(buffer);
     if (!isShapeMagic(bytes)) return null;
-    const magic = String.fromCharCode(bytes[0], bytes[1], bytes[2], bytes[3]);
-    const little = magic === 'SHPP' || magic === 'SHPS';
+    const little = shapeIsLittle(bytes);
     const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
     const count = view.getUint32(8, little);
     if (count <= 0 || count > 20000) return null;
@@ -639,6 +660,9 @@
         placeShape(frames, shape, index, false);
       }
     }
+    if (kind === 'rink') {
+      while (frames.length > 1 && frames[frames.length - 1].width === 0) frames.pop();
+    }
     return {
       numFrames: frames.length,
       frames,
@@ -914,6 +938,7 @@
         spriteFiles.push(rel);
         continue;
       }
+      if (!/\.(qfs|ppv|spit|shp|vsh)$/i.test(rel)) continue;
       let opened = null;
       try {
         const stat = fs.statSync(path.join(dir, rel));
