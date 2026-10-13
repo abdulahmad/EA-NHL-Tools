@@ -140,6 +140,23 @@ assert.strictEqual(spritesAnim.numFrames, 549);
 assert.strictEqual(spf('SPFSiren').end, null);
 assert.ok(spritesAnim.frames[0].sprites.length > 0);
 assert.ok(Number.isFinite(spritesAnim.frames[0].hotspotX));
+assert.strictEqual(spritesAnim.frames[0].canvasWidth, 16);
+assert.strictEqual(spritesAnim.frames[0].canvasHeight, 32);
+const frame1 = renderFrame(spritesAnim, 1);
+assert.strictEqual(frame1.hotspotX, -4);
+assert.strictEqual(frame1.hotspotY, -20);
+assert.strictEqual(frame1.canvasWidth, frame1.width);
+assert.strictEqual(frame1.canvasHeight, frame1.height);
+assert.strictEqual(frame1.hotspotPxX, frame1.hotspotX - frame1.minX);
+assert.strictEqual(frame1.hotspotPxY, frame1.hotspotY - frame1.minY);
+for (const bank of [spritesAnim, puckAnim, zamAnim, crowdAnim]) {
+  for (const meta of bank.frames) {
+    assert.ok(meta.canvasWidth > 0 && meta.canvasHeight > 0, 'frame ' + meta.frame + ' canvas');
+    const rendered = renderFrame(bank, meta.frame);
+    assert.strictEqual(rendered.canvasWidth, rendered.width, 'frame ' + meta.frame + ' canvas width');
+    assert.strictEqual(rendered.canvasHeight, rendered.height, 'frame ' + meta.frame + ' canvas height');
+  }
+}
 
 console.log('catalog', catalog.spfs.length, 'SPF groups,', catalog.anims.length, 'SPA animations');
 console.log('banks', {
