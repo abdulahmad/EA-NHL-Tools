@@ -6,6 +6,8 @@ The pictures come from the `.ANIM` files in `ANIM-To-BMP`. The names come from [
 
 Facing 0 is north on a vertical rink (`dirtab` in `logic.asm`), then clockwise. A horizontal rink subtracts 2 from the facing before the lookup. Spin walks the compass where an animation actually has more than one sequence.
 
+Each frame is pinned on the X/Y offset `GetHot` reads (file offsets `0x18` and `0x1A`), so a sequence stays registered on that point. A dashed rectangle is the canvas size from the frame header (`0x06` and `0x08`, stored as twice the pixel size). On these banks that size matches the sprite bounds. The red crosshair is the offset.
+
 ## Run
 
 ```

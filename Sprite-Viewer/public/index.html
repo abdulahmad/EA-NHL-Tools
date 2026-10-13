@@ -108,6 +108,7 @@
         <p><b>SPF</b> names a run of those pictures in <span class="mono">frames.asm</span>. When the run is eight facings side by side, the compass steps through them.</p>
         <p><b>SPA</b> is an animation. Each of the eight facings has its own list of frame and vblank pairs. A negative time is the last step. Bit 0 of the flags word loops it.</p>
         <p>Facing 0 is north on a vertical rink, then clockwise. A horizontal rink subtracts 2 from the facing before this lookup.</p>
+        <p>The dashed box is the frame's canvas. The picture stays pinned on the stored X/Y offset, marked with a red cross, so the steps of an animation share one point.</p>
       </section>
     </aside>
   </div>

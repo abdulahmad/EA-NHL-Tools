@@ -141,13 +141,24 @@ function buildSequence(anim) {
   };
 }
 
+function canvasSize(frame) {
+  const width = frame.canvasWidth > 0 ? frame.canvasWidth : frame.width;
+  const height = frame.canvasHeight > 0 ? frame.canvasHeight : frame.height;
+  return { width, height };
+}
+
 function placement(frame) {
-  const near = frame.hotspotPxX >= -48 && frame.hotspotPxY >= -48 &&
-    frame.hotspotPxX <= frame.width + 48 && frame.hotspotPxY <= frame.height + 48;
-  if (near && frame.width <= 160 && frame.height <= 160) {
-    return { mode: 'hotspot', ax: frame.hotspotPxX, ay: frame.hotspotPxY };
+  const box = canvasSize(frame);
+  const ax = frame.hotspotPxX;
+  const ay = frame.hotspotPxY;
+  const onCanvas = ax >= -48 && ay >= -48 && ax <= box.width + 48 && ay <= box.height + 48;
+  // Crowd plates are hundreds of pixels across and store the offset on the
+  // corner. Pinning that corner hides the plate, so those stay centered.
+  const cornerPlate = (box.width > 200 || box.height > 200) && ax <= 8 && ay <= 8;
+  if (onCanvas && !cornerPlate) {
+    return { mode: 'offset', ax, ay };
   }
-  return { mode: 'center', ax: frame.width / 2, ay: frame.height / 2 };
+  return { mode: 'center', ax: box.width / 2, ay: box.height / 2 };
 }
 
 function bitmapFor(frame, colors) {
@@ -187,12 +198,15 @@ function paintInto(ctx, cssW, cssH, frame, colors, scaleCap, opts) {
   const mark = !opts || opts.mark !== false;
   ctx.clearRect(0, 0, cssW, cssH);
   if (!frame || !frame.width) return 0;
+  const box = canvasSize(frame);
   const place = placement(frame);
   let scale = scaleCap;
   if (!opts || !opts.exactScale) {
     const halfW = Math.max(8, (cssW - 8) / 2);
     const halfH = Math.max(8, (cssH - 8 - padBottom) / 2);
-    scale = Math.max(0.08, Math.min(scaleCap, halfW / Math.max(place.ax, frame.width - place.ax, 1), halfH / Math.max(place.ay, frame.height - place.ay, 1)));
+    const reachX = Math.max(place.ax, box.width - place.ax, 1);
+    const reachY = Math.max(place.ay, box.height - place.ay, 1);
+    scale = Math.max(0.08, Math.min(scaleCap, halfW / reachX, halfH / reachY));
   }
   const bmp = bitmapFor(frame, colors);
   const originX = cssW / 2;
@@ -201,19 +215,40 @@ function paintInto(ctx, cssW, cssH, frame, colors, scaleCap, opts) {
   const dy = originY - place.ay * scale;
   ctx.imageSmoothingEnabled = scale < 1.25;
   ctx.drawImage(bmp, dx, dy, frame.width * scale, frame.height * scale);
-  if (mark && place.mode === 'hotspot') {
-    const cx = originX;
-    const cy = originY;
-    ctx.strokeStyle = 'rgba(226, 59, 50, 0.85)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(cx - 7, cy);
-    ctx.lineTo(cx + 7, cy);
-    ctx.moveTo(cx, cy - 7);
-    ctx.lineTo(cx, cy + 7);
-    ctx.stroke();
+  strokeCanvas(ctx, dx, dy, box.width * scale, box.height * scale);
+  if (mark) {
+    const cx = dx + frame.hotspotPxX * scale;
+    const cy = dy + frame.hotspotPxY * scale;
+    const near = frame.hotspotPxX >= -2 && frame.hotspotPxY >= -2 &&
+      frame.hotspotPxX <= box.width + 2 && frame.hotspotPxY <= box.height + 2;
+    if (near) strokeOffset(ctx, cx, cy);
   }
   return scale;
+}
+
+function strokeCanvas(ctx, x, y, w, h) {
+  if (w < 1 || h < 1) return;
+  ctx.save();
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+  ctx.strokeRect(x - 1.5, y - 1.5, w + 3, h + 3);
+  ctx.strokeStyle = 'rgba(16, 20, 24, 0.92)';
+  ctx.setLineDash([4, 3]);
+  ctx.strokeRect(x - 0.5, y - 0.5, w + 1, h + 1);
+  ctx.restore();
+}
+
+function strokeOffset(ctx, cx, cy) {
+  ctx.save();
+  ctx.strokeStyle = 'rgba(226, 59, 50, 0.9)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(cx - 7, cy);
+  ctx.lineTo(cx + 7, cy);
+  ctx.moveTo(cx, cy - 7);
+  ctx.lineTo(cx, cy + 7);
+  ctx.stroke();
+  ctx.restore();
 }
 
 function paintStage() {
@@ -280,9 +315,10 @@ function viewScale(cssW, cssH, padBottom, scaleCap) {
   let maxY = 1;
   for (const frame of frames) {
     if (!frame.width) continue;
+    const box = canvasSize(frame);
     const place = placement(frame);
-    maxX = Math.max(maxX, place.ax, frame.width - place.ax, 1);
-    maxY = Math.max(maxY, place.ay, frame.height - place.ay, 1);
+    maxX = Math.max(maxX, place.ax, box.width - place.ax, 1);
+    maxY = Math.max(maxY, place.ay, box.height - place.ay, 1);
   }
   const halfW = Math.max(24, (cssW - 36) / 2);
   const halfH = Math.max(24, (cssH - 28 - padBottom) / 2);
@@ -545,8 +581,12 @@ function renderMeta() {
       rows.push(['In SPF', owner ? owner.name : '—']);
     }
     rows.push(['Sprites', String(frame.numSprites)]);
-    rows.push(['Art', frame.width + '×' + frame.height]);
-    rows.push(['Hotspot', frame.hotspotX + ', ' + frame.hotspotY]);
+    const box = canvasSize(frame);
+    rows.push(['Canvas', box.width + '×' + box.height]);
+    if (box.width !== frame.width || box.height !== frame.height) {
+      rows.push(['Art', frame.width + '×' + frame.height]);
+    }
+    rows.push(['Offset', frame.hotspotX + ', ' + frame.hotspotY]);
     if (step) {
       rows.push(['Hold', step.ticks >= 1000 ? 'forever (' + step.ticks + ')' : step.ticks + ' vblanks']);
     }

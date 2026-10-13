@@ -6,8 +6,9 @@
  * nibble 0 transparent, four 16-color Genesis CRAM palettes.
  *
  * Frame numbers are 1-based, the same values SPF symbols use.
- * The hotspot is SprStrhot+12/+14 (file offsets 0x18 and 0x1A), which
- * GetHot in logic.asm reads.
+ * The canvas size is the int16 pair at 0x06 and 0x08, each stored as
+ * twice the pixel size. The registration offset is SprStrhot+12/+14
+ * (file offsets 0x18 and 0x1A), which GetHot in logic.asm reads.
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
@@ -82,6 +83,8 @@
         index: n,
         header,
         numSprites,
+        canvasWidth: view.getInt16(cursor + 0x06) / 2,
+        canvasHeight: view.getInt16(cursor + 0x08) / 2,
         hotspotX: view.getInt16(cursor + 0x18),
         hotspotY: view.getInt16(cursor + 0x1a),
         sprites
@@ -143,11 +146,13 @@
         ...meta,
         width: 0,
         height: 0,
+        minX: 0,
+        minY: 0,
         offsetX: 0,
         offsetY: 0,
         pixels: new Uint8Array(0),
-        hotspotPxX: 0,
-        hotspotPxY: 0
+        hotspotPxX: meta.hotspotX,
+        hotspotPxY: meta.hotspotY
       };
     }
     const offsetX = -minX;
