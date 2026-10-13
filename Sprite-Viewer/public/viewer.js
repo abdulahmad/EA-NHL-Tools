@@ -510,7 +510,7 @@ function bindSpfEnd() {
   }
 }
 
-const IMAGE_ORDER = ['Screens', 'Logos', 'Sprites', 'Ice', 'Fonts', 'Other'];
+const IMAGE_ORDER = ['Screens', 'Logos', 'Players', 'Sprites', 'Ice', 'Fonts', 'Other'];
 
 function renderImageList(box, q) {
   const images = (gameInfo && gameInfo.images) || [];
@@ -1338,7 +1338,18 @@ async function ensureImage(id) {
   } else if (image.kind === 'jim') {
     const bytes = await bytesFor(image);
     if (!bytes) return null;
-    parsed = Nhl92Jim.decodeJim(bytes);
+    let donor = null;
+    if (image.paletteAt != null) {
+      const rom = await ensureRom();
+      if (rom && image.paletteAt >= 0 && image.paletteAt + 128 <= rom.length) {
+        donor = rom.subarray(image.paletteAt, image.paletteAt + 128);
+      }
+    }
+    parsed = Nhl92Jim.decodeJim(bytes, donor);
+  } else if (image.kind === 'frames') {
+    const bytes = await bytesFor(image);
+    if (!bytes) return null;
+    parsed = Nhl92Sheet.openFrames(bytes, Nhl92Jim);
   } else if (image.kind === 'pc95') {
     const paths = image.files && image.files.length ? image.files : [image.id];
     const parts = [];

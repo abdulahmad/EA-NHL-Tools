@@ -1,7 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const { GAMES, gameById } = require('./lib/games');
+const { GAMES, gameById, revAAdjust } = require('./lib/games');
 const pc95 = require('./lib/pc95');
 
 const ROOT = __dirname;
@@ -153,10 +153,23 @@ function pcBundle(rels) {
   return Buffer.from(pc95.encodeBundle(files));
 }
 
+function placedAssets(game, romFile) {
+  if (game.kind === 'pc95') return { images: pcFiles().images, sheet: null };
+  if (game.id !== 'nhlpa93' || !romFile) return { images: game.images || [], sheet: game.sheet || null };
+  try {
+    const buf = readRom(romFile, game);
+    const date = buf.length >= 0x120 ? buf.slice(0x118, 0x120).toString('ascii') : '';
+    return revAAdjust(game, date);
+  } catch (err) {
+    return { images: game.images || [], sheet: game.sheet || null };
+  }
+}
+
 function gameStatus(game) {
   const rom = findRom(game);
   const hasRom = Boolean(rom);
   const pc = game.kind === 'pc95' ? pcFiles() : null;
+  const placed = placedAssets(game, rom);
   const pixels = game.kind === 'pc95'
     ? pc.spriteFiles.length > 0 || pc.rinkFiles.length > 0
     : (game.kind === 'anim' || hasRom);
@@ -179,10 +192,10 @@ function gameStatus(game) {
     hint: game.hint || null,
     frames: game.frames,
     banks,
-    images: pc ? pc.images : (game.images || []),
+    images: placed.images,
     pixels,
     rom: hasRom,
-    sheet: game.sheet || null,
+    sheet: placed.sheet,
     snes: game.snes || null,
     romHint: game.kind === 'pc95' ? 'pc95/' : (game.romNames.length ? 'roms/' + game.romNames[0] : null)
   };

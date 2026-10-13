@@ -4,12 +4,12 @@ const assert = require('assert');
 const { parseFrames } = require('./lib/parse-frames');
 const { parseAnim, renderFrame } = require('./lib/anim');
 const { holdVblanks } = require('./lib/playback');
-const { parseSheet } = require('./lib/sheet');
+const { parseSheet, openFrames } = require('./lib/sheet');
 const { paletteLabel, defaultPaletteFile, matchPaletteFile } = require('./lib/labels');
-const { decodeJim } = require('./lib/jim');
+const { decodeJim, decompressBytecode } = require('./lib/jim');
 const { unpack93 } = require('./lib/snespak');
 const { parse93, parse94, openImage } = require('./lib/snes');
-const { GAMES } = require('./lib/games');
+const { GAMES, revAAdjust } = require('./lib/games');
 const pc95 = require('./lib/pc95');
 
 const root = __dirname;
@@ -281,11 +281,11 @@ assert.strictEqual(pictureFrame.opaque, true);
 assert.strictEqual(pictureFrame.width, 8);
 assert.strictEqual(pictureFrame.height, 8);
 assert.strictEqual(pictureFrame.pixels[0], 1);
-const compressed = Buffer.alloc(16);
-compressed.writeUInt32BE(0, 0);
-compressed.writeUInt32BE(20, 4);
-compressed.writeUInt16BE(1, 8);
-assert.throws(() => decodeJim(compressed), /compressed/);
+const notJim = Buffer.alloc(16);
+notJim.writeUInt32BE(100, 0);
+notJim.writeUInt32BE(200, 4);
+notJim.writeUInt16BE(1, 8);
+assert.throws(() => decodeJim(notJim), /not a JIM/);
 
 const snes93rom = Buffer.alloc(160);
 snes93rom.writeUInt16LE(0, 96);
@@ -327,6 +327,32 @@ for (const id of ['title', 'easports', 'logos', 'rink', 'center', 'letters', 'sm
   assert.ok(snes94images.includes(id), id);
 }
 
+const pa93 = GAMES.find((game) => game.id === 'nhlpa93');
+const g94 = GAMES.find((game) => game.id === 'nhl94');
+const g95 = GAMES.find((game) => game.id === 'nhl95');
+assert.strictEqual(pa93.images.length, 25);
+assert.strictEqual(g94.images.length, 215);
+assert.strictEqual(g95.images.length, 300);
+assert.ok(pa93.images.some((image) => image.id === 'IceRink.map.jim' && image.kind === 'jim'));
+assert.ok(pa93.images.some((image) => image.id === 'Crowd.anim' && image.kind === 'frames'));
+assert.ok(g94.images.some((image) => image.id === 'logoBOS.map.jim' && image.paletteAt === 0xFF482));
+assert.ok(g94.images.some((image) => image.id === 'CardMarioLemieux.bin' && image.paletteAt === 0xC6762));
+assert.ok(g95.images.some((image) => image.id === 'CardGuyHebert.bin' && image.paletteAt));
+assert.ok(g95.images.some((image) => image.id === 'logoANA.map.jim'));
+assert.ok(!pa93.images.some((image) => /palette|sound|scouttext/i.test(image.id)));
+
+function inkCount(frame) {
+  let n = 0;
+  for (let i = 0; i < frame.pixels.length; i++) if (frame.pixels[i]) n++;
+  return n;
+}
+
+const ronbarr = decodeJim(fs.readFileSync(path.join(root, '..', 'JIM-Tools', 'ronbarr.map.jzip')));
+const ronFrame = ronbarr.renderFrame(1);
+assert.strictEqual(ronFrame.width, 64);
+assert.strictEqual(ronFrame.height, 72);
+assert.ok(inkCount(ronFrame) > 100);
+
 function romIf(file) {
   return fs.existsSync(file) ? fs.readFileSync(file) : null;
 }
@@ -338,6 +364,67 @@ if (retail92) {
   assert.strictEqual(title.renderFrame(1).width, 256);
   const refs = decodeJim(retail92.subarray(0x3A3DC, 0x3D5EE));
   assert.strictEqual(refs.renderFrame(1).height, 2160);
+}
+const genesis94 = romIf('/tmp/disasm/NHL94Genesis/lst/nhl94.bin');
+if (genesis94) {
+  const boston = g94.images.find((image) => image.id === 'logoBOS.map.jim');
+  const logo = decodeJim(
+    genesis94.subarray(boston.start, boston.end),
+    genesis94.subarray(boston.paletteAt, boston.paletteAt + 32)
+  );
+  assert.ok(logo.combined.some((color) => color[0] > 180 && color[1] > 140 && color[2] < 80));
+  const titleSpec = g94.images.find((image) => image.id === 'Title94-1.map.jim');
+  const title = decodeJim(genesis94.subarray(titleSpec.start, titleSpec.end));
+  assert.ok(title.renderFrame(1).width >= 64);
+  assert.ok(inkCount(title.renderFrame(1)) > 100);
+  const card = g94.images.find((image) => image.id === 'CardMarioLemieux.bin');
+  const portrait = decodeJim(
+    genesis94.subarray(card.start, card.end),
+    genesis94.subarray(card.paletteAt, card.paletteAt + 128)
+  );
+  const face = portrait.renderFrame(1);
+  assert.strictEqual(face.width, 48);
+  assert.strictEqual(face.height, 48);
+  assert.ok(inkCount(face) > 50);
+  assert.deepStrictEqual(portrait.combined[6], [0, 0, 0]);
+  assert.deepStrictEqual(portrait.combined[5], [255, 255, 255]);
+  const crowdSpec = g94.images.find((image) => image.id === 'Crowd.anim');
+  const crowd = openFrames(genesis94.subarray(crowdSpec.start, crowdSpec.end), { decompressBytecode });
+  assert.ok(crowd.numFrames >= 2);
+  assert.ok(inkCount(crowd.renderFrame(1)) > 100);
+}
+const genesis95 = romIf('/tmp/disasm/NHL95Genesis/lst/nhl95.bin');
+if (genesis95) {
+  const logo = g95.images.find((image) => image.id === 'logoANA.map.jim');
+  const drawn = decodeJim(genesis95.subarray(logo.start, logo.end));
+  assert.ok(inkCount(drawn.renderFrame(1)) > 20);
+  const card = g95.images.find((image) => image.group === 'Players' && image.paletteAt);
+  const portrait = decodeJim(
+    genesis95.subarray(card.start, card.end),
+    genesis95.subarray(card.paletteAt, card.paletteAt + 128)
+  );
+  assert.ok(inkCount(portrait.renderFrame(1)) > 20);
+  assert.deepStrictEqual(portrait.combined[6], [0, 0, 0]);
+}
+const revA93 = romIf(path.join(root, '..', 'JIM-Tools', 'nhlpa93retailRevA.bin'));
+if (revA93) {
+  assert.strictEqual(revA93.slice(0x118, 0x120).toString('ascii'), '1992.OCT');
+  const adjusted = revAAdjust(pa93, '1992.OCT');
+  assert.strictEqual(adjusted.sheet.sprites, pa93.sheet.sprites + 0x2E);
+  assert.strictEqual(adjusted.sheet.hotlist, pa93.sheet.hotlist + 0x2E);
+  assert.strictEqual(adjusted.images[0].start, pa93.images[0].start + 0x2E);
+  assert.strictEqual(revAAdjust(pa93, '1992.JUL').sheet.sprites, pa93.sheet.sprites);
+  const sheet = parseSheet(revA93, adjusted.sheet);
+  assert.ok(sheet.numFrames > 100);
+  assert.ok(renderFrame(sheet, 1).pixels.some((pixel) => pixel));
+  const ice = adjusted.images.find((image) => image.id === 'IceRink.map.jim');
+  const rink = decodeJim(revA93.subarray(ice.start, ice.end));
+  assert.ok(rink.renderFrame(1).width > 64);
+  assert.ok(inkCount(rink.renderFrame(1)) > 100);
+  const crowdSpec = adjusted.images.find((image) => image.id === 'Crowd.anim');
+  const crowd = openFrames(revA93.subarray(crowdSpec.start, crowdSpec.end), { decompressBytecode });
+  assert.ok(crowd.numFrames >= 2);
+  assert.ok(inkCount(crowd.renderFrame(1)) > 100);
 }
 const retail93 = romIf('/tmp/snes/93/lst/nhlpa93snes.bin');
 if (retail93) {

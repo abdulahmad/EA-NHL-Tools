@@ -3,14 +3,49 @@
  *
  * NHL 92 pictures are Alice .ANIM banks. They also sit at fixed offsets in
  * the retail ROM. NHLPA 93, NHL 94 and NHL 95 Genesis keep the SPF/SPA tables
- * but the player pictures are a sprite sheet in the ROM. The two SNES ports
- * use planar 4bpp tiles; their animation names come from the disassemblies.
- * NHL 95 PC reads SHPP shape banks (PPV and RefPack QFS) of SPIT pictures.
+ * and a player sprite sheet, plus every picture the disassembly extract
+ * scripts name (screens, rink, fonts, logos, portraits, frame banks).
+ * The two SNES ports use planar 4bpp tiles; their animation names come from
+ * the disassemblies. NHL 95 PC reads SHPP shape banks (PPV and RefPack QFS)
+ * of SPIT pictures.
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
   else root.Nhl92Games = factory();
 })(typeof self !== 'undefined' ? self : this, function () {
+  const generated = (typeof require === 'function')
+    ? require('./genesis-images')
+    : { nhlpa93: [], nhl94: [], nhl95: [] };
+
+  // PicturePalette's CRAM block. Shared portraits (header longs are 0) have
+  // no colors of their own; DrawMatchupPicture uses this palette.
+  const PORTRAIT_PALETTE = { nhl94: 0xC6762, nhl95: 0xA1DC4 };
+
+  function stampPortraits(id, images) {
+    const at = PORTRAIT_PALETTE[id];
+    if (at == null) return images;
+    return images.map((image) => {
+      if (image.paletteAt != null || image.group !== 'Players' || image.kind !== 'jim') return image;
+      return Object.assign({}, image, { paletteAt: at });
+    });
+  }
+
+  // TeamLogoPalettes, one 16-color CRAM palette per team in TeamList order.
+  const LOGO_ORDER = ['ANH', 'BOS', 'BUF', 'CGY', 'CHI', 'DAL', 'DET', 'EDM', 'FLA', 'HFD', 'LA', 'MTL', 'NJ', 'NYI', 'NYR', 'OTW', 'PHI', 'PIT', 'QUE', 'SJ', 'STL', 'TB', 'TOR', 'VAN', 'WSH', 'WPG', 'ASE', 'ASW'];
+  const LOGO_PALETTE = { nhl94: 0xFF462, nhl95: 0x1A169A };
+
+  function stampLogos(id, images) {
+    const base = LOGO_PALETTE[id];
+    if (base == null) return images;
+    return images.map((image) => {
+      const match = /^logo([A-Z0-9]+)\.map\.jim$/.exec(image.id);
+      if (!match) return image;
+      const code = match[1] === 'ANA' ? 'ANH' : match[1];
+      const index = LOGO_ORDER.indexOf(code);
+      if (index < 0) return image;
+      return Object.assign({}, image, { paletteAt: base + index * 32 });
+    });
+  }
   const NHL92_IMAGES = [
     { id: 'Sprites.anim', label: 'Sprites', group: 'Sprites', kind: 'anim', file: true, start: 0x3D5EE, end: 0x7216C },
     { id: 'Puck.anim', label: 'Puck', group: 'Sprites', kind: 'anim', file: true, start: 0x2E9EC, end: 0x2F262 },
@@ -67,7 +102,7 @@
       kind: 'sheet',
       paletteKind: 'genesis',
       banks: [{ id: 'sprites', label: 'Sprites' }],
-      images: [],
+      images: generated.nhlpa93,
       palettes: '94',
       romNames: ['nhlpa93.bin', 'nhlpa93.md', 'nhlpa93.gen'],
       romBytes: 0x80000,
@@ -88,7 +123,7 @@
       kind: 'sheet',
       paletteKind: 'genesis',
       banks: [{ id: 'sprites', label: 'Sprites' }],
-      images: [],
+      images: stampLogos('nhl94', stampPortraits('nhl94', generated.nhl94)),
       palettes: '94',
       romNames: ['nhl94.bin', 'nhl94.md', 'nhl94.gen'],
       romBytes: 0x100000,
@@ -109,7 +144,7 @@
       kind: 'sheet',
       paletteKind: 'genesis',
       banks: [{ id: 'sprites', label: 'Sprites' }],
-      images: [],
+      images: stampLogos('nhl95', stampPortraits('nhl95', generated.nhl95)),
       palettes: '95',
       romNames: ['nhl95.bin', 'nhl95.md', 'nhl95.gen'],
       romBytes: 0x200000,
@@ -221,5 +256,32 @@
     return GAMES.find((game) => game.id === id) || null;
   }
 
-  return { GAMES, gameById };
+  // NHLPA 93 Rev A (header date 1992.OCT) places every slice at or after the
+  // Z80 driver ($16E53) 0x2E bytes later than retail. That includes the
+  // pictures and the player sprite sheet.
+  function revAAdjust(game, date) {
+    const images = (game && game.images) || [];
+    const sheet = (game && game.sheet) || null;
+    if (!game || game.id !== 'nhlpa93' || date !== '1992.OCT') return { images, sheet };
+    const delta = 0x2E;
+    const floor = 0x16E53;
+    const bump = (value) => (typeof value === 'number' && value >= floor ? value + delta : value);
+    return {
+      images: images.map((image) => {
+        const next = Object.assign({}, image, {
+          start: bump(image.start),
+          end: bump(image.end)
+        });
+        if (image.paletteAt != null) next.paletteAt = bump(image.paletteAt);
+        return next;
+      }),
+      sheet: sheet ? Object.assign({}, sheet, {
+        sprites: bump(sheet.sprites),
+        hotlist: bump(sheet.hotlist),
+        palette: bump(sheet.palette)
+      }) : null
+    };
+  }
+
+  return { GAMES, gameById, revAAdjust };
 });
