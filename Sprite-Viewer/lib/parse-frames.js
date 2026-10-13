@@ -118,6 +118,7 @@
     const n = keyOf(name);
     if (/gready|goalie|glove|gdive|gextra|ghigh|gslam|gblock|gcatch|ghold/.test(n)) return 'Goalies';
     if (/^spfgoal$/.test(n) || /arrow|pad|puck|logo|siren|replay|star/.test(n)) return 'Ice';
+    if (/later|font|crowd|zamboni/.test(n)) return 'Other';
     return 'Players';
   }
 

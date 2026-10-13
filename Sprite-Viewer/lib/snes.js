@@ -1,0 +1,430 @@
+/**
+ * Draw NHLPA 93 SNES and NHL 94 SNES sprites.
+ *
+ * 93 keeps 15 frame sets. A piece is x, y, tile, attributes (4 bytes, or 6
+ * for the crowd set). Tiles are 4bpp planar. Palette row 2 is the home jersey.
+ * 94's main set at $828000 is a table of offsets, then frames whose pieces
+ * are x, y, a tile word and a size byte, as DrawSprite reads them.
+ *
+ * Both return the same shape renderFrame does, so the stage can draw them.
+ */
+(function (root, factory) {
+  const pak = typeof module === 'object' && module.exports ? require('./snespak') : root.Nhl92SnesPak;
+  const api = factory(pak);
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.Nhl92Snes = api;
+})(typeof self !== 'undefined' ? self : this, function (pak) {
+  function snesRgb(v) {
+    return [
+      ((v & 31) * 255 / 31) | 0,
+      (((v >> 5) & 31) * 255 / 31) | 0,
+      (((v >> 10) & 31) * 255 / 31) | 0
+    ];
+  }
+
+  function decodeBgr555(bytes, offset, count) {
+    const colors = [];
+    const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+    for (let i = 0; i < count; i++) {
+      colors.push(snesRgb(view.getUint16(offset + i * 2, true)));
+    }
+    return colors;
+  }
+
+  function decodeTeamPalette(buffer) {
+    const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+    const colors = [];
+    for (let i = 0; i < 16; i++) {
+      const v = (bytes[i * 2] << 8) | bytes[i * 2 + 1];
+      const bgr = ((v & 0xf) << 1) | (((v >> 4) & 0xf) << 6) | (((v >> 8) & 0xf) << 11);
+      colors.push(snesRgb(bgr));
+    }
+    return colors;
+  }
+
+  function decodeRinkPalette(buffer) {
+    const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
+    const colors = decodeBgr555(bytes, 0, Math.min(128, bytes.length >> 1));
+    while (colors.length < 128) colors.push([0, 0, 0]);
+    return colors;
+  }
+
+  function tilePixel(tiles, t, x, y) {
+    const b = t * 32;
+    if (b < 0 || b + 32 > tiles.length) return 0;
+    const bit = 7 - (x & 7);
+    const p0 = tiles[b + 2 * y] || 0;
+    const p1 = tiles[b + 2 * y + 1] || 0;
+    const p2 = tiles[b + 16 + 2 * y] || 0;
+    const p3 = tiles[b + 16 + 2 * y + 1] || 0;
+    return ((p0 >> bit) & 1) | (((p1 >> bit) & 1) << 1) | (((p2 >> bit) & 1) << 2) | (((p3 >> bit) & 1) << 3);
+  }
+
+  function signedByte(v) {
+    return (v << 24) >> 24;
+  }
+
+  function read93Pieces(rom, set, index) {
+    const start = set.starts[index];
+    const end = set.starts[index + 1];
+    const pieces = [];
+    for (let p = start; p < end; p++) {
+      const o = set.pieces + p * set.pieceSize;
+      let x;
+      let y;
+      let tile;
+      let attr;
+      if (set.pieceSize === 6) {
+        const view = new DataView(rom.buffer, rom.byteOffset, rom.byteLength);
+        x = view.getInt16(o, true);
+        y = view.getInt16(o + 2, true);
+        tile = rom[o + 4];
+        attr = rom[o + 5];
+      } else {
+        x = signedByte(rom[o]);
+        y = signedByte(rom[o + 1]);
+        tile = rom[o + 2];
+        attr = rom[o + 3];
+      }
+      pieces.push({
+        x,
+        y,
+        tile: tile | ((attr & 3) << 8),
+        pal: (attr >> 2) & 7,
+        size: attr & 0x20 ? 16 : 8,
+        hFlip: attr & 0x40,
+        vFlip: attr & 0x80
+      });
+    }
+    return pieces;
+  }
+
+  function blitPieces(pieces, tiles) {
+    if (!pieces.length) {
+      return {
+        width: 0, height: 0, minX: 0, minY: 0, pixels: new Uint8Array(0)
+      };
+    }
+    let minX = 0;
+    let minY = 0;
+    let maxX = 1;
+    let maxY = 1;
+    for (const piece of pieces) {
+      if (piece.x < minX) minX = piece.x;
+      if (piece.y < minY) minY = piece.y;
+      if (piece.x + piece.size > maxX) maxX = piece.x + piece.size;
+      if (piece.y + piece.size > maxY) maxY = piece.y + piece.size;
+    }
+    const width = maxX - minX;
+    const height = maxY - minY;
+    const pixels = new Uint8Array(width * height);
+    for (let n = pieces.length - 1; n >= 0; n--) {
+      const piece = pieces[n];
+      for (let y = 0; y < piece.size; y++) {
+        for (let x = 0; x < piece.size; x++) {
+          const sx = piece.hFlip ? piece.size - 1 - x : x;
+          const sy = piece.vFlip ? piece.size - 1 - y : y;
+          const color = tilePixel(tiles, piece.tile + (sy >> 3) * 16 + (sx >> 3), sx & 7, sy & 7);
+          if (!color) continue;
+          const px = piece.x - minX + x;
+          const py = piece.y - minY + y;
+          if (px >= 0 && py >= 0 && px < width && py < height) {
+            pixels[py * width + px] = color + piece.pal * 16;
+          }
+        }
+      }
+    }
+    return { width, height, minX, minY, pixels };
+  }
+
+  function hotOf(rom, spec, frame) {
+    if (!spec.hotlist) return { x: 0, y: 0 };
+    let index = frame;
+    if (frame >= spec.hotCut) index = frame - spec.hotSkip;
+    index -= 1;
+    if (index < 0 || index * 2 + 1 >= spec.hotBytes) return { x: 0, y: 0 };
+    return {
+      x: signedByte(rom[spec.hotlist + index * 2]),
+      y: signedByte(rom[spec.hotlist + index * 2 + 1])
+    };
+  }
+
+  function frameRecord(frame, art, hot) {
+    return {
+      frame,
+      index: frame - 1,
+      width: art.width,
+      height: art.height,
+      canvasWidth: art.width,
+      canvasHeight: art.height,
+      minX: art.minX,
+      minY: art.minY,
+      hotspotX: hot.x,
+      hotspotY: hot.y,
+      hotspotPxX: hot.x - art.minX,
+      hotspotPxY: hot.y - art.minY,
+      numSprites: art.count,
+      sprites: art.sprites,
+      pixels: art.pixels
+    };
+  }
+
+  function spriteRow(piece) {
+    return {
+      xpos: piece.x,
+      ypos: piece.y,
+      dimensions: { width: piece.size / 8, height: piece.size / 8 },
+      tileIndex: piece.tile,
+      hFlip: piece.hFlip ? 1 : 0,
+      vFlip: piece.vFlip ? 1 : 0,
+      paletteIndex: piece.pal
+    };
+  }
+
+  function load93Sets(rom, spec) {
+    let base = 1;
+    return spec.sets.map((set) => {
+      const starts = [];
+      const table = set.pieces - (set.frames + 1) * 2;
+      const view = new DataView(rom.buffer, rom.byteOffset, rom.byteLength);
+      for (let i = 0; i < set.frames + 1; i++) starts.push(view.getUint16(table + i * 2, true));
+      const loaded = {
+        frames: set.frames,
+        base,
+        pieces: set.pieces,
+        pieceSize: set.pieceSize,
+        starts,
+        tiles: rom.subarray(set.pieces + set.pieceCount * set.pieceSize, set.pieces + set.pieceCount * set.pieceSize + set.tiles * 32)
+      };
+      base += set.frames;
+      return loaded;
+    });
+  }
+
+  function parse93(romBytes, spec, rinkColors) {
+    const rom = romBytes instanceof Uint8Array ? romBytes : new Uint8Array(romBytes);
+    const sets = load93Sets(rom, spec);
+    const numFrames = sets.reduce((sum, set) => sum + set.frames, 0);
+    const cache = new Map();
+    function renderFrame(frame) {
+      if (cache.has(frame)) return cache.get(frame);
+      const set = sets.find((item) => frame >= item.base && frame < item.base + item.frames);
+      if (!set) return null;
+      const pieces = read93Pieces(rom, set, frame - set.base);
+      const art = blitPieces(pieces, set.tiles);
+      art.count = pieces.length;
+      art.sprites = pieces.map(spriteRow);
+      const record = frameRecord(frame, art, hotOf(rom, spec, frame));
+      cache.set(frame, record);
+      return record;
+    }
+    return {
+      numFrames,
+      combined: rinkColors || grey(128),
+      renderFrame
+    };
+  }
+
+  function grey(n) {
+    const colors = [];
+    for (let i = 0; i < n; i++) {
+      const c = (i % 16) * 17;
+      colors.push([c, c, c]);
+    }
+    return colors;
+  }
+
+  function u16(rom, addr) {
+    const o = pak.lorom(addr);
+    return rom[o] | (rom[o + 1] << 8);
+  }
+
+  function s16(rom, addr) {
+    const v = u16(rom, addr);
+    return v & 0x8000 ? v - 0x10000 : v;
+  }
+
+  function parse94(romBytes, spec, rinkColors) {
+    const rom = romBytes instanceof Uint8Array ? romBytes : new Uint8Array(romBytes);
+    const base = spec.base;
+    const first = u16(rom, base) | (u16(rom, base + 2) << 16);
+    const numFrames = (first / 4) | 0;
+    const cache = new Map();
+    function renderFrame(frame) {
+      if (frame < 1 || frame > numFrames) return null;
+      if (cache.has(frame)) return cache.get(frame);
+      const n = frame - 1;
+      const rel = u16(rom, base + n * 4) | (u16(rom, base + n * 4 + 2) << 16);
+      const record = draw94(rom, base + rel);
+      record.frame = frame;
+      record.index = n;
+      cache.set(frame, record);
+      return record;
+    }
+    return { numFrames, combined: rinkColors || grey(128), renderFrame };
+  }
+
+  function draw94(rom, addr) {
+    const count = rom[pak.lorom(addr)] || 0;
+    const flags = rom[pak.lorom(addr + 1)] || 0;
+    const s1 = u16(rom, addr + 0x0c);
+    const s2 = u16(rom, addr + 0x0e);
+    const tileOff = u16(rom, addr + 0x10);
+    const vram = new Uint8Array(0x2000);
+    const src = addr + tileOff;
+    for (let i = 0; i < s1 && i < vram.length; i++) vram[i] = rom[pak.lorom(src + i)] || 0;
+    if (flags & 0x80) {
+      const t2 = ((((s1 >> 1) & 0xff00) | 0x100) >> 4);
+      for (let i = 0; i < s2 && t2 * 32 + i < vram.length; i++) {
+        vram[t2 * 32 + i] = rom[pak.lorom(src + s1 + i)] || 0;
+      }
+    }
+    const pieces = [];
+    for (let p = 0; p < count; p++) {
+      const q = addr + 0x16 + p * 7;
+      const tileWord = u16(rom, q + 4);
+      const sizeByte = rom[pak.lorom(q + 6)] || 0;
+      pieces.push({
+        x: s16(rom, q),
+        y: s16(rom, q + 2),
+        tile: tileWord & 0x1ff,
+        pal: (tileWord >> 9) & 7,
+        size: sizeByte ? 16 : 8,
+        hFlip: tileWord & 0x4000,
+        vFlip: tileWord & 0x8000
+      });
+    }
+    const art = blitPieces(pieces, vram);
+    art.count = pieces.length;
+    art.sprites = pieces.map(spriteRow);
+    return frameRecord(0, art, { x: 0, y: 0 });
+  }
+
+  function pictureFromPixels(width, height, pixels, colors) {
+    const frame = {
+      frame: 1,
+      index: 0,
+      picture: true,
+      opaque: true,
+      width,
+      height,
+      canvasWidth: width,
+      canvasHeight: height,
+      minX: 0,
+      minY: 0,
+      hotspotX: 0,
+      hotspotY: 0,
+      hotspotPxX: Math.floor(width / 2),
+      hotspotPxY: Math.floor(height / 2),
+      numSprites: 0,
+      sprites: [],
+      pixels,
+      colors
+    };
+    return {
+      numFrames: 1,
+      picture: true,
+      opaque: true,
+      combined: colors,
+      renderFrame: function () { return frame; }
+    };
+  }
+
+  function renderMap(mapBytes, tiles, colors, mapW, mapH) {
+    const width = mapW * 8;
+    const height = mapH * 8;
+    const pixels = new Uint8Array(width * height);
+    const view = new DataView(mapBytes.buffer, mapBytes.byteOffset, mapBytes.byteLength);
+    for (let ty = 0; ty < mapH; ty++) {
+      for (let tx = 0; tx < mapW; tx++) {
+        const o = (ty * mapW + tx) * 2;
+        if (o + 1 >= mapBytes.length) continue;
+        const entry = view.getUint16(o, true);
+        const tile = entry & 0x3ff;
+        const pal = (entry >> 10) & 7;
+        const hFlip = entry & 0x4000;
+        const vFlip = entry & 0x8000;
+        for (let y = 0; y < 8; y++) {
+          for (let x = 0; x < 8; x++) {
+            const sx = hFlip ? 7 - x : x;
+            const sy = vFlip ? 7 - y : y;
+            const color = tilePixel(tiles, tile, sx, sy);
+            pixels[(ty * 8 + y) * width + tx * 8 + x] = color + pal * 16;
+          }
+        }
+      }
+    }
+    return pictureFromPixels(width, height, pixels, colors);
+  }
+
+  function screen93(rom, image, rinkColors) {
+    const packed = rom.subarray(image.start, image.end);
+    const data = pak.unpack93(packed, 0);
+    const mapW = image.mapW;
+    const mapH = image.mapH;
+    const mapBytes = data.subarray(0, image.mapSize);
+    const tiles = data.subarray(image.tiles);
+    let colors;
+    if (image.noPal) colors = grey(128);
+    else if (image.useRink) colors = rinkColors || grey(128);
+    else colors = decodeBgr555(data, image.pal, 128);
+    while (colors.length < 128) colors.push([0, 0, 0]);
+    return renderMap(mapBytes, tiles, colors, mapW, mapH);
+  }
+
+  function tileSheet(tiles, columns, colors) {
+    const count = (tiles.length / 32) | 0;
+    const cols = columns || 16;
+    const rows = Math.max(1, Math.ceil(count / cols));
+    const width = cols * 8;
+    const height = rows * 8;
+    const pixels = new Uint8Array(width * height);
+    for (let t = 0; t < count; t++) {
+      for (let y = 0; y < 8; y++) {
+        for (let x = 0; x < 8; x++) {
+          pixels[((t / cols) | 0) * 8 * width + y * width + (t % cols) * 8 + x] = tilePixel(tiles, t, x, y);
+        }
+      }
+    }
+    return pictureFromPixels(width, height, pixels, colors || grey(16));
+  }
+
+  function font93(rom, image) {
+    const data = pak.unpack93(rom.subarray(image.start, image.end), 0);
+    return tileSheet(data, image.columns || 16, grey(16));
+  }
+
+  function map93(rom, image, rinkColors) {
+    const tiles = pak.unpack93(rom.subarray(image.tilesStart, image.tilesEnd), 0);
+    const mapBytes = rom.subarray(image.mapStart, image.mapStart + image.mapSize);
+    return renderMap(mapBytes, tiles, rinkColors || grey(128), image.mapW, image.mapH);
+  }
+
+  function openImage(rom, image, spec, rinkColors) {
+    if (image.kind === 'snes93-screen') return screen93(rom, image, rinkColors);
+    if (image.kind === 'snes93-map') return map93(rom, image, rinkColors);
+    if (image.kind === 'snes93-font') return font93(rom, image);
+    if (image.kind === 'snes94-rink') return rink94(rom, spec, rinkColors);
+    throw new Error('Unknown picture ' + image.label);
+  }
+
+  function rink94(rom, spec, rinkColors) {
+    const tiles = pak.unpack94(rom, pak.lorom(spec.rinkTiles));
+    const packed = pak.unpack94(rom, pak.lorom(spec.rinkMap));
+    const view = new DataView(packed.buffer, packed.byteOffset, packed.byteLength);
+    const mapW = view.getUint16(0, true) || 48;
+    const mapH = view.getUint16(2, true) || 1;
+    const mapBytes = packed.subarray(6, 6 + mapW * mapH * 2);
+    return renderMap(mapBytes, tiles, rinkColors || grey(128), mapW, mapH);
+  }
+
+  return {
+    decodeTeamPalette,
+    decodeRinkPalette,
+    parse93,
+    parse94,
+    openImage,
+    tilePixel,
+    snesRgb
+  };
+});

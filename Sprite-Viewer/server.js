@@ -11,7 +11,8 @@ const ANIM_DIR = path.join(ROOT, '..', 'ANIM-To-BMP');
 const PAL_DIRS = {
   '92': path.join(ANIM_DIR, 'Palettes'),
   '94': path.join(ROOT, '..', 'ANIM94-To-BMP', 'Palettes'),
-  '95': path.join(ROOT, '..', 'ANIM95-To-BMP', 'Palettes', 'NHL95')
+  '95': path.join(ROOT, '..', 'ANIM95-To-BMP', 'Palettes', 'NHL95'),
+  'snes': path.join(DATA, 'pals', 'snes')
 };
 const PAL_DIR = PAL_DIRS['92'];
 const ROM_DIR = path.join(ROOT, 'roms');
@@ -52,7 +53,7 @@ function serveFile(res, file) {
 
 function listPals(dir) {
   if (!fs.existsSync(dir)) return [];
-  return fs.readdirSync(dir).filter((name) => name.toLowerCase().endsWith('.pal')).sort();
+  return fs.readdirSync(dir).filter((name) => /\.(pal|snespal)$/i.test(name)).sort();
 }
 
 function findRom(game) {
@@ -65,28 +66,36 @@ function findRom(game) {
   return null;
 }
 
-function readRom(file) {
-  const buf = fs.readFileSync(file);
-  if (buf.length >= 0x304 && buf.slice(0x300, 0x304).toString('ascii') === 'SEGA' &&
+function readRom(file, game) {
+  let buf = fs.readFileSync(file);
+  if (game && game.platform === 'snes' && buf.length % 1024 === 512) {
+    buf = buf.subarray(512);
+  } else if (buf.length >= 0x304 && buf.slice(0x300, 0x304).toString('ascii') === 'SEGA' &&
       buf.slice(0x100, 0x104).toString('ascii') !== 'SEGA') {
-    return buf.subarray(0x200);
+    buf = buf.subarray(0x200);
   }
   return buf;
 }
 
 function gameStatus(game) {
   const rom = findRom(game);
-  const pixels = game.kind === 'anim' || Boolean(rom);
+  const hasRom = Boolean(rom);
+  const pixels = game.kind === 'anim' || hasRom;
   return {
     id: game.id,
     title: game.title,
     source: game.source,
+    platform: game.platform,
     kind: game.kind,
+    paletteKind: game.paletteKind,
     frames: game.frames,
     banks: game.banks,
+    images: game.images || [],
     pixels,
+    rom: hasRom,
     sheet: game.sheet || null,
-    romHint: game.kind === 'sheet' ? 'roms/' + game.romNames[0] : null
+    snes: game.snes || null,
+    romHint: game.romNames.length ? 'roms/' + game.romNames[0] : null
   };
 }
 
@@ -124,7 +133,7 @@ const server = http.createServer((req, res) => {
   if (gamePal) {
     const game = gameById(gamePal[1]);
     const file = game && safeFile(PAL_DIRS[game.palettes], gamePal[2]);
-    if (!file || !file.toLowerCase().endsWith('.pal')) {
+    if (!file || !/\.(pal|snespal)$/i.test(file)) {
       send(res, 404, 'Unknown palette', 'text/plain; charset=utf-8');
       return;
     }
@@ -138,7 +147,7 @@ const server = http.createServer((req, res) => {
     const file = game && findRom(game);
     if (!file) { send(res, 404, 'ROM not found', 'text/plain; charset=utf-8'); return; }
     try {
-      send(res, 200, readRom(file), 'application/octet-stream');
+      send(res, 200, readRom(file, game), 'application/octet-stream');
     } catch (err) {
       send(res, 500, 'Could not read ROM', 'text/plain; charset=utf-8');
     }

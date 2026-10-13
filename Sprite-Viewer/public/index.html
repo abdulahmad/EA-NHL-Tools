@@ -44,6 +44,7 @@
         <button type="button" id="mode-frame" role="tab" aria-selected="false">Frame</button>
         <button type="button" id="mode-spf" role="tab" aria-selected="false">SPF</button>
         <button type="button" id="mode-spa" role="tab" aria-selected="true">SPA</button>
+        <button type="button" id="mode-image" role="tab" aria-selected="false">Images</button>
       </div>
       <div class="order">
         <span>Order</span>
@@ -124,7 +125,8 @@
         <h2>How the numbers work</h2>
         <p><b>Frame</b> is the 1-based picture in the ANIM file. The docs count the same pictures from 0, shown here as the index.</p>
         <p><b>SPF</b> names a run of those pictures in <span class="mono">frames.asm</span>. When the run is eight facings side by side, the compass steps through them.</p>
-        <p><b>SPA</b> is an animation. Each of the eight facings has its own list of frame and vblank pairs. A negative time is the last step. The picture stays up for one extra vblank, the one that expires the counter, and never changes faster than every 4 vblanks. Bit 0 of the flags word loops it. <b>Groups</b> follows the sidebar categories. <b>File</b> is the order in frames.asm.</p>
+        <p><b>SPA</b> is an animation. Each of the eight facings has its own list of frame and vblank pairs. A negative time is the last step. The picture stays up for one extra vblank, the one that expires the counter, and never changes faster than every 4 vblanks. Bit 0 of the flags word loops it. <b>Groups</b> follows the sidebar categories. <b>File</b> is the order in frames.asm. Switching games stays on an SPA or SPF of the same name when the new game has one.</p>
+        <p><b>Images</b> is the rest of the pictures in the ROM: titles, the rink, fonts, and the other animation banks. NHL 92 can draw its sprite banks without a ROM. The other games, and these extra pictures, need the ROM named in the caption.</p>
         <p>Facing 0 is north on a vertical rink, then clockwise. A horizontal rink subtracts 2 from the facing before this lookup.</p>
         <p>The dashed box is the frame's canvas. <b>Pin</b> chooses the point held in the middle of the stage. <b>0, 0</b> is the player's position, at the skates, and <b>Hotspot</b> is where the puck sits. The amber mark is 0, 0. The red cross is the hotspot.</p>
       </section>
@@ -134,6 +136,10 @@
   <script src="/lib/anim.js"></script>
   <script src="/lib/playback.js"></script>
   <script src="/lib/sheet.js"></script>
+  <script src="/lib/labels.js"></script>
+  <script src="/lib/jim.js"></script>
+  <script src="/lib/snespak.js"></script>
+  <script src="/lib/snes.js"></script>
   <script src="/viewer.js"></script>
 </body>
 </html>

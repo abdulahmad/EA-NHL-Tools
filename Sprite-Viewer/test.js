@@ -5,6 +5,11 @@ const { parseFrames } = require('./lib/parse-frames');
 const { parseAnim, renderFrame } = require('./lib/anim');
 const { holdVblanks } = require('./lib/playback');
 const { parseSheet } = require('./lib/sheet');
+const { paletteLabel, defaultPaletteFile, matchPaletteFile } = require('./lib/labels');
+const { decodeJim } = require('./lib/jim');
+const { unpack93 } = require('./lib/snespak');
+const { parse93, parse94, openImage } = require('./lib/snes');
+const { GAMES } = require('./lib/games');
 
 const root = __dirname;
 const framesSrc = fs.readFileSync(path.join(root, 'data', 'frames.asm'), 'utf8');
@@ -219,6 +224,137 @@ const drawn = renderFrame(sheet, 1);
 assert.strictEqual(drawn.sprites[0].ypos, -8);
 assert.strictEqual(drawn.pixels[0], 17, 'palette 1 plus color 1');
 assert.strictEqual(drawn.pixels[1], 0);
+
+assert.strictEqual(paletteLabel('sabresh.pal'), 'Buffalo · home');
+assert.strictEqual(paletteLabel('BUFh.snespal'), 'Buffalo · home');
+assert.strictEqual(paletteLabel('rangersv.pal'), 'New York · away');
+assert.strictEqual(paletteLabel('NYv.snespal'), 'New York · away');
+assert.strictEqual(paletteLabel('islandersh.pal'), 'Long Island · home');
+assert.strictEqual(paletteLabel('ASEh.snespal'), 'All-Star East · home');
+assert.strictEqual(defaultPaletteFile(['bruinsv.pal', 'sabresv.pal', 'sabresh.pal']), 'sabresh.pal');
+assert.strictEqual(defaultPaletteFile(['BUFv.snespal', 'BUFh.snespal']), 'BUFh.snespal');
+assert.strictEqual(matchPaletteFile(['BUFh.snespal', 'BUFv.snespal'], 'sabresh.pal'), 'BUFh.snespal');
+assert.strictEqual(matchPaletteFile(['oilersh.pal'], 'missing.pal'), '');
+
+const snes93cat = parseFrames(fs.readFileSync(path.join(root, 'data', 'frames93snes.asm'), 'utf8'));
+assert.strictEqual(snes93cat.anims.length, 59);
+assert.strictEqual(snes93cat.spfs.length, 40);
+const skate93 = snes93cat.anims.find((anim) => anim.name === 'SPAskatewp');
+assert.deepStrictEqual(skate93.directions[0].steps.map((step) => step.frame), [2, 3, 4, 5, 1]);
+assert.deepStrictEqual(skate93.directions[0].steps.map((step) => step.rawTime), [10, 10, 10, 10, -15]);
+assert.strictEqual(snes93cat.spfs.find((item) => item.name === 'SPFsmallfont').group, 'Other');
+assert.strictEqual(snes93cat.spfs.find((item) => item.name === 'SPFcrowd').group, 'Other');
+assert.strictEqual(snes93cat.spfs.find((item) => item.name === 'SPFzamboni').group, 'Other');
+
+const snes94cat = parseFrames(fs.readFileSync(path.join(root, 'data', 'frames94snes.asm'), 'utf8'));
+assert.strictEqual(snes94cat.anims.length, 71);
+assert.strictEqual(snes94cat.spfs.length, 28);
+const skate94 = snes94cat.anims.find((anim) => anim.name === 'SPAskatewp');
+assert.deepStrictEqual(skate94.directions[0].steps.map((step) => step.frame), [2, 3, 4, 5, 1]);
+assert.deepStrictEqual(skate94.directions[0].steps.map((step) => step.rawTime), [10, 10, 10, 10, -15]);
+const later = snes94cat.spfs.find((item) => item.name === 'SPFlater');
+assert.strictEqual(later.start, 406);
+assert.strictEqual(later.end, null);
+assert.strictEqual(later.group, 'Other');
+assert.strictEqual(snes94cat.anims.filter((anim) => anim.name === 'SPAskatewp').length, 1);
+
+const literal = unpack93(Buffer.from([0x02, 1, 2, 3, 0xe0, 0]), 0);
+assert.deepStrictEqual([...literal], [1, 2, 3]);
+
+const jimTiles = 1;
+const jimPal = 10 + jimTiles * 32;
+const jimMap = jimPal + 128;
+const jim = Buffer.alloc(jimMap + 4 + 2);
+jim.writeUInt32BE(jimPal, 0);
+jim.writeUInt32BE(jimMap, 4);
+jim.writeUInt16BE(jimTiles, 8);
+jim.writeUInt16BE(1, jimMap);
+jim.writeUInt16BE(1, jimMap + 2);
+jim.writeUInt16BE(0, jimMap + 4);
+jim[10] = 0x10;
+const picture = decodeJim(jim);
+const pictureFrame = picture.renderFrame(1);
+assert.strictEqual(picture.numFrames, 1);
+assert.strictEqual(pictureFrame.picture, true);
+assert.strictEqual(pictureFrame.opaque, true);
+assert.strictEqual(pictureFrame.width, 8);
+assert.strictEqual(pictureFrame.height, 8);
+assert.strictEqual(pictureFrame.pixels[0], 1);
+const compressed = Buffer.alloc(16);
+compressed.writeUInt32BE(0, 0);
+compressed.writeUInt32BE(20, 4);
+compressed.writeUInt16BE(1, 8);
+assert.throws(() => decodeJim(compressed), /compressed/);
+
+const snes93rom = Buffer.alloc(160);
+snes93rom.writeUInt16LE(0, 96);
+snes93rom.writeUInt16LE(1, 98);
+snes93rom[104] = 0x80;
+const snes93anim = parse93(snes93rom, {
+  sets: [{ frames: 1, pieceCount: 1, tiles: 1, pieceSize: 4, pieces: 100 }]
+});
+assert.strictEqual(snes93anim.numFrames, 1);
+const snes93frame = snes93anim.renderFrame(1);
+assert.strictEqual(snes93frame.width, 8);
+assert.strictEqual(snes93frame.height, 8);
+assert.strictEqual(snes93frame.pixels[0], 1);
+assert.strictEqual(snes93frame.numSprites, 1);
+
+const snes94rom = Buffer.alloc(0x80);
+snes94rom.writeUInt32LE(4, 0);
+snes94rom[4] = 1;
+snes94rom.writeUInt16LE(32, 4 + 0x0c);
+snes94rom.writeUInt16LE(0x1d, 4 + 0x10);
+snes94rom[4 + 0x1d] = 0x80;
+const snes94anim = parse94(snes94rom, { base: 0x808000 });
+assert.strictEqual(snes94anim.numFrames, 1);
+const snes94frame = snes94anim.renderFrame(1);
+assert.strictEqual(snes94frame.width, 8);
+assert.strictEqual(snes94frame.pixels[0], 1);
+
+const nhl92 = GAMES.find((game) => game.id === 'nhl92');
+for (const bank of nhl92.banks) {
+  if (!bank.file) continue;
+  const size = fs.statSync(path.join(root, '..', 'ANIM-To-BMP', bank.id)).size;
+  assert.strictEqual(bank.end - bank.start, size, bank.id + ' ROM span');
+}
+assert.ok(nhl92.images.some((image) => image.kind === 'jim'));
+assert.ok(GAMES.some((game) => game.id === 'nhlpa93snes' && game.kind === 'snes93'));
+assert.ok(GAMES.some((game) => game.id === 'nhl94snes' && game.kind === 'snes94'));
+
+function romIf(file) {
+  return fs.existsSync(file) ? fs.readFileSync(file) : null;
+}
+const retail92 = romIf(path.join(root, '..', 'NHL92FMTunes-To-MIDI', 'nhl92retail.bin'));
+if (retail92) {
+  const sliced = parseAnim(retail92.subarray(0x3D5EE, 0x7216C));
+  assert.strictEqual(sliced.numFrames, spritesAnim.numFrames);
+  const title = decodeJim(retail92.subarray(0x25642, 0x2ADF0));
+  assert.strictEqual(title.renderFrame(1).width, 256);
+  const refs = decodeJim(retail92.subarray(0x3A3DC, 0x3D5EE));
+  assert.strictEqual(refs.renderFrame(1).height, 2160);
+}
+const retail93 = romIf('/tmp/snes/93/lst/nhlpa93snes.bin');
+if (retail93) {
+  const drawn = parse93(retail93, GAMES.find((game) => game.id === 'nhlpa93snes').snes);
+  assert.strictEqual(drawn.numFrames, 720);
+  const first = drawn.renderFrame(1);
+  assert.strictEqual(first.hotspotX, -4);
+  assert.strictEqual(first.hotspotY, -20);
+  assert.ok(first.pixels.some((pixel) => pixel));
+  const title = openImage(retail93, GAMES.find((game) => game.id === 'nhlpa93snes').images[0], null, null);
+  assert.strictEqual(title.renderFrame(1).width, 256);
+}
+const retail94 = romIf('/tmp/snes/94/lst/nhl94snes.sfc');
+if (retail94) {
+  const game = GAMES.find((item) => item.id === 'nhl94snes');
+  const drawn = parse94(retail94, game.snes);
+  assert.strictEqual(drawn.numFrames, 976);
+  assert.ok(drawn.renderFrame(2).pixels.some((pixel) => pixel));
+  const rink = openImage(retail94, game.images[0], game.snes, null);
+  assert.strictEqual(rink.renderFrame(1).width, 384);
+  assert.strictEqual(rink.renderFrame(1).height, 904);
+}
 
 console.log('catalog', catalog.spfs.length, 'SPF groups,', catalog.anims.length, 'SPA animations');
 console.log('banks', {
