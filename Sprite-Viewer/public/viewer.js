@@ -571,7 +571,7 @@ function renderImageList(box, q) {
         state.step = 0;
         state.acc = 0;
         state.holdKey = '';
-        state.playing = true;
+        state.playing = false;
         ensureImage(state.image).then(() => {
           loadError = '';
           refreshAll();
@@ -1083,7 +1083,7 @@ function wire() {
     if (!state.image && gameInfo && gameInfo.images.length) state.image = gameInfo.images[0].id;
     state.step = 0;
     state.acc = 0;
-    state.playing = true;
+    state.playing = false;
     try {
       loadError = '';
       await ensureImage(state.image);
@@ -1475,8 +1475,9 @@ async function loadGame(id, keepSelection) {
     state.dir = previous.dir;
     state.step = 0;
     state.frame = previous.frame || 1;
-    state.playing = true;
+    state.playing = state.mode === 'spa' || state.mode === 'spf';
   }
+  if (keepSelection && state.mode !== 'spa' && state.mode !== 'spf') state.playing = false;
   const spaMatch = named(catalog.anims, previous.spa) || named(catalog.anims, 'SPAskatewp') || catalog.anims[0];
   const spfMatch = named(catalog.spfs, previous.spf) || catalog.spfs[0];
   state.spa = spaMatch ? spaMatch.name : '';
