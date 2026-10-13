@@ -99,7 +99,7 @@
     return pieces;
   }
 
-  function blitPieces(pieces, tiles) {
+  function blitPieces(pieces, tiles, keepPaletteZero) {
     if (!pieces.length) {
       return {
         width: 0, height: 0, minX: 0, minY: 0, pixels: new Uint8Array(0)
@@ -118,6 +118,7 @@
     const width = maxX - minX;
     const height = maxY - minY;
     const pixels = new Uint8Array(width * height);
+    if (keepPaletteZero) pixels.fill(255);
     for (let n = pieces.length - 1; n >= 0; n--) {
       const piece = pieces[n];
       for (let y = 0; y < piece.size; y++) {
@@ -125,7 +126,9 @@
           const sx = piece.hFlip ? piece.size - 1 - x : x;
           const sy = piece.vFlip ? piece.size - 1 - y : y;
           const color = tilePixel(tiles, piece.tile + (sy >> 3) * 16 + (sx >> 3), sx & 7, sy & 7);
-          if (!color) continue;
+          // Sprites drop color 0 on every row. Pictures keep palette 0's color 0
+          // and leave the other rows' color 0 as the clear sentinel.
+          if (!color && (!keepPaletteZero || piece.pal)) continue;
           const px = piece.x - minX + x;
           const py = piece.y - minY + y;
           if (px >= 0 && py >= 0 && px < width && py < height) {
@@ -305,7 +308,8 @@
       frame: 1,
       index: 0,
       picture: true,
-      opaque: true,
+      opaque: false,
+      rowTransparent: true,
       width,
       height,
       canvasWidth: width,
@@ -324,7 +328,8 @@
     return {
       numFrames: 1,
       picture: true,
-      opaque: true,
+      opaque: false,
+      rowTransparent: true,
       combined: colors,
       renderFrame: function () { return frame; }
     };
@@ -525,7 +530,7 @@
           vFlip: tileWord & 0x8000
         });
       }
-      frames.push(blitPieces(pieces, vram));
+      frames.push(blitPieces(pieces, vram, true));
     }
     return frames;
   }
@@ -545,6 +550,8 @@
     return {
       picture: true,
       opaque: false,
+      rowTransparent: true,
+      clearIndex: 255,
       width,
       height,
       canvasWidth: width,

@@ -231,10 +231,13 @@ function bitmapFor(frame, colors) {
     if (!own && frame.dynamic === false && colors && colors.game) palette = colors.game;
     const opaque = Boolean(frame.opaque);
     const skip = frame.transparent == null ? 0 : frame.transparent;
+    const byRow = Boolean(frame.rowTransparent) && !opaque;
     for (let i = 0; i < frame.pixels.length; i++) {
       const index = frame.pixels[i];
       const o = i * 4;
-      if (index === skip && !opaque) continue;
+      if (byRow) {
+        if (Nhl92Jim.picturePixelHidden(index, frame.clearIndex)) continue;
+      } else if (index === skip && !opaque) continue;
       const rgb = palette[index] || [0, 0, 0];
       data[o] = rgb[0];
       data[o + 1] = rgb[1];

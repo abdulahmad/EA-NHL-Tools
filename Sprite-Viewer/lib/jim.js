@@ -11,14 +11,23 @@
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.Nhl92Jim = api;
 })(typeof self !== 'undefined' ? self : this, function (anim) {
+  // Map pixels are color + palette * 16. Palette 0 is an opaque picture
+  // (color 0 is a real entry, usually the fill). Palettes 1, 2, and 3 use
+  // color 0 as the transparent hole, the same way a Genesis tile does when
+  // it is not on the backdrop row.
+  function picturePixelHidden(index, clearIndex) {
+    if (clearIndex != null && index === clearIndex) return true;
+    const row = index >> 4;
+    return (index & 15) === 0 && row !== 0;
+  }
+
   function pictureAnim(width, height, pixels, colors) {
     const frame = {
       frame: 1,
       index: 0,
       picture: true,
-      // Genesis color 0 is transparent, so a title laid over another screen
-      // keeps the picture behind it instead of a black box.
       opaque: false,
+      rowTransparent: true,
       width,
       height,
       canvasWidth: width,
@@ -37,6 +46,7 @@
       numFrames: 1,
       picture: true,
       opaque: false,
+      rowTransparent: true,
       combined: colors,
       renderFrame: function () { return frame; }
     };
@@ -270,5 +280,5 @@
     return pictureAnim(width, height, pixels, colors);
   }
 
-  return { decodeJim, pictureAnim, decompressBytecode, unpackPortrait };
+  return { decodeJim, pictureAnim, picturePixelHidden, decompressBytecode, unpackPortrait };
 });
