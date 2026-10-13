@@ -16,7 +16,9 @@
       frame: 1,
       index: 0,
       picture: true,
-      opaque: true,
+      // Genesis color 0 is transparent, so a title laid over another screen
+      // keeps the picture behind it instead of a black box.
+      opaque: false,
       width,
       height,
       canvasWidth: width,
@@ -34,7 +36,7 @@
     return {
       numFrames: 1,
       picture: true,
-      opaque: true,
+      opaque: false,
       combined: colors,
       renderFrame: function () { return frame; }
     };
@@ -168,10 +170,16 @@
     const tiles = tileWord & 0x7fff;
     if (!tiles || tiles > 4096) throw new Error('JIM tile count is not usable');
     if (packed) return { tiles, tileBytes: decompressBytecode(bytes, 10, tiles * 32) };
-    if (!noPalette && (palOff === 0 || palOff === 10 + tiles * 24)) {
+    // A shared 6×6 card (both header longs are 0) and a card whose palette
+    // sits right after the 3-byte rows are portraits. Arena graphics use the
+    // same zero header with ordinary 32-byte tiles and no map.
+    if (!noPalette && palOff === 10 + tiles * 24) {
       return { tiles, tileBytes: unpackPortrait(bytes, 10, tiles) };
     }
-    if (noPalette || palOff === 10 + tiles * 32 || palOff === mapOff) {
+    if (!noPalette && palOff === 0 && mapOff === 0 && (tiles === 36 || tiles === 0x24)) {
+      return { tiles, tileBytes: unpackPortrait(bytes, 10, tiles) };
+    }
+    if (noPalette || palOff === 0 || palOff === 10 + tiles * 32 || palOff === mapOff) {
       return { tiles, tileBytes: rawTiles(bytes, tiles) };
     }
     throw new Error('This picture is not a JIM');
@@ -198,10 +206,14 @@
     const decoded = tileBytesFor(bytes, palOff, mapOff, tileWord, noPalette);
     const tiles = decoded.tiles;
     const tileBytes = decoded.tileBytes;
+    const face = shared && (tiles === 36 || tiles === 0x24);
     let mapW;
     let mapH;
-    if (shared) {
-      mapW = tiles === 36 || tiles === 0x24 ? 6 : Math.max(1, Math.round(Math.sqrt(tiles)));
+    if (face) {
+      mapW = 6;
+      mapH = Math.ceil(tiles / mapW);
+    } else if (shared) {
+      mapW = Math.min(8, tiles);
       mapH = Math.ceil(tiles / mapW);
     } else {
       if (mapOff + 4 > bytes.length) throw new Error('JIM offsets run past the file');
@@ -215,7 +227,7 @@
     // Player portraits unpack to nibbles 5–12. DrawPictureBox copies the 16
     // colors at palette+0x20 (the first row is a solid fill) into CRAM. The
     // same 16 colors are stored in every slot so a map palette bit still hits them.
-    const portrait = !noPalette && (palOff === 0 || palOff === 10 + tiles * 24);
+    const portrait = face || (!noPalette && palOff === 10 + tiles * 24);
     let faceBytes = null;
     if (portrait && shared && donor && donor.length >= 64) faceBytes = donor.subarray(32, 64);
     else if (portrait && !shared && palOff + 64 <= bytes.length) faceBytes = bytes.subarray(palOff + 32, palOff + 64);

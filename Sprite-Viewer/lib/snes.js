@@ -372,7 +372,7 @@
     return renderMap(mapBytes, tiles, colors, mapW, mapH);
   }
 
-  function tileSheet(tiles, columns, colors) {
+  function tileSheet(tiles, columns, colors, remap) {
     const count = (tiles.length / 32) | 0;
     const cols = columns || 16;
     const rows = Math.max(1, Math.ceil(count / cols));
@@ -382,22 +382,49 @@
     for (let t = 0; t < count; t++) {
       for (let y = 0; y < 8; y++) {
         for (let x = 0; x < 8; x++) {
-          pixels[((t / cols) | 0) * 8 * width + y * width + (t % cols) * 8 + x] = tilePixel(tiles, t, x, y);
+          let color = tilePixel(tiles, t, x, y);
+          if (remap && color < remap.length) color = remap[color];
+          pixels[((t / cols) | 0) * 8 * width + y * width + (t % cols) * 8 + x] = color;
         }
       }
     }
     return pictureFromPixels(width, height, pixels, colors || grey(16));
   }
 
-  function font93(rom, image) {
+  function font93(rom, image, rinkColors) {
     const data = pak.unpack93(rom.subarray(image.start, image.end), 0);
-    return tileSheet(data, image.columns || 16, grey(16));
+    return tileSheet(data, image.columns || 16, rinkColors || grey(16), image.remap);
   }
 
   function map93(rom, image, rinkColors) {
-    const tiles = pak.unpack93(rom.subarray(image.tilesStart, image.tilesEnd), 0);
+    const tiles = image.rawTiles
+      ? rom.subarray(image.tilesStart, image.tilesEnd)
+      : pak.unpack93(rom.subarray(image.tilesStart, image.tilesEnd), 0);
     const mapBytes = rom.subarray(image.mapStart, image.mapStart + image.mapSize);
     return renderMap(mapBytes, tiles, rinkColors || grey(128), image.mapW, image.mapH);
+  }
+
+  function frames93(rom, image, rinkColors) {
+    const tiles = image.rawTiles
+      ? rom.subarray(image.tilesStart, image.tilesEnd)
+      : pak.unpack93(rom.subarray(image.tilesStart, image.tilesEnd), 0);
+    const colors = rinkColors || grey(128);
+    const records = [];
+    for (let i = 0; i < image.frames; i++) {
+      const at = image.mapStart + i * image.frameBytes;
+      const mapBytes = rom.subarray(at, at + image.frameBytes);
+      records.push(renderMap(mapBytes, tiles, colors, image.mapW, image.mapH).renderFrame(1));
+    }
+    return pictureAnim(records);
+  }
+
+  function playoff93(rom, image) {
+    const data = pak.unpack93(rom.subarray(image.tilesStart, image.tilesEnd), 0);
+    const colors = decodeBgr555(data, 0, 128);
+    while (colors.length < 128) colors.push([0, 0, 0]);
+    const tiles = data.subarray(256);
+    const mapBytes = rom.subarray(image.mapStart, image.mapStart + image.mapSize);
+    return renderMap(mapBytes, tiles, colors, image.mapW, image.mapH);
   }
 
   function linearToPlanar(data) {
@@ -559,13 +586,13 @@
     return pals;
   }
 
-  function sprites94(rom, image) {
+  function sprites94(rom, image, rinkColors) {
     const view = image.packed
       ? bufferView(pak.unpack94(rom, pak.lorom(image.addr)))
       : romAddrView(rom, image.addr);
     const arts = readSpriteSet(view);
     const table = image.palTable ? paletteTable(rom, image.palTable, arts.length) : null;
-    const shared = table ? null : greyRows(image.palRows || 1);
+    const shared = table ? null : (rinkColors || greyRows(image.palRows || 1));
     const records = arts.map((art, index) => spritePicture(art, table ? table[index] : shared));
     return pictureAnim(records);
   }
@@ -613,9 +640,11 @@
   function openImage(rom, image, spec, rinkColors) {
     if (image.kind === 'snes93-screen') return screen93(rom, image, rinkColors);
     if (image.kind === 'snes93-map') return map93(rom, image, rinkColors);
-    if (image.kind === 'snes93-font') return font93(rom, image);
+    if (image.kind === 'snes93-font') return font93(rom, image, rinkColors);
+    if (image.kind === 'snes93-frames') return frames93(rom, image, rinkColors);
+    if (image.kind === 'snes93-playoff') return playoff93(rom, image);
     if (image.kind === 'snes94-rink') return rink94(rom, spec, rinkColors);
-    if (image.kind === 'snes94-sprites') return sprites94(rom, image);
+    if (image.kind === 'snes94-sprites') return sprites94(rom, image, image.useRink ? rinkColors : null);
     if (image.kind === 'snes94-screen') return screen94(rom, image, rinkColors);
     if (image.kind === 'snes94-center') return centerIce94(rom, rinkColors);
     throw new Error('Unknown picture ' + image.label);

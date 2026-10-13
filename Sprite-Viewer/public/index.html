@@ -62,6 +62,10 @@
     </aside>
 
     <main class="stage-panel">
+      <div class="pane-toggles">
+        <button type="button" id="toggle-list" aria-expanded="false">List</button>
+        <button type="button" id="toggle-meta" aria-expanded="false">Details</button>
+      </div>
       <div class="stage-wrap">
         <canvas id="stage" aria-label="Sprite stage"></canvas>
         <div class="compass" id="compass" aria-label="Facing">
@@ -131,6 +135,7 @@
         <p>The dashed box is the frame's canvas. <b>Pin</b> chooses the point held in the middle of the stage. <b>0, 0</b> is the player's position, at the skates, and <b>Hotspot</b> is where the puck sits. The amber mark is 0, 0. The red cross is the hotspot.</p>
       </section>
     </aside>
+    <button type="button" id="scrim" class="scrim" aria-label="Close panels"></button>
   </div>
   <script src="/lib/parse-frames.js"></script>
   <script src="/lib/anim.js"></script>

@@ -154,7 +154,7 @@
   // Crowd, faceoff, zamboni and the title sprites are a packed (or raw) tile
   // bank plus a word table of frame offsets. Frame 0 is unused. Sprite bytes
   // are the 93/94 record: X, Y, tile, flags, size.
-  function openFrames(buffer, jim) {
+  function openFrames(buffer, jim, donorPalette) {
     const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
     const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
     if (bytes.length < 16 || !jim) throw new Error('Frame bank is too small');
@@ -209,8 +209,13 @@
     }
     if (!frames.length) throw new Error('Frame bank has no frames');
     const colors = [];
+    const donor = donorPalette
+      ? (donorPalette instanceof Uint8Array ? donorPalette : new Uint8Array(donorPalette))
+      : null;
     if (!noPalette && palOff + 128 <= bytes.length && palOff !== table) {
       for (let p = 0; p < 4; p++) colors.push.apply(colors, decodeCram(view, palOff + p * 32));
+    } else if (donor && donor.length >= 128 && anim && anim.decodePaletteFile) {
+      for (let p = 0; p < 4; p++) colors.push.apply(colors, anim.decodePaletteFile(donor.subarray(p * 32, (p + 1) * 32)));
     } else {
       for (let i = 0; i < 64; i++) {
         const ramp = i === 0 ? 0 : 32 + ((i * 37) % 224);

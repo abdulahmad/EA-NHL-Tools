@@ -119,7 +119,14 @@
     EASCRN: ['EA screen', 'Screens'],
     EASCRN1: ['EA screen 2', 'Screens'],
     EAOPEN: ['EA open', 'Screens'],
-    EADESK: ['EA desk', 'Screens']
+    EADESK: ['EA desk', 'Screens'],
+    SCRBRD: ['Scoreboard', 'Jumbotron']
+  };
+
+  // Event clips and the scoreboard. They share one sidebar group.
+  const JUMBOTRON = {
+    CLAP: 1, CROSS: 1, CFLAG: 1, UFLAG: 1, FANOM: 1, GOAL: 1, GUILT: 1, HOOK: 1,
+    RUFF: 1, SAVED: 1, SIREN: 1, SCRBRD1: 1, SCRBRD2: 1
   };
 
   const SEQUENCE_LABELS = {
@@ -128,7 +135,9 @@
     EADESK: ['EA desk', 'Screens'],
     SETTING: ['Settings', 'Screens'],
     PIONEER: ['Pioneer', 'Screens'],
-    EASCRN: ['EA screen', 'Screens']
+    EASCRN: ['EA screen', 'Screens'],
+    SCRBRD: ['Scoreboard', 'Jumbotron'],
+    CTTITLE: ['City titles', 'Screens']
   };
 
   const CITY_CODES = {
@@ -145,11 +154,13 @@
   const PAL_DONOR = {
     SRLOGO: 'ARENA',
     CTLOGO: 'CTBKGD',
-    CTTITLE: 'CITY',
-    CTTITLE1: 'CITY',
-    CTTITLE2: 'CITY',
-    CTTITLE3: 'CITY',
-    PSTATBAR: 'CITY',
+    // TonightsGameScreen and the summary screens load ctbkgd "!pal" before these shapes.
+    CTTITLE: 'CTBKGD',
+    CTTITLE1: 'CTBKGD',
+    CTTITLE2: 'CTBKGD',
+    CTTITLE3: 'CTBKGD',
+    // DrawCreatePlayer copies prez2 "!pal" before the stat bar.
+    PSTATBAR: 'PREZ2',
     DIALOGBX: 'DB_BUT',
     EXHGAME2: 'DB_BUT',
     PLAQUE: 'DB_BUT',
@@ -349,6 +360,7 @@
     if (16 + count * 8 > bytes.length) return null;
     const shapes = [];
     let palette = null;
+    let paletteRank = 0;
     for (let i = 0; i < count; i++) {
       const entry = 16 + i * 8;
       const tag = tagAt(bytes, entry);
@@ -356,7 +368,12 @@
       if (offset <= 0 || offset >= bytes.length) continue;
       const slice = bytes.subarray(offset);
       if (tag.charAt(0) === '!' || /^pal/i.test(tag)) {
-        palette = palette || decodeEaPalette(slice);
+        const decoded = decodeEaPalette(slice);
+        const rank = tag === '!pal' ? 3 : 2;
+        if (decoded && rank >= paletteRank) {
+          palette = decoded;
+          paletteRank = rank;
+        }
         continue;
       }
       const spit = decodeSpit(slice);
@@ -797,18 +814,18 @@
 
   function openImageParts(parts, donor) {
     const frames = [];
-    let colors = paletteFrom(donor) || null;
+    let carry = paletteFrom(donor) || null;
     for (const part of parts || []) {
       const opened = openBytes(part && part.data) || { shapes: [], palette: null };
-      if (!colors && opened.palette) colors = opened.palette;
-      const use = colors || grayscale();
+      if (opened.palette) carry = opened.palette;
+      const use = opened.palette || carry || grayscale();
       for (const shape of opened.shapes) {
         const frame = shapeToFrame(shape, frames.length + 1, true);
         frame.colors = use;
         frames.push(frame);
       }
     }
-    const use = colors || grayscale();
+    const use = (frames[0] && frames[0].colors) || carry || grayscale();
     return {
       numFrames: frames.length,
       frames,
@@ -843,6 +860,7 @@
         group: 'Jerseys'
       };
     }
+    if (JUMBOTRON[stem]) return { label: LABELS[stem] ? LABELS[stem][0] : stemOf(rel), group: 'Jumbotron' };
     const emblem = /^EMB([A-Z]{2,4})$/.exec(stem);
     if (emblem && !/^PAL/.test(emblem[1])) {
       return { label: cityOf(emblem[1]) + ' emblem', group: 'Logos' };
@@ -1080,7 +1098,9 @@
         image.palette = sibling;
         continue;
       }
-      const donor = PAL_DONOR[stemOf(image.id).toUpperCase()];
+      const stem = stemOf(image.id).toUpperCase();
+      let donor = PAL_DONOR[stem];
+      if (!donor && /^EMB/.test(stem) && !/^EMBPAL/.test(stem)) donor = 'EMBPAL';
       if (donor && byId.has(donor)) image.palette = byId.get(donor);
     }
     images.sort((a, b) => a.label.localeCompare(b.label) || a.id.localeCompare(b.id));

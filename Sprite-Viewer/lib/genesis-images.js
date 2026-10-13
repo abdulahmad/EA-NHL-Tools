@@ -25,7 +25,7 @@ module.exports = {
     { id: "EASN.map.jim", label: "EASN", group: "Screens", kind: "jim", start: 509866, end: 510278 },
     { id: "RonBarr.map.jim", label: "Ron Barr", group: "Screens", kind: "jim", start: 510278, end: 511774 },
     { id: "Scores.map.jim", label: "Scores", group: "Screens", kind: "jim", start: 511774, end: 512772 },
-    { id: "Stanley.anim", label: "Stanley", group: "Sprites", kind: "frames", start: 512772, end: 521462 },
+    { id: "Stanley.anim", label: "Spinning EASN", group: "Sprites", kind: "frames", start: 512772, end: 521462 },
     { id: "EASN2.map.jim", label: "EASN 2", group: "Screens", kind: "jim", start: 521462, end: 523126 }
   ],
   nhl94: [
@@ -429,7 +429,7 @@ module.exports = {
     { id: "SetupFont.map.jim", label: "Setup Font", group: "Fonts", kind: "jim", start: 1382240, end: 1385678 },
     { id: "SetupBgMap2.map.jim", label: "Setup Bg Map 2", group: "Screens", kind: "jim", start: 1385678, end: 1411324 },
     { id: "SetupBgMap1.map.jim", label: "Setup Bg Map 1", group: "Screens", kind: "jim", start: 1411324, end: 1414986 },
-    { id: "TeamBitmaps.map.jim", label: "Team Bitmaps", group: "Screens", kind: "jim", start: 1414986, end: 1429096 },
+    { id: "TeamBitmaps.map.jim", label: "Team blocks", group: "Screens", kind: "jim", start: 1414986, end: 1429096 },
     { id: "BigFontMap3.map.jim", label: "Big Font Map 3", group: "Fonts", kind: "jim", start: 1429096, end: 1433994 },
     { id: "BigFontMap.map.jim", label: "Big Font", group: "Fonts", kind: "jim", start: 1433994, end: 1438828 },
     { id: "BigFontMap2.map.jim", label: "Big Font Map 2", group: "Fonts", kind: "jim", start: 1438828, end: 1443342 },

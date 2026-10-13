@@ -144,7 +144,12 @@
       kind: 'sheet',
       paletteKind: 'genesis',
       banks: [{ id: 'sprites', label: 'Sprites' }],
-      images: stampLogos('nhl95', stampPortraits('nhl95', generated.nhl95)),
+      images: stampLogos('nhl95', stampPortraits('nhl95', generated.nhl95)).map((image) => {
+        if (!/^ArenaGfx/.test(image.id)) return image;
+        const next = Object.assign({}, image);
+        delete next.paletteAt;
+        return next;
+      }),
       palettes: '95',
       romNames: ['nhl95.bin', 'nhl95.md', 'nhl95.gen'],
       romBytes: 0x200000,
@@ -195,12 +200,19 @@
       images: [
         { id: 'title', label: 'Title', group: 'Screens', kind: 'snes93-screen', start: 0x2D5C0, end: 0x2D5C0 + 9721, mapW: 32, mapH: 28, mapSize: 0x700, pal: 0x700, tiles: 0x800 },
         { id: 'setup', label: 'Game setup', group: 'Screens', kind: 'snes93-screen', start: 0x40000, end: 0x40000 + 559, mapW: 32, mapH: 32, mapSize: 0x800, pal: 0x800, tiles: 0x900 },
-        { id: 'easn', label: 'EASN', group: 'Screens', kind: 'snes93-screen', start: 0x3C3A0, end: 0x3C3A0 + 788, mapW: 32, mapH: 16, mapSize: 0x400, tiles: 0x400, noPal: true },
+        { id: 'easn', label: 'EASN', group: 'Screens', kind: 'snes93-screen', start: 0x3C3A0, end: 0x3C3A0 + 788, mapW: 32, mapH: 16, mapSize: 0x400, tiles: 0x400, useRink: true },
         { id: 'ronbarr', label: 'Ron Barr', group: 'Screens', kind: 'snes93-screen', start: 0x6D38, end: 0x6D38 + 1590, mapW: 8, mapH: 9, mapSize: 0x90, pal: 0x90, tiles: 0x190 },
         { id: 'nhlpa', label: 'NHLPA logo', group: 'Screens', kind: 'snes93-screen', start: 0x60000, end: 0x60000 + 1114, mapW: 8, mapH: 10, mapSize: 0xA0, pal: 0xA0, tiles: 0x1A0 },
         { id: 'rink', label: 'Ice rink', group: 'Ice', kind: 'snes93-map', mapStart: 0x1CCCB, mapSize: 8160, mapW: 48, mapH: 85, tilesStart: 0x14DA0, tilesEnd: 0x14DA0 + 11164 },
-        { id: 'bigfont', label: 'Big font', group: 'Fonts', kind: 'snes93-font', start: 0x6EEC8, end: 0x6EEC8 + 2496, columns: 16 },
-        { id: 'smallfont', label: 'Small font', group: 'Fonts', kind: 'snes93-font', start: 0x1C6D8, end: 0x1C6D8 + 1332, columns: 16 }
+        { id: 'horrink', label: 'Horizontal rink', group: 'Ice', kind: 'snes93-map', mapStart: 0x1ECAB, mapSize: 0xA80, mapW: 48, mapH: 28, tilesStart: 0x14DA0, tilesEnd: 0x14DA0 + 11164 },
+        { id: 'faceoff', label: 'Face off', group: 'Screens', kind: 'snes93-map', mapStart: 0x26949, mapSize: 240, mapW: 12, mapH: 10, tilesStart: 0x3C6B4, tilesEnd: 0x3CABA },
+        { id: 'framer', label: 'Framer', group: 'Screens', kind: 'snes93-map', mapStart: 0x4071C, mapSize: 18, mapW: 3, mapH: 3, tilesStart: 0x4072E, tilesEnd: 0x407AE, rawTiles: true },
+        { id: 'playoff', label: 'Playoff bracket', group: 'Screens', kind: 'snes93-playoff', mapStart: 0x578B4, mapSize: 552, mapW: 12, mapH: 23, tilesStart: 0x2779D, tilesEnd: 0x27816 },
+        { id: 'teamblocks', label: 'Team blocks', group: 'Screens', kind: 'snes93-frames', mapStart: 0x3CABA, frameBytes: 36, frames: 26, mapW: 9, mapH: 2, tilesStart: 0x41B73, tilesEnd: 0x43C56 },
+        { id: 'refs', label: 'Refs', group: 'Ice', kind: 'snes93-frames', mapStart: 0x1FAEC, frameBytes: 0x70, frames: 7, mapW: 8, mapH: 7, tilesStart: 0x3F55E, tilesEnd: 0x3FF78 },
+        { id: 'refshor', label: 'Refs horizontal', group: 'Ice', kind: 'snes93-frames', mapStart: 0x4F3FB, frameBytes: 0x70, frames: 17, mapW: 8, mapH: 7, tilesStart: 0x4EB45, tilesEnd: 0x4F3FB },
+        { id: 'bigfont', label: 'Big font', group: 'Fonts', kind: 'snes93-font', start: 0x6EEC8, end: 0x6EEC8 + 2496, columns: 16, remap: [7, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] },
+        { id: 'smallfont', label: 'Small font', group: 'Fonts', kind: 'snes93-font', start: 0x1C6D8, end: 0x1C6D8 + 1332, columns: 16, remap: [4, 3, 4, 3, 2, 1, 4] }
       ]
     },
     {

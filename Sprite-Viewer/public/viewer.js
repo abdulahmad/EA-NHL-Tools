@@ -212,9 +212,14 @@ function placement(frame) {
 }
 
 function bitmapFor(frame, colors) {
-  const own = Boolean(frame.colors);
-  const key = state.game + ':' + spriteBank() + ':' + frame.frame + ':' + (own ? 'own' : (state.paletteName || 'embedded'));
-  let canvas = bitmaps.get(key);
+  const named = state.paletteName;
+  const pending = Boolean(named) && !paletteFiles.has(named);
+  const team = !pending && named && paletteFiles.has(named);
+  const own = Boolean(frame.colors) && !team;
+  const key = pending
+    ? ''
+    : state.game + ':' + spriteBank() + ':' + frame.frame + ':' + (own ? 'own' : (named || 'embedded'));
+  let canvas = key && bitmaps.get(key);
   if (!canvas) {
     canvas = document.createElement('canvas');
     canvas.width = Math.max(1, frame.width);
@@ -222,8 +227,8 @@ function bitmapFor(frame, colors) {
     const ctx = canvas.getContext('2d');
     const image = ctx.createImageData(canvas.width, canvas.height);
     const data = image.data;
-    let palette = frame.colors || colors;
-    if (frame.dynamic === false && colors && colors.game) palette = colors.game;
+    let palette = own ? frame.colors : colors;
+    if (!own && frame.dynamic === false && colors && colors.game) palette = colors.game;
     const opaque = Boolean(frame.opaque);
     const skip = frame.transparent == null ? 0 : frame.transparent;
     for (let i = 0; i < frame.pixels.length; i++) {
@@ -237,7 +242,7 @@ function bitmapFor(frame, colors) {
       data[o + 3] = 255;
     }
     ctx.putImageData(image, 0, 0);
-    bitmaps.set(key, canvas);
+    if (key) bitmaps.set(key, canvas);
   }
   return canvas;
 }
@@ -343,7 +348,11 @@ function paintStage() {
     ctx.clearRect(0, 0, cssW, cssH);
     return;
   }
-  paintInto(ctx, cssW, cssH, frame, colors, viewScale(cssW, cssH, 46, state.scale), {
+  const fit = viewScale(cssW, cssH, 46, 64);
+  const picture = frame.picture || state.mode === 'image';
+  const base = picture ? Math.min(8, fit) : Math.min(state.scale, fit);
+  const zoom = picture ? Math.pow(2, (state.scale - 8) / 2) : 1;
+  paintInto(ctx, cssW, cssH, frame, colors, base * zoom, {
     padBottom: 46,
     exactScale: true,
     mark: !frame.picture
@@ -510,7 +519,8 @@ function bindSpfEnd() {
   }
 }
 
-const IMAGE_ORDER = ['Screens', 'Logos', 'Players', 'Sprites', 'Ice', 'Fonts', 'Other'];
+const IMAGE_ORDER = ['Screens', 'Logos', 'Players', 'Sprites', 'Ice', 'Jumbotron', 'Fonts', 'Other'];
+const imageMemory = new Map();
 
 function renderImageList(box, q) {
   const images = (gameInfo && gameInfo.images) || [];
@@ -572,7 +582,9 @@ function renderImageList(box, q) {
         state.acc = 0;
         state.holdKey = '';
         state.playing = false;
-        ensureImage(state.image).then(() => {
+        rememberImage();
+        closeDrawers();
+        applyImagePalette(image).then(() => ensureImage(state.image)).then(() => {
           loadError = '';
           refreshAll();
         }).catch((err) => {
@@ -670,6 +682,7 @@ function renderList() {
       }
       button.append(name, sub);
       button.addEventListener('click', () => {
+        closeDrawers();
         if (state.mode === 'spf') state.spf = entry.name;
         else state.spa = entry.name;
         state.dir = 0;
@@ -704,7 +717,7 @@ function renderFilmstrip() {
   strip.replaceChildren();
   const colors = activeColors();
   if (!colors) return;
-  const windowed = seq.steps.length > 80;
+  const windowed = state.mode !== 'image' && seq.steps.length > 80;
   const steps = windowed
     ? seq.steps.map((step, index) => ({ step, index })).filter((item) => Math.abs(item.index - state.step) <= 8)
     : seq.steps.map((step, index) => ({ step, index }));
@@ -865,11 +878,40 @@ function romHint() {
   return 'No picture loaded.';
 }
 
+function rememberImage() {
+  if (!gameInfo || !state.image) return;
+  const image = ((gameInfo.images) || []).find((item) => item.id === state.image);
+  imageMemory.set(gameInfo.id, { id: state.image, label: image ? image.label : '' });
+}
+
+function closeDrawers() {
+  const app = document.querySelector('.app');
+  if (!app) return;
+  app.classList.remove('show-list', 'show-meta');
+  const list = el('toggle-list');
+  const meta = el('toggle-meta');
+  if (list) list.setAttribute('aria-expanded', 'false');
+  if (meta) meta.setAttribute('aria-expanded', 'false');
+}
+
+function currentImage() {
+  return ((gameInfo && gameInfo.images) || []).find((image) => image.id === state.image) || null;
+}
+
 function showEmbeddedPalette() {
   if (state.mode !== 'image' && state.paletteName) spritePalette = state.paletteName;
   state.paletteName = '';
   const menu = el('palette');
   if (menu && [...menu.options].some((option) => option.value === '')) menu.value = '';
+}
+
+// Jumbotron clips and the scoreboard are indexed into the team palette.
+async function applyImagePalette(image) {
+  if (image && image.group === 'Jumbotron') {
+    if (!state.paletteName) await restoreSpritePalette();
+    return;
+  }
+  showEmbeddedPalette();
 }
 
 async function restoreSpritePalette() {
@@ -971,7 +1013,7 @@ function refreshPlaybackChrome() {
   renderTransport();
   renderCompass();
   renderMeta();
-  if (sequence().key !== sequenceKey || sequence().steps.length > 80) renderFilmstrip();
+  if (sequence().key !== sequenceKey || (state.mode !== 'image' && sequence().steps.length > 80)) renderFilmstrip();
   else highlightStep();
 }
 
@@ -1078,9 +1120,10 @@ function wire() {
   });
   el('mode-image').addEventListener('click', async () => {
     clearSearch();
-    showEmbeddedPalette();
+    if (state.mode !== 'image' && state.paletteName) spritePalette = state.paletteName;
     state.mode = 'image';
     if (!state.image && gameInfo && gameInfo.images.length) state.image = gameInfo.images[0].id;
+    await applyImagePalette(currentImage());
     state.step = 0;
     state.acc = 0;
     state.playing = false;
@@ -1186,14 +1229,31 @@ function wire() {
     refreshAll();
   });
   el('palette').addEventListener('change', async () => {
-    state.paletteName = el('palette').value;
+    const next = el('palette').value;
     state.paletteExplicit = true;
+    await ensurePalette(next);
+    state.paletteName = next;
     if (state.paletteName || state.mode !== 'image') spritePalette = state.paletteName;
-    await ensurePalette(state.paletteName);
     bitmaps.clear();
     sequenceKey = '';
     refreshAll();
   });
+  function setDrawer(name, open) {
+    const app = document.querySelector('.app');
+    const showList = name === 'list' ? open : false;
+    const showMeta = name === 'meta' ? open : false;
+    app.classList.toggle('show-list', showList);
+    app.classList.toggle('show-meta', showMeta);
+    el('toggle-list').setAttribute('aria-expanded', showList ? 'true' : 'false');
+    el('toggle-meta').setAttribute('aria-expanded', showMeta ? 'true' : 'false');
+  }
+  el('toggle-list').addEventListener('click', () => {
+    setDrawer('list', !document.querySelector('.app').classList.contains('show-list'));
+  });
+  el('toggle-meta').addEventListener('click', () => {
+    setDrawer('meta', !document.querySelector('.app').classList.contains('show-meta'));
+  });
+  el('scrim').addEventListener('click', closeDrawers);
   el('stage').addEventListener('wheel', (event) => {
     event.preventDefault();
     state.scale = Math.max(1, Math.min(12, state.scale + (event.deltaY < 0 ? 1 : -1)));
@@ -1245,6 +1305,28 @@ function fillSelect(select, items, selected) {
   if (selected != null && [...select.options].some((option) => option.value === selected)) {
     select.value = selected;
   }
+}
+
+const icePalettes = new Map();
+
+async function icePaletteBytes() {
+  if (!gameInfo) return null;
+  if (icePalettes.has(gameInfo.id)) return icePalettes.get(gameInfo.id);
+  const image = (gameInfo.images || []).find((item) => item.kind === 'jim' && /^(IceRink|Rinktilelist)/i.test(item.id));
+  if (!image) {
+    icePalettes.set(gameInfo.id, null);
+    return null;
+  }
+  const bytes = await bytesFor(image);
+  const view = bytes && bytes.length >= 12 ? new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength) : null;
+  const palOff = view ? view.getUint32(0) : 0;
+  if (!view || !palOff || palOff === 0xffffffff || palOff + 128 > bytes.length) {
+    icePalettes.set(gameInfo.id, null);
+    return null;
+  }
+  const donor = bytes.slice(palOff, palOff + 128);
+  icePalettes.set(gameInfo.id, donor);
+  return donor;
 }
 
 async function ensureRom() {
@@ -1344,12 +1426,18 @@ async function ensureImage(id) {
       if (rom && image.paletteAt >= 0 && image.paletteAt + 128 <= rom.length) {
         donor = rom.subarray(image.paletteAt, image.paletteAt + 128);
       }
+    } else if (bytes.length >= 8) {
+      const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+      const palOff = view.getUint32(0);
+      const mapOff = view.getUint32(4);
+      if (palOff === 0xffffffff || (palOff === 0 && mapOff === 0)) donor = await icePaletteBytes();
     }
     parsed = Nhl92Jim.decodeJim(bytes, donor);
   } else if (image.kind === 'frames') {
     const bytes = await bytesFor(image);
     if (!bytes) return null;
-    parsed = Nhl92Sheet.openFrames(bytes, Nhl92Jim);
+    const missing = bytes.length >= 4 && new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(0) === 0xffffffff;
+    parsed = Nhl92Sheet.openFrames(bytes, Nhl92Jim, missing ? await icePaletteBytes() : null);
   } else if (image.kind === 'pc95') {
     const paths = image.files && image.files.length ? image.files : [image.id];
     const parts = [];
@@ -1406,6 +1494,7 @@ function choosePalette(pals, previous, keepSelection) {
 }
 
 async function loadGame(id, keepSelection) {
+  rememberImage();
   const previous = {
     mode: state.mode,
     bank: state.bank,
@@ -1483,14 +1572,21 @@ async function loadGame(id, keepSelection) {
   state.spa = spaMatch ? spaMatch.name : '';
   state.spf = spfMatch ? spfMatch.name : '';
   if (!catalog.anims.length && state.mode === 'spa' && catalog.spfs.length) state.mode = 'spf';
+  const remembered = imageMemory.get(info.id);
   const imageMatch = images.find((image) => image.id === previous.image)
     || images.find((image) => previous.imageLabel && image.label.toLowerCase() === previous.imageLabel.toLowerCase())
+    || (remembered && (images.find((image) => image.id === remembered.id)
+      || images.find((image) => remembered.label && image.label.toLowerCase() === remembered.label.toLowerCase())))
     || images[0];
   state.image = imageMatch ? imageMatch.id : '';
+  rememberImage();
+  if (state.mode !== 'image' && chosen) await ensurePalette(chosen);
   if (state.mode === 'image') {
     if (!spritePalette) spritePalette = chosen || Nhl92Labels.defaultPaletteFile(jerseys);
-    fillSelect(el('palette'), paletteItems, '');
-    state.paletteName = '';
+    const teamPic = imageMatch && imageMatch.group === 'Jumbotron';
+    fillSelect(el('palette'), paletteItems, teamPic ? (spritePalette || chosen || '') : '');
+    state.paletteName = el('palette').value;
+    if (state.paletteName) await ensurePalette(state.paletteName);
   } else {
     fillSelect(el('palette'), paletteItems, chosen);
     state.paletteName = el('palette').value;
@@ -1514,7 +1610,6 @@ async function loadGame(id, keepSelection) {
       loadError = err.message;
     }
   }
-  if (state.paletteName) await ensurePalette(state.paletteName);
   const anim = currentAnim();
   if (state.mode === 'frame' && anim) {
     state.frame = Math.max(1, Math.min(anim.numFrames, state.frame));

@@ -277,7 +277,7 @@ const picture = decodeJim(jim);
 const pictureFrame = picture.renderFrame(1);
 assert.strictEqual(picture.numFrames, 1);
 assert.strictEqual(pictureFrame.picture, true);
-assert.strictEqual(pictureFrame.opaque, true);
+assert.strictEqual(pictureFrame.opaque, false);
 assert.strictEqual(pictureFrame.width, 8);
 assert.strictEqual(pictureFrame.height, 8);
 assert.strictEqual(pictureFrame.pixels[0], 1);
@@ -286,6 +286,23 @@ notJim.writeUInt32BE(100, 0);
 notJim.writeUInt32BE(200, 4);
 notJim.writeUInt16BE(1, 8);
 assert.throws(() => decodeJim(notJim), /not a JIM/);
+
+const arenaSheet = Buffer.alloc(10 + 24 * 32);
+arenaSheet.writeUInt16BE(24, 8);
+arenaSheet[10] = 0x10;
+const arenaPic = decodeJim(arenaSheet);
+assert.strictEqual(arenaPic.renderFrame(1).width, 64);
+assert.strictEqual(arenaPic.renderFrame(1).height, 24);
+assert.strictEqual(arenaPic.renderFrame(1).pixels[0], 1);
+const unpaletted = Buffer.alloc(10 + 32 + 6);
+unpaletted.writeUInt32BE(0xffffffff, 0);
+unpaletted.writeUInt32BE(42, 4);
+unpaletted.writeUInt16BE(1, 8);
+unpaletted.writeUInt16BE(1, 42);
+unpaletted.writeUInt16BE(1, 44);
+const donor = Buffer.alloc(128);
+const fromDonor = decodeJim(unpaletted, donor);
+assert.deepStrictEqual(fromDonor.combined[1], [0, 0, 0]);
 
 const snes93rom = Buffer.alloc(160);
 snes93rom.writeUInt16LE(0, 96);
@@ -434,8 +451,21 @@ if (retail93) {
   assert.strictEqual(first.hotspotX, -4);
   assert.strictEqual(first.hotspotY, -20);
   assert.ok(first.pixels.some((pixel) => pixel));
-  const title = openImage(retail93, GAMES.find((game) => game.id === 'nhlpa93snes').images[0], null, null);
+  const snesGame = GAMES.find((game) => game.id === 'nhlpa93snes');
+  const title = openImage(retail93, snesGame.images[0], null, null);
   assert.strictEqual(title.renderFrame(1).width, 256);
+  const face = openImage(retail93, snesGame.images.find((image) => image.id === 'faceoff'), null, null);
+  assert.strictEqual(face.renderFrame(1).width, 96);
+  assert.strictEqual(face.renderFrame(1).height, 80);
+  const framer = openImage(retail93, snesGame.images.find((image) => image.id === 'framer'), null, null);
+  assert.strictEqual(framer.renderFrame(1).width, 24);
+  assert.strictEqual(framer.renderFrame(1).height, 24);
+  const blocks = openImage(retail93, snesGame.images.find((image) => image.id === 'teamblocks'), null, null);
+  assert.strictEqual(blocks.numFrames, 26);
+  assert.strictEqual(blocks.renderFrame(1).width, 72);
+  const playoff = openImage(retail93, snesGame.images.find((image) => image.id === 'playoff'), null, null);
+  assert.strictEqual(playoff.renderFrame(1).width, 96);
+  assert.strictEqual(playoff.renderFrame(1).height, 184);
 }
 const retail94 = romIf('/tmp/snes/94/lst/nhl94snes.sfc');
 if (retail94) {
@@ -698,6 +728,25 @@ const joined = pc95.openImageParts([
   { name: 'CREDIT01.QFS', data: fs.readFileSync(path.join(pcDir, 'CREDIT01.QFS')) }
 ]);
 assert.strictEqual(joined.numFrames, 2);
+if (fs.existsSync('/tmp/nhl95all/EMBBOS.QFS')) {
+  const live = pc95.catalogDirectory('/tmp/nhl95all');
+  const bos = live.images.find((image) => /EMBBOS/i.test(image.id));
+  assert.ok(bos && /EMBPAL\.QFS$/i.test(bos.palette));
+  const goal = live.images.find((image) => /GOAL\.PPV$/i.test(image.id));
+  assert.strictEqual(goal.group, 'Jumbotron');
+  const titles = live.images.find((image) => /CTTITLE\.QFS$/i.test(image.id));
+  assert.ok(titles && /CTBKGD\.QFS$/i.test(titles.palette));
+  const bar = live.images.find((image) => /PSTATBAR\.QFS$/i.test(image.id));
+  assert.ok(bar && /PREZ2\.QFS$/i.test(bar.palette));
+  const desk = live.images.find((image) => /EADESK0/i.test(image.id));
+  const parts = desk.files.map((rel) => ({
+    name: rel,
+    data: fs.readFileSync(path.join('/tmp/nhl95all', rel))
+  }));
+  const opened = pc95.openImageParts(parts);
+  assert.ok(opened.numFrames >= 3);
+  assert.notDeepStrictEqual(opened.renderFrame(1).colors[1], opened.renderFrame(2).colors[1]);
+}
 assert.strictEqual(joined.renderFrame(2).tag, '0001');
 assert.strictEqual(listed.hasHome, true);
 assert.ok(listed.paletteNames.includes('bufh.pal'));
