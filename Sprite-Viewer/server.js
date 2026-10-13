@@ -137,7 +137,10 @@ function pcPaletteBytes(name) {
   if (start + pc95.TEAM_BYTES > bin.length) return null;
   const colors = pc95.buildTeamPalette(bin.subarray(start, start + pc95.TEAM_BYTES), loadRinkColors());
   if (!colors) return null;
-  return Buffer.from(pc95.colorsToAct(colors));
+  return Buffer.concat([
+    Buffer.from(pc95.colorsToAct(colors)),
+    Buffer.from(pc95.colorsToAct(colors.game || colors))
+  ]);
 }
 
 function pcBundle(rels) {

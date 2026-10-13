@@ -8,10 +8,16 @@
  * SHPI. Each entry is a SPIT picture. Type 123 is raw pixels. Anything
  * else is the ILBM-style run already decoded by SPIT-To-BMP.
  *
- * Player and goalie sprites use a 256-color palette. HOMEPALS.BIN and
- * AWAYPALS.BIN hold 28 teams of 448 bytes. Colors 0–127 are the rink,
- * 128–191 are the 64 team colors, and the 128 mapping bytes at team
- * offset 320 remap sprite indexes 128–255. Index 0 is transparent.
+ * Player and goalie sprites use the createPal from PAL-To-ACT: rink
+ * colors, the 64 team colors, the mapping bytes at team offset 320,
+ * then createjerseyShadowfixed for indexes 0–143. Static sprites
+ * (referee, puck, the F*.PPV crowd) use the game palette instead,
+ * which is rinkpal plus those team colors and rinkpal's last five
+ * colors. The blitter skips index 255, and index 0 is equipment black.
+ *
+ * SPIT bytes 8 and 10 are the console 0, 0 point (DrawSprite subtracts
+ * them from the world position). GetHot reads HotList in HOCKEY.EXE;
+ * its Y is stored with the opposite sign of the Genesis hotspot.
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
@@ -499,24 +505,115 @@
     return out;
   }
 
+  const ACTS = {};
+  // HotList at HOCKEY.EXE file offset 0x11339C. Pairs are signed X, then
+  // Y with the opposite sign of the Genesis hotspot. 814 entries.
+  const HOT_B64 = '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';
+
+  function actColors(name) {
+    if (Object.prototype.hasOwnProperty.call(ACTS, name)) return ACTS[name];
+    ACTS[name] = null;
+    if (typeof require !== 'function') return null;
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const file = path.join(__dirname, '..', '..', 'PAL-To-ACT', name);
+      if (!fs.existsSync(file)) return null;
+      ACTS[name] = decodeAct(fs.readFileSync(file));
+      return ACTS[name];
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function padColors(colors) {
+    const out = [];
+    for (let i = 0; i < 256; i++) {
+      if (colors && colors[i]) out.push(colors[i].slice());
+      else out.push([0, 0, 0]);
+    }
+    return out;
+  }
+
+  // mergePal.js: the first palette keeps its head, and a rink palette
+  // also keeps its last five colors (indexes 251–255).
+  function mergeColors(first, second, colorsFromFirst, keepTail) {
+    const end = keepTail ? 251 : 256;
+    const out = [];
+    for (let i = 0; i < 256; i++) {
+      const source = i < colorsFromFirst || i >= end ? first : second;
+      out.push((source[i] || [0, 0, 0]).slice());
+    }
+    return out;
+  }
+
+  function hotTable() {
+    if (hotTable.bytes) return hotTable.bytes;
+    let bytes;
+    if (typeof Buffer !== 'undefined') bytes = new Uint8Array(Buffer.from(HOT_B64, 'base64'));
+    else {
+      const bin = atob(HOT_B64);
+      bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    }
+    hotTable.bytes = bytes;
+    return bytes;
+  }
+
+  function signedByte(value) {
+    return value > 127 ? value - 256 : value;
+  }
+
+  // GetHot in engine_core.asm. The frame number is the 0-based PC index.
+  function hotspotFor(index) {
+    let frame = index;
+    if (frame < 0 || frame >= 0x468) return { x: 0, y: 0 };
+    if (frame >= 0x378) frame -= 0xF4;
+    else if (frame > 0x283) return { x: 0, y: 0 };
+    if (frame >= 0x2DA) frame -= 0x46;
+    else if (frame > 0x293) return { x: 0, y: 0 };
+    const table = hotTable();
+    const at = frame * 2;
+    if (at + 1 >= table.length) return { x: 0, y: 0 };
+    return { x: signedByte(table[at]), y: -signedByte(table[at + 1]) };
+  }
+
+  // Arrows, the puck, nets, the goal light, glass, and the referee use
+  // the game palette. Player and goalie poses use createPal.
+  function frameIsDynamic(frame) {
+    if (frame >= 353 && frame <= 357) return false;
+    if (frame >= 384 && frame <= 407) return false;
+    if (frame >= 555 && frame <= 568) return false;
+    if (frame >= 645 && frame <= 872) return false;
+    if (frame >= 1129 && frame <= 1134) return false;
+    return true;
+  }
+
   function buildTeamPalette(teamBlock, rinkColors) {
     const bytes = bytesOf(teamBlock);
     if (bytes.length < TEAM_BYTES) return null;
-    const base = [];
-    for (let i = 0; i < 128; i++) {
-      if (rinkColors && rinkColors[i]) base.push(rinkColors[i].slice());
-      else base.push([i, i, i]);
-    }
+    const team = padColors(null);
     for (let i = 0; i < 64; i++) {
-      base.push([bytes[i * 3] * 4, bytes[i * 3 + 1] * 4, bytes[i * 3 + 2] * 4]);
+      team[128 + i] = [bytes[i * 3] * 4, bytes[i * 3 + 1] * 4, bytes[i * 3 + 2] * 4];
     }
-    while (base.length < 256) base.push([0, 0, 0]);
-    const mapped = base.map((rgb) => rgb.slice());
-    for (let i = 0; i < 128; i++) {
-      const src = bytes[320 + i];
-      mapped[128 + i] = (base[src] || [0, 0, 0]).slice();
+    const map = new Uint8Array(256);
+    for (let i = 0; i < 128; i++) map[128 + i] = bytes[320 + i];
+    const fallback = padColors(rinkColors);
+    const rinkPlain = actColors('rinkpal.act') || fallback;
+    const rinkFixed = actColors('rinkpalShadowfixed.act') || fallback;
+    const jersey = actColors('createjerseyShadowfixed.act');
+    const game = mergeColors(rinkPlain, team, 128, true);
+    const gameFixed = mergeColors(rinkFixed, team, 128, true);
+    const mapped = [];
+    for (let i = 0; i < 256; i++) mapped.push((gameFixed[map[i]] || [0, 0, 0]).slice());
+    let sprite = mapped;
+    if (jersey) {
+      const edit = [];
+      for (let i = 0; i < 256; i++) edit.push((i >= 251 ? jersey[i] : mapped[i]).slice());
+      sprite = mergeColors(jersey, edit, 144, false);
     }
-    return mapped;
+    sprite.game = game;
+    return sprite;
   }
 
   function emptyFrame(frame) {
@@ -541,7 +638,10 @@
     };
   }
 
-  function shapeToFrame(shape, frame, picture) {
+  function shapeToFrame(shape, frame, picture, kind) {
+    const minX = picture ? 0 : -shape.xOffset;
+    const minY = picture ? 0 : -shape.yOffset;
+    const hot = picture || kind === 'rink' ? { x: 0, y: 0 } : hotspotFor(frame - 1);
     return {
       frame,
       index: frame - 1,
@@ -549,17 +649,19 @@
       height: shape.height,
       canvasWidth: shape.width,
       canvasHeight: shape.height,
-      minX: picture ? 0 : shape.xOffset,
-      minY: picture ? 0 : shape.yOffset,
-      hotspotX: shape.xPos,
-      hotspotY: shape.yPos,
-      hotspotPxX: shape.xPos,
-      hotspotPxY: shape.yPos,
+      minX,
+      minY,
+      hotspotX: hot.x,
+      hotspotY: hot.y,
+      hotspotPxX: hot.x - minX,
+      hotspotPxY: hot.y - minY,
       pixels: shape.pixels,
       numSprites: picture ? 0 : 1,
       sprites: [],
       picture,
-      opaque: picture,
+      opaque: Boolean(picture),
+      transparent: picture ? 0 : 255,
+      dynamic: !picture && kind !== 'rink' && frameIsDynamic(frame),
       tag: shape.tag || ''
     };
   }
@@ -617,9 +719,9 @@
     return Boolean(range && range.kind === 'rink');
   }
 
-  function placeShape(frames, shape, index, picture) {
+  function placeShape(frames, shape, index, picture, kind) {
     if (index < 0 || index >= frames.length) return;
-    frames[index] = shapeToFrame(shape, index + 1, picture);
+    frames[index] = shapeToFrame(shape, index + 1, picture, kind);
   }
 
   function buildSpriteBank(files, kind) {
@@ -647,7 +749,7 @@
       const opened = openBytes(file.data);
       if (!opened) continue;
       if (!range && opened.shapes.length === 1 && named != null) {
-        placeShape(frames, opened.shapes[0], named, false);
+        placeShape(frames, opened.shapes[0], named, false, kind);
         continue;
       }
       for (let local = 0; local < opened.shapes.length; local++) {
@@ -657,7 +759,7 @@
           index = range.start + local;
         }
         if (index == null) continue;
-        placeShape(frames, shape, index, false);
+        placeShape(frames, shape, index, false, kind);
       }
     }
     if (kind === 'rink') {
@@ -1014,6 +1116,8 @@
     decodeRinkFile,
     colorsToAct,
     buildTeamPalette,
+    hotspotFor,
+    frameIsDynamic,
     isSpriteBank,
     isRinkBank,
     rangeOf,

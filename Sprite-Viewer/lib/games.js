@@ -208,7 +208,7 @@
       jerseyRow: 9,
       paletteLabel: 'Team colors',
       tagline: 'Player sheets from the sequential PPV files, rink and crowd sheets, and every QFS picture',
-      hint: 'Copy the NHL 95 PC PPV and QFS files into Sprite-Viewer/pc95/, plus HOMEPALS.BIN and AWAYPALS.BIN. Player frames are the 000_049.PPV … 11001149.PPV series. Rink and crowd frames are F000_049.PPV, F050_099.PPV, F100_149.PPV, and F000_149.PPV. Every other QFS is a picture. Restart the server after adding files.',
+      hint: 'Copy the NHL 95 PC PPV and QFS files into Sprite-Viewer/pc95/, plus HOMEPALS.BIN and AWAYPALS.BIN. Player frames are the 000_049.PPV … 11001149.PPV series. On the Frame tab, Bank → Rink and crowd opens F000_049.PPV, F050_099.PPV, F100_149.PPV, and F000_149.PPV. Every other QFS is a picture. Restart the server after adding files.',
       banks: [{ id: 'sprites', label: 'Players' }],
       images: [],
       palettes: 'pc95',

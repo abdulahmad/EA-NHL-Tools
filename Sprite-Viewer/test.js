@@ -479,7 +479,12 @@ const spriteBundle = pc95.encodeBundle([
 const spriteAnim = pc95.openSpriteBundle(spriteBundle);
 assert.strictEqual(spriteAnim.numFrames, 1134);
 assert.deepStrictEqual(Array.from(spriteAnim.renderFrame(1).pixels), [1, 2, 3, 4]);
-assert.strictEqual(spriteAnim.renderFrame(1).minX, -1);
+assert.strictEqual(spriteAnim.renderFrame(1).minX, 1);
+assert.strictEqual(spriteAnim.renderFrame(1).minY, -16);
+assert.strictEqual(spriteAnim.renderFrame(1).hotspotX, -4);
+assert.strictEqual(spriteAnim.renderFrame(1).hotspotY, -20);
+assert.strictEqual(spriteAnim.renderFrame(1).transparent, 255);
+assert.strictEqual(spriteAnim.renderFrame(1).dynamic, true);
 assert.strictEqual(spriteAnim.renderFrame(6).tag, '0005');
 assert.strictEqual(spriteAnim.renderFrame(2).width, 0);
 
@@ -516,6 +521,8 @@ const crowd = pc95.encodeBundle([
 const crowdAnimPc = pc95.openSpriteBundle(crowd);
 assert.strictEqual(crowdAnimPc.numFrames, 51);
 assert.strictEqual(crowdAnimPc.renderFrame(1).tag, '0000');
+assert.strictEqual(crowdAnimPc.renderFrame(1).dynamic, false);
+assert.strictEqual(crowdAnimPc.renderFrame(1).hotspotX, 0);
 assert.deepStrictEqual(Array.from(crowdAnimPc.renderFrame(1).pixels), [1, 2, 3, 4]);
 assert.strictEqual(crowdAnimPc.renderFrame(51).tag, 'F050');
 assert.strictEqual(crowdAnimPc.renderFrame(51).index, 50);
@@ -524,17 +531,36 @@ const team = Buffer.alloc(448);
 team[0] = 10;
 team[1] = 20;
 team[2] = 30;
-team[320] = 128;
-team[321] = 0;
+team[336] = 128;
 const rink = [];
 for (let i = 0; i < 128; i++) rink.push([i, 0, 1]);
 const teamColors = pc95.buildTeamPalette(team, rink);
-assert.deepStrictEqual(teamColors[128], [40, 80, 120]);
-assert.deepStrictEqual(teamColors[129], [0, 0, 1]);
-assert.deepStrictEqual(teamColors[0], [0, 0, 1]);
+const jerseyAct = fs.readFileSync(path.join(root, '..', 'PAL-To-ACT', 'createjerseyShadowfixed.act'));
+const rinkAct = fs.readFileSync(path.join(root, '..', 'PAL-To-ACT', 'rinkpal.act'));
+function actAt(buf, index) {
+  return [buf[index * 3], buf[index * 3 + 1], buf[index * 3 + 2]];
+}
+assert.deepStrictEqual(teamColors[0], actAt(jerseyAct, 0));
+assert.deepStrictEqual(teamColors[143], actAt(jerseyAct, 143));
+assert.deepStrictEqual(teamColors[144], [40, 80, 120]);
+assert.deepStrictEqual(teamColors.game[128], [40, 80, 120]);
+assert.deepStrictEqual(teamColors.game[0], actAt(rinkAct, 0));
+assert.deepStrictEqual(teamColors.game[251], actAt(rinkAct, 251));
+assert.deepStrictEqual(teamColors.game[255], actAt(rinkAct, 255));
+assert.strictEqual(pc95.hotspotFor(0).x, -4);
+assert.strictEqual(pc95.hotspotFor(0).y, -20);
+assert.strictEqual(pc95.frameIsDynamic(1), true);
+assert.strictEqual(pc95.frameIsDynamic(394), false);
+assert.strictEqual(pc95.frameIsDynamic(650), false);
 
 const pcCatalog = parseFrames(fs.readFileSync(path.join(root, 'data', 'frames95pc.asm'), 'utf8'));
-assert.strictEqual(pcCatalog.anims.length, 0);
+assert.strictEqual(pcCatalog.anims.length, 119);
+const pcReady = pcCatalog.anims.find((anim) => anim.name.toLowerCase() === 'spagready');
+assert.ok(pcReady.loop);
+assert.strictEqual(pcReady.directions[0].steps[0].frame, 407);
+const pcSkate = pcCatalog.anims.find((anim) => anim.name.toLowerCase() === 'spaskatewp');
+assert.strictEqual(pcSkate.directions[0].steps[0].frame, 2);
+assert.strictEqual(pcCatalog.anims[pcCatalog.anims.length - 1].name.toLowerCase(), 'sparefhistick');
 assert.ok(!pcCatalog.spfs.some((spf) => spf.name.toLowerCase() === 'spflimit'));
 let cursor = 1;
 for (const spf of pcCatalog.spfs) {

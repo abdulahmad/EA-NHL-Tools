@@ -81,7 +81,11 @@ function activeColors() {
   if (!anim) return null;
   const override = paletteFiles.get(state.paletteName);
   if (gameInfo && gameInfo.paletteKind === 'pc') {
-    if (override && override.length >= 256) return override.map((c) => c.slice());
+    if (override && override.length >= 256) {
+      const colors = override.map((c) => c.slice());
+      if (override.game) colors.game = override.game;
+      return colors;
+    }
     return anim.combined.map((c) => c.slice());
   }
   const colors = anim.combined.map((c) => c.slice());
@@ -218,12 +222,14 @@ function bitmapFor(frame, colors) {
     const ctx = canvas.getContext('2d');
     const image = ctx.createImageData(canvas.width, canvas.height);
     const data = image.data;
-    const palette = frame.colors || colors;
+    let palette = frame.colors || colors;
+    if (frame.dynamic === false && colors && colors.game) palette = colors.game;
     const opaque = Boolean(frame.opaque);
+    const skip = frame.transparent == null ? 0 : frame.transparent;
     for (let i = 0; i < frame.pixels.length; i++) {
       const index = frame.pixels[i];
       const o = i * 4;
-      if (!index && !opaque) continue;
+      if (index === skip && !opaque) continue;
       const rgb = palette[index] || [0, 0, 0];
       data[o] = rgb[0];
       data[o + 1] = rgb[1];
@@ -1366,11 +1372,15 @@ async function ensurePalette(name) {
   const response = await fetch('/api/games/' + gameInfo.id + '/palettes/' + encodeURIComponent(name));
   if (!response.ok) return;
   const buf = await response.arrayBuffer();
+  const bytes = new Uint8Array(buf);
   const colors = gameInfo.paletteKind === 'pc'
-    ? Nhl95Pc.decodeAct(new Uint8Array(buf))
+    ? Nhl95Pc.decodeAct(bytes)
     : gameInfo.paletteKind === 'snes'
       ? Nhl92Snes.decodeTeamPalette(buf)
       : Nhl92Anim.decodePaletteFile(buf);
+  if (gameInfo.paletteKind === 'pc' && bytes.length >= 1536) {
+    colors.game = Nhl95Pc.decodeAct(bytes.subarray(768, 1536));
+  }
   paletteFiles.set(name, colors);
 }
 
