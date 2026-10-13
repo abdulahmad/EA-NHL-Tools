@@ -30,6 +30,7 @@ const state = {
   loop: true,
   speed: 1,
   scale: 8,
+  pin: 'origin',
   spin: false,
   spinMs: 700,
   minGap: false,
@@ -147,17 +148,20 @@ function canvasSize(frame) {
   return { width, height };
 }
 
+function pinPoint(frame) {
+  if (state.pin === 'hotspot') return { x: frame.hotspotPxX, y: frame.hotspotPxY };
+  return { x: -(frame.minX || 0), y: -(frame.minY || 0) };
+}
+
+function onCanvas(frame, x, y) {
+  const box = canvasSize(frame);
+  return x >= -48 && y >= -48 && x <= box.width + 48 && y <= box.height + 48;
+}
+
 function placement(frame) {
   const box = canvasSize(frame);
-  const ax = frame.hotspotPxX;
-  const ay = frame.hotspotPxY;
-  const onCanvas = ax >= -48 && ay >= -48 && ax <= box.width + 48 && ay <= box.height + 48;
-  // Crowd plates are hundreds of pixels across and store the offset on the
-  // corner. Pinning that corner hides the plate, so those stay centered.
-  const cornerPlate = (box.width > 200 || box.height > 200) && ax <= 8 && ay <= 8;
-  if (onCanvas && !cornerPlate) {
-    return { mode: 'offset', ax, ay };
-  }
+  const point = pinPoint(frame);
+  if (onCanvas(frame, point.x, point.y)) return { mode: state.pin, ax: point.x, ay: point.y };
   return { mode: 'center', ax: box.width / 2, ay: box.height / 2 };
 }
 
@@ -217,11 +221,12 @@ function paintInto(ctx, cssW, cssH, frame, colors, scaleCap, opts) {
   ctx.drawImage(bmp, dx, dy, frame.width * scale, frame.height * scale);
   strokeCanvas(ctx, dx, dy, box.width * scale, box.height * scale);
   if (mark) {
-    const cx = dx + frame.hotspotPxX * scale;
-    const cy = dy + frame.hotspotPxY * scale;
-    const near = frame.hotspotPxX >= -2 && frame.hotspotPxY >= -2 &&
-      frame.hotspotPxX <= box.width + 2 && frame.hotspotPxY <= box.height + 2;
-    if (near) strokeOffset(ctx, cx, cy);
+    const originPxX = -(frame.minX || 0);
+    const originPxY = -(frame.minY || 0);
+    if (onCanvas(frame, originPxX, originPxY)) strokeOrigin(ctx, dx + originPxX * scale, dy + originPxY * scale);
+    if (onCanvas(frame, frame.hotspotPxX, frame.hotspotPxY)) {
+      strokeOffset(ctx, dx + frame.hotspotPxX * scale, dy + frame.hotspotPxY * scale);
+    }
   }
   return scale;
 }
@@ -235,6 +240,20 @@ function strokeCanvas(ctx, x, y, w, h) {
   ctx.strokeStyle = 'rgba(16, 20, 24, 0.92)';
   ctx.setLineDash([4, 3]);
   ctx.strokeRect(x - 0.5, y - 0.5, w + 1, h + 1);
+  ctx.restore();
+}
+
+function strokeOrigin(ctx, cx, cy) {
+  ctx.save();
+  ctx.strokeStyle = 'rgba(240, 180, 41, 0.95)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 4.5, 0, Math.PI * 2);
+  ctx.moveTo(cx - 8, cy);
+  ctx.lineTo(cx + 8, cy);
+  ctx.moveTo(cx, cy - 8);
+  ctx.lineTo(cx, cy + 8);
+  ctx.stroke();
   ctx.restore();
 }
 
@@ -281,7 +300,7 @@ function viewScale(cssW, cssH, padBottom, scaleCap) {
   const fitKey = [
     state.mode,
     state.mode === 'frame' ? state.bank + ':' + state.frame : state.mode === 'spa' ? state.spa : state.spf,
-    cssW, cssH, padBottom, scaleCap
+    state.pin, cssW, cssH, padBottom, scaleCap
   ].join(':');
   if (fitCache.has(fitKey)) return fitCache.get(fitKey);
   const frames = [];
@@ -499,7 +518,7 @@ function renderList() {
 function renderFilmstrip() {
   const seq = sequence();
   const strip = el('filmstrip');
-  const filmKey = seq.steps.length > 80 ? seq.key + '@' + state.step : seq.key;
+  const filmKey = (seq.steps.length > 80 ? seq.key + '@' + state.step : seq.key) + ':' + state.pin;
   if (filmKey === sequenceKey && strip.childElementCount) {
     highlightStep();
     return;
@@ -586,7 +605,7 @@ function renderMeta() {
     if (box.width !== frame.width || box.height !== frame.height) {
       rows.push(['Art', frame.width + '×' + frame.height]);
     }
-    rows.push(['Offset', frame.hotspotX + ', ' + frame.hotspotY]);
+    rows.push(['Hotspot', frame.hotspotX + ', ' + frame.hotspotY]);
     if (step) {
       rows.push(['Hold', step.ticks >= 1000 ? 'forever (' + step.ticks + ')' : step.ticks + ' vblanks']);
     }
@@ -701,6 +720,8 @@ function renderTransport() {
   el('play').textContent = state.playing ? 'Pause' : 'Play';
   el('loop').checked = state.loop;
   el('scale-readout').textContent = state.scale + '×';
+  el('pin-origin').setAttribute('aria-pressed', state.pin === 'hotspot' ? 'false' : 'true');
+  el('pin-hotspot').setAttribute('aria-pressed', state.pin === 'hotspot' ? 'true' : 'false');
   el('bank').value = state.mode === 'frame' ? state.bank : 'Sprites.anim';
   el('bank').disabled = state.mode !== 'frame';
   for (const mode of ['frame', 'spf', 'spa']) {
@@ -741,6 +762,7 @@ function writeHash() {
     params.set('step', String(state.step));
   }
   if (state.paletteName) params.set('pal', state.paletteName);
+  if (state.pin === 'hotspot') params.set('pin', 'hotspot');
   if (state.spin) params.set('spin', '1');
   history.replaceState(null, '', '#' + params.toString());
 }
@@ -756,6 +778,7 @@ function readHash() {
   if (params.get('frame')) state.frame = Number(params.get('frame')) || 1;
   if (params.get('step')) state.step = Number(params.get('step')) || 0;
   if (params.get('pal')) state.paletteName = params.get('pal');
+  if (params.get('pin') === 'hotspot') state.pin = 'hotspot';
   if (params.get('spin') === '1') state.spin = true;
 }
 
@@ -814,6 +837,16 @@ function wire() {
     await ensureBank(state.bank);
     refreshAll();
   });
+  function setPin(pin) {
+    if (state.pin === pin) return;
+    state.pin = pin;
+    renderTransport();
+    renderFilmstrip();
+    paintStage();
+    writeHash();
+  }
+  el('pin-origin').addEventListener('click', () => setPin('origin'));
+  el('pin-hotspot').addEventListener('click', () => setPin('hotspot'));
   el('scale').addEventListener('input', () => {
     state.scale = Number(el('scale').value);
     el('scale-readout').textContent = state.scale + '×';

@@ -73,6 +73,16 @@ button { cursor: pointer; }
   box-shadow: 0 0 12px var(--red);
 }
 .head-controls { display: flex; gap: 16px; align-items: end; }
+.pin { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
+.pin-options { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.pin-options button {
+  background: var(--bg);
+  border: 0;
+  padding: 7px 10px;
+  color: var(--muted);
+}
+.pin-options button + button { border-left: 1px solid var(--line); }
+.pin-options button[aria-pressed="true"] { background: var(--text); color: var(--bg); }
 
 .field { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
 .field b { color: var(--text); font-weight: 650; }

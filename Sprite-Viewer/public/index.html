@@ -21,6 +21,13 @@
           <span>Bank</span>
           <select id="bank"></select>
         </label>
+        <div class="pin">
+          <span>Pin</span>
+          <div class="pin-options" role="group" aria-label="Pin point">
+            <button type="button" id="pin-origin" aria-pressed="true" title="Player position. On skaters this is at the skates.">0, 0</button>
+            <button type="button" id="pin-hotspot" aria-pressed="false" title="Where the puck sits when the player has possession.">Hotspot</button>
+          </div>
+        </div>
         <label class="field">
           <span>Scale <b id="scale-readout">6×</b></span>
           <input id="scale" type="range" min="1" max="12" value="8">
@@ -108,7 +115,7 @@
         <p><b>SPF</b> names a run of those pictures in <span class="mono">frames.asm</span>. When the run is eight facings side by side, the compass steps through them.</p>
         <p><b>SPA</b> is an animation. Each of the eight facings has its own list of frame and vblank pairs. A negative time is the last step. Bit 0 of the flags word loops it.</p>
         <p>Facing 0 is north on a vertical rink, then clockwise. A horizontal rink subtracts 2 from the facing before this lookup.</p>
-        <p>The dashed box is the frame's canvas. The picture stays pinned on the stored X/Y offset, marked with a red cross, so the steps of an animation share one point.</p>
+        <p>The dashed box is the frame's canvas. <b>Pin</b> chooses the point held in the middle of the stage. <b>0, 0</b> is the player's position, at the skates, and <b>Hotspot</b> is where the puck sits. The amber mark is 0, 0. The red cross is the hotspot.</p>
       </section>
     </aside>
   </div>
