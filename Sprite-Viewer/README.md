@@ -6,7 +6,7 @@ The pictures come from the `.ANIM` files in `ANIM-To-BMP`. The names come from [
 
 Facing 0 is north on a vertical rink (`dirtab` in `logic.asm`), then clockwise. A horizontal rink subtracts 2 from the facing before the lookup. Spin walks the compass where an animation actually has more than one sequence.
 
-Each frame is pinned on the X/Y offset `GetHot` reads (file offsets `0x18` and `0x1A`), so a sequence stays registered on that point. A dashed rectangle is the canvas size from the frame header (`0x06` and `0x08`, stored as twice the pixel size). On these banks that size matches the sprite bounds. The red crosshair is the offset.
+Pin holds one point in the middle of the stage. **0, 0** is the default: the player's position, which sits at the skates. **Hotspot** is the pair `GetHot` reads (file offsets `0x18` and `0x1A`), where the puck sits in possession. An amber mark is 0, 0 and a red cross is the hotspot. A dashed rectangle is the canvas size from the frame header (`0x06` and `0x08`, stored as twice the pixel size). On these banks that size matches the sprite bounds.
 
 ## Run
 
