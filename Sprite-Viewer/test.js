@@ -478,9 +478,40 @@ assert.strictEqual(spriteAnim.renderFrame(2).width, 0);
 
 const numbered = [];
 for (let i = 0; i < 200; i++) numbered.push({ tag: String(i).padStart(4, '0') });
-assert.strictEqual(pc95.isSpriteBank({ shapes: numbered }, 'bank.ppv'), true);
-assert.strictEqual(pc95.isSpriteBank({ shapes: numbered.slice(0, 105) }, 'F000149.PPV'), false);
+assert.strictEqual(pc95.isSpriteBank({ shapes: numbered }, 'bank.ppv'), false);
+assert.strictEqual(pc95.isSpriteBank({ shapes: numbered.slice(0, 50) }, '000_049.PPV'), true);
+assert.strictEqual(pc95.isSpriteBank({ shapes: numbered.slice(0, 50) }, '10001049.PPV'), true);
+assert.strictEqual(pc95.isRinkBank({ shapes: numbered.slice(0, 50) }, 'F000_049.PPV'), true);
+assert.strictEqual(pc95.isRinkBank({ shapes: numbered.slice(0, 105) }, 'F000_149.PPV'), true);
+assert.strictEqual(pc95.isSpriteBank({ shapes: numbered.slice(0, 105) }, 'F000_149.PPV'), false);
 assert.strictEqual(pc95.isSpriteBank({ shapes: [] }, 'sprites.ppv'), true);
+
+const playerSheet = pc95.encodeBundle([
+  { name: '000_049.PPV', data: shapeBank('0000', rawSpit) },
+  { name: '050_099.PPV', data: shapeBank('0000', rawSpit) },
+  { name: '11001149.PPV', data: shapeBank('1100', rawSpit) }
+]);
+const sheets = pc95.openSpriteBundle(playerSheet);
+assert.strictEqual(sheets.numFrames, 1134);
+assert.strictEqual(sheets.renderFrame(1).tag, '0000');
+assert.strictEqual(sheets.renderFrame(51).tag, '0000');
+assert.strictEqual(sheets.renderFrame(51).index, 50);
+assert.strictEqual(sheets.renderFrame(1101).tag, '1100');
+assert.strictEqual(sheets.renderFrame(2).width, 0);
+
+const wide = Buffer.from(rawSpit);
+wide[16] = 9;
+const crowd = pc95.encodeBundle([
+  { name: 'F000_149.PPV', data: shapeBank('0000', wide) },
+  { name: 'F000_049.PPV', data: shapeBank('0000', rawSpit) },
+  { name: 'F050_099.PPV', data: shapeBank('F050', rawSpit) }
+]);
+const crowdAnimPc = pc95.openSpriteBundle(crowd);
+assert.strictEqual(crowdAnimPc.numFrames, 150);
+assert.strictEqual(crowdAnimPc.renderFrame(1).tag, '0000');
+assert.deepStrictEqual(Array.from(crowdAnimPc.renderFrame(1).pixels), [1, 2, 3, 4]);
+assert.strictEqual(crowdAnimPc.renderFrame(51).tag, 'F050');
+assert.strictEqual(crowdAnimPc.renderFrame(51).index, 50);
 
 const team = Buffer.alloc(448);
 team[0] = 10;
@@ -521,13 +552,33 @@ const pcDir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'pc95-'));
 fs.mkdirSync(path.join(pcDir, 'sprites'));
 fs.writeFileSync(path.join(pcDir, 'sprites', '000'), rawSpit);
 fs.writeFileSync(path.join(pcDir, 'LOGO.QFS'), packedBank);
+fs.writeFileSync(path.join(pcDir, '000_049.PPV'), shapeBank('0000', rawSpit));
+fs.writeFileSync(path.join(pcDir, '050_099.PPV'), shapeBank('0055', rawSpit));
+fs.writeFileSync(path.join(pcDir, 'F000_049.PPV'), shapeBank('0000', rawSpit));
+fs.writeFileSync(path.join(pcDir, 'F050_099.PPV'), shapeBank('0050', rawSpit));
+fs.writeFileSync(path.join(pcDir, 'CREDIT00.QFS'), packedBank);
+fs.writeFileSync(path.join(pcDir, 'CREDIT01.QFS'), shapeBank('0001', rawSpit));
+fs.writeFileSync(path.join(pcDir, 'JERBUFH.QFS'), packedBank);
 const home = Buffer.alloc(28 * 448);
 home.set(team, 448);
 fs.writeFileSync(path.join(pcDir, 'HOMEPALS.BIN'), home);
 const listed = pc95.catalogDirectory(pcDir);
-assert.deepStrictEqual(listed.spriteFiles, ['sprites/000']);
-assert.strictEqual(listed.images.length, 1);
-assert.strictEqual(listed.images[0].id, 'LOGO.QFS');
+assert.deepStrictEqual(listed.spriteFiles, ['000_049.PPV', 'sprites/000', '050_099.PPV']);
+assert.deepStrictEqual(listed.rinkFiles, ['F000_049.PPV', 'F050_099.PPV']);
+const credits = listed.images.find((image) => image.label === 'Credits');
+assert.ok(credits);
+assert.deepStrictEqual(credits.files, ['CREDIT00.QFS', 'CREDIT01.QFS']);
+assert.strictEqual(credits.palette, '');
+const buffalo = listed.images.find((image) => image.id === 'JERBUFH.QFS');
+assert.strictEqual(buffalo.label, 'Buffalo home jersey');
+assert.strictEqual(buffalo.group, 'Jerseys');
+assert.ok(listed.images.some((image) => image.id === 'LOGO.QFS'));
+const joined = pc95.openImageParts([
+  { name: 'CREDIT00.QFS', data: fs.readFileSync(path.join(pcDir, 'CREDIT00.QFS')) },
+  { name: 'CREDIT01.QFS', data: fs.readFileSync(path.join(pcDir, 'CREDIT01.QFS')) }
+]);
+assert.strictEqual(joined.numFrames, 2);
+assert.strictEqual(joined.renderFrame(2).tag, '0001');
 assert.strictEqual(listed.hasHome, true);
 assert.ok(listed.paletteNames.includes('bufh.pal'));
 assert.ok(!listed.paletteNames.includes('bufv.pal'));

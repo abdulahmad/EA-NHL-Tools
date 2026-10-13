@@ -154,7 +154,15 @@ function gameStatus(game) {
   const rom = findRom(game);
   const hasRom = Boolean(rom);
   const pc = game.kind === 'pc95' ? pcFiles() : null;
-  const pixels = game.kind === 'pc95' ? pc.spriteFiles.length > 0 : (game.kind === 'anim' || hasRom);
+  const pixels = game.kind === 'pc95'
+    ? pc.spriteFiles.length > 0 || pc.rinkFiles.length > 0
+    : (game.kind === 'anim' || hasRom);
+  let banks = game.banks;
+  if (game.kind === 'pc95') {
+    banks = [];
+    if (pc.spriteFiles.length || !pc.rinkFiles.length) banks.push({ id: 'sprites', label: 'Players' });
+    if (pc.rinkFiles.length) banks.push({ id: 'rink', label: 'Rink and crowd' });
+  }
   return {
     id: game.id,
     title: game.title,
@@ -167,7 +175,7 @@ function gameStatus(game) {
     tagline: game.tagline || null,
     hint: game.hint || null,
     frames: game.frames,
-    banks: game.banks,
+    banks,
     images: pc ? pc.images : (game.images || []),
     pixels,
     rom: hasRom,
@@ -233,7 +241,9 @@ const server = http.createServer((req, res) => {
   if (pcSprites) {
     const game = gameById(pcSprites[1]);
     if (!game || game.kind !== 'pc95') { send(res, 404, 'Unknown game', 'text/plain; charset=utf-8'); return; }
-    const files = pcFiles().spriteFiles;
+    const catalog = pcFiles();
+    const bank = url.searchParams.get('bank') || 'sprites';
+    const files = bank === 'rink' ? catalog.rinkFiles : catalog.spriteFiles;
     if (!files.length) { send(res, 404, 'No PC sprites', 'text/plain; charset=utf-8'); return; }
     send(res, 200, pcBundle(files), 'application/octet-stream');
     return;

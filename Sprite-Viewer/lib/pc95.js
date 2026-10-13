@@ -79,10 +79,59 @@
     AWAYPAL3: ['Away jersey colors', 'Other'],
     NUMSHP: ['Number shapes', 'Fonts'],
     SCRBRD1: ['Scoreboard', 'Screens'],
+    SCRBRD2: ['Scoreboard 2', 'Screens'],
     TRINKND: ['Rink end', 'Ice'],
-    F000149: ['Photos F000–F149', 'Other'],
+    F000149: ['Rink and crowd', 'Ice'],
     CALENDAR: ['Calendar', 'Screens'],
-    HILIGHT: ['Highlight font', 'Fonts']
+    HILIGHT: ['Highlight font', 'Fonts'],
+    CLAP: ['Clap', 'Ice'],
+    GOAL: ['Goal light', 'Ice'],
+    HOOK: ['Hook', 'Ice'],
+    SIREN: ['Siren', 'Ice'],
+    RUFF: ['Ruff', 'Ice'],
+    FANOM: ['Fan', 'Ice'],
+    CROSS: ['Cross', 'Ice'],
+    CFLAG: ['Canadian flag', 'Ice'],
+    UFLAG: ['US flag', 'Ice'],
+    SAVED: ['Saved', 'Screens'],
+    CRESTS4: ['Crests', 'Logos'],
+    GADGET5: ['Gadget', 'Screens'],
+    GADGET6: ['Gadget replay', 'Screens'],
+    POINTER3: ['Pointer', 'Screens'],
+    LOAD: ['Loading', 'Screens'],
+    LOCKROOM: ['Locker room', 'Screens'],
+    PLAYER: ['Player card', 'Screens'],
+    LELOGO: ['League logos', 'Logos'],
+    CALLOGO: ['Calendar logos', 'Logos'],
+    OPEN_BUT: ['Open buttons', 'Screens'],
+    JOYCAL: ['Joystick calibration', 'Screens'],
+    SAVEGAME: ['Save game', 'Screens'],
+    SOUND: ['Sound', 'Screens'],
+    PALETTE: ['Palette', 'Other'],
+    EASN: ['EA Sports Net', 'Screens'],
+    EASCRN: ['EA screen', 'Screens'],
+    EASCRN1: ['EA screen 2', 'Screens'],
+    EAOPEN: ['EA open', 'Screens'],
+    EADESK: ['EA desk', 'Screens']
+  };
+
+  const SEQUENCE_LABELS = {
+    CREDIT: ['Credits', 'Screens'],
+    PORTR: ['Portraits', 'Screens'],
+    EADESK: ['EA desk', 'Screens'],
+    SETTING: ['Settings', 'Screens'],
+    PIONEER: ['Pioneer', 'Screens'],
+    EASCRN: ['EA screen', 'Screens']
+  };
+
+  const CITY_CODES = {
+    ANA: 'Anaheim', ASE: 'All-Star East', ASW: 'All-Star West', BOS: 'Boston', BUF: 'Buffalo',
+    CGY: 'Calgary', CHI: 'Chicago', DAL: 'Dallas', DET: 'Detroit', EAS: 'EA Sports',
+    EDM: 'Edmonton', FLA: 'Florida', HFD: 'Hartford', LA: 'Los Angeles', MIN: 'Minnesota',
+    MTL: 'Montreal', NHL: 'NHL', NJ: 'New Jersey', NYI: 'Long Island', NYR: 'New York',
+    OTT: 'Ottawa', PHI: 'Philadelphia', PIT: 'Pittsburgh', QUE: 'Quebec', SCUP: 'Stanley Cup',
+    SJ: 'San Jose', STL: 'St. Louis', TB: 'Tampa Bay', TOR: 'Toronto', VAN: 'Vancouver',
+    WES: 'West', WPG: 'Winnipeg', WSH: 'Washington'
   };
 
   // Pictures whose colors live in a different QFS. From QFS-To-BMP.
@@ -499,15 +548,52 @@
     return numericTag(base);
   }
 
-  function isSpriteBank(opened, filename) {
-    const base = String(filename || '').split(/[\\/]/).pop().replace(/\.[^.]+$/, '');
-    if (/^(sprites?|players?)$/i.test(base)) return true;
-    if (!opened || !opened.shapes) return false;
-    let numbered = 0;
-    for (const shape of opened.shapes) {
-      if (numericTag(shape.tag) != null) numbered += 1;
+  /**
+   * Player sheets are one PPV per 50 frames: 000_049, 050_099, … 950_999,
+   * then 10001049, 10501099, and 11001149 (LoadPlayerPhotos). Rink and
+   * crowd sheets use the same cut with an F prefix (F000_049 … F100_149),
+   * and F000_149 is the wider rink-object bank DrawRinkObjects indexes.
+   */
+  function rangeOf(name) {
+    const stem = stemOf(name).toUpperCase();
+    let match = /^F(\d{3})_(\d{3})$/.exec(stem);
+    if (match) {
+      const start = parseInt(match[1], 10);
+      const end = parseInt(match[2], 10);
+      if (end >= start) return { kind: 'rink', start, end };
     }
-    return numbered >= 200;
+    match = /^(\d{3})_(\d{3})$/.exec(stem);
+    if (match) {
+      const start = parseInt(match[1], 10);
+      const end = parseInt(match[2], 10);
+      if (start % 50 === 0 && end === start + 49) return { kind: 'players', start, end };
+    }
+    match = /^(\d{4})(\d{4})$/.exec(stem);
+    if (match) {
+      const start = parseInt(match[1], 10);
+      const end = parseInt(match[2], 10);
+      if (start >= 1000 && start % 50 === 0 && end === start + 49) return { kind: 'players', start, end };
+    }
+    return null;
+  }
+
+  function tagIndex(tag) {
+    const text = String(tag || '').trim();
+    const prefixed = /^f(\d{1,4})$/i.exec(text);
+    if (prefixed) return parseInt(prefixed[1], 10);
+    return numericTag(text);
+  }
+
+  function isSpriteBank(opened, filename) {
+    const range = rangeOf(filename);
+    if (range) return range.kind === 'players';
+    const base = String(filename || '').split(/[\\/]/).pop().replace(/\.[^.]+$/, '');
+    return /^(sprites?|players?)$/i.test(base);
+  }
+
+  function isRinkBank(opened, filename) {
+    const range = rangeOf(filename);
+    return Boolean(range && range.kind === 'rink');
   }
 
   function placeShape(frames, shape, index, picture) {
@@ -515,25 +601,46 @@
     frames[index] = shapeToFrame(shape, index + 1, picture);
   }
 
-  function buildSpriteBank(files) {
+  function buildSpriteBank(files, kind) {
+    const list = files || [];
+    let count = kind === 'rink' ? 0 : FRAME_COUNT;
+    if (kind === 'rink') {
+      for (const file of list) {
+        const range = rangeOf(file.name);
+        if (range) count = Math.max(count, range.end + 1);
+      }
+      if (!count) count = 1;
+    }
     const frames = [];
-    for (let i = 0; i < FRAME_COUNT; i++) frames.push(emptyFrame(i + 1));
-    for (const file of files) {
+    for (let i = 0; i < count; i++) frames.push(emptyFrame(i + 1));
+    const ordered = list.slice().sort((a, b) => {
+      const left = rangeOf(a.name);
+      const right = rangeOf(b.name);
+      const spanA = left ? left.end - left.start : 0;
+      const spanB = right ? right.end - right.start : 0;
+      return spanB - spanA;
+    });
+    for (const file of ordered) {
       const named = numericName(file.name);
+      const range = rangeOf(file.name);
       const opened = openBytes(file.data);
       if (!opened) continue;
-      if (opened.shapes.length === 1 && named != null) {
+      if (!range && opened.shapes.length === 1 && named != null) {
         placeShape(frames, opened.shapes[0], named, false);
         continue;
       }
-      for (const shape of opened.shapes) {
-        const index = numericTag(shape.tag);
+      for (let local = 0; local < opened.shapes.length; local++) {
+        const shape = opened.shapes[local];
+        let index = tagIndex(shape.tag);
+        if (range && (index == null || index < range.start || index > range.end)) {
+          index = range.start + local;
+        }
         if (index == null) continue;
         placeShape(frames, shape, index, false);
       }
     }
     return {
-      numFrames: FRAME_COUNT,
+      numFrames: frames.length,
       frames,
       combined: grayscale(),
       renderFrame: function (frameNumber) {
@@ -545,8 +652,10 @@
   function openSpriteBundle(buffer) {
     const bytes = bytesOf(buffer);
     const files = isBundle(bytes) ? decodeBundle(bytes) : [{ name: 'sprites', data: bytes }];
-    if (!files) return buildSpriteBank([]);
-    return buildSpriteBank(files);
+    if (!files) return buildSpriteBank([], 'players');
+    const rink = files.some((file) => isRinkBank(null, file.name));
+    const players = files.some((file) => isSpriteBank(null, file.name) && rangeOf(file.name));
+    return buildSpriteBank(files, rink && !players ? 'rink' : 'players');
   }
 
   function paletteFrom(buffer) {
@@ -560,22 +669,32 @@
     return decodeEaPalette(bytes);
   }
 
-  function openImage(buffer, donor) {
-    const opened = openBytes(buffer) || { shapes: [], palette: null };
-    const colors = opened.palette || paletteFrom(donor) || grayscale();
-    const frames = opened.shapes.map((shape, index) => {
-      const frame = shapeToFrame(shape, index + 1, true);
-      frame.colors = colors;
-      return frame;
-    });
+  function openImageParts(parts, donor) {
+    const frames = [];
+    let colors = paletteFrom(donor) || null;
+    for (const part of parts || []) {
+      const opened = openBytes(part && part.data) || { shapes: [], palette: null };
+      if (!colors && opened.palette) colors = opened.palette;
+      const use = colors || grayscale();
+      for (const shape of opened.shapes) {
+        const frame = shapeToFrame(shape, frames.length + 1, true);
+        frame.colors = use;
+        frames.push(frame);
+      }
+    }
+    const use = colors || grayscale();
     return {
       numFrames: frames.length,
       frames,
-      combined: colors,
+      combined: use,
       renderFrame: function (frameNumber) {
         return frames[frameNumber - 1] || null;
       }
     };
+  }
+
+  function openImage(buffer, donor) {
+    return openImageParts([{ data: buffer }], donor);
   }
 
   function stemOf(rel) {
@@ -584,9 +703,24 @@
     return (cut > 0 ? base.slice(0, cut) : base);
   }
 
+  function cityOf(code) {
+    return CITY_CODES[code] || code;
+  }
+
   function imageMeta(rel) {
     const stem = stemOf(rel).toUpperCase();
     const parent = stemOf(String(rel || '').split(/[\\/]/).slice(0, -1).pop() || '').toUpperCase();
+    const jersey = /^JER([A-Z]{2,4})([HV])$/.exec(stem);
+    if (jersey) {
+      return {
+        label: cityOf(jersey[1]) + (jersey[2] === 'V' ? ' away' : ' home') + ' jersey',
+        group: 'Jerseys'
+      };
+    }
+    const emblem = /^EMB([A-Z]{2,4})$/.exec(stem);
+    if (emblem && !/^PAL/.test(emblem[1])) {
+      return { label: cityOf(emblem[1]) + ' emblem', group: 'Logos' };
+    }
     if (/^EMB/.test(stem) && stem.length > 3) {
       return { label: stem.slice(3) + ' emblem', group: 'Screens' };
     }
@@ -630,9 +764,87 @@
     return /\.(bmp|raw|json|md|txt|js|asm)$/i.test(rel);
   }
 
+  function sequenceParts(stem) {
+    const match = /^(.*\D)(\d+)$/.exec(String(stem || '').toUpperCase());
+    if (!match) return null;
+    return { prefix: match[1], n: parseInt(match[2], 10) };
+  }
+
+  function groupImages(items) {
+    const buckets = new Map();
+    const bare = new Map();
+    const singles = [];
+    for (const item of items) {
+      const stem = stemOf(item.rel).toUpperCase();
+      const parts = sequenceParts(stem);
+      if (!parts) {
+        if (!bare.has(stem)) bare.set(stem, []);
+        bare.get(stem).push(item);
+        continue;
+      }
+      const dirName = item.rel.split('/').slice(0, -1).join('/');
+      const key = dirName + '\n' + parts.prefix;
+      if (!buckets.has(key)) buckets.set(key, []);
+      buckets.get(key).push({ item, n: parts.n, prefix: parts.prefix, dirName });
+    }
+    const images = [];
+    const used = new Set();
+    for (const group of buckets.values()) {
+      const prefix = group[0].prefix;
+      const extras = (bare.get(prefix) || []).filter((item) => {
+        const dirName = item.rel.split('/').slice(0, -1).join('/');
+        return dirName === group[0].dirName && !used.has(item.rel);
+      });
+      if (group.length + extras.length < 2) {
+        singles.push(group[0].item);
+        continue;
+      }
+      group.sort((a, b) => a.n - b.n || a.item.rel.localeCompare(b.item.rel));
+      const members = extras.concat(group.map((entry) => entry.item));
+      for (const item of members) used.add(item.rel);
+      const known = SEQUENCE_LABELS[prefix];
+      const first = members[0];
+      const last = members[members.length - 1];
+      images.push({
+        id: first.rel,
+        label: known ? known[0] : stemOf(first.rel) + '–' + stemOf(last.rel),
+        group: known ? known[1] : first.meta.group,
+        kind: 'pc95',
+        palette: '',
+        files: members.map((item) => item.rel)
+      });
+    }
+    for (const item of singles) {
+      if (used.has(item.rel)) continue;
+      images.push({
+        id: item.rel,
+        label: item.meta.label,
+        group: item.meta.group,
+        kind: 'pc95',
+        palette: '',
+        files: [item.rel]
+      });
+    }
+    for (const list of bare.values()) {
+      for (const item of list) {
+        if (used.has(item.rel)) continue;
+        images.push({
+          id: item.rel,
+          label: item.meta.label,
+          group: item.meta.group,
+          kind: 'pc95',
+          palette: '',
+          files: [item.rel]
+        });
+      }
+    }
+    return images;
+  }
+
   function catalogDirectory(dir) {
     const empty = {
       spriteFiles: [],
+      rinkFiles: [],
       images: [],
       hasHome: false,
       hasAway: false,
@@ -678,7 +890,8 @@
 
     walk(dir, '');
     const spriteFiles = [];
-    const images = [];
+    const rinkFiles = [];
+    const loose = [];
     let hasHome = false;
     let hasAway = false;
     let homeFile = '';
@@ -709,20 +922,26 @@
       } catch (err) {
         opened = null;
       }
-      if (!opened || !opened.shapes.length) continue;
-      if (isSpriteBank(opened, rel)) {
-        spriteFiles.push(rel);
+      const ranged = rangeOf(rel);
+      if (ranged || isSpriteBank(opened, rel) || isRinkBank(opened, rel)) {
+        if (!opened || !opened.shapes.length) continue;
+        if (ranged && ranged.kind === 'rink') rinkFiles.push(rel);
+        else spriteFiles.push(rel);
         continue;
       }
-      const meta = imageMeta(rel);
-      images.push({
-        id: rel,
-        label: meta.label,
-        group: meta.group,
-        kind: 'pc95',
-        palette: ''
-      });
+      if (!opened || !opened.shapes.length) continue;
+      loose.push({ rel, meta: imageMeta(rel) });
     }
+    const images = groupImages(loose);
+    function byRange(a, b) {
+      const left = rangeOf(a);
+      const right = rangeOf(b);
+      const startA = left ? left.start : 0;
+      const startB = right ? right.start : 0;
+      return startA - startB || a.localeCompare(b);
+    }
+    spriteFiles.sort(byRange);
+    rinkFiles.sort(byRange);
     const byId = new Map(files.map((rel) => [stemOf(rel).toUpperCase(), rel]));
     for (const image of images) {
       const dirName = image.id.split('/').slice(0, -1).join('/');
@@ -740,6 +959,7 @@
     images.sort((a, b) => a.label.localeCompare(b.label) || a.id.localeCompare(b.id));
     return {
       spriteFiles,
+      rinkFiles,
       images,
       hasHome,
       hasAway,
@@ -770,9 +990,12 @@
     colorsToAct,
     buildTeamPalette,
     isSpriteBank,
+    isRinkBank,
+    rangeOf,
     buildSpriteBank,
     openSpriteBundle,
     openImage,
+    openImageParts,
     paletteFrom,
     imageMeta,
     parseTeamFile,

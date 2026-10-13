@@ -135,7 +135,7 @@ function buildSequence(anim) {
       directions: false,
       spin: false,
       loopDefault: true,
-      title: state.bank
+      title: ((gameInfo.banks || []).find((bank) => bank.id === state.bank) || {}).label || state.bank
     };
   }
   if (state.mode === 'spf') {
@@ -520,7 +520,7 @@ function renderImageList(box, q) {
   const groups = new Map();
   const visible = [];
   for (const image of images) {
-    const hay = (image.label + ' ' + image.id + ' ' + (image.group || '')).toLowerCase();
+    const hay = (image.label + ' ' + image.id + ' ' + (image.files || []).join(' ') + ' ' + (image.group || '')).toLowerCase();
     if (q && !hay.includes(q)) continue;
     visible.push(image);
     const group = image.group || 'Other';
@@ -558,7 +558,7 @@ function renderImageList(box, q) {
       name.textContent = image.label;
       const sub = document.createElement('span');
       sub.className = 'sub';
-      sub.textContent = image.id;
+      sub.textContent = image.files && image.files.length > 1 ? image.files.length + ' files' : image.id;
       button.append(name, sub);
       button.addEventListener('click', () => {
         state.image = image.id;
@@ -765,7 +765,10 @@ function renderMeta() {
   } else if (state.mode === 'image') {
     const image = ((gameInfo && gameInfo.images) || []).find((item) => item.id === state.image);
     rows.push(['Image', image ? image.label : state.image]);
-    if (image) rows.push(['File', image.id]);
+    if (image) {
+      const files = image.files && image.files.length ? image.files : [image.id];
+      rows.push(['File', files.length > 1 ? files[0] + ' … ' + files[files.length - 1] : image.id]);
+    }
   }
   if (frame) {
     const owner = spfAt(frame.frame);
@@ -1294,7 +1297,7 @@ async function ensureBank(name) {
     parsed = Nhl92Sheet.parseSheet(rom, gameInfo.sheet);
   } else if (gameInfo.kind === 'pc95') {
     if (!gameInfo.pixels) return null;
-    const response = await fetch('/api/games/' + gameInfo.id + '/sprites');
+    const response = await fetch('/api/games/' + gameInfo.id + '/sprites?bank=' + encodeURIComponent(name));
     if (!response.ok) return null;
     parsed = Nhl95Pc.openSpriteBundle(new Uint8Array(await response.arrayBuffer()));
   } else if (gameInfo.kind === 'snes93' || gameInfo.kind === 'snes94') {
@@ -1331,14 +1334,20 @@ async function ensureImage(id) {
     if (!bytes) return null;
     parsed = Nhl92Jim.decodeJim(bytes);
   } else if (image.kind === 'pc95') {
-    const response = await fetch('/api/games/' + gameInfo.id + '/file?path=' + encodeURIComponent(image.id));
-    if (!response.ok) return null;
+    const paths = image.files && image.files.length ? image.files : [image.id];
+    const parts = [];
+    for (const rel of paths) {
+      const response = await fetch('/api/games/' + gameInfo.id + '/file?path=' + encodeURIComponent(rel));
+      if (!response.ok) continue;
+      parts.push({ name: rel, data: new Uint8Array(await response.arrayBuffer()) });
+    }
+    if (!parts.length) return null;
     let donor = null;
     if (image.palette) {
       const pal = await fetch('/api/games/' + gameInfo.id + '/file?path=' + encodeURIComponent(image.palette));
       if (pal.ok) donor = new Uint8Array(await pal.arrayBuffer());
     }
-    parsed = Nhl95Pc.openImage(new Uint8Array(await response.arrayBuffer()), donor);
+    parsed = Nhl95Pc.openImageParts(parts, donor);
   } else if (image.kind && image.kind.indexOf('snes') === 0) {
     const rom = await ensureRom();
     if (!rom) return null;
