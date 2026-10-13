@@ -204,7 +204,7 @@
     return colors;
   }
 
-  function decodeJim(buffer, donorPalette) {
+  function decodeJim(buffer, donorPalette, options) {
     const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
     const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
     if (bytes.length < 12) throw new Error('JIM is too small');
@@ -233,6 +233,7 @@
     if (!mapW || !mapH || mapW > 1024 || mapH > 1024) throw new Error('JIM map is ' + mapW + ' by ' + mapH);
     if (!shared && mapOff + 4 + mapW * mapH * 2 > bytes.length) throw new Error('JIM map runs past the file');
     const colors = [];
+    const opts = options || {};
     const donor = donorPalette ? (donorPalette instanceof Uint8Array ? donorPalette : new Uint8Array(donorPalette)) : null;
     // Player portraits unpack to nibbles 5–12. DrawPictureBox copies the 16
     // colors at palette+0x20 (the first row is a solid fill) into CRAM. The
@@ -242,7 +243,9 @@
     if (portrait && shared && donor && donor.length >= 64) faceBytes = donor.subarray(32, 64);
     else if (portrait && !shared && palOff + 64 <= bytes.length) faceBytes = bytes.subarray(palOff + 32, palOff + 64);
     const logo = !portrait && !noPalette && palOff !== 0 && palOff === mapOff;
-    if (faceBytes || (logo && donor && donor.length >= 32)) {
+    if (opts.forceDonor && donor && donor.length >= 128) {
+      for (let p = 0; p < 4; p++) colors.push.apply(colors, anim.decodePaletteFile(donor.subarray(p * 32, (p + 1) * 32)));
+    } else if (faceBytes || (logo && donor && donor.length >= 32)) {
       const row = faceBytes || donor.subarray(0, 32);
       const face = anim.decodePaletteFile(row);
       for (let p = 0; p < 4; p++) {
@@ -275,6 +278,13 @@
             pixels[(ty * 8 + y) * width + tx * 8 + x] = index + pal * 16;
           }
         }
+      }
+    }
+    if (opts.remap) {
+      for (let i = 0; i < pixels.length; i++) {
+        const row = pixels[i] & ~15;
+        const color = pixels[i] & 15;
+        if (color < opts.remap.length) pixels[i] = row + opts.remap[color];
       }
     }
     return pictureAnim(width, height, pixels, colors);

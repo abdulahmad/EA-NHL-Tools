@@ -390,6 +390,25 @@ assert.ok(inkCount(ronFrame) > 100);
 function romIf(file) {
   return fs.existsSync(file) ? fs.readFileSync(file) : null;
 }
+const viewer92 = romIf(path.join(root, 'roms', 'nhl92.bin'));
+if (viewer92) {
+  const game = GAMES.find((item) => item.id === 'nhl92');
+  const spec = game.images.find((image) => image.id === 'Framer.map.jim');
+  const ice = game.images.find((image) => image.id === 'IceRink.map.jim');
+  const iceBytes = viewer92.subarray(ice.start, ice.end);
+  const palOff = new DataView(iceBytes.buffer, iceBytes.byteOffset, iceBytes.byteLength).getUint32(0);
+  const framed = decodeJim(
+    viewer92.subarray(spec.start, spec.end),
+    iceBytes.subarray(palOff, palOff + 128),
+    { remap: spec.remap, forceDonor: true }
+  );
+  const frame = framed.renderFrame(1);
+  assert.strictEqual(frame.width, 24);
+  assert.strictEqual(frame.height, 24);
+  assert.ok(framed.combined[0][1] > 200 && framed.combined[0][2] > 200);
+  assert.ok(frame.pixels.some((pixel) => (pixel & 15) === 3));
+  assert.ok(!frame.pixels.some((pixel) => (pixel & 15) === 1));
+}
 const retail92 = romIf(path.join(root, '..', 'NHL92FMTunes-To-MIDI', 'nhl92retail.bin'));
 if (retail92) {
   const sliced = parseAnim(retail92.subarray(0x3D5EE, 0x7216C));
@@ -477,6 +496,23 @@ if (retail93) {
   const framer = openImage(retail93, snesGame.images.find((image) => image.id === 'framer'), null, null);
   assert.strictEqual(framer.renderFrame(1).width, 24);
   assert.strictEqual(framer.renderFrame(1).height, 24);
+  assert.ok(framer.renderFrame(1).pixels.some((pixel) => (pixel & 15) === 4));
+  const easn = openImage(retail93, snesGame.images.find((image) => image.id === 'easn'), null, null);
+  assert.strictEqual(easn.renderFrame(1).width, 256);
+  assert.strictEqual(easn.renderFrame(1).height, 128);
+  assert.strictEqual(easn.renderFrame(1).colors[13][0], 0);
+  assert.ok(easn.renderFrame(1).colors[13][2] > 150);
+  const refs = openImage(retail93, snesGame.images.find((image) => image.id === 'refs'), null, null);
+  assert.strictEqual(refs.numFrames, 7);
+  assert.strictEqual(refs.renderFrame(1).width, 56);
+  assert.strictEqual(refs.renderFrame(1).height, 64);
+  const refs2 = openImage(retail93, snesGame.images.find((image) => image.id === 'refshor'), null, null);
+  assert.strictEqual(refs2.numFrames, 17);
+  assert.strictEqual(refs2.renderFrame(1).width, 56);
+  assert.strictEqual(refs2.renderFrame(1).height, 64);
+  const bigfont = openImage(retail93, snesGame.images.find((image) => image.id === 'bigfont'), null, null);
+  assert.strictEqual(bigfont.renderFrame(1).width, 608);
+  assert.strictEqual(bigfont.renderFrame(1).height, 16);
   const blocks = openImage(retail93, snesGame.images.find((image) => image.id === 'teamblocks'), null, null);
   assert.strictEqual(blocks.numFrames, 26);
   assert.strictEqual(blocks.renderFrame(1).width, 72);
