@@ -767,6 +767,8 @@ assert.strictEqual(pc95.hotspotFor(0).x, -4);
 assert.strictEqual(pc95.hotspotFor(0).y, -20);
 assert.strictEqual(pc95.frameIsDynamic(1), true);
 assert.strictEqual(pc95.frameIsDynamic(394), false);
+assert.strictEqual(pc95.frameIsDynamic(406), false);
+assert.strictEqual(pc95.frameIsDynamic(407), true);
 assert.strictEqual(pc95.frameIsDynamic(650), false);
 
 const pcCatalog = parseFrames(fs.readFileSync(path.join(root, 'data', 'frames95pc.asm'), 'utf8'));
