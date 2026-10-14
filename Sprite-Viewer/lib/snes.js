@@ -335,7 +335,7 @@
     };
   }
 
-  function renderMap(mapBytes, tiles, colors, mapW, mapH) {
+  function renderMap(mapBytes, tiles, colors, mapW, mapH, remap) {
     const width = mapW * 8;
     const height = mapH * 8;
     const pixels = new Uint8Array(width * height);
@@ -353,7 +353,8 @@
           for (let x = 0; x < 8; x++) {
             const sx = hFlip ? 7 - x : x;
             const sy = vFlip ? 7 - y : y;
-            const color = tilePixel(tiles, tile, sx, sy);
+            let color = tilePixel(tiles, tile, sx, sy);
+            if (remap && color < remap.length) color = remap[color];
             pixels[(ty * 8 + y) * width + tx * 8 + x] = color + pal * 16;
           }
         }
@@ -370,7 +371,10 @@
     const mapBytes = data.subarray(0, image.mapSize);
     const tiles = data.subarray(image.tiles);
     let colors;
-    if (image.noPal) colors = grey(128);
+    if (image.palFrom) {
+      const blob = pak.unpack93(rom.subarray(image.palFrom.start, image.palFrom.end), 0);
+      colors = decodeBgr555(blob, image.palFrom.offset, image.palFrom.count || 128);
+    } else if (image.noPal) colors = grey(128);
     else if (image.useRink) colors = rinkColors || grey(128);
     else colors = decodeBgr555(data, image.pal, 128);
     while (colors.length < 128) colors.push([0, 0, 0]);
@@ -396,9 +400,26 @@
     return pictureFromPixels(width, height, pixels, colors || grey(16));
   }
 
+  function fontStrip(rom, tiles, image, colors) {
+    const columns = image.columns || 76;
+    const top = rom.subarray(image.mapStart, image.mapStart + columns * 2);
+    const bottomAt = image.mapStart + (image.bottom == null ? columns * 2 : image.bottom);
+    const bot = rom.subarray(bottomAt, bottomAt + columns * 2);
+    const map = new Uint8Array(columns * 4);
+    for (let i = 0; i < columns; i++) {
+      map[i * 2] = top[i * 2];
+      map[i * 2 + 1] = top[i * 2 + 1];
+      map[(columns + i) * 2] = bot[i * 2];
+      map[(columns + i) * 2 + 1] = bot[i * 2 + 1];
+    }
+    return renderMap(map, tiles, colors, columns, 2, image.remap);
+  }
+
   function font93(rom, image, rinkColors) {
     const data = pak.unpack93(rom.subarray(image.start, image.end), 0);
-    return tileSheet(data, image.columns || 16, rinkColors || grey(16), image.remap);
+    const colors = rinkColors || grey(16);
+    if (image.mapStart != null) return fontStrip(rom, data, image, colors);
+    return tileSheet(data, image.columns || 16, colors, image.remap);
   }
 
   function map93(rom, image, rinkColors) {
@@ -406,7 +427,7 @@
       ? rom.subarray(image.tilesStart, image.tilesEnd)
       : pak.unpack93(rom.subarray(image.tilesStart, image.tilesEnd), 0);
     const mapBytes = rom.subarray(image.mapStart, image.mapStart + image.mapSize);
-    return renderMap(mapBytes, tiles, rinkColors || grey(128), image.mapW, image.mapH);
+    return renderMap(mapBytes, tiles, rinkColors || grey(128), image.mapW, image.mapH, image.remap);
   }
 
   function frames93(rom, image, rinkColors) {

@@ -286,6 +286,7 @@ select:focus, input:focus, button:focus-visible {
 }
 .transport .play { min-width: 72px; background: var(--text); color: var(--bg); border-color: var(--text); }
 .check { display: flex; gap: 6px; align-items: center; font-size: 13px; }
+.check.is-hidden { display: none; }
 
 .filmstrip {
   display: flex;

@@ -22,6 +22,7 @@ const state = {
   spin: false,
   spinMs: 700,
   minGap: true,
+  transparentOverride: null,
   sort: 'group',
   game: 'nhl92',
   image: '',
@@ -211,14 +212,20 @@ function placement(frame) {
   return { mode: 'center', ax: box.width / 2, ay: box.height / 2 };
 }
 
+function imageTransparencyOn(frame) {
+  if (state.transparentOverride != null) return state.transparentOverride;
+  return Boolean(frame && frame.picture && !frame.opaque);
+}
+
 function bitmapFor(frame, colors) {
   const named = state.paletteName;
   const pending = Boolean(named) && !paletteFiles.has(named);
   const team = !pending && named && paletteFiles.has(named);
   const own = Boolean(frame.colors) && !team;
+  const override = state.mode === 'image' ? state.transparentOverride : null;
   const key = pending
     ? ''
-    : state.game + ':' + spriteBank() + ':' + frame.frame + ':' + (own ? 'own' : (named || 'embedded'));
+    : state.game + ':' + spriteBank() + ':' + frame.frame + ':' + (own ? 'own' : (named || 'embedded')) + ':' + (override == null ? 'd' : override ? 't' : 'o');
   let canvas = key && bitmaps.get(key);
   if (!canvas) {
     canvas = document.createElement('canvas');
@@ -229,9 +236,9 @@ function bitmapFor(frame, colors) {
     const data = image.data;
     let palette = own ? frame.colors : colors;
     if (!own && frame.dynamic === false && colors && colors.game) palette = colors.game;
-    const opaque = Boolean(frame.opaque);
+    const opaque = override === false || (override == null && Boolean(frame.opaque));
     const skip = frame.transparent == null ? 0 : frame.transparent;
-    const byRow = Boolean(frame.rowTransparent) && !opaque;
+    const byRow = (override === true || (override == null && Boolean(frame.rowTransparent))) && !opaque;
     for (let i = 0; i < frame.pixels.length; i++) {
       const index = frame.pixels[i];
       const o = i * 4;
@@ -580,6 +587,7 @@ function renderImageList(box, q) {
       sub.textContent = image.files && image.files.length > 1 ? image.files.length + ' files' : image.id;
       button.append(name, sub);
       button.addEventListener('click', () => {
+        if (state.image !== image.id) state.transparentOverride = null;
         state.image = image.id;
         state.step = 0;
         state.acc = 0;
@@ -1005,6 +1013,13 @@ function renderTransport() {
   el('play').textContent = state.playing ? 'Pause' : 'Play';
   el('loop').checked = state.loop;
   el('min-gap').checked = state.minGap;
+  const transparent = el('transparent');
+  const showTransparent = state.mode === 'image';
+  el('transparent-field').classList.toggle('is-hidden', !showTransparent);
+  if (showTransparent) {
+    const frame = renderedFrame(sequence().steps[state.step] ? sequence().steps[state.step].frame : 1);
+    transparent.checked = frame ? imageTransparencyOn(frame) : false;
+  }
   el('scale-readout').textContent = state.scale + '×';
   el('pin-origin').setAttribute('aria-pressed', state.pin === 'hotspot' ? 'false' : 'true');
   el('pin-hotspot').setAttribute('aria-pressed', state.pin === 'hotspot' ? 'true' : 'false');
@@ -1206,6 +1221,10 @@ function wire() {
     state.minGap = el('min-gap').checked;
     state.holdKey = '';
     state.acc = 0;
+  });
+  el('transparent').addEventListener('change', () => {
+    state.transparentOverride = el('transparent').checked;
+    paintStage();
   });
   function setSort(sort) {
     if (state.sort === sort) return;
@@ -1441,7 +1460,8 @@ async function ensureImage(id) {
       const mapOff = view.getUint32(4);
       if (palOff === 0xffffffff || (palOff === 0 && mapOff === 0)) donor = await icePaletteBytes();
     }
-    parsed = Nhl92Jim.decodeJim(bytes, donor);
+    if (image.forceIce) donor = await icePaletteBytes();
+    parsed = Nhl92Jim.decodeJim(bytes, donor, image.remap ? { remap: image.remap, forceDonor: Boolean(image.forceIce) } : null);
   } else if (image.kind === 'frames') {
     const bytes = await bytesFor(image);
     if (!bytes) return null;
@@ -1587,6 +1607,7 @@ async function loadGame(id, keepSelection) {
     || (remembered && (images.find((image) => image.id === remembered.id)
       || images.find((image) => remembered.label && image.label.toLowerCase() === remembered.label.toLowerCase())))
     || images[0];
+  state.transparentOverride = null;
   state.image = imageMatch ? imageMatch.id : '';
   rememberImage();
   if (state.mode !== 'image' && chosen) await ensurePalette(chosen);
