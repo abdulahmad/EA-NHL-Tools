@@ -294,6 +294,8 @@ select:focus, input:focus, button:focus-visible {
   overflow-x: auto;
   padding-bottom: 4px;
   min-height: 108px;
+  scroll-behavior: smooth;
+  scroll-padding-inline: 12px;
 }
 .thumb {
   flex: none;
