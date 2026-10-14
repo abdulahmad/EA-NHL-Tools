@@ -599,7 +599,7 @@
   // the game palette. Player and goalie poses use createPal.
   function frameIsDynamic(frame) {
     if (frame >= 353 && frame <= 357) return false;
-    if (frame >= 384 && frame <= 407) return false;
+    if (frame >= 384 && frame <= 406) return false;
     if (frame >= 555 && frame <= 568) return false;
     if (frame >= 645 && frame <= 872) return false;
     if (frame >= 1129 && frame <= 1134) return false;
