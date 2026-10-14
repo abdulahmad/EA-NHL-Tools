@@ -185,6 +185,19 @@ for (const file of ['frames93.asm', 'frames94.asm', 'frames95.asm']) {
   const names = later.anims.map((anim) => anim.name);
   assert.deepStrictEqual(names.slice().sort(), [...new Set(names)].sort(), file + ' unique spa names');
   assert.ok(later.spfs.every((spf) => ['Players', 'Goalies', 'Ice', 'Other'].includes(spf.group)), file + ' spf group');
+  assert.ok(later.spfs.every((spf) => spf.end == null || spf.end >= spf.start), file + ' spf order');
+}
+{
+  const nhl94 = parseFrames(fs.readFileSync(path.join(root, 'data', 'frames94.asm'), 'utf8'));
+  const glass = nhl94.spfs.find((spf) => spf.name === 'SPFbglass');
+  const high = nhl94.spfs.find((spf) => spf.name === 'SPFghighr');
+  const top = nhl94.spfs.find((spf) => spf.name === 'SPFslamtop');
+  const bot = nhl94.spfs.find((spf) => spf.name === 'SPFslambot');
+  assert.deepStrictEqual([glass.start, glass.end], [653, 657]);
+  assert.deepStrictEqual([high.start, high.end], [658, 707]);
+  assert.deepStrictEqual([top.start, top.end], [708, 711]);
+  assert.deepStrictEqual([bot.start, bot.end], [712, 713]);
+  assert.ok(bot.usedBy.some((name) => name.toLowerCase() === 'spagslambot'));
 }
 
 function be(buf, offset, value) {

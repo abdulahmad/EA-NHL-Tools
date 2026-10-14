@@ -425,23 +425,53 @@
     }
     if (anim) finishAnim(anim);
 
+    // The next line is not always the next frame. NHL 94 lists SPFslambot
+    // (712) and then SPFghighr (658), and closing on that source order runs
+    // the slam-bot frames backward. A group ends at the frame before the
+    // next higher base. SPFlimit is only that ceiling. The highest base
+    // stays open, unless the following line is a lower number: then the
+    // group is the contiguous run of frames the animations use.
     const spfs = spfOrder.map((name, index) => {
-      const start = globals.get(keyOf(name)).value;
-      const next = index + 1 < spfOrder.length ? globals.get(keyOf(spfOrder[index + 1])).value : null;
-      const end = next == null ? null : next - 1;
-      const info = spfInfo(name);
       const stored = globals.get(keyOf(name));
+      const info = spfInfo(name);
       return {
         name,
-        start,
-        end,
-        count: end == null ? null : end - start + 1,
+        sourceIndex: index,
+        start: stored.value,
+        end: null,
+        count: null,
         blurb: info.blurb || (stored && stored.comment) || '',
         group: info.group
       };
     });
     const limitAt = spfs.findIndex((spf) => keyOf(spf.name) === 'spflimit');
+    const limit = limitAt >= 0 ? spfs[limitAt].start : null;
     if (limitAt >= 0) spfs.splice(limitAt, 1);
+    const ceilings = spfs.map((spf) => spf.start);
+    if (limit != null) ceilings.push(limit);
+    ceilings.sort((a, b) => a - b);
+    const usedFrames = new Set();
+    for (const anim of anims) {
+      for (const dir of anim.directions) {
+        for (const step of dir.steps) usedFrames.add(step.frame);
+      }
+    }
+    for (const spf of spfs) {
+      const next = ceilings.find((value) => value > spf.start);
+      if (next != null) {
+        spf.end = next - 1;
+      } else {
+        const follower = spfOrder[spf.sourceIndex + 1];
+        const followerStart = follower ? globals.get(keyOf(follower)).value : null;
+        if (followerStart != null && followerStart < spf.start) {
+          let end = spf.start;
+          while (usedFrames.has(end + 1)) end += 1;
+          spf.end = end;
+        }
+      }
+      if (spf.end != null) spf.count = spf.end - spf.start + 1;
+      delete spf.sourceIndex;
+    }
 
     for (const spf of spfs) {
       if (spf.end == null) {
