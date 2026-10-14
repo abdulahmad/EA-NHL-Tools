@@ -43,6 +43,9 @@ const roms = new Map();
 const rinkColors = new Map();
 let catalog = null;
 let sequenceKey = '';
+const FILMSTRIP_LAZY_THRESHOLD = 48;
+let filmstripPaintQueue = [];
+let filmstripPaintScheduled = false;
 let loadToken = 0;
 let loadError = '';
 let seqCache = null;
@@ -630,7 +633,7 @@ function renderList() {
     note.className = 'empty-note';
     const anim = banks.get(state.bank);
     note.textContent = anim
-      ? anim.numFrames + ' frames in ' + spriteBank() + '. Scrub the frame slider, or pick an SPF or SPA.'
+      ? anim.numFrames + ' frames in ' + spriteBank() + '. Scrub the step slider or filmstrip, or pick an SPF or SPA.'
       : (gameInfo && !gameInfo.pixels
         ? (gameInfo.hint || ('Pictures need the ROM at Sprite-Viewer/' + gameInfo.romHint + '.'))
         : 'Loading ' + state.bank + '…');
@@ -719,22 +722,47 @@ function renderList() {
   }
 }
 
+function filmstripStepJump() {
+  const len = sequence().steps.length;
+  if (len < 2) return 1;
+  return Math.max(8, Math.min(40, Math.round(len / 12)));
+}
+
+function scheduleFilmstripPaints() {
+  if (filmstripPaintScheduled) return;
+  filmstripPaintScheduled = true;
+  const paintBatch = () => {
+    const colors = activeColors();
+    let painted = 0;
+    while (filmstripPaintQueue.length && painted < 10) {
+      const job = filmstripPaintQueue.shift();
+      if (!job.canvas.isConnected) continue;
+      const frame = renderedFrame(job.frameNumber);
+      if (frame && colors) paintThumb(job.canvas, frame, colors);
+      painted++;
+    }
+    if (filmstripPaintQueue.length) requestAnimationFrame(paintBatch);
+    else filmstripPaintScheduled = false;
+  };
+  requestAnimationFrame(paintBatch);
+}
+
 function renderFilmstrip() {
   const seq = sequence();
   const strip = el('filmstrip');
-  const filmKey = (seq.steps.length > 80 ? seq.key + '@' + state.step : seq.key) + ':' + state.pin;
+  const filmKey = seq.key + ':' + state.pin;
   if (filmKey === sequenceKey && strip.childElementCount) {
     highlightStep();
     return;
   }
   sequenceKey = filmKey;
+  filmstripPaintQueue = [];
+  filmstripPaintScheduled = false;
   strip.replaceChildren();
   const colors = activeColors();
   if (!colors) return;
-  const windowed = state.mode !== 'image' && seq.steps.length > 80;
-  const steps = windowed
-    ? seq.steps.map((step, index) => ({ step, index })).filter((item) => Math.abs(item.index - state.step) <= 8)
-    : seq.steps.map((step, index) => ({ step, index }));
+  const lazyPaint = seq.steps.length > FILMSTRIP_LAZY_THRESHOLD;
+  const steps = seq.steps.map((step, index) => ({ step, index }));
   for (const item of steps) {
     const button = document.createElement('button');
     button.type = 'button';
@@ -744,16 +772,22 @@ function renderFilmstrip() {
     const label = document.createElement('span');
     label.textContent = String(item.step.frame);
     button.append(canvas, label);
-    const frame = renderedFrame(item.step.frame);
-    if (frame) paintThumb(canvas, frame, colors);
+    if (lazyPaint) filmstripPaintQueue.push({ canvas, frameNumber: item.step.frame });
+    else {
+      const frame = renderedFrame(item.step.frame);
+      if (frame) paintThumb(canvas, frame, colors);
+    }
     button.addEventListener('click', () => {
       state.step = item.index;
+      if (state.mode === 'frame') state.frame = item.step.frame;
       state.acc = 0;
       refreshPlaybackChrome();
       paintStage();
+      writeHash();
     });
     strip.appendChild(button);
   }
+  if (lazyPaint) scheduleFilmstripPaints();
   highlightStep();
 }
 
@@ -1002,13 +1036,26 @@ function renderCompass() {
 }
 
 function renderTransport() {
-  const anim = currentAnim();
+  const seq = sequence();
   const frameSlider = el('frame');
-  if (anim) {
-    frameSlider.max = String(anim.numFrames);
-    const shown = state.mode === 'frame' ? state.frame : (sequence().steps[state.step] || {}).frame || state.frame;
-    frameSlider.value = String(Math.max(1, Math.min(anim.numFrames, shown)));
-    el('frame-readout').textContent = shown + ' · index ' + (shown - 1);
+  const stepCount = seq.steps.length;
+  if (stepCount) {
+    const clampedStep = Math.max(0, Math.min(stepCount - 1, state.step));
+    const step = seq.steps[clampedStep];
+    const frameNum = step ? step.frame : state.frame;
+    frameSlider.min = '1';
+    frameSlider.max = String(stepCount);
+    frameSlider.disabled = false;
+    frameSlider.value = String(clampedStep + 1);
+    const readout = el('frame-readout');
+    if (stepCount > 1) readout.textContent = frameNum + ' · step ' + (clampedStep + 1) + '/' + stepCount;
+    else readout.textContent = frameNum + ' · index ' + (frameNum - 1);
+  } else {
+    frameSlider.min = '1';
+    frameSlider.max = '1';
+    frameSlider.value = '1';
+    frameSlider.disabled = true;
+    el('frame-readout').textContent = '—';
   }
   el('play').textContent = state.playing ? 'Pause' : 'Play';
   el('loop').checked = state.loop;
@@ -1037,7 +1084,7 @@ function refreshPlaybackChrome() {
   renderTransport();
   renderCompass();
   renderMeta();
-  if (sequence().key !== sequenceKey || (state.mode !== 'image' && sequence().steps.length > 80)) renderFilmstrip();
+  if (sequence().key + ':' + state.pin !== sequenceKey) renderFilmstrip();
   else highlightStep();
 }
 
@@ -1186,21 +1233,20 @@ function wire() {
     paintStage();
   });
   el('frame').addEventListener('input', async () => {
-    if (state.mode === 'image') {
-      state.step = Math.max(0, Number(el('frame').value) - 1);
-      state.acc = 0;
+    const seq = sequence();
+    const stepIndex = Math.max(0, Math.min(seq.steps.length - 1, Number(el('frame').value) - 1));
+    state.step = stepIndex;
+    state.acc = 0;
+    const step = seq.steps[stepIndex];
+    if (state.mode === 'frame' && step) {
+      state.frame = step.frame;
+    } else if (state.mode === 'image') {
       refreshAll();
       return;
     }
-    const from = state.mode;
-    state.mode = 'frame';
-    if (from !== 'frame') state.bank = spriteBank();
-    state.frame = Number(el('frame').value);
-    state.step = state.frame - 1;
-    state.acc = 0;
-    el('bank').value = state.bank;
-    await ensureBank(state.bank);
-    refreshAll();
+    refreshPlaybackChrome();
+    paintStage();
+    writeHash();
   });
   el('play').addEventListener('click', () => {
     state.playing = !state.playing;
@@ -1213,8 +1259,8 @@ function wire() {
     }
     renderTransport();
   });
-  el('prev').addEventListener('click', () => nudge(-1));
-  el('next').addEventListener('click', () => nudge(1));
+  el('prev').addEventListener('click', (event) => nudge(event.shiftKey ? -filmstripStepJump() : -1));
+  el('next').addEventListener('click', (event) => nudge(event.shiftKey ? filmstripStepJump() : 1));
   el('loop').addEventListener('change', () => { state.loop = el('loop').checked; });
   el('speed').addEventListener('change', () => { state.speed = Number(el('speed').value); });
   el('min-gap').addEventListener('change', () => {
@@ -1295,8 +1341,14 @@ function wire() {
     if (event.code === 'Space') {
       event.preventDefault();
       el('play').click();
-    } else if (event.code === 'ArrowRight') { event.preventDefault(); nudge(1); }
-    else if (event.code === 'ArrowLeft') { event.preventDefault(); nudge(-1); }
+    } else if (event.code === 'ArrowRight') {
+      event.preventDefault();
+      nudge(event.shiftKey ? filmstripStepJump() : 1);
+    } else if (event.code === 'ArrowLeft') {
+      event.preventDefault();
+      nudge(event.shiftKey ? -filmstripStepJump() : -1);
+    } else if (event.code === 'PageDown') { event.preventDefault(); nudge(filmstripStepJump()); }
+    else if (event.code === 'PageUp') { event.preventDefault(); nudge(-filmstripStepJump()); }
     else if (event.code === 'ArrowDown') { event.preventDefault(); selectNeighbor(1); }
     else if (event.code === 'ArrowUp') { event.preventDefault(); selectNeighbor(-1); }
     else if (event.key === 'q' || event.key === 'Q') rotate(-1);
@@ -1309,12 +1361,13 @@ function wire() {
 
 function nudge(delta) {
   const seq = sequence();
-  if (!seq.steps.length) return;
+  if (!seq.steps.length || !delta) return;
   let next = state.step + delta;
   if (state.loop) next = (next + seq.steps.length) % seq.steps.length;
   else next = Math.max(0, Math.min(seq.steps.length - 1, next));
   state.step = next;
-  if (state.mode === 'frame') state.frame = seq.steps[state.step].frame;
+  const step = seq.steps[state.step];
+  if (state.mode === 'frame' && step) state.frame = step.frame;
   state.acc = 0;
   state.holdKey = '';
   refreshPlaybackChrome();

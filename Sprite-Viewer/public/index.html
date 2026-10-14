@@ -58,7 +58,7 @@
         <input id="search" type="search" placeholder="Search names" autocomplete="off">
       </label>
       <div id="catalog" class="catalog" role="listbox" aria-label="Catalog"></div>
-      <p class="keys">← → step · Q E face · Space play · S spin</p>
+      <p class="keys">← → step · Shift or PgUp/PgDn jump · Q E face · Space play · S spin</p>
     </aside>
 
     <main class="stage-panel">
@@ -82,9 +82,9 @@
         <p id="caption" class="caption"></p>
       </div>
       <div class="transport">
-        <button type="button" id="prev" title="Previous step">Prev</button>
+        <button type="button" id="prev" title="Previous step. Shift-click or Page Up jumps farther.">Prev</button>
         <button type="button" id="play" class="play" title="Play or pause">Play</button>
-        <button type="button" id="next" title="Next step">Next</button>
+        <button type="button" id="next" title="Next step. Shift-click or Page Down jumps farther.">Next</button>
         <label class="check"><input id="loop" type="checkbox"> Loop</label>
         <label class="field slim">
           <span>Speed</span>
@@ -98,8 +98,8 @@
         <label class="check" title="Matches updateanim: the expiring vblank still shows this picture, and a new picture cannot appear until 4 vblanks after the last change."><input id="min-gap" type="checkbox" checked> Game timing</label>
         <label class="check" id="transparent-field" title="Starts the way this picture is drawn. Color 0 on every palette row except the first can be see-through."><input id="transparent" type="checkbox"> Transparency</label>
         <label class="field grow" id="frame-field">
-          <span>Frame <b id="frame-readout">1</b></span>
-          <input id="frame" type="range" min="1" max="1" value="1">
+          <span>Step <b id="frame-readout">1</b></span>
+          <input id="frame" type="range" min="1" max="1" value="1" title="Scrub through every step in the current sequence">
         </label>
         <label class="field slim" id="dwell-field">
           <span>Spin dwell</span>
