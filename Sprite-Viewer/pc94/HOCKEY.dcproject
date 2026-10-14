@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemata.jklnet.org/Reko/v5">
+  <arch>x86-real-16</arch>
+  <platform>ms-dos</platform>
+  <input>
+    <location>HOCKEY.EXE</location>
+    <asmDir>HOCKEY.reko</asmDir>
+    <srcDir>HOCKEY.reko</srcDir>
+    <includeDir>HOCKEY.reko</includeDir>
+    <resources>HOCKEY.reko\resources</resources>
+    <user>
+      <processor />
+      <procedure name="fn0800_3664_playrockditi">
+        <address>0800:3664</address>
+      </procedure>
+      <procedure name="fn0BA3_0D8C_easndesk">
+        <address>0BA3:0D8C</address>
+      </procedure>
+      <annotation addr="0800:36E6">Play ROCKDITI</annotation>
+      <registerValues />
+      <outputFilePolicy>Segment</outputFilePolicy>
+    </user>
+  </input>
+</project>
