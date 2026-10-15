@@ -403,12 +403,12 @@ Principle: **never upload ROMs to the server** on Pages; on Local Node, still re
 
 | Phase | Deliverable |
 |-------|-------------|
-| **HOST-0** | App root in **NHL9XStudio** repo; EA-NHL-Tools points here; develop on `main` |
-| **HOST-1** | **`lib/open-asset.js`**: unified `openBytes(name, mime, Uint8Array)` → `{ kind, gameHint, decoded }` |
-| **HOST-2** | **Drop zone** + file picker in UI; bypass `/api/.../rom` when a session blob is set; hash routing for single asset |
-| **HOST-3** | **Virtual workspace** in browser: `FileSystemDirectoryHandle` or dropped folder → map paths to today’s PC/ROM layout |
-| **HOST-4** | **GitHub Pages** workflow: build static bundle, `base` path, deploy on push to `main` |
-| **HOST-5** | **ISO** reader for 95PC (and 94PC if needed); or document “extract ISO first” until then |
+| **HOST-0** | ✅ App root in **NHL9XStudio**; EA-NHL-Tools `Sprite-Viewer/` synced |
+| **HOST-1** | ✅ `lib/open-asset.js`, `lib/rom-detect.js`, `lib/rev-a.js`; PC via `openSpriteBundle` |
+| **HOST-2** | ✅ Drag-and-drop overlay; client ROM + PC folder (`catalogFromPaths`); static `games.json` boot |
+| **HOST-3** | Partial — folder drop for PC95; ROM session map; no persistent OPFS yet |
+| **HOST-4** | ✅ `.github/workflows/pages.yml` (deploy on `main` after tests) |
+| **HOST-5** | ISO shows guidance message; mount not implemented |
 
 Local Node keeps `/api/games` for convenience; Studio Web implements the same `gameStatus` shape in a client module.
 
