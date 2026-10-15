@@ -386,7 +386,7 @@ const g94 = GAMES.find((game) => game.id === 'nhl94');
 const g95 = GAMES.find((game) => game.id === 'nhl95');
 assert.strictEqual(pa93.images.length, 25);
 assert.strictEqual(g94.images.length, 215);
-assert.strictEqual(g95.images.length, 300);
+assert.strictEqual(g95.images.length, 302);
 assert.ok(pa93.images.some((image) => image.id === 'IceRink.map.jim' && image.kind === 'jim'));
 assert.ok(pa93.images.some((image) => image.id === 'Crowd.anim' && image.kind === 'frames'));
 assert.strictEqual(pa93.banks.length, sheetGameBanks(pa93.images).length);
@@ -397,6 +397,10 @@ assert.ok(g94.images.some((image) => image.id === 'logoBOS.map.jim' && image.pal
 assert.ok(g94.images.some((image) => image.id === 'CardMarioLemieux.bin' && image.paletteAt === 0xC6762));
 assert.ok(g95.images.some((image) => image.id === 'CardGuyHebert.bin' && image.paletteAt));
 assert.ok(g95.images.some((image) => image.id === 'logoANA.map.jim'));
+assert.ok(g95.images.some((image) => image.id === 'Crowd.anim' && image.kind === 'frames'));
+assert.strictEqual(g95.banks.length, sheetGameBanks(g95.images).length);
+assert.strictEqual(g95.banks.filter((bank) => bank.kind === 'frames').length, 2);
+assert.ok(g95.banks.some((bank) => bank.id === 'FaceOff.anim' && bank.kind === 'frames'));
 assert.ok(!pa93.images.some((image) => /palette|sound|scouttext/i.test(image.id)));
 
 function inkCount(frame) {
@@ -482,6 +486,24 @@ if (genesis95) {
   );
   assert.ok(inkCount(portrait.renderFrame(1)) > 20);
   assert.deepStrictEqual(portrait.combined[6], [0, 0, 0]);
+  const crowdSpec = g95.images.find((image) => image.id === 'Crowd.anim');
+  const crowd = openFrames(
+    genesis95.subarray(crowdSpec.start, crowdSpec.end),
+    { decompressBytecode },
+    null,
+    { record: '95' }
+  );
+  assert.ok(crowd.numFrames >= 10);
+  assert.ok(inkCount(crowd.renderFrame(1)) > 50);
+  const faceSpec = g95.images.find((image) => image.id === 'FaceOff.anim');
+  const face = openFrames(
+    genesis95.subarray(faceSpec.start, faceSpec.end),
+    { decompressBytecode },
+    null,
+    { record: '95' }
+  );
+  assert.ok(face.numFrames >= 2);
+  assert.ok(inkCount(face.renderFrame(1)) > 20);
 }
 const revA93 = romIf(path.join(root, '..', 'JIM-Tools', 'nhlpa93retailRevA.bin'));
 if (revA93) {
