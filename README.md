@@ -39,7 +39,7 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 
 `SPIT-To-BMP` - Converts NHL95 PC SPIT format files to `.RAW` & `.BMP`, with ability to pass in .ACT palette
 
-`Sprite-Viewer` - **NHL9X Studio** — browser app for NHL 9x sprites, SPF/SPA, and pictures (run `node server.js` in that folder)
+`Sprite-Viewer` - **NHL9X Studio** (moving to [NHL9XStudio](https://github.com/abdulahmad/NHL9XStudio)) — browser app for NHL 9x sprites, SPF/SPA, and pictures
 
 `TIL-To-BMP` - WIP Converts NHL95 PC TIL/MAP format to .BMP (centre ice logos)
 

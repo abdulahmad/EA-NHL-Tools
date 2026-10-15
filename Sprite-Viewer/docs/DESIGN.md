@@ -1,6 +1,6 @@
 # NHL9X Studio — design document
 
-**Application name:** **NHL9X Studio**. The Node app and static UI live under **`Sprite-Viewer/`** in this repo (legacy folder name).
+**Application name:** **NHL9X Studio**. **Canonical repository:** [github.com/abdulahmad/NHL9XStudio](https://github.com/abdulahmad/NHL9XStudio) (`main`). A copy may remain under `EA-NHL-Tools/Sprite-Viewer/` during transition.
 
 **Vision:** One editor for EA NHL hockey titles — graphics today, audio and team data tomorrow — with a **game profile** per title so new platforms are mostly data and decoders, not a forked UI.
 
@@ -361,14 +361,67 @@ These remain **future** NHL9X Studio goals, not current app features:
 Suggested **overall** order after today’s NHL9X Studio shell:
 
 1. ✅ Multi-game graphics shell (done).
-2. **Graphics GAP-1–8** and **audio AUD-0–5** in **implementation priority** order: **92G, 93G, 94G, 95G, 93S, 94S, 95PC, 94PC**.
-3. Team/roster editor.
-4. Graphics edit/export.
-5. Schedules and build integration.
+2. **HOST-0 → HOST-2** (repo on NHL9XStudio, client `openBytes`, drag-and-drop) so **GitHub Pages** is viable.
+3. **Graphics GAP-1–8** in **implementation priority** order: **92G, 93G, 94G, 95G, 93S, 94S, 95PC, 94PC** (GAP-1–3 largely done for 92G–94G banks).
+4. **HOST-3–5** (folder workspace in browser, Pages CI, ISO).
+5. **Audio AUD-0–5** (same platform priority).
+6. Team/roster editor, graphics edit/export, schedules/build.
 
 ---
 
-## 5. References (in-repo)
+## 5. Hosting, deployment, and how users supply files
+
+NHL9X Studio should run in **two complementary setups**. Both use the same decoders; only **where bytes come from** changes.
+
+### 5.1 Runtime modes
+
+| Mode | Where it runs | How data arrives | Best for |
+|------|----------------|------------------|----------|
+| **Studio Local** | `node server.js` on your machine | Files on disk: `roms/`, `pc95/`, `pc94/`, optional `ANIM-To-BMP` drops | Daily modding, switching games, full catalogs |
+| **Studio Web** | **GitHub Pages** (static) or any static host | **Drag-and-drop** or file/folder picker into the browser; bytes stay client-side | Shareable demo, quick look at one ROM or one asset, no install |
+
+**GitHub Pages** is a target deployment for Studio Web: ship `public/`, bundled `lib/*.js`, and `data/*.asm` only. No ROMs or PC installs in git. Optional: separate “full local” docs for Node.
+
+### 5.2 Drop-in vs workspace (same app, two habits)
+
+**Workspace (local Node):** Lay out retail or extracted trees the way the server expects today. Use the **Game** menu to jump between profiles (`nhl94`, `nhl95pc`, …). ROMs and PC folders can coexist; the server resolves paths.
+
+**Drop-in (local or Pages):** Open **one** input without configuring folders:
+
+| Input | Examples | Expected handling |
+|-------|-----------|-------------------|
+| Genesis / SNES ROM | `nhl94.bin`, `.md`, `.gen`, `.sfc` | Detect size/CRC/header → game profile → full catalog (frames, images, banks) |
+| Extracted graphic | `.anim`, `.jim`, crowd/faceoff `.anim` slice, `PlayoffSprite.bin` | Sniff header → `parseAnim` / `openFrames` / `decodeJim` → Frame or Images view |
+| NHL 95 PC file | `.PPV`, `.QFS`, `HOMEPALS.BIN`, `HOCKEY.EXE` (for SPA table) | Route to `pc95.js`; multi-shape PPV/QFS as today |
+| NHL 94 PC file | `.PPV`, `.QPP`, palette BINs | Route to planned `pc94.js` |
+| NHL 95 PC **ISO** | `.iso` / `.bin rip | **Future:** client-side ISO9660 (or pre-extracted folder); mount and read paths like local `pc95/` |
+| Folder drop | Whole `pc95` or `pc94` install, or `NHL94/Graphics` extract | File System Access API or zip unpack → virtual catalog |
+
+Principle: **never upload ROMs to the server** on Pages; on Local Node, still read user paths only (no cloud storage).
+
+### 5.3 Technical workstreams (hosting)
+
+| Phase | Deliverable |
+|-------|-------------|
+| **HOST-0** | App root in **NHL9XStudio** repo; EA-NHL-Tools points here; develop on `main` |
+| **HOST-1** | **`lib/open-asset.js`**: unified `openBytes(name, mime, Uint8Array)` → `{ kind, gameHint, decoded }` |
+| **HOST-2** | **Drop zone** + file picker in UI; bypass `/api/.../rom` when a session blob is set; hash routing for single asset |
+| **HOST-3** | **Virtual workspace** in browser: `FileSystemDirectoryHandle` or dropped folder → map paths to today’s PC/ROM layout |
+| **HOST-4** | **GitHub Pages** workflow: build static bundle, `base` path, deploy on push to `main` |
+| **HOST-5** | **ISO** reader for 95PC (and 94PC if needed); or document “extract ISO first” until then |
+
+Local Node keeps `/api/games` for convenience; Studio Web implements the same `gameStatus` shape in a client module.
+
+### 5.4 Repository split
+
+| Repo | Keeps |
+|------|--------|
+| **NHL9XStudio** | App, `data/frames*.asm`, tests, design doc, Pages deploy |
+| **EA-NHL-Tools** | `ANIM*-To-BMP`, `Asset-Extractor`, `Docs/`, `MID94-Tools`, mod tools; README link to NHL9X Studio |
+
+---
+
+## 6. References (in-repo)
 
 | Path | Topic |
 |------|--------|
@@ -382,7 +435,7 @@ Suggested **overall** order after today’s NHL9X Studio shell:
 
 ---
 
-## 6. Document history
+## 7. Document history
 
 | Date | Change |
 |------|--------|
@@ -390,3 +443,4 @@ Suggested **overall** order after today’s NHL9X Studio shell:
 | 2026-10 | §1.8 94G celebrate/bench vs viewer gaps; **AUD-1** no longer assumes working `MID94-Tools`. |
 | 2026-10 | Canonical **implementation priority**: 92G → 93G → 94G → 95G → 93S → 94S → 95PC → 94PC. |
 | 2026-10 | Product rename to **NHL9X Studio**; Genesis auxiliary frame banks (92G–94G). |
+| 2026-10 | §5 hosting: GitHub Pages, workspace vs drop-in, ISO/PC loose files; **NHL9XStudio** repo. |
