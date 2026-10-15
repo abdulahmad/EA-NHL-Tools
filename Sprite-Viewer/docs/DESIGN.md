@@ -96,6 +96,49 @@ Static: `/viewer.js`, `/lib/*.js`, `/data/*`.
 - **96G:** Out of scope for viewer game list.
 - **Editing / export / build:** View-only; no write path to ROM or extracted bins.
 
+### 1.8 Goal celebrations, “bench” sprites, and missing banks (94G focus)
+
+#### What the retail **NHL 94 Genesis** game actually does
+
+| Moment | Assignment (`assign94.asm`) | SPA used | SPF frames (`frames94.asm`) |
+|--------|---------------------------|----------|-----------------------------|
+| Goal scored (on ice) | `assscore` | `SPAcelebrate`; scorer gets `SPApump` | `SPFcelebrate` **185–200**, `SPFpump` **201–216** |
+| Skate to bench / line change | `assbench` | `SPAglide` / `SPAgready`, then `SPAwallleft` or `SPAwallright` at the door | Normal skate + **penalty-box door** (`SPFPen`), not a “sitting on bench” pose |
+| Checked near center boards | (collision) | `SPAbenchcheckl` / `SPAbenchcheckr` | Reuses fall/board frames — **not** bench celebration |
+
+There is **no** `SPFbench`, `SPFbetween`, or bench-cheer sequence on **94G** or **95G** like there is on **NHL 95 PC** (`SPFbench`, `SPFbetween`, `SPAcelebrate` on the DOS sheet in `frames95pc.asm`). If you remember players **celebrating while seated on the bench**, that behavior is from the **PC** titles (or a different platform), not the Genesis ROM.
+
+**Crowd** reactions are a separate asset: `Crowd.anim` (ROM slice in `genesis-images.js`), not player SPF/SPA from `frames94.asm`.
+
+#### What the Sprite Viewer supports today for **94G**
+
+| Asset | Where in the UI | Notes |
+|-------|-----------------|-------|
+| On-ice celebrate / pump | **SPA** tab → group **Celebrate** → `SPAcelebrate`, `SPApump` | Needs `nhl94.bin` loaded; frames **185–216** on the main player sheet |
+| Stanley / cup poses | **SPA** → Celebrate → `SPAstanley`, etc. | Same sheet |
+| “Bench” in the name | **SPA** → usually **Falls** or **Other** → `SPAbenchcheckl` / `SPAbenchcheckr` | Board check at center ice — easy to confuse with bench celebration |
+| Penalty box door | **SPA** → `SPAwallleft` / `SPAwallright` | Uses `SPFPen` frames |
+| `Crowd.anim`, `FaceOff.anim`, `Zam.anim` | **Images** tab → group **Sprites** | Decoded as multi-frame `kind: 'frames'`; **not** on Frame / SPF / SPA tabs |
+| `PlayoffSprite.bin` | **Images** → **Sprites** | Easy to miss; not in `frames94.asm` |
+| Extra ANIM bank on Frame tab | **Not exposed** | **92G** lists `Crowd.anim`, `Puck.anim`, `Zam.anim` as separate **banks**; **94G** only has `{ id: 'sprites', label: 'Sprites' }` |
+
+So: **on-ice goal celebrations are supported** via SPA/SPF on the main sheet. **Bench-sit celebration is not in the Genesis data** and therefore cannot be browsed as a named animation on 94G. Auxiliary sprite banks are only partially surfaced (Images only).
+
+#### Implementation plan — graphics coverage (beyond §2 94PC)
+
+Phases are independent; order by what you care to browse first.
+
+| Phase | Scope | Work |
+|-------|--------|------|
+| **GAP-1** | **94G / 95G multi-bank Frame tab** | Extend `lib/games.js` like **92G**: banks for main sheet + `Crowd.anim`, `FaceOff.anim`, `Zam.anim` (offsets from `genesis-images.js` / disasm). Wire `server.js` + `viewer.js` bank switch to `sheet.openFrames` or sheet hotlist as appropriate. |
+| **GAP-2** | **Discoverability** | SPA group blurbs in `parse-frames.js` (e.g. clarify `SPAbenchcheck*` vs PC `SPFbench`). Optional catalog search aliases (“bench celebrate” → explain + link to Celebrate / 95PC). |
+| **GAP-3** | **94PC bench & crowd** | §2: `frames94pc.asm` from `pc94/HOCKEY.EXE` — includes **bench** and **between-plays** SPFs and crowd `F000+` series documented in PC sprite readme. |
+| **GAP-4** | **Genesis image audit** | Diff `lib/genesis-images.js` vs `Asset-Extractor/extractAssets94.js` and NHL94Genesis `.lst` / `data94.asm`: fill gaps (e.g. unscouted `unknown*.map.jim` regions, compressed Ron Barr variant naming), regenerate list via existing tooling where possible. |
+| **GAP-5** | **94S parity** | Add missing SNES pictures and any celebrate/bench SPAs once ROM offsets are pinned (`tools/build-snes-frames.js`, `frames94snes.asm`). |
+| **GAP-6** | **Playoff / special sheets** | Document or tag `PlayoffSprite.bin` in catalog; add SPF names only if disasm defines frame tables for that bank. |
+
+**Tests:** extend `test.js` with bank count smoke test per game profile; optional frame-count check for `Crowd.anim` slice when ROM present.
+
 ---
 
 ## 2. Implementation plan: NHL 94 PC graphics (`94PC`)
