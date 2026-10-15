@@ -10,6 +10,7 @@ const { decodeJim, decompressBytecode, picturePixelHidden } = require('./lib/jim
 const { unpack93 } = require('./lib/snespak');
 const { parse93, parse94, openImage } = require('./lib/snes');
 const { GAMES, revAAdjust, sheetGameBanks } = require('./lib/games');
+const { APP_NAME } = require('./lib/studio');
 const pc95 = require('./lib/pc95');
 
 const root = __dirname;
@@ -359,6 +360,8 @@ assert.strictEqual(snes94anim.numFrames, 1);
 const snes94frame = snes94anim.renderFrame(1);
 assert.strictEqual(snes94frame.width, 8);
 assert.strictEqual(snes94frame.pixels[0], 1);
+
+assert.strictEqual(APP_NAME, 'NHL9X Studio');
 
 const nhl92 = GAMES.find((game) => game.id === 'nhl92');
 assert.ok(nhl92.banks.some((bank) => bank.id === 'FaceOff.anim'));

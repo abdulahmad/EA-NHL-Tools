@@ -58,8 +58,9 @@ button { cursor: pointer; }
     var(--raise);
 }
 .brand { display: flex; gap: 12px; align-items: center; min-width: 0; }
-.brand h1 { margin: 0; font-size: 18px; letter-spacing: 0.01em; font-weight: 650; }
-.brand p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+.brand h1.product-name { margin: 0; font-size: 18px; letter-spacing: 0.04em; font-weight: 700; text-transform: none; }
+.brand .game-title { margin: 2px 0 0; font-size: 14px; font-weight: 550; color: var(--ice-2); }
+.brand p#tagline { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
 .lamp {
   width: 14px;
   height: 14px;

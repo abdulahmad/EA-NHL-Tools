@@ -186,7 +186,7 @@ function buildSequence(anim) {
     spin: spa.uniqueDirections > 1,
     loopDefault: spa.loop,
     title: spa.name,
-    blurb: spa.comment,
+    blurb: spa.blurb || spa.comment,
     spa
   };
 }
@@ -1683,11 +1683,11 @@ async function loadGame(id, keepSelection) {
     if (state.paletteName) spritePalette = state.paletteName;
   }
   el('palette').parentElement.querySelector('span').textContent = info.paletteLabel || ('Palette slot ' + (info.jerseyRow || 2));
-  el('title').textContent = info.title + ' Sprite Viewer';
+  el('game-title').textContent = info.title;
   el('tagline').textContent = info.tagline || (info.pixels
     ? 'Frame index, SPF groups, SPA sequences, and other pictures'
     : 'SPF and SPA names from ' + info.source + '. Pictures need the ROM.');
-  document.title = info.title + ' Sprite Viewer';
+  document.title = info.title + ' · NHL9X Studio';
   if (info.pixels) {
     await ensureBank(spritesBankId());
     if (state.mode === 'frame' && state.bank !== spritesBankId()) await ensureBank(state.bank);
