@@ -7,10 +7,25 @@
 This document has three parts:
 
 1. **What the Sprite Viewer does today** (accurate as of the multi-game viewer on `main`).
-2. **Implementation plan: NHL 94 PC graphics** (`94PC`).
-3. **Implementation plan: audio** for **92G, 93G, 93S, 94G, 94S, 95G, 94PC, 95PC**.
+2. **Implementation plan: NHL 94 PC graphics** (`94PC`) — detailed later; **lowest** platform priority (after **95PC**).
+3. **Implementation plan: audio** for all eight retail profiles below.
 
 Long-term product buckets (teams, schedules, ROM build, patches) remain as in the original outline at the end; they are not implemented in the viewer yet.
+
+### Implementation priority (canonical)
+
+Unless a task is **blocked** by a dependency (e.g. shared `lib/pc*.js` for DOS), schedule **graphics gaps**, **audio**, and **new game profiles** in this order:
+
+| # | Shorthand | Game profile id | Role |
+|---|-----------|-----------------|------|
+| 1 | **92G** | `nhl92` | Genesis baseline; multi-bank Frame tab already exposed — use as pattern for later Genesis titles |
+| 2 | **93G** | `nhlpa93` | Genesis sheet + image catalog hardening |
+| 3 | **94G** | `nhl94` | Genesis sheet + auxiliary banks / celebrate discoverability (§1.8) |
+| 4 | **95G** | `nhl95` | Genesis sheet + image catalog (e.g. arena gfx) |
+| 5 | **93S** | `nhlpa93snes` | SNES sprites + pictures |
+| 6 | **94S** | `nhl94snes` | SNES parity vs Genesis catalogs |
+| 7 | **95PC** | `nhl95pc` | DOS graphics/audio already partially wired — close catalog and palette edge cases **before** 94PC |
+| 8 | **94PC** | `nhl94pc` (planned) | New decode + `frames94pc.asm` (§2) |
 
 ---
 
@@ -40,6 +55,8 @@ There is **no database** and **no audio pipeline** in the viewer yet. All state 
 | `nhlpa93snes` | **93S** | NHLPA 93 | SNES | `snes93` | `roms/nhlpa93snes.sfc` |
 | `nhl94snes` | **94S** | NHL 94 | SNES | `snes94` | `roms/nhl94snes.sfc` |
 | `nhl95pc` | **95PC** | NHL 95 | DOS | `pc95` | `Sprite-Viewer/pc95/` (PPV, QFS, palette BINs); not in git |
+
+*(Table follows **implementation priority** § above; not chronological release order.)*
 
 **Not in viewer:** NHL 96 Genesis (extract script only), Sega CD branches, **94PC** (assets exist under `Sprite-Viewer/pc94/` on `main` but no profile).
 
@@ -124,24 +141,28 @@ There is **no** `SPFbench`, `SPFbetween`, or bench-cheer sequence on **94G** or 
 
 So: **on-ice goal celebrations are supported** via SPA/SPF on the main sheet. **Bench-sit celebration is not in the Genesis data** and therefore cannot be browsed as a named animation on 94G. Auxiliary sprite banks are only partially surfaced (Images only).
 
-#### Implementation plan — graphics coverage (beyond §2 94PC)
+#### Implementation plan — graphics coverage (priority order)
 
-Phases are independent; order by what you care to browse first.
+Work **92G → … → 94PC** (see **Implementation priority** above). PC DOS titles: finish **95PC** catalog/codec gaps before starting **94PC** (§2).
 
-| Phase | Scope | Work |
-|-------|--------|------|
-| **GAP-1** | **94G / 95G multi-bank Frame tab** | Extend `lib/games.js` like **92G**: banks for main sheet + `Crowd.anim`, `FaceOff.anim`, `Zam.anim` (offsets from `genesis-images.js` / disasm). Wire `server.js` + `viewer.js` bank switch to `sheet.openFrames` or sheet hotlist as appropriate. |
-| **GAP-2** | **Discoverability** | SPA group blurbs in `parse-frames.js` (e.g. clarify `SPAbenchcheck*` vs PC `SPFbench`). Optional catalog search aliases (“bench celebrate” → explain + link to Celebrate / 95PC). |
-| **GAP-3** | **94PC bench & crowd** | §2: `frames94pc.asm` from `pc94/HOCKEY.EXE` — includes **bench** and **between-plays** SPFs and crowd `F000+` series documented in PC sprite readme. |
-| **GAP-4** | **Genesis image audit** | Diff `lib/genesis-images.js` vs `Asset-Extractor/extractAssets94.js` and NHL94Genesis `.lst` / `data94.asm`: fill gaps (e.g. unscouted `unknown*.map.jim` regions, compressed Ron Barr variant naming), regenerate list via existing tooling where possible. |
-| **GAP-5** | **94S parity** | Add missing SNES pictures and any celebrate/bench SPAs once ROM offsets are pinned (`tools/build-snes-frames.js`, `frames94snes.asm`). |
-| **GAP-6** | **Playoff / special sheets** | Document or tag `PlayoffSprite.bin` in catalog; add SPF names only if disasm defines frame tables for that bank. |
+| Phase | Priority | Scope | Work |
+|-------|----------|--------|------|
+| **GAP-1** | **92G** | Reference quality | Treat as gold standard: bank list, Images catalog, palette/transparency rules; document anything still missing from `ANIM-To-BMP` / ROM slices. |
+| **GAP-2** | **93G** | Banks + images | Add auxiliary Frame banks if disasm exposes them; audit `genesis-images` vs NHLPA93 extract; Rev A offset tests. |
+| **GAP-3** | **94G** | Banks + discoverability | Multi-bank Frame tab like 92G (`Crowd.anim`, `FaceOff.anim`, `Zam.anim`, `PlayoffSprite.bin`); SPA blurbs (`SPAbenchcheck*` vs PC `SPFbench`); search aliases for celebrate vs bench. |
+| **GAP-4** | **95G** | Banks + images | Same multi-bank pattern; arena gfx / `genesis-images` audit vs NHL95 extract. |
+| **GAP-5** | **93S** | SNES catalog | Pictures, palettes, frame asm completeness (`frames93snes.asm`, `build-snes-frames.js`). |
+| **GAP-6** | **94S** | SNES parity | Missing Genesis-parity pictures; celebrate/bench SPAs once offsets pinned. |
+| **GAP-7** | **95PC** | DOS polish | Remaining QFS/PPV catalog holes, goalie palette edge cases, hotspot/dynamic rules — viewer already has core `pc95` path. |
+| **GAP-8** | **94PC** | New profile | §2: PPV/QPP decode, `frames94pc.asm`, `nhl94pc` — bench/crowd `F000+` SPFs live here, not on Genesis. |
 
 **Tests:** extend `test.js` with bank count smoke test per game profile; optional frame-count check for `Crowd.anim` slice when ROM present.
 
 ---
 
 ## 2. Implementation plan: NHL 94 PC graphics (`94PC`)
+
+**Priority:** **8** of 8 — implement after **95PC** (7) is in good shape. Section kept here for technical detail, not queue position.
 
 ### 2.1 Goal
 
@@ -303,18 +324,18 @@ Viewer audio mode should display **both** runtime id (`$5A`) and **stable label*
 
 ### 3.6 Phased delivery
 
-| Phase | Games | Deliverable |
-|-------|--------|-------------|
-| **AUD-0** | — | `lib/audio/README.md`, catalog schema, `/api/games/:id/audio` listing endpoint |
-| **AUD-1** | 94G | Cmdstream **preview** in viewer: **new** `lib/audio/genesis.js` player from `sound94.asm` opcodes (or fixed extract), **not** wrapping `MID94-Tools` as-is. Server returns decoded events or PCM; client uses Web Audio + YM2612 WASM. Optional MIDI export is out of scope until extract is correct. |
-| **AUD-2** | 92G–95G | `Hockey.snd` **sample browser** (slice ROM, decode format, WAV download) |
-| **AUD-3** | 94G, 93G | Full **SFX table** from disasm ids + play PCM/FM where mapped |
-| **AUD-4** | 93S, 94S | SNES sample decode + music once format confirmed |
-| **AUD-5** | 95PC, 94PC | KMS playback (OPL WASM); catalog from `pc95/` / `pc94/` |
-| **AUD-6** | 94PC, 95PC | VIV/speech extract + play |
-| **AUD-7** | All | Patch viewer (FM/OPL regs), trigger xref from SPA/SPF, export WAV |
+Follow **implementation priority**: **92G → 93G → 94G → 95G → 93S → 94S → 95PC → 94PC**. Phases below are **workstreams**; within Genesis, complete each title’s music/SFX pass before moving down the list.
 
-Dependencies: **94PC graphics (PC94-2)** shares `lib/pc*.js` with PC audio file access; no hard blocker except dev time.
+| Phase | Games (in order) | Deliverable |
+|-------|------------------|-------------|
+| **AUD-0** | — | `lib/audio/README.md`, catalog schema, `/api/games/:id/audio` listing endpoint |
+| **AUD-1** | **92G → 95G** (one title at a time) | Per-title Genesis audio: `Hockey.snd` sample browser + cmdstream/SFX where documented (`sound*.asm`, `Docs/SND`). **94G** is the richest cmdstream set (`$30–$7A`) but lands **third** in the queue after 92G and 93G. Player is **new** `lib/audio/genesis.js` (not `MID94-Tools`). |
+| **AUD-2** | **93S → 94S** | SNES sample decode + music once format confirmed |
+| **AUD-3** | **95PC → 94PC** | KMS playback (OPL WASM); catalogs from `pc95/` then `pc94/` |
+| **AUD-4** | **95PC → 94PC** | VIV/speech extract + play |
+| **AUD-5** | All eight | Patch viewer (FM/OPL regs), trigger xref from SPA/SPF, export WAV |
+
+Dependencies: **94PC** audio and graphics share planned `lib/pc*.js`; building **95PC** audio/catalog first validates that module before **94PC** QPP/PPV differences.
 
 ### 3.7 Risks
 
@@ -328,7 +349,7 @@ Dependencies: **94PC graphics (PC94-2)** shares `lib/pc*.js` with PC audio file 
 
 ---
 
-## 4. Product roadmap (unchanged direction)
+## 4. Product roadmap
 
 These remain **future** NHL Studio goals, not current viewer features:
 
@@ -340,12 +361,10 @@ These remain **future** NHL Studio goals, not current viewer features:
 Suggested **overall** order after today’s viewer:
 
 1. ✅ Multi-game graphics shell (done).
-2. **94PC graphics** (Section 2).
-3. **Audio AUD-1–3** (Genesis music + samples).
-4. **Audio AUD-4–6** (SNES + PC).
-5. Team/roster editor.
-6. Graphics edit/export.
-7. Schedules and build integration.
+2. **Graphics GAP-1–8** and **audio AUD-0–5** in **implementation priority** order: **92G, 93G, 94G, 95G, 93S, 94S, 95PC, 94PC**.
+3. Team/roster editor.
+4. Graphics edit/export.
+5. Schedules and build integration.
 
 ---
 
@@ -368,3 +387,5 @@ Suggested **overall** order after today’s viewer:
 | Date | Change |
 |------|--------|
 | 2026-10 | Expanded from vision-only outline to **current state + 94PC + audio plans**. |
+| 2026-10 | §1.8 94G celebrate/bench vs viewer gaps; **AUD-1** no longer assumes working `MID94-Tools`. |
+| 2026-10 | Canonical **implementation priority**: 92G → 93G → 94G → 95G → 93S → 94S → 95PC → 94PC. |
