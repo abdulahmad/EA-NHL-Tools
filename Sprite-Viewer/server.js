@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { GAMES, gameById, revAAdjust, sheetGameBanks } = require('./lib/games');
 const { APP_NAME } = require('./lib/studio');
+const { buildManifest } = require('./lib/manifest');
 const pc95 = require('./lib/pc95');
 
 const ROOT = __dirname;
@@ -294,6 +295,16 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (pathname === '/games.json') {
+    serveFile(res, path.join(PUBLIC, 'games.json'));
+    return;
+  }
+  if (pathname.startsWith('/data/')) {
+    const file = safeFile(DATA, pathname.slice('/data/'.length));
+    if (!file) { send(res, 400, 'Bad path', 'text/plain; charset=utf-8'); return; }
+    serveFile(res, file);
+    return;
+  }
   if (pathname === '/' || pathname === '/index.html') {
     serveFile(res, path.join(PUBLIC, 'index.html'));
     return;
@@ -329,6 +340,13 @@ const server = http.createServer((req, res) => {
   }
   send(res, 404, 'Not found', 'text/plain; charset=utf-8');
 });
+
+try {
+  const manifestPath = path.join(PUBLIC, 'games.json');
+  fs.writeFileSync(manifestPath, JSON.stringify(buildManifest(), null, 2) + '\n');
+} catch (err) {
+  console.warn('Could not write games.json:', err.message);
+}
 
 const port = Number(process.env.PORT) || 8732;
 server.listen(port, () => {

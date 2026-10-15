@@ -41,6 +41,38 @@ const paletteFiles = new Map();
 const bitmaps = new Map();
 const roms = new Map();
 const rinkColors = new Map();
+let pathPrefix = '';
+let useApi = true;
+let clientPc = null;
+
+function resolveUrl(path) {
+  const p = path.charAt(0) === '/' ? path : '/' + path;
+  return pathPrefix + p;
+}
+
+async function detectApi() {
+  try {
+    const response = await fetch(resolveUrl('/api/games'));
+    if (response.ok) {
+      useApi = true;
+      pathPrefix = '';
+      return;
+    }
+  } catch (err) {
+    /* static / GitHub Pages */
+  }
+  useApi = false;
+  const parts = location.pathname.split('/').filter(Boolean);
+  pathPrefix = parts.length && !/^(api|lib|data|viewer\.js|viewer\.css)$/i.test(parts[0]) ? '/' + parts[0] : '';
+}
+
+async function loadGamesList() {
+  await detectApi();
+  if (useApi) {
+    return fetch(resolveUrl('/api/games')).then((response) => response.json());
+  }
+  return fetch(resolveUrl('/games.json')).then((response) => response.json());
+}
 let catalog = null;
 let sequenceKey = '';
 const FILMSTRIP_LAZY_THRESHOLD = 48;
@@ -1357,6 +1389,7 @@ function wire() {
   });
   window.addEventListener('resize', paintStage);
   new ResizeObserver(paintStage).observe(el('stage').parentElement);
+  wireDropTarget();
 }
 
 function nudge(delta) {
@@ -1413,7 +1446,8 @@ async function icePaletteBytes() {
 async function ensureRom() {
   if (!gameInfo) return null;
   if (roms.has(gameInfo.id)) return roms.get(gameInfo.id);
-  const response = await fetch('/api/games/' + gameInfo.id + '/rom');
+  if (!useApi) return null;
+  const response = await fetch(resolveUrl('/api/games/' + gameInfo.id + '/rom'));
   if (!response.ok) {
     roms.set(gameInfo.id, null);
     return null;
@@ -1426,7 +1460,7 @@ async function ensureRom() {
 async function ensureRink() {
   if (!gameInfo || gameInfo.paletteKind !== 'snes') return null;
   if (rinkColors.has(gameInfo.id)) return rinkColors.get(gameInfo.id);
-  const response = await fetch('/api/games/' + gameInfo.id + '/palettes/' + encodeURIComponent('Rink.snespal'));
+  const response = await fetch(resolveUrl('/api/games/' + gameInfo.id + '/palettes/' + encodeURIComponent('Rink.snespal')));
   if (!response.ok) return null;
   const colors = Nhl92Snes.decodeRinkPalette(await response.arrayBuffer());
   rinkColors.set(gameInfo.id, colors);
@@ -1473,9 +1507,20 @@ async function ensureBank(name) {
     }
   } else if (gameInfo.kind === 'pc95') {
     if (!gameInfo.pixels) return null;
-    const response = await fetch('/api/games/' + gameInfo.id + '/sprites?bank=' + encodeURIComponent(name));
-    if (!response.ok) return null;
-    parsed = Nhl95Pc.openSpriteBundle(new Uint8Array(await response.arrayBuffer()));
+    let bundle;
+    if (clientPc) {
+      const files = name === 'rink' ? clientPc.catalog.rinkFiles : clientPc.catalog.spriteFiles;
+      const parts = files.map((rel) => ({ name: rel, data: clientPc.map.get(rel) })).filter((part) => part.data);
+      if (!parts.length) return null;
+      bundle = Nhl95Pc.encodeBundle(parts);
+    } else if (!useApi) {
+      return null;
+    } else {
+      const response = await fetch(resolveUrl('/api/games/' + gameInfo.id + '/sprites?bank=' + encodeURIComponent(name)));
+      if (!response.ok) return null;
+      bundle = new Uint8Array(await response.arrayBuffer());
+    }
+    parsed = Nhl95Pc.openSpriteBundle(bundle);
   } else if (gameInfo.kind === 'snes93' || gameInfo.kind === 'snes94') {
     if (!gameInfo.pixels) return null;
     const rom = await ensureRom();
@@ -1531,14 +1576,20 @@ async function ensureImage(id) {
     const paths = image.files && image.files.length ? image.files : [image.id];
     const parts = [];
     for (const rel of paths) {
-      const response = await fetch('/api/games/' + gameInfo.id + '/file?path=' + encodeURIComponent(rel));
-      if (!response.ok) continue;
-      parts.push({ name: rel, data: new Uint8Array(await response.arrayBuffer()) });
+      let data = null;
+      if (clientPc && clientPc.map.has(rel)) data = clientPc.map.get(rel);
+      else if (useApi) {
+        const response = await fetch(resolveUrl('/api/games/' + gameInfo.id + '/file?path=' + encodeURIComponent(rel)));
+        if (!response.ok) continue;
+        data = new Uint8Array(await response.arrayBuffer());
+      }
+      if (!data) continue;
+      parts.push({ name: rel, data });
     }
     if (!parts.length) return null;
     let donor = null;
     if (image.palette) {
-      const pal = await fetch('/api/games/' + gameInfo.id + '/file?path=' + encodeURIComponent(image.palette));
+      const pal = await fetch(resolveUrl('/api/games/' + gameInfo.id + '/file?path=' + encodeURIComponent(image.palette)));
       if (pal.ok) donor = new Uint8Array(await pal.arrayBuffer());
     }
     parsed = Nhl95Pc.openImageParts(parts, donor);
@@ -1557,7 +1608,14 @@ async function ensureImage(id) {
 
 async function ensurePalette(name) {
   if (!name || paletteFiles.has(name) || !gameInfo) return;
-  const response = await fetch('/api/games/' + gameInfo.id + '/palettes/' + encodeURIComponent(name));
+  let response;
+  if (!useApi && gameInfo.paletteKind === 'snes') {
+    response = await fetch(resolveUrl('/data/pals/snes/' + encodeURIComponent(name)));
+  } else if (useApi) {
+    response = await fetch(resolveUrl('/api/games/' + gameInfo.id + '/palettes/' + encodeURIComponent(name)));
+  } else {
+    return;
+  }
   if (!response.ok) return;
   const buf = await response.arrayBuffer();
   const bytes = new Uint8Array(buf);
@@ -1610,13 +1668,16 @@ async function loadGame(id, keepSelection) {
   seqCacheToken = '';
   state.holdKey = '';
   state.acc = 0;
-  const [asm, pals] = await Promise.all([
-    fetch('/api/games/' + info.id + '/frames').then((response) => {
-      if (!response.ok) throw new Error('Could not load ' + info.frames);
-      return response.text();
-    }),
-    fetch('/api/games/' + info.id + '/palettes').then((response) => response.json())
-  ]);
+  const asm = await fetch(resolveUrl(useApi ? '/api/games/' + info.id + '/frames' : '/data/' + info.frames)).then((response) => {
+    if (!response.ok) throw new Error('Could not load ' + info.frames);
+    return response.text();
+  });
+  let pals = [];
+  if (useApi) {
+    pals = await fetch(resolveUrl('/api/games/' + info.id + '/palettes')).then((response) => response.json());
+  } else if (info.paletteFiles) {
+    pals = info.paletteFiles;
+  }
   catalog = Nhl92Frames.parseFrames(asm);
   const bankId = info.banks.some((bank) => bank.id === previous.bank) ? previous.bank : info.banks[0].id;
   fillSelect(el('bank'), info.banks.map((bank) => ({
@@ -1717,8 +1778,118 @@ async function loadGame(id, keepSelection) {
   refreshAll();
 }
 
+async function ingestDroppedFiles(fileList) {
+  const files = Array.from(fileList || []);
+  if (!files.length) return;
+  const entries = await Promise.all(files.map(async (file) => ({
+    file,
+    rel: (file.webkitRelativePath || file.name).replace(/^\/+/, ''),
+    bytes: new Uint8Array(await file.arrayBuffer())
+  })));
+  const isFolder = entries.some((entry) => entry.rel.includes('/'));
+  const hasPc = entries.some((entry) => /\.(ppv|qfs|qpp)$/i.test(entry.rel));
+  if (isFolder && hasPc) {
+    const map = new Map(entries.map((entry) => [entry.rel, entry.bytes]));
+    const paths = [...map.keys()];
+    clientPc = { map, catalog: Nhl95Pc.catalogFromPaths(paths, (rel) => map.get(rel)) };
+    let entry = games.find((game) => game.id === 'nhl95pc') || { id: 'nhl95pc', kind: 'pc95' };
+    entry = Object.assign({}, entry, {
+      pixels: clientPc.catalog.spriteFiles.length > 0 || clientPc.catalog.images.length > 0,
+      rom: true,
+      images: clientPc.catalog.images
+    });
+    games = games.map((game) => (game.id === 'nhl95pc' ? entry : game));
+    await loadGame('nhl95pc');
+    return;
+  }
+  if (files.length !== 1) {
+    loadError = 'Drop one ROM/asset file, or a PC game folder';
+    refreshAll();
+    return;
+  }
+  const { file, bytes } = entries[0];
+  const classified = NhlOpenAsset.classify(file.name, bytes);
+  if (classified.kind === 'iso') {
+    loadError = classified.message;
+    refreshAll();
+    return;
+  }
+  const rom = classified.kind === 'rom'
+    ? classified
+    : (classified.kind === 'rom-candidate' ? NhlRomDetect.detect(file.name, bytes) : null);
+  if (rom) {
+    const id = rom.id || rom.gameId;
+    const body = rom.bytes || bytes;
+    roms.set(id, body);
+    let entry = games.find((game) => game.id === id);
+    if (entry && typeof NhlRevA !== 'undefined') entry = NhlRevA.adjustGameStatus(entry, rom.revADate || '');
+    if (entry) {
+      entry = Object.assign({}, entry, { rom: true, pixels: true });
+      games = games.map((game) => (game.id === id ? entry : game));
+    }
+    state.game = id;
+    el('game').value = id;
+    await loadGame(id);
+    return;
+  }
+  const decoded = NhlOpenAsset.decodeLoose(classified, {
+    anim: Nhl92Anim,
+    sheet: Nhl92Sheet,
+    jim: Nhl92Jim,
+    pc95: Nhl95Pc
+  });
+  if (!decoded) {
+    loadError = 'Could not open ' + file.name;
+    refreshAll();
+    return;
+  }
+  if (decoded.gameId) {
+    state.game = decoded.gameId;
+    el('game').value = decoded.gameId;
+    gameInfo = games.find((game) => game.id === decoded.gameId);
+  }
+  banks.set(decoded.bankId, decoded.parsed);
+  state.mode = decoded.mode;
+  state.bank = decoded.bankId;
+  if (decoded.mode === 'image') state.image = decoded.imageId || decoded.bankId;
+  state.frame = 1;
+  state.step = 0;
+  refreshAll();
+}
+
+function wireDropTarget() {
+  const overlay = el('drop-overlay');
+  const show = (on) => {
+    overlay.hidden = !on;
+    overlay.setAttribute('aria-hidden', on ? 'false' : 'true');
+  };
+  let depth = 0;
+  window.addEventListener('dragenter', (event) => {
+    event.preventDefault();
+    depth += 1;
+    show(true);
+  });
+  window.addEventListener('dragleave', () => {
+    depth = Math.max(0, depth - 1);
+    if (!depth) show(false);
+  });
+  window.addEventListener('dragover', (event) => event.preventDefault());
+  window.addEventListener('drop', async (event) => {
+    event.preventDefault();
+    depth = 0;
+    show(false);
+    loadError = '';
+    try {
+      await ingestDroppedFiles(event.dataTransfer.files);
+    } catch (err) {
+      loadError = err.message || String(err);
+      refreshAll();
+    }
+  });
+}
+
 async function boot() {
-  games = await fetch('/api/games').then((response) => response.json());
+  games = await loadGamesList();
   fillSelect(el('game'), games.map((game) => ({ value: game.id, label: game.title })), 'nhl92');
   const params = new URLSearchParams(location.hash.replace(/^#/, ''));
   if (params.get('game') && games.some((game) => game.id === params.get('game'))) {

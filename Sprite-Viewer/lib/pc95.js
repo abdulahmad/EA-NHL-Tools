@@ -1117,6 +1117,92 @@
     };
   }
 
+  function catalogFromPaths(relativePaths, readBytes) {
+    const files = (relativePaths || []).filter(Boolean).sort();
+    const spriteFiles = [];
+    const rinkFiles = [];
+    const loose = [];
+    let hasHome = false;
+    let hasAway = false;
+    let homeFile = '';
+    let awayFile = '';
+    let rinkFile = '';
+    for (const rel of files) {
+      const base = stemOf(rel);
+      if (/^homepals$/i.test(base) && /\.bin$/i.test(rel)) {
+        hasHome = true;
+        if (!homeFile) homeFile = rel;
+      }
+      if (/^awaypals$/i.test(base) && /\.bin$/i.test(rel)) {
+        hasAway = true;
+        if (!awayFile) awayFile = rel;
+      }
+      if (/^rinkpal$/i.test(base) && !rinkFile) rinkFile = rel;
+      if (isPaletteFile(rel) || isIgnored(rel)) continue;
+      const inSprites = /(^|\/)sprites?\//i.test(rel);
+      if (inSprites) {
+        spriteFiles.push(rel);
+        continue;
+      }
+      if (!/\.(qfs|ppv|spit|shp|vsh)$/i.test(rel)) continue;
+      let opened = null;
+      try {
+        const data = readBytes(rel);
+        if (!data || data.length > 32 * 1024 * 1024) continue;
+        opened = openBytes(data);
+      } catch (err) {
+        opened = null;
+      }
+      const ranged = rangeOf(rel);
+      if (ranged || isSpriteBank(opened, rel) || isRinkBank(opened, rel)) {
+        if (!opened || !opened.shapes.length) continue;
+        if (ranged && ranged.kind === 'rink') rinkFiles.push(rel);
+        else spriteFiles.push(rel);
+        continue;
+      }
+      if (!opened || !opened.shapes.length) continue;
+      loose.push({ rel, meta: imageMeta(rel) });
+    }
+    const images = groupImages(loose);
+    function byRange(a, b) {
+      const left = rangeOf(a);
+      const right = rangeOf(b);
+      const startA = left ? left.start : 0;
+      const startB = right ? right.start : 0;
+      return startA - startB || a.localeCompare(b);
+    }
+    spriteFiles.sort(byRange);
+    rinkFiles.sort(byRange);
+    const byId = new Map(files.map((rel) => [stemOf(rel).toUpperCase(), rel]));
+    for (const image of images) {
+      const dirName = image.id.split('/').slice(0, -1).join('/');
+      const sibling = files.find((rel) => {
+        const parent = rel.split('/').slice(0, -1).join('/');
+        return parent === dirName && stemOf(rel).charAt(0) === '!';
+      });
+      if (sibling) {
+        image.palette = sibling;
+        continue;
+      }
+      const stem = stemOf(image.id).toUpperCase();
+      let donor = PAL_DONOR[stem];
+      if (!donor && /^EMB/.test(stem) && !/^EMBPAL/.test(stem)) donor = 'EMBPAL';
+      if (donor && byId.has(donor)) image.palette = byId.get(donor);
+    }
+    images.sort((a, b) => a.label.localeCompare(b.label) || a.id.localeCompare(b.id));
+    return {
+      spriteFiles,
+      rinkFiles,
+      images,
+      hasHome,
+      hasAway,
+      homeFile,
+      awayFile,
+      rinkFile,
+      paletteNames: paletteNames(hasHome, hasAway)
+    };
+  }
+
   return {
     FRAME_COUNT,
     TEAM_BYTES,
@@ -1149,6 +1235,7 @@
     imageMeta,
     parseTeamFile,
     paletteNames,
-    catalogDirectory
+    catalogDirectory,
+    catalogFromPaths
   };
 });

@@ -11,6 +11,9 @@ const { unpack93 } = require('./lib/snespak');
 const { parse93, parse94, openImage } = require('./lib/snes');
 const { GAMES, revAAdjust, sheetGameBanks } = require('./lib/games');
 const { APP_NAME } = require('./lib/studio');
+const { buildManifest } = require('./lib/manifest');
+const romDetect = require('./lib/rom-detect');
+const openAsset = require('./lib/open-asset');
 const pc95 = require('./lib/pc95');
 
 const root = __dirname;

@@ -34,6 +34,23 @@ button { cursor: pointer; }
 }
 .mono { font-family: var(--mono); }
 
+.drop-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(16, 20, 24, 0.88);
+  border: 3px dashed var(--amber);
+  pointer-events: none;
+  color: var(--ice);
+  font-size: 18px;
+  text-align: center;
+  padding: 24px;
+}
+.drop-overlay[aria-hidden="false"] { pointer-events: auto; }
+
 .app {
   display: grid;
   grid-template-columns: 300px minmax(0, 1fr) 320px;

@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="/viewer.css">
 </head>
 <body>
+  <div id="drop-overlay" class="drop-overlay" hidden aria-hidden="true">
+    <p>Drop a ROM, PC game folder, or asset file (PPV, QFS, ANIM, JIM, …)</p>
+  </div>
   <div class="app">
     <header class="head">
       <div class="brand">
@@ -139,6 +142,9 @@
     </aside>
     <button type="button" id="scrim" class="scrim" aria-label="Close panels"></button>
   </div>
+  <script src="/lib/rom-detect.js"></script>
+  <script src="/lib/rev-a.js"></script>
+  <script src="/lib/open-asset.js"></script>
   <script src="/lib/parse-frames.js"></script>
   <script src="/lib/anim.js"></script>
   <script src="/lib/playback.js"></script>
