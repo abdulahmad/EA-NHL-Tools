@@ -186,7 +186,7 @@ function buildSequence(anim) {
     spin: spa.uniqueDirections > 1,
     loopDefault: spa.loop,
     title: spa.name,
-    blurb: spa.comment,
+    blurb: spa.blurb || spa.comment,
     spa
   };
 }
@@ -1463,7 +1463,14 @@ async function ensureBank(name) {
     if (!gameInfo.pixels) return null;
     const rom = await ensureRom();
     if (!rom) throw new Error('Could not load the ' + gameInfo.title + ' ROM');
-    parsed = Nhl92Sheet.parseSheet(rom, gameInfo.sheet);
+    if (spec.kind === 'frames' && spec.start != null && spec.end != null) {
+      const bytes = rom.subarray(spec.start, spec.end);
+      const missing = bytes.length >= 4
+        && new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(0) === 0xffffffff;
+      parsed = Nhl92Sheet.openFrames(bytes, Nhl92Jim, missing ? await icePaletteBytes() : null);
+    } else {
+      parsed = Nhl92Sheet.parseSheet(rom, gameInfo.sheet);
+    }
   } else if (gameInfo.kind === 'pc95') {
     if (!gameInfo.pixels) return null;
     const response = await fetch('/api/games/' + gameInfo.id + '/sprites?bank=' + encodeURIComponent(name));
@@ -1676,11 +1683,11 @@ async function loadGame(id, keepSelection) {
     if (state.paletteName) spritePalette = state.paletteName;
   }
   el('palette').parentElement.querySelector('span').textContent = info.paletteLabel || ('Palette slot ' + (info.jerseyRow || 2));
-  el('title').textContent = info.title + ' Sprite Viewer';
+  el('game-title').textContent = info.title;
   el('tagline').textContent = info.tagline || (info.pixels
     ? 'Frame index, SPF groups, SPA sequences, and other pictures'
     : 'SPF and SPA names from ' + info.source + '. Pictures need the ROM.');
-  document.title = info.title + ' Sprite Viewer';
+  document.title = info.title + ' · NHL9X Studio';
   if (info.pixels) {
     await ensureBank(spritesBankId());
     if (state.mode === 'frame' && state.bank !== spritesBankId()) await ensureBank(state.bank);

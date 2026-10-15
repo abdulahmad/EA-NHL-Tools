@@ -78,7 +78,17 @@
     SPAfhigh: 'Fight', SPAflow: 'Fight', SPAfhith: 'Fight',
     SPAfhitl: 'Fight', SPAffall: 'Fight',
     SPAwallright: 'Special', SPAwallleft: 'Special',
-    SPAfaceoff: 'Special', SPAfaceoffr: 'Special', SPAsiren: 'Special'
+    SPAfaceoff: 'Special', SPAfaceoffr: 'Special', SPAsiren: 'Special',
+    SPAbenchcheckl: 'Falls', SPAbenchcheckr: 'Falls'
+  };
+
+  const SPA_BLURB = {
+    SPAcelebrate: 'On-ice goal celebration (stick up). Not bench seating.',
+    SPApump: 'Scorer arm pump after a goal.',
+    SPAbenchcheckl: 'Checked into the boards near center ice (left). Not bench celebration — see NHL 95 PC for bench cheer.',
+    SPAbenchcheckr: 'Checked into the boards near center ice (right). Not bench celebration.',
+    SPAwallleft: 'Skate to the penalty-box door (left boards).',
+    SPAwallright: 'Skate to the penalty-box door (right boards).'
   };
 
   function keyOf(name) {
@@ -339,6 +349,7 @@
       anims.push({
         name: block.name,
         comment: block.comment,
+        blurb: SPA_BLURB[keyOf(block.name)] || block.comment || '',
         group: spaGroup(block.name),
         offset: block.offset,
         flags,
