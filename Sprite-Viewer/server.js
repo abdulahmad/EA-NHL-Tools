@@ -1,7 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const { GAMES, gameById, revAAdjust } = require('./lib/games');
+const { GAMES, gameById, revAAdjust, sheetGameBanks } = require('./lib/games');
 const pc95 = require('./lib/pc95');
 
 const ROOT = __dirname;
@@ -174,7 +174,9 @@ function gameStatus(game) {
     ? pc.spriteFiles.length > 0 || pc.rinkFiles.length > 0
     : (game.kind === 'anim' || hasRom);
   let banks = game.banks;
-  if (game.kind === 'pc95') {
+  if (game.kind === 'sheet') {
+    banks = sheetGameBanks(placed.images);
+  } else if (game.kind === 'pc95') {
     banks = [];
     if (pc.spriteFiles.length || !pc.rinkFiles.length) banks.push({ id: 'sprites', label: 'Players' });
     if (pc.rinkFiles.length) banks.push({ id: 'rink', label: 'Rink and crowd' });

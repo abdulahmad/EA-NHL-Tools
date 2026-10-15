@@ -9,7 +9,7 @@ const { paletteLabel, defaultPaletteFile, matchPaletteFile } = require('./lib/la
 const { decodeJim, decompressBytecode, picturePixelHidden } = require('./lib/jim');
 const { unpack93 } = require('./lib/snespak');
 const { parse93, parse94, openImage } = require('./lib/snes');
-const { GAMES, revAAdjust } = require('./lib/games');
+const { GAMES, revAAdjust, sheetGameBanks } = require('./lib/games');
 const pc95 = require('./lib/pc95');
 
 const root = __dirname;
@@ -361,6 +361,7 @@ assert.strictEqual(snes94frame.width, 8);
 assert.strictEqual(snes94frame.pixels[0], 1);
 
 const nhl92 = GAMES.find((game) => game.id === 'nhl92');
+assert.ok(nhl92.banks.some((bank) => bank.id === 'FaceOff.anim'));
 for (const bank of nhl92.banks) {
   if (!bank.file) continue;
   const size = fs.statSync(path.join(root, '..', 'ANIM-To-BMP', bank.id)).size;
@@ -382,6 +383,10 @@ assert.strictEqual(g94.images.length, 215);
 assert.strictEqual(g95.images.length, 300);
 assert.ok(pa93.images.some((image) => image.id === 'IceRink.map.jim' && image.kind === 'jim'));
 assert.ok(pa93.images.some((image) => image.id === 'Crowd.anim' && image.kind === 'frames'));
+assert.strictEqual(pa93.banks.length, sheetGameBanks(pa93.images).length);
+assert.ok(pa93.banks.some((bank) => bank.id === 'Crowd.anim' && bank.kind === 'frames'));
+assert.ok(g94.banks.some((bank) => bank.id === 'PlayoffSprite.bin'));
+assert.strictEqual(g94.banks.filter((bank) => bank.kind === 'frames').length, 4);
 assert.ok(g94.images.some((image) => image.id === 'logoBOS.map.jim' && image.paletteAt === 0xFF482));
 assert.ok(g94.images.some((image) => image.id === 'CardMarioLemieux.bin' && image.paletteAt === 0xC6762));
 assert.ok(g95.images.some((image) => image.id === 'CardGuyHebert.bin' && image.paletteAt));

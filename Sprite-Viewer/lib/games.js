@@ -69,6 +69,35 @@
     { id: 'EASN.map.jim', label: 'EASN', group: 'Screens', kind: 'jim', start: 0x7FC20, end: 0x7FE8A }
   ];
 
+  const AUX_FRAME_BANK_ORDER = [
+    'Crowd.anim',
+    'FaceOff.anim',
+    'Zam.anim',
+    'Stanley.anim',
+    'PlayoffSprite.bin'
+  ];
+
+  function frameBanksFromImages(images) {
+    const list = images || [];
+    const banks = [];
+    for (const id of AUX_FRAME_BANK_ORDER) {
+      const image = list.find((item) => item.id === id && item.kind === 'frames');
+      if (!image) continue;
+      banks.push({
+        id: image.id,
+        label: image.label,
+        kind: 'frames',
+        start: image.start,
+        end: image.end
+      });
+    }
+    return banks;
+  }
+
+  function sheetGameBanks(images) {
+    return [{ id: 'sprites', label: 'Sprites' }].concat(frameBanksFromImages(images));
+  }
+
   function snes93(frames, pieces, tiles, pieceSize, piecesAt) {
     return { frames, pieceCount: pieces, tiles, pieceSize, pieces: piecesAt };
   }
@@ -86,6 +115,7 @@
         { id: 'Sprites.anim', label: 'Sprites', file: true, start: 0x3D5EE, end: 0x7216C },
         { id: 'Puck.anim', label: 'Puck', file: true, start: 0x2E9EC, end: 0x2F262 },
         { id: 'Crowd.anim', label: 'Crowd', file: true, start: 0x7216C, end: 0x75790 },
+        { id: 'FaceOff.anim', label: 'Faceoff', start: 0x75790, end: 0x7716C },
         { id: 'Zam.anim', label: 'Zamboni', file: true, start: 0x7716C, end: 0x778D2 }
       ],
       images: NHL92_IMAGES,
@@ -101,7 +131,7 @@
       platform: 'genesis',
       kind: 'sheet',
       paletteKind: 'genesis',
-      banks: [{ id: 'sprites', label: 'Sprites' }],
+      banks: sheetGameBanks(generated.nhlpa93),
       images: generated.nhlpa93,
       palettes: '94',
       romNames: ['nhlpa93.bin', 'nhlpa93.md', 'nhlpa93.gen'],
@@ -122,7 +152,7 @@
       platform: 'genesis',
       kind: 'sheet',
       paletteKind: 'genesis',
-      banks: [{ id: 'sprites', label: 'Sprites' }],
+      banks: sheetGameBanks(stampLogos('nhl94', stampPortraits('nhl94', generated.nhl94))),
       images: stampLogos('nhl94', stampPortraits('nhl94', generated.nhl94)),
       palettes: '94',
       romNames: ['nhl94.bin', 'nhl94.md', 'nhl94.gen'],
@@ -304,5 +334,5 @@
     };
   }
 
-  return { GAMES, gameById, revAAdjust };
+  return { GAMES, gameById, revAAdjust, sheetGameBanks, frameBanksFromImages };
 });

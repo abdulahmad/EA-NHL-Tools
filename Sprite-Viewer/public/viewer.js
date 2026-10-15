@@ -1463,7 +1463,14 @@ async function ensureBank(name) {
     if (!gameInfo.pixels) return null;
     const rom = await ensureRom();
     if (!rom) throw new Error('Could not load the ' + gameInfo.title + ' ROM');
-    parsed = Nhl92Sheet.parseSheet(rom, gameInfo.sheet);
+    if (spec.kind === 'frames' && spec.start != null && spec.end != null) {
+      const bytes = rom.subarray(spec.start, spec.end);
+      const missing = bytes.length >= 4
+        && new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(0) === 0xffffffff;
+      parsed = Nhl92Sheet.openFrames(bytes, Nhl92Jim, missing ? await icePaletteBytes() : null);
+    } else {
+      parsed = Nhl92Sheet.parseSheet(rom, gameInfo.sheet);
+    }
   } else if (gameInfo.kind === 'pc95') {
     if (!gameInfo.pixels) return null;
     const response = await fetch('/api/games/' + gameInfo.id + '/sprites?bank=' + encodeURIComponent(name));
