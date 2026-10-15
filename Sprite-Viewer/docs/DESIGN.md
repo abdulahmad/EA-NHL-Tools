@@ -237,7 +237,7 @@ Parity with **95PC** in the viewer: Frame / SPF / SPA / Images, team jerseys, ho
 
 | Tool / doc | Use |
 |------------|-----|
-| `MID94-Tools/` | Genesis 94 **cmdstream** ↔ MIDI; channel timing, footer loop |
+| `MID94-Tools/` | **Experimental / unfinished** — cmdstream ↔ MIDI attempt; **not reliable** for production or viewer integration today (see repo README). Useful notes only until a JS player or fixed extractor exists. |
 | `Docs/SND/Readme.md` | `Hockey.snd` magic / ROM offsets 92–95 |
 | NHL94Genesis `sound94.asm`, `extractAssets94.js` | Song stream slices, `SoundStreamTable` |
 | NHLPA93Genesis `extractAssets93` | Named `fmtune_*` pattern for 93 |
@@ -306,7 +306,7 @@ Viewer audio mode should display **both** runtime id (`$5A`) and **stable label*
 | Phase | Games | Deliverable |
 |-------|--------|-------------|
 | **AUD-0** | — | `lib/audio/README.md`, catalog schema, `/api/games/:id/audio` listing endpoint |
-| **AUD-1** | 94G | Extracted cmdstream **preview** via MID94 pipeline (server returns MIDI or JSON events; client plays with Web MIDI or simple synth) |
+| **AUD-1** | 94G | Cmdstream **preview** in viewer: **new** `lib/audio/genesis.js` player from `sound94.asm` opcodes (or fixed extract), **not** wrapping `MID94-Tools` as-is. Server returns decoded events or PCM; client uses Web Audio + YM2612 WASM. Optional MIDI export is out of scope until extract is correct. |
 | **AUD-2** | 92G–95G | `Hockey.snd` **sample browser** (slice ROM, decode format, WAV download) |
 | **AUD-3** | 94G, 93G | Full **SFX table** from disasm ids + play PCM/FM where mapped |
 | **AUD-4** | 93S, 94S | SNES sample decode + music once format confirmed |
@@ -320,7 +320,7 @@ Dependencies: **94PC graphics (PC94-2)** shares `lib/pc*.js` with PC audio file 
 
 | Risk | Mitigation |
 |------|------------|
-| FM cmdstream **timing** (per-channel factors) | Reuse MID94-Tools research; label channels in catalog |
+| FM cmdstream **timing** (per-channel factors) | Do not depend on MID94-Tools output; validate against retail in-emulator audio; use disasm + labeled song inventory |
 | **WASM** build/size | Lazy-load emulators per platform |
 | **VIV** unknown format | Ship KMS/SFX first; speech as extracted WAV fallback |
 | **SNES music** not isolated | Start with **SFX/samples**; music after SPC/BRR map |
@@ -356,7 +356,7 @@ Suggested **overall** order after today’s viewer:
 | `Sprite-Viewer/README.md` | User-facing runbook |
 | `Docs/Sprites/Readme.md` | Frame numbering Genesis & DOS |
 | `Docs/SND/Readme.md` | `Hockey.snd` offsets |
-| `MID94-Tools/README.md` | 94G cmdstream ↔ MIDI |
+| `MID94-Tools/README.md` | 94G cmdstream experiment (unfinished) |
 | `lib/pc95.js` | 95PC graphics codec |
 | NHL94Genesis `src/sound94.asm`, `src/title94.asm` | Driver, `TeamSongs`, `SongPointerTable` |
 | NHL94Genesis `docs/HANDOFF.md` | Naming rules for disassembly |

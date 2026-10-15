@@ -1,6 +1,8 @@
 # NHL 94 Music Extractor
 
-This tool extracts music from NHL 94 ROM files and converts it to standard MIDI format for playback or editing.
+> **Status: unfinished.** This folder is research/experiment code. MIDI export and round-trip timing are **not reliable**; treat results as exploratory only. Sprite Viewer audio plans assume a **new** in-browser Genesis cmdstream player, not this tool as shipped.
+
+This tool attempts to extract music from NHL 94 ROM files and convert it to standard MIDI format for playback or editing.
 
 ## Overview
 

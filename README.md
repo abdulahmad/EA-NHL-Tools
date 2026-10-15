@@ -27,7 +27,7 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 
 `JIM-Tools` - Tools to import/export images from/to NHL 92 Genesis
 
-`MID94-Tools` - Experiment in extracting music from NHL 94 Genesis
+`MID94-Tools` - WIP experiment in extracting music from NHL 94 Genesis (**unfinished; conversion does not reliably work** — not used by Sprite Viewer)
 
 `PAL-To-ACT` - Convert NHL95 PC `!<palname>` & `<HOME/AWAY>PALS.bin` files to `.ACT`. For use with sprites extracted from PPV files & centre ice logos extracted
 
