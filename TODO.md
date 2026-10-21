@@ -3,7 +3,7 @@
 Open items for this repo.
 
 ## Sprite Viewer
-- [ ] Support `crowd.anim`.
+- [x] Support `crowd.anim`: on NHL 92 each frame is drawn over the rink's crowd area (`Nhl92Anim.crowdOnRink`, `Sprite-Viewer/test-crowd.js`).
 - [ ] Support NHL 95 PC `f*.ppv` files.
 - [ ] Fix the off palette on the crowd bench players for 95 PC.
 
