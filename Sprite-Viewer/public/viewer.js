@@ -256,7 +256,7 @@ function bitmapFor(frame, colors) {
   const named = state.paletteName;
   const pending = Boolean(named) && !paletteFiles.has(named);
   const team = !pending && named && paletteFiles.has(named);
-  const own = Boolean(frame.colors) && !team;
+  const own = Boolean(frame.colors) && (!team || Boolean(frame.onRink));
   const override = state.mode === 'image' ? state.transparentOverride : null;
   const key = pending
     ? ''
@@ -1482,6 +1482,20 @@ async function bytesFor(spec) {
   return null;
 }
 
+/** Crowd.anim over the rink picture (Nhl92Anim.crowdOnRink) when the ROM has IceRink.map.jim; else the bare frames. */
+async function crowdOverRink(crowd) {
+  const spec = (gameInfo.images || []).find((image) => image.id === 'IceRink.map.jim');
+  if (!spec) return crowd;
+  try {
+    const bytes = await bytesFor(spec);
+    if (!bytes) return crowd;
+    const rink = Nhl92Jim.decodeJim(bytes);
+    return Nhl92Anim.crowdOnRink(crowd, rink.renderFrame(1), rink.combined);
+  } catch (err) {
+    return crowd;
+  }
+}
+
 async function ensureBank(name) {
   if (banks.has(name)) return banks.get(name);
   if (!gameInfo) return null;
@@ -1493,6 +1507,7 @@ async function ensureBank(name) {
     const bytes = await bytesFor(spec);
     if (!bytes) return null;
     parsed = Nhl92Anim.parseAnim(bytes);
+    if (name === 'Crowd.anim') parsed = await crowdOverRink(parsed);
   } else if (gameInfo.kind === 'sheet') {
     if (!gameInfo.pixels) return null;
     const rom = await ensureRom();

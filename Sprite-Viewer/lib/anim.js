@@ -211,5 +211,46 @@
     };
   }
 
-  return { parseAnim, renderFrame, decodePaletteFile, expandChannel, SIZE_TAB, DIMENSIONS };
+  /**
+   * Crowd.anim drawn the way the game shows it. Its frames are a few 8x8 tiles each, placed in rink-map pixels
+   * (showcrowd in video.asm adds the scroll to the same coordinates the rink map uses), so a frame alone is sparse
+   * specks. This lays every frame over the rink picture's crowd area: rink colours 0-63, crowd colours 64-127.
+   * @param {object} crowd parseAnim result of Crowd.anim
+   * @param {{width:number,height:number,pixels:Uint8Array}} rink the decoded IceRink.map.jim frame
+   * @param {number[][]} rinkColors the rink's 64 colours
+   */
+  function crowdOnRink(crowd, rink, rinkColors) {
+    const colors = rinkColors.slice(0, 64);
+    while (colors.length < 64) colors.push([0, 0, 0]);
+    const all = colors.concat(crowd.combined);
+    const cache = new Map();
+    return Object.assign({}, crowd, {
+      onRink: true,
+      combined: all,
+      renderFrame: function (frameNumber) {
+        if (cache.has(frameNumber)) return cache.get(frameNumber);
+        const own = renderFrame(crowd, frameNumber);
+        const width = rink.width;
+        const height = Math.min(rink.height, Math.max(own.canvasHeight || 0, own.minY + own.height));
+        const pixels = new Uint8Array(width * height);
+        for (let y = 0; y < height; y++) pixels.set(rink.pixels.subarray(y * rink.width, y * rink.width + width), y * width);
+        for (let y = 0; y < own.height; y++) {
+          for (let x = 0; x < own.width; x++) {
+            const p = own.pixels[y * own.width + x];
+            const X = own.minX + x;
+            const Y = own.minY + y;
+            if (p && X >= 0 && Y >= 0 && X < width && Y < height) pixels[Y * width + X] = 64 + p;
+          }
+        }
+        const frame = Object.assign({}, own, {
+          width, height, minX: 0, minY: 0, offsetX: 0, offsetY: 0, pixels, colors: all, opaque: true, onRink: true,
+          hotspotPxX: own.hotspotX, hotspotPxY: own.hotspotY
+        });
+        cache.set(frameNumber, frame);
+        return frame;
+      }
+    });
+  }
+
+  return { parseAnim, renderFrame, crowdOnRink, decodePaletteFile, expandChannel, SIZE_TAB, DIMENSIONS };
 });
