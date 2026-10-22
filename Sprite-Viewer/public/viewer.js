@@ -1516,7 +1516,8 @@ async function ensureBank(name) {
       const bytes = rom.subarray(spec.start, spec.end);
       const missing = bytes.length >= 4
         && new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(0) === 0xffffffff;
-      parsed = Nhl92Sheet.openFrames(bytes, Nhl92Jim, missing ? await icePaletteBytes() : null);
+      const frameOpts = gameInfo.sheet && gameInfo.sheet.record === '95' ? { record: '95' } : null;
+      parsed = Nhl92Sheet.openFrames(bytes, Nhl92Jim, missing ? await icePaletteBytes() : null, frameOpts);
     } else {
       parsed = Nhl92Sheet.parseSheet(rom, gameInfo.sheet);
     }
@@ -1586,7 +1587,8 @@ async function ensureImage(id) {
     const bytes = await bytesFor(image);
     if (!bytes) return null;
     const missing = bytes.length >= 4 && new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(0) === 0xffffffff;
-    parsed = Nhl92Sheet.openFrames(bytes, Nhl92Jim, missing ? await icePaletteBytes() : null);
+    const frameOpts = gameInfo.sheet && gameInfo.sheet.record === '95' ? { record: '95' } : null;
+    parsed = Nhl92Sheet.openFrames(bytes, Nhl92Jim, missing ? await icePaletteBytes() : null, frameOpts);
   } else if (image.kind === 'pc95') {
     const paths = image.files && image.files.length ? image.files : [image.id];
     const parts = [];

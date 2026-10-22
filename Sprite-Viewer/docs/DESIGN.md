@@ -150,7 +150,7 @@ Work **92G → … → 94PC** (see **Implementation priority** above). PC DOS ti
 | **GAP-1** | **92G** | Reference quality | Treat as gold standard: bank list, Images catalog, palette/transparency rules; document anything still missing from `ANIM-To-BMP` / ROM slices. |
 | **GAP-2** | **93G** | Banks + images | Add auxiliary Frame banks if disasm exposes them; audit `genesis-images` vs NHLPA93 extract; Rev A offset tests. |
 | **GAP-3** | **94G** | Banks + discoverability | Multi-bank Frame tab like 92G (`Crowd.anim`, `FaceOff.anim`, `Zam.anim`, `PlayoffSprite.bin`); SPA blurbs (`SPAbenchcheck*` vs PC `SPFbench`); search aliases for celebrate vs bench. |
-| **GAP-4** | **95G** | Banks + images | Same multi-bank pattern; arena gfx / `genesis-images` audit vs NHL95 extract. |
+| **GAP-4** | **95G** | Banks + images | Crowd + FaceOff on Frame tab (retail `0x18B628`, `0x14A490`; not `segmap95` `0xA4B54`); no Genesis Zam; `openFrames` `record: '95'`. Remaining: arena gfx / full `genesis-images` audit vs `extractAssets95.js`. |
 | **GAP-5** | **93S** | SNES catalog | Pictures, palettes, frame asm completeness (`frames93snes.asm`, `build-snes-frames.js`). |
 | **GAP-6** | **94S** | SNES parity | Missing Genesis-parity pictures; celebrate/bench SPAs once offsets pinned. |
 | **GAP-7** | **95PC** | DOS polish | Remaining QFS/PPV catalog holes, goalie palette edge cases, hotspot/dynamic rules — viewer already has core `pc95` path. |

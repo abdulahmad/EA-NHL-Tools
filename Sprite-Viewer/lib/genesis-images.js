@@ -407,6 +407,8 @@ module.exports = {
     { id: "CardTeemuSelanne.bin", label: "Teemu Selanne", group: "Players", kind: "jim", start: 801890, end: 802764, paletteAt: 662980 },
     { id: "CardTeppoNumminen.bin", label: "Teppo Numminen", group: "Players", kind: "jim", start: 802764, end: 803818 },
     { id: "CardDaveManson.bin", label: "Dave Manson", group: "Players", kind: "jim", start: 803818, end: 804692, paletteAt: 662980 },
+    { id: "Crowd.anim", label: "Crowd", group: "Sprites", kind: "frames", start: 1619496, end: 1628840 },
+    { id: "FaceOff.anim", label: "Face Off sprites", group: "Sprites", kind: "frames", start: 1352848, end: 1360200 },
     { id: "Rinktilelist.map.jim", label: "Rinktilelist", group: "Ice", kind: "jim", start: 805500, end: 828778 },
     { id: "RosterFont.bin", label: "Roster Font", group: "Fonts", kind: "jim", start: 1278918, end: 1282196 },
     { id: "SmallFontMap.map.jim", label: "Small Font", group: "Fonts", kind: "jim", start: 1282196, end: 1285634 },
