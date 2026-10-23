@@ -47,9 +47,18 @@ D={
    pants=NV,pstripe=(180,40,40),helmet=NV,glove=NV),
 }
 def bands(d,w,h,base,bl,vertical=False):
-    for v0,v1,c in bl or []:
-        a=int(round(v0*h));b=max(int(round(v1*h)),a+1)   # every band gets >=1 texel row
-        d.rectangle((0,a,w,b-1),fill=c)
+    # non-overlapping largest-remainder allocation over gap-filled bands: every band keeps >=1 row (fixes P1 drops)
+    if not bl:return
+    from build_v4 import alloc
+    full=[];t=0.
+    for v0,v1,c in sorted(bl):
+        v0=max(v0,t)
+        if v0>t+1e-6:full.append((t,v0,base))
+        if v1>v0:full.append((v0,v1,c));t=v1
+    if t<1-1e-6:full.append((t,1.,base))
+    n=w if vertical else h
+    for r,i in enumerate(alloc(full,n)):
+        d.rectangle((r,0,r,h-1) if vertical else (0,r,w-1,r),fill=full[i][2])
 def star(d,cx,cy,r,c):
     import math;pts=[(cx+(r if k%2==0 else r*.45)*math.sin(k*math.pi/5),cy-(r if k%2==0 else r*.45)*math.cos(k*math.pi/5)) for k in range(10)];d.polygon(pts,fill=c)
 def font(sz):

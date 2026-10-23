@@ -6,3 +6,8 @@ progress/
 *_proof*.png
 jerseys/ref/
 __pycache__/
+*_compare.png
+local_*
+*_grid_v4.png
+*.jpg
+*.webp
