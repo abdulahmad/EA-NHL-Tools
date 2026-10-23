@@ -28,3 +28,4 @@ Final outputs in v2/: 10–13 (equipment), 20–22 (atlas + UV), PLAN.md, FINDIN
     - The Thrashers vertical piping is mostly 1 px and flickers.
     - Thin stripes (1–2 % of V) drop out on small frames.
     - Sleeve left/right can swap between directions.
+- 2026-10-23: removed back name/number from all jersey designs; jersey atlases now include the real crest (approved).

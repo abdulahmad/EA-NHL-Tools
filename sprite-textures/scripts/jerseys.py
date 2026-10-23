@@ -70,8 +70,7 @@ def build(key):
                 d.rectangle((int(u0*w),int(.1*h),int(u1*w),h),fill=c);d.rectangle((int((1-u1)*w),int(.1*h),int((1-u0)*w),h),fill=c)
             if nm=='torso_front':
                 cw=int(w*.42);ch=int(cw*crest.height/crest.width);im.paste(crest.resize((cw,ch),Image.LANCZOS),((w-cw)//2,int(h*.42)-ch//2))
-            elif s['num']:
-                f=font(int(h*.38));d.text((w/2,h*.45),s['num'],fill=s['numc'],font=f,anchor='mm',stroke_width=2,stroke_fill=(20,20,20))
+            # back: colours/stripes only (no name/number, per Abdul)
         elif nm.startswith('sleeve'):
             bands(d,w,h,s['base'],s['sleeve'])
             if s.get('svpipe'):d.rectangle((int(w*.45),0,int(w*.5),h),fill=NV);d.rectangle((int(w*.5),0,int(w*.55),h),fill=(180,40,40))
