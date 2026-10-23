@@ -6,28 +6,7 @@
   "chicago_alt_bottom": 0,
   "montreal_baby_blue_bottom": 0
  },
- "head": [
-  [
-   2,
-   7,
-   "recolour: shoulder patch gold -> team colour"
-  ],
-  [
-   11,
-   7,
-   "recolour: shoulder patch gold -> team colour"
-  ],
-  [
-   16,
-   7,
-   "recolour: shoulder patch gold -> team colour"
-  ],
-  [
-   25,
-   7,
-   "recolour: shoulder patch gold -> team colour"
-  ]
- ],
+ "head": [],
  "body": [
   [
    6,
