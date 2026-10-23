@@ -86,12 +86,44 @@ def fit(n):
     #    arm-stripe-3 line along the elbow->glove axis; across-arm position picks the arm column; L/R arm -> that arm's template columns.
     FOF={(y,x):f for f,px in P.items() for (y,x) in px}
     def torso_rows(tor):
-        W=[(y-o,x) for (y,x) in tor for o in [{'waist 1':0,'waist 2':1,'waist 3':2}.get(FOF[(y,x)])] if o is not None]
-        xs=np.array([p[1] for p in W],float);ys=np.array([p[0] for p in W],float)
-        s=float(np.clip(np.polyfit(xs,ys,1)[0],-1,1)) if len(W)>=3 and np.ptp(xs)>0 else 0.0
-        xc=float(xs.mean()) if len(W) else 0.0;k=lambda y,x:y-int(round(s*(x-xc)))
-        kw=int(np.median([k(y,x) for (y,x) in W])) if W else max(p[0] for p in tor)-2
-        GEO['torso']=dict(slope=s,xc=xc,k_waist1=kw);return {p:14+k(*p)-kw for p in tor}
+        # v5.2 (Abdul pt789u): smooth torso. Bottom line = least-squares fit of the waist bands (row 14 = waist 1), top line = fit of the
+        # yoke bands (row 8 = yoke 3). Every jersey pixel gets its fractional position u between the two lines IN ITS OWN COLUMN, so the
+        # stripe lines are a linear blend of the two fitted lines: the angle bends gradually from waist to shoulders (a continuous spine,
+        # not 2 rigid segments). Approved stretch: the n sheared lines between the bands are sampled onto the 5 jersey rows 13..9 by
+        # floor(u*5) -> extra lines are spread evenly (never two doubled rows side by side for n<=10) and the top row is not repeated.
+        def fitline(offs):
+            P_=[(y-o,x) for (y,x) in tor for o in [offs.get(FOF[(y,x)])] if o is not None]
+            if len(P_)<2:return None
+            xs=np.array([p[1] for p in P_],float);ys=np.array([p[0] for p in P_],float)
+            sl=float(np.clip(np.polyfit(xs,ys,1)[0],-1,1)) if len(P_)>=3 and np.ptp(xs)>0 else 0.0
+            return sl,float(np.median(ys-sl*(xs-xc)))
+        xc=float(np.mean([p[1] for p in tor]))
+        bot=fitline({'waist 1':0,'waist 2':1,'waist 3':2}) or (0.0,float(max(p[0] for p in tor))-2)
+        top=fitline({'yoke 3':0,'yoke 2':-1,'yoke 1':-2,'yoke corner':0})
+        if top is None or bot[1]-top[1]<3:top=(bot[0],float(min(p[0] for p in tor))+2)
+        yb=lambda x:bot[1]+bot[0]*(x-xc);yt=lambda x:top[1]+top[0]*(x-xc)
+        GEO['torso']=dict(bottom_slope=bot[0],top_slope=top[0],xc=xc,bottom_y=bot[1],top_y=top[1],
+                          jersey_lines=float(bot[1]-top[1]-1),stretch_factor=round(5/max(1,bot[1]-top[1]-1),3))
+        # fractional spine position from Euclidean distances to the two bands (works for twisted torsos where the waist and yoke bands
+        # cover different columns): u = d_waist / (d_waist + d_yoke); the iso-lines of u bend gradually from the waist angle to the yoke angle.
+        from scipy.ndimage import distance_transform_edt as EDT
+        Hh,Ww=q.shape
+        def dist(fs):
+            m=np.ones((Hh,Ww),bool);hit=False
+            for p in tor:
+                if FOF[p] in fs:m[p]=0;hit=True
+            return EDT(m) if hit else None
+        db=dist({'waist 1'}) if any(FOF[p]=='waist 1' for p in tor) else dist({'waist 2','waist 3'})
+        dt=dist({'yoke 3'}) if any(FOF[p]=='yoke 3' for p in tor) else dist({'yoke 1','yoke 2','yoke corner','shoulder patch'})
+        R_={};ns=[]
+        for (y,x) in tor:
+            f=FOF[(y,x)]
+            if f!='jersey' or db is None or dt is None:
+                R_[(y,x)]={'waist 1':14,'waist 2':15,'waist 3':16,'yoke 1':6,'yoke 2':7,'yoke 3':8}.get(f,11);continue
+            n=max(1.0,db[y,x]+dt[y,x]-1);u=min(0.999,max(0.0,(db[y,x]-0.5)/n));ns.append(n)
+            R_[(y,x)]=13-int(np.floor(u*5))
+        if ns:GEO['torso']['jersey_lines']=float(np.median(ns));GEO['torso']['stretch_factor']=round(5/max(1,float(np.median(ns))),3)
+        return R_
     GEO={};NKS=set(NK)
     seg=SEG.segment(q,FOF,d,NKS,{p for p,t in fixed.items() if t=='stick'},torso_rows)
     PART,JOINTS,EDGES,ARMS,TROW=seg
@@ -115,6 +147,25 @@ def fit(n):
         el=cen(g({'arm stripe 1','arm stripe 2','arm stripe 3'}));sh=JOINTS.get(sname+' shoulder') or cen(ua);gl=JOINTS.get(sname+' glove') or cen(fa)
         axis_rows(ua,sh,el or cen(fa),a1,12,1,8,11,sname+' upper arm')          # row 12 = arm stripe 1 line, rows 11..8 towards the shoulder
         axis_rows(fa,el or cen(ua),gl,a3,14,1,15,17,sname+' lower arm')         # row 14 = arm stripe 3 line, rows 15..17 towards the glove
+        # v5.2 smooth arm (Abdul pt789u): rows follow a curved distance field instead of one straight axis per segment, so the stripe
+        # angle bends gradually shoulder -> upper arm -> elbow (stripes) -> forearm -> wrist. Upper arm row = 11 - floor(d(arm stripe 1)-0.5),
+        # forearm row = 15 + floor(d(arm stripe 3)-0.5) (Euclidean distance to the stripe pixels). NOT stretched (arm stretch not approved);
+        # ARM_STRETCH_PREVIEW=1 instead samples u = d_stripe/(d_stripe+d_end) onto the 4 / 3 template rows (gradual stretch, PREVIEW only).
+        from scipy.ndimage import distance_transform_edt as EDT
+        def dfield(pts):
+            m=np.ones(q.shape,bool)
+            for p in pts:m[p]=0
+            return EDT(m) if pts else None
+        tor_px=[p for p,i in PART.items() if i in(2,3)];glv=[p for p,i in PART.items() if i==(8 if sname=='R' else 9)]
+        for pts,stripe,end,base,sign,lo,hi,key in ((ua,a1 or g({'arm stripe 2'}),tor_px,11,-1,8,11,'upper arm'),(fa,a3 or g({'arm stripe 2'}),glv,15,1,15,17,'lower arm')):
+            ds=dfield(stripe);de=dfield(end)
+            if ds is None or not pts:continue
+            raw=[base+sign*int(np.floor(max(0,ds[p]-0.5))) for p in pts]
+            GEO.setdefault(sname+' '+key,{})['curve_rows']=[min(raw),max(raw)]
+            for p,r in zip(pts,raw):
+                if os.environ.get('ARM_STRETCH_PREVIEW')=='1' and de is not None:
+                    n=max(1.0,ds[p]+de[p]-1);u=min(0.999,max(0.0,(ds[p]-0.5)/n));r=base+sign*int(np.floor(u*(hi-lo+1)))
+                ROWT[p]=int(min(hi,max(lo,r)))
         # across-arm column: rank of the perpendicular coordinate, inner column = nearer the torso centre
         tc=JOINTS.get('chest') or (x0,y0)
         for part in (ua,g({'arm stripe 1','arm stripe 2','arm stripe 3'})+fa):

@@ -255,3 +255,18 @@ Without a stretch the extra lines repeat at the clamped end (row 9 / row 17): th
 
 **Game-zone defects** (flagged, not forced): 889 (95-only crosscheck 889-904, see AUDIT #5) forearm zone on both sides of arm stripe 3
 on both arms; front views 57/62/67 and side 52 have yoke 1 under yoke 2 (row 7,6,7) and crest-index rows out of order.
+
+# v5.2 — smooth torso + approved gradual torso stretch, curved arms, stick model (Abdul pt789u)
+Skating-left frame = **72** (d6, faces/skates screen-left). Its torso stripe angles jumped (PR #48: one rigid waist-band slope for the
+whole torso, the yoke band at -45 deg) -> max angle step between adjacent rows 50 deg.
+* **Torso (applied):** every jersey pixel gets a fractional spine position `u = d_waist1/(d_waist1+d_yoke3)` (Euclidean distance fields to
+  the two fitted bands), row = `13 - floor(5u)`. Iso-lines blend continuously from the waist angle (bottom) to the yoke angle (top) — a
+  continuous spine rather than 3-4 rigid sections — and the n sheared lines are sampled evenly onto the 5 jersey rows (approved stretch,
+  extra lines spread out, top row not repeated). Twisted torsos (waist and yoke bands over different columns, 67/52) work too.
+* **Arms (applied, no stretch):** upper arm row = `11 - floor(d(arm stripe 1) - 0.5)`, forearm `15 + floor(d(arm stripe 3) - 0.5)` — curved
+  distance field shoulder -> elbow -> wrist. `ARM_STRETCH_PREVIEW=1` samples `u = d_stripe/(d_stripe+d_end)` onto 4/3 rows = gradual arm
+  stretch, rendered only to `v5/preview_arm_stretch/` (PREVIEW, not approved, not the main mapping).
+* **Stick model:** shaft (grip at the glove -> heel) and blade (heel -> toe), fitted from the 136 stick pixels; drawn SH/BL in the overlays,
+  stored in `skeleton_v5.json`. No texel (model/alignment only).
+* **New metrics:** torso and per-arm max angle step between adjacent texel rows (PCA line angle per row); stripe thickness
+  = min(vertical, horizontal run) of a row at a pixel (1 for a 1-px line at any angle); adjacent doubles.
