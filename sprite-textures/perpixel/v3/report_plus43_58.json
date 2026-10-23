@@ -1,0 +1,324 @@
+{
+ "leafs_home_370": {
+  "diff": 0,
+  "visible": 354,
+  "mapped": 235,
+  "from_filled_texels": 0,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 4,
+  "dirs": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "facing": "front",
+  "waist_collisions": 0
+ },
+ "leafs_home_889": {
+  "diff": 0,
+  "visible": 366,
+  "mapped": 271,
+  "from_filled_texels": 0,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 0,
+  "dirs": [
+   0
+  ],
+  "facing": "back",
+  "waist_collisions": 0
+ },
+ "leafs_home_897": {
+  "diff": 0,
+  "visible": 395,
+  "mapped": 228,
+  "from_filled_texels": 30,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 4,
+  "dirs": [
+   4
+  ],
+  "facing": "front",
+  "waist_collisions": 0
+ },
+ "leafs_home_42": {
+  "diff": 0,
+  "visible": 324,
+  "mapped": 219,
+  "from_filled_texels": 20,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 0,
+  "dirs": [
+   0
+  ],
+  "facing": "back",
+  "waist_collisions": 0
+ },
+ "leafs_home_47": {
+  "diff": 0,
+  "visible": 281,
+  "mapped": 203,
+  "from_filled_texels": 14,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 1,
+  "dirs": [
+   1
+  ],
+  "facing": "back",
+  "waist_collisions": 0
+ },
+ "leafs_home_52": {
+  "diff": 0,
+  "visible": 302,
+  "mapped": 188,
+  "from_filled_texels": 14,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 2,
+  "dirs": [
+   2
+  ],
+  "facing": "side",
+  "waist_collisions": 0
+ },
+ "leafs_home_57": {
+  "diff": 0,
+  "visible": 252,
+  "mapped": 154,
+  "from_filled_texels": 1,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 3,
+  "dirs": [
+   3
+  ],
+  "facing": "front",
+  "waist_collisions": 0
+ },
+ "leafs_home_62": {
+  "diff": 0,
+  "visible": 251,
+  "mapped": 144,
+  "from_filled_texels": 11,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 4,
+  "dirs": [
+   4
+  ],
+  "facing": "front",
+  "waist_collisions": 0
+ },
+ "leafs_home_67": {
+  "diff": 0,
+  "visible": 298,
+  "mapped": 188,
+  "from_filled_texels": 24,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 5,
+  "dirs": [
+   5
+  ],
+  "facing": "front",
+  "waist_collisions": 0
+ },
+ "leafs_home_72": {
+  "diff": 0,
+  "visible": 306,
+  "mapped": 199,
+  "from_filled_texels": 13,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 6,
+  "dirs": [
+   6
+  ],
+  "facing": "side",
+  "waist_collisions": 0
+ },
+ "leafs_home_77": {
+  "diff": 0,
+  "visible": 294,
+  "mapped": 219,
+  "from_filled_texels": 22,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 7,
+  "dirs": [
+   7
+  ],
+  "facing": "back",
+  "waist_collisions": 0
+ },
+ "rangers_away_370": {
+  "diff": 0,
+  "visible": 354,
+  "mapped": 235,
+  "from_filled_texels": 0,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 4,
+  "dirs": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "facing": "front",
+  "waist_collisions": 0
+ },
+ "rangers_away_889": {
+  "diff": 0,
+  "visible": 366,
+  "mapped": 271,
+  "from_filled_texels": 0,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 0,
+  "dirs": [
+   0
+  ],
+  "facing": "back",
+  "waist_collisions": 0
+ },
+ "rangers_away_897": {
+  "diff": 0,
+  "visible": 395,
+  "mapped": 228,
+  "from_filled_texels": 30,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 4,
+  "dirs": [
+   4
+  ],
+  "facing": "front",
+  "waist_collisions": 0
+ },
+ "rangers_away_42": {
+  "diff": 0,
+  "visible": 324,
+  "mapped": 219,
+  "from_filled_texels": 20,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 0,
+  "dirs": [
+   0
+  ],
+  "facing": "back",
+  "waist_collisions": 0
+ },
+ "rangers_away_47": {
+  "diff": 0,
+  "visible": 281,
+  "mapped": 203,
+  "from_filled_texels": 14,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 1,
+  "dirs": [
+   1
+  ],
+  "facing": "back",
+  "waist_collisions": 0
+ },
+ "rangers_away_52": {
+  "diff": 0,
+  "visible": 302,
+  "mapped": 188,
+  "from_filled_texels": 14,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 2,
+  "dirs": [
+   2
+  ],
+  "facing": "side",
+  "waist_collisions": 0
+ },
+ "rangers_away_57": {
+  "diff": 0,
+  "visible": 252,
+  "mapped": 154,
+  "from_filled_texels": 1,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 3,
+  "dirs": [
+   3
+  ],
+  "facing": "front",
+  "waist_collisions": 0
+ },
+ "rangers_away_62": {
+  "diff": 0,
+  "visible": 251,
+  "mapped": 144,
+  "from_filled_texels": 11,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 4,
+  "dirs": [
+   4
+  ],
+  "facing": "front",
+  "waist_collisions": 0
+ },
+ "rangers_away_67": {
+  "diff": 0,
+  "visible": 298,
+  "mapped": 188,
+  "from_filled_texels": 24,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 5,
+  "dirs": [
+   5
+  ],
+  "facing": "front",
+  "waist_collisions": 0
+ },
+ "rangers_away_72": {
+  "diff": 0,
+  "visible": 306,
+  "mapped": 199,
+  "from_filled_texels": 13,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 6,
+  "dirs": [
+   6
+  ],
+  "facing": "side",
+  "waist_collisions": 0
+ },
+ "rangers_away_77": {
+  "diff": 0,
+  "visible": 294,
+  "mapped": 219,
+  "from_filled_texels": 22,
+  "texel_collisions": 0,
+  "reasons": {},
+  "dir": 7,
+  "dirs": [
+   7
+  ],
+  "facing": "back",
+  "waist_collisions": 0
+ }
+}
