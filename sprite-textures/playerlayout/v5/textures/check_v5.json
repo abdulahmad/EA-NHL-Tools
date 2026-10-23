@@ -1,0 +1,609 @@
+{
+ "occupancy": {
+  "leafs_home": 0,
+  "rangers_away": 0,
+  "chicago_home_top": 0,
+  "chicago_alt_bottom": 0,
+  "montreal_baby_blue_bottom": 0
+ },
+ "head": [
+  [
+   2,
+   7,
+   "recolour: shoulder patch gold -> team colour"
+  ],
+  [
+   11,
+   7,
+   "recolour: shoulder patch gold -> team colour"
+  ],
+  [
+   16,
+   7,
+   "recolour: shoulder patch gold -> team colour"
+  ],
+  [
+   25,
+   7,
+   "recolour: shoulder patch gold -> team colour"
+  ]
+ ],
+ "body": [
+  [
+   6,
+   8,
+   "recolour: skin -> green placeholder"
+  ],
+  [
+   10,
+   13,
+   "stripe column alignment: template white -> jersey (red) at row 13"
+  ],
+  [
+   17,
+   13,
+   "stripe column alignment: template white -> jersey (red) at row 13"
+  ],
+  [
+   10,
+   14,
+   "stripe column alignment: template black -> waist1 (white) at row 14"
+  ],
+  [
+   17,
+   14,
+   "stripe column alignment: template black -> waist1 (white) at row 14"
+  ],
+  [
+   10,
+   15,
+   "stripe column alignment: template white -> waist2 (black) at row 15"
+  ],
+  [
+   17,
+   15,
+   "stripe column alignment: template white -> waist2 (black) at row 15"
+  ],
+  [
+   0,
+   18,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   1,
+   18,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   11,
+   18,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   12,
+   18,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   13,
+   18,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   14,
+   18,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   15,
+   18,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   16,
+   18,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   26,
+   18,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   27,
+   18,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   0,
+   19,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   1,
+   19,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   11,
+   19,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   12,
+   19,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   13,
+   19,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   14,
+   19,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   15,
+   19,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   16,
+   19,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   26,
+   19,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   27,
+   19,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   0,
+   20,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   1,
+   20,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   11,
+   20,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   12,
+   20,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   13,
+   20,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   14,
+   20,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   15,
+   20,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   16,
+   20,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   26,
+   20,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   27,
+   20,
+   "recolour: glove -> green placeholder"
+  ],
+  [
+   1,
+   23,
+   "stripe column alignment: template red -> pants (black) at row 23"
+  ],
+  [
+   5,
+   23,
+   "stripe column alignment: template red -> pants (black) at row 23"
+  ],
+  [
+   7,
+   23,
+   "stripe column alignment: template red -> pants (black) at row 23"
+  ],
+  [
+   11,
+   23,
+   "stripe column alignment: template red -> pants (black) at row 23"
+  ],
+  [
+   16,
+   23,
+   "stripe column alignment: template red -> pants (black) at row 23"
+  ],
+  [
+   20,
+   23,
+   "stripe column alignment: template red -> pants (black) at row 23"
+  ],
+  [
+   22,
+   23,
+   "stripe column alignment: template red -> pants (black) at row 23"
+  ],
+  [
+   26,
+   23,
+   "stripe column alignment: template red -> pants (black) at row 23"
+  ],
+  [
+   1,
+   24,
+   "stripe column alignment: template white -> socks (red) at row 24"
+  ],
+  [
+   5,
+   24,
+   "stripe column alignment: template white -> socks (red) at row 24"
+  ],
+  [
+   7,
+   24,
+   "stripe column alignment: template white -> socks (red) at row 24"
+  ],
+  [
+   11,
+   24,
+   "stripe column alignment: template white -> socks (red) at row 24"
+  ],
+  [
+   16,
+   24,
+   "stripe column alignment: template white -> socks (red) at row 24"
+  ],
+  [
+   20,
+   24,
+   "stripe column alignment: template white -> socks (red) at row 24"
+  ],
+  [
+   22,
+   24,
+   "stripe column alignment: template white -> socks (red) at row 24"
+  ],
+  [
+   26,
+   24,
+   "stripe column alignment: template white -> socks (red) at row 24"
+  ],
+  [
+   5,
+   25,
+   "stripe column alignment: template black -> sock1 (white) at row 25"
+  ],
+  [
+   7,
+   25,
+   "stripe column alignment: template black -> sock1 (white) at row 25"
+  ],
+  [
+   20,
+   25,
+   "stripe column alignment: template black -> sock1 (white) at row 25"
+  ],
+  [
+   22,
+   25,
+   "stripe column alignment: template black -> sock1 (white) at row 25"
+  ],
+  [
+   4,
+   27,
+   "stripe column alignment: template black -> socks (red) at row 27"
+  ],
+  [
+   8,
+   27,
+   "stripe column alignment: template black -> socks (red) at row 27"
+  ],
+  [
+   18,
+   27,
+   "stripe column alignment: template black -> socks (red) at row 27"
+  ],
+  [
+   19,
+   27,
+   "stripe column alignment: template black -> socks (red) at row 27"
+  ],
+  [
+   23,
+   27,
+   "stripe column alignment: template black -> socks (red) at row 27"
+  ],
+  [
+   24,
+   27,
+   "stripe column alignment: template black -> socks (red) at row 27"
+  ],
+  [
+   2,
+   28,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   3,
+   28,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   4,
+   28,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   8,
+   28,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   9,
+   28,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   10,
+   28,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   17,
+   28,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   18,
+   28,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   19,
+   28,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   23,
+   28,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   24,
+   28,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   25,
+   28,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   1,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   2,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   3,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   4,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   8,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   9,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   10,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   11,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   16,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   17,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   18,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   19,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   23,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   24,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   25,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   26,
+   29,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   1,
+   30,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   2,
+   30,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   3,
+   30,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   4,
+   30,
+   "recolour: blade -> green placeholder"
+  ],
+  [
+   8,
+   30,
+   "recolour: blade -> green placeholder"
+  ],
+  [
+   9,
+   30,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   10,
+   30,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   11,
+   30,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   16,
+   30,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   17,
+   30,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   18,
+   30,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   19,
+   30,
+   "recolour: blade -> green placeholder"
+  ],
+  [
+   23,
+   30,
+   "recolour: blade -> green placeholder"
+  ],
+  [
+   24,
+   30,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   25,
+   30,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   26,
+   30,
+   "recolour: skate -> green placeholder"
+  ],
+  [
+   2,
+   31,
+   "recolour: blade -> green placeholder"
+  ],
+  [
+   3,
+   31,
+   "recolour: blade -> green placeholder"
+  ],
+  [
+   9,
+   31,
+   "recolour: blade -> green placeholder"
+  ],
+  [
+   10,
+   31,
+   "recolour: blade -> green placeholder"
+  ],
+  [
+   17,
+   31,
+   "recolour: blade -> green placeholder"
+  ],
+  [
+   18,
+   31,
+   "recolour: blade -> green placeholder"
+  ],
+  [
+   24,
+   31,
+   "recolour: blade -> green placeholder"
+  ],
+  [
+   25,
+   31,
+   "recolour: blade -> green placeholder"
+  ]
+ ],
+ "unexplained": []
+}
