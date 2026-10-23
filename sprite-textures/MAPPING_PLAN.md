@@ -225,4 +225,4 @@ After PoC1 (fractional UV into a 512² atlas) missed ~20 % of pixels on 897/42, 
 ## 14. Expanded sub-zones (staged)
 Every 370 pixel becomes its own colour sub-zone; other frames get a sub-zone map. Stage 1 (front torso) done — see
 [EXPANDED_ZONES.md](EXPANDED_ZONES.md): 84 sub-zones, 0 diff on 370/897/57/62/67 and front halves of 52/72. Next stages
-(back torso, then arms one at a time, pants, socks, helmet) pending review.
+(back torso, then arms one at a time, pants, socks, helmet) pending review. Stage 1b: rectangular rows, strict 1:1 with texture expansion (18×17, 141 texels), 0 diff and 0 duplicates on all 11 test frames, 4 teams.

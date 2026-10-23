@@ -53,3 +53,56 @@ PYTHONPATH=../scripts python3 ../scripts/subzones/stage1.py   # writes out/subzo
 ```
 `scripts/subzones/backbase.py` (+ `backbase_metrics.json`, `backbase_candidates.png`) is preliminary evidence for the back-torso stage
 (217 Stanley-cup back: untilted, all bands; 161 glide-back: arms down). No decision taken yet.
+
+# Stage 1b — rectangular rows, strict 1:1, expansion, 4 teams (supersedes the stage 1 split rule)
+Script `scripts/subzones/stage1b.py` → `subzones/stage1b/` (run from `out/`, writes `out/subzones_stage1b/`).
+
+**Mental model:** texture = front anthem torso (370) + texels added for pixels other frames show but 370 does not
+(seam/flank columns at the sides, extra band rows). Strongly prefer one sub-zone ↔ one pixel per frame.
+
+**Layout (18×17, 141 texels; 84 from 370, 57 expansions; the rest magenta = reserve).** Texture rows are
+(group, j) from top to bottom: Y1 (yoke 1), Y2 (yoke 2 + shoulder patch), Y3 (yoke 3 + yoke corner), J (jersey + crest), W1, W2, W3;
+inside a group, j = band row counted **up** from the band's lowest pixel in that column (non-torso occluders such as the stick are
+walked through; a different torso band stops the walk). Each 370 pixel keeps its own column.
+- **Waist rows are straight:** W1/W2/W3 are each one full-width row. In 370 the right body column has its waist one row higher; with
+  per-band rows it drops into the W rows, leaving the top jersey texel of that column (under the armpit) empty = **reserve texel**.
+- **Matching per frame:** crest pixels → the sub-zone with the same crest index. Other pixels: per (band, j), the target pixels and the
+  existing sub-zones are both sorted by across position s and matched with an order-preserving DP (cost |Δs|; an unmatched pixel
+  costs 0.30). An unmatched pixel gets a **new texel** in that band row, placed in the first free column next to its matched
+  neighbour (so expansions grow outward = seam/flank columns), or a new row if j is above the band's top. Never shared.
+- Expansion order: 370, 897, 62, 57, 67, 52, 72; later frames reuse earlier expansions. `stage1b.json` → `expansions`,
+  `texel_table` (texel → band, j, s, xy, source frame/pixel), `submap` (frame pixel → texel).
+
+**Expansions (texels added, why):** 897: 5 (one more pixel in each waist row, jersey j0 and yoke 2 — its torso is one pixel wider);
+62: 11 (hunched shoulders show yoke 2 above *and* below yoke 1 → 7 new yoke-2 texels; yoke 1 +2; jersey +2); 57 (d3): 4
+(jersey j2 +3, yoke 2 j1 +1); 67 (d5, 3/4): 22 (visible flank: jersey j0–j3 +11 seam texels, a 6th jersey row j5, tilted yoke
+bands give 2–3 rows per column: yoke 1 j1/j2, yoke 2 j1, yoke 3 j1, yoke corner, waist 2/3 +1 each); 52 front half: 8 (yoke 3 +4,
+jersey +3, yoke 2 j2); 72 front half: 7 (tilted yoke rows j1, jersey +2). Extra rows Y1 j1–j2, Y2 j1–j2, Y3 j1, J j5 come only from
+tilted 3/4 and side frames.
+
+**Results:** Leafs home and Rangers away: **0 diff on all 11 frames**; **0 shared/duplicate pixels on every frame** (no exceptions
+needed). Back frames 889, 42, 47, 77: no front-torso pixels (back torso = next stage).
+| frame | dir | front-torso px | matched to 370/earlier | new texels | duplicates | diff |
+|---|---|---|---|---|---|---|
+| 370 | d4 | 84 | 84 (20 crest) | 0 | 0 | 0 |
+| 897 | d4 | 78 | 73 (15 crest) | 5 | 0 | 0 |
+| 57 | d3 | 50 | 46 (9 crest) | 4 | 0 | 0 |
+| 62 | d4 | 49 | 38 | 11 | 0 | 0 |
+| 67 | d5 | 68 | 46 | 22 | 0 | 0 |
+| 52 | d2 front half | 32 | 24 (4 crest) | 8 | 0 | 0 |
+| 72 | d6 front half | 36 | 29 | 7 | 0 | 0 |
+| 889, 42, 47, 77 | back | 0 | – | – | – | – |
+
+**Leafs / Rangers textures** = each texel's band medium colour from the team palette (crest: crest index colour); render shades
+light/dark through the team's palette ramp → exact. **Chicago / Montreal** (from the reference photos `blackhawks_alt`,
+`canadiens_babyblue`): yoke rows = yoke colour; jersey j4 = the white line above the chest band, j0–j3 = chest band (black / navy)
+with the photo crest pixelated to the 5×4 crest grid, j≥5 = body colour; W1/W2/W3 = hem stripes (Chicago red/black/white,
+Montreal white/navy/blue); render shade light ×1.125, dark ×0.875. Only the front torso is redesigned — arms/pants/socks/helmet
+stay Leafs until their stages.
+
+Images: `tex_<team>.png` + `_x16.png` (labelled; cyan box = expansion texel; row labels at right) for leafs_home, rangers_away,
+chicago, montreal, synthetic_unique, synthetic_rows; `compare_<team>.png`; `combined_4teams.png`; `synthetic_compare.png`.
+
+**Issues:** the texture is sparse (141 of 306 texels used) because the extra rows from tilted bands only hold 1–3 texels each; the 67
+flank seam texels sit at the right end of the jersey rows — a dedicated side-seam column per side is the cleaner layout once the back
+torso is added. The crest at 5×4 is coarse (Montreal CH reads weakly).
