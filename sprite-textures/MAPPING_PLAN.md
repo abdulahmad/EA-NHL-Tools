@@ -21,7 +21,7 @@ Sources: AUDIT.md, FINDINGS.md, FIX_RESULTS_V4–V10.
 | Thin trim dropout; flat stripes on upright frames; non-uniform torso V (the yoke zones cover ~35 % of the torso) | V comes from a harmonic fill between silhouette edges | V must come from 3D arc length along the body, not from where the zones end |
 | 1-texel side piping covers ~2/12 of the torso width | U is anchored to the silhouette | U must be a cylinder angle: edge columns are foreshortened (cos falloff), so piping naturally shrinks to almost nothing |
 | Pants are one region; arms crossing the torso break stripes | No per-limb segmentation and no depth order | Segment per limb, and build an explicit depth order between segments |
-| 95-only frames 889–904 (crosscheck): forearms labelled glove; goalie hands found in only 91/253 frames | Zone indices are shared/reused and wrong in places | Zone indices are evidence, never truth. Segmentation must be reviewable and overridable |
+| 95-only frames 889–904 (crosscheck): forearms labelled glove; goalie hands found in only 91/253 frames | Zone indices are shared/reused and wrong in places | Zone indices are evidence, never truth. The solver weighs them as soft votes (§4.1) |
 | Goalie gear used bounding-box UV | No gear geometry | Gear gets its own simple 3D proxies (slabs and shells), not boxes |
 
 ## 1. Frame structure to exploit
@@ -198,7 +198,7 @@ Only pixels labelled outline are affected. Black gloves, skates and tape (also i
    - Build the automatic solver (§4), validate it on synthetic renders, then solve the pilot animations and render UV/checker sheets.
    - Go/no-go review with Abdul.
 3. **M2:** propagation across directions and phases for the pilot animations, plus the metrics. Tune the residual fit.
-4. **M3:** all skater animations, then goalies, then 95-only sets (boards, shotblock, goalie95), then extras/ref (ref only if wanted).
+4. **M3:** all skater animations, then goalies, then 95-only sets (boards, shotblock, goalie95), then the player extras (cup, faceoff, anthem, line change, bench, benchcheck, cheer, swat/hook/wobble/flip/injury). Ref and UI frames are excluded.
 5. **M4:** zone-shading pass (RGB, no palette), per-team batch export, and the regression suite in CI (scripts only; renders stay local because they are retail-derived).
 
 ## 12. Open questions for Abdul
