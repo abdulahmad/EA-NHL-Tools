@@ -85,3 +85,63 @@ This was verified on 2026-10-23 from a clean `out/`: the outputs are byte-identi
 - Choose source frames by coverage: a greedy set cover over the 62 blocks, so that every block is observed.
 - Hand-authored textures: paint directly in the 225×46 layout, with real per-texel detail. Then check stripe continuity across directions.
 - Goalies (pads use sock/arm indices): a separate pass.
+
+---
+# v3 (2026-10-23): aligned waist stripes + Chicago/Montreal
+
+Abdul asked for the bottom three horizontal stripes in the texture to be aligned, as they appear on frame 42.
+
+**What frame 42 shows:** the three jersey hem stripes appear as three straight, 1-px rows, stacked directly on top of each other across the full hem width:
+- row 12: waist 1 (index 168/169/170, odd/even alternating with a "hidden" pixel at the edge)
+- row 13: waist 2 (171–173)
+- row 14: waist 3 (174–176)
+
+370 shows the same (rows 14–16). 889 shows them bent into a V. Across all 596 skater frames, 467 frames have every waist stripe exactly 1 px thick per column.
+
+**What was wrong in v2:**
+- Waist 1 was split into three separate blocks (odd / even / hidden), stacked vertically, each with its own width.
+- Waist 2 and waist 3 had their own widths, and their columns were "rank in row".
+- So screen column x landed in a different texture column for each stripe.
+
+**What changed in v3:**
+1. **Waist 1 is one band.** The game's odd/even/hidden indices are that stripe's light/medium/dark. Leafs: 252/224/196 grey. Rangers: 208,0,0 / 208,0,0 / 156,0,0. They now go through the shade lookup like every other zone.
+2. **Waist 1/2/3 share one column range per half.** The column is the signed offset from the waist's centre column, `(min x + max x)//2` of the union of the three stripes, mirrored in back views. The three blocks have the same x and width (front 13, back 12), so a screen column maps to the same texture column in all three stripes.
+3. **Waist rows are per column.** The row is the distance from the stripe's top pixel in that screen column. The geodesic row used in v2 collided with offset columns 481 times; this gives 0 collisions over all 596 frames.
+
+**Size:** 225 × 54 (was 225 × 46). The waist blocks are now as deep as the deepest per-column run. That tail comes from a few frames where the hem runs near-vertical:
+- skate back 163: 12 rows
+- skate 3/5/43/45: 9 rows
+- falls and sweep checks: 6–8 rows
+
+Front waist blocks are 13×8 ×3; back waist blocks are 12×9, 12×7 and 12×12.
+
+**Diffs (Leafs and Rangers identical):**
+- Sources 370+889+43+58: all 11 test frames diff 0.
+- Sources 370+889 only: same as v2 (370/889/897 diff 0; the skate frames miss only the zones those two frames never draw).
+
+**Chicago / Montreal (`designs.py`):**
+- Built from the v3 hand-authored designs in `jerseys.py` (`blackhawks_alt`, `canadiens_babyblue`: stripe colour lists + the crest crop of the reference photo; the reference photos stay local).
+- Each zone block gets the design colour of the matching stripe (yoke, waist 1/2/3, arm stripes 1–3, sock stripes 1–2, pants, helmet).
+- The crest is the reference crest pixelated to the game's 5×4 crest grid (20 px, which is all the game draws).
+- Rendering is 1 texel = 1 sprite pixel × shade (light 1.05 / medium .85 / dark .62, from the palette index).
+- A first try that voted old-atlas colours through the old fractional UV smeared stripes diagonally across zone blocks, so I dropped it.
+
+Known limits, seen in the sheets:
+- (a) The Chicago "CHICAGO" wordmark is unreadable at 5×4: it shows as a grey/red box.
+- (b) The Montreal crest is a red blob.
+- (c) Montreal's white/navy chest band (`torso` .34–.55) and Chicago's red chest band have no game zone, so they are not drawn. The jersey zone is one block.
+- (d) Montreal socks: the white gap between the two navy stripes is drawn as sock-body baby blue.
+
+Outputs in `perpixel/v3/`:
+- `tex_<team>[_plus43_58]_{raw,filled}[_x12].png`, `compare_<team>[_plus43_58].png`, `report*.json`, `layout.json`, `measure.json`
+- `tex_{chicago,montreal}_*`, `compare_{chicago,montreal}.png` (Leafs game render | team), `combined_4teams.png` (Leafs | Rangers | Chicago | Montreal per frame; each sprite centred in its column; Leafs/Rangers there are the game renders, which equal the texture renders at 0 diff)
+
+Reproduce (from `out/`, `PYTHONPATH=../scripts`; `designs.py` also needs `out/jerseys/ref/` with the reference photos):
+```sh
+mkdir -p poc poc3 && python3 ../scripts/perpixel/dirtable.py
+python3 ../scripts/perpixel/v3/measure.py
+python3 ../scripts/perpixel/v3/roundtrip3.py
+SRC=370,889,43,58 TAG=_plus43_58 python3 ../scripts/perpixel/v3/roundtrip3.py
+python3 ../scripts/perpixel/v3/designs.py
+```
+I verified this from the repo copy: the outputs are byte-identical to the working run.
