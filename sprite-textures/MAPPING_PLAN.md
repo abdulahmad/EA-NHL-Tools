@@ -1,6 +1,14 @@
 # Sprite mapping plan: posed-3D, per-segment, per-pixel (texture coordinate + shade)
 
 Status: PLAN ONLY, nothing implemented yet. Pixels are square everywhere; there is no aspect compensation.
+
+**Decisions from Abdul (2026-10-23), which override anything below:**
+1. **Pose estimation is automatic.** There is no manual keypoint clicking or review pass, at most small exception queues (§4).
+2. **Shading** keeps the original colour-zone light/medium/dark. There is no rig lighting (§7).
+3. **Black outlines:** undecided. A comparison of 3 treatments is rendered locally (§6b).
+4. **No palette.** Outputs are RGB textures and colours. The 6-bit VGA snap used in v4–v12 stops from here on.
+5. **Scope:** every PLAYER sprite (skaters and goalies, including player celebrations, the Cup, bench, line change, boards, shot block). Referee, UI, arrows, puck, net, glass and siren frames are excluded.
+6. **Crests:** the first pass is resampled from the input texture (the photo) and hand-refined later.
 Inputs are the textures in `textures/v12` (gear) and `textures/v7` (jerseys), plus the 1134 NHL 95 PC frames (`data/frames.bin`, `frames.json` = [n,w,h,offset,anchorX,anchorY]).
 
 ## 0. What the current pipeline got wrong, and the lessons
@@ -20,10 +28,10 @@ Sources: AUDIT.md, FINDINGS.md, FIX_RESULTS_V4–V10.
 - **Group frames into animation × direction × phase.**
   - Parse the SPA animation scripts (HOCKEY.EXE table at 0x110471, already documented in `Sprite-Viewer/data/frames95pc.asm`).
   - This gives each frame (anim, dir d0..d7, phase). d0 = north (back to camera), clockwise.
-  - Where the scripts don't cover a frame (UI, ref, extras), fall back to a manual table.
+  - Where the scripts don't cover a frame (UI, ref, extras), assign by hash-matching to scripted frames, or solve as single-frame groups (refs and UI are out of scope anyway).
 - **Directional consistency.**
   - Within one (anim, phase), the 8 directions are the same 3D pose viewed with body yaw = dir×45° (plus small per-direction art fixes).
-  - So annotate the pose once per (anim, phase), as a 3D pose with joint angles. Each direction then only needs a residual 2D correction.
+  - So solve ONE 3D pose per (anim, phase), jointly over its directions (§4).
   - This is the main lever that turns about 1134 frames into roughly 1134/8 ≈ 140 pose keys, fewer still because some poses repeat.
 - **Temporal consistency.**
   - Joint angles across the phases of one animation are smooth or periodic (strides).
@@ -61,27 +69,53 @@ Sources: AUDIT.md, FINDINGS.md, FIX_RESULTS_V4–V10.
    - hand-label about 30 pilot frames fully in the tool and report per-segment IoU (target ≥ 0.9 on limbs, 0.95 on torso)
    - also report the share of pixels where zone and rig disagree, per animation
 
-## 4. Pose estimation: manual keyframes plus propagation
-Fully automatic 2D pose estimation on 20–40 px sprites is unreliable, and errors here are exactly the flicker and L/R bugs we already have. So:
+## 4. Pose estimation: automatic (analysis by synthesis)
+No clicking. Each frame's pose is the rig configuration that, rendered through the known camera, best explains everything the sprite tells us. Robustness comes from solving many frames jointly with strong shared constraints, not from fitting each frame alone.
 
-- **Annotation tool:**
-  - Small and local: Python with a tiny web/Tk UI, or a page in Sprite-Viewer.
-  - Shows a frame at 8–12× plus its neighbours and the other 7 directions.
-  - The user clicks 2D keypoints: head top, neck, pelvis, shoulders, elbows, wrists, hips, knees, ankles, stick butt and blade.
-  - Each keypoint gets a front/back (depth-order) toggle. Each limb pair gets an L/R tag.
-- **Lifting to 3D:**
-  - Bone lengths are known (section 2) and the camera is known.
-  - Each bone's 2D projection fixes its 3D direction up to a depth-sign ambiguity. The front/back toggle and joint limits resolve it.
-  - Solve for joint angles with a small least-squares fit: reprojection error + joint limits + smoothness.
-- **Propagation:**
-  - Annotate the d0 or d2 frame of each (anim, phase) key. Predict the other directions by yawing the 3D pose, then fit only the residual to the silhouette.
-  - The residual fit maximises silhouette IoU and the rig-label/zone agreement.
-  - Phases between keys are interpolated, then refined the same way.
-- **Workload estimate:**
-  - About 140 pose keys at about 1–2 min each, so about 3–5 h of clicking.
-  - Plus review of the frames the propagation flags (expected 10–20 %).
-  - Goalie (about 250 frames) and the 95-only sets are likely the bulk of the corrections.
-- **Automatic help where it is safe:** the silhouette skeleton (medial axis) and the zone colours suggest keypoint positions for the user to accept.
+**4.1 Evidence per frame (precomputed, all square-pixel):**
+- **Silhouette and parts.**
+  - The sprite silhouette, plus its distance transform.
+  - Zone evidence maps from `zn.json`, one per family (jersey/torso, sleeve/forearm, pants, sock, helmet/skin, stick 136, skate blade, goalie-gear indices). Each pixel is a soft vote, not a label.
+  - Outline index 0 marks part boundaries. Interior outline strokes are strong evidence for limb edges and overlaps.
+- **Shade direction.** Within each zone, the light/medium/dark gradient gives the surface normal's rough direction. This separates chest from back (the lit side flips) and the near limb from the far one.
+- **Medial axis.** The skeletonised silhouette and each zone blob's principal axis give rough bone directions.
+
+**4.2 Model:** the rig from §2, with per-sprite-set proportions. Per frame the unknowns are the root position and yaw, plus about 30 joint angles and the stick (2 hand grips or 1).
+
+**4.3 Objective (differentiable soft rasteriser, or render-and-compare with a Gauss-Newton / CMA-ES fallback):**
+- **Silhouette term:** IoU plus a chamfer distance between the rendered and sprite outlines.
+- **Part term:** cross-entropy between each rendered segment and the zone votes (sleeve on arms, sock on shins, and so on).
+- **Shade term:** sign agreement between the rendered N·(view-side) and the zone light/dark order.
+- **Outline term:** rendered depth discontinuities should land on interior index-0 strokes.
+- **Priors:** joint limits, symmetry of bone lengths, and a skating-pose prior (a small PCA/GMM over joint angles, learned from the solved frames of the first pass and then re-fitted).
+
+**4.4 Shared constraints (the key to robustness):**
+- **Grouping.** Parse the SPA animation scripts into (anim, dir, phase).
+  - All 8 directions of one (anim, phase) share ONE 3D pose: yaw = dir×45° plus a small per-direction residual, penalised in the objective.
+  - These 8 frames are solved jointly, so a pose that is ambiguous in one view (front vs back, which arm is near) is pinned by the other 7.
+- **Mirrored directions.** Where d1/d7, d2/d6, d3/d5 are pixel mirrors (checked automatically), they are tied with an explicit L/R swap.
+- **Time.** Joint angles across phases are smooth (or periodic for cyclic animations such as the stride). The solve uses a smoothness penalty over each animation, and a joint optimisation over (8 directions × phases).
+- **Reuse.** The same picture used in several animations (identical pixels, detected by hash) gets one pose.
+
+**4.5 Solving strategy:**
+1. **Initialise.** Each (anim, phase) starts from a library of canonical poses (upright, stride, crouch, shoot, check, goalie ready, butterfly, sprawl). The silhouette's principal axes and the zone blobs pick the best few seeds.
+2. **Coarse.** A multi-start solve on the 8-direction bundle (root, yaw, torso bend, limb directions only).
+3. **Fine.** All joints, then temporal smoothing over the animation, then a final joint refine.
+4. **Ambiguity handling.** Keep the top-2 hypotheses where scores are close (front/back of torso or head, near/far limb). Resolve them with the bundle and time terms; never with a per-frame coin flip.
+
+**4.6 Self-consistency checks (automatic, these drive the exception queue):**
+- Silhouette IoU below 0.9, or part agreement below 0.8.
+- Direction-bundle residual yaw above 15°.
+- A temporal joint-angle jump above 3σ of that animation.
+- Front/back of torso or head flipping within a run without a matching yaw change.
+- L/R swaps between neighbours.
+- Hypothesis margin below a threshold.
+
+Frames that fail are re-solved with the neighbours' poses as initialisation. Only the remainder (target under 3 % of player frames, expected around crosscheck 889–904, sprawls and dives) goes to the exception queue. Each queued frame gets an automatic best guess plus a picker over the top-2 hypotheses, which takes a few seconds per frame. Hand-placing keypoints is the last resort.
+
+**4.7 Bootstrapping without ground truth:**
+- **Synthetic sanity.** Render the rig in known poses into the game's zone vocabulary at sprite resolution, then re-solve. This measures the solver's error directly (target joint error under 1 px, 100 % correct front/back).
+- **Pilot spot-check.** Abdul looks at UV/checker sheets of the pilot animations; nobody labels anything.
 
 ## 5. Per-pixel texture coordinate
 Each sprite pixel is mapped to (segment, face, u, v) by ray-casting the posed rig through the pixel centre.
@@ -90,6 +124,7 @@ Each sprite pixel is mapped to (segment, face, u, v) by ray-casting the posed ri
   - The texture's front half is used when the hit normal faces the camera side of the body front. The back half (the separate *_b textures for sleeves and socks) is used otherwise.
   - v = arc length along the bone, continuous across the joint between the two torso segments, so stripes stay straight on the body and bend only where the body bends.
   - Square-pixel orthographic projection means the foreshortening comes out naturally. A stripe that is 1 texel tall on the body is about 1 px on screen when the limb is side-on, and thinner when it points at the camera.
+- **Crest (decision 6):** the first pass is resampled from the reference photo crop into the crest's body-space rectangle, and hand-refined later.
 - **Torso:**
   - Torso front/back come from the hit normal against the chest direction, not from per-frame guesses.
   - The crest is placed in body coordinates on the chest, so it rotates and foreshortens with the torso.
@@ -115,11 +150,18 @@ Each sprite pixel is mapped to (segment, face, u, v) by ray-casting the posed ri
 - Where an arm is in front of the torso, the torso stripe continues behind the arm.
 - Per frame, the depth order is checked against the zone evidence. For example, sleeve zone pixels inside the torso outline mean the arm is in front.
 
-## 7. Shading
-- The game's zone indices already carry light/medium/dark per region. Keep the original zone shade per pixel as the shading term; the shade factors are the current `shade_of`.
-- **Option B (later):** compute N·L from the rig (light from the upper left, matching the EA art) and blend it with the zone shade where the zones are unreliable.
-- **Output per pixel:** texture colour × shade, then snapped to the target palette (6-bit VGA or the custom build's palette).
-- Palette budgeting per team is a separate later step.
+## 6b. Black outlines (open, comparison rendered)
+`local_outline_compare*.png` (local, retail-derived) shows the current mapping in 3 ways on pilot frames 1, 9, 17, 25, 13, 221, 343, 889 (skaters, Thrashers home) and 407, 416, 419, 428 (goalie, Fuhr gear):
+- **A:** original black outlines kept.
+- **B:** outline pixels replaced by the nearest texture colour.
+- **C:** like B, darkened ×0.55.
+
+Only pixels labelled outline are affected. Black gloves, skates and tape (also index 0) are untouched. The mapper will support all three per pixel class (exterior silhouette vs interior part boundary) until Abdul picks one.
+
+## 7. Shading (decided: original zones)
+- The shade comes only from the original colour zones: each sprite pixel's light/medium/dark factor (`shade_of`, from `zn.json`) multiplies the texture RGB.
+- No rig lighting.
+- Output is RGB with no palette snap (decision 4). Gear and jersey textures from v4–v12 were VGA-snapped. New texture builds will drop `M.vga` and keep the measured RGB medians.
 
 ## 8. Left/right and asymmetric designs
 - L/R is anatomical (player-left/right), stored on the rig.
@@ -153,16 +195,13 @@ Each sprite pixel is mapped to (segment, face, u, v) by ray-casting the posed ri
    - Measure rig proportions on about 10 clean frames.
 2. **M1 (pilot, about 40 frames):**
    - Skating stride (all 8 dirs, 2–3 phases), goalie ready 407–428 (front and back masks, blocker, catcher), crosscheck 889–904.
-   - Build the annotation tool, annotate, lift to 3D, render UV/checker sheets.
+   - Build the automatic solver (§4), validate it on synthetic renders, then solve the pilot animations and render UV/checker sheets.
    - Go/no-go review with Abdul.
 3. **M2:** propagation across directions and phases for the pilot animations, plus the metrics. Tune the residual fit.
 4. **M3:** all skater animations, then goalies, then 95-only sets (boards, shotblock, goalie95), then extras/ref (ref only if wanted).
-5. **M4:** shading pass, palette snap, per-team batch export, and the regression suite in CI (scripts only; renders stay local because they are retail-derived).
+5. **M4:** zone-shading pass (RGB, no palette), per-team batch export, and the regression suite in CI (scripts only; renders stay local because they are retail-derived).
 
 ## 12. Open questions for Abdul
-1. Is manual keyframe clicking (about 3–5 h, plus review) acceptable, or do you want more automation and accept more review?
-2. Should shading keep the original zone light/medium/dark (faithful), or move to rig-based N·L (smoother, but less like EA's art)?
-3. Should the outline index 0 always stay as drawn, or should texture colours override it in places (e.g. the mask cage)?
-4. What is the target palette for the custom build: 6-bit VGA per team (as now), or a larger palette?
-5. Should referee, UI and celebration frames get mapping too, or only skaters and goalies?
-6. What is the crest policy at 5×4–8×7 px: hand-drawn per-team icons, or measured blobs?
+1. **Outlines:** A, B or C (see `local_outline_compare*.png`), or different rules for exterior silhouette and interior boundaries?
+2. **Exception queue:** is a top-2 hypothesis picker (a few seconds per frame, target under 3 % of frames) acceptable as the only manual step?
+3. **Goalie pose prior:** the goalie animations differ a lot from skaters. Should goalies be solved as a separate pass after skaters, so the skater prior isn't polluted?
