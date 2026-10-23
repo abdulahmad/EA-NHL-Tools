@@ -65,8 +65,8 @@ def design(**k):
 TEAMS['Chicago home (top)']=design(_crest=abd,patch=(168,132,0),arm1=W_,arm2=K_,arm3=W_,waist1=W_,waist2=K_,waist3=W_,sock1=W_,sock2=K_)   # = Abdul's template colours
 TEAMS['Chicago alt (bottom)']=design(jersey=K_,number=K_,arm1=K_,arm2=W_,arm3=K_,waist1=R_,waist2=W_,waist3=R_,
     # Abdul pt775u, bottom-up. Torso rows 16..9 (waist3,waist2,waist1, jersey/crest/number rows 13..9) = K,W,K,R,W,K,W,R.
-    # Arms rows 17..9 (forearm 17-15, arm3-1 14-12, upper arm 11-9) = R,R,K,W,R,W,K,W,R; upper-arm row 8 (above the 9-row pattern) keeps upper-arm red.
-    _rows={'torso':dict(zip(range(16,8,-1),[K_,W_,K_,R_,W_,K_,W_,R_])),'arm':dict(zip(range(17,8,-1),[R_,R_,K_,W_,R_,W_,K_,W_,R_]))})
+    # Arms rows 17..10 (forearm 17-15, arm3-1 14-12, upper arm 11-10) = R,K,W,R,W,K,W,R (Abdul pt776u: one leading red cut); upper-arm rows 9-8 keep upper-arm red.
+    _rows={'torso':dict(zip(range(16,8,-1),[K_,W_,K_,R_,W_,K_,W_,R_])),'arm':dict(zip(range(17,9,-1),[R_,K_,W_,R_,W_,K_,W_,R_]))})
 LB,RB,MR=(96,144,224),(0,40,160),(200,0,30)
 TEAMS['Montreal baby blue (bottom)']=design(helmet=RB,yoke1=LB,yoke2=LB,yoke3=LB,**{'yoke corner':LB},patch=LB,jersey=LB,number=LB,**{'upper arm':LB},
     arm1=W_,arm2=RB,arm3=W_,forearm=LB,waist1=LB,waist2=W_,waist3=RB,   # Abdul pt775u: waist top=baby blue, middle=white, bottom=royal
