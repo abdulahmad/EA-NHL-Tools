@@ -64,10 +64,13 @@ def design(**k):
            forearm=R_,waist1=K_,waist2=W_,waist3=K_,pants=K_,pstripe1=W_,pstripe2=R_,socks=R_,sock1=K_,sock2=W_);d.update(k);return d
 TEAMS['Chicago home (top)']=design(_crest=abd,patch=(168,132,0),arm1=W_,arm2=K_,arm3=W_,waist1=W_,waist2=K_,waist3=W_,sock1=W_,sock2=K_)   # = Abdul's template colours
 TEAMS['Chicago alt (bottom)']=design(jersey=K_,number=K_,arm1=K_,arm2=W_,arm3=K_,waist1=R_,waist2=W_,waist3=R_,
-    _band={10:[W_]*8,11:[R_,W_,W_,R_,W_,R_,W_,R_],12:[R_,W_,R_,R_,W_,W_,W_,R_],13:[W_]*8},_backband=None)
+    # Abdul pt775u, bottom-up. Torso rows 16..9 (waist3,waist2,waist1, jersey/crest/number rows 13..9) = K,W,K,R,W,K,W,R.
+    # Arms rows 17..9 (forearm 17-15, arm3-1 14-12, upper arm 11-9) = R,R,K,W,R,W,K,W,R; upper-arm row 8 (above the 9-row pattern) keeps upper-arm red.
+    _rows={'torso':dict(zip(range(16,8,-1),[K_,W_,K_,R_,W_,K_,W_,R_])),'arm':dict(zip(range(17,8,-1),[R_,R_,K_,W_,R_,W_,K_,W_,R_]))})
 LB,RB,MR=(96,144,224),(0,40,160),(200,0,30)
 TEAMS['Montreal baby blue (bottom)']=design(helmet=RB,yoke1=LB,yoke2=LB,yoke3=LB,**{'yoke corner':LB},patch=LB,jersey=LB,number=LB,**{'upper arm':LB},
-    arm1=W_,arm2=RB,arm3=W_,forearm=LB,waist1=W_,waist2=RB,waist3=W_,pants=RB,pstripe1=W_,pstripe2=MR,socks=LB,sock1=RB,sock2=W_,
+    arm1=W_,arm2=RB,arm3=W_,forearm=LB,waist1=LB,waist2=W_,waist3=RB,   # Abdul pt775u: waist top=baby blue, middle=white, bottom=royal
+    pants=RB,pstripe1=W_,pstripe2=MR,socks=LB,sock1=RB,sock2=W_,
     _band={10:[W_]*8,11:[RB]*8,12:[RB]*8,13:[W_]*8},_backband={10:[W_]*8,11:[RB]*8,12:[RB]*8,13:[W_]*8},
     _crest=[[W_,MR,MR,MR,W_],[MR,W_,RB,W_,MR],[MR,W_,RB,W_,MR],[W_,MR,MR,MR,W_]])
 rep={}
@@ -79,6 +82,8 @@ def tex(T):
         band=T.get('_backband' if back else '_band') if u<28 else None
         if band and v in band and 3<=w<=10:c=band[v][w-3]
         if r=='crest' and '_crest' in T:c=T['_crest'][v-10][u-4]
+        RG={'jersey':'torso','crest':'torso','number':'torso','waist1':'torso','waist2':'torso','waist3':'torso','upper arm':'arm','arm1':'arm','arm2':'arm','arm3':'arm','forearm':'arm'}
+        if '_rows' in T and r in RG and v in T['_rows'][RG[r]]:c=T['_rows'][RG[r]][v]
         img[v,u]=c
     return img
 imgs={}
