@@ -1,0 +1,186 @@
+{
+ "teams": {
+  "canadiens_babyblue": {
+   "front": {
+    "rows": 15,
+    "bands": 8,
+    "old_row_match": 11,
+    "new_row_match": 13,
+    "dropped_new": 0,
+    "max_edge_err": 1.0
+   },
+   "sleeve": {
+    "rows": 14,
+    "bands": 5,
+    "old_row_match": 9,
+    "new_row_match": 14,
+    "dropped_new": 0,
+    "max_edge_err": 0.43
+   },
+   "sock": {
+    "rows": 10,
+    "bands": 5,
+    "old_row_match": 7,
+    "new_row_match": 9,
+    "dropped_new": 0,
+    "max_edge_err": 1.0
+   },
+   "colour_de_old": 20.7,
+   "colour_de_new": 0.95,
+   "crest_top3_de_old": 43.4,
+   "crest_top3_de_new": 0.7
+  },
+  "wild_home": {
+   "front": {
+    "rows": 15,
+    "bands": 6,
+    "old_row_match": 12,
+    "new_row_match": 12,
+    "dropped_new": 0,
+    "max_edge_err": 1.75
+   },
+   "sleeve": {
+    "rows": 14,
+    "bands": 5,
+    "old_row_match": 10,
+    "new_row_match": 13,
+    "dropped_new": 0,
+    "max_edge_err": 0.78
+   },
+   "sock": {
+    "rows": 10,
+    "bands": 5,
+    "old_row_match": 6,
+    "new_row_match": 9,
+    "dropped_new": 0,
+    "max_edge_err": 1.0
+   },
+   "colour_de_old": 7.1,
+   "colour_de_new": 1.7,
+   "crest_top3_de_old": 50.4,
+   "crest_top3_de_new": 2.0
+  },
+  "blackhawks_alt": {
+   "front": {
+    "rows": 15,
+    "bands": 8,
+    "old_row_match": 9,
+    "new_row_match": 11,
+    "dropped_new": 0,
+    "max_edge_err": 0.81
+   },
+   "sleeve": {
+    "rows": 14,
+    "bands": 8,
+    "old_row_match": 6,
+    "new_row_match": 11,
+    "dropped_new": 0,
+    "max_edge_err": 0.68
+   },
+   "sock": {
+    "rows": 10,
+    "bands": 5,
+    "old_row_match": 8,
+    "new_row_match": 8,
+    "dropped_new": 0,
+    "max_edge_err": 1.08
+   },
+   "colour_de_old": 6.6,
+   "colour_de_new": 0.57
+  },
+  "panthers_home": {
+   "front": {
+    "rows": 15,
+    "bands": 7,
+    "old_row_match": 8,
+    "new_row_match": 12,
+    "dropped_new": 0,
+    "max_edge_err": 1.88
+   },
+   "sleeve": {
+    "rows": 14,
+    "bands": 5,
+    "old_row_match": 8,
+    "new_row_match": 13,
+    "dropped_new": 0,
+    "max_edge_err": 0.57
+   },
+   "sock": {
+    "rows": 10,
+    "bands": 6,
+    "old_row_match": 9,
+    "new_row_match": 8,
+    "dropped_new": 0,
+    "max_edge_err": 0.79
+   },
+   "colour_de_old": 17.9,
+   "colour_de_new": 1.77,
+   "crest_top3_de_old": 50.5,
+   "crest_top3_de_new": 1.2
+  },
+  "stars_alt": {
+   "sleeve": {
+    "rows": 14,
+    "bands": 3,
+    "old_row_match": 11,
+    "new_row_match": 14,
+    "dropped_new": 0,
+    "max_edge_err": 0.35
+   },
+   "sock": {
+    "rows": 10,
+    "bands": 4,
+    "old_row_match": 7,
+    "new_row_match": 8,
+    "dropped_new": 0,
+    "max_edge_err": 0.88
+   },
+   "colour_de_old": 6.3,
+   "colour_de_new": 1.2,
+   "crest_top3_de_old": 28.0,
+   "crest_top3_de_new": 1.6
+  },
+  "thrashers_home": {
+   "front": {
+    "rows": 15,
+    "bands": 2,
+    "old_row_match": 13,
+    "new_row_match": 14,
+    "dropped_new": 0,
+    "max_edge_err": 0.69
+   },
+   "sleeve": {
+    "rows": 14,
+    "bands": 3,
+    "old_row_match": 13,
+    "new_row_match": 13,
+    "dropped_new": 0,
+    "max_edge_err": 1.07
+   },
+   "sock": {
+    "rows": 10,
+    "bands": 9,
+    "old_row_match": 7,
+    "new_row_match": 4,
+    "dropped_new": 0,
+    "max_edge_err": 1.33
+   },
+   "colour_de_old": 19.0,
+   "colour_de_new": 1.92,
+   "crest_top3_de_old": 27.7,
+   "crest_top3_de_new": 1.4
+  }
+ },
+ "total": {
+  "old_ok": 154,
+  "new_ok": 186,
+  "rows": 219,
+  "dropped_new": 0,
+  "max_edge": 1.875,
+  "old_row_pct": 70.3,
+  "new_row_pct": 84.9,
+  "dropped_old": 9,
+  "edges": 77,
+  "edges_within_1px": 68
+ }
+}
