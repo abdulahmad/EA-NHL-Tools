@@ -17,6 +17,8 @@ def build_gear():
     b,_=BL.blocker(*sq(100,*box_wh(BL.BOARD)));b[0,0]=b[0,-1]=b[-1,0]=b[-1,-1]=c0;G['blocker']=b
     f,_,*r=M.GEAR['blocker'];M.GEAR['blocker']=(f,BL.BOARD,*r)
     G['mask_b'],_=MB.mask_back(*MASK_B)   # measured back-facing head extent (head_extent.py): median 5x6 over 77 goalie frames
+    m=G['goalie_mask'];H,W=m.shape[:2];org=m[H-1,W//2].copy()
+    m[H-1,(W-1)//2]=m[H-1,W//2]=org   # even width: chin is 2 centre pixels, both orange (Fuhr's mask is symmetric)
     for k,v in G.items():
         if not k.startswith('_'):SIZES[k]=f'{v.shape[1]}x{v.shape[0]}'
     return G,P
