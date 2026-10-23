@@ -4,7 +4,7 @@
 import sys,os,json,collections,numpy as np;sys.path.insert(0,'.');sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from PIL import Image,ImageDraw
 from lib import frame,spritepal,D,ZN
-OUT=sys.argv[1] if len(sys.argv)>1 else 'playerlayout_fit370';SRC=os.path.join(os.path.dirname(os.path.abspath(__file__)),'abdul_layout_v3.png')   # v3 = v2 (side-helmet strips) with the two light-blue stray texels removed
+OUT=sys.argv[1] if len(sys.argv)>1 else 'playerlayout_fit370';SRC=os.path.join(os.path.dirname(os.path.abspath(__file__)),'abdul_layout_v4.png')   # v4 = v3 + side-pants panels (cols 29-53, rows 17-23)   # v3 = v2 (side-helmet strips) with the two light-blue stray texels removed
 L=np.asarray(Image.open(SRC).convert('RGB')).astype(int);TH,TW=L.shape[:2];MAG=(252,0,252);HAVE=~(L==MAG).all(2)
 p=frame(370);OX=4                                                  # texel (u,v) = (x-OX, y) for frame 370 (row by row, identity)
 # ---- per-index family + shade (game palette index semantics, zn.json names; skin/helmet/pants pairs added)
@@ -19,12 +19,14 @@ def fs(i):
     w=n.rsplit(' ',1)
     if w[-1] in('light','medium','dark'):return w[0],w[-1]
     return n,'flat'                                                 # yoke 1-3, yoke corner, shoulder patch, pants stripes, crest grid
-STICK={136};ASG={};NOT=collections.Counter()
+PX=25;STICK={136};ASG={};NOT=collections.Counter()
 for y,x in zip(*np.nonzero(p!=255)):
     i=int(p[y,x]);u,v=x-OX,y
     inl=0<=u<TW and v<TH and HAVE[v,u]
     if i in STICK and not(inl and tuple(L[v,u])==(164,108,72)):NOT['stick (136)']+=1;continue   # 136 is also the neck shadow: kept where he drew neck skin
     if not inl:NOT[f'idx {i} outside layout']+=1;continue
+    f0=fs(i)[0]
+    if f0.startswith('pants') and 0<=u+PX-OX+OX<TW and 17<=v<=23 and HAVE[v,u+PX]:u=u+PX     # v4: pants -> unoccluded side-pants panel
     ASG[(y,x)]=(u,v)
 FAM={};SH={}
 for (y,x),(u,v) in ASG.items():f,s=fs(int(p[y,x]));FAM[(u,v)]=f;SH[(y,x)]=s
@@ -48,24 +50,59 @@ for v in range(6):
             FAM[(u,v)]='helmet' if c in RAMP['helmet'].values() else ('marker' if c==(64,160,224) else 'skin side');SIDE[(u,v)]=side
 for u in (4,8):
     if HAVE[0,u] and (u,0) not in FAM:FAM[(u,0)]='helmet';SIDE[(u,0)]='top'
+def cls(c):
+    r,g,b=c
+    if r>100 and g>100 and b<60:return 'gold'
+    if b>r and b>g:return 'blue'
+    if r-g>60:return 'red'
+    return 'black' if max(c)<120 else 'white'
+for v,u in zip(*np.nonzero(HAVE)):                                   # side-pants panel texels 370 does not reach (behind gloves): by colour
+    if u>=28 and (u,v) not in FAM:FAM[(u,v)]={'black':'pants','white':'pants stripe 1','red':'pants stripe 2'}[cls(tuple(L[v,u]))]
 for v,u in zip(*np.nonzero(HAVE)):
     if (u,v) in FAM:continue
-    if u>=14 and (u-14,v) in FAM:
+    if 14<=u<28 and (u-14,v) in FAM:
         f=FAM[(u-14,v)];c=tuple(L[v,u])
-        if f.startswith('crest'):f='back number'                     # back has no crest: that area holds his number (kept as drawn)
+        if f.startswith('crest') or (f.startswith('idx') and int(f[3:])>=192):f='back number'                     # back has no crest: that area holds his number (kept as drawn)
         elif f=='skin' and c in RAMP['helmet'].values():f='helmet'    # back of the head = helmet, not face
         FAM[(u,v)]=f;continue
-    c=tuple(L[v,u]);cand=sorted(used,key=lambda t:abs(t[0]-(u%14))+abs(t[1]-v))
+    c=tuple(L[v,u])
+    if 17<=v<=22 and cls(c) in('black','white') and not(u%14<3 and v<21) and not(u%14>10 and v<21):  # v4: front-figure pants now superseded by side panel
+        FAM[(u,v)]='pants' if cls(c)=='black' else 'pants stripe 1';continue
+    cand=sorted(used,key=lambda t:abs(t[0]-(u%14))+abs(t[1]-v))
     FAM[(u,v)]=next((FAM[t] for t in cand if c in RAMP.get(FAM[t],{}).values()),FAM[cand[0]])
 for v,u in zip(*np.nonzero(HAVE)):
     if (u,v) not in FAM and u>=14:pass
-FL=L.copy()
-for (u,v),f in FAM.items():FL[v,u]=flat_of(tuple(L[v,u]),f)
+# v4 flatten: uniform = exactly one red/black/white; gloves/skates/blades/stick = green placeholder; crest kept as drawn;
+# skin -> one skin, helmet -> one helmet colour; gold shoulder patch kept (design accent). All shading lives in the shading layer.
+RED,BLK,WHT,GRN,SKN,HEL_=(132,0,0),(44,44,44),(232,232,232),(0,220,0),(200,132,92),(0,0,0)
+CR={'red':{'light':(160,0,0),'medium':RED,'dark':(104,0,0)},'white':{'light':(252,252,252),'medium':WHT,'dark':(204,204,204)},
+    'black':{'light':(88,88,88),'medium':BLK,'dark':(0,0,0)}}
+GEAR=lambda f:f in('idx0','idx1','idx8','idx28','idx88')
+def canon(c,f):
+    if f=='idx136':return RED if cls(c)=='red' else SKN          # 136 = neck shadow (back figure: jersey red behind the neck)
+    if f.startswith('crest') or (f.startswith('idx') and not GEAR(f)) or f=='marker':return c
+    if GEAR(f):return GRN
+    if f in('skin','skin side','idx136'):return SKN   # 136 here = neck shadow
+    if f=='helmet':return HEL_
+    k=cls(c)
+    if k=='gold':return c
+    if k=='blue':return GRN
+    return CR[k]['medium']
+FL=L.copy();CLS={}
+for (u,v),f in FAM.items():FL[v,u]=canon(tuple(L[v,u]),f)
+RAMPA={}
+for (u,v),f in FAM.items():
+    c=tuple(FL[v,u]);k=next((k for k in CR if CR[k]['medium']==c),None)
+    if k:RAMPA.setdefault(f,set()).add(k)
+RAMPA={f:CR[min(k)] for f,k in RAMPA.items()};RAMPA['skin']=RAMP['skin'] | {'medium':SKN};RAMPA['helmet']={'medium':HEL_,'dark':(44,44,44)}
 # ---- shading: medium = texel colour; light/dark from a ramp lookup (Abdul's own ramps here; team palette for Leafs); fallback +-28
 def shade(c,f,s,R):
     if s in('medium','flat'):return np.array(c)
     r=R.get(f,{})
     if r.get('medium')==tuple(c) and s in r:return np.array(r[s])
+    if R is RAMPA:
+        k=next((k for k in CR if CR[k]['medium']==tuple(c)),None)
+        if k:return np.array(CR[k][s] if s in CR[k] else c)
     return np.clip(np.array(c)+(28 if s=='light' else -28),0,255)
 GREY={'light':200,'medium':128,'dark':64,'flat':128}
 def renders(T,R):
@@ -75,7 +112,7 @@ def renders(T,R):
         if s=='flat':shd[y,x]=(128,128,150)                        # unshaded zones: neutral with a slight blue tint
     return flat,shd,comb,m
 # Abdul design
-fA,sA,cA,M=renders(FL,RAMP)
+fA,sA,cA,M=renders(FL,RAMPA)
 dA=sum(1 for (y,x),(u,v) in ASG.items() if tuple(cA[y,x].astype(int))!=tuple(L[v,u]))
 # Leafs home: texel = Leafs palette medium of the texel's family (crest/flat zones: own index); ramp = Leafs palette
 sp=spritepal(next(q for q in json.load(open(D+'HOME.json')) if q['code']=='tor')).astype(int)
@@ -107,9 +144,9 @@ for nm,T in (('abdul_layout',L),('abdul_flat',FL),('leafs_flat',TL)):
 I=tex_img(L,20);d=ImageDraw.Draw(I);AB={'marker':'?','back number':'#','skin side':'ss','upper arm':'ua','forearm':'fa','arm stripe 1':'a1','arm stripe 2':'a2','arm stripe 3':'a3','yoke 1':'y1','yoke 2':'y2','yoke 3':'y3','yoke corner':'yc','shoulder patch':'sp','jersey':'j','waist 1':'w1','waist 2':'w2','waist 3':'w3','pants':'p','pants stripe 1':'ps','socks':'so','socks stripe 1':'s1','socks stripe 2':'s2','helmet':'h','skin':'sk'}
 for (u,v),f in FAM.items():
     lab='c' if f.startswith('crest') else AB.get(f,f[3:] if f.startswith('idx') else f[:2])
-    col=(0,255,0) if (u,v) in used else (255,128,0) if (u,v) in SIDE else (0,200,255)
+    col=(255,0,255) if u>=28 else (0,255,0) if (u,v) in used else (255,128,0) if (u,v) in SIDE else (0,200,255)
     d.rectangle([u*20+1,v*20+1,u*20+18,v*20+18],outline=col);d.text((u*20+3,v*20+5),lab,fill=(255,255,0),stroke_width=1,stroke_fill=(0,0,0))
-C=Image.new('RGB',(I.width,I.height+30),(20,20,20));C.paste(I,(0,30));ImageDraw.Draw(C).text((4,8),'green = texel used by frame 370 pixel, orange = new side-helmet texel, cyan = texel not on 370 (back figure / behind stick); label = game zone family',fill=(255,255,255));C.save(f'{OUT}/texel_assignment_x20.png')
+C=Image.new('RGB',(I.width,I.height+30),(20,20,20));C.paste(I,(0,30));ImageDraw.Draw(C).text((4,8),'green = texel used by frame 370 pixel, orange = side-helmet texel, magenta box = v4 side-pants panel (cols 29-53), cyan = texel not on 370 (back figure / behind stick); label = game zone family',fill=(255,255,255));C.save(f'{OUT}/texel_assignment_x20.png')
 vis=p!=255
 def sheet(cols,path,title):
     h=max(i.height for _,i in cols)+50;w=sum(i.width+30 for _,i in cols)+10;O=Image.new('RGB',(w,h),(20,20,20));d=ImageDraw.Draw(O);d.text((8,4),title,fill=(255,255,255));x=10
@@ -151,3 +188,13 @@ for n,d in ((52,2),(72,6)):
     for yx,t in a.items():o[yx]=col[t]
     up(o,q!=255,S).save(f'{OUT}/side_helmet_demo_{n}_x{S}.png')
 json.dump(demo,open(f'{OUT}/side_helmet_demo.json','w'),default=str,indent=1);print('side helmet demo',{n:(v['mapped'],v['unmapped']) for n,v in demo.items()})
+
+# ---- v4 unique-colour audit of the flattened texture per region (crest excluded)
+REG=collections.defaultdict(collections.Counter)
+for (u,v),f in FAM.items():
+    c=tuple(int(t) for t in FL[v,u])
+    reg=('skin' if c==SKN else 'back uniform' if u>=14 else 'front uniform') if f=='idx136' else 'crest' if f.startswith('crest') or (f.startswith('idx') and not GEAR(f)) else 'gear(green)' if c==GRN else 'skin' if f in('skin','skin side','idx136') else 'helmet' if f=='helmet' else 'marker' if f=='marker' else 'front uniform' if u<14 else 'back uniform' if u<28 else 'side pants'
+    REG[reg][c]+=1
+AUD={r:{str(c):n for c,n in C.most_common()} for r,C in REG.items()}
+uni=set(c for r,C in REG.items() if r in('front uniform','back uniform','side pants') for c in C)
+AUD['uniform_all_colours']=sorted(map(str,uni));json.dump(AUD,open(f'{OUT}/unique_colours.json','w'),indent=1);print(json.dumps(AUD))
