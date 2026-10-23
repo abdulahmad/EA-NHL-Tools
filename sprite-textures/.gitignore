@@ -1,0 +1,8 @@
+# Generated from retail game data: never commit
+out/
+data/
+progress/
+*_grid.png
+*_proof*.png
+jerseys/ref/
+__pycache__/
