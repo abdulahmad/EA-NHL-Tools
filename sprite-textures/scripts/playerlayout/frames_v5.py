@@ -10,7 +10,7 @@
 #    -> that side's helmet strip (d2 = player's right = cols 2-3, d6 = left = cols 9-10). Pants -> side-pants panel first.
 #    Wrong figure +40, wrong side of the centre line +12, side-helmet strip outside its side view +30.
 #  * gear (gloves/skates/blades idx 0,1,8,28,31) -> glove/skate texels (green); stick (136 not neck) and ice shadow (82/88) have no texel
-#    by design: stick = green, ice = drawn in its game colour in every render (not part of the player).
+#    by design: stick = green, ice shadow = green too (Abdul pt780u); round-trip check still uses game colours.
 import sys,os,json,collections,runpy,numpy as np
 from scipy.optimize import linear_sum_assignment
 from PIL import Image,ImageDraw
@@ -135,7 +135,7 @@ for (fn,c),sp in ALLP.items():
     for f,r in ramps(sp).items():
         if 'medium' in r and 'light' in r and 'dark' in r:COLRAMP.setdefault(r['medium'],r)
 TEXS={'leafs_home':('HOME.json','tor'),'rangers_away':('AWAY.json','nyr'),'chicago_home_top':('HOME.json','chi'),
-      'chicago_alt_bottom':('AWAY.json','chi'),'montreal_baby_blue_bottom':('HOME.json','mtl')}
+      'chicago_alt_bottom':('AWAY.json','chi'),'montreal_baby_blue_bottom':('HOME.json','mtl'),'stripe_diagnostic':('HOME.json','chi')}
 def shade(c,f,s,R):
     c=tuple(int(t) for t in c)
     if s in('medium','flat'):return c
@@ -168,7 +168,7 @@ def render(n,TEX,R,gamecol=None):
     q,A,LEV,fixed=MAPS[n];fl=-np.ones(q.shape+(3,),int);sh=fl.copy();cb=fl.copy();bad=0
     for (y,x),t in fixed.items():
         g=ALLP[('HOME.json','tor')][q[y,x]] if gamecol is None else gamecol[q[y,x]]
-        if t=='ice':fl[y,x]=cb[y,x]=g;sh[y,x]=(128,128,150)
+        if t=='ice':fl[y,x]=cb[y,x]=(GRN if gamecol is None else g);sh[y,x]=(128,128,150)
         else:fl[y,x]=cb[y,x]=(GRN if gamecol is None else g);sh[y,x]=(128,128,150)
     for (y,x),(u,v) in A.items():
         c=tuple(int(t) for t in TEX[v,u]);s=LEV[(y,x)];f=TF[(u,v)]
@@ -213,7 +213,7 @@ def sheet(cols,title,path):
     W.save(path)
 for k in TEXS:
     sheet([('flat',lambda n:RENDERS[(k,n)][0]),('shading layer',lambda n:RENDERS[(k,n)][1]),('combined',lambda n:RENDERS[(k,n)][2]),(f'game ({TEXS[k][1]} {TEXS[k][0][:4].lower()})',lambda n:gameimg(n,k))],
-          f'{k}: v5 texture on 11 frames (green = skin/gloves/skates/stick placeholder)',f'{OUT}/{k}_sheet.png')
+          f'{k}: v5 texture on 11 frames (green = skin/gloves/skates/stick/ice shadow placeholder)',f'{OUT}/{k}_sheet.png')
 sheet([('game tor home',lambda n:gameimg(n,'leafs_home'))]+[(k,(lambda k:lambda n:RENDERS[(k,n)][2])(k)) for k in TEXS],
       'v5: all 5 textures (combined = flat x shading) on all 11 frames, game frame at left',f'{OUT}/all_teams_all_frames_sheet.png')
 sheet([('game tor home',lambda n:gameimg(n,'leafs_home'))]+[(k,(lambda k:lambda n:RENDERS[(k,n)][0])(k)) for k in TEXS],
@@ -234,3 +234,5 @@ json.dump(dict(frames=RES,roundtrip_game_colours=ROUND,team_render_errors=TEAMER
 for n in FRAMES:print(n,{k:v for k,v in RES[n].items() if k!='shared'})
 for t,r in ROUND.items():print('roundtrip',t,{n:(v['diff'],v['occupancy_diff']) for n,v in r.items()})
 for t,r in TEAMERR.items():print('team',t,{n:tuple(v.values()) for n,v in r.items()})
+sheet([('game (chi home)',lambda n:gameimg(n,'stripe_diagnostic')),('flat',lambda n:RENDERS[('stripe_diagnostic',n)][0]),('combined',lambda n:RENDERS[('stripe_diagnostic',n)][2])],
+      'stripe_diagnostic on 11 frames: one colour per torso row / arm row (see stripe_diagnostic_legend.png)',f'{OUT}/stripe_diagnostic_frames_sheet.png')

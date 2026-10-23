@@ -723,6 +723,74 @@
     "green_mismatch": 0,
     "unmapped": 0
    }
+  },
+  "stripe_diagnostic": {
+   "370": {
+    "magenta_texel_hits": 0,
+    "occupancy_diff": 0,
+    "green_mismatch": 0,
+    "unmapped": 0
+   },
+   "897": {
+    "magenta_texel_hits": 0,
+    "occupancy_diff": 0,
+    "green_mismatch": 0,
+    "unmapped": 0
+   },
+   "57": {
+    "magenta_texel_hits": 0,
+    "occupancy_diff": 0,
+    "green_mismatch": 0,
+    "unmapped": 0
+   },
+   "62": {
+    "magenta_texel_hits": 0,
+    "occupancy_diff": 0,
+    "green_mismatch": 0,
+    "unmapped": 0
+   },
+   "67": {
+    "magenta_texel_hits": 0,
+    "occupancy_diff": 0,
+    "green_mismatch": 0,
+    "unmapped": 0
+   },
+   "52": {
+    "magenta_texel_hits": 0,
+    "occupancy_diff": 0,
+    "green_mismatch": 0,
+    "unmapped": 0
+   },
+   "72": {
+    "magenta_texel_hits": 0,
+    "occupancy_diff": 0,
+    "green_mismatch": 0,
+    "unmapped": 0
+   },
+   "889": {
+    "magenta_texel_hits": 0,
+    "occupancy_diff": 0,
+    "green_mismatch": 0,
+    "unmapped": 0
+   },
+   "42": {
+    "magenta_texel_hits": 0,
+    "occupancy_diff": 0,
+    "green_mismatch": 0,
+    "unmapped": 0
+   },
+   "47": {
+    "magenta_texel_hits": 0,
+    "occupancy_diff": 0,
+    "green_mismatch": 0,
+    "unmapped": 0
+   },
+   "77": {
+    "magenta_texel_hits": 0,
+    "occupancy_diff": 0,
+    "green_mismatch": 0,
+    "unmapped": 0
+   }
   }
  },
  "maps": {
