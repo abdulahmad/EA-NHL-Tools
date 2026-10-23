@@ -129,19 +129,26 @@ for n in FRAMES:
 json.dump(SP,open(f'{OUT}/stretch_proposal_v5.json','w'),indent=1,default=int)
 for n,o in SP.items():print('stretch',n,{k:(v['need'],v['have'],v['factor']) for k,v in o.items() if v['factor']<1})
 # ---- stick model (Abdul): 2 segments, shaft (grip -> heel) and blade (heel -> toe), fitted from the stick-zone pixels (136 not neck).
-# grip = stick pixel nearest a glove pixel (parts 8/9; fallback nearest the torso); toe = stick pixel farthest from the grip; heel = the
+# grip = stick pixel nearest a glove pixel (parts 8/9; fallback nearest the torso); toe = max(distance from grip + drop below it); heel = the
 # stick pixel farthest from the grip->toe chord (the bend); if the bend is < 1.2 px the blade is the last 3 px along the chord. No texel.
 def stick_model(n):
     P=SEGS[n]['part'];st=[p for p,t in MAPS[n][3].items() if t=='stick']
+    st=[p for p in st if any(max(abs(p[0]-o[0]),abs(p[1]-o[1]))<=2 for o in st if o!=p)] # drop isolated stray 136 px (42: x29,y13)
     if len(st)<3:return None
     gl=[p for p,i in P.items() if i in(8,9)] or [p for p,i in P.items() if i in(2,3)]
     d2=lambda a,b:(a[0]-b[0])**2+(a[1]-b[1])**2
-    grip=min(st,key=lambda p:min(d2(p,g) for g in gl));toe=max(st,key=lambda p:d2(p,grip))
+    grip=min(st,key=lambda p:min(d2(p,g) for g in gl))
+    # v5.2b fix: the blade lies on the ice -> toe = max(distance from grip + drop below grip), not just the pixel farthest from the
+    # grip alone (on 370/889/42/67 that was the butt end above the hand); score = distance + drop below the grip. Heel = the bend, searched only within 8 px of the toe; if there is no
+    # bend (< 1.2 px off the grip->toe chord) or the blade would be longer than the shaft, the blade is the last 4 px along the chord.
+    toe=max(st,key=lambda p:d2(p,grip)**.5+(p[0]-grip[0]))   # far from the grip AND low (score = distance + drop)
     gy,gx=grip;ty,tx=toe;L=max(1e-6,d2(grip,toe)**.5)
     dev=lambda p:abs((tx-gx)*(gy-p[0])-(gx-p[1])*(ty-gy))/L
-    heel=max(st,key=dev)
-    if dev(heel)<1.2:   # straight stick: blade = last 3 px along the chord
-        t=lambda p:((p[1]-gx)*(tx-gx)+(p[0]-gy)*(ty-gy))/L;heel=min([p for p in st if t(p)>=L-3] or [toe],key=t)
+    near=[p for p in st if d2(p,toe)<=64 and p!=toe] or [toe]
+    heel=max(near,key=dev)
+    if dev(heel)<1.2 or d2(heel,toe)>d2(grip,heel):
+        t=lambda p:((p[1]-gx)*(tx-gx)+(p[0]-gy)*(ty-gy))/L;heel=min([p for p in st if t(p)>=L-4] or [toe],key=t)
+    if heel==toe:heel=min([p for p in st if p!=toe],key=lambda p:d2(p,toe))   # gap in the stick (occluded): nearest other pixel
     xy=lambda p:[float(p[1]),float(p[0])]
     return dict(grip=xy(grip),heel=xy(heel),toe=xy(toe),shaft_len=round(d2(grip,heel)**.5,2),blade_len=round(d2(heel,toe)**.5,2),
                 grip_glove=('R glove' if P.get(min(gl,key=lambda g:d2(g,grip)))==8 else 'L glove' if P.get(min(gl,key=lambda g:d2(g,grip)))==9 else 'torso (no glove)'),pixels=len(st))
