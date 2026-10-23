@@ -73,15 +73,31 @@ TEAMS['Montreal baby blue (bottom)']=design(helmet=RB,yoke1=LB,yoke2=LB,yoke3=LB
     pants=RB,pstripe1=W_,pstripe2=MR,socks=LB,sock1=RB,sock2=W_,
     _band={10:[W_]*8,11:[RB]*8,12:[RB]*8,13:[W_]*8},_backband={10:[W_]*8,11:[RB]*8,12:[RB]*8,13:[W_]*8},
     _crest=[[W_,MR,MR,MR,W_],[MR,W_,RB,W_,MR],[MR,W_,RB,W_,MR],[W_,MR,MR,MR,W_]])
-# ---- stripe_diagnostic (Abdul pt780u): one distinct colour per torso row (W3,W2,W1, jersey 13..9, yoke 8..6) and per arm row (17..8),
-# colour-blind safe (Okabe-Ito / Tol + black/white, no green, no red/green pairs), light/dark alternating rows; arm set disjoint from torso set.
-# Pants/side-pants panel = neutral grey (the panel rows 17-23 match their torso rows, which are all pants). Helmet/socks as design().
-DIAG_TORSO=[(16,'W3',(255,255,255),'white'),(15,'W2',(0,0,0),'black'),(14,'W1',(240,228,66),'yellow'),(13,'jersey r13',(51,34,136),'indigo'),
-  (12,'jersey r12',(255,200,90),'light orange'),(11,'jersey r11',(136,34,85),'wine'),(10,'jersey r10',(150,210,245),'pale sky blue'),(9,'jersey r9',(102,51,0),'brown'),
-  (8,'yoke3 r8',(240,170,210),'pink'),(7,'yoke2 r7 (+patch)',(64,64,64),'dark grey'),(6,'yoke1 r6',(220,190,240),'lavender')]
-DIAG_ARM=[(17,'forearm r17',(221,204,119),'sand'),(16,'forearm r16',(0,34,85),'navy'),(15,'forearm r15',(255,204,204),'pale pink'),
-  (14,'arm3 r14',(213,94,0),'vermillion'),(13,'arm2 r13',(170,238,255),'pale cyan'),(12,'arm1 r12',(102,0,51),'maroon'),
-  (11,'upper arm r11',(255,200,140),'peach'),(10,'upper arm r10',(85,0,136),'violet'),(9,'upper arm r9',(190,205,230),'steel'),(8,'upper arm r8',(0,80,120),'ocean')]
+# ---- stripe_diagnostic (Abdul pt780u, pt782u): contrast-ratio palette. Almost every arm row lies within 3 px of almost every torso row in
+# the 11 frame renders, so torso and arm use disjoint WCAG luminance levels: torso alternates black (L=0) / light (L~0.33), arms alternate
+# dark (L~0.088) / white (L=1). Levels are geometric, so every close pair (arm-vs-torso and adjacent rows within a part) has contrast
+# ratio >= 2.76:1 -- the maximum possible with 4 levels, and 4 levels are the minimum here. Hue (few, no green) only tells same-level rows apart.
+DIAG_TORSO=[(16,'W3',(226, 133, 41),'orange'),
+  (15,'W2',(0, 0, 0),'black'),
+  (14,'W1',(104, 160, 217),'sky blue'),
+  (13,'jersey r13',(0, 0, 0),'black'),
+  (12,'jersey r12',(200, 136, 178),'pink'),
+  (11,'jersey r11',(0, 0, 0),'black'),
+  (10,'jersey r10',(226, 133, 41),'orange'),
+  (9,'jersey r9',(0, 0, 0),'black'),
+  (8,'yoke3 r8',(104, 160, 217),'sky blue'),
+  (7,'yoke2 r7 (+patch)',(0, 0, 0),'black'),
+  (6,'yoke1 r6',(200, 136, 178),'pink')]
+DIAG_ARM=[(17,'forearm r17',(255, 255, 255),'white'),
+  (16,'forearm r16',(170, 10, 10),'red'),
+  (15,'forearm r15',(255, 255, 255),'white'),
+  (14,'arm3 r14',(24, 85, 147),'blue'),
+  (13,'arm2 r13',(255, 255, 255),'white'),
+  (12,'arm1 r12',(131, 0, 196),'purple'),
+  (11,'upper arm r11',(255, 255, 255),'white'),
+  (10,'upper arm r10',(170, 10, 10),'red'),
+  (9,'upper arm r9',(255, 255, 255),'white'),
+  (8,'upper arm r8',(24, 85, 147),'blue')]
 DGR=(128,128,128)
 TEAMS['Stripe diagnostic']=design(pants=DGR,pstripe1=DGR,pstripe2=DGR,socks=DGR,sock1=DGR,sock2=DGR,
     _rows={'torso':{v:c for v,_,c,_ in DIAG_TORSO},'arm':{v:c for v,_,c,_ in DIAG_ARM}})
