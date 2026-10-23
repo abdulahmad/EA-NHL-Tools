@@ -33,10 +33,15 @@ def lines(P,ids,fam,geo=None):
         out.append(run)
     return out
 SEGIDS={'torso':{2,3},'R upper arm':{4},'L upper arm':{5},'R lower arm':{6},'L lower arm':{7}}
+def TSCAN(n):   # torso scan direction = across the stripes: PCA direction of the waist bands; stripes steeper than 45 deg -> scan rows
+    fam=SEGS[n]['fam'];ps=[p for p,f in fam.items() if f.startswith('waist')]
+    if len(ps)<3:return {'scan':'columns'}
+    Y=np.array(ps,float);Y-=Y.mean(0);w,V=np.linalg.eigh(Y.T@Y);vy,vx=V[:,1]
+    return {'scan':'rows'} if abs(vy)>abs(vx) else {'scan':'columns'}
 def check(n,A):
     sg=SEGS[n];P,fam=sg['part'],sg['fam'];R=dict(kink_forced=0,kink=0,run_capacity=0,run_other=0,red_flags=0,seams=0,kink_at=[],run_at=[],flag_at=[])
     for nm,ids in SEGIDS.items():
-        for ln in lines(P,ids,fam,sg['geo'].get(nm)):
+        for ln in lines(P,ids,fam,TSCAN(n) if nm=='torso' else sg['geo'].get(nm)):
             ln=[p for p in ln if p in A]
             vs=[A[p][1] for p in ln];d=[b-a for a,b in zip(vs,vs[1:]) if b!=a]
             rev=sum(1 for a,b in zip(d,d[1:]) if (a>0)!=(b>0))+(sum(1 for t in d if t<0) if nm=='torso' else 0)
@@ -55,12 +60,57 @@ def check(n,A):
             if fa!=fb:R['seams']+=1;continue
             if abs(wa-wb)>2 or abs(va-vb)>2:R['red_flags']+=1;R['flag_at'].append([list((y,x)),list(b),list(uv),list(A[b])])
     return R
+def torso_extra(n,A):
+    """angle smoothness: slope of each torso texel row (per-column mean y, >=3 columns), max |angle change| between adjacent rows;
+    jersey run lengths down each column: max run, and 'adjacent doubles' (a 2-px row directly above/below another 2-px row)."""
+    P=SEGS[n]['part'];fam=SEGS[n]['fam'];rows=collections.defaultdict(lambda:collections.defaultdict(list))
+    for p,(u,v) in A.items():
+        if P.get(p) in(2,3) and u<28:rows[v][p[1]].append(p[0])
+    ang={}
+    for v,cols in rows.items():    # PCA line angle of each texel row's pixels (mod 180)
+        ps=[(y,x) for x,yy in cols.items() for y in yy]
+        if len(ps)>=3:
+            Y=np.array(ps,float);Y-=Y.mean(0);w,V=np.linalg.eigh(Y.T@Y);vy,vx=V[:,1]
+            if w[1]>w[0]*1.2:ang[v]=float(np.degrees(np.arctan2(vy,vx)))%180
+    vs=sorted(ang);dA=[min(abs(ang[b]-ang[a]),180-abs(ang[b]-ang[a])) for a,b in zip(vs,vs[1:]) if b==a+1]
+    # stripe thickness at a pixel = min(vertical run, horizontal run) of its texel row inside the segment: a 1-px line at any angle
+    # (straight, 45-deg staircase, steep) has thickness 1; a 2-px band has 2. adjacent doubles = thickness-2 pixels of row v touching
+    # thickness-2 pixels of row v+-1.
+    def thick(ids,famset):
+        Q={p:A[p][1] for p,i in P.items() if i in ids and p in A and fam[p] in famset and A[p][0]<28}
+        def run(p,dy,dx):
+            v=Q[p];k=1;y,x=p
+            for s in(1,-1):
+                t=(y+s*dy,x+s*dx)
+                while Q.get(t)==v:k+=1;t=(t[0]+s*dy,t[1]+s*dx)
+            return k
+        T={p:min(run(p,1,0),run(p,0,1)) for p in Q}
+        adj=sum(1 for p,t in T.items() if t>=2 and any(T.get((p[0]+a,p[1]+b),0)>=2 and abs(Q[(p[0]+a,p[1]+b)]-Q[p])==1 for a,b in((1,0),(0,1))))
+        return (max(T.values()) if T else 0),adj
+    mx,adj=thick({2,3},{'jersey'})
+    armthick={S.PARTS[i]:thick({i},{'upper arm','forearm'})[0] for i in(4,5,6,7) if any(j==i for j in P.values())}
+    arm={}
+    for ids in ({4},{5},{6},{7}):
+        rv=collections.defaultdict(list)
+        for p,(u,v) in A.items():
+            if P.get(p) in ids:rv[v].append(p)
+        an={}
+        for v,ps in rv.items():
+            if len(ps)>=3:
+                Y=np.array(ps,float);Y-=Y.mean(0);w,V=np.linalg.eigh(Y.T@Y);vy,vx=V[:,1]
+                if w[1]>w[0]*1.2:an[v]=float(np.degrees(np.arctan2(vy,vx)))%180
+        vs=sorted(an);st=[min(abs(an[b]-an[a]),180-abs(an[b]-an[a])) for a,b in zip(vs,vs[1:]) if b==a+1]
+        if st:arm[S.PARTS[min(ids)]]=round(max(st),1)
+    return dict(arm_max_thickness=armthick,arm_max_angle_step_deg=arm,max_angle_step_deg=round(max(dA),1) if dA else 0.0,row_angles={int(k):round(a,1) for k,a in ang.items()},jersey_max_run=mx,adjacent_doubles=adj)
 AFTER={n:MAPS[n][1] for n in FRAMES}
-res={'after':{n:check(n,AFTER[n]) for n in FRAMES}}
+res={'after':{n:dict(check(n,AFTER[n]),**torso_extra(n,AFTER[n])) for n in FRAMES}}
 if BEFORE:
-    bj=json.load(open(BEFORE))['maps'];res['before']={n:check(n,{(int(k.split(',')[1]),int(k.split(',')[0])):tuple(v) for k,v in bj[str(n)].items()}) for n in FRAMES}
+    bj=json.load(open(BEFORE))['maps'];BM={n:{(int(k.split(',')[1]),int(k.split(',')[0])):tuple(v) for k,v in bj[str(n)].items()} for n in FRAMES};res['before']={n:dict(check(n,BM[n]),**torso_extra(n,BM[n])) for n in FRAMES}
 json.dump(res,open(f'{OUT}/stripe_checks_v5.json','w'),indent=1,default=int)
 for t in res:
+    print(t,'arm thickness',{n:r['arm_max_thickness'] for n,r in res[t].items()})
+    print(t,'arm angle step',{n:r['arm_max_angle_step_deg'] for n,r in res[t].items()})
+    print(t,'angle/maxrun/adjdbl',{n:(r['max_angle_step_deg'],r['jersey_max_run'],r['adjacent_doubles']) for n,r in res[t].items()})
     print(t,{n:(r['kink'],r['kink_forced'],r['run_other'],r['run_capacity'],r['red_flags']) for n,r in res[t].items()},'totals kink/kink_forced/run_other/run_capacity/red_flags',
           [sum(r[k] for r in res[t].values()) for k in('kink','kink_forced','run_other','run_capacity','red_flags')])
 # ---- stretch math (PROPOSAL ONLY, NOT applied - Abdul: no stretching without approval): geometric rows a segment spans in the sprite
@@ -68,14 +118,34 @@ for t in res:
 SP={}
 for n in FRAMES:
     sg=SEGS[n];fam=sg['fam'];o={}
-    jr=[r for p,r in sg['trow'].items() if fam[p]=='jersey']
-    if jr:o['jersey']=dict(sprite_rows=[min(jr),max(jr)],need=max(jr)-min(jr)+1,have=5,template_rows=[9,13])
+    tg=sg['geo'].get('torso',{})
+    if 'jersey_lines' in tg:o['jersey (APPLIED v5.2, approved pt789u)']=dict(need=round(tg['jersey_lines'],2),have=5,template_rows=[9,13])
     for k,g in sg['geo'].items():
-        if 'raw_rows' in g:lo,hi=g['raw_rows'];o[k]=dict(sprite_rows=[lo,hi],need=hi-lo+1,have=g['template_rows'][1]-g['template_rows'][0]+1,template_rows=g['template_rows'])
+        if 'curve_rows' in g:
+            lo,hi=g['curve_rows'];tr=[8,11] if 'upper' in k else [15,17];o[k]=dict(sprite_rows=[lo,hi],need=hi-lo+1,have=tr[1]-tr[0]+1,template_rows=tr)
     for k,v in o.items():v['factor']=round(v['have']/v['need'],2) if v['need']>v['have'] else 1.0
+    for k,v in o.items():v['applied']=k.startswith('jersey')
     SP[n]=o
 json.dump(SP,open(f'{OUT}/stretch_proposal_v5.json','w'),indent=1,default=int)
 for n,o in SP.items():print('stretch',n,{k:(v['need'],v['have'],v['factor']) for k,v in o.items() if v['factor']<1})
+# ---- stick model (Abdul): 2 segments, shaft (grip -> heel) and blade (heel -> toe), fitted from the stick-zone pixels (136 not neck).
+# grip = stick pixel nearest a glove pixel (parts 8/9; fallback nearest the torso); toe = stick pixel farthest from the grip; heel = the
+# stick pixel farthest from the grip->toe chord (the bend); if the bend is < 1.2 px the blade is the last 3 px along the chord. No texel.
+def stick_model(n):
+    P=SEGS[n]['part'];st=[p for p,t in MAPS[n][3].items() if t=='stick']
+    if len(st)<3:return None
+    gl=[p for p,i in P.items() if i in(8,9)] or [p for p,i in P.items() if i in(2,3)]
+    d2=lambda a,b:(a[0]-b[0])**2+(a[1]-b[1])**2
+    grip=min(st,key=lambda p:min(d2(p,g) for g in gl));toe=max(st,key=lambda p:d2(p,grip))
+    gy,gx=grip;ty,tx=toe;L=max(1e-6,d2(grip,toe)**.5)
+    dev=lambda p:abs((tx-gx)*(gy-p[0])-(gx-p[1])*(ty-gy))/L
+    heel=max(st,key=dev)
+    if dev(heel)<1.2:   # straight stick: blade = last 3 px along the chord
+        t=lambda p:((p[1]-gx)*(tx-gx)+(p[0]-gy)*(ty-gy))/L;heel=min([p for p in st if t(p)>=L-3] or [toe],key=t)
+    xy=lambda p:[float(p[1]),float(p[0])]
+    return dict(grip=xy(grip),heel=xy(heel),toe=xy(toe),shaft_len=round(d2(grip,heel)**.5,2),blade_len=round(d2(heel,toe)**.5,2),
+                grip_glove=('R glove' if P.get(min(gl,key=lambda g:d2(g,grip)))==8 else 'L glove' if P.get(min(gl,key=lambda g:d2(g,grip)))==9 else 'torso (no glove)'),pixels=len(st))
+STICK={n:stick_model(n) for n in FRAMES}
 # ---- overlays
 FONT=ImageFont.load_default()
 def overlay(n,S_=12):
@@ -107,6 +177,14 @@ def overlay(n,S_=12):
                 if a in J and b in J:
                     A_=(J[a][0]*S_+S_/2,24+J[a][1]*S_+S_/2);B_=(J[b][0]*S_+S_/2,24+J[b][1]*S_+S_/2)
                     d.line([A_,B_],fill=(0,0,0),width=7);d.line([A_,B_],fill=(255,255,255),width=3)
+            sm=STICK[n]
+            if sm:
+                for a,b,lab in(('grip','heel','SH'),('heel','toe','BL')):
+                    A_=(sm[a][0]*S_+S_/2,24+sm[a][1]*S_+S_/2);B_=(sm[b][0]*S_+S_/2,24+sm[b][1]*S_+S_/2)
+                    d.line([A_,B_],fill=(0,0,0),width=7);d.line([A_,B_],fill=(255,255,255),width=3,joint=None)
+                    for t_ in range(0,10,3):   # dashes mark the stick (not a body bone)
+                        f=t_/10;d.ellipse([A_[0]+(B_[0]-A_[0])*f-2,A_[1]+(B_[1]-A_[1])*f-2,A_[0]+(B_[0]-A_[0])*f+2,A_[1]+(B_[1]-A_[1])*f+2],fill=(0,0,0))
+                    M=((A_[0]+B_[0])/2,(A_[1]+B_[1])/2);tw=d.textlength(lab);d.rectangle([M[0]-tw/2-2,M[1]-14,M[0]+tw/2+2,M[1]-2],fill=(0,0,0));d.text((M[0]-tw/2,M[1]-13),lab,fill=(255,255,0))
             for k_,(x,y) in J.items():
                 X,Y=x*S_+S_/2,24+y*S_+S_/2;d.ellipse([X-6,Y-6,X+6,Y+6],fill=(0,0,0));d.ellipse([X-3,Y-3,X+3,Y+3],fill=(255,255,255))
                 lab=k_[0] if k_[:2] in('R ','L ') else ''
@@ -115,8 +193,8 @@ def overlay(n,S_=12):
 ims=[overlay(n) for n in FRAMES];cols=3;cw=max(i.width for i in ims);ch=max(i.height for i in ims)
 leg=' | '.join(f'{k} {v}' for k,v in S.PARTS.items())
 SH=Image.new('RGB',(cw*cols,ch*((len(ims)+cols-1)//cols)+70),(255,255,255));dd=ImageDraw.Draw(SH)
-dd.text((6,4),'v5 body-part segmentation + stickman (left: skeleton on game sprite, R/L = player side; right: part numbers, black borders)',fill=(0,0,0))
+dd.text((6,4),'v5 body-part segmentation + stickman (left: skeleton on game sprite, R/L = player side, stick SH = shaft, BL = blade; right: part numbers, black borders)',fill=(0,0,0))
 for i in range(0,len(leg),170):dd.text((6,20+i//170*14),leg[i:i+170],fill=(0,0,0))
 for i,im in enumerate(ims):SH.paste(im,((i%cols)*cw,70+(i//cols)*ch));im.save(f'{OUT}/skeleton_{FRAMES[i]}.png')
 SH.save(f'{OUT}/skeleton_overlay_sheet.png')
-json.dump({n:dict(parts={f'{x},{y}':i for (y,x),i in SEGS[n]['part'].items()},joints=SEGS[n]['joints'],torso_geometry=SEGS[n]['geo']) for n in FRAMES},open(f'{OUT}/skeleton_v5.json','w'),indent=1,default=float)
+json.dump({n:dict(parts={f'{x},{y}':i for (y,x),i in SEGS[n]['part'].items()},joints=SEGS[n]['joints'],torso_geometry=SEGS[n]['geo'],stick=STICK[n]) for n in FRAMES},open(f'{OUT}/skeleton_v5.json','w'),indent=1,default=float)
