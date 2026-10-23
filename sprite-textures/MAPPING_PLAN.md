@@ -1,6 +1,6 @@
 # Sprite mapping plan: posed-3D, per-segment, per-pixel (texture coordinate + shade)
 
-Status: PLAN ONLY, nothing implemented yet. Pixels are square everywhere; there is no aspect compensation.
+Status: PLAN ONLY, nothing implemented yet. **No implementation starts until Abdul has reviewed and approved this plan.** Pixels are square everywhere; there is no aspect compensation.
 
 **Decisions from Abdul (2026-10-23), which override anything below:**
 1. **Pose estimation is automatic.** There is no manual keypoint clicking or review pass, at most small exception queues (§4).
@@ -189,6 +189,17 @@ Only pixels labelled outline are affected. Black gloves, skates and tape (also i
 - **Regression:** the frames from AUDIT (100–107, 200, 889–904, 407–428 and the goalie95 samples) are fixed checks in every run.
 
 ## 11. Milestones
+0. **POC: proof of concept on a few frames (before the pilot).**
+   - Run the automatic fit (§4) and texture mapping on about 5 frames:
+     - skater stride d0 (back view)
+     - skater stride d2 (side view)
+     - a Cup or anthem frame (358–359 / 370–372)
+     - goalie ready 407
+     - crosscheck 889
+   - Deliverables, all local because they are retail-derived:
+     - per-frame sheets with centred columns: sprite | fitted rig overlay | UV checker | textured result (outline variants A/B/C)
+     - fit metrics
+   - **REVIEW GATE:** Abdul must approve the POC before anything is scaled up (M0 data tooling beyond what the POC needs, M1 pilot and later).
 1. **M0 (data):**
    - Parse the SPA scripts into the (anim, dir, phase) table.
    - Detect mirrored directions.
