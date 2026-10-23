@@ -216,3 +216,8 @@ Only pixels labelled outline are affected. Black gloves, skates and tape (also i
 1. **Outlines:** A, B or C (see `local_outline_compare*.png`), or different rules for exterior silhouette and interior boundaries?
 2. **Exception queue:** is a top-2 hypothesis picker (a few seconds per frame, target under 3 % of frames) acceptable as the only manual step?
 3. **Goalie pose prior:** the goalie animations differ a lot from skaters. Should goalies be solved as a separate pass after skaters, so the skater prior isn't polluted?
+
+## 13. Update 2026-10-23: per-pixel map (PoC2)
+After PoC1 (fractional UV into a 512² atlas) missed ~20 % of pixels on 897/42, the texture was redesigned as a **per-pixel map**. Each texel row is one sprite-pixel band row of a game colour zone, and each column is one pixel around the body. Front and back halves are separate, and left/right limbs swap in back views. The layout is 225×46, sized from all 596 skater frames. See `PER_PIXEL_MAP.md`.
+- Results: 370/889/897 diff 0. Skate d0–d7 frames miss only zones absent from the 370/889 sources (waist 1 hidden; pants stripe 1/2 per half), 1–8 px each, with evidence. With skate frames 43+58 added as sources, all 11 test frames diff 0 for both teams.
+- Policy change: game-derived renders/textures may be committed (in `perpixel/`); ROMs and original game files still may not.

@@ -1,0 +1,312 @@
+{
+"helmet|-|back|helmet": [
+7,
+6,
+2
+],
+"helmet|-|front|helmet": [
+7,
+7,
+230
+],
+"pants|-|back|pants": [
+12,
+22,
+626
+],
+"pants|-|back|pants stripe 1": [
+7,
+13,
+275
+],
+"pants|-|back|pants stripe 2": [
+2,
+13,
+201
+],
+"pants|-|front|pants": [
+12,
+21,
+926
+],
+"pants|-|front|pants stripe 1": [
+3,
+19,
+962
+],
+"pants|-|front|pants stripe 2": [
+2,
+12,
+964
+],
+"sleeve|L|back|arm stripe 1": [
+7,
+7,
+284
+],
+"sleeve|L|back|arm stripe 2": [
+2,
+7,
+881
+],
+"sleeve|L|back|arm stripe 3": [
+1,
+8,
+1074
+],
+"sleeve|L|back|forearm": [
+4,
+9,
+1128
+],
+"sleeve|L|back|upper arm": [
+5,
+12,
+1090
+],
+"sleeve|L|front|arm stripe 1": [
+2,
+7,
+264
+],
+"sleeve|L|front|arm stripe 2": [
+2,
+6,
+264
+],
+"sleeve|L|front|arm stripe 3": [
+2,
+8,
+1084
+],
+"sleeve|L|front|forearm": [
+4,
+10,
+190
+],
+"sleeve|L|front|upper arm": [
+3,
+11,
+92
+],
+"sleeve|R|back|arm stripe 1": [
+7,
+8,
+938
+],
+"sleeve|R|back|arm stripe 2": [
+2,
+7,
+877
+],
+"sleeve|R|back|arm stripe 3": [
+1,
+6,
+90
+],
+"sleeve|R|back|forearm": [
+4,
+10,
+6
+],
+"sleeve|R|back|upper arm": [
+5,
+13,
+1102
+],
+"sleeve|R|front|arm stripe 1": [
+2,
+7,
+350
+],
+"sleeve|R|front|arm stripe 2": [
+2,
+7,
+350
+],
+"sleeve|R|front|arm stripe 3": [
+2,
+7,
+129
+],
+"sleeve|R|front|forearm": [
+4,
+12,
+580
+],
+"sleeve|R|front|upper arm": [
+5,
+18,
+1096
+],
+"sock|L|back|socks": [
+7,
+15,
+303
+],
+"sock|L|back|socks stripe 1": [
+2,
+8,
+96
+],
+"sock|L|back|socks stripe 2": [
+1,
+10,
+877
+],
+"sock|L|front|socks": [
+7,
+16,
+1120
+],
+"sock|L|front|socks stripe 1": [
+4,
+13,
+966
+],
+"sock|L|front|socks stripe 2": [
+1,
+10,
+965
+],
+"sock|R|back|socks": [
+7,
+14,
+82
+],
+"sock|R|back|socks stripe 1": [
+3,
+9,
+147
+],
+"sock|R|back|socks stripe 2": [
+1,
+10,
+881
+],
+"sock|R|front|socks": [
+7,
+16,
+196
+],
+"sock|R|front|socks stripe 1": [
+4,
+13,
+962
+],
+"sock|R|front|socks stripe 2": [
+2,
+10,
+961
+],
+"torso|-|back|jersey": [
+13,
+16,
+274
+],
+"torso|-|back|shoulder patch": [
+2,
+2,
+2
+],
+"torso|-|back|waist 1 even": [
+2,
+5,
+104
+],
+"torso|-|back|waist 1 hidden": [
+2,
+7,
+276
+],
+"torso|-|back|waist 1 odd": [
+2,
+6,
+878
+],
+"torso|-|back|waist 2": [
+4,
+11,
+337
+],
+"torso|-|back|waist 3": [
+4,
+12,
+163
+],
+"torso|-|back|yoke 1": [
+4,
+10,
+161
+],
+"torso|-|back|yoke 2": [
+2,
+15,
+273
+],
+"torso|-|back|yoke 3": [
+3,
+15,
+602
+],
+"torso|-|back|yoke corner": [
+2,
+4,
+273
+],
+"torso|-|front|jersey": [
+11,
+33,
+613
+],
+"torso|-|front|shoulder patch": [
+5,
+3,
+92
+],
+"torso|-|front|waist 1 even": [
+2,
+5,
+194
+],
+"torso|-|front|waist 1 hidden": [
+3,
+5,
+85
+],
+"torso|-|front|waist 1 odd": [
+4,
+5,
+193
+],
+"torso|-|front|waist 2": [
+5,
+12,
+951
+],
+"torso|-|front|waist 3": [
+5,
+11,
+328
+],
+"torso|-|front|yoke 1": [
+5,
+9,
+181
+],
+"torso|-|front|yoke 2": [
+2,
+18,
+630
+],
+"torso|-|front|yoke 3": [
+2,
+17,
+119
+],
+"torso|-|front|yoke corner": [
+2,
+4,
+16
+]
+}
