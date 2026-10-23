@@ -16,16 +16,14 @@
 14/15/16_arm_band_order_violations_*.png — red = arm band touching a non-adjacent band (e.g. forearm next to stripe 1). 94 skaters are nearly clean; 95 crosscheck/shotblock show clusters at elbows and hands → broken zones.
 Final outputs in v2/: 10–13 (equipment), 20–22 (atlas + UV), PLAN.md, FINDINGS.md.
 17_wrap_fix_before_after_200_1_409.png — torso V cylinder-wrap sag (ELEV=35°): frame 200 flat stripe -> arc. left before / right after. flat isolines 107/422 -> 6/434 (flatcheck.py)
-
-## 2026-10-23
-- Exported per-frame draw anchor (-minX,-minY) in dump.js. Grids are now aligned on it: rows share the anchor y (feet) and columns use the max left/right extent about the anchor. The pc95.js `hotspotFor` value is the stick/puck hotspot, not the body anchor, so it was not used.
-- Wrap fix for flat torso stripes (frame 200). Flat isolines went from 107/422 to 6/434. Before/after is local only (out/jerseys/fix_wrap_before_after_200_1_409.png).
-- Six jersey atlases authored in `jerseys.py`: Canadiens baby blue, Wild home, Blackhawks CHICAGO alt, Panthers home, Stars star alt, Thrashers home. Rendered on frames 1,9,…,57, 100, 200, 300, 889, 897, 1080, 409, 980.
-  - Reads well: colour blocking, wide chest bands (Wild, Panthers, Blackhawks), sock stripes, and pants/helmet colours.
-  - Reads poorly:
-    - Crests on 10–15 px torsos are smudges and illegible.
-    - The Stars star shape is lost.
-    - The Thrashers vertical piping is mostly 1 px and flickers.
-    - Thin stripes (1–2 % of V) drop out on small frames.
-    - Sleeve left/right can swap between directions.
-- 2026-10-23: removed back name/number from all jersey designs; jersey atlases now include the real crest (approved).
+18_A01 sides+wrap 8 dirs, top=before bottom=after (asym test atlas: red=player-right sleeve/sock, grey=back torso). Back views now put player-right on screen-right.
+19_A02 limb wrap before/after on frames whose sleeve/sock stripes were straight. Straight vertical-limb isolines 122/646 -> 49/732.
+20_A03 frames 100-107: frame 101 flipped to back (grey) before; front smoothing fixes. Front/back flips in near-identical consecutive pairs 32/232 -> 0 (by construction of chain vote; eyeball-verified on this strip).
+21_A04 crosscheck 889-903 (odd): forearms holding the stick are labelled glove (yellow) on 893/895/897: equipment-zone error from the broken 95 zones. NOT fixed.
+22_A05 goalies: front flip fixed on 409; pads ok; catcher/blocker still swap on some saves.
+23_A06 arms in front of torso: sleeve UV ok but arm/torso occlusion makes stripes jump.
+24_A07 stride frames: pants are one region, so a pants stripe can't follow each leg. NOT fixed.
+25 v3 summary: capacity-limited textures + fixes. 26 Wild flat texture at capacity.
+27-28 gloves (Ottawa, red/black, Edmonton) at 6x7, geodesic cuff->fingers UV.
+29-30 Fuhr gear redraw at pad 19x21, blocker/catcher 10x10, mask 7x6; SPAgready frames 407..428 (asm frame numbers = our 1-based numbering).
+31-32 McDavid stick 1x26 (knob tape/shaft/blade tape) on Oilers-ish jersey.
