@@ -103,7 +103,7 @@ def render(n,A,crest,sp,scale=5):
     s=sample(A,p,U,V,Rg);o[has]=(s*sh)[has]
     seg,_=segment(n,p);cm=seg==PN.index('crest') if isinstance(seg,np.ndarray) and seg.dtype!=object else None
     cm=np.isin(p,[*range(192,197),*range(208,213),*range(224,229),*range(240,245)])
-    if cm.sum()>=2:
+    if cm.sum()>=2 and pixcrest!='none':
         ys,xs=np.nonzero(cm);y0,y1,x0,x1=ys.min(),ys.max(),xs.min(),xs.max()
         C=np.asarray(crest.resize((x1-x0+1,y1-y0+1),Image.LANCZOS)).astype(float)
         o[cm]=(C[ys-y0,xs-x0]*sh[cm])
@@ -135,7 +135,8 @@ def render3(n,A,crest,sp,key,scale=5,trim=True,pixcrest=True):
     s=D[key];p,part,U,V,Rg=solve(n);m=p!=255;has=Rg!='';o=sp[p].astype(float);sh=shade_of(p)[...,None]
     smp=sample(A,p,U,V,Rg);o[has]=(smp*sh)[has];drawn=0
     if trim:
-        for regs,bl in ((('torso_front','torso_back'),(s.get('yoke') or [])+s['torso']),(('sleeve','sleeve_b'),s['sleeve']),(('sock','sock_b'),s['sock'])):
+        T=(('torso_back',) if s.get('direct') else ('torso_front','torso_back'))   # v5: front/sock resampled directly -> no isolines there
+        for regs,bl in ((T,(s.get('yoke') or [])+s['torso']),(('sleeve','sleeve_b'),s['sleeve']),(('sock','sock_b'),[] if s.get('direct') else s['sock'])):
             lab,k=ndi.label(np.isin(Rg,regs),np.ones((3,3)))
             for c in range(1,k+1):
                 mm=lab==c;ys,xs=np.nonzero(mm);L=max(np.ptp(ys),np.ptp(xs))+1
@@ -145,7 +146,7 @@ def render3(n,A,crest,sp,key,scale=5,trim=True,pixcrest=True):
                     if vis.sum()>=max(2,0.5*(np.ptp(xs)+1)): continue
                     l=iso_line(V,mm,(v0+v1)/2);o[l]=np.array(col)*sh[l];drawn+=int(l.sum())
     cm=np.isin(p,[*range(192,197),*range(208,213),*range(224,229),*range(240,245)])
-    if cm.sum()>=2:
+    if cm.sum()>=2 and pixcrest!='none':
         ys,xs=np.nonzero(cm);y0,y1,x0,x1=ys.min(),ys.max(),xs.min(),xs.max()
         ci=crest.resize((x1-x0+1,y1-y0+1),Image.NEAREST) if pixcrest=='cap' else crest_px(crest,x1-x0+1,y1-y0+1) if pixcrest else crest.resize((x1-x0+1,y1-y0+1),Image.LANCZOS)
         C=np.asarray(ci).astype(float);o[cm]=C[ys-y0,xs-x0]*sh[cm]
