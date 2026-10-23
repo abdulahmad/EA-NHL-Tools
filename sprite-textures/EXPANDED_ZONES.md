@@ -270,3 +270,19 @@ whole torso, the yoke band at -45 deg) -> max angle step between adjacent rows 5
   stored in `skeleton_v5.json`. No texel (model/alignment only).
 * **New metrics:** torso and per-arm max angle step between adjacent texel rows (PCA line angle per row); stripe thickness
   = min(vertical, horizontal run) of a row at a pixel (1 for a 1-px line at any angle); adjacent doubles.
+
+# v5.2 control test — do game-jersey textures through the v5.2 mapping match the game? (Abdul pt792u)
+`scripts/playerlayout/control_v5.py` -> `playerlayout/control_v5/` (control textures `textures/control_<team>.png`, per frame
+flat/shading/combined renders, sheets `A_control_<team>_sheet.png`, `B_blind_geometry_<team>_sheet.png`, counts `control_v5.json`).
+* **A, control (approved v5.2 mapping, full pipeline):** texel = medium colour of the game zone the texel stands for (crest = own index,
+  skin, gear); shading layer from the game pixel's light/medium/dark/shadow; combined via the game ramps; stick/ice/gear in game colours.
+  **0 mismatched pixels on all 11 frames x 5 teams, occupancy diff 0.** This is expected by construction: the game zone is the validity
+  filter, so every pixel lands on a texel of its own zone and the in-game colours cannot differ. It proves the pipeline (texture, shading,
+  ramps, fixed colours) is exact; it CANNOT see stripe-row choices inside one zone (jersey rows 9-13 are one game colour).
+* **B, blind geometry (diagnostic only, no mapping change):** nearest texel by skeleton geometry alone, no zone filter (torso row from the
+  fitted waist/yoke lines, arm row from arc length shoulder->elbow->glove, legs/helmet by bbox). Mismatches (colour-visible in that team):
+  tor 743, nyr 842, chi home 857, chi away 853, mtl 771. Classes per frame in control_v5.json: R wrong stripe row (~60%), P wrong part
+  (~30%, mostly arm-over-torso on the twisted/crossed frames 67, 52, 62, 72), S wrong shade 0, D game-zone defect 3-22 per frame (most on
+  897 and 889, the 95-only crosscheck frames). The crude blind rules are a lower bound on what the zone filter fixes, not a proposal.
+* **Stick fit fix (v5.2b):** toe = max(distance from grip + drop below grip) (was: farthest from the grip -> picked the butt end on
+  370/889/42/67), heel searched within 8 px of the toe, blade fallback = last 4 px, isolated stray 136 px dropped (42 x29 y13).

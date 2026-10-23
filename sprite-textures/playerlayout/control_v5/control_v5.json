@@ -1,0 +1,851 @@
+{
+ "A_control": {
+  "leafs_home": {
+   "370": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "897": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "57": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "62": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "67": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "52": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "72": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "889": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "42": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "47": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "77": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   }
+  },
+  "rangers_away": {
+   "370": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "897": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "57": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "62": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "67": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "52": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "72": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "889": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "42": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "47": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "77": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   }
+  },
+  "chicago_home_top": {
+   "370": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "897": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "57": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "62": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "67": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "52": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "72": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "889": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "42": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "47": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "77": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   }
+  },
+  "chicago_alt_bottom": {
+   "370": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "897": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "57": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "62": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "67": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "52": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "72": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "889": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "42": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "47": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "77": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   }
+  },
+  "montreal_baby_blue_bottom": {
+   "370": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "897": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "57": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "62": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "67": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "52": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "72": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "889": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "42": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "47": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   },
+   "77": {
+    "mismatch": 0,
+    "R": 0,
+    "P": 0,
+    "S": 0,
+    "D": 0,
+    "occupancy_diff": 0
+   }
+  }
+ },
+ "B_blind_geometry": {
+  "leafs_home": {
+   "370": {
+    "mismatch": 55,
+    "R": 31,
+    "P": 16,
+    "S": 0,
+    "D": 8
+   },
+   "897": {
+    "mismatch": 62,
+    "R": 31,
+    "P": 11,
+    "S": 0,
+    "D": 20
+   },
+   "57": {
+    "mismatch": 68,
+    "R": 39,
+    "P": 21,
+    "S": 0,
+    "D": 8
+   },
+   "62": {
+    "mismatch": 74,
+    "R": 45,
+    "P": 26,
+    "S": 0,
+    "D": 3
+   },
+   "67": {
+    "mismatch": 98,
+    "R": 50,
+    "P": 45,
+    "S": 0,
+    "D": 3
+   },
+   "52": {
+    "mismatch": 88,
+    "R": 56,
+    "P": 27,
+    "S": 0,
+    "D": 5
+   },
+   "72": {
+    "mismatch": 84,
+    "R": 47,
+    "P": 31,
+    "S": 0,
+    "D": 6
+   },
+   "889": {
+    "mismatch": 62,
+    "R": 35,
+    "P": 14,
+    "S": 0,
+    "D": 13
+   },
+   "42": {
+    "mismatch": 50,
+    "R": 41,
+    "P": 5,
+    "S": 0,
+    "D": 4
+   },
+   "47": {
+    "mismatch": 50,
+    "R": 33,
+    "P": 14,
+    "S": 0,
+    "D": 3
+   },
+   "77": {
+    "mismatch": 52,
+    "R": 34,
+    "P": 10,
+    "S": 0,
+    "D": 8
+   }
+  },
+  "rangers_away": {
+   "370": {
+    "mismatch": 63,
+    "R": 34,
+    "P": 21,
+    "S": 0,
+    "D": 8
+   },
+   "897": {
+    "mismatch": 71,
+    "R": 35,
+    "P": 14,
+    "S": 0,
+    "D": 22
+   },
+   "57": {
+    "mismatch": 76,
+    "R": 46,
+    "P": 19,
+    "S": 0,
+    "D": 11
+   },
+   "62": {
+    "mismatch": 80,
+    "R": 43,
+    "P": 33,
+    "S": 0,
+    "D": 4
+   },
+   "67": {
+    "mismatch": 128,
+    "R": 56,
+    "P": 68,
+    "S": 0,
+    "D": 4
+   },
+   "52": {
+    "mismatch": 94,
+    "R": 63,
+    "P": 26,
+    "S": 0,
+    "D": 5
+   },
+   "72": {
+    "mismatch": 91,
+    "R": 53,
+    "P": 30,
+    "S": 0,
+    "D": 8
+   },
+   "889": {
+    "mismatch": 64,
+    "R": 33,
+    "P": 13,
+    "S": 0,
+    "D": 18
+   },
+   "42": {
+    "mismatch": 59,
+    "R": 44,
+    "P": 6,
+    "S": 0,
+    "D": 9
+   },
+   "47": {
+    "mismatch": 58,
+    "R": 37,
+    "P": 16,
+    "S": 0,
+    "D": 5
+   },
+   "77": {
+    "mismatch": 58,
+    "R": 38,
+    "P": 10,
+    "S": 0,
+    "D": 10
+   }
+  },
+  "chicago_home_top": {
+   "370": {
+    "mismatch": 60,
+    "R": 36,
+    "P": 16,
+    "S": 0,
+    "D": 8
+   },
+   "897": {
+    "mismatch": 68,
+    "R": 35,
+    "P": 13,
+    "S": 0,
+    "D": 20
+   },
+   "57": {
+    "mismatch": 76,
+    "R": 47,
+    "P": 20,
+    "S": 0,
+    "D": 9
+   },
+   "62": {
+    "mismatch": 79,
+    "R": 45,
+    "P": 30,
+    "S": 0,
+    "D": 4
+   },
+   "67": {
+    "mismatch": 127,
+    "R": 59,
+    "P": 64,
+    "S": 0,
+    "D": 4
+   },
+   "52": {
+    "mismatch": 102,
+    "R": 67,
+    "P": 30,
+    "S": 0,
+    "D": 5
+   },
+   "72": {
+    "mismatch": 95,
+    "R": 55,
+    "P": 32,
+    "S": 0,
+    "D": 8
+   },
+   "889": {
+    "mismatch": 72,
+    "R": 41,
+    "P": 13,
+    "S": 0,
+    "D": 18
+   },
+   "42": {
+    "mismatch": 61,
+    "R": 46,
+    "P": 6,
+    "S": 0,
+    "D": 9
+   },
+   "47": {
+    "mismatch": 56,
+    "R": 35,
+    "P": 16,
+    "S": 0,
+    "D": 5
+   },
+   "77": {
+    "mismatch": 61,
+    "R": 41,
+    "P": 10,
+    "S": 0,
+    "D": 10
+   }
+  },
+  "chicago_alt_bottom": {
+   "370": {
+    "mismatch": 65,
+    "R": 36,
+    "P": 21,
+    "S": 0,
+    "D": 8
+   },
+   "897": {
+    "mismatch": 71,
+    "R": 35,
+    "P": 14,
+    "S": 0,
+    "D": 22
+   },
+   "57": {
+    "mismatch": 72,
+    "R": 44,
+    "P": 18,
+    "S": 0,
+    "D": 10
+   },
+   "62": {
+    "mismatch": 81,
+    "R": 44,
+    "P": 33,
+    "S": 0,
+    "D": 4
+   },
+   "67": {
+    "mismatch": 128,
+    "R": 55,
+    "P": 69,
+    "S": 0,
+    "D": 4
+   },
+   "52": {
+    "mismatch": 99,
+    "R": 64,
+    "P": 30,
+    "S": 0,
+    "D": 5
+   },
+   "72": {
+    "mismatch": 94,
+    "R": 54,
+    "P": 32,
+    "S": 0,
+    "D": 8
+   },
+   "889": {
+    "mismatch": 66,
+    "R": 35,
+    "P": 13,
+    "S": 0,
+    "D": 18
+   },
+   "42": {
+    "mismatch": 59,
+    "R": 44,
+    "P": 6,
+    "S": 0,
+    "D": 9
+   },
+   "47": {
+    "mismatch": 59,
+    "R": 38,
+    "P": 16,
+    "S": 0,
+    "D": 5
+   },
+   "77": {
+    "mismatch": 59,
+    "R": 39,
+    "P": 10,
+    "S": 0,
+    "D": 10
+   }
+  },
+  "montreal_baby_blue_bottom": {
+   "370": {
+    "mismatch": 58,
+    "R": 32,
+    "P": 18,
+    "S": 0,
+    "D": 8
+   },
+   "897": {
+    "mismatch": 62,
+    "R": 26,
+    "P": 16,
+    "S": 0,
+    "D": 20
+   },
+   "57": {
+    "mismatch": 69,
+    "R": 41,
+    "P": 21,
+    "S": 0,
+    "D": 7
+   },
+   "62": {
+    "mismatch": 73,
+    "R": 36,
+    "P": 33,
+    "S": 0,
+    "D": 4
+   },
+   "67": {
+    "mismatch": 114,
+    "R": 56,
+    "P": 54,
+    "S": 0,
+    "D": 4
+   },
+   "52": {
+    "mismatch": 94,
+    "R": 63,
+    "P": 27,
+    "S": 0,
+    "D": 4
+   },
+   "72": {
+    "mismatch": 82,
+    "R": 44,
+    "P": 32,
+    "S": 0,
+    "D": 6
+   },
+   "889": {
+    "mismatch": 64,
+    "R": 36,
+    "P": 16,
+    "S": 0,
+    "D": 12
+   },
+   "42": {
+    "mismatch": 51,
+    "R": 39,
+    "P": 5,
+    "S": 0,
+    "D": 7
+   },
+   "47": {
+    "mismatch": 51,
+    "R": 33,
+    "P": 14,
+    "S": 0,
+    "D": 4
+   },
+   "77": {
+    "mismatch": 53,
+    "R": 34,
+    "P": 11,
+    "S": 0,
+    "D": 8
+   }
+  }
+ }
+}
