@@ -22,14 +22,14 @@ for v,u in zip(*np.nonzero(HAVE)):
     if v<=7:
         exp={'skin':'skin','black':'helmet','gold':'patch','red':('yoke1' if v==6 else 'yoke2')}[t]
         if r!=exp:rep['unexplained'].append([int(u),int(v),f'head role {r} != template {exp}'])
-        if t=='gold' and k=='red':rep['head'].append([int(u),int(v),'recolour: shoulder patch gold -> team colour'])
+        if t=='gold' and k!='gold':rep['head'].append([int(u),int(v),'recolour: shoulder patch gold -> team colour'])
         continue
     if u<14 and 10<=v<=13 and 4<=w<=8:continue                       # crest block: Chicago home = his crest as drawn
     if t==k or (t=='blue' and k=='green'):
         if t=='blue':rep['body'].append([int(u),int(v),'recolour: blade -> green placeholder'])
         continue
     if k=='green' and (r in('glove','skate') or t=='skin'):rep['body'].append([int(u),int(v),f'recolour: {r} -> green placeholder']);continue
-    if t=='gold':rep['body'].append([int(u),int(v),'recolour: shoulder patch gold -> team colour']);continue
+    if t=='gold' and k!='gold':rep['body'].append([int(u),int(v),'recolour: shoulder patch gold -> team colour']);continue
     if u<28 and 8<=v<=27:rep['body'].append([int(u),int(v),f'stripe column alignment: template {t} -> {r} ({k}) at row {v}']);continue
     rep['unexplained'].append([int(u),int(v),f'template {t} -> {r} ({k})'])
 json.dump(rep,open(f'{OUT}/check_v5.json','w'),indent=1)

@@ -53,13 +53,16 @@ B,W=(0,0,140),(224,224,224)
 TEAMS={}
 TEAMS['Leafs home'],spL=gameteam('HOME.json','tor',[B,W])
 TEAMS['Rangers away'],spR=gameteam('AWAY.json','nyr',[(0,0,128),(192,0,0),(220,220,220)])
+for _t in ('Leafs home','Rangers away'):TEAMS[_t]['patch']=TEAMS[_t]['yoke2']   # no shoulder patch on these designs -> yoke/body colour
+# shoulder patch = its own role (template gold 168,132,0 at front cols 2,11 / back 16,25 row 7). Chicago home keeps gold (template design);
+# teams with no shoulder patch (Leafs, Rangers, Chicago alt, Montreal) use the yoke/body colour there.
 # ---- reference-sheet designs (bottom/top jerseys of out/ref_jerseys/*.png), one shade per hue
 R_,K_,W_=(132,0,0),(44,44,44),(232,232,232)
 abd=[[tuple(L[v,u]) for u in range(4,9)] for v in range(10,14)]     # Abdul's drawn Indian-head crest
 def design(**k):
     d=dict(helmet=K_,yoke1=R_,yoke2=R_,yoke3=R_,**{'yoke corner':R_},patch=R_,jersey=R_,number=R_,**{'upper arm':R_},arm1=K_,arm2=W_,arm3=K_,
            forearm=R_,waist1=K_,waist2=W_,waist3=K_,pants=K_,pstripe1=W_,pstripe2=R_,socks=R_,sock1=K_,sock2=W_);d.update(k);return d
-TEAMS['Chicago home (top)']=design(_crest=abd,arm1=W_,arm2=K_,arm3=W_,waist1=W_,waist2=K_,waist3=W_,sock1=W_,sock2=K_)   # = Abdul's template colours
+TEAMS['Chicago home (top)']=design(_crest=abd,patch=(168,132,0),arm1=W_,arm2=K_,arm3=W_,waist1=W_,waist2=K_,waist3=W_,sock1=W_,sock2=K_)   # = Abdul's template colours
 TEAMS['Chicago alt (bottom)']=design(jersey=K_,number=K_,arm1=K_,arm2=W_,arm3=K_,waist1=R_,waist2=W_,waist3=R_,
     _band={10:[W_]*8,11:[R_,W_,W_,R_,W_,R_,W_,R_],12:[R_,W_,R_,R_,W_,W_,W_,R_],13:[W_]*8},_backband=None)
 LB,RB,MR=(96,144,224),(0,40,160),(200,0,30)

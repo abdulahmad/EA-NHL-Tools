@@ -166,3 +166,14 @@ Script: `scripts/playerlayout/textures_v5.py <outdir>`, which loads `templates/a
   The full list with reasons is in `playerlayout/v5/textures/check_v5.json`.
 - Teams: Leafs home, Rangers away (game colours snapped to one shade per hue), Chicago home = Abdul's template colours plus his crest,
   Chicago alt, Montreal baby blue (from the reference sheets). Skin, gloves, skates, blades and stick are green (0,220,0).
+
+## v5 head roles (RGB -> role, rows 0-7, from the template file)
+| template RGB | role | texture colour |
+|---|---|---|
+| 0,0,0 / 44,44,44 | helmet | team helmet |
+| 220,148,104 / 200,132,92 / 184,120,80 / 96,56,28 / 164,108,72 / 176,113,79 / 198,127,89 | skin (face, eyes, ears, neck) | green (0,220,0) |
+| 160,0,0 (row 6) / 132,0,0 (row 7) | yoke1 / yoke2 | team yoke |
+| 168,132,0 (row 7: front cols 2,11, back cols 16,25) | shoulder patch (own role, `sp`) | Chicago home keeps gold 168,132,0; Leafs, Rangers, Chicago alt and Montreal have no patch, so it takes the yoke colour |
+
+On the back figure the template has helmet in rows 0-3. Row 4 cols 20-22 (164,108,72 / 220,148,104 / 164,108,72) and all of row 5 are skin (neck), so they are green.
+Run `scripts/playerlayout/compare_v5.py <outdir>` to rebuild the template-vs-texture x16 comparisons.
