@@ -10,7 +10,7 @@ Research tooling for per-pixel jersey textures on the NHL 95 PC player sprites. 
 - `textures/jerseys/*_atlas.png`: six hand-authored jersey designs. Crests are downscaled team logos (committed with the owner's approval). Back torsos carry no name or number.
 - `FINDINGS.md`, `PLAN.md` (v2) and `LOG.md`, plus JSON results: `broken_arm_crest.json`, `broken_metrics.json`, `broken_stick.json`, `goalie_part_presence.json`, `flat_stripe_check.json`.
 
-**Not committed:** any game data or any image rendered from retail sprites. `out/` is git-ignored.
+**Not committed:** ROMs and original game files. `out/` is git-ignored. Since 2026-10-23, game-derived renders and extracted control textures may be committed (see `perpixel/`, `PER_PIXEL_MAP.md`).
 
 ## Regenerate from your own NHL 95 PC files
 Requirements: Node 18+, Python 3.10+, `pip install -r requirements.txt`, and a checkout of NHL9XStudio (for `lib/pc95.js` and `lib/pc-jersey.js`).
