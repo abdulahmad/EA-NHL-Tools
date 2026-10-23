@@ -1,19 +1,11 @@
 {
  "side_helmet_texels": {
-  "2,0": [
-   "marker",
-   "R"
-  ],
   "3,0": [
    "helmet",
    "R"
   ],
   "9,0": [
    "helmet",
-   "L"
-  ],
-  "10,0": [
-   "marker",
    "L"
   ],
   "2,1": [
@@ -116,7 +108,7 @@
   "idx 88 outside layout": 28,
   "idx 1 outside layout": 3
  },
- "texels_drawn": 642,
+ "texels_drawn": 640,
  "texels_used_by_370": 297,
  "ramps_from_his_drawing": {
   "helmet": {
@@ -365,11 +357,6 @@
  "unused_texels": [
   [
    2,
-   0,
-   "marker"
-  ],
-  [
-   2,
    1,
    "helmet"
   ],
@@ -517,11 +504,6 @@
    9,
    5,
    "skin side"
-  ],
-  [
-   10,
-   0,
-   "marker"
   ],
   [
    10,

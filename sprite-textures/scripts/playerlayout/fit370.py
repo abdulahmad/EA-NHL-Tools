@@ -4,7 +4,7 @@
 import sys,os,json,collections,numpy as np;sys.path.insert(0,'.');sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
 from PIL import Image,ImageDraw
 from lib import frame,spritepal,D,ZN
-OUT=sys.argv[1] if len(sys.argv)>1 else 'playerlayout_fit370';SRC=os.path.join(os.path.dirname(os.path.abspath(__file__)),'abdul_layout_v2.png')   # v2 = Abdul's revision with side-helmet strips
+OUT=sys.argv[1] if len(sys.argv)>1 else 'playerlayout_fit370';SRC=os.path.join(os.path.dirname(os.path.abspath(__file__)),'abdul_layout_v3.png')   # v3 = v2 (side-helmet strips) with the two light-blue stray texels removed
 L=np.asarray(Image.open(SRC).convert('RGB')).astype(int);TH,TW=L.shape[:2];MAG=(252,0,252);HAVE=~(L==MAG).all(2)
 p=frame(370);OX=4                                                  # texel (u,v) = (x-OX, y) for frame 370 (row by row, identity)
 # ---- per-index family + shade (game palette index semantics, zn.json names; skin/helmet/pants pairs added)
