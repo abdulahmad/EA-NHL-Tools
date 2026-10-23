@@ -1,0 +1,354 @@
+{
+ "leafs_home": {
+  "texture_unique_colours_excl_crest": 6,
+  "colours": {
+   "(0, 0, 140)": 315,
+   "(224, 224, 224)": 263,
+   "(0, 220, 0)": 90,
+   "(208, 208, 208)": 55,
+   "(224, 128, 128)": 31,
+   "(252, 252, 252)": 20
+  },
+  "frames": {
+   "897": {
+    "styled_vs_game_diff": 81,
+    "non_gear_px": 248
+   },
+   "57": {
+    "styled_vs_game_diff": 54,
+    "non_gear_px": 170
+   },
+   "62": {
+    "styled_vs_game_diff": 56,
+    "non_gear_px": 160
+   },
+   "67": {
+    "styled_vs_game_diff": 61,
+    "non_gear_px": 201
+   },
+   "52": {
+    "styled_vs_game_diff": 60,
+    "non_gear_px": 204
+   },
+   "72": {
+    "styled_vs_game_diff": 67,
+    "non_gear_px": 211
+   },
+   "370": {
+    "styled_vs_game_diff": 69,
+    "non_gear_px": 255
+   },
+   "889": {
+    "styled_vs_game_diff": 73,
+    "non_gear_px": 274
+   },
+   "42": {
+    "styled_vs_game_diff": 68,
+    "non_gear_px": 222
+   },
+   "47": {
+    "styled_vs_game_diff": 56,
+    "non_gear_px": 209
+   },
+   "77": {
+    "styled_vs_game_diff": 66,
+    "non_gear_px": 222
+   }
+  }
+ },
+ "rangers_away": {
+  "texture_unique_colours_excl_crest": 6,
+  "colours": {
+   "(192, 0, 0)": 315,
+   "(0, 0, 128)": 195,
+   "(0, 220, 0)": 90,
+   "(220, 220, 220)": 88,
+   "(0, 0, 108)": 55,
+   "(224, 128, 128)": 31
+  },
+  "frames": {
+   "897": {
+    "styled_vs_game_diff": 49,
+    "non_gear_px": 248
+   },
+   "57": {
+    "styled_vs_game_diff": 29,
+    "non_gear_px": 170
+   },
+   "62": {
+    "styled_vs_game_diff": 38,
+    "non_gear_px": 160
+   },
+   "67": {
+    "styled_vs_game_diff": 33,
+    "non_gear_px": 201
+   },
+   "52": {
+    "styled_vs_game_diff": 26,
+    "non_gear_px": 204
+   },
+   "72": {
+    "styled_vs_game_diff": 35,
+    "non_gear_px": 211
+   },
+   "370": {
+    "styled_vs_game_diff": 42,
+    "non_gear_px": 255
+   },
+   "889": {
+    "styled_vs_game_diff": 40,
+    "non_gear_px": 274
+   },
+   "42": {
+    "styled_vs_game_diff": 32,
+    "non_gear_px": 222
+   },
+   "47": {
+    "styled_vs_game_diff": 32,
+    "non_gear_px": 209
+   },
+   "77": {
+    "styled_vs_game_diff": 37,
+    "non_gear_px": 222
+   }
+  }
+ },
+ "chicago_away": {
+  "texture_unique_colours_excl_crest": 8,
+  "colours": {
+   "(28, 28, 28)": 283,
+   "(132, 0, 0)": 191,
+   "(0, 220, 0)": 90,
+   "(232, 232, 232)": 76,
+   "(0, 0, 0)": 67,
+   "(136, 136, 136)": 32,
+   "(224, 128, 128)": 31,
+   "(168, 132, 0)": 4
+  },
+  "frames": {
+   "897": {
+    "styled_vs_game_diff": 32,
+    "non_gear_px": 248
+   },
+   "57": {
+    "styled_vs_game_diff": 19,
+    "non_gear_px": 170
+   },
+   "62": {
+    "styled_vs_game_diff": 27,
+    "non_gear_px": 160
+   },
+   "67": {
+    "styled_vs_game_diff": 28,
+    "non_gear_px": 201
+   },
+   "52": {
+    "styled_vs_game_diff": 21,
+    "non_gear_px": 204
+   },
+   "72": {
+    "styled_vs_game_diff": 27,
+    "non_gear_px": 211
+   },
+   "370": {
+    "styled_vs_game_diff": 31,
+    "non_gear_px": 255
+   },
+   "889": {
+    "styled_vs_game_diff": 32,
+    "non_gear_px": 274
+   },
+   "42": {
+    "styled_vs_game_diff": 22,
+    "non_gear_px": 222
+   },
+   "47": {
+    "styled_vs_game_diff": 31,
+    "non_gear_px": 209
+   },
+   "77": {
+    "styled_vs_game_diff": 26,
+    "non_gear_px": 222
+   }
+  }
+ },
+ "montreal_home": {
+  "texture_unique_colours_excl_crest": 7,
+  "colours": {
+   "(0, 0, 184)": 271,
+   "(220, 220, 220)": 174,
+   "(228, 0, 20)": 141,
+   "(0, 220, 0)": 90,
+   "(176, 176, 176)": 55,
+   "(224, 128, 128)": 31,
+   "(252, 252, 252)": 12
+  },
+  "frames": {
+   "897": {
+    "styled_vs_game_diff": 37,
+    "non_gear_px": 248
+   },
+   "57": {
+    "styled_vs_game_diff": 22,
+    "non_gear_px": 170
+   },
+   "62": {
+    "styled_vs_game_diff": 28,
+    "non_gear_px": 160
+   },
+   "67": {
+    "styled_vs_game_diff": 28,
+    "non_gear_px": 201
+   },
+   "52": {
+    "styled_vs_game_diff": 23,
+    "non_gear_px": 204
+   },
+   "72": {
+    "styled_vs_game_diff": 30,
+    "non_gear_px": 211
+   },
+   "370": {
+    "styled_vs_game_diff": 34,
+    "non_gear_px": 255
+   },
+   "889": {
+    "styled_vs_game_diff": 32,
+    "non_gear_px": 274
+   },
+   "42": {
+    "styled_vs_game_diff": 23,
+    "non_gear_px": 222
+   },
+   "47": {
+    "styled_vs_game_diff": 30,
+    "non_gear_px": 209
+   },
+   "77": {
+    "styled_vs_game_diff": 29,
+    "non_gear_px": 222
+   }
+  }
+ },
+ "leafs_home_gamecolours": {
+  "texture_unique_colours_excl_crest": 8,
+  "colours": {
+   "(0, 0, 140)": 235,
+   "(208, 208, 208)": 159,
+   "(224, 224, 224)": 159,
+   "(0, 220, 0)": 90,
+   "(0, 0, 112)": 76,
+   "(224, 128, 128)": 31,
+   "(252, 252, 252)": 20,
+   "(36, 0, 160)": 4
+  },
+  "frames": {
+   "897": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 248
+   },
+   "57": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 170
+   },
+   "62": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 160
+   },
+   "67": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 201
+   },
+   "52": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 204
+   },
+   "72": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 211
+   },
+   "370": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 255
+   },
+   "889": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 274
+   },
+   "42": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 222
+   },
+   "47": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 209
+   },
+   "77": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 222
+   }
+  }
+ },
+ "rangers_away_gamecolours": {
+  "texture_unique_colours_excl_crest": 11,
+  "colours": {
+   "(192, 0, 0)": 223,
+   "(0, 0, 128)": 181,
+   "(0, 220, 0)": 90,
+   "(220, 220, 220)": 72,
+   "(0, 0, 108)": 55,
+   "(208, 0, 0)": 48,
+   "(144, 0, 0)": 32,
+   "(224, 128, 128)": 31,
+   "(212, 212, 212)": 16,
+   "(36, 0, 160)": 14,
+   "(176, 0, 0)": 12
+  },
+  "frames": {
+   "897": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 248
+   },
+   "57": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 170
+   },
+   "62": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 160
+   },
+   "67": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 201
+   },
+   "52": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 204
+   },
+   "72": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 211
+   },
+   "370": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 255
+   },
+   "889": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 274
+   },
+   "42": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 222
+   },
+   "47": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 209
+   },
+   "77": {
+    "styled_vs_game_diff": 0,
+    "non_gear_px": 222
+   }
+  }
+ }
+}
