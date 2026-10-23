@@ -7,7 +7,7 @@ Research tooling for per-pixel jersey textures on the NHL 95 PC player sprites. 
 ## What is committed
 - `scripts/`: the extraction and analysis pipeline (Node + Python).
 - `textures/reference_atlas_*.png`: the 512×512 atlas layout. Regions are listed in `scripts/uv.py` `ATLAS`. Includes uv, checker, candy-stripe and design test textures, plus a labelled copy.
-- `textures/jerseys/*_atlas.png`: six hand-authored jersey designs. Crest areas are left blank because team marks are not committed. Supply a reference image locally and the crest is cropped in at render time.
+- `textures/jerseys/*_atlas.png`: six hand-authored jersey designs. Crests are downscaled team logos (committed with the owner's approval). Back torsos carry no name or number.
 - `FINDINGS.md`, `PLAN.md` (v2) and `LOG.md`, plus JSON results: `broken_arm_crest.json`, `broken_metrics.json`, `broken_stick.json`, `goalie_part_presence.json`, `flat_stripe_check.json`.
 
 **Not committed:** any game data or any image rendered from retail sprites. `out/` is git-ignored.
