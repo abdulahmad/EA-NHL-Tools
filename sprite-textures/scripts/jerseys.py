@@ -48,42 +48,46 @@ D={
 }
 def bands(d,w,h,base,bl,vertical=False):
     for v0,v1,c in bl or []:
-        d.rectangle((0,int(v0*h),w,int(v1*h)-1),fill=c)
+        a=int(round(v0*h));b=max(int(round(v1*h)),a+1)   # every band gets >=1 texel row
+        d.rectangle((0,a,w,b-1),fill=c)
 def star(d,cx,cy,r,c):
     import math;pts=[(cx+(r if k%2==0 else r*.45)*math.sin(k*math.pi/5),cy-(r if k%2==0 else r*.45)*math.cos(k*math.pi/5)) for k in range(10)];d.polygon(pts,fill=c)
 def font(sz):
     try:return ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf',sz)
     except:return ImageFont.load_default()
-def build(key):
+def build(key,caps=None):
     s=D[key];A=Image.new('RGB',(512,512),(255,0,255));dr=ImageDraw.Draw(A)
-    import os
-    # crest is cropped from a user-supplied reference image (team marks are not committed); blank if absent
-    crest=Image.open(R0+s['ref']).convert('RGB').crop(s['crest']) if os.path.exists(R0+s['ref']) and not os.environ.get('NOCREST') else Image.new('RGB',(32,24),s['base'])
-    for nm,(x,y,w,h) in ATLAS.items():
-        im=Image.new('RGB',(w,h),s['base']);d=ImageDraw.Draw(im)
+    crest=Image.open(R0+s['ref']).convert('RGB').crop(s['crest'])
+    flat={}
+    for nm,(x,y,fw,fh) in ATLAS.items():
+        w,h=(caps or {}).get(nm,(fw,fh));im=Image.new('RGB',(w,h),s['base']);d=ImageDraw.Draw(im)
         if nm.startswith('torso'):
             if s.get('star'): # black body with big star, green sides/hem
                 d.rectangle((0,0,w,h),fill=s['base']);d.polygon([(w*.2,0),(w*.8,0),(w*.85,h*.55),(w*.5,h*.95),(w*.15,h*.55)],fill=(20,20,20))
                 star(d,w/2,h*.45,w*.42,(20,20,20));star(d,w/2,h*.45,w*.42-4,(20,20,20))
             bands(d,w,h,s['base'],s.get('yoke'));bands(d,w,h,s['base'],s['torso'])
             for u0,u1,c in s.get('vpipe',[]):
-                d.rectangle((int(u0*w),int(.1*h),int(u1*w),h),fill=c);d.rectangle((int((1-u1)*w),int(.1*h),int((1-u0)*w),h),fill=c)
+                a=int(round(u0*w));b=max(int(round(u1*w)),a+1)
+                d.rectangle((a,int(.1*h),b-1,h),fill=c);d.rectangle((w-b,int(.1*h),w-a-1,h),fill=c)
             if nm=='torso_front':
-                cw=int(w*.42);ch=int(cw*crest.height/crest.width);im.paste(crest.resize((cw,ch),Image.LANCZOS),((w-cw)//2,int(h*.42)-ch//2))
+                cw=max(int(round(w*.42)),1);ch=max(int(round(cw*crest.height/crest.width)),1)
+                ci=crest_px(crest,cw,ch) if caps else crest.resize((cw,ch),Image.LANCZOS);im.paste(ci,((w-cw)//2,int(h*.42)-ch//2))
             # back: colours/stripes only (no name/number, per Abdul)
         elif nm.startswith('sleeve'):
             bands(d,w,h,s['base'],s['sleeve'])
-            if s.get('svpipe'):d.rectangle((int(w*.45),0,int(w*.5),h),fill=NV);d.rectangle((int(w*.5),0,int(w*.55),h),fill=(180,40,40))
+            if s.get('svpipe'):c0=w//2;d.rectangle((c0-1,0,c0-1,h),fill=NV);d.rectangle((c0,0,c0,h),fill=(180,40,40))
         elif nm.startswith('sock'):
             d.rectangle((0,0,w,h),fill=s['sockbase']);bands(d,w,h,None,s['sock'])
         elif nm=='pants':
             d.rectangle((0,0,w,h),fill=s['pants'])
-            if s['pstripe']:d.rectangle((0,0,4,h),fill=s['pstripe']);d.rectangle((w-5,0,w,h),fill=s['pstripe'])
+            if s['pstripe']:t=max(1,round(w*.04));d.rectangle((0,0,t-1,h),fill=s['pstripe']);d.rectangle((w-t,0,w,h),fill=s['pstripe'])
         elif nm in('helmet','goalie_mask'):d.rectangle((0,0,w,h),fill=s['helmet'])
         elif nm in('glove','blocker','catcher'):d.rectangle((0,0,w,h),fill=s['glove']);d.rectangle((0,int(h*.75),w,h),fill=W if nm!='glove' else s['glove'])
         elif nm=='pad':d.rectangle((0,0,w,h),fill=W);[d.rectangle((0,int(h*v),w,int(h*v)+8),fill=s['glove']) for v in(.2,.5,.8)]
         elif nm=='skate':d.rectangle((0,0,w,h),fill=(25,25,25))
-        A.paste(im,(x,y))
+        flat[nm]=im;A.paste(im.resize((fw,fh),Image.NEAREST) if caps else im,(x,y))
+    if caps and 'crest' in caps: crest=crest_px(crest,*caps['crest']);flat['crest']=crest
+    build.flat=flat
     return A,crest
 def render(n,A,crest,sp,scale=5):
     p,part,U,V,Rg=solve(n);m=p!=255;has=Rg!='';o=sp[p].astype(float);sh=shade_of(p)[...,None]
@@ -108,3 +112,44 @@ def anchored(imgs,anc,cols,pad=6,bg=(20,20,20),scale=5):
         for c,i in enumerate(r):S.paste(imgs[i],(x+pad//2+L[c]-anc[i][0]*scale,y+pad//2+T[k]-anc[i][1]*scale));x+=cw[c]
         y+=rh[k]
     return S
+
+# ---- v3 fixes: trim isolines + pixel-art crest ----
+def iso_line(V,mask,v0):
+    Vv=np.where(mask,V,np.nan);o=np.zeros(V.shape,bool)
+    for dy,dx in ((0,1),(1,0),(0,-1),(-1,0)):
+        nb=np.roll(np.roll(Vv,dy,0),dx,1);o|=mask&(Vv<v0)&(nb>=v0)
+    return o
+def crest_px(crest,w,h,k=5):
+    c=crest.resize((w*4,h*4),Image.LANCZOS).resize((w,h),Image.BOX)
+    return c.quantize(k,method=Image.Quantize.MEDIANCUT).convert('RGB')
+def render3(n,A,crest,sp,key,scale=5,trim=True,pixcrest=True):
+    s=D[key];p,part,U,V,Rg=solve(n);m=p!=255;has=Rg!='';o=sp[p].astype(float);sh=shade_of(p)[...,None]
+    smp=sample(A,p,U,V,Rg);o[has]=(smp*sh)[has];drawn=0
+    if trim:
+        for regs,bl in ((('torso_front','torso_back'),(s.get('yoke') or [])+s['torso']),(('sleeve','sleeve_b'),s['sleeve']),(('sock','sock_b'),s['sock'])):
+            lab,k=ndi.label(np.isin(Rg,regs),np.ones((3,3)))
+            for c in range(1,k+1):
+                mm=lab==c;ys,xs=np.nonzero(mm);L=max(np.ptp(ys),np.ptp(xs))+1
+                for v0,v1,col in bl:
+                    if v0<=0.001 or (v1-v0)*L>=1.2: continue
+                    vis=mm&(V>=v0)&(V<v1)
+                    if vis.sum()>=max(2,0.5*(np.ptp(xs)+1)): continue
+                    l=iso_line(V,mm,(v0+v1)/2);o[l]=np.array(col)*sh[l];drawn+=int(l.sum())
+    cm=np.isin(p,[*range(192,197),*range(208,213),*range(224,229),*range(240,245)])
+    if cm.sum()>=2:
+        ys,xs=np.nonzero(cm);y0,y1,x0,x1=ys.min(),ys.max(),xs.min(),xs.max()
+        ci=crest.resize((x1-x0+1,y1-y0+1),Image.NEAREST) if pixcrest=='cap' else crest_px(crest,x1-x0+1,y1-y0+1) if pixcrest else crest.resize((x1-x0+1,y1-y0+1),Image.LANCZOS)
+        C=np.asarray(ci).astype(float);o[cm]=C[ys-y0,xs-x0]*sh[cm]
+    return toimg(np.clip(o,0,255),m,scale),drawn
+
+# ---- gloves: cuff (V 0-.3), back of hand (.3-.72), fingers (.72-1); thumb/palm = U<.3 band in hand/fingers ----
+TAN=(205,185,150)
+GLOVES={'ottawa':dict(name='Ottawa (black/red cuff, red palm)',back=(25,25,25),cuff=(200,20,40),fingers=(25,25,25),palm=(200,20,40)),
+        'redblack':dict(name='Red/black (red cuff, red fingers, tan palm)',back=(25,25,25),cuff=(215,35,35),fingers=(215,35,35),palm=TAN),
+        'edmonton':dict(name='Edmonton (navy, orange cuff+fingers, tan palm)',back=(20,35,85),cuff=(245,110,20),fingers=(245,110,20),palm=TAN)}
+def glove_tex(g,w,h):
+    im=Image.new('RGB',(w,h),g['back']);d=ImageDraw.Draw(im)
+    cu=max(1,round(.3*h));fi=max(cu+1,round(.72*h));th=max(1,round(.3*w))
+    d.rectangle((0,0,w-1,cu-1),fill=g['cuff']);d.rectangle((0,fi,w-1,h-1),fill=g['fingers'])
+    d.rectangle((0,cu+1,th-1,h-1),fill=g['palm'])
+    return im

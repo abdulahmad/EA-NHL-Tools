@@ -80,21 +80,33 @@
   - full list in broken_arm_crest.json
 - Caveat: these metrics found arm-band order and crest-row errors only. I could not confirm the specific breakage Abdul means by eye. The waist and sock bands in crosscheck look plausible, and the stick uses 136 correctly. Abdul should say what he sees as broken so a dedicated check can be written.
 
-## Update 2026-10-23: flat torso stripes (frame 200) and the cylinder-wrap fix
-- **Symptom.** Frame 200 (stick overhead, upright, back view): the V=0.5 stripe was a single straight screen row.
-- **Cause.** On upright torsos every V anchor (neck border, yoke, waist rows 168–176, pants border) is a horizontal pixel row. The harmonic solve therefore returns horizontal isolines. The anchors are present and valid; they just contain no curvature information.
-- **Fix** (`uv.py`, `WRAP`/`ELEV`). Model the torso as a cylinder seen from an elevated camera (ELEV=35°).
-  - The near side of a horizontal ring sags at the body centre line: V' = V − sag·√(1−(2U−1)²)·4V(1−V), with sag = ½·width·sin(ELEV)/length.
-  - The 4V(1−V) factor keeps the neck and pants borders fixed.
-- **Measured over all 1134 frames** (`flatcheck.py`; flat = V=0.5 isoline confined to a single row, ≥5 px):
+## Capacity-limited flat textures (2026-10-23)
+- **Method** (`capacity.py`):
+  - For every frame, each UV region's connected components are measured.
+  - Limbs and torso use their across-axis width W and along-axis length L (PCA axis). Compact parts use their bounding box.
+  - The texture size of each region is the 95th percentile over all frames. Paired regions (front/back torso, the two sleeves, the two socks) share the larger value.
+  - Goalie gear is measured only on goalie frames.
+- **Resulting sizes, in texels (W×L):**
 
-  | | Frames with torso UV | Flat |
-  |---|---|---|
-  | Before | 422 | 107 |
-  | After | 434 | 6 |
+  | Region | Size |
+  |---|---|
+  | torso | 12×15 |
+  | crest | 6×4–6 |
+  | sleeve | 8×14 |
+  | sock | 6×10 |
+  | pants | 14×9 |
+  | helmet | 6×6 |
+  | glove | 6×7 |
+  | skate | 8×6 |
+  | goalie_mask | 7×6 |
+  | pad | 19×21 |
+  | blocker | 10×10 |
+  | catcher | 10×10 |
+  | stick | 1×26 |
 
-  The 6 still flat are frames 19, 92, 419, 437, 518 and 987. These have very short or wide torsos. Frames without a torso UV region (mostly goalies, falls and tiny frames) are not measured.
-- **Caveats.**
-  - ELEV is a guess and is not derived from the projection.
-  - The EA waist rows 168–176 are still treated as anchors, so the arc is weaker near the hem.
-  - Sleeves and socks get no wrap term yet.
+- Textures are authored at these sizes, so every band is at least 1 texel. They are nearest-neighbour upscaled into the 512 atlas for sampling, so the flat texture never has more detail than the sprites can carry.
+- **Gloves.** V is the geodesic distance from the cuff (pixels touching the sleeve or forearm; otherwise the end nearest the torso), and U comes from the side anchors. Texture rows: cuff 0–.3, back of hand .3–.72, fingers .72–1. The palm/thumb is the left 30 % of the columns below the cuff.
+- **Pads.** V is the geodesic from the knee (touching the pants, else the top row) to the toe.
+- **Stick.** V is the geodesic along the largest index-136 component, from the knob (the end nearest the torso centre) to the blade. Black blade pixels within 3 px of the tip get V=1.
+- **Camera.** The rink faceoff circles measure h/w ≈ 0.61–0.63 and the rink length/width ratio gives 0.667, so ELEV ≈ 38–42°. 40° is used.
+- **Frame numbers.** The SPA tables in `frames95pc.asm` use the same 1-based frame numbering as here. SPAgready = 407, 410, …, 428 are the 8 directions of a standing goalie.

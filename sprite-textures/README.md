@@ -26,3 +26,12 @@ mkdir -p jerseys/ref                         # optional: put the reference jerse
 python3 ../scripts/jerseys_render.py         # per-jersey grids + 00_summary_all6.png
 ```
 Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for example `PYTHONPATH=../scripts python3 ...`).
+
+## Audit and fix pipeline (2026-10-23)
+- `audit.py <tag> WRAP_LIMBS SIDE_FIX ELEV FRONT_SMOOTH` runs the per-frame metrics, and `audit_stats.py` summarises them. Results: `AUDIT.md`, `FIX_PLAN.md`, `stats_before_vs_fix2.txt`.
+- `capacity.py` measures each region's pixel capacity (`capacity.json`). `jerseys_render3.py` renders the capacity-limited textures (`textures/capacity/*_flat.png` show the exact texels).
+- Demo scripts:
+  - `glove_demo.py`: gloves (`textures/gloves`).
+  - `fuhr.py`: goalie gear (`textures/goalie_fuhr`).
+  - `stick_demo.py`: stick (`textures/stick`).
+- Reference images (jersey photos, glove renders, the Grant Fuhr goalie textures from a third-party NHL 2004-era mod, the stick photo) are kept local in `out/jerseys/ref/` and are not committed. The committed gear and stick textures are my own low-resolution redraws at sprite capacity.

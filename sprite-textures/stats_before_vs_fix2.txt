@@ -1,0 +1,54 @@
+before {
+"frames_with_torso_uv": 857,
+"torso_iso_straight(<0.05)": "14/549",
+"limb_iso_straight_on_vertical_limbs": "122/646",
+"similar_consecutive_pairs": 232,
+"front_back_flips": 32,
+"sleeve_label_flips": 4,
+"torso_iso_jitter_median/p90": [
+0.042,
+0.169
+],
+"trim_band(.86-.89)_zero_px": "141/857",
+"crest_frames": 308,
+"crest_w_median/max": [
+5,
+8
+],
+"crest_h_median": 4,
+"arm_over_torso_frames": 60,
+"stride_pants_single_region": 18,
+"uv_coverage_skater_mean": 0.66,
+"uv_coverage_goalie_mean": 0.974,
+"uv_cov_crosscheck": 0.945,
+"uv_cov_boards": 0.952,
+"uv_cov_goalie95": 0.979,
+"uv_cov_shotblock": 0.952
+}
+fix2 {
+"frames_with_torso_uv": 857,
+"torso_iso_straight(<0.05)": "18/553",
+"limb_iso_straight_on_vertical_limbs": "49/732",
+"similar_consecutive_pairs": 232,
+"front_back_flips": 0,
+"sleeve_label_flips": 4,
+"torso_iso_jitter_median/p90": [
+0.045,
+0.169
+],
+"trim_band(.86-.89)_zero_px": "144/857",
+"crest_frames": 308,
+"crest_w_median/max": [
+5,
+8
+],
+"crest_h_median": 4,
+"arm_over_torso_frames": 60,
+"stride_pants_single_region": 20,
+"uv_coverage_skater_mean": 0.66,
+"uv_coverage_goalie_mean": 0.974,
+"uv_cov_crosscheck": 0.945,
+"uv_cov_boards": 0.952,
+"uv_cov_goalie95": 0.979,
+"uv_cov_shotblock": 0.952
+}
