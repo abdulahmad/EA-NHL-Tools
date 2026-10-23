@@ -19,6 +19,7 @@ TEXDIR=sys.argv[2] if len(sys.argv)>2 else os.path.join(os.path.dirname(OUT),'te
 sys.argv=['x','/tmp/_v5_t5'];os.makedirs('/tmp/_v5_t5',exist_ok=True);T5=runpy.run_path(f'{H}/textures_v5.py')
 ROLE,TW,TH,HAVE=T5['ROLE'],T5['TW'],T5['TH'],T5['HAVE']
 sys.path.insert(0,H);from lib import frame,spritepal,D,ZN
+import seg_v5 as SEG;SEGS={}
 GRN=(0,220,0);MAG=(252,0,252)
 DIRS={370:4,897:4,62:4,57:3,67:5,42:0,47:1,52:2,72:6,77:7,889:0}
 # ---------- families
@@ -77,23 +78,54 @@ def fit(n):
         f,s=('skin','neck') if i==136 else pfam(i);P[f].append((y,x));LEV[(y,x)]=s
     TX=collections.defaultdict(list)
     for uv,f in TF.items():TX[f].append(uv)
-    # row targets for families whose texture rows carry their own stripes (Chicago alt torso/arm rows, Montreal chest band):
-    # row = band row counted from the anchor stripe along the body (geodesic, 4-connected inside the family), as in stage 1b.
+    # v5.1 (Abdul pt784u): stripe rows and arm texels come from the SKELETON GEOMETRY, not from the game zones. The game zone is only a
+    # validity filter (a pixel may only take a texel of its own family, which keeps the game-colour round trip exact).
+    #  torso: one straight stripe direction per frame (least-squares fit of the waist-1/2/3 bands), sheared line index
+    #    k = y - round(s*(x-xc)) -> every column steps one texel row per pixel, lines are digital straight lines (no kink, no 2-px rows).
+    #  arms: per arm (segmentation), upper arm counted from the arm-stripe-1 line along the shoulder->elbow axis, forearm from the
+    #    arm-stripe-3 line along the elbow->glove axis; across-arm position picks the arm column; L/R arm -> that arm's template columns.
     FOF={(y,x):f for f,px in P.items() for (y,x) in px}
-    ROWT={}
-    for f,anc,r0,step,lim in (('jersey',('waist 1','waist 2','waist 3'),13,-1,9),('upper arm',('arm stripe 1',),11,-1,8),('forearm',('arm stripe 3',),15,1,17)):
-        same=lambda t:FOF.get(t)==f or (f=='jersey' and str(FOF.get(t,'')).startswith('idx') and FOF.get(t)!='idx0' and FOF.get(t)!='gear')
-        front=[t for t in P.get(f,[])+([t for g,px in P.items() if g.startswith('idx') for t in px] if f=='jersey' else [])
-               if any(FOF.get((t[0]+a,t[1]+b)) in anc for a,b in((1,0),(-1,0),(0,1),(0,-1)))]
-        dist={t:1 for t in front};fr=list(front)
-        while fr:
-            nf=[]
-            for (y,x) in fr:
-                for a,b in((1,0),(-1,0),(0,1),(0,-1)):
-                    t=(y+a,x+b)
-                    if t not in dist and same(t):dist[t]=dist[(y,x)]+1;nf.append(t)
-            fr=nf
-        for t,k in dist.items():ROWT[t]=max(lim,r0+step*(k-1)) if step<0 else min(lim,r0+step*(k-1))
+    def torso_rows(tor):
+        W=[(y-o,x) for (y,x) in tor for o in [{'waist 1':0,'waist 2':1,'waist 3':2}.get(FOF[(y,x)])] if o is not None]
+        xs=np.array([p[1] for p in W],float);ys=np.array([p[0] for p in W],float)
+        s=float(np.clip(np.polyfit(xs,ys,1)[0],-1,1)) if len(W)>=3 and np.ptp(xs)>0 else 0.0
+        xc=float(xs.mean()) if len(W) else 0.0;k=lambda y,x:y-int(round(s*(x-xc)))
+        kw=int(np.median([k(y,x) for (y,x) in W])) if W else max(p[0] for p in tor)-2
+        GEO['torso']=dict(slope=s,xc=xc,k_waist1=kw);return {p:14+k(*p)-kw for p in tor}
+    GEO={};NKS=set(NK)
+    seg=SEG.segment(q,FOF,d,NKS,{p for p,t in fixed.items() if t=='stick'},torso_rows)
+    PART,JOINTS,EDGES,ARMS,TROW=seg
+    ROWT={};COLT={}
+    for p,r in TROW.items():
+        if FOF[p]=='jersey':ROWT[p]=min(13,max(9,r))
+    for sname,c in ARMS.items():
+        cs=set(c);g=lambda fs:[p for p in c if FOF[p] in fs]
+        def axis_rows(pts,a0,a1,anchor,base,sign,lo,hi,key):
+            if not pts or a0 is None or a1 is None:return
+            ax,ay=a1[0]-a0[0],a1[1]-a0[1]
+            if abs(ax)<1e-6 and abs(ay)<1e-6:ax=1
+            GEO[key]=dict(axis=[float(ax),float(ay)],scan='rows' if abs(ax)>=abs(ay) else 'columns')
+            if abs(ax)>=abs(ay):sl=-ay/ax;kk=lambda y,x:(x-int(round(sl*(y-a0[1]))))*np.sign(ax)
+            else:sl=-ax/ay;kk=lambda y,x:(y-int(round(sl*(x-a0[0]))))*np.sign(ay)
+            ka=int(np.median([kk(*p) for p in anchor])) if anchor else int(np.median([kk(*p) for p in pts]))
+            raw=[int(base+sign*(kk(*p)-ka)) for p in pts];GEO[key]['raw_rows']=[min(raw),max(raw)];GEO[key]['template_rows']=[lo,hi]
+            for p,r in zip(pts,raw):ROWT[p]=int(min(hi,max(lo,r)))
+        cen=lambda px:(float(np.mean([p[1] for p in px])),float(np.mean([p[0] for p in px]))) if px else None
+        ua,a1,a3,fa=g({'upper arm'}),g({'arm stripe 1'}),g({'arm stripe 3'}),g({'forearm'})
+        el=cen(g({'arm stripe 1','arm stripe 2','arm stripe 3'}));sh=JOINTS.get(sname+' shoulder') or cen(ua);gl=JOINTS.get(sname+' glove') or cen(fa)
+        axis_rows(ua,sh,el or cen(fa),a1,12,1,8,11,sname+' upper arm')          # row 12 = arm stripe 1 line, rows 11..8 towards the shoulder
+        axis_rows(fa,el or cen(ua),gl,a3,14,1,15,17,sname+' lower arm')         # row 14 = arm stripe 3 line, rows 15..17 towards the glove
+        # across-arm column: rank of the perpendicular coordinate, inner column = nearer the torso centre
+        tc=JOINTS.get('chest') or (x0,y0)
+        for part in (ua,g({'arm stripe 1','arm stripe 2','arm stripe 3'})+fa):
+            if not part:continue
+            a0,a1_=(sh,el) if part is ua else (el or cen(ua),gl)
+            if a0 is None or a1_ is None:a0,a1_=cen(part),(cen(part)[0]+1,cen(part)[1])
+            ax,ay=a1_[0]-a0[0],a1_[1]-a0[1];nn=max(1e-6,(ax*ax+ay*ay)**.5);px_,py_=-ay/nn,ax/nn
+            if (tc[0]-a0[0])*px_+(tc[1]-a0[1])*py_<0:px_,py_=-px_,-py_     # +perp = towards torso
+            for p in part:
+                a=(p[1]-a0[0])*px_+(p[0]-a0[1])*py_;ci=0 if a<-0.75 else 2 if a>0.75 else 1      # 0 outer,1 mid,2 inner
+                COLT[p]=(sname,ci)
     A={};shared=[];side=d in(2,6)
     for f,px in P.items():
         tx=TX.get(f,[])
@@ -101,7 +133,7 @@ def fit(n):
         C=np.zeros((len(px),len(tx)))
         for a,(y,x) in enumerate(px):
             nx=4+(x-x0)*13/max(1,x1-x0);ny=(y-y0)*31/max(1,y1-y0);wy=1
-            if (y,x) in ROWT:ny=ROWT[(y,x)];wy=4
+            if (y,x) in ROWT:ny=ROWT[(y,x)];wy=50
             if side:   # depth from the leading (chest) edge, 0..1
                 qd=(x1-x)/max(1,x1-x0) if d==2 else (x-x0)/max(1,x1-x0)
                 want='F' if qd<0.5 else 'B';t=min(1,qd/0.5) if qd<0.5 else min(1,(qd-0.5)/0.5)
@@ -109,18 +141,24 @@ def fit(n):
                 if d==2:cxp=10.5-6.5*t if want=='F' else 17-6.5*(1-t)
                 else:cxp=10.5+6.5*t if want=='F' else 4+6.5*(1-t)
             else:want='B' if d in(0,1,7) else 'F';cxp=nx
+            if (y,x) in COLT:   # arm pixel: its own arm's template columns, both figures carry the arm (back = mirror)
+                sname,ci=COLT[(y,x)];wt=(0,1,2)[ci] if sname=='R' else (13,12,11)[ci];want='B' if d in(0,1,7) else 'F' if d in(3,4,5) else want
             for b,(u,v) in enumerate(tx):
                 cx,cy,fig=tpos(u,v);c=abs(cxp-cx)+wy*abs(ny-cy)
+                if (y,x) in COLT and u<28:
+                    w=27-u if u>=14 else u;c=abs(w-wt)+(200 if (w<=2)!=(sname=='R') else 0)+(wy*abs(ny-cy) if (y,x) in ROWT else 0)
                 if fig!='S' and fig!=want:c+=40
                 if not side and (cxp-10.5)*(cx-10.5)<0 and abs(cxp-10.5)>1.5 and abs(cx-10.5)>1.5:c+=12
                 if (u,v) in SIDEH:c+=0 if side and SIDEH[(u,v)]==('R' if d==2 else 'L') else 30
                 if side and f in('pants','pants stripe 1','pants stripe 2') and u<28:c+=10      # side view: pants on the side panel
                 C[a,b]=c
+        K=max(1,-(-len(px)//len(tx))+2);C=np.concatenate([C+0.6*j for j in range(K)],1);tx=tx*K   # each texel usable K times, reuse costs 0.6
         r,c=linear_sum_assignment(C)
         for a,b in zip(r,c):A[px[a]]=tx[b]
         for a in set(range(len(px)))-set(r):
             b=int(C[a].argmin());A[px[a]]=tx[b];shared.append(dict(x=int(px[a][1]),y=int(px[a][0]),family=f,texel=list(map(int,tx[b])),
                 family_pixels=len(px),family_texels=len(tx)))
+    SEGS[n]=dict(part=PART,joints=JOINTS,edges=EDGES,geo=GEO,rowt=ROWT,fam=FOF,trow=TROW)
     return q,A,LEV,fixed,shared,(x0,x1,y0,y1)
 # ---------- palettes & ramps
 def pal(fn,c):return spritepal(next(t for t in json.load(open(D+fn)) if t['code']==c)).astype(int)

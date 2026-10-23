@@ -218,3 +218,40 @@ other figure's texels of the same family and row (front views: yoke 1/2 on 57/62
 back views: 889 arms/helmet/yoke 2, 42/47/77 a few socks/forearm texels). Checked: in all 5 textures each such texel has exactly the same
 colour as a same-row same-role texel of the correct figure, so it is invisible; the alternative would be shared texels.
 Gear overflow (glove/skate texels of the other figure) is ignored — all green.
+
+# v5.1 — skeleton segmentation + geometry-driven stripe rows (Abdul pt784u)
+Scripts: `scripts/playerlayout/seg_v5.py` (segmentation + stickman), `frames_v5.py` (mapping), `stripe_checks_v5.py` (checks, overlays,
+stretch proposal). Run from `sprite-textures/out`: `PYTHONPATH=../scripts python3 ../scripts/playerlayout/stripe_checks_v5.py <out>/v5/frames [before/frames_v5.json]`.
+
+**Root causes of the flagged renders (PR #47 stripe_diagnostic).**
+* 42 (d0 back, kink): jersey rows came from a 4-connected geodesic distance to the waist zones plus a one-pixel-per-texel Hungarian
+  assignment. A back-figure jersey row has only ~8 texels; when a sprite row needed more, the overflow pixels were pushed to the nearest
+  free texel on another row (e.g. a row-12 texel inside the row-10 line, a row-13 texel in the row-11 line) -> the wiggle. The back
+  jersey zone is also splashed: jersey pixels inside the yoke-3 line (row 5), a yoke-corner pixel in the middle of the back, upper-arm
+  pixels on the torso edge, so the geodesic fronts started from ragged seeds.
+* 47 (d1 back) and 72 (d6 side), thick black: the geodesic isolines of a leaning torso are diagonal (|dx|+|dy|), so the same row repeats
+  down a column; and every jersey pixel more than 5 steps from the waist was clamped onto row 9 (black), stacked on yoke-2 row 7 (black).
+  72 also mixed arm columns of both template arms in one arm.
+
+**Method.** The game zone is only a validity filter: a pixel may only take a texel of its own family (that keeps the game-colour round
+trip at 0 diffs; no two families share colours in all 5 palettes, so no cross-family texel is allowed). Inside that, the texel comes from
+geometry: torso stripe direction = least-squares slope of the waist-1/2/3 bands; sheared line index `k = y - round(s(x-xc))`; jersey row
+`= 14 + k - k(waist 1)` clamped to 9..13 — straight digital lines, one row per pixel per column. Arms: segmentation splits arm-zone
+components, assigns player L/R (front: right = screen-left; back: right = screen-right; side d2 near = right, d6 near = left), upper arm
+rows counted from the arm-stripe-1 line along shoulder->elbow, forearm from the arm-stripe-3 line along elbow->glove, across-arm position
+-> arm column (inner/mid/outer), and only that arm's template columns. Texels may be reused (no more forced row jumps).
+Parts: 1 head, 2/3 torso upper/lower, 4/5 R/L upper arm, 6/7 R/L lower arm, 8/9 R/L glove, 10/11 R/L upper leg, 12/13 R/L lower leg,
+14/15 R/L skate, 16 pants (hips), 17 stick. Overlays: `skeleton_<frame>.png`, `skeleton_overlay_sheet.png` (numbers + black borders).
+
+**Checks** (`stripe_checks_v5.json`): kink = scan line (torso column / arm line along its axis) whose row sequence reverses; split into
+`mapping` and `forced` (the reversing pixel's zone has texels on one row only: yoke/waist/arm stripe/crest index = game-zone scatter);
+run>1 on rows we choose, split into `capacity` (segment longer than the template rows) and `other`; contiguity red flag = same-segment
+4-neighbours whose texels are >2 apart. Totals over 11 frames, before -> after: mapping kinks 10 -> 3, forced kinks 21 -> 21,
+run other 10 -> 2, run capacity 31 -> 47, red flags 265 -> 53. Errors, occupancy and round trip stay 0.
+
+**Not applied — stretch proposal** (`stretch_proposal_v5.json`, needs Abdul's approval): sheared rows needed vs template rows. Jersey: 42 and 47
+7/5 (factor 0.71), 72/889/77 6/5, 67 10/5, 52 12/5 (side-view slope fit poor). Forearm 3 rows vs 5-7 needed in 47 (7), 52/72/889 (6), 77 (5).
+Without a stretch the extra lines repeat at the clamped end (row 9 / row 17): that is the remaining 2-px band at the top of 42/47.
+
+**Game-zone defects** (flagged, not forced): 889 (95-only crosscheck 889-904, see AUDIT #5) forearm zone on both sides of arm stripe 3
+on both arms; front views 57/62/67 and side 52 have yoke 1 under yoke 2 (row 7,6,7) and crest-index rows out of order.
