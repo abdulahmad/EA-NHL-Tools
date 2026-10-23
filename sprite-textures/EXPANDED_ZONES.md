@@ -184,3 +184,37 @@ Run `scripts/playerlayout/compare_v5.py <outdir>` to rebuild the template-vs-tex
 - Chicago alt arms, bottom-up, rows 17..10 (forearm 17-15, arm stripes 14-12, upper arm 11-10): R,K,W,R,W,K,W,R; upper-arm rows 9-8 stay red (pt776u cut one leading red from the earlier R,R,K,W,R,W,K,W,R).
   The arm runs rows 8-17 (10 rows) and the pattern has 9, so upper-arm row 8 (4 texels: front cols 1-2, back cols 25-26) stays red.
 - Front and back use the same row colours (row-based, so mirroring needs no change). Occupancy is unchanged and check_v5 shows 0 unexplained.
+
+# v5 step 2 — the 5 flat v5 textures on all 11 frames (`scripts/playerlayout/frames_v5.py`)
+Run from `sprite-textures/out` (out/data → game data): `PYTHONPATH=../scripts python3 ../scripts/playerlayout/frames_v5.py <out>/v5/frames [<out>/v5/textures]`.
+Committed output: `playerlayout/v5/frames/` — per team `<team>/<frame>_{flat,shading,combined}.png`, `<team>_sheet.png`
+(flat | shading layer | combined | game, each sprite centred in its column), `all_teams_all_frames_sheet.png` (game + 5 teams combined),
+`all_teams_flat_sheet.png`, `mapping_overlay_sheet.png` (which figure each pixel's texel is in), `frames_v5.json` (maps + all counts).
+The template `templates/abdul_layout_v4_template.png` is used unchanged; no texels added.
+
+**Mapping fixes vs v4 (frames_v4.py):**
+1. **Texel family = v5 role.** v4 assigned pixels to texels by the v4 FAM tags; those disagree with the column-aligned v5 roles on
+   ~75 texels (e.g. waist-2 pixels on a forearm texel, pants pixels on pants-stripe texels, socks-stripe-2 on skate texels) → colours
+   bled between zones in the team renders. v5: a pixel of game family F only lands on texels whose v5 role is F (crest by exact index).
+2. **Stripe rows follow the body.** Jersey (+number/crest band), upper arm and forearm carry row stripes in the v5 designs (Chicago alt,
+   Montreal band). Their target row = band row counted from the anchor stripe along the body (geodesic inside the family: jersey up from
+   the waist stripes, upper arm up from arm stripe 1, forearm down from arm stripe 3), not the bbox-scaled row → continuous stripes on
+   bent/twisted frames (42, 47, 77, 57, 62, 67).
+3. **Direction table.** d3-5 (57, 370/897/62, 67) front figure; d0/1/7 (889, 42, 47, 77) back figure; d2/d6 (52, 72) side: leading
+   half → front figure, trailing half → back figure, both on the visible side (d2 = player's right, d6 = left), helmet → that side's
+   helmet strip (cols 2-3 / 9-10), pants → side-pants panel (cols 29-53, rows 17-23). Left/right crossing of the centre line is penalised.
+4. Body bbox excludes stick, blades and ice shadow (v4 used the full bbox, so a long stick squeezed the body mapping).
+5. Gloves/skates (fixed-colour 0/1/8/28/31) are mapped onto glove/skate texels (green); stick (136 off the neck) has no texel by
+   design → green; ice shadow (82/88) is not part of the player and is drawn in its game colour in every render.
+
+**Results (all 11 frames):** every non-stick, non-ice sprite pixel is mapped 1:1, **0 shared texels on every frame including 62**
+(v4's 3 shared yoke-2 pixels on 62 are gone: with role families the yoke-2 row has enough texels, the overflow goes to the back
+figure's yoke-2 row). Round trip in the game's own colours (tor home, nyr away, chi home, chi away, mtl home): **0 px different, 0
+occupancy difference** on every frame. Team renders: 0 magenta (empty-texel) hits, 0 occupancy difference, skin/gloves/skates/stick
+exactly green, nothing else green.
+
+**Allowed exception (documented):** where a frame shows more pixels of a family than that figure has texels, the overflow goes to the
+other figure's texels of the same family and row (front views: yoke 1/2 on 57/62/67, jersey j on 67, a few socks/pants-stripe rows;
+back views: 889 arms/helmet/yoke 2, 42/47/77 a few socks/forearm texels). Checked: in all 5 textures each such texel has exactly the same
+colour as a same-row same-role texel of the correct figure, so it is invisible; the alternative would be shared texels.
+Gear overflow (glove/skate texels of the other figure) is ignored — all green.
