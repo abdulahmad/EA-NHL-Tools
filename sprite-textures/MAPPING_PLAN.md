@@ -221,3 +221,8 @@ Only pixels labelled outline are affected. Black gloves, skates and tape (also i
 After PoC1 (fractional UV into a 512² atlas) missed ~20 % of pixels on 897/42, the texture was redesigned as a **per-pixel map**. Each texel row is one sprite-pixel band row of a game colour zone, and each column is one pixel around the body. Front and back halves are separate, and left/right limbs swap in back views. The layout is 225×46, sized from all 596 skater frames. See `PER_PIXEL_MAP.md`. v3: waist 1/2/3 aligned (shared columns, waist 1 merged), 225×54, all 11 test frames still diff 0; Chicago/Montreal rendered.
 - Results: 370/889/897 diff 0. Skate d0–d7 frames miss only zones absent from the 370/889 sources (waist 1 hidden; pants stripe 1/2 per half), 1–8 px each, with evidence. With skate frames 43+58 added as sources, all 11 test frames diff 0 for both teams.
 - Policy change: game-derived renders/textures may be committed (in `perpixel/`); ROMs and original game files still may not.
+
+## 14. Expanded sub-zones (staged)
+Every 370 pixel becomes its own colour sub-zone; other frames get a sub-zone map. Stage 1 (front torso) done — see
+[EXPANDED_ZONES.md](EXPANDED_ZONES.md): 84 sub-zones, 0 diff on 370/897/57/62/67 and front halves of 52/72. Next stages
+(back torso, then arms one at a time, pants, socks, helmet) pending review.

@@ -1,0 +1,521 @@
+{
+ "stanley 217": {
+  "frame": 217,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 98,
+  "jersey_px": 52,
+  "body_px": 300,
+  "missing_bands": [],
+  "waist_top_std": [
+   0.68,
+   0.68,
+   0.71
+  ],
+  "torso_tilt_deg": 0.1,
+  "torso_holes": 0,
+  "sleeve_px": {
+   "L": 46,
+   "R": 36
+  },
+  "sock_px": {
+   "L": 18,
+   "R": 19
+  },
+  "pants_stripes": {
+   "178": 9,
+   "179": 7
+  }
+ },
+ "skate 42": {
+  "frame": 42,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 81,
+  "jersey_px": 41,
+  "body_px": 219,
+  "missing_bands": [
+   "yoke 1"
+  ],
+  "waist_top_std": [
+   0.0,
+   0.33,
+   0.35
+  ],
+  "torso_tilt_deg": 18.2,
+  "torso_holes": 0,
+  "sleeve_px": {
+   "R": 28,
+   "L": 5
+  },
+  "sock_px": {
+   "L": 23,
+   "R": 9
+  },
+  "pants_stripes": {
+   "178": 8,
+   "179": 5
+  }
+ },
+ "skate 43": {
+  "frame": 43,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 82,
+  "jersey_px": 32,
+  "body_px": 205,
+  "missing_bands": [],
+  "waist_top_std": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "torso_tilt_deg": 23.1,
+  "torso_holes": 0,
+  "sleeve_px": {
+   "L": 25,
+   "R": 7
+  },
+  "sock_px": {
+   "R": 27
+  },
+  "pants_stripes": {
+   "178": 5,
+   "179": 5
+  }
+ },
+ "skate 44": {
+  "frame": 44,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 82,
+  "jersey_px": 39,
+  "body_px": 222,
+  "missing_bands": [
+   "yoke 1"
+  ],
+  "waist_top_std": [
+   0.0,
+   0.33,
+   0.35
+  ],
+  "torso_tilt_deg": 22.2,
+  "torso_holes": 0,
+  "sleeve_px": {
+   "L": 28,
+   "R": 6
+  },
+  "sock_px": {
+   "L": 9,
+   "R": 23
+  },
+  "pants_stripes": {
+   "178": 8,
+   "179": 5
+  }
+ },
+ "skate 45": {
+  "frame": 45,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 82,
+  "jersey_px": 32,
+  "body_px": 204,
+  "missing_bands": [],
+  "waist_top_std": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "torso_tilt_deg": 23.1,
+  "torso_holes": 0,
+  "sleeve_px": {
+   "L": 7,
+   "R": 24
+  },
+  "sock_px": {
+   "L": 27
+  },
+  "pants_stripes": {
+   "178": 5,
+   "179": 5
+  }
+ },
+ "glide 1": {
+  "frame": 1,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 93,
+  "jersey_px": 45,
+  "body_px": 241,
+  "missing_bands": [
+   "yoke 1"
+  ],
+  "waist_top_std": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "torso_tilt_deg": 15.3,
+  "torso_holes": 0,
+  "sleeve_px": {
+   "L": 11,
+   "R": 25
+  },
+  "sock_px": {
+   "L": 20,
+   "R": 20
+  },
+  "pants_stripes": {
+   "178": 8,
+   "179": 10
+  }
+ },
+ "glideback 161": {
+  "frame": 161,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 112,
+  "jersey_px": 49,
+  "body_px": 274,
+  "missing_bands": [],
+  "waist_top_std": [
+   0.46,
+   0.46,
+   0.46
+  ],
+  "torso_tilt_deg": 0.1,
+  "torso_holes": 0,
+  "sleeve_px": {
+   "L": 27,
+   "R": 21
+  },
+  "sock_px": {
+   "L": 16,
+   "R": 18
+  },
+  "pants_stripes": {
+   "178": 10,
+   "179": 7
+  }
+ },
+ "celebrate 185": {
+  "frame": 185,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 93,
+  "jersey_px": 39,
+  "body_px": 270,
+  "missing_bands": [
+   "pants stripe 1"
+  ],
+  "waist_top_std": [
+   0.48,
+   0.48,
+   0.48
+  ],
+  "torso_tilt_deg": 0.0,
+  "torso_holes": 3,
+  "sleeve_px": {
+   "L": 25,
+   "R": 33
+  },
+  "sock_px": {
+   "L": 17,
+   "R": 17
+  },
+  "pants_stripes": {
+   "178": 9,
+   "179": 0
+  }
+ },
+ "celebrate 186": {
+  "frame": 186,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 94,
+  "jersey_px": 43,
+  "body_px": 287,
+  "missing_bands": [
+   "pants stripe 1"
+  ],
+  "waist_top_std": [
+   0.46,
+   0.48,
+   0.48
+  ],
+  "torso_tilt_deg": 2.7,
+  "torso_holes": 2,
+  "sleeve_px": {
+   "L": 32,
+   "R": 32
+  },
+  "sock_px": {
+   "L": 17,
+   "R": 17
+  },
+  "pants_stripes": {
+   "178": 12,
+   "179": 0
+  }
+ },
+ "fallfwd 305": {
+  "frame": 305,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 94,
+  "jersey_px": 43,
+  "body_px": 231,
+  "missing_bands": [],
+  "waist_top_std": [
+   0.43,
+   0.43,
+   0.43
+  ],
+  "torso_tilt_deg": 6.3,
+  "torso_holes": 0,
+  "sleeve_px": {
+   "L": 15,
+   "R": 18
+  },
+  "sock_px": {
+   "L": 17,
+   "R": 15
+  },
+  "pants_stripes": {
+   "178": 10,
+   "179": 4
+  }
+ },
+ "fallfwd 306": {
+  "frame": 306,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 86,
+  "jersey_px": 38,
+  "body_px": 231,
+  "missing_bands": [],
+  "waist_top_std": [
+   0.5,
+   0.5,
+   0.5
+  ],
+  "torso_tilt_deg": 8.0,
+  "torso_holes": 0,
+  "sleeve_px": {
+   "L": 22,
+   "R": 21
+  },
+  "sock_px": {
+   "L": 17,
+   "R": 19
+  },
+  "pants_stripes": {
+   "178": 11,
+   "179": 2
+  }
+ },
+ "fallfwd 307": {
+  "frame": 307,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 73,
+  "jersey_px": 24,
+  "body_px": 233,
+  "missing_bands": [],
+  "waist_top_std": [
+   0.5,
+   0.5,
+   0.5
+  ],
+  "torso_tilt_deg": 65.2,
+  "torso_holes": 0,
+  "sleeve_px": {
+   "L": 27,
+   "R": 26
+  },
+  "sock_px": {
+   "L": 17,
+   "R": 16
+  },
+  "pants_stripes": {
+   "178": 9,
+   "179": 5
+  }
+ },
+ "fallfwd 308": {
+  "frame": 308,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 80,
+  "jersey_px": 29,
+  "body_px": 202,
+  "missing_bands": [],
+  "waist_top_std": [
+   0.5,
+   0.5,
+   0.5
+  ],
+  "torso_tilt_deg": 14.4,
+  "torso_holes": 0,
+  "sleeve_px": {
+   "L": 19,
+   "R": 16
+  },
+  "sock_px": {
+   "L": 10,
+   "R": 9
+  },
+  "pants_stripes": {
+   "178": 8,
+   "179": 2
+  }
+ },
+ "fallback 273": {
+  "frame": 273,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 61,
+  "jersey_px": 9,
+  "body_px": 143,
+  "missing_bands": [
+   "pants stripe 1",
+   "pants stripe 2",
+   "socks",
+   "socks stripe 1",
+   "socks stripe 2"
+  ],
+  "waist_top_std": [
+   0.0,
+   0.47,
+   0.47
+  ],
+  "torso_tilt_deg": 87.4,
+  "torso_holes": 5,
+  "sleeve_px": {
+   "L": 21,
+   "R": 27
+  },
+  "sock_px": {},
+  "pants_stripes": {
+   "178": 0,
+   "179": 0
+  }
+ },
+ "fallback 274": {
+  "frame": 274,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 73,
+  "jersey_px": 21,
+  "body_px": 220,
+  "missing_bands": [],
+  "waist_top_std": [
+   0.37,
+   0.33,
+   0.42
+  ],
+  "torso_tilt_deg": 79.6,
+  "torso_holes": 5,
+  "sleeve_px": {
+   "L": 28,
+   "R": 29
+  },
+  "sock_px": {
+   "L": 12,
+   "R": 9
+  },
+  "pants_stripes": {
+   "178": 2,
+   "179": 7
+  }
+ },
+ "fallback 275": {
+  "frame": 275,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 61,
+  "jersey_px": 17,
+  "body_px": 247,
+  "missing_bands": [],
+  "waist_top_std": [
+   0.71,
+   0.71,
+   0.71
+  ],
+  "torso_tilt_deg": 7.1,
+  "torso_holes": 10,
+  "sleeve_px": {
+   "L": 25,
+   "R": 25
+  },
+  "sock_px": {
+   "L": 17,
+   "R": 15
+  },
+  "pants_stripes": {
+   "178": 4,
+   "179": 13
+  }
+ },
+ "fallback 276": {
+  "frame": 276,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 65,
+  "jersey_px": 14,
+  "body_px": 178,
+  "missing_bands": [
+   "socks",
+   "waist 3"
+  ],
+  "waist_top_std": [
+   0.49,
+   0.47
+  ],
+  "torso_tilt_deg": 87.5,
+  "torso_holes": 5,
+  "sleeve_px": {
+   "L": 26,
+   "R": 30
+  },
+  "sock_px": {
+   "L": 5,
+   "R": 6
+  },
+  "pants_stripes": {
+   "178": 2,
+   "179": 4
+  }
+ },
+ "crosscheck 889": {
+  "frame": 889,
+  "facing": "back",
+  "dir": 0,
+  "torso_px": 87,
+  "jersey_px": 35,
+  "body_px": 271,
+  "missing_bands": [
+   "pants stripe 1"
+  ],
+  "waist_top_std": [
+   0.48,
+   0.48,
+   0.48
+  ],
+  "torso_tilt_deg": 6.0,
+  "torso_holes": 3,
+  "sleeve_px": {
+   "L": 32,
+   "R": 33
+  },
+  "sock_px": {
+   "L": 17,
+   "R": 17
+  },
+  "pants_stripes": {
+   "178": 9,
+   "179": 0
+  }
+ }
+}
