@@ -73,6 +73,18 @@ TEAMS['Montreal baby blue (bottom)']=design(helmet=RB,yoke1=LB,yoke2=LB,yoke3=LB
     pants=RB,pstripe1=W_,pstripe2=MR,socks=LB,sock1=RB,sock2=W_,
     _band={10:[W_]*8,11:[RB]*8,12:[RB]*8,13:[W_]*8},_backband={10:[W_]*8,11:[RB]*8,12:[RB]*8,13:[W_]*8},
     _crest=[[W_,MR,MR,MR,W_],[MR,W_,RB,W_,MR],[MR,W_,RB,W_,MR],[W_,MR,MR,MR,W_]])
+# ---- stripe_diagnostic (Abdul pt780u): one distinct colour per torso row (W3,W2,W1, jersey 13..9, yoke 8..6) and per arm row (17..8),
+# colour-blind safe (Okabe-Ito / Tol + black/white, no green, no red/green pairs), light/dark alternating rows; arm set disjoint from torso set.
+# Pants/side-pants panel = neutral grey (the panel rows 17-23 match their torso rows, which are all pants). Helmet/socks as design().
+DIAG_TORSO=[(16,'W3',(255,255,255),'white'),(15,'W2',(0,0,0),'black'),(14,'W1',(240,228,66),'yellow'),(13,'jersey r13',(51,34,136),'indigo'),
+  (12,'jersey r12',(255,200,90),'light orange'),(11,'jersey r11',(136,34,85),'wine'),(10,'jersey r10',(150,210,245),'pale sky blue'),(9,'jersey r9',(102,51,0),'brown'),
+  (8,'yoke3 r8',(240,170,210),'pink'),(7,'yoke2 r7 (+patch)',(64,64,64),'dark grey'),(6,'yoke1 r6',(220,190,240),'lavender')]
+DIAG_ARM=[(17,'forearm r17',(221,204,119),'sand'),(16,'forearm r16',(0,34,85),'navy'),(15,'forearm r15',(255,204,204),'pale pink'),
+  (14,'arm3 r14',(213,94,0),'vermillion'),(13,'arm2 r13',(170,238,255),'pale cyan'),(12,'arm1 r12',(102,0,51),'maroon'),
+  (11,'upper arm r11',(255,200,140),'peach'),(10,'upper arm r10',(85,0,136),'violet'),(9,'upper arm r9',(190,205,230),'steel'),(8,'upper arm r8',(0,80,120),'ocean')]
+DGR=(128,128,128)
+TEAMS['Stripe diagnostic']=design(pants=DGR,pstripe1=DGR,pstripe2=DGR,socks=DGR,sock1=DGR,sock2=DGR,
+    _rows={'torso':{v:c for v,_,c,_ in DIAG_TORSO},'arm':{v:c for v,_,c,_ in DIAG_ARM}})
 rep={}
 def tex(T):
     img=np.zeros((TH,TW,3),int);img[:]=MAG
@@ -82,7 +94,7 @@ def tex(T):
         band=T.get('_backband' if back else '_band') if u<28 else None
         if band and v in band and 3<=w<=10:c=band[v][w-3]
         if r=='crest' and '_crest' in T:c=T['_crest'][v-10][u-4]
-        RG={'jersey':'torso','crest':'torso','number':'torso','waist1':'torso','waist2':'torso','waist3':'torso','upper arm':'arm','arm1':'arm','arm2':'arm','arm3':'arm','forearm':'arm'}
+        RG={'yoke1':'torso','yoke2':'torso','yoke3':'torso','yoke corner':'torso','patch':'torso','jersey':'torso','crest':'torso','number':'torso','waist1':'torso','waist2':'torso','waist3':'torso','upper arm':'arm','arm1':'arm','arm2':'arm','arm3':'arm','forearm':'arm'}
         if '_rows' in T and r in RG and v in T['_rows'][RG[r]]:c=T['_rows'][RG[r]][v]
         img[v,u]=c
     return img
@@ -109,5 +121,20 @@ for k,(n,img) in enumerate(imgs.items()):
     O.paste(Image.fromarray(img.astype(np.uint8)).resize((TW*S,TH*S),Image.NEAREST),(x0,70))
     for u in range(0,TW,2):d.text((x0+u*S,70+TH*S+4),str(u%10),fill=(150,150,150))
 O.save(f'{OUT}/all_textures_sheet.png')
+# stripe_diagnostic legend: swatch + row number + name + colour name + relative luminance (colour is never the only cue)
+def lum(c):
+    f=lambda x:(x/255)/12.92 if x/255<=0.04045 else ((x/255+0.055)/1.055)**2.4
+    return 0.2126*f(c[0])+0.7152*f(c[1])+0.0722*f(c[2])
+LG=Image.new('RGB',(900,60+28*max(len(DIAG_TORSO),len(DIAG_ARM))+40),(30,30,30));d=ImageDraw.Draw(LG)
+d.text((10,8),'stripe_diagnostic legend (bottom-up). Pants, side-pants panel, socks = grey 128. Skin/gloves/skates/stick/ice shadow = green.',fill=(255,255,255))
+for col,(title,rows) in enumerate((('TORSO rows (front + mirrored back)',DIAG_TORSO),('ARM sleeve rows (up from glove)',DIAG_ARM))):
+    x=10+col*450;d.text((x,32),title,fill=(255,255,0))
+    for i,(v,nm,c,cn) in enumerate(rows):
+        y=56+i*28;d.rectangle([x,y,x+40,y+22],fill=c,outline=(255,255,255));d.text((x+8,y+6),str(v),fill=(0,0,0) if lum(c)>0.3 else (255,255,255))
+        d.text((x+50,y+6),f'row {v:2d}  {nm:<18} {cn:<10} L={lum(c):.2f}',fill=(230,230,230))
+LG.resize((LG.width*2,LG.height*2),Image.NEAREST).save(f'{OUT}/stripe_diagnostic_legend.png')
+for rows in (DIAG_TORSO,DIAG_ARM):
+    for i in range(len(rows)-1):
+        a,b=lum(rows[i][2]),lum(rows[i+1][2]);print('lum step',rows[i][1],'->',rows[i+1][1],round(abs(a-b),2))
 json.dump(rep,open(f'{OUT}/texture_colours.json','w'),indent=1)
 for n,r in rep.items():print(n,'| excl crest:',r['excl_crest'])

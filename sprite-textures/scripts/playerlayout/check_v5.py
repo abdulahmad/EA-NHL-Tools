@@ -8,7 +8,7 @@ import sys,os,json,numpy as np;from PIL import Image
 OUT=sys.argv[1];sys.argv=['x',OUT+'/_tmp'];import runpy
 G=runpy.run_path(os.path.join(os.path.dirname(os.path.abspath(__file__)),'textures_v5.py'))
 L,HAVE,ROLE,cls,TW,TH,GRN=G['L'],G['HAVE'],G['ROLE'],G['cls'],G['TW'],G['TH'],G['GRN']
-MAG=(252,0,252);files=['leafs_home','rangers_away','chicago_home_top','chicago_alt_bottom','montreal_baby_blue_bottom']
+MAG=(252,0,252);files=['leafs_home','rangers_away','chicago_home_top','chicago_alt_bottom','montreal_baby_blue_bottom','stripe_diagnostic']
 rep={'occupancy':{},'head':[],'body':[],'unexplained':[]}
 for f in files:
     T=np.asarray(Image.open(f'{OUT}/{f}.png').convert('RGB')).astype(int);occ=~(T==MAG).all(2)
