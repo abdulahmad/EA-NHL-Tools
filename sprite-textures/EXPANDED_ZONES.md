@@ -181,6 +181,6 @@ Run `scripts/playerlayout/compare_v5.py <outdir>` to rebuild the template-vs-tex
 ## v5 corrections (Abdul pt775u)
 - Montreal waist stripes: w1 (row 14) baby blue 96,144,224; w2 (row 15) white 232,232,232; w3 (row 16) royal 0,40,160.
 - Chicago alt torso, bottom-up, rows 16..9 (w3,w2,w1, then jersey/crest/number rows 13..9): K,W,K,R,W,K,W,R. Exactly 8 rows. This replaces the old CHICAGO band in rows 10-13.
-- Chicago alt arms, bottom-up, rows 17..9 (forearm 17-15, arm stripes 14-12, upper arm 11-9): R,R,K,W,R,W,K,W,R.
+- Chicago alt arms, bottom-up, rows 17..10 (forearm 17-15, arm stripes 14-12, upper arm 11-10): R,K,W,R,W,K,W,R; upper-arm rows 9-8 stay red (pt776u cut one leading red from the earlier R,R,K,W,R,W,K,W,R).
   The arm runs rows 8-17 (10 rows) and the pattern has 9, so upper-arm row 8 (4 texels: front cols 1-2, back cols 25-26) stays red.
 - Front and back use the same row colours (row-based, so mirroring needs no change). Occupancy is unchanged and check_v5 shows 0 unexplained.
