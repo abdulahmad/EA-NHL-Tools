@@ -44,3 +44,6 @@ Sprite renders (`toimg`, `grid_px`, `anchored`) already used square integer scal
   - The front `goalie_mask` texture is now 6x7 (42 texels, square cells from the photo). It is close to the on-sprite 5x8 = 40, but narrower and taller on the sprite. Leave the exact fit to the sprite-mapping phase.
 
 mask_b is still measured from `01M5MRFQ67SC2AWJK05N1EM5SV.jpg`, the only back-of-helmet reference. Tight crop, no forced symmetry, cream-coverage cells, VGA 6-bit snap.
+
+## Follow-up: symmetric chin
+The front goalie_mask is 6 wide, so its chin is the 2 centre pixels of the bottom row. Both are now orange (247,49,12), matching Fuhr's symmetric mask. Before, only the right-of-centre pixel was orange and the left one was white.
