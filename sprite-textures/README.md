@@ -123,6 +123,8 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 
 **Goalie v10c (2026-10-24, pt872u):** texture v3 (23x31, `goalie_texture_v3_indexed.png`). The pad back is Abdul's strip wrapping round; the padBack piece is dropped. 186 is the real extra pad-back zone (strip 155 -> 186). Both stripe orders exist in the game art, per animation. The unified catcher (FRONT from 538, BACK from 428) replaces catcherH, and the catcher orientation is added to the skeleton (`skel10.py`). See D80-D86.
 
+**Goalie v10d (2026-10-24, pt874u):** full-body ready skeleton for all 8 facings (`skel10.py`): 413 faces right, 425 faces left. Limb sides per facing re-derived. Fuhr-style designed catcher in texture v4 (`goalie_texture_v4_indexed.png`). Abdul's 8x12 catcher still matches better on front views (255 vs 445 px after expansion over 39 frames). See D87-D90.
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.
