@@ -1,0 +1,78 @@
+{
+ "part": "goalie_mask",
+ "frames": [
+  413,
+  416,
+  422,
+  428,
+  449,
+  519,
+  980,
+  1000
+ ],
+ "layout": [
+  29,
+  0,
+  7,
+  6
+ ],
+ "control_px_wrong": {
+  "HOME.json tor": 3,
+  "AWAY.json nyr": 3,
+  "HOME.json chi": 3,
+  "AWAY.json chi": 3,
+  "HOME.json mtl": 3
+ },
+ "stats": {
+  "413": {
+   "px": 16,
+   "texels": 9,
+   "shared": 4
+  },
+  "416": {
+   "px": 25,
+   "texels": 14,
+   "shared": 5
+  },
+  "422": {
+   "px": 41,
+   "texels": 20,
+   "shared": 12
+  },
+  "428": {
+   "px": 3,
+   "texels": 2,
+   "shared": 1
+  },
+  "449": {
+   "px": 4,
+   "texels": 4,
+   "shared": 0
+  },
+  "519": {
+   "px": 0,
+   "texels": 0,
+   "shared": 0
+  },
+  "980": {
+   "px": 4,
+   "texels": 1,
+   "shared": 1
+  },
+  "1000": {
+   "px": 1,
+   "texels": 1,
+   "shared": 0
+  }
+ },
+ "texels": 42,
+ "texels_used": 22,
+ "family_fallback_px": {
+  "row_fallback": 1,
+  "idx135": 3
+ },
+ "texel_families": {
+  "goalie mask": 41,
+  "idx135": 1
+ }
+}

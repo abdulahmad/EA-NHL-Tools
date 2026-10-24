@@ -467,3 +467,44 @@ Script: `v2_38x32/scripts/v2map3.py`. The `PARTS` env var turns on family-aware 
   - Control 0. 22 of 26 texels are used. Sharing only in 370 (6) and 897 (11) and 62 (1).
   - Shadow/ice indices 88 and 82 stay fixed and are not part of the texture.
 - D13: The diff sheets show the part's pixels in the test-texture colours. Sheets with game sprites are kept local and not committed.
+
+## Goalie gear first pass (2026-10-24)
+Script: `v2_38x32/scripts/gmap.py <part>`. Results: `v2_38x32/goalie/g_<part>.json`.
+- D14 **Goalie test frames (8):**
+  - 413: front/side stance
+  - 416: back, catcher visible
+  - 422: back with blocker raised
+  - 428: front, catcher up
+  - 449: front blocker save
+  - 519: pad save / wide stance
+  - 980: front glove save
+  - 1000: stack/dive (lying)
+  These were chosen from a candidate sheet of 15 frames: 375, 410, 413, 416, 419, 422, 428, 447, 449, 471, 519, 521, 980, 1000, 1040. They cover front, back, side, save poses and a dive, each shows at least one gear part, and their segmentation looked plausible. Rejected: 419 and 1040 (pads/blocker segmentation bled into the arms and torso), 375 (fall pose, mostly mask).
+- D15 **Goalie needs its own texture layout.** The gear is not in the skater 38x32. Its pixels come from the older `uv.py` part segmentation (`goalie_mask/blocker/catcher/pad`) and per-pixel U,V, not from the v5 per-texel maps. It also does not fit the skater v2: there are 448 free (magenta) texels, but they are fragmented, and a pad alone needs a 19x21 block.
+  - Draft **goalie companion texture, 38x32:**
+    - pad: cols 0-18, rows 0-20 (both pads share it; the back view is mirrored as in uv.py)
+    - blocker: cols 19-28, rows 0-9
+    - catcher: cols 19-28, rows 10-19
+    - mask: cols 29-35, rows 0-5
+  - Sizes are the measured max capacities (`capacity.json`: pad 19x21, blocker/catcher 10x10, mask 7x6).
+  - Goalie jersey/pants are meant to reuse the skater v2 zones, but that is **blocked**: the per-texel skater maps (v5 `MAPS`) do not exist for goalie frames. Next step is to extend the v5 per-pixel mapper to goalie frames.
+- D16 **Rules applied to the gear:**
+  - Row = round(V·(h-1)).
+  - Group by (connected component, row, family). Pads are separate components that share texels.
+  - Order by U; centre-contiguous if fewer pixels than texels, stretch from centre if more.
+  - Families: the goalie gear is drawn with skater palette zones (arm stripe 1/2/3, forearm, upper arm, socks/socks stripes, plus fixed idx0/idx135). Each texel's family is the majority vote of naive-UV placements across the 8 frames; texels never hit take their row's nearest family (edge extension).
+  - Fallback: nearest row ±3 with the family, otherwise any texel in the row (counted as wrong).
+- D17 **Control.** Each pixel is rendered as the palette entry of its texel's family at the pixel's own shade level, then compared with in-game for tor HOME, nyr AWAY, chi HOME/AWAY and mtl HOME.
+
+| part | px wrong per team | texels used | note |
+|---|---|---|---|
+| mask | 3 (all teams) | 22/42 | the 3 px are idx135 cage pixels; no texel holds that family. Fix: give the cage its own texel |
+| blocker | 0 | 49/100 | 0 shared except 1 in 519 |
+| pad | 10 (9 for mtl) | 280/399 | the families idx0 and upper arm are missing from some rows (5+5 px); 169 px used a row fallback; 11-39 shared texels per frame |
+| catcher | 0 | 57/100 | |
+
+- D18 **Known limits:**
+  - Segmentation quality: pads include some sleeve-coloured pixels, and the "mask" in back frames is the helmet back.
+  - The front/back flag from uv.py is heuristic.
+  - Before a second pass: hand-check the segmentation on the 8 frames, add a cage family texel, and consider separate left/right pad blocks.
+- D19: The goalie sheets contain game sprites and are kept local.
