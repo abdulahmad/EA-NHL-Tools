@@ -84,6 +84,12 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 
 **Decisions pt857 (2026-10-24):** 4-wide glove block (D27), 38 wide kept (D28), arm rows 11/15 illustrated (D29, pending), goalie pads L/R + cage texel with control 0 (D30), stick blade analysis (D31), Oilers Fuhr texture (D32), player glove textures (D33). Folders: `v2_38x32/decisions`, `goalie2`, `stick`, `gloves`.
 
+**Goalie layout v3 (2026-10-24, pt859u):** `v2_38x32/goalie3/`.
+- The Fuhr part shapes now include pad backs and mask back. Layout diagram: `goalie_layout_v3.png`.
+- Default-gear control is **0 on 8 frames x 5 teams**.
+- Why the D32 Oilers pass failed: D34 (pad backs never mapped, 59% of pad px; family-run packing; capacity-sized blocks; segmentation).
+- Fixes: D35-D39. Brighter or high-contrast glove test colours: D40.
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.

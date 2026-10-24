@@ -555,3 +555,43 @@ Script: `v2_38x32/scripts/gmap.py <part>`. Results: `v2_38x32/goalie/g_<part>.js
   - pad_b is not placed (needs a layout decision for rows 21-31)
   - Measured 8-frame sprite extents (max px per row): pad 7-8 per side (12-13 when sprawled), blocker 6, catcher 6, mask 4-5. The blocks are kept at the capacity.json sizes.
 - D33 **Player gloves** (v12 edmonton/ottawa/redblack, 5x9) -> 4x3 per arm on the D27 block. Kept cols 0,1,3,4 and rows 1,4,7 (nearest); left arms mirrored. This is a large vertical reduction (9 -> 3 rows) because the glove block has 3 rows. Script `gloves/gloves_tex.py`, textures `gloves/glove_*_v2block.png`.
+
+## Goalie layout v3: pad backs, default-gear control 0, Fuhr redo (Abdul pt859u, 2026-10-24)
+Folder `v2_38x32/goalie3/`. Scripts: `g3map.py` (mapping + control), `g3sheet.py` (sheets), `fuhr3.py`, `layout_diagram.py`, `diag_g3.py` (numbers below, in `diagnosis_numbers.json`).
+
+- D34 **Why the Oilers Fuhr pass (D32) looked wrong.** These are measured on the D30 mapping over the 8 goalie frames:
+  1. **Pad backs were never used.** uv.py has a single `pad` region and only mirrors U on back-facing frames. D30 therefore drew back views (416, 422, 519, 1000) from the pad FRONT art: 597 of the 1020 pad pixels (59%). The `pad_b` art was not placed at all. The same applied to the mask: 67 of the 94 mask pixels are back-of-helmet pixels, and they were drawn from the mask-front art. `mask_b` was reserved but not mapped.
+  2. **Placement was by family run, not by position.** D30 grouped pixels by (component, row, family) and packed each run centre-contiguously onto that family's texels in the row. A pixel's column therefore depended on how many same-family pixels were in its row, not on where it sits on the pad. 547 of the 1020 pad pixels (54%) landed 2 or more columns away from their geometric column (mean shift 2.7 columns on padL and 2.9 on padR). Blocker, catcher and mask shifted by a mean of 1.5-1.9 columns. Control colours do not show this. Real art does: it gets scrambled.
+  3. **Blocks were sized to capacity, not to the art or the sprite.** Blocker and catcher were 10x10 blocks, but the sprite parts are at most 6x7 (blocker) and 6x8 (catcher), and the art is 8x12 and 11x9. To fit the 10x10 blocks, the art had rows or columns dropped (blocker rows 2 and 8, catcher col 5, mask row 3) and then edge-extended (+2 blocker cols, +1 catcher row, +1 mask col). Only the centre texels were ever hit (blocker 49 of 100 texels, catcher 57 of 100), so the art's edges and design were mostly lost.
+  4. **Segmentation noise put wrong pixels into the head part.** Index 164 ("goalie mask") is also drawn on the lower body (pad straps): 62 px on 413, 416, 422 and 449. These sat in the mask region, so the mask bbox stretched from the head to the feet and mask art appeared at the skates. Small helmet-crown blobs drawn with socks colours or idx0 were labelled catcher or blocker (14 + 9 px on 428, 980 and 519).
+  5. **U had no fixed direction.** The side_anchor sign is arbitrary per component, so the inner/outer pad edge flipped between frames (for example, 413 L increased right-to-left while 413 R increased left-to-right). The two pads of 413 are one merged component, so V on its left pad also ran toe-to-knee.
+- D35 **Layout v3 (38x32), every Fuhr part fits including the pad backs.** See `goalie_layout_v3.png`.
+  - Pads, named by SCREEN side:
+    - front L (0,0,9,20) and front R (9,0,10,20)
+    - back L (19,0,9,20) and back R (28,0,10,20)
+  - blocker (0,20,8,12), catcher (8,20,11,9), mask front (19,20,6,7), mask back (25,20,5,6)
+  - cage texel (30,20)
+  - The pads are the only parts resized: front 15x25 -> 9/10x20 and back 17x24 -> 9/10x20, nearest, with the kept rows/cols in `fuhr_oilers_resize_log_v3.json`. Blocker, catcher, mask and mask_b are now 1:1 (no edge extension). Screen-right pads are the art mirrored, so the inner edge matches on both sides.
+- D36 **Mapping v3: geometric first, family as a fallback.**
+  - Front-facing frames (uv.py flag: crest or skin visible) use the front pad and mask blocks. Back-facing frames use the back blocks. Pad pixels in 416, 422, 519 and 1000 now hit pad-back texels: 651 px, with 155+161 of 380 back texels used.
+  - Pads: each screen side gets its own PCA frame. V runs along the long axis from the end nearest the body (knee) to the toe. U runs across, increasing with screen x. The same rule is used front and back.
+  - Blocker, catcher and mask: U,V come from the part's bbox in that frame.
+  - Each texel's family is the majority vote of geometric hits. A family that has pixels in a block but no texel steals its best texel (1 case: arm stripe 3 in padF_L, 1 px).
+  - A pixel keeps its geometric texel when the families match. Otherwise it moves to the nearest texel of its family in the same block. Result: 157 of 1082 pad pixels (15%) move 2 or more texels (was 54%). Mean shift is 0.5-0.7 on pads and 0.1-0.4 on the other parts.
+  - Pure geometric mapping without the family fallback would give 303-386 wrong px per team.
+- D37 **Segmentation clean-up applied before mapping.**
+  - Mask = only the mask components starting within 3 rows of the topmost one. The others (index 164 on the legs, 62 px) are treated as pad pixels.
+  - Blocker/catcher blobs inside rows 0-4 that start at row <=1 become mask pixels (helmet crown, 23 px), but only when the head is near the top (mask top <=5). This rule does not fire on the dive frame 1000.
+- D38 **Default-gear control = 0.** The texture is family-labelled. Each texel is rendered at the pixel's own shade level (as in D17). Diff vs in-game is **0 px on all 8 frames x 5 teams** (tor HOME, nyr AWAY, chi HOME/AWAY, mtl HOME), with 0 fallbacks to wrong families. Per-team textures (medium shade): `default_gear_<team>.png`.
+- D39 **Fuhr Oilers redo.** `fuhr_oilers_texture_v3.png` on the v3 mapping:
+  - Back views now show the pad-back art (blue straps) and the mask_b art.
+  - The red pad band sits on the upper pad.
+  - Remaining speckle comes from the 15% of pad pixels relocated by the family fallback (D36), plus in-game idx0 outline pixels that now take art colours.
+  - Sheets with game sprites stay local.
+- D40 **Player glove test colours (Abdul is colour blind: luminance contrast, no red/green).** Edmonton navy (0,28,65) has only 1.24:1 contrast against the black sprite outline, which is why it is hard to see. Two options in `gloves/gloves_v3.py`:
+  - A `glove_brightblue_v2block.png`: navy -> sky blue (140,210,255). That is 12.8:1 against black and 2.0:1 against the orange (255,77,0). A mid blue such as (0,120,255) would match the orange's luminance (1.2:1), so it was rejected.
+  - B `glove_hc_check_v2block.png`: a white / blue (0,120,255) checker over each 4x3 arm block. Every neighbour pair is 4.1:1, and blue against the black outline is 5.1:1.
+- **Open:**
+  - (a) Keep idx0 outline pixels in the goalie gear fixed (not textured), like the stick shadow in D12? This would sharpen the art and remove some fallbacks.
+  - (b) 519 is classed as back-facing by the crest/skin rule. Confirm by eye.
+  - (c) Choose A or B for the glove test colour.
