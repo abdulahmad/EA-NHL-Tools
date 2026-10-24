@@ -18,6 +18,7 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - goalie24: next group SPAgglover (8 frames) auto-labelled for inspection, 3 open questions; Fuhr pad test render local only, D128.
 - goalie24 (Fuhr v8): Fuhr Oilers art remapped into the current 23x32 goalie layout, mask = centre front / back on both sides, D129.
 - goalie25: Fuhr v9 from the v12 source art (+ high-res build), geometric-snap pad maps and new blocker/catcher/mask maps; strict: pads 1127/0, mask 335/2, catcher 519/1, blocker 304/73 (open question), D130.
+- goalie26: Fuhr v10 from Abdul's DR high-res gear (pads, blocker, catcher front/back), NHL95 cage-style mask with warped edges and orange/blue chin, 1044 arm ruling, Abdul rulings log (D131, D132).
 - goalie13: strict pad remap, 95 strict errors (g12 152), D101–D104.
 
 ## Tools included
