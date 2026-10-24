@@ -6,7 +6,7 @@
 # the leg's extent on that line -> a texel column is a straight line down the pad; diagonal legs: u from the leg's two
 # edges fitted as straight lines along the axis; (2) u side chosen from the game's own
 # art: the side of the leg where the sprite's own 151/152 px are (same as the strict maps in all 28 legs: inner edge in
-# front views, outer in back views); no 151/152 px -> inner; (3) v = long axis knee 0 -> toe 13 (a 145 knee-band anchor was tried and dropped: it over-stretched 987).
+# front views, outer in back views); no 151/152 px -> inner; (3) v = long axis knee 0 -> toe 13; D136: when the blob's PCA axis is >25 deg off the skeleton's hip->ankle line, the skeleton line is used (short/occluded/butterfly pads) (a 145 knee-band anchor was tried and dropped: it over-stretched 987).
 import sys,os,json,collections,numpy as np
 H=os.path.dirname(os.path.abspath(__file__));G=os.path.abspath(H+'/..')
 for d in ('/goalie15','/goalie14','/goalie13','/goalie12','/goalie25'):sys.path.insert(0,G+d)
@@ -23,8 +23,22 @@ def legs(n):
         q=[tuple(map(int,c)) for c in np.argwhere((lab==code)&(p!=255))]
         if len(q)>=4:out.append((leg,q,None))
     return out
-def geo2(q,outer_right,anchor_v=None):
-    P=np.array(q,float);c,a,b=g25map.axes(q);vert=abs(a[0])>=np.cos(np.radians(40))
+JO={}
+def joints(n):   # g16 joint fit (14 frames) / g24 (SPAgglover); joints are [x,y]
+    if not JO:JO.update(json.load(open('/tmp/g16_seg.json')));JO.update(json.load(open('/tmp/g24_seg.json')))
+    return JO[str(n)]['joints']
+def leg_axis(n,leg):
+    """D136 (Abdul pt938u): knee->toe direction = hip->ankle line of the skeleton, (dy,dx) unit, pointing down."""
+    J=joints(n);sides=[k for k in ('L','R') if 'padF_'+k in leg]
+    h=np.mean([J[k+'hip'] for k in sides],0);a_=np.mean([J[k+'ank'] for k in sides],0)
+    d=np.array([a_[1]-h[1],a_[0]-h[0]],float);nn=np.linalg.norm(d)
+    if nn<1e-6:return None
+    d/=nn;return d if d[0]>=0 else -d
+def geo2(q,outer_right,anchor_v=None,ja=None):
+    P=np.array(q,float);c,a,b=g25map.axes(q)
+    if ja is not None and abs(a@ja)<np.cos(np.radians(25)):   # PCA blob axis disagrees with the skeleton -> use the skeleton
+        a=ja;b=np.array([-a[1],a[0]])
+    vert=abs(a[0])>=np.cos(np.radians(40))
     s=(P-c)@a;v=(s-s.min())/max(1e-6,s.max()-s.min())*13
     if False and anchor_v is not None and anchor_v.any():   # tried: 145 knee-band anchor; over-stretched 987 (top px clipped to v0), dropped
         s2=s[anchor_v].mean();k=11/max(1e-6,s.max()-s2);v=np.clip(2+(s-s2)*k,0,13)
@@ -53,10 +67,11 @@ def run():
             inner_right=cx[leg]<np.mean(other) if other else True
             outer_right=(np.mean(xs)>P[:,1].mean()) if xs else inner_right   # no cue: front-view rule (cols 7-8 inside, 14/14 strict frames)
             av=np.array([int(p[c])==145 for c in q])
-            v,u=geo2(q,outer_right,av);vo,uo=g25map.geo_pad(q,leg.endswith('R'))
+            ja=leg_axis(n,leg);v,u=geo2(q,outer_right,av,ja)
+            pa=g25map.axes(q)[1];forced=bool(ja is not None and abs(pa@ja)<np.cos(np.radians(25)));vo,uo=g25map.geo_pad(q,leg.endswith('R'))
             R['geo2_'+leg]={'%d,%d'%c:[int(round(v[i])),int(round(u[i]))] for i,c in enumerate(q)}
             R['geo_'+leg]={'%d,%d'%c:[int(round(vo[i])),int(round(uo[i]))] for i,c in enumerate(q)}
-            diag['%d %s'%(n,leg)]=dict(outer_right=bool(outer_right),px=len(q),strict=bool(sm))
+            diag['%d %s'%(n,leg)]=dict(outer_right=bool(outer_right),px=len(q),strict=bool(sm),skel_axis=forced)
         out[n]=R
     json.dump(dict(frames=out,diag=diag),open(H+'/g27_map.json','w'));return out,diag
 if __name__=='__main__':
