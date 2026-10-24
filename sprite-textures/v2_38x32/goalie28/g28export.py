@@ -8,7 +8,7 @@ from PIL import Image
 t=[t for t in TEAMS if t[0]=='edm_home'][0];sp=spal(t[1],t[2])
 A=json.load(open('/tmp/g28_all.json'))
 out=dict(palette=[list(map(int,c)) for c in sp],
-  texDefault=np.array(Image.open(H+'/goalie_texture_v7_indexed.png')).astype(int).tolist(),
-  texFuhr=np.asarray(Image.open(H+'/fuhr_oilers_texture_v13.png').convert('RGB')).astype(int).tolist(),
+  texDefault=np.array(Image.open(G+'/goalie29/goalie_texture_v8_indexed.png')).astype(int).tolist(),
+  texFuhr=np.asarray(Image.open(G+'/goalie29/fuhr_oilers_texture_v14.png').convert('RGB')).astype(int).tolist(),
   frames={n:dict(px=frame(int(n)).astype(int).tolist(),lab=r['lab'],joints=r['joints'],back=r['back']) for n,r in A.items()})
 o=sys.argv[1] if len(sys.argv)>1 else '/tmp/goalie_editor_data.json';json.dump(out,open(o,'w'),separators=(',',':'));print(o,len(out['frames']),'frames')
