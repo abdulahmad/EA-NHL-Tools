@@ -57,8 +57,16 @@ ST={n:stick2d(n) for g in GROUPS.values() for n in g}
 def proj(P3,th,phi,s,o):
     r,u,f=P3[:,0],P3[:,1],P3[:,2];X=r*np.cos(th)+f*np.sin(th);Z=r*np.sin(th)-f*np.cos(th)
     return np.stack([s*X+o[0],s*(-u*np.cos(phi)+Z*np.sin(phi))+o[1]],1)
+# v5.5 (Abdul pt800u) leg visibility: a leg side with no upper/lower-leg pixels (seg parts 10/12 R, 11/13 L) is OCCLUDED (behind the
+# near leg). Its 2D leg joints are dropped (on 57 the 'L skate' was stray pixels by the stick) and the fit puts it behind the near leg.
+def legvis(n):
+    P_=G['SEGS'][n]['part'];c={o:sum(1 for v in P_.values() if v in(10+o,12+o)) for o in(0,1)}
+    return {'RL'[o]:c[o]>=3 for o in(0,1)}
 def obs(n):
-    J=dict(G['SEGS'][n]['joints']);s=ST.get(n)
+    J=dict(G['SEGS'][n]['joints']);s=ST.get(n);V=legvis(n)
+    J={k:v for k,v in J.items() if not(k[:2] in('R ','L ') and k.split()[1] in('hip','knee','ankle','skate') and not V[k[0]])}
+    if 'R hip' in J and 'R knee' in J and np.allclose(J['R hip'],J['R knee']):J.pop('R knee')   # seg fallback put hip==knee: not a real knee
+    if 'L hip' in J and 'L knee' in J and np.allclose(J['L hip'],J['L knee']):J.pop('L knee')
     if s:J.update({'stick butt':s['butt'],'stick heel':s['heel'],'stick toe':s['toe']})
     return {k:np.array(v,float) for k,v in J.items()}
 BONES=[('head','neck'),('neck','chest'),('chest','belly'),('belly','pelvis')]+[(f'{s} {a}',f'{s} {b}') for s in 'RL' for a,b in
@@ -73,11 +81,31 @@ def fitgroup(fr,phis=(5,10,15,25,35)):
     SY=[(ix[a],ix[b],ix['L'+a[1:]],ix['L'+b[1:]]) for a,b in BONES if a[:2]=='R ' and b[:2]=='R ' and all(k in ix for k in(a,b,'L'+a[1:],'L'+b[1:]))]
     SY=np.array(SY) if SY else np.zeros((0,4),int)
     NOM={n:np.radians(45*fr[n]) for n in nf}
+    # per-side leg masks: each leg's bones must lie on ITS OWN leg pixels (parts 10/12/14 R, 11/13/15 L, 16 hips); an occluded leg
+    # instead lies on the near leg's pixels and is pushed BEHIND it in depth (Z towards camera).
+    VIS={n:legvis(n) for n in fr};LM={}
+    for n in fr:
+        P_=G['SEGS'][n]['part'];q_=G['MAPS'][n][0]
+        for o,sd in enumerate('RL'):
+            near=sd if VIS[n][sd] else 'RL'[1-o];oo='RL'.index(near)
+            m=np.ones(q_.shape,bool)
+            for (y,x),v in P_.items():
+                if v in(10+oo,12+oo,14+oo,16):m[y,x]=False
+            LM[(n,sd)]=EDT(m) if (~m).any() else M[n]
+    LB={sd:np.array([(ix[f'{sd} {a}'],ix[f'{sd} {b}']) for a,b in(('hip','knee'),('knee','ankle'),('ankle','skate')) if f'{sd} {a}' in ix and f'{sd} {b}' in ix]) for sd in 'RL'}
+    LJ=[(ix[f'R {k}'],ix[f'L {k}']) for k in('knee','ankle','skate') if f'R {k}' in ix and f'L {k}' in ix]
     def frame_res(P3,th,phi,s,o,n):
         pr=proj(P3,th,phi,s,o);R=[(pr[OI[n][0]]-OI[n][1]).ravel()]
         if len(BI):
             p=(pr[BI[:,0]][:,None,:]*(1-TS[None,:,None])+pr[BI[:,1]][:,None,:]*TS[None,:,None]).reshape(-1,2)
             R.append(0.5*map_coordinates(M[n],[p[:,1],p[:,0]],order=1,mode='nearest'))
+        for sd in 'RL':
+            if len(LB[sd]):
+                p=(pr[LB[sd][:,0]][:,None,:]*(1-TS[None,:,None])+pr[LB[sd][:,1]][:,None,:]*TS[None,:,None]).reshape(-1,2)
+                R.append(0.7*map_coordinates(LM[(n,sd)],[p[:,1],p[:,0]],order=1,mode='nearest'))
+            if not VIS[n][sd] and VIS[n]['RL'[1-'RL'.index(sd)]] and LJ:
+                Z=P3[:,0]*np.sin(th)-P3[:,2]*np.cos(th);io=1 if sd=='L' else 0
+                R.append(2.0*s*np.maximum(0,np.array([Z[j[io]]-Z[j[1-io]]+0.3 for j in LJ])))
         return R
     best=None
     for phi in np.radians(list(phis)):
@@ -96,7 +124,7 @@ def fitgroup(fr,phis=(5,10,15,25,35)):
         r=least_squares(res,x0,loss='soft_l1',f_scale=1.5,max_nfev=500)
         if best is None or r.cost<best[0]:best=(r.cost,r,phi)
     _,r,phi=best;x=r.x;P3=x[:3*N].reshape(N,3);s=x[3*N];TH=x[3*N+1+2*len(nf):]
-    # stage 2: per-frame refinement. Each frame may move its joints by D (3D) and its yaw, penalised: 0.8 per px of joint displacement + 0.12 per degree of bone-direction change,
+    # stage 2: per-frame refinement. Each frame may move its joints by D (3D) and its yaw, penalised (v5.5, relaxed): legs 0.1/px + 0.01/deg, other joints 0.4/px + 0.05/deg, bone lengths held,
     # 0.3 per 10 deg of yaw change -> the shared pose is the prior/ballpark, the fit tightens where the drawing differs.
     per={};PR={};SH={};SCAN={}
     for i,n in enumerate(nf):
@@ -104,15 +132,17 @@ def fitgroup(fr,phis=(5,10,15,25,35)):
         for dg in range(0,360,5):
             pr=proj(P3,np.radians(dg),phi,s,(0,0));d_=OI[n][1]-pr[OI[n][0]];o_=np.median(d_,0);cur.append((float(np.mean(np.linalg.norm(d_-o_,axis=1))),dg))
         SCAN[n]=cur
+    LEGK=lambda k:k[:2] in('R ','L ') and k.split()[1] in('hip','knee','ankle','skate')
+    DW=np.array([0.1 if LEGK(k) else 0.4 for k in names]);BW=[0.01 if LEGK(names[b_]) else 0.05 for a_,b_ in BI];BLW=[1.5]*len(BI)
     for i,n in enumerate(nf):
         o0=x[3*N+1+2*i:3*N+3+2*i]
         def res2(z):
             D=z[:3*N].reshape(N,3);th=z[3*N];o=z[3*N+1:]
             BA=[]
-            for a_,b_ in BI:   # bone direction change vs the shared pose: 0.12 per degree (bounded: a few degrees)
-                u0=P3[b_]-P3[a_];u1=u0+D[b_]-D[a_];BA.append(0.12*np.degrees(np.arctan2(np.linalg.norm(np.cross(u0,u1)),u0@u1)))
-            return np.concatenate(frame_res(P3+D,th,phi,s,o,n)+[0.8*s*D.ravel(),BA,[0.3*np.degrees(th-TH[i])/10]])
-        z=least_squares(res2,np.concatenate([np.zeros(3*N),[TH[i]],o0]),loss='soft_l1',f_scale=1.5,max_nfev=300).x
+            for (a_,b_),wa,wl in zip(BI,BW,BLW):   # v5.5: legs 0.01/deg (effectively free), other bones 0.05/deg; bone LENGTH kept (no stretching)
+                u0=P3[b_]-P3[a_];u1=u0+D[b_]-D[a_];BA.append(wa*np.degrees(np.arctan2(np.linalg.norm(np.cross(u0,u1)),u0@u1)));BA.append(wl*s*(np.linalg.norm(u1)-np.linalg.norm(u0)))
+            return np.concatenate(frame_res(P3+D,th,phi,s,o,n)+[(s*D*DW[:,None]).ravel(),BA,[0.3*np.degrees(th-TH[i])/10]])
+        z=least_squares(res2,np.concatenate([np.zeros(3*N),[TH[i]],o0]),loss='soft_l1',f_scale=1.5,max_nfev=400).x
         D=z[:3*N].reshape(N,3);th=z[3*N];o=z[3*N+1:]
         pr=proj(P3+D,th,phi,s,o);PR[n]={k:pr[ix[k]] for k in names};p0=proj(P3,TH[i],phi,s,o0);SH[n]={k:p0[ix[k]] for k in names}
         def stats(PRn):
@@ -127,12 +157,17 @@ def fitgroup(fr,phis=(5,10,15,25,35)):
             if a in ix and b in ix:
                 u0=P3[ix[b]]-P3[ix[a]];u1=(P3+D)[ix[b]]-(P3+D)[ix[a]]
                 ang.append(np.degrees(np.arccos(np.clip(u0@u1/max(1e-9,np.linalg.norm(u0)*np.linalg.norm(u1)),-1,1))))
+        LIMB={}
+        for nm,(a,b) in {'R thigh':('R hip','R knee'),'R shin':('R knee','R ankle'),'L thigh':('L hip','L knee'),'L shin':('L knee','L ankle'),'R skate':('R ankle','R skate'),'L skate':('L ankle','L skate'),
+                         'R upper arm':('R shoulder','R elbow'),'L upper arm':('L shoulder','L elbow'),'R forearm':('R elbow','R wrist'),'L forearm':('L elbow','L wrist')}.items():
+            if a in ix and b in ix:
+                u0=P3[ix[b]]-P3[ix[a]];u1=(P3+D)[ix[b]]-(P3+D)[ix[a]];LIMB[nm]=round(float(np.degrees(np.arccos(np.clip(u0@u1/max(1e-9,np.linalg.norm(u0)*np.linalg.norm(u1)),-1,1)))),1)
         e0=stats(SH[n]);e1=stats(PR[n]);dpx=s*np.linalg.norm(D,axis=1)
         worst=sorted(((float(np.linalg.norm(PR[n][k]-v)),k) for k,v in O[n].items()),reverse=True)[:3]
         per[n]=dict(dir=fr[n],yaw_nominal=45*fr[n],yaw_shared_fit=round(float(np.degrees(TH[i])),1),yaw_refined=round(float(np.degrees(th)),1),
                     shared_mean_err=e0[0],shared_max_err=e0[1],shared_on_sprite=e0[2],mean_err_px=e1[0],max_err_px=e1[1],bone_on_sprite=e1[2],
                     dev_mean_px=round(float(dpx.mean()),2),dev_max_px=round(float(dpx.max()),2),dev_max_bone_deg=round(float(max(ang)),1),
-                    worst=[(k,round(v,1)) for v,k in worst],
+                    worst=[(k,round(v,1)) for v,k in worst],limb_dev_deg=LIMB,leg_visible=VIS[n],
                     yaw_scan_best=min(SCAN[n])[1],yaw_scan_err_best=round(min(SCAN[n])[0],2),
                     yaw_scan_err_at_nominal=round(dict((d,e) for e,d in SCAN[n])[(45*fr[n])%360],2))
     return dict(phi_deg=round(float(np.degrees(phi)),1),scale=round(float(s),3),joints3d={k:P3[ix[k]].round(2).tolist() for k in names},per_frame=per),PR,O,SH
