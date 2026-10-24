@@ -1,0 +1,40 @@
+{
+ "11": {
+  "groups": 22,
+  "overflow": 5,
+  "frames": [
+   42,
+   47,
+   889,
+   897
+  ],
+  "before": 8,
+  "after_all4": 3,
+  "after_front_only": 7,
+  "by_zone": {
+   "FR": 1,
+   "BL": 1,
+   "BR": 3
+  }
+ },
+ "15": {
+  "groups": 18,
+  "overflow": 7,
+  "frames": [
+   42,
+   47,
+   52,
+   67,
+   77,
+   889
+  ],
+  "before": 10,
+  "after_all4": 3,
+  "after_front_only": 9,
+  "by_zone": {
+   "FR": 1,
+   "BR": 4,
+   "BL": 2
+  }
+ }
+}

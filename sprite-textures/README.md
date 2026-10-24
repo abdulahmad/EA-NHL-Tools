@@ -82,6 +82,8 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 
 **Skate texture v1 (2026-10-24):** `v2_38x32/skates/` - every in-game skate index has its own texel family, control diff 0 on 11 frames x 5 teams; test + realistic textures (EXPANDED_ZONES D20-D24). Fuhr goalie demo and gloves/stick extra-frame scripts: D25-D26.
 
+**Decisions pt857 (2026-10-24):** 4-wide glove block (D27), 38 wide kept (D28), arm rows 11/15 illustrated (D29, pending), goalie pads L/R + cage texel with control 0 (D30), stick blade analysis (D31), Oilers Fuhr texture (D32), player glove textures (D33). Folders: `v2_38x32/decisions`, `goalie2`, `stick`, `gloves`.
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.

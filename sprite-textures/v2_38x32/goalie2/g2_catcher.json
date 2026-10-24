@@ -1,0 +1,88 @@
+{
+ "part": "catcher",
+ "frames": [
+  413,
+  416,
+  422,
+  428,
+  449,
+  519,
+  980,
+  1000
+ ],
+ "layout": [
+  19,
+  10,
+  10,
+  10
+ ],
+ "control_px_wrong": {
+  "HOME.json tor": 0,
+  "AWAY.json nyr": 0,
+  "HOME.json chi": 0,
+  "AWAY.json chi": 0,
+  "HOME.json mtl": 0
+ },
+ "stats": {
+  "413": {
+   "px": 0,
+   "texels": 0,
+   "shared": 0
+  },
+  "416": {
+   "px": 19,
+   "texels": 18,
+   "shared": 1
+  },
+  "422": {
+   "px": 0,
+   "texels": 0,
+   "shared": 0
+  },
+  "428": {
+   "px": 28,
+   "texels": 27,
+   "shared": 1
+  },
+  "449": {
+   "px": 0,
+   "texels": 0,
+   "shared": 0
+  },
+  "519": {
+   "px": 19,
+   "texels": 19,
+   "shared": 0
+  },
+  "980": {
+   "px": 32,
+   "texels": 32,
+   "shared": 0
+  },
+  "1000": {
+   "px": 0,
+   "texels": 0,
+   "shared": 0
+  }
+ },
+ "texels": 100,
+ "split": {
+  "413": 9.0,
+  "416": 9.0,
+  "422": 24.0,
+  "428": 12.0,
+  "449": 10.0,
+  "519": 11.5,
+  "980": 18.0,
+  "1000": 17.5
+ },
+ "texels_used": 57,
+ "family_fallback_px": {},
+ "texel_families": {
+  "arm stripe 2": 23,
+  "arm stripe 3": 52,
+  "forearm": 13,
+  "socks stripe 1": 7,
+  "socks stripe 2": 5
+ }
+}
