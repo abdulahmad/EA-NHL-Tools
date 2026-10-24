@@ -857,3 +857,11 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
   - The loop is fit, label every facing, refit, until no facing's labels change (at most 4 rounds). Siblings without goalie9 parts use colour zones only. No pad label may sit above hip level − 4 unless index evidence puts it there.
 - **D115 Guards.** A frame keeps its g15 legs if g16 maps it worse (this never triggered). 538 (19,19), (19,21), (20,21) and 1044 (24,9) keep their g15 labels until Abdul answers.
 - **Result.** 49 strict errors (49 mapping + 0 missing). g15 had 50, and 987 went from 7 to 6. Bone samples off the sprite, g15 → g16: 421 15→0, 538 8→4, 980 6→0, 520 6→5, 987 14→1, 505 6→0, 1044 2→0 (of 98 each). Since D109 put 182/183 into the texture, an unmatched shade px counts as mapping, where g14 counted it as missing colour. Per frame, total strict errors are ≤ g14 (980: 12 → 6, 407: 13 → 1), but 980/407/428/425 mapping alone is above g14's mapping-only count.
+
+## goalie17 – Abdul's g15 corrections as ground truth (D116–D121)
+- D116: SKATE labels grow back into their pads before post-rules; legs() maps L/R separately and merges only if one side < 8 px (replaces D102 narrow merge that joined 416/428 legs).
+- D117: R1 stick butt – trace the 136 shaft and label up to 2 px of index 0/8 past its upper end as STICK.
+- D118: R2 blade px (0/8) directly under pad/skate and touching skate/31 → SKATE; re-applied after legs() (fixes 1044 (33,10)).
+- D119: R3 pad-only indices {151,152,155,164} labelled blocker that touch a pad → pad; R4 catcher-zone body touching catcher → catcher; pad labels above pelvis-4 → body.
+- D120: R5 READY d6 frames with hidden right hand (425): blocker → body. R6 legs_assign: side views take the near leg as the larger mass; blobs cut off from their own leg but touching the other flip.
+- D121: g17checks.py verifies each of Abdul's corrections (416,419,538,407,428,980,425,1044,422 + all-frames butt); g17inspect.py writes per-frame coordinate sheets (clean + lettered labels, x/y axes). Result: 42 strict errors (g15 50), every frame ≤ g14. 416 5→6 and 407 1→2 come from the ground-truth pad pixels.

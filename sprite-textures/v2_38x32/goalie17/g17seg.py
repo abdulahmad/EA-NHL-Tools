@@ -1,0 +1,106 @@
+# Goalie v17 segmentation = g16 joint multi-facing fit + rules from Abdul's g15 corrections (pt911u, ground truth).
+#  R1 BUTT    the shaft (136) is traced as a line; up to 2 px past its upper end with index 0/8 are stick (butt tape),
+#             (416, 422, 538, 1044, 425 had the butt as b/B).
+#  R2 SKATE   blade px (index 0/8) directly under a pad/skate px, inside the pad-bottom column span and touching the
+#             skate (31 or skate label) are skate, not blade (1044).
+#  R3 PAD>BLK blocker px with a pad-only index (151/152/155/164) 4-connected to a pad join that pad (416 outer left pad).
+#  R4 GLOVE   body px with a catcher-zone index (144-152) 4-connected to the catcher join the catcher (422 glove lower).
+#  R5 HIDDEN  in the exact side view of the ready stance (blocker hand depth < -7.9 in the rotated 3D pose, d6) the
+#             blocker is behind the body: no blocker label (425).
+#  R6 LEGS    leg continuity: each side keeps its largest connected blob (from the skeleton labels); a smaller blob of
+#             that side that is cut off from it but touches the other leg joins the other leg (419, 407, 428, 980).
+#             Side views d2/d6 with one connected pad mass: the larger side is the near leg (d2 right, d6 left), so the
+#             two sides swap if needed (425). Pad labels above pelvis-4 (helmet columns on 407/980) become body.
+#  Frozen px (538 (19,19),(19,21),(20,21); 1044 (24,9)) keep their g15 labels.
+import sys,os,math,json
+H17=os.path.dirname(os.path.abspath(__file__));sys.path.insert(0,H17+'/../goalie16')
+import g16seg,g14seg
+from g16seg import *
+import numpy as np
+PADONLY={151,152,155,164}
+def nb4(y,x,H,W):
+    for d in ((y+1,x),(y-1,x),(y,x+1),(y,x-1)):
+        if 0<=d[0]<H and 0<=d[1]<W:yield d
+def grow(lab,p,src,dst,idx):
+    H,W=lab.shape;ch=True;n=0
+    while ch:
+        ch=False
+        for y in range(H):
+            for x in range(W):
+                if lab[y,x]==src and int(p[y,x]) in idx and any(lab[d]==dst for d in nb4(y,x,H,W)):lab[y,x]=dst;ch=True;n+=1
+    return n
+def butt(p,lab):
+    S=np.argwhere(p==136);out=[]
+    if len(S)<3:return out
+    top=S[S[:,0].argmin()];C=S[np.abs(S[:,0]-top[0])<=6].astype(float)
+    if np.ptp(C[:,0])<2:return out
+    a=np.polyfit(C[:,0],C[:,1],1)[0]   # dx per row going down; butt continues upward
+    y,x=float(top[0]),float(top[1])
+    for k in (1,2):
+        yy,xx=int(round(y-k)),int(round(x-k*a))
+        if 0<=yy<p.shape[0] and 0<=xx<p.shape[1] and int(p[yy,xx]) in(0,8):out.append((yy,xx))
+        else:break
+    return out
+def legs_assign(n,lab,J,d):
+    H,W=lab.shape;P=[tuple(c) for c in np.argwhere(np.isin(lab,[PADL,PADR]))]
+    if not P:return
+    if d in(2,6) and len(comps(P))==1:   # side view, one leg mass: the larger side is the near leg (d2 right, d6 left)
+        near=PADR if d==2 else PADL;far=PADL if d==2 else PADR
+        if (lab==far).sum()>(lab==near).sum():
+            m=lab.copy();lab[m==far]=near;lab[m==near]=far
+    for _ in range(3):   # leg continuity: a pad blob cut off from its side's main leg but touching the other leg flips
+        ch=False
+        for L,O in ((PADL,PADR),(PADR,PADL)):
+            bl=sorted(comps([tuple(c) for c in np.argwhere(lab==L)]),key=len,reverse=True)
+            for c in bl[1:]:
+                if len(c)<len(bl[0]) and any(lab[r]==O for q in c for r in nb4(*q,H,W)):
+                    for q in c:lab[q]=O
+                    ch=True
+        if not ch:break
+def post(n,p,lab,J):
+    lab=lab.copy();H,W=lab.shape;d=GF[n][0][1];log={}
+    # R2 skate under the pads
+    P=np.argwhere(np.isin(lab,[PADL,PADR]))
+    if len(P):
+        yb=P[:,0].max();xs=P[P[:,0]>=yb-3][:,1];x0,x1=xs.min(),xs.max();k=0
+        for y in range(yb-2,min(H,yb+4)):   # blade px right under a pad/skate px and touching the skate
+            for x in range(x0,x1+1):
+                if lab[y,x]==STICK and int(p[y,x]) in(0,8) and lab[y-1,x] in(PADL,PADR,SKATE) and \
+                   any(lab[yy,xx]==SKATE or int(p[yy,xx])==31 for yy in range(y-1,min(H,y+2)) for xx in range(max(0,x-1),min(W,x+2))):lab[y,x]=SKATE;k+=1
+        log['R2']=k
+    b=butt(p,lab);log['R1']=len(b)
+    for c in b:lab[c]=STICK
+    log['R3']=grow(lab,p,BLOCK,PADL,PADONLY)+grow(lab,p,BLOCK,PADR,PADONLY)
+    log['R4']=grow(lab,p,BODY,CATCH,CATZ)
+    t=math.radians(45*d);x,y,z=skel10.BASE['Rhand']
+    if n in skel10.READY and x*math.sin(t)-z*math.cos(t)<-7.9:log['R5']=int((lab==BLOCK).sum());lab[lab==BLOCK]=BODY
+    py=J['pelvis'][1];top=lab[:max(0,int(py-4))];top[np.isin(top,[PADL,PADR])]=BODY
+    before=lab.copy();legs_assign(n,lab,J,d);log['R6']=int((before!=lab).sum())
+    for c in FROZEN.get(n,[]):lab[c]=g15lab(n)[c]
+    return lab,log
+LOG={}
+G16=None
+def seg(n,iters=4):   # g16 joint-fit result (from its run) + the R rules
+    global G16
+    if G16 is None:G16=json.load(open('/tmp/g16_seg.json'))
+    S=G16[str(n)];p=frame(n);J={k:tuple(v) for k,v in S['joints'].items()}
+    lab=np.array(S['lab']);ALL=set(range(256))   # g16 stored the skate px legs() split off; give them back to their pad
+    grow(lab,p,SKATE,PADL,ALL);grow(lab,p,SKATE,PADR,ALL)
+    lab,LOG[n]=post(n,p,lab,J);return p,lab,J,S['src']+' +R'
+g14seg.seg=seg
+#  LEGS FOR MAPPING: with leg continuity in place, the two sides are mapped separately; the g13 "merge touching narrow
+#  pads" rule (D102) now only merges a side smaller than 8 px into the other (416 left+right were merged into one leg).
+def legs(n):
+    p,lab,J,src=seg(n);raw=[(g,set(zip(*np.nonzero(lab==L)))) for g,L in (('padF_L',PADL),('padF_R',PADR))];raw=[(g,s) for g,s in raw if s]
+    if len(raw)==2 and min(len(s) for g,s in raw)<8:raw=[(raw[0][0]+'+'+raw[1][0],raw[0][1]|raw[1][1])]
+    res=[]
+    for g,s in raw:
+        s=g14seg.main_body(s);sk=g14seg.skate(p,s)
+        for c in sk:lab[c]=SKATE
+        res.append((g,sorted(s-sk),sorted(sk)))
+    H,W=lab.shape;ch=True   # R2 again once legs() has marked the skate: blade px under a pad/skate px touching the skate
+    while ch:
+        ch=False
+        for y,x in np.argwhere(lab==STICK):
+            if int(p[y,x]) in(0,8) and y>0 and lab[y-1,x] in(PADL,PADR,SKATE) and any(lab[yy,xx]==SKATE or int(p[yy,xx])==31 for yy in range(y-1,min(H,y+2)) for xx in range(max(0,x-1),min(W,x+2))):lab[y,x]=SKATE;ch=True
+    return res,lab,J,src

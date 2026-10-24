@@ -1,0 +1,50 @@
+{
+ "416 outer left pad not blocker": {
+  "ok": true,
+  "detail": "blocker px with pad-only index touching pad L: 0"
+ },
+ "419 left pad not right": {
+  "ok": true,
+  "detail": "px cut off from their own leg but touching the other: 0"
+ },
+ "407 right pad inner edge not left": {
+  "ok": true,
+  "detail": "px cut off from their own leg but touching the other: 0"
+ },
+ "428 left pad not right": {
+  "ok": true,
+  "detail": "px cut off from their own leg but touching the other: 0"
+ },
+ "980 inner upper right pad not left": {
+  "ok": true,
+  "detail": "px cut off from their own leg but touching the other: 0"
+ },
+ "407 no pad label on helmet": {
+  "ok": true,
+  "detail": ""
+ },
+ "425 left pad majority, no blocker": {
+  "ok": true,
+  "detail": "L 28 R 14 B 0"
+ },
+ "1044 skate not blade": {
+  "ok": true,
+  "detail": "blade px under pad touching skate: []"
+ },
+ "422 glove covers catcher-colour body below it": {
+  "ok": true,
+  "detail": "body px with catcher index touching catcher: 0"
+ },
+ "538 stick butt": {
+  "ok": true,
+  "detail": "[(6, 17)]"
+ },
+ "538 right pad not blocker": {
+  "ok": true,
+  "detail": "only pad-only-index px are checked (0); the 144/146/147 board above the pad is still blocker - NEEDS coordinates from Abdul"
+ },
+ "all frames stick butt is stick": {
+  "ok": true,
+  "detail": "{416: [(13, 0)], 419: [(4, 5)], 421: [(1, 0)], 538: [(6, 17)], 413: [(11, 4)], 425: [(0, 6)], 987: [(4, 1)], 505: [(1, 4)], 422: [(0, 6)]}"
+ }
+}
