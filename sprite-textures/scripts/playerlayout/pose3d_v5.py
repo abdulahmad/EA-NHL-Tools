@@ -64,69 +64,86 @@ def obs(n):
 BONES=[('head','neck'),('neck','chest'),('chest','belly'),('belly','pelvis')]+[(f'{s} {a}',f'{s} {b}') for s in 'RL' for a,b in
        (('shoulder','elbow'),('elbow','wrist'),('wrist','glove'),('hip','knee'),('knee','ankle'),('ankle','skate'))]+\
       [('neck','R shoulder'),('neck','L shoulder'),('pelvis','R hip'),('pelvis','L hip'),('stick butt','stick heel'),('stick heel','stick toe')]
-def fitgroup(fr,swap=None,phis=(5,10,15,25,35)):
-    swap=swap or {}
-    O={};M={}
-    for n in fr:
-        o=obs(n)
-        if swap.get(n):o={(('L'+k[1:]) if k[0]=='R' else ('R'+k[1:]) if k[0]=='L' else k) if k[:2] in('R ','L ') else k:v for k,v in o.items()}
-        O[n]=o;q=G['MAPS'][n][0];M[n]=EDT(q==255)
-    names=sorted(set(k for o in O.values() for k in o));ix={k:i for i,k in enumerate(names)};N=len(names)
+def fitgroup(fr,phis=(5,10,15,25,35)):
+    # v5.4 (Abdul pt799u) stage 1: ONE shared 3D pose, but each frame's body yaw is FREE (weak prior towards 45 deg x d, 0.3 per 10 deg)
+    O={n:obs(n) for n in fr};M={n:EDT(G['MAPS'][n][0]==255) for n in fr}
+    names=sorted(set(k for o in O.values() for k in o));ix={k:i for i,k in enumerate(names)};N=len(names);nf=list(fr)
+    OI={n:(np.array([ix[k] for k in O[n]]),np.array(list(O[n].values()))) for n in nf}
+    BI=np.array([(ix[a],ix[b]) for a,b in BONES if a in ix and b in ix]);TS=np.array([0.25,0.5,0.75])
+    SY=[(ix[a],ix[b],ix['L'+a[1:]],ix['L'+b[1:]]) for a,b in BONES if a[:2]=='R ' and b[:2]=='R ' and all(k in ix for k in(a,b,'L'+a[1:],'L'+b[1:]))]
+    SY=np.array(SY) if SY else np.zeros((0,4),int)
+    NOM={n:np.radians(45*fr[n]) for n in nf}
+    def frame_res(P3,th,phi,s,o,n):
+        pr=proj(P3,th,phi,s,o);R=[(pr[OI[n][0]]-OI[n][1]).ravel()]
+        if len(BI):
+            p=(pr[BI[:,0]][:,None,:]*(1-TS[None,:,None])+pr[BI[:,1]][:,None,:]*TS[None,:,None]).reshape(-1,2)
+            R.append(0.5*map_coordinates(M[n],[p[:,1],p[:,0]],order=1,mode='nearest'))
+        return R
     best=None
     for phi in np.radians(list(phis)):
-        # init: average of back-projections with f=0
         P0=np.zeros((N,3));cnt=np.zeros(N)
         for n,o in O.items():
-            th=np.radians(45*fr[n]);ce=np.mean(list(o.values()),0)
-            for k,v in o.items():
-                P0[ix[k]]+=[ (v[0]-ce[0])*np.cos(th),-(v[1]-ce[1])/np.cos(phi),(v[0]-ce[0])*np.sin(th)];cnt[ix[k]]+=1
+            th=NOM[n];ce=np.mean(list(o.values()),0)
+            for k,v in o.items():P0[ix[k]]+=[(v[0]-ce[0])*np.cos(th),-(v[1]-ce[1])/np.cos(phi),(v[0]-ce[0])*np.sin(th)];cnt[ix[k]]+=1
         P0/=np.maximum(1,cnt)[:,None]
-        nf=list(fr);x0=np.concatenate([P0.ravel(),[1.0]]+[np.mean(list(O[n].values()),0) for n in nf])
-        OI={n:(np.array([ix[k] for k in O[n]]),np.array(list(O[n].values()))) for n in nf}
-        BI=np.array([(ix[a],ix[b]) for a,b in BONES if a in ix and b in ix]);TS=np.array([0.25,0.5,0.75])
-        SY=[(ix[a],ix[b],ix['L'+a[1:]],ix['L'+b[1:]]) for a,b in BONES if a[:2]=='R ' and b[:2]=='R ' and all(k in ix for k in(a,b,'L'+a[1:],'L'+b[1:]))]
-        SY=np.array(SY) if SY else np.zeros((0,4),int)
+        x0=np.concatenate([P0.ravel(),[1.0]]+[np.mean(list(O[n].values()),0) for n in nf]+[[NOM[n] for n in nf]])
         def res(x):
-            P3=x[:3*N].reshape(N,3);s=x[3*N];R=[]
+            P3=x[:3*N].reshape(N,3);s=x[3*N];TH=x[3*N+1+2*len(nf):];R=[]
             for i,n in enumerate(nf):
-                o=x[3*N+1+2*i:3*N+3+2*i];pr=proj(P3,np.radians(45*fr[n]),phi,s,o)
-                R.append((pr[OI[n][0]]-OI[n][1]).ravel())
-                if len(BI):
-                    p=(pr[BI[:,0]][:,None,:]*(1-TS[None,:,None])+pr[BI[:,1]][:,None,:]*TS[None,:,None]).reshape(-1,2)
-                    R.append(0.5*map_coordinates(M[n],[p[:,1],p[:,0]],order=1,mode='nearest'))
+                R+=frame_res(P3,TH[i],phi,s,x[3*N+1+2*i:3*N+3+2*i],n);R.append([0.3*np.degrees(TH[i]-NOM[n])/10])
             if len(SY):R.append(0.5*(np.linalg.norm(P3[SY[:,0]]-P3[SY[:,1]],axis=1)-np.linalg.norm(P3[SY[:,2]]-P3[SY[:,3]],axis=1)))
             return np.concatenate(R)
-        r=least_squares(res,x0,loss='soft_l1',f_scale=1.5,max_nfev=400)
+        r=least_squares(res,x0,loss='soft_l1',f_scale=1.5,max_nfev=500)
         if best is None or r.cost<best[0]:best=(r.cost,r,phi)
-    _,r,phi=best;x=r.x;P3=x[:3*N].reshape(N,3);s=x[3*N]
-    per={};PR={}
-    for i,n in enumerate(fr):
-        o=x[3*N+1+2*i:3*N+3+2*i];pr=proj(P3,np.radians(45*fr[n]),phi,s,o);PR[n]={k:pr[ix[k]] for k in names}
-        e=[float(np.linalg.norm(pr[ix[k]]-v)) for k,v in O[n].items()]
-        sil=[];q=G['MAPS'][n][0]
+    _,r,phi=best;x=r.x;P3=x[:3*N].reshape(N,3);s=x[3*N];TH=x[3*N+1+2*len(nf):]
+    # stage 2: per-frame refinement. Each frame may move its joints by D (3D) and its yaw, penalised: 0.8 per px of joint displacement + 0.12 per degree of bone-direction change,
+    # 0.3 per 10 deg of yaw change -> the shared pose is the prior/ballpark, the fit tightens where the drawing differs.
+    per={};PR={};SH={};SCAN={}
+    for i,n in enumerate(nf):
+        cur=[]
+        for dg in range(0,360,5):
+            pr=proj(P3,np.radians(dg),phi,s,(0,0));d_=OI[n][1]-pr[OI[n][0]];o_=np.median(d_,0);cur.append((float(np.mean(np.linalg.norm(d_-o_,axis=1))),dg))
+        SCAN[n]=cur
+    for i,n in enumerate(nf):
+        o0=x[3*N+1+2*i:3*N+3+2*i]
+        def res2(z):
+            D=z[:3*N].reshape(N,3);th=z[3*N];o=z[3*N+1:]
+            BA=[]
+            for a_,b_ in BI:   # bone direction change vs the shared pose: 0.12 per degree (bounded: a few degrees)
+                u0=P3[b_]-P3[a_];u1=u0+D[b_]-D[a_];BA.append(0.12*np.degrees(np.arctan2(np.linalg.norm(np.cross(u0,u1)),u0@u1)))
+            return np.concatenate(frame_res(P3+D,th,phi,s,o,n)+[0.8*s*D.ravel(),BA,[0.3*np.degrees(th-TH[i])/10]])
+        z=least_squares(res2,np.concatenate([np.zeros(3*N),[TH[i]],o0]),loss='soft_l1',f_scale=1.5,max_nfev=300).x
+        D=z[:3*N].reshape(N,3);th=z[3*N];o=z[3*N+1:]
+        pr=proj(P3+D,th,phi,s,o);PR[n]={k:pr[ix[k]] for k in names};p0=proj(P3,TH[i],phi,s,o0);SH[n]={k:p0[ix[k]] for k in names}
+        def stats(PRn):
+            e=[float(np.linalg.norm(PRn[k]-v)) for k,v in O[n].items()];q=G['MAPS'][n][0];sil=[]
+            for a,b in BONES:
+                if a in ix and b in ix:
+                    for t in np.linspace(0,1,7):
+                        p=np.round(PRn[a]*(1-t)+PRn[b]*t).astype(int);sil.append(0<=p[1]<q.shape[0] and 0<=p[0]<q.shape[1] and q[p[1],p[0]]!=255)
+            return round(float(np.mean(e)),2),round(float(np.max(e)),2),round(float(np.mean(sil)),3)
+        ang=[]
         for a,b in BONES:
             if a in ix and b in ix:
-                for t in np.linspace(0,1,7):
-                    p=np.round(PR[n][a]*(1-t)+PR[n][b]*t).astype(int)
-                    sil.append(0<=p[1]<q.shape[0] and 0<=p[0]<q.shape[1] and q[p[1],p[0]]!=255)
+                u0=P3[ix[b]]-P3[ix[a]];u1=(P3+D)[ix[b]]-(P3+D)[ix[a]]
+                ang.append(np.degrees(np.arccos(np.clip(u0@u1/max(1e-9,np.linalg.norm(u0)*np.linalg.norm(u1)),-1,1))))
+        e0=stats(SH[n]);e1=stats(PR[n]);dpx=s*np.linalg.norm(D,axis=1)
         worst=sorted(((float(np.linalg.norm(PR[n][k]-v)),k) for k,v in O[n].items()),reverse=True)[:3]
-        per[n]=dict(dir=fr[n],mean_err_px=round(float(np.mean(e)),2),max_err_px=round(float(np.max(e)),2),
-                    bone_on_sprite=round(float(np.mean(sil)),3),worst=[(k,round(v,1)) for v,k in worst])
-    return dict(phi_deg=round(float(np.degrees(phi)),1),scale=round(float(s),3),joints3d={k:P3[ix[k]].round(2).tolist() for k in names},per_frame=per),PR,O
-RES={};PROJ={};OBS={}
+        per[n]=dict(dir=fr[n],yaw_nominal=45*fr[n],yaw_shared_fit=round(float(np.degrees(TH[i])),1),yaw_refined=round(float(np.degrees(th)),1),
+                    shared_mean_err=e0[0],shared_max_err=e0[1],shared_on_sprite=e0[2],mean_err_px=e1[0],max_err_px=e1[1],bone_on_sprite=e1[2],
+                    dev_mean_px=round(float(dpx.mean()),2),dev_max_px=round(float(dpx.max()),2),dev_max_bone_deg=round(float(max(ang)),1),
+                    worst=[(k,round(v,1)) for v,k in worst],
+                    yaw_scan_best=min(SCAN[n])[1],yaw_scan_err_best=round(min(SCAN[n])[0],2),
+                    yaw_scan_err_at_nominal=round(dict((d,e) for e,d in SCAN[n])[(45*fr[n])%360],2))
+    return dict(phi_deg=round(float(np.degrees(phi)),1),scale=round(float(s),3),joints3d={k:P3[ix[k]].round(2).tolist() for k in names},per_frame=per),PR,O,SH
+RES={};PROJ={};OBS={};SHP={}
 QUICK=os.environ.get('QUICK')=='1'
 for gname,fr in ({} if QUICK else GROUPS).items():
     if len(fr)<2:
         n=list(fr)[0];RES[gname]=dict(note='single frame: same sprite drawn for all 8 directions, no rotation to fit',per_frame={n:dict(dir=fr[n])});
         PROJ[n]={k:v for k,v in obs(n).items()};OBS[n]=obs(n);continue
-    R0,PR,O=fitgroup(fr)
-    # left/right test: does swapping one frame's L/R labels fit the shared pose better? (flags L/R-inconsistent segmentation or art)
-    flips=[]
-    for n in fr:
-        R1,PR1,O1=fitgroup(fr,{n:True},phis=(R0['phi_deg'],))
-        if R1['per_frame'][n]['mean_err_px']+0.5<R0['per_frame'][n]['mean_err_px']:flips.append((n,R0['per_frame'][n]['mean_err_px'],R1['per_frame'][n]['mean_err_px']))
-    R0['lr_swap_improves']=flips;RES[gname]=R0;PROJ.update(PR);OBS.update(O)
-    print(gname,'phi',R0['phi_deg'],{n:(v['mean_err_px'],v['max_err_px'],v['bone_on_sprite']) for n,v in R0['per_frame'].items()},'flips',flips)
+    R0,PR,O,SH=fitgroup(fr);RES[gname]=R0;PROJ.update(PR);OBS.update(O);SHP.update(SH)
+    for n,v in R0['per_frame'].items():print(gname[:14],n,{k:v[k] for k in v if k!='worst'})
 if not QUICK:json.dump(dict(groups=RES,stick2d=ST),open(f'{OUT}/pose3d_v5.json','w'),indent=1,default=float)
 # ---------- sheets: game sprite washed out, shared-pose projection (thick black/white bones, white dots), observed 2D joints = small black squares
 SC=8
@@ -135,8 +152,9 @@ def draw(n,PRn,On,label):
     o=np.full((h,w,3),255,np.uint8);m=q!=255;o[m]=(sp[q[m]]*0.35+255*0.65).astype(np.uint8)
     for p,t in G['MAPS'][n][3].items():
         if t=='stick':o[p]=(70,70,70)        # drawn stick pixels: dark grey
-    im=Image.fromarray(o).resize((w*SC,h*SC),Image.NEAREST);d=ImageDraw.Draw(im)
-    P=lambda v:(v[0]*SC+SC/2,v[1]*SC+SC/2)
+    PAD=6;o2=np.full((h+2*PAD,w+2*PAD,3),255,np.uint8);o2[PAD:PAD+h,PAD:PAD+w]=o;o=o2   # 6-px margin: labels/stick never clip
+    im=Image.fromarray(o).resize(((w+2*PAD)*SC,(h+2*PAD)*SC),Image.NEAREST);d=ImageDraw.Draw(im)
+    P=lambda v:((v[0]+PAD)*SC+SC/2,(v[1]+PAD)*SC+SC/2)
     for k,v in On.items():X,Y=P(v);d.rectangle([X-3,Y-3,X+3,Y+3],fill=(0,0,0))
     for a,b in BONES:
         if a in PRn and b in PRn:
@@ -146,17 +164,22 @@ def draw(n,PRn,On,label):
         if k[:2] in('R ','L ') and k.split()[1] in('glove','skate','shoulder'):d.text((X+6,Y-6),k[0],fill=(0,0,0))
     for a,b,lab in(('stick butt','stick heel','SHAFT'),('stick heel','stick toe','BLADE')):
         if a in PRn:M_=((P(PRn[a])[0]+P(PRn[b])[0])/2,(P(PRn[a])[1]+P(PRn[b])[1])/2);tw=d.textlength(lab);d.rectangle([M_[0]-tw/2-2,M_[1]-15,M_[0]+tw/2+2,M_[1]-3],fill=(0,0,0));d.text((M_[0]-tw/2,M_[1]-14),lab,fill=(255,255,255))
-    c=Image.new('RGB',(im.width,im.height+30),'white');c.paste(im,(0,30));ImageDraw.Draw(c).text((4,4),label,fill=(0,0,0));return c
+    L=label.split('|');tw=int(max(ImageDraw.Draw(im).textlength(x) for x in L))+8;cw=max(im.width,tw)   # column at least as wide as its label: no clipping
+    c=Image.new('RGB',(cw,im.height+16*len(L)+6),'white');c.paste(im,((cw-im.width)//2,16*len(L)+6))
+    for i,x in enumerate(L):ImageDraw.Draw(c).text((4,4+16*i),x,fill=(0,0,0))
+    return c
 def row_sheet(items,title,path):
     CW=max(i.width for i in items)+16;RH=max(i.height for i in items)+10
     W=Image.new('RGB',(CW*len(items),RH+40),'white');dr=ImageDraw.Draw(W);dr.text((6,6),title,fill=(0,0,0))
     for j,i in enumerate(items):W.paste(i,(j*CW+(CW-i.width)//2,40+(RH-i.height)))    # centred per column, common baseline
     W.save(path)
-LEG='white bones = ONE shared 3D pose rotated to each direction; yellow = stick (SHAFT/BLADE); small black squares = joints seen in that frame'
+LEG='white bones = refined pose for this direction (shared 3D pose + small penalised deviation); yellow = stick (SHAFT/BLADE); small black squares = joints seen in that frame'
 for gname,fr in ({} if QUICK else GROUPS).items():
     if len(fr)<2:continue
-    items=[draw(n,PROJ[n],OBS[n],f"{n} d{fr[n]} err {RES[gname]['per_frame'][n]['mean_err_px']}px on-sprite {RES[gname]['per_frame'][n]['bone_on_sprite']}") for n in fr]
-    row_sheet(items,f"{gname}: phi {RES[gname]['phi_deg']} deg.  {LEG}",f"{OUT}/pose_{gname.split()[0]}_sheet.png")
+    pf=RES[gname]['per_frame']
+    items=[draw(n,PROJ[n],OBS[n],f"{n} d{fr[n]}  yaw {pf[n]['yaw_refined']:.0f} (nominal {45*fr[n]})|err {pf[n]['mean_err_px']}/{pf[n]['max_err_px']}px|dev {pf[n]['dev_mean_px']}/{pf[n]['dev_max_px']}px, {pf[n]['dev_max_bone_deg']}deg") for n in fr]
+    row_sheet(items[:4],f"{gname} (1/2): per-direction refined pose (shared 3D pose = prior), free yaw, phi {RES[gname]['phi_deg']}.  {LEG}",f"{OUT}/pose_{gname.split()[0]}_sheet_a.png")
+    row_sheet(items[4:],f"{gname} (2/2)",f"{OUT}/pose_{gname.split()[0]}_sheet_b.png")
 # fixed stick sheet (2D stick from pixels) on 370/889/42/67/52/72
 items=[]
 for n in (370,889,42,67,52,72):

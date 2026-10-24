@@ -1,0 +1,1160 @@
+{
+ "groups": {
+  "SPAskate phase 0": {
+   "phi_deg": 15.0,
+   "scale": 63.047,
+   "joints3d": {
+    "L ankle": [
+     -0.08,
+     -0.14,
+     -0.14
+    ],
+    "L elbow": [
+     -0.06,
+     0.03,
+     0.03
+    ],
+    "L glove": [
+     -0.06,
+     -0.02,
+     0.09
+    ],
+    "L hip": [
+     -0.04,
+     -0.05,
+     -0.08
+    ],
+    "L knee": [
+     -0.05,
+     -0.08,
+     -0.08
+    ],
+    "L shoulder": [
+     -0.05,
+     0.07,
+     0.05
+    ],
+    "L skate": [
+     -0.11,
+     -0.17,
+     -0.15
+    ],
+    "L wrist": [
+     -0.06,
+     -0.0,
+     0.06
+    ],
+    "R ankle": [
+     0.07,
+     -0.14,
+     -0.0
+    ],
+    "R elbow": [
+     0.09,
+     0.07,
+     -0.07
+    ],
+    "R glove": [
+     0.07,
+     -0.0,
+     0.0
+    ],
+    "R hip": [
+     0.04,
+     -0.07,
+     0.0
+    ],
+    "R knee": [
+     0.06,
+     -0.08,
+     0.01
+    ],
+    "R shoulder": [
+     0.08,
+     0.11,
+     -0.04
+    ],
+    "R skate": [
+     0.07,
+     -0.18,
+     0.0
+    ],
+    "R wrist": [
+     0.09,
+     0.03,
+     -0.07
+    ],
+    "belly": [
+     -0.0,
+     0.04,
+     -0.07
+    ],
+    "chest": [
+     0.01,
+     0.1,
+     0.0
+    ],
+    "head": [
+     0.01,
+     0.15,
+     0.08
+    ],
+    "neck": [
+     0.01,
+     0.11,
+     0.04
+    ],
+    "pelvis": [
+     -0.0,
+     0.02,
+     -0.08
+    ],
+    "stick butt": [
+     0.06,
+     0.0,
+     0.04
+    ],
+    "stick heel": [
+     -0.11,
+     -0.05,
+     0.13
+    ],
+    "stick toe": [
+     -0.17,
+     0.0,
+     0.17
+    ]
+   },
+   "per_frame": {
+    "42": {
+     "dir": 0,
+     "yaw_nominal": 0,
+     "yaw_shared_fit": -1.3,
+     "yaw_refined": -2.5,
+     "shared_mean_err": 1.23,
+     "shared_max_err": 5.27,
+     "shared_on_sprite": 0.935,
+     "mean_err_px": 0.6,
+     "max_err_px": 2.08,
+     "bone_on_sprite": 0.987,
+     "dev_mean_px": 0.72,
+     "dev_max_px": 2.98,
+     "dev_max_bone_deg": 8.8,
+     "worst": [
+      [
+       "stick heel",
+       2.1
+      ],
+      [
+       "stick toe",
+       1.4
+      ],
+      [
+       "L ankle",
+       1.3
+      ]
+     ],
+     "yaw_scan_best": 0,
+     "yaw_scan_err_best": 1.24,
+     "yaw_scan_err_at_nominal": 1.24
+    },
+    "47": {
+     "dir": 1,
+     "yaw_nominal": 45,
+     "yaw_shared_fit": 32.0,
+     "yaw_refined": 32.3,
+     "shared_mean_err": 0.98,
+     "shared_max_err": 1.5,
+     "shared_on_sprite": 0.994,
+     "mean_err_px": 0.61,
+     "max_err_px": 1.0,
+     "bone_on_sprite": 1.0,
+     "dev_mean_px": 0.31,
+     "dev_max_px": 0.69,
+     "dev_max_bone_deg": 4.9,
+     "worst": [
+      [
+       "R elbow",
+       1.0
+      ],
+      [
+       "R wrist",
+       0.9
+      ],
+      [
+       "R glove",
+       0.9
+      ]
+     ],
+     "yaw_scan_best": 30,
+     "yaw_scan_err_best": 0.98,
+     "yaw_scan_err_at_nominal": 1.19
+    },
+    "52": {
+     "dir": 2,
+     "yaw_nominal": 90,
+     "yaw_shared_fit": 90.8,
+     "yaw_refined": 90.9,
+     "shared_mean_err": 1.36,
+     "shared_max_err": 3.38,
+     "shared_on_sprite": 0.981,
+     "mean_err_px": 0.75,
+     "max_err_px": 2.21,
+     "bone_on_sprite": 0.994,
+     "dev_mean_px": 0.63,
+     "dev_max_px": 1.2,
+     "dev_max_bone_deg": 8.5,
+     "worst": [
+      [
+       "R wrist",
+       2.2
+      ],
+      [
+       "pelvis",
+       1.6
+      ],
+      [
+       "belly",
+       1.5
+      ]
+     ],
+     "yaw_scan_best": 90,
+     "yaw_scan_err_best": 1.36,
+     "yaw_scan_err_at_nominal": 1.36
+    },
+    "57": {
+     "dir": 3,
+     "yaw_nominal": 135,
+     "yaw_shared_fit": 179.3,
+     "yaw_refined": 179.1,
+     "shared_mean_err": 1.6,
+     "shared_max_err": 5.28,
+     "shared_on_sprite": 0.909,
+     "mean_err_px": 1.17,
+     "max_err_px": 4.42,
+     "bone_on_sprite": 0.916,
+     "dev_mean_px": 0.51,
+     "dev_max_px": 1.3,
+     "dev_max_bone_deg": 9.0,
+     "worst": [
+      [
+       "pelvis",
+       4.4
+      ],
+      [
+       "belly",
+       4.1
+      ],
+      [
+       "L skate",
+       3.0
+      ]
+     ],
+     "yaw_scan_best": 180,
+     "yaw_scan_err_best": 1.6,
+     "yaw_scan_err_at_nominal": 2.4
+    },
+    "62": {
+     "dir": 4,
+     "yaw_nominal": 180,
+     "yaw_shared_fit": 178.9,
+     "yaw_refined": 179.0,
+     "shared_mean_err": 1.53,
+     "shared_max_err": 3.73,
+     "shared_on_sprite": 0.987,
+     "mean_err_px": 0.94,
+     "max_err_px": 3.04,
+     "bone_on_sprite": 1.0,
+     "dev_mean_px": 0.68,
+     "dev_max_px": 1.35,
+     "dev_max_bone_deg": 6.2,
+     "worst": [
+      [
+       "L shoulder",
+       3.0
+      ],
+      [
+       "R shoulder",
+       1.9
+      ],
+      [
+       "stick toe",
+       1.5
+      ]
+     ],
+     "yaw_scan_best": 180,
+     "yaw_scan_err_best": 1.53,
+     "yaw_scan_err_at_nominal": 1.53
+    },
+    "67": {
+     "dir": 5,
+     "yaw_nominal": 225,
+     "yaw_shared_fit": 224.2,
+     "yaw_refined": 224.2,
+     "shared_mean_err": 2.85,
+     "shared_max_err": 6.41,
+     "shared_on_sprite": 0.896,
+     "mean_err_px": 1.66,
+     "max_err_px": 4.11,
+     "bone_on_sprite": 0.974,
+     "dev_mean_px": 1.0,
+     "dev_max_px": 3.11,
+     "dev_max_bone_deg": 13.1,
+     "worst": [
+      [
+       "R shoulder",
+       4.1
+      ],
+      [
+       "R elbow",
+       3.9
+      ],
+      [
+       "R glove",
+       3.3
+      ]
+     ],
+     "yaw_scan_best": 220,
+     "yaw_scan_err_best": 2.83,
+     "yaw_scan_err_at_nominal": 2.9
+    },
+    "72": {
+     "dir": 6,
+     "yaw_nominal": 270,
+     "yaw_shared_fit": 274.5,
+     "yaw_refined": 274.5,
+     "shared_mean_err": 1.36,
+     "shared_max_err": 4.08,
+     "shared_on_sprite": 0.909,
+     "mean_err_px": 0.72,
+     "max_err_px": 2.05,
+     "bone_on_sprite": 0.987,
+     "dev_mean_px": 0.72,
+     "dev_max_px": 2.26,
+     "dev_max_bone_deg": 6.6,
+     "worst": [
+      [
+       "stick butt",
+       2.1
+      ],
+      [
+       "stick toe",
+       1.7
+      ],
+      [
+       "R wrist",
+       1.7
+      ]
+     ],
+     "yaw_scan_best": 275,
+     "yaw_scan_err_best": 1.35,
+     "yaw_scan_err_at_nominal": 1.38
+    },
+    "77": {
+     "dir": 7,
+     "yaw_nominal": 315,
+     "yaw_shared_fit": 289.7,
+     "yaw_refined": 289.6,
+     "shared_mean_err": 2.6,
+     "shared_max_err": 11.38,
+     "shared_on_sprite": 0.929,
+     "mean_err_px": 1.74,
+     "max_err_px": 9.27,
+     "bone_on_sprite": 0.968,
+     "dev_mean_px": 0.83,
+     "dev_max_px": 2.22,
+     "dev_max_bone_deg": 8.2,
+     "worst": [
+      [
+       "stick butt",
+       9.3
+      ],
+      [
+       "stick toe",
+       5.9
+      ],
+      [
+       "pelvis",
+       2.0
+      ]
+     ],
+     "yaw_scan_best": 290,
+     "yaw_scan_err_best": 2.59,
+     "yaw_scan_err_at_nominal": 2.84
+    }
+   }
+  },
+  "SPAcrosscheck phase 0": {
+   "phi_deg": 5.0,
+   "scale": 1.27,
+   "joints3d": {
+    "L ankle": [
+     -1.56,
+     -9.87,
+     -1.49
+    ],
+    "L elbow": [
+     -5.98,
+     3.21,
+     0.12
+    ],
+    "L glove": [
+     -5.55,
+     2.82,
+     3.01
+    ],
+    "L hip": [
+     -1.4,
+     -5.19,
+     -0.63
+    ],
+    "L knee": [
+     -1.26,
+     -6.65,
+     -0.55
+    ],
+    "L shoulder": [
+     -3.32,
+     4.01,
+     -0.77
+    ],
+    "L skate": [
+     -1.68,
+     -11.75,
+     -0.6
+    ],
+    "L wrist": [
+     -5.63,
+     3.53,
+     1.87
+    ],
+    "R ankle": [
+     2.55,
+     -9.83,
+     -1.48
+    ],
+    "R elbow": [
+     7.3,
+     3.26,
+     -0.06
+    ],
+    "R glove": [
+     6.64,
+     3.08,
+     2.8
+    ],
+    "R hip": [
+     2.66,
+     -5.17,
+     -0.66
+    ],
+    "R knee": [
+     2.57,
+     -6.58,
+     -0.59
+    ],
+    "R shoulder": [
+     4.55,
+     4.17,
+     -0.88
+    ],
+    "R skate": [
+     2.68,
+     -11.72,
+     -0.62
+    ],
+    "R wrist": [
+     7.13,
+     3.6,
+     1.65
+    ],
+    "belly": [
+     0.47,
+     -0.24,
+     -1.7
+    ],
+    "chest": [
+     0.53,
+     4.45,
+     -2.24
+    ],
+    "head": [
+     0.64,
+     8.51,
+     -1.09
+    ],
+    "neck": [
+     0.59,
+     5.7,
+     -1.87
+    ],
+    "pelvis": [
+     0.43,
+     -0.76,
+     -1.76
+    ],
+    "stick butt": [
+     11.23,
+     3.28,
+     1.28
+    ],
+    "stick heel": [
+     -9.91,
+     2.25,
+     3.52
+    ],
+    "stick toe": [
+     -11.77,
+     1.28,
+     3.18
+    ]
+   },
+   "per_frame": {
+    "889": {
+     "dir": 0,
+     "yaw_nominal": 0,
+     "yaw_shared_fit": -3.8,
+     "yaw_refined": -2.9,
+     "shared_mean_err": 1.0,
+     "shared_max_err": 2.9,
+     "shared_on_sprite": 0.974,
+     "mean_err_px": 0.62,
+     "max_err_px": 1.68,
+     "bone_on_sprite": 1.0,
+     "dev_mean_px": 0.47,
+     "dev_max_px": 1.65,
+     "dev_max_bone_deg": 5.2,
+     "worst": [
+      [
+       "R glove",
+       1.7
+      ],
+      [
+       "L glove",
+       1.6
+      ],
+      [
+       "L elbow",
+       1.3
+      ]
+     ],
+     "yaw_scan_best": 355,
+     "yaw_scan_err_best": 0.98,
+     "yaw_scan_err_at_nominal": 0.98
+    },
+    "891": {
+     "dir": 1,
+     "yaw_nominal": 45,
+     "yaw_shared_fit": 92.8,
+     "yaw_refined": 94.0,
+     "shared_mean_err": 2.88,
+     "shared_max_err": 10.49,
+     "shared_on_sprite": 0.961,
+     "mean_err_px": 1.67,
+     "max_err_px": 5.52,
+     "bone_on_sprite": 0.948,
+     "dev_mean_px": 1.07,
+     "dev_max_px": 4.48,
+     "dev_max_bone_deg": 11.9,
+     "worst": [
+      [
+       "stick butt",
+       5.5
+      ],
+      [
+       "L skate",
+       3.7
+      ],
+      [
+       "L ankle",
+       3.0
+      ]
+     ],
+     "yaw_scan_best": 90,
+     "yaw_scan_err_best": 2.89,
+     "yaw_scan_err_at_nominal": 4.28
+    },
+    "893": {
+     "dir": 2,
+     "yaw_nominal": 90,
+     "yaw_shared_fit": 93.3,
+     "yaw_refined": 93.2,
+     "shared_mean_err": 2.02,
+     "shared_max_err": 4.21,
+     "shared_on_sprite": 0.916,
+     "mean_err_px": 1.12,
+     "max_err_px": 2.97,
+     "bone_on_sprite": 0.987,
+     "dev_mean_px": 0.71,
+     "dev_max_px": 2.47,
+     "dev_max_bone_deg": 5.7,
+     "worst": [
+      [
+       "R glove",
+       3.0
+      ],
+      [
+       "stick toe",
+       2.5
+      ],
+      [
+       "R shoulder",
+       1.8
+      ]
+     ],
+     "yaw_scan_best": 95,
+     "yaw_scan_err_best": 2.03,
+     "yaw_scan_err_at_nominal": 2.11
+    },
+    "895": {
+     "dir": 3,
+     "yaw_nominal": 135,
+     "yaw_shared_fit": 140.7,
+     "yaw_refined": 142.3,
+     "shared_mean_err": 1.41,
+     "shared_max_err": 2.86,
+     "shared_on_sprite": 0.942,
+     "mean_err_px": 0.78,
+     "max_err_px": 1.36,
+     "bone_on_sprite": 0.981,
+     "dev_mean_px": 0.62,
+     "dev_max_px": 1.95,
+     "dev_max_bone_deg": 5.6,
+     "worst": [
+      [
+       "chest",
+       1.4
+      ],
+      [
+       "L elbow",
+       1.3
+      ],
+      [
+       "stick heel",
+       1.3
+      ]
+     ],
+     "yaw_scan_best": 140,
+     "yaw_scan_err_best": 1.41,
+     "yaw_scan_err_at_nominal": 1.49
+    },
+    "897": {
+     "dir": 4,
+     "yaw_nominal": 180,
+     "yaw_shared_fit": 172.1,
+     "yaw_refined": 174.3,
+     "shared_mean_err": 0.77,
+     "shared_max_err": 1.57,
+     "shared_on_sprite": 0.981,
+     "mean_err_px": 0.47,
+     "max_err_px": 1.03,
+     "bone_on_sprite": 0.994,
+     "dev_mean_px": 0.38,
+     "dev_max_px": 0.82,
+     "dev_max_bone_deg": 2.9,
+     "worst": [
+      [
+       "R elbow",
+       1.0
+      ],
+      [
+       "R glove",
+       0.9
+      ],
+      [
+       "stick toe",
+       0.8
+      ]
+     ],
+     "yaw_scan_best": 170,
+     "yaw_scan_err_best": 0.78,
+     "yaw_scan_err_at_nominal": 0.82
+    },
+    "899": {
+     "dir": 5,
+     "yaw_nominal": 225,
+     "yaw_shared_fit": 211.9,
+     "yaw_refined": 210.8,
+     "shared_mean_err": 1.34,
+     "shared_max_err": 2.59,
+     "shared_on_sprite": 0.981,
+     "mean_err_px": 0.8,
+     "max_err_px": 1.98,
+     "bone_on_sprite": 0.994,
+     "dev_mean_px": 0.56,
+     "dev_max_px": 1.26,
+     "dev_max_bone_deg": 4.9,
+     "worst": [
+      [
+       "R glove",
+       2.0
+      ],
+      [
+       "chest",
+       1.3
+      ],
+      [
+       "R elbow",
+       1.1
+      ]
+     ],
+     "yaw_scan_best": 210,
+     "yaw_scan_err_best": 1.36,
+     "yaw_scan_err_at_nominal": 1.72
+    },
+    "901": {
+     "dir": 6,
+     "yaw_nominal": 270,
+     "yaw_shared_fit": 266.8,
+     "yaw_refined": 266.0,
+     "shared_mean_err": 1.73,
+     "shared_max_err": 3.45,
+     "shared_on_sprite": 0.955,
+     "mean_err_px": 0.88,
+     "max_err_px": 1.92,
+     "bone_on_sprite": 0.974,
+     "dev_mean_px": 0.66,
+     "dev_max_px": 1.99,
+     "dev_max_bone_deg": 5.8,
+     "worst": [
+      [
+       "L shoulder",
+       1.9
+      ],
+      [
+       "L glove",
+       1.7
+      ],
+      [
+       "L hip",
+       1.4
+      ]
+     ],
+     "yaw_scan_best": 265,
+     "yaw_scan_err_best": 1.74,
+     "yaw_scan_err_at_nominal": 1.81
+    },
+    "903": {
+     "dir": 7,
+     "yaw_nominal": 315,
+     "yaw_shared_fit": 268.2,
+     "yaw_refined": 267.8,
+     "shared_mean_err": 2.85,
+     "shared_max_err": 8.45,
+     "shared_on_sprite": 0.942,
+     "mean_err_px": 1.61,
+     "max_err_px": 4.51,
+     "bone_on_sprite": 0.929,
+     "dev_mean_px": 1.09,
+     "dev_max_px": 4.63,
+     "dev_max_bone_deg": 13.8,
+     "worst": [
+      [
+       "stick toe",
+       4.5
+      ],
+      [
+       "stick butt",
+       3.8
+      ],
+      [
+       "R skate",
+       3.6
+      ]
+     ],
+     "yaw_scan_best": 275,
+     "yaw_scan_err_best": 2.81,
+     "yaw_scan_err_at_nominal": 3.58
+    }
+   }
+  },
+  "SPAanthem1 phase 0 (same frame 370 in all 8 directions)": {
+   "note": "single frame: same sprite drawn for all 8 directions, no rotation to fit",
+   "per_frame": {
+    "370": {
+     "dir": 4
+    }
+   }
+  }
+ },
+ "stick2d": {
+  "42": {
+   "butt": [
+    27.5,
+    13.0
+   ],
+   "heel": [
+    10.0365922615489,
+    11.747695187128643
+   ],
+   "toe": [
+    7.0,
+    8.0
+   ],
+   "shaft_len": 17.508251688382096,
+   "blade_len": 4.823495804758813,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.0,
+    "L": 0.4888136057807456
+   },
+   "pixels": 10,
+   "shaft_inliers": 8,
+   "blade_side": 1.0
+  },
+  "47": null,
+  "52": {
+   "butt": [
+    14.666666666666666,
+    12.444444444444445
+   ],
+   "heel": [
+    21.840584619873006,
+    14.420808847646029
+   ],
+   "toe": [
+    25.0,
+    10.0
+   ],
+   "shaft_len": 7.4411769938349535,
+   "blade_len": 5.433733192898637,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.0,
+    "L": 0.0204280180510092
+   },
+   "pixels": 11,
+   "shaft_inliers": 8,
+   "blade_side": -1.0
+  },
+  "57": {
+   "butt": [
+    8.090909090909092,
+    9.454545454545455
+   ],
+   "heel": [
+    18.059971359332742,
+    16.91310398998257
+   ],
+   "toe": [
+    22.0,
+    13.0
+   ],
+   "shaft_len": 12.450393485277884,
+   "blade_len": 5.553035973744073,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.0,
+    "L": 0.3274194539731099
+   },
+   "pixels": 12,
+   "shaft_inliers": 9,
+   "blade_side": -1.0
+  },
+  "62": {
+   "butt": [
+    5.055576245299426,
+    9.812848197723895
+   ],
+   "heel": [
+    15.217781639927171,
+    12.830597494958935
+   ],
+   "toe": [
+    18.093657021146914,
+    13.684612009879034
+   ],
+   "shaft_len": 10.600812671845674,
+   "blade_len": 3.0000000000000018,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.573614730128594,
+    "L": 0.3167832119008473
+   },
+   "pixels": 13,
+   "shaft_inliers": 13,
+   "blade_side": -1.0
+  },
+  "67": {
+   "butt": [
+    5.896522314599489,
+    8.031652631628182
+   ],
+   "heel": [
+    9.315646787809044,
+    19.209335762055392
+   ],
+   "toe": [
+    11.0,
+    16.0
+   ],
+   "shaft_len": 11.688926910864724,
+   "blade_len": 3.6244836566089877,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 1.2954637154144055
+   },
+   "pixels": 13,
+   "shaft_inliers": 13,
+   "blade_side": -1.0
+  },
+  "72": {
+   "butt": [
+    14.3,
+    13.7
+   ],
+   "heel": [
+    9.038861337335575,
+    15.122441231782465
+   ],
+   "toe": [
+    5.0,
+    11.0
+   ],
+   "shaft_len": 5.450038448089815,
+   "blade_len": 5.771215003075543,
+   "blade_longer_than_shaft": true,
+   "hand_offsets_px": {
+    "L": 0.0
+   },
+   "pixels": 9,
+   "shaft_inliers": 6,
+   "blade_side": 1.0
+  },
+  "77": {
+   "butt": [
+    5.280032513443681,
+    12.778011603307156
+   ],
+   "heel": [
+    8.770882489000627,
+    17.181626870021418
+   ],
+   "toe": [
+    12.0,
+    15.0
+   ],
+   "shaft_len": 5.619418205569403,
+   "blade_len": 3.8970111239053753,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "L": 1.2844135237848473
+   },
+   "pixels": 6,
+   "shaft_inliers": 5,
+   "blade_side": -1.0
+  },
+  "889": {
+   "butt": [
+    34.0,
+    8.0
+   ],
+   "heel": [
+    3.0,
+    8.0
+   ],
+   "toe": [
+    0.0,
+    11.0
+   ],
+   "shaft_len": 31.0,
+   "blade_len": 4.242640687119285,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 1.0,
+    "L": 1.0
+   },
+   "pixels": 12,
+   "shaft_inliers": 9,
+   "blade_side": -1.0
+  },
+  "891": {
+   "butt": [
+    4.985113435965998,
+    6.039743966185344
+   ],
+   "heel": [
+    19.383467593377738,
+    11.432814706760654
+   ],
+   "toe": [
+    22.19285982958729,
+    12.48510519095477
+   ],
+   "shaft_len": 15.375233801640398,
+   "blade_len": 3.0000000000000004,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.9410455330131876
+   },
+   "pixels": 9,
+   "shaft_inliers": 6,
+   "blade_side": -1.0
+  },
+  "893": {
+   "butt": [
+    10.166666666666666,
+    7.666666666666667
+   ],
+   "heel": [
+    14.019238815542511,
+    11.977817459305204
+   ],
+   "toe": [
+    12.0,
+    9.0
+   ],
+   "shaft_len": 5.781724078435578,
+   "blade_len": 3.597877459716551,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.0
+   },
+   "pixels": 5,
+   "shaft_inliers": 5,
+   "blade_side": -1.0
+  },
+  "895": {
+   "butt": [
+    0.03967250490137353,
+    12.351779550643876
+   ],
+   "heel": [
+    20.998657539557914,
+    9.988096286527709
+   ],
+   "toe": [
+    24.0,
+    13.0
+   ],
+   "shaft_len": 21.09184800476288,
+   "blade_len": 4.252013704597003,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.10251066197979991,
+    "L": 0.9599313262757244
+   },
+   "pixels": 21,
+   "shaft_inliers": 18,
+   "blade_side": 1.0
+  },
+  "897": {
+   "butt": [
+    0.0,
+    11.0
+   ],
+   "heel": [
+    26.0,
+    11.0
+   ],
+   "toe": [
+    29.0,
+    14.0
+   ],
+   "shaft_len": 26.0,
+   "blade_len": 4.242640687119285,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.4166666666666661,
+    "L": 0.4166666666666661
+   },
+   "pixels": 24,
+   "shaft_inliers": 21,
+   "blade_side": 1.0
+  },
+  "899": {
+   "butt": [
+    4.989087710430246,
+    10.096582526599628
+   ],
+   "heel": [
+    24.960117595798287,
+    12.352991307648805
+   ],
+   "toe": [
+    26.0,
+    14.0
+   ],
+   "shaft_len": 20.09809481690887,
+   "blade_len": 1.9478175087129508,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.5079125517367205,
+    "L": 0.12892624552228946
+   },
+   "pixels": 17,
+   "shaft_inliers": 17,
+   "blade_side": 1.0
+  },
+  "901": {
+   "butt": [
+    3.8659691453628913,
+    8.956323606803846
+   ],
+   "heel": [
+    1.9064602032309426,
+    14.96951835490242
+   ],
+   "toe": [
+    2.0,
+    13.0
+   ],
+   "shaft_len": 6.324411938896401,
+   "blade_len": 1.9717383811949112,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "L": 0.3314928206028457
+   },
+   "pixels": 7,
+   "shaft_inliers": 5,
+   "blade_side": 1.0
+  },
+  "903": {
+   "butt": [
+    2.1558421009748043,
+    13.147878241791634
+   ],
+   "heel": [
+    6.902624150287368,
+    8.145462210387294
+   ],
+   "toe": [
+    8.967611535670889,
+    5.969266654329214
+   ],
+   "shaft_len": 6.8960935300304,
+   "blade_len": 3.0000000000000004,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "L": 0.12047808264176794
+   },
+   "pixels": 12,
+   "shaft_inliers": 7,
+   "blade_side": -1.0
+  },
+  "370": {
+   "butt": [
+    3.7317098414024783,
+    6.045074431105553
+   ],
+   "heel": [
+    8.089766535054753,
+    31.98491865851114
+   ],
+   "toe": [
+    11.0,
+    35.0
+   ],
+   "shaft_len": 26.30338717137309,
+   "blade_len": 4.1904861670552584,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.9982278788950631,
+    "L": 9.952301346354696
+   },
+   "pixels": 21,
+   "shaft_inliers": 17,
+   "blade_side": -1.0
+  }
+ }
+}
