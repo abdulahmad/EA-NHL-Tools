@@ -845,3 +845,15 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
   - Labelling and fitting alternate until the labels stop changing (at most 4 rounds).
 - **D112 Mask and grow rules.** The skeleton only assigns mask when a frame has no mask evidence (980). Body pixels with a pad colour that touch a pad, within 4 rows of the pelvis, join that pad (421 left pad). The D105 smoothing is unchanged.
 - **Result.** 50 strict errors = 50 mapping + 0 missing colour (g14: 89 = 41 + 48), the same for all 4 teams. Mapping changed per frame: 407 0→1, 428 4→5, 980 1→6, 425 6→7, 987 6→7, and every other frame is unchanged. Open questions: 538 (19,19)/(19,21)/(20,21) may be stick paddle, and 1044 (24,9) is unidentified.
+
+## goalie16 – joint fit of all facings (Abdul pt907u, full cross-reference)
+- **D113 One pose per animation frame.** The siblings of a frame are the frames at the same sequence index in the other 7 facings' sequences (980 poke d0 → 982…994; 538 gglovel2 has only d0/d4). One 3D skel10 pose is fitted to all of them at once (`goalie16/g16seg.py`). It is rotated to each facing (yaw 45°·d, pitch 30), with a scale and offset per sprite.
+- **D114 Cost.** Each facing contributes several terms:
+  - Part targets from its current labels: head → mask, hands → blocker/catcher, ankles → pad bottoms, hips → pad tops.
+  - Every bone, sampled at 7 points, must stay on the goalie. Distance to the nearest px that is not background, shadow or stick is penalised.
+  - Pad bones must sit on pad-colour px and the hand ends on glove px.
+  - Bone lengths are held to the skel10 BASE lengths, with a weak prior toward the BASE pose.
+  - Facings with hand-fit ADJ joints pin the pose.
+  - The loop is fit, label every facing, refit, until no facing's labels change (at most 4 rounds). Siblings without goalie9 parts use colour zones only. No pad label may sit above hip level − 4 unless index evidence puts it there.
+- **D115 Guards.** A frame keeps its g15 legs if g16 maps it worse (this never triggered). 538 (19,19), (19,21), (20,21) and 1044 (24,9) keep their g15 labels until Abdul answers.
+- **Result.** 49 strict errors (49 mapping + 0 missing). g15 had 50, and 987 went from 7 to 6. Bone samples off the sprite, g15 → g16: 421 15→0, 538 8→4, 980 6→0, 520 6→5, 987 14→1, 505 6→0, 1044 2→0 (of 98 each). Since D109 put 182/183 into the texture, an unmatched shade px counts as mapping, where g14 counted it as missing colour. Per frame, total strict errors are ≤ g14 (980: 12 → 6, 407: 13 → 1), but 980/407/428/425 mapping alone is above g14's mapping-only count.
