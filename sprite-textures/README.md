@@ -117,6 +117,8 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 
 **Goalie v9: straight-on view scan (2026-10-24, pt868u):** `v2_38x32/goalie9/`. All 246 goalie frames from the SPA tables scanned with a generic segmentation and ranked per piece (pad front/back L/R, pad side, blocker, catcher, mask front/side/back) for facing, squareness, size, verticality and stick occlusion (D70-D71). Contact sheets are local; Abdul to pick the new source frames.
 
+**Goalie v10: Abdul's texture + zone palette (2026-10-24, pt869u):** `v2_38x32/goalie10/` holds Abdul's 23x23 goalie texture and NHL 9x Studio .act (pieces: blocker, front-centred mask wrap, pad front, 3-wide pad strip, catcher, D72). Zone-first fit then expansion on the goalie9 straight-on frames: blocker 1021 and masks 547/543/539 reach 0 diff, pad fronts 987/505 0-4, pad backs 520 2-3, catcher 538 8 (D73-D74). Wall frames 374-376 (Abdul's 373-375 if 0-based) draw the pad knee band 144/145/144 instead of 146/145/146 and stay excluded (D75).
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.
