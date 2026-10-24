@@ -883,3 +883,6 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 
 ## goalie23 – zero strict pad errors (D127)
 - D127: g22 split made recursive (depth 2: a piece may be cut once more, so a leg has up to 4 pieces, each ≥6 px, each with its own best g14 mode) and the split cost lowered to 0.9, so a cut that removes a single error is kept. Labels unchanged, same texture, no new texels, strict index equality. Strict errors 14 → 0 in all 14 frames (1127 ok + 170 skate). Extra cuts sit at the knee/boot-cuff rows (y≈20-26) where the pad bends. g23pad.py, g23images.py (local sheets).
+
+## goalie24 – Fuhr test render, next group SPAgglover (D128)
+- D128: (a) Fuhr test render (local only): pad pixels of the 14 g23 frames take `goalie7/fuhr_oilers_texture_v7.png` pad blocks (front L/R, back L/R) at row v*20/14, col u*w/10 of each g23 (v,u); sock (u>=10/-1), skate and all non-pad pixels stay the original sprite in the EDM home palette (no mapping exists yet for blocker/catcher/mask in the current layout). (b) Next group SPAgglover 408,411,414,417,420,423,426,429: `g24seg.py` = g16 joint fit + g21 R rules; `g24inspect.py` sheets and `g24questions.py` ringed questions are local only. Open: 408 mask over jersey, 417 right-side group pad vs catcher, 426 back-view catcher location.
