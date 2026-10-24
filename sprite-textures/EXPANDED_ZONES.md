@@ -806,3 +806,17 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - D97 **goalie12 sheets.** Each team and option has ORIGINAL 95 PC PALETTE | OPTION X TEXTURE APPLIED | OPTION X ERRORS MARKED side by side, with labels repeated every 4 frames.
   - **Missing parts:** 520's mask is now found (8 px, mask zones round the sprite's top centre). For 428, the 5 blocker-zone px near the skel10 right hand are already claimed by the catcher part, so it still has no separate blocker.
   - **Totals, 11 frames, strict>after:** A 709>271, B 655>195.
+- D98 **Shading counts as gear on equipment (Abdul).** On pads, blocker, catcher and mask, pixels with shading indices (22, 30/31, 88, 109) are part of the gear, and the texture has to carry that shading itself; they are no longer excluded. The stick (136) and the body are unchanged. `goalie12/g12pad.py` counts them as errors when no texel holds them.
+- D99 **Glove coherence.** The free catcher fit can mirror the glove inside one facing, squash it (sy<0.6 skips every other texture row), or start 3+ rows down, which drops the cuff and web. Those fits are "scrambled".
+  - FRONT oval frames with a scrambled free fit now use a coherent fit (`goalie12/g12glove.py`): no mirror, oy -1..1, the whole piece covered top to bottom, sy 0.75-1.6.
+  - BACK/SIDE keep the free fit. They already read as the glove back, and coherence made 425, 535, 554 and 980 worse.
+  - Fixed, B: 418 424 437 439 440 441 548 549 1021 1042. Fixed, A: 416 418 419 424 437 439 441 545 547 548 549 987 1042.
+  - 550 B has no coherent fit and stays mirrored.
+  - Cost, 42 frames, strict>after: B 758>245 -> 814>287; A 883>484 -> 911>481.
+- D100 **Pads as a cylinder with per-row UV** (`goalie12/g12pad.py`, `g12_pads.json`).
+  - **Segmentation:** a pad part keeps only px that can be pad gear (pad zones, white family, shading). This removes 74 px of blocker/catcher/stick.
+  - **Mapping:** the pad is a 13-wide cylinder (front x0-9 + strip x10-12, wrapping). Each sprite row is an arc with start, scale 0.5-2.0 texels per px and skew ±0.34/±0.5 rows per px, which covers the diagonal sock stripes in 3/4 back views. A DP keeps the rows monotonic, so both stripe orders remap rows without any change to the texture. Mirror is solved per leg.
+  - **Result, 14 frames, 28 pad parts, strict:**
+    - ok 1216; shading 54, which needs shading texels in the pad texture (D98); row content 98; missing texel 0.
+    - Old v12 mapping: 368 strict errors on the same px.
+  - **Not yet zero.** The 98 row-content px need a 2D UV beyond a per-row arc, or new texels. They are not proven impossible.
