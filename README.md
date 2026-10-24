@@ -24,6 +24,7 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - goalie27 D136: pad direction from the skeleton hip->ankle line when the blob axis disagrees; highlighted cuff test.
 - goalie27 D137: the 12 still-off pad frames are left as they are (Abdul).
 - goalie27 D138: blocker orientation and pad mapping confirmed as they are (Abdul).
+- goalie27 D139: open questions resolved by pixel match; back-view pads use the strap strip.
 - goalie13: strict pad remap, 95 strict errors (g12 152), D101–D104.
 
 ## Tools included
