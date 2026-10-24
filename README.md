@@ -23,6 +23,7 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - goalie27: pad test patterns + geometric pad maps v2 (straight columns/rows, 22 frames), Fuhr v12 with a clean straight navy stripe; pad-bottom transparency confirmed as Abdul's original (D134, D135).
 - goalie27 D136: pad direction from the skeleton hip->ankle line when the blob axis disagrees; highlighted cuff test.
 - goalie27 D137: the 12 still-off pad frames are left as they are (Abdul).
+- goalie27 D138: blocker orientation and pad mapping confirmed as they are (Abdul).
 - goalie13: strict pad remap, 95 strict errors (g12 152), D101–D104.
 
 ## Tools included
