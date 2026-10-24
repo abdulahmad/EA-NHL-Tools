@@ -1,0 +1,135 @@
+{
+ "old": {
+  "padL": {
+   "px": 505,
+   "back_frame_px": 307,
+   "mean_col_shift": 2.66,
+   "shift_ge2": 259,
+   "cols_used": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "block_w": 9
+  },
+  "padR": {
+   "px": 515,
+   "back_frame_px": 290,
+   "mean_col_shift": 2.94,
+   "shift_ge2": 288,
+   "cols_used": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "block_w": 10
+  },
+  "blocker": {
+   "px": 64,
+   "back_frame_px": 41,
+   "mean_col_shift": 1.62,
+   "shift_ge2": 21,
+   "cols_used": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+   ],
+   "block_w": 10
+  },
+  "catcher": {
+   "px": 98,
+   "back_frame_px": 38,
+   "mean_col_shift": 1.46,
+   "shift_ge2": 36,
+   "cols_used": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ],
+   "block_w": 10
+  },
+  "goalie_mask": {
+   "px": 94,
+   "back_frame_px": 67,
+   "mean_col_shift": 1.94,
+   "shift_ge2": 48,
+   "cols_used": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7
+   ],
+   "block_w": 7
+  }
+ },
+ "new": {
+  "padF_L": {
+   "px": 202,
+   "mean_shift": 0.49,
+   "shift_ge2": 29
+  },
+  "padF_R": {
+   "px": 229,
+   "mean_shift": 0.52,
+   "shift_ge2": 36
+  },
+  "padB_L": {
+   "px": 331,
+   "mean_shift": 0.5,
+   "shift_ge2": 33
+  },
+  "padB_R": {
+   "px": 320,
+   "mean_shift": 0.71,
+   "shift_ge2": 59
+  },
+  "blocker": {
+   "px": 55,
+   "mean_shift": 0.35,
+   "shift_ge2": 6
+  },
+  "catcher": {
+   "px": 84,
+   "mean_shift": 0.14,
+   "shift_ge2": 2
+  },
+  "maskF": {
+   "px": 26,
+   "mean_shift": 0.42,
+   "shift_ge2": 3
+  },
+  "maskB": {
+   "px": 22,
+   "mean_shift": 0.23,
+   "shift_ge2": 1
+  }
+ }
+}
