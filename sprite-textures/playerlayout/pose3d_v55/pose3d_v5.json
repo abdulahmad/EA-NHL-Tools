@@ -1,0 +1,1416 @@
+{
+ "groups": {
+  "SPAskate phase 0": {
+   "phi_deg": 25.0,
+   "scale": 0.774,
+   "joints3d": {
+    "L ankle": [
+     -4.76,
+     -12.02,
+     -14.39
+    ],
+    "L elbow": [
+     -4.88,
+     3.32,
+     -0.43
+    ],
+    "L glove": [
+     -4.36,
+     -1.44,
+     3.07
+    ],
+    "L hip": [
+     -2.92,
+     -3.98,
+     -10.39
+    ],
+    "L knee": [
+     -2.67,
+     -6.5,
+     -10.93
+    ],
+    "L shoulder": [
+     -4.49,
+     6.3,
+     0.65
+    ],
+    "L skate": [
+     -6.32,
+     -15.1,
+     -15.77
+    ],
+    "L wrist": [
+     -5.03,
+     0.64,
+     1.01
+    ],
+    "R ankle": [
+     3.86,
+     -11.04,
+     -2.95
+    ],
+    "R elbow": [
+     5.45,
+     6.85,
+     -8.19
+    ],
+    "R glove": [
+     4.78,
+     0.85,
+     -2.6
+    ],
+    "R hip": [
+     2.76,
+     -5.34,
+     -3.59
+    ],
+    "R knee": [
+     3.61,
+     -5.57,
+     -1.86
+    ],
+    "R shoulder": [
+     5.05,
+     9.59,
+     -6.12
+    ],
+    "R skate": [
+     3.68,
+     -14.45,
+     -2.16
+    ],
+    "R wrist": [
+     5.31,
+     3.09,
+     -7.05
+    ],
+    "belly": [
+     -0.19,
+     2.92,
+     -9.17
+    ],
+    "chest": [
+     -0.37,
+     9.03,
+     -3.3
+    ],
+    "head": [
+     -0.23,
+     13.53,
+     2.52
+    ],
+    "neck": [
+     -0.26,
+     10.34,
+     -0.24
+    ],
+    "pelvis": [
+     -0.27,
+     1.66,
+     -9.45
+    ],
+    "stick butt": [
+     4.51,
+     0.97,
+     -0.3
+    ],
+    "stick heel": [
+     -7.91,
+     -3.3,
+     6.51
+    ],
+    "stick toe": [
+     -11.88,
+     1.34,
+     9.58
+    ]
+   },
+   "per_frame": {
+    "42": {
+     "dir": 0,
+     "yaw_nominal": 0,
+     "yaw_shared_fit": 6.2,
+     "yaw_refined": -13.5,
+     "shared_mean_err": 1.85,
+     "shared_max_err": 7.59,
+     "shared_on_sprite": 0.922,
+     "mean_err_px": 0.59,
+     "max_err_px": 3.16,
+     "bone_on_sprite": 0.987,
+     "dev_mean_px": 1.81,
+     "dev_max_px": 6.45,
+     "dev_max_bone_deg": 58.9,
+     "worst": [
+      [
+       "stick butt",
+       3.2
+      ],
+      [
+       "stick heel",
+       2.2
+      ],
+      [
+       "stick toe",
+       1.1
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 58.9,
+      "R shin": 28.0,
+      "L thigh": 33.1,
+      "L shin": 25.8,
+      "R skate": 16.0,
+      "L skate": 15.2,
+      "R upper arm": 2.2,
+      "L upper arm": 1.9,
+      "R forearm": 7.6,
+      "L forearm": 5.1
+     },
+     "leg_visible": {
+      "R": true,
+      "L": true
+     },
+     "yaw_scan_best": 0,
+     "yaw_scan_err_best": 1.82,
+     "yaw_scan_err_at_nominal": 1.82
+    },
+    "47": {
+     "dir": 1,
+     "yaw_nominal": 45,
+     "yaw_shared_fit": 43.5,
+     "yaw_refined": 44.5,
+     "shared_mean_err": 0.96,
+     "shared_max_err": 1.89,
+     "shared_on_sprite": 1.0,
+     "mean_err_px": 0.27,
+     "max_err_px": 0.77,
+     "bone_on_sprite": 1.0,
+     "dev_mean_px": 0.79,
+     "dev_max_px": 2.45,
+     "dev_max_bone_deg": 30.2,
+     "worst": [
+      [
+       "belly",
+       0.8
+      ],
+      [
+       "pelvis",
+       0.7
+      ],
+      [
+       "R wrist",
+       0.6
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 20.2,
+      "R shin": 28.8,
+      "L thigh": 30.2,
+      "L shin": 5.4,
+      "R skate": 4.8,
+      "L skate": 23.6,
+      "R upper arm": 1.9,
+      "L upper arm": 0.4,
+      "R forearm": 9.9,
+      "L forearm": 0.2
+     },
+     "leg_visible": {
+      "R": true,
+      "L": true
+     },
+     "yaw_scan_best": 45,
+     "yaw_scan_err_best": 0.98,
+     "yaw_scan_err_at_nominal": 0.98
+    },
+    "52": {
+     "dir": 2,
+     "yaw_nominal": 90,
+     "yaw_shared_fit": 98.6,
+     "yaw_refined": 99.4,
+     "shared_mean_err": 1.52,
+     "shared_max_err": 2.8,
+     "shared_on_sprite": 0.961,
+     "mean_err_px": 0.51,
+     "max_err_px": 1.51,
+     "bone_on_sprite": 1.0,
+     "dev_mean_px": 1.31,
+     "dev_max_px": 2.81,
+     "dev_max_bone_deg": 34.1,
+     "worst": [
+      [
+       "pelvis",
+       1.5
+      ],
+      [
+       "R hip",
+       1.4
+      ],
+      [
+       "R wrist",
+       1.1
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 34.1,
+      "R shin": 14.9,
+      "L thigh": 4.1,
+      "L shin": 13.4,
+      "R skate": 9.7,
+      "L skate": 11.0,
+      "R upper arm": 1.7,
+      "L upper arm": 6.3,
+      "R forearm": 2.8,
+      "L forearm": 10.0
+     },
+     "leg_visible": {
+      "R": true,
+      "L": true
+     },
+     "yaw_scan_best": 95,
+     "yaw_scan_err_best": 1.51,
+     "yaw_scan_err_at_nominal": 1.6
+    },
+    "57": {
+     "dir": 3,
+     "yaw_nominal": 135,
+     "yaw_shared_fit": 158.6,
+     "yaw_refined": 153.7,
+     "shared_mean_err": 1.35,
+     "shared_max_err": 3.16,
+     "shared_on_sprite": 0.994,
+     "mean_err_px": 0.39,
+     "max_err_px": 1.03,
+     "bone_on_sprite": 0.981,
+     "dev_mean_px": 1.24,
+     "dev_max_px": 2.5,
+     "dev_max_bone_deg": 23.8,
+     "worst": [
+      [
+       "belly",
+       1.0
+      ],
+      [
+       "stick butt",
+       0.8
+      ],
+      [
+       "neck",
+       0.7
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 18.8,
+      "R shin": 23.8,
+      "L thigh": 2.4,
+      "L shin": 4.7,
+      "R skate": 5.8,
+      "L skate": 1.1,
+      "R upper arm": 0.4,
+      "L upper arm": 2.3,
+      "R forearm": 4.4,
+      "L forearm": 1.0
+     },
+     "leg_visible": {
+      "R": true,
+      "L": false
+     },
+     "yaw_scan_best": 165,
+     "yaw_scan_err_best": 1.33,
+     "yaw_scan_err_at_nominal": 1.76
+    },
+    "62": {
+     "dir": 4,
+     "yaw_nominal": 180,
+     "yaw_shared_fit": 180.4,
+     "yaw_refined": 175.6,
+     "shared_mean_err": 1.62,
+     "shared_max_err": 3.94,
+     "shared_on_sprite": 0.961,
+     "mean_err_px": 0.59,
+     "max_err_px": 2.32,
+     "bone_on_sprite": 1.0,
+     "dev_mean_px": 1.48,
+     "dev_max_px": 3.34,
+     "dev_max_bone_deg": 49.9,
+     "worst": [
+      [
+       "L shoulder",
+       2.3
+      ],
+      [
+       "R shoulder",
+       1.7
+      ],
+      [
+       "R elbow",
+       1.2
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 49.9,
+      "R shin": 12.3,
+      "L thigh": 21.5,
+      "L shin": 24.9,
+      "R skate": 8.7,
+      "L skate": 8.6,
+      "R upper arm": 6.7,
+      "L upper arm": 2.1,
+      "R forearm": 7.2,
+      "L forearm": 11.0
+     },
+     "leg_visible": {
+      "R": true,
+      "L": true
+     },
+     "yaw_scan_best": 180,
+     "yaw_scan_err_best": 1.64,
+     "yaw_scan_err_at_nominal": 1.64
+    },
+    "67": {
+     "dir": 5,
+     "yaw_nominal": 225,
+     "yaw_shared_fit": 224.5,
+     "yaw_refined": 225.7,
+     "shared_mean_err": 2.75,
+     "shared_max_err": 7.3,
+     "shared_on_sprite": 0.942,
+     "mean_err_px": 0.67,
+     "max_err_px": 1.26,
+     "bone_on_sprite": 1.0,
+     "dev_mean_px": 2.44,
+     "dev_max_px": 5.17,
+     "dev_max_bone_deg": 48.1,
+     "worst": [
+      [
+       "R glove",
+       1.3
+      ],
+      [
+       "R elbow",
+       1.2
+      ],
+      [
+       "neck",
+       1.1
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 24.8,
+      "R shin": 19.1,
+      "L thigh": 21.7,
+      "L shin": 12.8,
+      "R skate": 10.7,
+      "L skate": 21.4,
+      "R upper arm": 8.4,
+      "L upper arm": 3.8,
+      "R forearm": 3.0,
+      "L forearm": 2.4
+     },
+     "leg_visible": {
+      "R": true,
+      "L": true
+     },
+     "yaw_scan_best": 220,
+     "yaw_scan_err_best": 2.75,
+     "yaw_scan_err_at_nominal": 2.78
+    },
+    "72": {
+     "dir": 6,
+     "yaw_nominal": 270,
+     "yaw_shared_fit": 277.8,
+     "yaw_refined": 278.1,
+     "shared_mean_err": 1.44,
+     "shared_max_err": 5.32,
+     "shared_on_sprite": 0.922,
+     "mean_err_px": 0.42,
+     "max_err_px": 1.36,
+     "bone_on_sprite": 1.0,
+     "dev_mean_px": 1.27,
+     "dev_max_px": 4.99,
+     "dev_max_bone_deg": 27.0,
+     "worst": [
+      [
+       "R wrist",
+       1.4
+      ],
+      [
+       "L elbow",
+       1.1
+      ],
+      [
+       "stick toe",
+       1.1
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 20.8,
+      "R shin": 18.9,
+      "L thigh": 11.6,
+      "L shin": 8.1,
+      "R skate": 13.7,
+      "L skate": 3.8,
+      "R upper arm": 11.9,
+      "L upper arm": 4.3,
+      "R forearm": 10.6,
+      "L forearm": 5.6
+     },
+     "leg_visible": {
+      "R": true,
+      "L": true
+     },
+     "yaw_scan_best": 275,
+     "yaw_scan_err_best": 1.43,
+     "yaw_scan_err_at_nominal": 1.48
+    },
+    "77": {
+     "dir": 7,
+     "yaw_nominal": 315,
+     "yaw_shared_fit": 236.4,
+     "yaw_refined": 269.3,
+     "shared_mean_err": 4.35,
+     "shared_max_err": 7.93,
+     "shared_on_sprite": 0.701,
+     "mean_err_px": 0.72,
+     "max_err_px": 1.9,
+     "bone_on_sprite": 0.981,
+     "dev_mean_px": 2.98,
+     "dev_max_px": 9.52,
+     "dev_max_bone_deg": 45.5,
+     "worst": [
+      [
+       "L glove",
+       1.9
+      ],
+      [
+       "R wrist",
+       1.6
+      ],
+      [
+       "stick toe",
+       1.4
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 13.2,
+      "R shin": 28.9,
+      "L thigh": 32.7,
+      "L shin": 39.7,
+      "R skate": 19.5,
+      "L skate": 14.4,
+      "R upper arm": 6.7,
+      "L upper arm": 20.4,
+      "R forearm": 9.5,
+      "L forearm": 10.9
+     },
+     "leg_visible": {
+      "R": true,
+      "L": false
+     },
+     "yaw_scan_best": 290,
+     "yaw_scan_err_best": 2.8,
+     "yaw_scan_err_at_nominal": 2.97
+    }
+   }
+  },
+  "SPAcrosscheck phase 0": {
+   "phi_deg": 5.0,
+   "scale": 0.323,
+   "joints3d": {
+    "L ankle": [
+     -2.04,
+     -37.44,
+     -9.42
+    ],
+    "L elbow": [
+     -22.63,
+     14.33,
+     2.17
+    ],
+    "L glove": [
+     -25.31,
+     13.28,
+     17.85
+    ],
+    "L hip": [
+     -4.21,
+     -19.24,
+     -0.26
+    ],
+    "L knee": [
+     -2.92,
+     -23.94,
+     -4.39
+    ],
+    "L shoulder": [
+     -12.18,
+     17.12,
+     -3.46
+    ],
+    "L skate": [
+     -3.99,
+     -44.58,
+     -6.19
+    ],
+    "L wrist": [
+     -24.03,
+     15.67,
+     11.48
+    ],
+    "R ankle": [
+     9.44,
+     -36.78,
+     -5.99
+    ],
+    "R elbow": [
+     28.71,
+     13.01,
+     -5.19
+    ],
+    "R glove": [
+     21.1,
+     12.34,
+     7.06
+    ],
+    "R hip": [
+     11.03,
+     -18.69,
+     -3.26
+    ],
+    "R knee": [
+     8.96,
+     -23.4,
+     -0.31
+    ],
+    "R shoulder": [
+     18.41,
+     17.34,
+     -8.3
+    ],
+    "R skate": [
+     9.64,
+     -43.97,
+     -1.78
+    ],
+    "R wrist": [
+     25.33,
+     14.92,
+     2.83
+    ],
+    "belly": [
+     3.95,
+     0.07,
+     -8.46
+    ],
+    "chest": [
+     4.04,
+     18.58,
+     -9.4
+    ],
+    "head": [
+     3.31,
+     34.58,
+     -4.64
+    ],
+    "neck": [
+     3.88,
+     23.49,
+     -7.93
+    ],
+    "pelvis": [
+     3.93,
+     -1.96,
+     -8.55
+    ],
+    "stick butt": [
+     39.51,
+     14.05,
+     -0.66
+    ],
+    "stick heel": [
+     -41.42,
+     10.81,
+     22.89
+    ],
+    "stick toe": [
+     -49.94,
+     7.51,
+     23.62
+    ]
+   },
+   "per_frame": {
+    "889": {
+     "dir": 0,
+     "yaw_nominal": 0,
+     "yaw_shared_fit": 0.4,
+     "yaw_refined": -1.4,
+     "shared_mean_err": 1.19,
+     "shared_max_err": 4.4,
+     "shared_on_sprite": 0.994,
+     "mean_err_px": 0.56,
+     "max_err_px": 2.99,
+     "bone_on_sprite": 1.0,
+     "dev_mean_px": 0.95,
+     "dev_max_px": 2.28,
+     "dev_max_bone_deg": 33.5,
+     "worst": [
+      [
+       "stick butt",
+       3.0
+      ],
+      [
+       "R glove",
+       2.0
+      ],
+      [
+       "stick toe",
+       1.0
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 25.4,
+      "R shin": 12.7,
+      "L thigh": 20.6,
+      "L shin": 10.8,
+      "R skate": 4.6,
+      "L skate": 6.8,
+      "R upper arm": 4.3,
+      "L upper arm": 2.8,
+      "R forearm": 33.5,
+      "L forearm": 13.5
+     },
+     "leg_visible": {
+      "R": true,
+      "L": true
+     },
+     "yaw_scan_best": 0,
+     "yaw_scan_err_best": 1.18,
+     "yaw_scan_err_at_nominal": 1.18
+    },
+    "891": {
+     "dir": 1,
+     "yaw_nominal": 45,
+     "yaw_shared_fit": 83.7,
+     "yaw_refined": 89.5,
+     "shared_mean_err": 2.79,
+     "shared_max_err": 10.16,
+     "shared_on_sprite": 0.929,
+     "mean_err_px": 0.65,
+     "max_err_px": 1.66,
+     "bone_on_sprite": 1.0,
+     "dev_mean_px": 2.03,
+     "dev_max_px": 8.86,
+     "dev_max_bone_deg": 39.5,
+     "worst": [
+      [
+       "R shoulder",
+       1.7
+      ],
+      [
+       "stick butt",
+       1.1
+      ],
+      [
+       "stick toe",
+       1.0
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 24.7,
+      "R shin": 31.6,
+      "L thigh": 18.2,
+      "L shin": 23.0,
+      "R skate": 39.1,
+      "L skate": 39.5,
+      "R upper arm": 12.6,
+      "L upper arm": 2.6,
+      "R forearm": 4.4,
+      "L forearm": 2.5
+     },
+     "leg_visible": {
+      "R": true,
+      "L": true
+     },
+     "yaw_scan_best": 85,
+     "yaw_scan_err_best": 2.78,
+     "yaw_scan_err_at_nominal": 4.11
+    },
+    "893": {
+     "dir": 2,
+     "yaw_nominal": 90,
+     "yaw_shared_fit": 81.9,
+     "yaw_refined": 82.2,
+     "shared_mean_err": 2.04,
+     "shared_max_err": 3.94,
+     "shared_on_sprite": 0.903,
+     "mean_err_px": 0.78,
+     "max_err_px": 2.15,
+     "bone_on_sprite": 0.974,
+     "dev_mean_px": 1.19,
+     "dev_max_px": 3.05,
+     "dev_max_bone_deg": 27.3,
+     "worst": [
+      [
+       "R hip",
+       2.2
+      ],
+      [
+       "R glove",
+       2.1
+      ],
+      [
+       "stick toe",
+       1.5
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 18.1,
+      "R shin": 7.8,
+      "L thigh": 5.8,
+      "L shin": 4.4,
+      "R skate": 6.9,
+      "L skate": 2.4,
+      "R upper arm": 5.1,
+      "L upper arm": 0.5,
+      "R forearm": 12.1,
+      "L forearm": 0.2
+     },
+     "leg_visible": {
+      "R": true,
+      "L": false
+     },
+     "yaw_scan_best": 85,
+     "yaw_scan_err_best": 2.05,
+     "yaw_scan_err_at_nominal": 2.12
+    },
+    "895": {
+     "dir": 3,
+     "yaw_nominal": 135,
+     "yaw_shared_fit": 197.5,
+     "yaw_refined": 197.7,
+     "shared_mean_err": 1.34,
+     "shared_max_err": 3.46,
+     "shared_on_sprite": 0.994,
+     "mean_err_px": 0.44,
+     "max_err_px": 1.19,
+     "bone_on_sprite": 0.994,
+     "dev_mean_px": 1.04,
+     "dev_max_px": 3.26,
+     "dev_max_bone_deg": 24.1,
+     "worst": [
+      [
+       "R glove",
+       1.2
+      ],
+      [
+       "stick heel",
+       1.0
+      ],
+      [
+       "L elbow",
+       0.8
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 2.3,
+      "R shin": 2.6,
+      "L thigh": 11.6,
+      "L shin": 9.5,
+      "R skate": 1.5,
+      "L skate": 23.8,
+      "R upper arm": 8.2,
+      "L upper arm": 5.3,
+      "R forearm": 24.1,
+      "L forearm": 9.5
+     },
+     "leg_visible": {
+      "R": false,
+      "L": true
+     },
+     "yaw_scan_best": 195,
+     "yaw_scan_err_best": 1.34,
+     "yaw_scan_err_at_nominal": 2.01
+    },
+    "897": {
+     "dir": 4,
+     "yaw_nominal": 180,
+     "yaw_shared_fit": 186.1,
+     "yaw_refined": 187.2,
+     "shared_mean_err": 0.93,
+     "shared_max_err": 1.45,
+     "shared_on_sprite": 0.994,
+     "mean_err_px": 0.38,
+     "max_err_px": 0.9,
+     "bone_on_sprite": 0.987,
+     "dev_mean_px": 0.7,
+     "dev_max_px": 1.54,
+     "dev_max_bone_deg": 29.0,
+     "worst": [
+      [
+       "R glove",
+       0.9
+      ],
+      [
+       "R elbow",
+       0.9
+      ],
+      [
+       "stick toe",
+       0.8
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 29.0,
+      "R shin": 6.4,
+      "L thigh": 29.0,
+      "L shin": 2.6,
+      "R skate": 7.4,
+      "L skate": 11.3,
+      "R upper arm": 1.6,
+      "L upper arm": 2.7,
+      "R forearm": 9.0,
+      "L forearm": 6.3
+     },
+     "leg_visible": {
+      "R": true,
+      "L": true
+     },
+     "yaw_scan_best": 185,
+     "yaw_scan_err_best": 0.96,
+     "yaw_scan_err_at_nominal": 1.02
+    },
+    "899": {
+     "dir": 5,
+     "yaw_nominal": 225,
+     "yaw_shared_fit": 204.0,
+     "yaw_refined": 205.1,
+     "shared_mean_err": 1.06,
+     "shared_max_err": 2.48,
+     "shared_on_sprite": 0.974,
+     "mean_err_px": 0.39,
+     "max_err_px": 0.89,
+     "bone_on_sprite": 0.994,
+     "dev_mean_px": 0.94,
+     "dev_max_px": 4.23,
+     "dev_max_bone_deg": 44.3,
+     "worst": [
+      [
+       "R elbow",
+       0.9
+      ],
+      [
+       "L elbow",
+       0.8
+      ],
+      [
+       "R glove",
+       0.7
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 38.6,
+      "R shin": 8.5,
+      "L thigh": 8.3,
+      "L shin": 5.4,
+      "R skate": 21.0,
+      "L skate": 4.6,
+      "R upper arm": 2.7,
+      "L upper arm": 7.0,
+      "R forearm": 14.1,
+      "L forearm": 11.0
+     },
+     "leg_visible": {
+      "R": true,
+      "L": false
+     },
+     "yaw_scan_best": 205,
+     "yaw_scan_err_best": 1.05,
+     "yaw_scan_err_at_nominal": 2.06
+    },
+    "901": {
+     "dir": 6,
+     "yaw_nominal": 270,
+     "yaw_shared_fit": 256.3,
+     "yaw_refined": 256.7,
+     "shared_mean_err": 1.75,
+     "shared_max_err": 3.55,
+     "shared_on_sprite": 0.981,
+     "mean_err_px": 0.6,
+     "max_err_px": 1.75,
+     "bone_on_sprite": 1.0,
+     "dev_mean_px": 1.05,
+     "dev_max_px": 3.7,
+     "dev_max_bone_deg": 29.7,
+     "worst": [
+      [
+       "L hip",
+       1.7
+      ],
+      [
+       "stick heel",
+       1.3
+      ],
+      [
+       "stick toe",
+       1.0
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 3.4,
+      "R shin": 5.2,
+      "L thigh": 8.5,
+      "L shin": 29.7,
+      "R skate": 0.9,
+      "L skate": 11.7,
+      "R upper arm": 0.3,
+      "L upper arm": 5.2,
+      "R forearm": 0.4,
+      "L forearm": 12.8
+     },
+     "leg_visible": {
+      "R": false,
+      "L": true
+     },
+     "yaw_scan_best": 255,
+     "yaw_scan_err_best": 1.75,
+     "yaw_scan_err_at_nominal": 2.45
+    },
+    "903": {
+     "dir": 7,
+     "yaw_nominal": 315,
+     "yaw_shared_fit": 263.3,
+     "yaw_refined": 257.2,
+     "shared_mean_err": 3.16,
+     "shared_max_err": 9.3,
+     "shared_on_sprite": 0.935,
+     "mean_err_px": 0.64,
+     "max_err_px": 2.5,
+     "bone_on_sprite": 0.935,
+     "dev_mean_px": 2.39,
+     "dev_max_px": 6.91,
+     "dev_max_bone_deg": 55.8,
+     "worst": [
+      [
+       "stick toe",
+       2.5
+      ],
+      [
+       "L shoulder",
+       1.5
+      ],
+      [
+       "L elbow",
+       1.0
+      ]
+     ],
+     "limb_dev_deg": {
+      "R thigh": 30.0,
+      "R shin": 26.8,
+      "L thigh": 27.0,
+      "L shin": 41.3,
+      "R skate": 55.8,
+      "L skate": 35.3,
+      "R upper arm": 2.4,
+      "L upper arm": 9.6,
+      "R forearm": 1.7,
+      "L forearm": 7.3
+     },
+     "leg_visible": {
+      "R": true,
+      "L": true
+     },
+     "yaw_scan_best": 265,
+     "yaw_scan_err_best": 3.15,
+     "yaw_scan_err_at_nominal": 4.47
+    }
+   }
+  },
+  "SPAanthem1 phase 0 (same frame 370 in all 8 directions)": {
+   "note": "single frame: same sprite drawn for all 8 directions, no rotation to fit",
+   "per_frame": {
+    "370": {
+     "dir": 4
+    }
+   }
+  }
+ },
+ "stick2d": {
+  "42": {
+   "butt": [
+    27.5,
+    13.0
+   ],
+   "heel": [
+    10.0365922615489,
+    11.747695187128643
+   ],
+   "toe": [
+    7.0,
+    8.0
+   ],
+   "shaft_len": 17.508251688382096,
+   "blade_len": 4.823495804758813,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.0,
+    "L": 0.4888136057807456
+   },
+   "pixels": 10,
+   "shaft_inliers": 8,
+   "blade_side": 1.0
+  },
+  "47": null,
+  "52": {
+   "butt": [
+    14.666666666666666,
+    12.444444444444445
+   ],
+   "heel": [
+    21.840584619873006,
+    14.420808847646029
+   ],
+   "toe": [
+    25.0,
+    10.0
+   ],
+   "shaft_len": 7.4411769938349535,
+   "blade_len": 5.433733192898637,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.0,
+    "L": 0.0204280180510092
+   },
+   "pixels": 11,
+   "shaft_inliers": 8,
+   "blade_side": -1.0
+  },
+  "57": {
+   "butt": [
+    8.090909090909092,
+    9.454545454545455
+   ],
+   "heel": [
+    18.059971359332742,
+    16.91310398998257
+   ],
+   "toe": [
+    22.0,
+    13.0
+   ],
+   "shaft_len": 12.450393485277884,
+   "blade_len": 5.553035973744073,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.0,
+    "L": 0.3274194539731099
+   },
+   "pixels": 12,
+   "shaft_inliers": 9,
+   "blade_side": -1.0
+  },
+  "62": {
+   "butt": [
+    5.055576245299426,
+    9.812848197723895
+   ],
+   "heel": [
+    15.217781639927171,
+    12.830597494958935
+   ],
+   "toe": [
+    18.093657021146914,
+    13.684612009879034
+   ],
+   "shaft_len": 10.600812671845674,
+   "blade_len": 3.0000000000000018,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.573614730128594,
+    "L": 0.3167832119008473
+   },
+   "pixels": 13,
+   "shaft_inliers": 13,
+   "blade_side": -1.0
+  },
+  "67": {
+   "butt": [
+    5.896522314599489,
+    8.031652631628182
+   ],
+   "heel": [
+    9.315646787809044,
+    19.209335762055392
+   ],
+   "toe": [
+    11.0,
+    16.0
+   ],
+   "shaft_len": 11.688926910864724,
+   "blade_len": 3.6244836566089877,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 1.2954637154144055
+   },
+   "pixels": 13,
+   "shaft_inliers": 13,
+   "blade_side": -1.0
+  },
+  "72": {
+   "butt": [
+    14.3,
+    13.7
+   ],
+   "heel": [
+    9.038861337335575,
+    15.122441231782465
+   ],
+   "toe": [
+    5.0,
+    11.0
+   ],
+   "shaft_len": 5.450038448089815,
+   "blade_len": 5.771215003075543,
+   "blade_longer_than_shaft": true,
+   "hand_offsets_px": {
+    "L": 0.0
+   },
+   "pixels": 9,
+   "shaft_inliers": 6,
+   "blade_side": 1.0
+  },
+  "77": {
+   "butt": [
+    5.280032513443681,
+    12.778011603307156
+   ],
+   "heel": [
+    8.770882489000627,
+    17.181626870021418
+   ],
+   "toe": [
+    12.0,
+    15.0
+   ],
+   "shaft_len": 5.619418205569403,
+   "blade_len": 3.8970111239053753,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "L": 1.2844135237848473
+   },
+   "pixels": 6,
+   "shaft_inliers": 5,
+   "blade_side": -1.0
+  },
+  "889": {
+   "butt": [
+    34.0,
+    8.0
+   ],
+   "heel": [
+    3.0,
+    8.0
+   ],
+   "toe": [
+    0.0,
+    11.0
+   ],
+   "shaft_len": 31.0,
+   "blade_len": 4.242640687119285,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 1.0,
+    "L": 1.0
+   },
+   "pixels": 12,
+   "shaft_inliers": 9,
+   "blade_side": -1.0
+  },
+  "891": {
+   "butt": [
+    4.985113435965998,
+    6.039743966185344
+   ],
+   "heel": [
+    19.383467593377738,
+    11.432814706760654
+   ],
+   "toe": [
+    22.19285982958729,
+    12.48510519095477
+   ],
+   "shaft_len": 15.375233801640398,
+   "blade_len": 3.0000000000000004,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.9410455330131876
+   },
+   "pixels": 9,
+   "shaft_inliers": 6,
+   "blade_side": -1.0
+  },
+  "893": {
+   "butt": [
+    10.166666666666666,
+    7.666666666666667
+   ],
+   "heel": [
+    14.019238815542511,
+    11.977817459305204
+   ],
+   "toe": [
+    12.0,
+    9.0
+   ],
+   "shaft_len": 5.781724078435578,
+   "blade_len": 3.597877459716551,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.0
+   },
+   "pixels": 5,
+   "shaft_inliers": 5,
+   "blade_side": -1.0
+  },
+  "895": {
+   "butt": [
+    0.03967250490137353,
+    12.351779550643876
+   ],
+   "heel": [
+    20.998657539557914,
+    9.988096286527709
+   ],
+   "toe": [
+    24.0,
+    13.0
+   ],
+   "shaft_len": 21.09184800476288,
+   "blade_len": 4.252013704597003,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.10251066197979991,
+    "L": 0.9599313262757244
+   },
+   "pixels": 21,
+   "shaft_inliers": 18,
+   "blade_side": 1.0
+  },
+  "897": {
+   "butt": [
+    0.0,
+    11.0
+   ],
+   "heel": [
+    26.0,
+    11.0
+   ],
+   "toe": [
+    29.0,
+    14.0
+   ],
+   "shaft_len": 26.0,
+   "blade_len": 4.242640687119285,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.4166666666666661,
+    "L": 0.4166666666666661
+   },
+   "pixels": 24,
+   "shaft_inliers": 21,
+   "blade_side": 1.0
+  },
+  "899": {
+   "butt": [
+    4.989087710430246,
+    10.096582526599628
+   ],
+   "heel": [
+    24.960117595798287,
+    12.352991307648805
+   ],
+   "toe": [
+    26.0,
+    14.0
+   ],
+   "shaft_len": 20.09809481690887,
+   "blade_len": 1.9478175087129508,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.5079125517367205,
+    "L": 0.12892624552228946
+   },
+   "pixels": 17,
+   "shaft_inliers": 17,
+   "blade_side": 1.0
+  },
+  "901": {
+   "butt": [
+    3.8659691453628913,
+    8.956323606803846
+   ],
+   "heel": [
+    1.9064602032309426,
+    14.96951835490242
+   ],
+   "toe": [
+    2.0,
+    13.0
+   ],
+   "shaft_len": 6.324411938896401,
+   "blade_len": 1.9717383811949112,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "L": 0.3314928206028457
+   },
+   "pixels": 7,
+   "shaft_inliers": 5,
+   "blade_side": 1.0
+  },
+  "903": {
+   "butt": [
+    2.1558421009748043,
+    13.147878241791634
+   ],
+   "heel": [
+    6.902624150287368,
+    8.145462210387294
+   ],
+   "toe": [
+    8.967611535670889,
+    5.969266654329214
+   ],
+   "shaft_len": 6.8960935300304,
+   "blade_len": 3.0000000000000004,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "L": 0.12047808264176794
+   },
+   "pixels": 12,
+   "shaft_inliers": 7,
+   "blade_side": -1.0
+  },
+  "370": {
+   "butt": [
+    3.7317098414024783,
+    6.045074431105553
+   ],
+   "heel": [
+    8.089766535054753,
+    31.98491865851114
+   ],
+   "toe": [
+    11.0,
+    35.0
+   ],
+   "shaft_len": 26.30338717137309,
+   "blade_len": 4.1904861670552584,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.9982278788950631,
+    "L": 9.952301346354696
+   },
+   "pixels": 21,
+   "shaft_inliers": 17,
+   "blade_side": -1.0
+  }
+ }
+}

@@ -333,3 +333,43 @@ Script: `sprite-textures/scripts/playerlayout/pose3d_v5.py`; outputs in `sprite-
 | 903 | 315 | 267.8 | 275 (2.81/3.58) | 2.85/8.45 | 1.61/4.51 | 1.09/4.63 | 13.8 |
 
 Flags: 57, 891 and 903 snap to the neighbouring direction's yaw (about 180°, 93° and 268°). The art may really be drawn that way, or the 2D joints may not pin down the yaw, so check them by eye. Crosscheck yaws are 3–14° off the 45° grid. 77's stick butt is still the largest error (9.3 px). 62's torso still looks compact; that comes from the crouched front-on art.
+
+## v5.5: legs allowed to move, plus occlusion (Abdul pt800u)
+
+Outputs are in `sprite-textures/playerlayout/pose3d_v55/`.
+- **Old limit (v5.4):** 0.8 per px of joint movement and 0.12 per degree of bone-angle change, for all joints. Observed deviations reached 9–14° and up to 4.6 px.
+- **New limit:** leg joints 0.1/px and 0.01/deg (effectively free); other joints 0.4/px and 0.05/deg. Bone lengths are held (1.5 per px of length change), so nothing stretches.
+- **Leg pixels:** each leg's bones must lie on that leg's own pixels (seg parts 10/12/14 for R, 11/13/15 for L, plus 16 for the hips). This applies in both stages, so it also affects yaw.
+- **Occlusion:** a side with fewer than 3 upper- or lower-leg pixels counts as occluded. Its 2D leg joints are dropped. On 57 the "L skate" was stray pixels by the stick. The occluded leg is placed on the near leg's pixels and pushed behind it in depth.
+- **Seg fallback:** where the segmentation put hip == knee, that knee is ignored.
+
+Needed deviation from the shared pose for the reported legs (°):
+
+| frame | R thigh | R shin | R skate | L thigh | L shin | L skate | legs visible |
+|---|---|---|---|---|---|---|---|
+| 57 | 18.8 | 23.8 | 5.8 | 2.4 | 4.7 | 1.1 | R only (L behind) |
+| 891 | 24.7 | 31.6 | 39.1 | 18.2 | 23.0 | 39.5 | both |
+| 903 | 30.0 | 26.8 | 55.8 | 27.0 | 41.3 | 35.3 | both |
+
+Yaw / error (shared → refined mean/max px; deviation max px / max bone °):
+
+| frame | nominal | shared yaw | refined yaw | 5° check best | shared err | refined err | dev |
+|---|---|---|---|---|---|---|---|
+| 42 | 0 | 6.2 | -13.5 | 0 | 1.85/7.59 | 0.59/3.16 | 6.45/58.9 |
+| 47 | 45 | 43.5 | 44.5 | 45 | 0.96/1.89 | 0.27/0.77 | 2.45/30.2 |
+| 52 | 90 | 98.6 | 99.4 | 95 | 1.52/2.80 | 0.51/1.51 | 2.81/34.1 |
+| 57 | 135 | 158.6 | 153.7 | 165 | 1.35/3.16 | 0.39/1.03 | 2.50/23.8 |
+| 62 | 180 | 180.4 | 175.6 | 180 | 1.62/3.94 | 0.59/2.32 | 3.34/49.9 |
+| 67 | 225 | 224.5 | 225.7 | 220 | 2.75/7.30 | 0.67/1.26 | 5.17/48.1 |
+| 72 | 270 | 277.8 | 278.1 | 275 | 1.44/5.32 | 0.42/1.36 | 4.99/27.0 |
+| 77 | 315 | 236.4 | 269.3 | 290 | 4.35/7.93 | 0.72/1.90 | 9.52/45.5 |
+| 889 | 0 | 0.4 | -1.4 | 0 | 1.19/4.40 | 0.56/2.99 | 2.28/33.5 |
+| 891 | 45 | 83.7 | 89.5 | 85 | 2.79/10.16 | 0.65/1.66 | 8.86/39.5 |
+| 893 | 90 | 81.9 | 82.2 | 85 | 2.04/3.94 | 0.78/2.15 | 3.05/27.3 |
+| 895 | 135 | 197.5 | 197.7 | 195 | 1.34/3.46 | 0.44/1.19 | 3.26/24.1 |
+| 897 | 180 | 186.1 | 187.2 | 185 | 0.93/1.45 | 0.38/0.90 | 1.54/29.0 |
+| 899 | 225 | 204.0 | 205.1 | 205 | 1.06/2.48 | 0.39/0.89 | 4.23/44.3 |
+| 901 | 270 | 256.3 | 256.7 | 255 | 1.75/3.55 | 0.60/1.75 | 3.70/29.7 |
+| 903 | 315 | 263.3 | 257.2 | 265 | 3.16/9.30 | 0.64/2.50 | 6.91/55.8 |
+
+With the legs corrected, 57 moved off the 180° snap to about 154°. 891 (about 90°) and 903 (about 257°) still sit near the neighbouring direction, and 895 moved to about 198°. So yaw on the crosscheck art is still poorly constrained; check by eye.
