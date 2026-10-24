@@ -9,6 +9,7 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - goalie15: sock shades 182/183 in texture v6 + colour-zone/fitted-skeleton segmentation, 50 strict errors (50 mapping + 0 missing colour), D109–D112.
 - goalie16: all facings of each animation frame fitted jointly (one 3D pose), 49 strict errors (49 mapping + 0 missing colour), D113–D115.
 - goalie17: Abdul's g15 segmentation corrections as ground truth (pads by connected leg, stick butt, skate vs blade, catcher), per-correction checks + coordinate inspection sheets, 42 strict errors, D116–D121.
+- goalie18: frame 538 blocker taken from Abdul's green marks, leftover old blocker cells → body, 42 strict errors, D122.
 - goalie13: strict pad remap, 95 strict errors (g12 152), D101–D104.
 
 ## Tools included

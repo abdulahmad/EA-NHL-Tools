@@ -865,3 +865,6 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - D119: R3 pad-only indices {151,152,155,164} labelled blocker that touch a pad → pad; R4 catcher-zone body touching catcher → catcher; pad labels above pelvis-4 → body.
 - D120: R5 READY d6 frames with hidden right hand (425): blocker → body. R6 legs_assign: side views take the near leg as the larger mass; blobs cut off from their own leg but touching the other flip.
 - D121: g17checks.py verifies each of Abdul's corrections (416,419,538,407,428,980,425,1044,422 + all-frames butt); g17inspect.py writes per-frame coordinate sheets (clean + lettered labels, x/y axes). Result: 42 strict errors (g15 50), every frame ≤ g14. 416 5→6 and 407 1→2 come from the ground-truth pad pixels.
+
+## goalie18 – 538 blocker from Abdul's green marks (D122)
+- D122: Abdul painted 538's blocker green on the clean inspect panel (pt918u). Registered against the panel (30.5 px cells, stick column x17 as anchor): 23 cells (17,10-12) (18,9-13) (19,8-13) (20,8-12) (21,9-11) (22,10) are BLOCKER (ground truth). The other 11 old blocker cells (21,5) (20,6) (21,6) (19-22,7) (21-23,8) (22,9) sit on the shoulder/jersey, touch no pad and have no shaft index, so they become BODY (STICK if index 136). Open questions are shown as images in g18questions.py. 42 strict errors, all g17 checks pass.
