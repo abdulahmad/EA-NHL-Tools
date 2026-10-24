@@ -915,7 +915,7 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - D137: leave the 12 still-off pad frames as they are, no hand-marked knees (pt940u).
 - D138: blocker orientation kept (no rotation); pad front not mirrored; check pixel matches myself instead of asking when the match is visible (pt942u).
 - D139: 421 ringed px = blocker glove; 408 ringed = body; 417 group = pad; 426 left edge = mask; strap rotation, catcher back x0-10 and back views on the strip confirmed by pixel match (pt942u rule).
-- Open (art): Fuhr knee-cuff colour; mask V tip pixel.
+- D140: Fuhr cuff and V tip stay as NOW (v12); do not re-ask settled questions (pt943u).
 
 ## goalie26 v11 – symmetric mask, orange on top (D133)
 - D133 (Abdul pt934u "make the fuhr texture symmetrical, and more of the orange needs to be on top") **Fuhr v11** (`goalie26/fuhr26.py` `small11`, `fuhr_oilers_texture_v11.png`). Mask front x14-18 mirrored about x16 (x14-15 -> x18-17); back halves mirror each other (x12-13 -> x20-19); the orange flame/V of the mask reference is brought into the top: row 1 x14,15,17,18 and row 2 x15-17 orange (row 1 x16 keeps the darker red point); chin kept (orange (6,16),(7,16), blue (6,15),(6,17)). Pad front was NOT mirrored: Abdul's DR pad reference itself is asymmetric (navy stripe right of centre, logo bottom-left/right differ; 86 of 140 texels differ from their mirror), so it follows the reference. Blocker/catcher refs are not symmetric designs either.
@@ -935,3 +935,4 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
   - Catcher-back choice: in back views (407/428/980/520/425) the game catcher px are the 149-152 ramp (block x0-10) and the strict maps pick x0-10 -> catcher back stays x0-10.
   - Back views use the strap strip: `g27map.py` geo2 now sends every pad px whose sprite index is 181-189 to the strip texel with the same index nearest its geo2 row (226 px over 22 frames; the same px the strict maps send to the strip). Default texture renders now match the game on those px (407/980/428/520/425/429/408/411 checked, local images).
   - Still for Abdul (art, no pixel answer): Fuhr knee-cuff colour; the dark red pixel at the tip of the mask V.
+- D140 (Abdul pt943u + correction) **Fuhr knee cuff and mask V tip stay as NOW** (v12): grey/white knee cuff from his reference, dark red pixel at the tip of the mask V. No orange-cuff v13 was made or merged. Settled questions are not re-asked.
