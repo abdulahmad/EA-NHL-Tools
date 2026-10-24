@@ -11,14 +11,20 @@ for d in ('/goalie15','/goalie14','/goalie13','/goalie12','/goalie25','/goalie27
 from g15pad import frame
 import g25map,g27map,g28strict as S28,g9common
 BG,BODY,MASK,CATCH,BLOCK,STICK,PADL,PADR,SKATE,SHADOW=range(10)
+# D145 (Abdul pt951u: eye holes belong in the mask texture) texture v8 = v7 + mask texels the game uses that v7 lacked:
+# 45 eye-hole shade (538) at (7,15)/(7,17), under the 0 eye holes (4,15)/(4,17), same columns; 134 helmet strap (D42: 519/1000
+# draw the strap with 134) at (6,12)/(6,20), under the 135 strap (5,12)/(5,20). These cells were 255 (unused).
+from PIL import Image as _I
+L8=S28.L.copy();L8[7,15]=L8[7,17]=45;L8[6,12]=L8[6,20]=134
+S28.L=L8;g25map.L=L8
 def seg(n):
     E=json.load(open('/tmp/g28_edits.json')) if os.path.exists('/tmp/g28_edits.json') else {}
     if str(n) in E:return np.array(E[str(n)]['lab']),E[str(n)]['joints']
     if n in g25map.FR:
         if not hasattr(seg,'fr'):seg.fr=S28.seg_all();seg.j=json.load(open('/tmp/g16_seg.json'))
         return evidence(n,frame(n),np.array(seg.fr[str(n)]['lab']))[0],seg.j[str(n)]['joints']
-    d=json.load(open('/tmp/g24_%d.json'%n));lab=np.array(d['lab']);lab,_=evidence(n,frame(n),lab);return lab,d['joints']
-L7=S28.L
+    d=json.load(open('/tmp/g24_%d.json'%n));lab=region(n,frame(n),np.array(d['lab']),d['joints']);lab,_=evidence(n,frame(n),lab);return lab,d['joints']
+L7=L8
 def own_idx(l):
     """indices a part can map exactly: gloves share one atlas (D141), mask = cols 12-20 rows 0-7, stick = its region."""
     if l in (BLOCK,CATCH):return {int(v) for y in range(23,32) for v in L7[y,0:22]}|{int(v) for v in L7[0:7,0:10].ravel()}
@@ -26,6 +32,27 @@ def own_idx(l):
     if l==STICK:return {int(v) for v in L7[9:23,14:17].ravel()}
     if l in (PADL,PADR):return {int(v) for v in L7[9:23,0:13].ravel()}
     return None
+GLOVE=set(range(144,153))
+def region(n,p,lab,J=None):
+    """D146 (pt951u): glove/mask label by region, not only by colour. The g16 auto-seg sometimes gives a whole torso to the
+    blocker (540) or the chest to the mask (521, 530, 1071), and body px whose colour a glove/mask texel also has then
+    render glove/mask colours on the body. Blocker/catcher keep only glove colours 144-152 and the 0 outline 8-touching
+    them; mask keeps only its top 9 rows (mask is 8 rows tall in every hand-checked frame). Checked on the 14 hand-checked
+    frames: changes 1 px there (407 blocker outline), so it runs on the auto-segmented frames only."""
+    lab=lab.copy();h,w=lab.shape
+    for L_ in (BLOCK,CATCH):
+        m=lab==L_;keep=m&np.isin(p,list(GLOVE))
+        for y,x in zip(*np.nonzero(m&(p==0))):
+            if keep[max(0,y-1):y+2,max(0,x-1):x+2].any():keep[y,x]=True
+        lab[m&~keep]=-10-L_
+    if J and 'neck' in J:   # head: a glove-labelled px at/above the neck joint in a mask colour is the mask (540, 462)
+        mi=own_idx(MASK)
+        for y,x in zip(*np.nonzero(lab<0)):
+            if y<=J['neck'][1] and int(p[y,x]) in mi:lab[y,x]=MASK
+    m=lab==MASK
+    if m.any():
+        top=np.nonzero(m)[0].min();mm=m.copy();mm[:top+9]=False;lab[mm]=-10-MASK
+    return lab
 def evidence(n,p,lab):
     """D144 (pt948u-pt950u, pixel match like D139): on the auto-segmented frames a blocker/catcher/mask/stick px whose
     sprite index no texel of that part has is not that part: it takes the most common 8-neighbour label that can hold the
@@ -33,18 +60,27 @@ def evidence(n,p,lab):
     greys 22/30/31). Pads too (index must exist in the pad front/strip)."""
     lab=lab.copy();h,w=lab.shape;ch=0
     for _ in range(3):
-        for y,x in zip(*np.nonzero(np.isin(lab,[BLOCK,CATCH,MASK,STICK,PADL,PADR])&(p!=255))):
+        for y,x in zip(*np.nonzero(((lab<0)|np.isin(lab,[BLOCK,CATCH,MASK,STICK,PADL,PADR]))&(p!=255))):
             s=int(p[y,x]);l=lab[y,x]
-            if s in own_idx(l):continue
+            if l>=0 and s in own_idx(l):continue
             nb=collections.Counter(int(lab[yy,xx]) for yy in range(max(0,y-1),min(h,y+2)) for xx in range(max(0,x-1),min(w,x+2)) if (yy,xx)!=(y,x) and p[yy,xx]!=255)
-            ok=[k for k,_ in nb.most_common() if k not in (BG,l) and (own_idx(k) is None or s in own_idx(k))]
-            lab[y,x]=ok[0] if ok else (BODY if s>=153 or l in (MASK,BLOCK,CATCH) else SKATE);ch+=1
-    return lab,ch
+            ok=[k for k,_ in nb.most_common() if k>0 and k!=l and not (l<0 and k==-10-l) and own_idx(k) is not None and s in own_idx(k)]   # prefer a part whose texture has the colour (pad 155/164)
+            ok+=[k for k,_ in nb.most_common() if k>0 and k!=l and own_idx(k) is None]
+            lab[y,x]=ok[0] if ok else (BODY if s>=153 or l in (MASK,BLOCK,CATCH) or l<0 else SKATE);ch+=1
+    lab[lab<0]=BODY;return lab,ch
 def back(n,lab,p,J):
     o=g25map.ORI.get(n)
     if o:return o=='BACK'
     # no orient ruling: back view when the mask px show no eye/face indices (0 inside the mask interior) -> mostly helmet back
     q=np.argwhere(lab==MASK);return bool(len(q)) and not any(int(p[tuple(c)])==0 for c in q if 0<c[1]-q[:,1].min()<q[:,1].max()-q[:,1].min())
+def ppsnap(s,cells,py,px):
+    """D147: per-pixel target (py,px) in texel units, snapped to the nearest SAME-index texel of the block."""
+    C=[c for c in cells if L8[c]==s]
+    return min(C,key=lambda z:(z[0]-py)**2+(z[1]-px)**2) if C else None
+CELLS={k:[(y,x) for y in range(b[1],b[1]+b[3]) for x in range(b[0],b[0]+b[2]) if L8[y,x]!=255] for k,b in S28.BLK.items()}
+CELLS['mask']=[(y,x) for y in range(0,8) for x in range(12,21) if L8[y,x]!=255]
+CELLS['pad']=[(y,x) for y in range(9,23) for x in range(0,13) if L8[y,x]!=255]
+PP=os.environ.get('PP','1')=='1'
 def maps(n):
     p=frame(n);lab,J=seg(n);R={};B=back(n,lab,p,J);L=S28.L
     for part,L_ in (('blocker',BLOCK),('catcher',CATCH),('mask',MASK),('stick',STICK)):
@@ -56,7 +92,16 @@ def maps(n):
             V=(sv-sv.min())/max(1e-6,sv.max()-sv.min());U=(su-su.min())/max(1e-6,su.max()-su.min())
         for i,(y,x) in enumerate(q):
             v=(y-a)/max(1,cc-a);u=(x-b)/max(1,e-b);s=int(p[y,x])
-            if part=='mask':t=g25map.snap_mask(s,v,u,B)
+            if PP and part in ('blocker','catcher','mask'):
+                cy=(a+cc)/2;cxx=(b+e)/2
+                if part=='mask':
+                    tc=16+(x-cxx) if not B else (12.5 if x<cxx else 19.5)+(x-cxx)*0.5;t=ppsnap(s,CELLS['mask'],3.5+(y-cy),tc)
+                else:
+                    t=None
+                    for bk in ((['catFront','catBack'] if not B else ['catBack','catFront'])+['blocker'] if part=='catcher' else ['blocker','catFront','catBack']):
+                        x0,y0,w_,h_=S28.BLK[bk];t=ppsnap(s,CELLS[bk],y0+(h_-1)/2+(y-cy),x0+(w_-1)/2+(x-cxx))
+                        if t:break
+            elif part=='mask':t=g25map.snap_mask(s,v,u,B)
             elif part=='stick':t=S28.snap_box(s,S28.BLK['stick'],V[i],U[i])
             else:
                 order=(['catFront','catBack'] if not B else ['catBack','catFront'])+['blocker'] if part=='catcher' else ['blocker','catFront','catBack']
@@ -84,7 +129,15 @@ def maps(n):
         def psnap(s,vv,uu):
             C=[(y,x) for y in range(9,23) for x in range(0,13) if L[y,x]==s]
             return list(min(C,key=lambda z:(z[0]-9-vv)**2+(z[1]-uu)**2)) if C else None
-        R['pad_'+leg]={'%d,%d'%c:psnap(int(p[c]),v[i],u[i]) for i,c in enumerate(q)}
+        if os.environ.get('PADPP')=='1':   # D147 trial: per-pixel pad target; worse (30%/25% 1-step) than geo2 (34%/45%), off
+            ys=P[:,0];top=ys.min();k=min(1.0,13/max(1,ys.max()-top));rows=collections.defaultdict(list)
+            for c in q:rows[c[0]].append(c[1])
+            def pp(c):
+                r=rows[c[0]];lo,hi=min(r),max(r)
+                uu=9-(hi-c[1]) if outer_right else 9-(c[1]-lo)     # outer side = texel col 9, 1 col per px inward
+                return 9+(c[0]-top)*k,max(0,uu)
+            R['pad_'+leg]={'%d,%d'%c:psnap(int(p[c]),*pp(c)) for c in q}
+        else:R['pad_'+leg]={'%d,%d'%c:psnap(int(p[c]),v[i],u[i]) for i,c in enumerate(q)}
         R['geo2_'+leg]={'%d,%d'%c:([9+t[0],t[1]] if (t:=g27map.strip_texel(int(p[c]),v[i]) if 181<=int(p[c])<=189 else None) else [9+int(round(v[i])),int(round(u[i]))]) for i,c in enumerate(q)}
     return R,lab,J,B
 def run(frames=None):
