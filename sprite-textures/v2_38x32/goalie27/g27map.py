@@ -56,6 +56,12 @@ def geo2(q,outer_right,anchor_v=None,ja=None):
         if b[1]<0:u=9-u
     if not outer_right:u=9-u         # u=9 (cols 7-9) on the outer side
     return v,u
+from PIL import Image
+LT=np.array(Image.open(G+'/goalie15/goalie_texture_v6_indexed.png')).astype(int)
+def strip_texel(idx,v):
+    c=[(y-9,x) for y in range(9,23) for x in (10,11,12) if LT[y,x]==idx]
+    if not c:c=[(y-9,10+(idx-181)%3) for y in range(9,20)]
+    return list(min(c,key=lambda t:abs(t[0]-v)))
 def run():
     out={};diag={}
     for n in FR+SPA:
@@ -69,9 +75,15 @@ def run():
             av=np.array([int(p[c])==145 for c in q])
             ja=leg_axis(n,leg);v,u=geo2(q,outer_right,av,ja)
             pa=g25map.axes(q)[1];forced=bool(ja is not None and abs(pa@ja)<np.cos(np.radians(25)));vo,uo=g25map.geo_pad(q,leg.endswith('R'))
-            R['geo2_'+leg]={'%d,%d'%c:[int(round(v[i])),int(round(u[i]))] for i,c in enumerate(q)}
+            # D139: back views use the strap/sock strip x10-12: a pad px whose sprite index is a strip index 181-189
+            # takes the strip texel with the SAME index whose row is nearest its geo2 row (Abdul's strip: 181/184/187
+            # col 10, 182/185/188 col 11, 183/186/189 col 12; 184-189 only in the stripe rows 15-16) -> index-exact.
+            R['geo2_'+leg]={'%d,%d'%c:(strip_texel(int(p[c]),v[i]) if 181<=int(p[c])<=189 else [int(round(v[i])),int(round(u[i]))]) for i,c in enumerate(q)}
             R['geo_'+leg]={'%d,%d'%c:[int(round(vo[i])),int(round(uo[i]))] for i,c in enumerate(q)}
             diag['%d %s'%(n,leg)]=dict(outer_right=bool(outer_right),px=len(q),strict=bool(sm),skel_axis=forced)
+        # D139: the 11 421 'blocker' px with no strict texel use glove indices 145/148-152 on top of the blocker
+        # (arm/jersey is 153+), so they are blocker glove, unlike the 1044 arm px (D132, jersey 153-180): label stays
+        # BLOCKER. No blocker texel has those indices, so they stay unmapped (sprite colour) to keep the default pixel-perfect.
         out[n]=R
     json.dump(dict(frames=out,diag=diag),open(H+'/g27_map.json','w'));return out,diag
 if __name__=='__main__':
