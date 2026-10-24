@@ -66,6 +66,11 @@ def tpos(u,v):
     else:x,fig=u-38+0.0,'B'
     return x,v,fig
 # ---------- mapping
+# v5.7 (Abdul pt816u): per-frame skeleton source. SKEL3D_SRC=<pose3d json> + SKEL3D_FRAMES=a,b,c (or 'all') overrides the defaults.
+_sk=os.environ.get('SKEL3D_SRC',os.path.join(H,'..','..','playerlayout','pose3d_v55','pose3d_v5.json'));_sf=os.environ.get('SKEL3D_FRAMES','67,42,47')   # adopted per frame where the blind test improved (pt816u)
+SKEL3D={}
+if _sf and os.path.exists(_sk):
+    _j=json.load(open(_sk)).get('joints2d',{});SKEL3D={int(k):v for k,v in _j.items() if _sf=='all' or k in _sf.split(',')}
 ARM_STRETCH={(72,'L'),(77,'R')}   # approved forearm stretch (pt807u)
 def fit(n):
     q=frame(n);d=DIRS[n];NK=neck136(q)
@@ -128,6 +133,8 @@ def fit(n):
     GEO={};NKS=set(NK)
     seg=SEG.segment(q,FOF,d,NKS,{p for p,t in fixed.items() if t=='stick'},torso_rows)
     PART,JOINTS,EDGES,ARMS,TROW=seg
+    if n in SKEL3D:   # v5.7: joints from the v5.5 3D-fitted per-frame skeleton (projected), see SKEL3D below
+        JOINTS=dict(JOINTS);JOINTS.update({k:tuple(v) for k,v in SKEL3D[n].items() if not k.startswith('stick')})
     ROWT={};COLT={}
     for p,r in TROW.items():
         if FOF[p]=='jersey':ROWT[p]=min(13,max(9,r))

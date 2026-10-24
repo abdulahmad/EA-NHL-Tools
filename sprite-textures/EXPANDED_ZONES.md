@@ -392,3 +392,33 @@ With the legs corrected, 57 moved off the 180° snap to about 154°. 891 (about 
     - 77 R forearm angle step: 16.8 -> 26.6°.
     - Arm thickness: unchanged.
 - **Sheets:** `playerlayout/v5/frames/stripe_diagnostic_with_texture_sheet.png` (the texture at 6x with row numbers, forearm rows 15-17 boxed, beside every frame) and `stretch_72_77_closeup.png`. Script: `scripts/playerlayout/stretch_sheet_v5.py`.
+
+## v5.7: per-frame skeleton source, 2D vs v5.5 3D fit (Abdul pt816u)
+`pose3d_v5.py` now saves the projected refined per-frame joints (`joints2d`) in `pose3d_v55/pose3d_v5.json`. `frames_v5.py` can take a frame's
+arm and chest joints from it: `SKEL3D_FRAMES` defaults to `67,42,47`, `all` uses every frame, and an empty value uses none. Pixel segmentation, torso bands and arm distance fields
+are unchanged, so only the arm axis and column side use these joints.
+
+Blind geometry test (mismatches summed over 5 teams; R wrong row / P wrong part / S shade / D zone defect):
+
+| frame | 2D | 3D | adopted |
+|---|---|---|---|
+| 370 | 301 | 301 (no 3D fit, single frame) | 2D |
+| 897 | 334 | 348 | 2D |
+| 57 | 361 | 361 | 2D |
+| 62 | 387 | 418 | 2D |
+| 67 | 595 | 583 | **3D** |
+| 52 | 477 | 477 | 2D |
+| 72 | 446 | 462 | 2D |
+| 889 | 328 | 385 | 2D |
+| 42 | 280 | 279 | **3D** |
+| 47 | 274 | 272 | **3D** |
+| 77 | 283 | 321 | 2D |
+
+Per team, before → after (mismatch, R/P/S/D):
+- tor: 743 (442/220/0/81) → 740 (440/217/0/83)
+- nyr: 842 → 840
+- chi home: 857 → 856
+- chi away: 853 → 851
+- mtl: 771 → 764
+
+All-3D would be worse: tor 773, nyr 877, chi home 882, chi away 889, mtl 786. Stripe checks (kinks, red flags, 2-px runs, angle steps, thickness) are identical for the 2D, 3D and mixed sources. Round trip, team errors and control A are all 0.
