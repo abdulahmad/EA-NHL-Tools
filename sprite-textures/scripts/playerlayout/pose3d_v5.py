@@ -179,7 +179,7 @@ for gname,fr in ({} if QUICK else GROUPS).items():
         PROJ[n]={k:v for k,v in obs(n).items()};OBS[n]=obs(n);continue
     R0,PR,O,SH=fitgroup(fr);RES[gname]=R0;PROJ.update(PR);OBS.update(O);SHP.update(SH)
     for n,v in R0['per_frame'].items():print(gname[:14],n,{k:v[k] for k in v if k!='worst'})
-if not QUICK:json.dump(dict(groups=RES,stick2d=ST),open(f'{OUT}/pose3d_v5.json','w'),indent=1,default=float)
+if not QUICK:json.dump(dict(groups=RES,stick2d=ST,joints2d={str(n):{k:[round(float(c),2) for c in v] for k,v in PROJ[n].items()} for n in PROJ}),open(f'{OUT}/pose3d_v5.json','w'),indent=1,default=float)
 # ---------- sheets: game sprite washed out, shared-pose projection (thick black/white bones, white dots), observed 2D joints = small black squares
 SC=8
 def draw(n,PRn,On,label):
