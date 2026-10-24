@@ -27,6 +27,7 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - goalie27 D139: open questions resolved by pixel match; back-view pads use the strap strip.
 - goalie27 D140: Fuhr knee cuff and mask V tip stay as v12 (Abdul).
 - goalie28: strict mapping 0 errors on blocker/catcher/stick (mask 2 left: index 45 eyes on 538), new stick region, Fuhr v13 (D141, D142).
+- goalie28 editor: goalie_part_editor.html (paint parts, drag skeleton, export) + g28all/g28export/g28import (D143).
 - goalie13: strict pad remap, 95 strict errors (g12 152), D101–D104.
 
 ## Tools included
