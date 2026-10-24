@@ -71,7 +71,12 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 - v2map2 control diff is **0 on all 5 teams x 11 frames**. It was 132-171 px per team, all pants/torso family slips.
 - Chicago red texture vs the in-game colours: 300 texels differ because of colour choices (pants grey, helmet, stripe shade), not because of the mapping. See `PLAN_v2.md` §4.
 
-**Next steps:** socks, helmet, skates, gloves (use the glove columns), stick, then goalie mask/blocker/pads/glove (needs goalie test frames). See `PLAN_v2.md` §5.
+**First pass done (2026-10-24):**
+- socks, helmet, skates, gloves and stick all have control diff 0.
+- The stick strip is at rows 0-1, cols 14-26.
+- Skate detail limit: see EXPANDED_ZONES D8-D13 and `v2_38x32/part_*.json`.
+
+**Next steps:** goalie mask, blocker, pads and glove (needs a goalie test frame set). See `PLAN_v2.md` §5.
 
 **Where scripts live:** `v2_38x32/scripts/`.
 - They expect the scratch layout used in development: `/workspace/preview_back/root/sprite-textures/out` as cwd with `scripts/` on PYTHONPATH, and `/workspace/preview_v2` for outputs.

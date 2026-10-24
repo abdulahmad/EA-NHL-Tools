@@ -452,3 +452,18 @@ Preview scripts lived outside the repo (scratch); no code change.
 - D5: Fallback order for a missing family: same row, then nearest row ±1..3 in the zone, then the pants wrap. Only D4 was triggered.
 - D6: Crest (idx), skin and gear texels are direct-mapped and are never targets for ordinary pixels.
 - D7: Overflow (more pixels than texels) is unchanged: stretch evenly from the centre.
+
+## v2 first pass: socks, helmet, skates, gloves, stick (2026-10-24)
+Script: `v2_38x32/scripts/v2map3.py`. The `PARTS` env var turns on family-aware remapping per part, cumulatively in the order socks → helmet → skates → gloves. `parts.py <part>` runs the 5-team control diff, the part stats and the sheet. `gearcons.py` runs the gear consistency check. Results are in `v2_38x32/part_<part>.json`.
+- D8 Socks: the zone is the existing leg texels (rows 23-31, socks / socks stripe 1/2 families, front cols 4-14 and back 25-34). No canvas change. Socks are remapped by (zone,row,family) with the centre and stretch rules. Control diff is 0 on 5 teams x 11 frames, with 0 family and 0 zone mismatches. 58 texels are used. 1-8 shared texels per frame because of overflow, worst in 67 (33 px on 25 texels).
+- D9 Helmet: the zone is the helmet-family texels in rows 0-5 (front cols 5-13, back 27-31). No change. Control 0. 40 texels used. 1 px per texel in every frame except 889 (23 px on 20 texels, 3 shared).
+- D10 Skates: the zone is the gear texels in leg rows 28-31. They are now remapped among gear texels only, and skin/crest texels stay protected. Control 0. 52 texels used.
+  **Limit:** in game, skates are 76% index 0 (black). The rest is per-frame detail: index 8 (14%), 28 (8%), 1 and 31. That detail does not belong to a texel. Even the original direct mapping has 63 of 292 skate pixels that disagree with their texel's majority index (64 of 292 after the remap). So skates can only be texture-driven if we accept those ~22% detail pixels drawn as fixed game index. The renderer keeps the game index for gear, so the control stays 0.
+- D11 Gloves: the zone is the gear texels in arm rows 18-20, including the added columns 0, 19, 20 and 37 (these are now used). No further expansion. Remapped family-aware with centre and stretch. Control 0. 38 texels used. Glove pixels per frame are 9-34 on 6-21 texels, so stretch-sharing is heavy (up to 13 shared texels in frame 57); a 4-wide glove block would reduce it. In game, every glove pixel is index 0 at a flat level, so texture-driven gloves would be exact (0 conflicts).
+- D12 Stick: the stick is not in the jersey texture in game. It is fixed palette index 136, at 6-24 px per frame (frame 47 has no index-136 pixels). New zone: **rows 0-1, cols 14-26**, which were magenta, so the canvas does not grow.
+  - Pixels are ordered along the stick's main axis, with t=0 at the end nearest the gloves.
+  - Steps along the length map to columns: centre-contiguous when there are ≤13 steps, stretched evenly when there are more.
+  - The central pixel of each step goes to row 0; a second, thicker pixel goes to row 1.
+  - Control 0. 22 of 26 texels are used. Sharing only in 370 (6) and 897 (11) and 62 (1).
+  - Shadow/ice indices 88 and 82 stay fixed and are not part of the texture.
+- D13: The diff sheets show the part's pixels in the test-texture colours. Sheets with game sprites are kept local and not committed.
