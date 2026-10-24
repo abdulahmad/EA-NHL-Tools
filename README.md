@@ -135,3 +135,4 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - Reorg to use central NHL95CD folder
 - Make similar functionality in PPV-To-BMP to extract with palette
 - D145-D147: eye holes in the mask texture (v8 / Fuhr v14), audit of the D144 relabels plus the region rule, per-pixel measurement and glove/mask per-pixel targets.
+- D148: skater part/skeleton editor (skater_part_editor.html + skater_editor/skater_export.py, skater_import.py).
