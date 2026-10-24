@@ -595,3 +595,47 @@ Folder `v2_38x32/goalie3/`. Scripts: `g3map.py` (mapping + control), `g3sheet.py
   - (a) Keep idx0 outline pixels in the goalie gear fixed (not textured), like the stick shadow in D12? This would sharpen the art and remove some fallbacks.
   - (b) 519 is classed as back-facing by the crest/skin rule. Confirm by eye.
   - (c) Choose A or B for the glove test colour.
+
+## Goalie segmentation v4 from palette zones, default gear rebuilt, glove contrast options (Abdul pt860u, 2026-10-24)
+Folder `v2_38x32/goalie4/`. Scripts: `zones.py` (one sheet per zone family), `idxmap.py` (per-frame index grids), `seg4.py` (segmentation), `segsheet.py`, `g4map.py` (mapping and control), `g4sheet.py`. Layout v3 (D35) is unchanged.
+- D41 **The goalie is drawn with skater zone indices.** The zone names in `zn.json` are skater names, so I worked out each index's goalie role from where it appears in the 8 frames (one zone highlighted at a time, `zones_*.png`) and from the index grids (`idx_<frame>.png`):
+  - **Pad front:** outer side roll is arm stripe 2 (150-152), trim is arm stripe 1 dark (155), and the face is the socks zones (181-189: plain 181-183, stripe rows 184-186 and 187-189). Straps are 164. Toe/boot is 0, 31, 30 and 109. For example, 519 left pad row 23 reads `150 155 184 185 186 155`.
+  - **Pad back:** arm stripe 2 (151/152), forearm (144-146), arm stripe 3 (147/148), 164 straps, 155 and 0. No socks face.
+  - **Blocker:** the face is forearm (144-146) and the outline is arm stripe 3 (147-149), plus 0. The stick (136) touches it in 413, 416, 422, 449, 519 and 1000.
+  - **Catcher:** the face is arm stripe 2 (150-152) and the outline is 147/148, plus 22.
+  - Back views show the back of the glove with the same pattern on both hands: `150 151 152 151 / 149 148 147 148 / 144 145 146 145`.
+  - **Mask:** the shell is pants dark (177), the helmet stripes are the socks-stripe zones (184-189), plus 164, 0 and 22. The cage is 135. On 519 and 980 the cage bars are drawn with 134 and with stick-colour 136 placed beside 134/135.
+  - **Not gear:** 153/154 (arm stripe 1 light/medium) are sleeve stripes, never gear. 156-158 are the upper arm. Jersey, yoke, waist and pants are body. 136 elsewhere is the stick and 88 is the ice shadow (both stay fixed).
+  - Because zones are shared between parts (arm stripe 2 is used by the catcher, pad sides and pad backs), colour alone cannot separate the parts. Each part = its zones AND a logical mask.
+- D42 **Logical masks (`seg4.py`, rules applied in order).**
+  1. Mask = head box ∩ head zones. Front if a cage pixel (135, or 134 and its bars) is present, otherwise back. 519 has a 134 cage row, so it is FRONT. This resolves open item (b): the crest/skin rule had called it back.
+  2. Blocker = the glove that holds the stick, using blocker zones.
+  3. Catcher = the other glove (front views: screen-left; back views: screen-right).
+  4. Pads = the gear zones below the waist, split per row:
+     - two segments → by side;
+     - one segment (pads touching) → cut after the k-th 155 trim run (k=1 on 413, where the right pad shows its side; k=2 on 428, 449, 519 and 980);
+     - back views use a fixed column (416 col 9, 422 col 22);
+     - 1000 (lying) is split by rows: upper pad = L (rows 7-12), lower pad = R (rows 13-20).
+  - Boxes per frame are in `SPEC`.
+  - Facing: front 413, 428, 449, 519, 980, 1000; back 416, 422.
+  - Pixels: pads F 564 / B 270, blocker 211, catcher 180, mask F 146 / B 63, cage 13 (1447 gear px).
+  - Frames with no catcher: 413 and 449. It is hidden behind the body.
+- D43 **Uncertain:** 1000 (dive): the facing (one 134 pixel), which pad is L/R, and the catcher (cols 27-31). 428 blocker is only 5 px, raised edge-on by the stick. 413 col 7-8 rows 13-18 (155/152 line) is left as arm, not pad. 416 blocker vs catcher is decided by stick contact; the D14 note "catcher visible" agrees.
+- D44 **Default gear from seg v4 (`g4map.py`).**
+  - Position-based mapping:
+    - pads: V knee→toe (top→bottom; on 1000 from the body end to the toe), U per row from screen-left to screen-right. Inner edge = art right on L blocks; R blocks hold the art mirrored.
+    - gloves and mask: per-frame bbox, mirrored on back views.
+  - Texel family = vote-smoothed (geometric hits in a 3x5 window for pads, 3x3 for other parts). Without smoothing the texture looked speckled.
+  - **Control = 0 px on 8 frames x 5 teams** (tor HOME, nyr AWAY, chi HOME/AWAY, mtl HOME).
+  - **Colour-driven relocation: 535 of 1447 px (37%); 259 moved 2+ texels.** Per block (relocated / of which 2+ texels): padF_L 98/45, padF_R 145/95, padB_L 30/14, padB_R 48/28, blocker 54/14, catcher 66/18, maskF 72/37, maskB 22/8, cage 0.
+  - Without smoothing: 433 relocated (149 moved 2+), still control 0, but the texture is scrambled.
+  - 23 family steals, for families with no texel in the block (e.g. idx0 in the blocker, 10 px).
+  - The default texture now reads as gear: red trims down both pad edges, white face, black toe rows, dark back straps, and a dark mask shell with cage bars. Files: `default_gear_<team>.png`.
+- D45 **Fuhr Oilers on seg v4.** The real art is drawn with the **position map** (no relocation; relocation only exists to make the family control exact). The A row uses the EDM HOME palette. Sheets (local, they contain game sprites): `fuhr_oilers_sheet_v4.png` (position) and `fuhr_oilers_sheet_v4_relocated.png` (for comparison; it scrambles the masks and gloves). Texture: `goalie3/fuhr_oilers_texture_v3.png`, unchanged.
+- D46 **Glove contrast options v4 (`gloves/gloves_v4.py`).** WCAG contrast ratios. The Edmonton orange (255,77,0) is 6.31:1 against black. Option A from D40 (sky blue) was 12.78:1 against black but only 2.02:1 against orange.
+  - **A white** (navy → 255,255,255): 21:1 vs black, 3.33:1 vs orange (the maximum possible against this orange for any colour lighter than it).
+  - **B white / dark (40,40,40) vertical stripes**, orange kept: white–dark 14.74:1, white–black 21:1, white–orange 3.33:1, dark–orange 4.43:1. The dark stripe against the outline is only 1.42:1; the white stripes carry the edge.
+  - **C white + deep orange (215,65,0)**: 21:1 vs black, white–deep orange 4.52:1, deep orange–black 4.65:1. This orange luminance balances both pairs (best min-pair contrast of the three).
+  - Caveat: white gloves on white home jerseys have little contrast against the sleeve.
+  - Textures: `glove_v4{A,B,C}_v2block.png`. Numbers: `glove_v4_contrast.json`.
+- **Open:** (a) choose glove option A/B/C; (b) Abdul to check the D43 uncertain frames on `segmentation_v4.png`; (c) whether to keep vote smoothing (coherent texture, 37% relocation) or raw votes (30%, speckled).
