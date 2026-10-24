@@ -827,3 +827,10 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - **D103 Skate exclusion.** The skate is not mapped: index 31, plus black pixels that are not enclosed by leg pixels and reach the blade or bottom, within 6 rows of the leg bottom.
 - **D104 Modes.** Row, diag/, diag\ (strap lines along anti-diagonals, as on 538 R) and column mode with per-column stripe order A/B (curved, reversed back-view sock stripes, as on 407). Non-row modes get a +0.75 tie penalty.
 - **Result.** 95 strict errors (47 content + 48 missing texel) vs g12 152, all teams. Proposal: add sock-shade texels 182/183 to the texture, which would remove 48.
+
+## goalie14 – segmented skeleton, stick out (Abdul pt904u)
+- **D105 Segmentation map.** Each frame gets a per-pixel part map: body, mask, catcher, blocker, stick, pad L, pad R, skate, shadow. Index evidence comes first (136 stick, catcher_q, goalie9 blocker/mask/pad parts). Any pixel left over takes its nearest skel10 bone: hand-fit ADJ joints for the 7 ready facings, otherwise the 3D model projected at the frame's facing. Smoothing is a 3x3 majority filter (2 passes) plus cleanup of islands under 4 px. Debris that is not connected to the goalie becomes shadow. A pad label always needs a pad index. Pads and gloves are assigned from this map (`goalie14/g14seg.py`).
+- **D106 Stick blade.** The blade is the black (0/8) pixels near the lowest 136 cluster that are not enclosed left and right by pad pixels. It and the shaft leave the pads. On 538 and 1044 the blade had been counted as skate inside the left/merged pad.
+- **D107 Column shift.** Column mode may shift the sock column by ±1 once per sprite column. This follows a stripe that crosses texel columns on a turned leg (407 right pad: 185 above 189). 407 now has 0 mapping errors.
+- **D108 No shading texels.** 182/183 occur nowhere in the 23x32 texture, so no mapping can hit them. They stay as missing-colour errors and are not added.
+- **Result.** 89 strict errors = 41 mapping + 48 missing colour (all 182/183). g13: 95 (47 + 48). Same for all 4 teams.
