@@ -1,0 +1,77 @@
+{
+ "part": "blocker",
+ "frames": [
+  413,
+  416,
+  422,
+  428,
+  449,
+  519,
+  980,
+  1000
+ ],
+ "layout": [
+  19,
+  0,
+  10,
+  10
+ ],
+ "control_px_wrong": {
+  "HOME.json tor": 0,
+  "AWAY.json nyr": 0,
+  "HOME.json chi": 0,
+  "AWAY.json chi": 0,
+  "HOME.json mtl": 0
+ },
+ "stats": {
+  "413": {
+   "px": 0,
+   "texels": 0,
+   "shared": 0
+  },
+  "416": {
+   "px": 0,
+   "texels": 0,
+   "shared": 0
+  },
+  "422": {
+   "px": 24,
+   "texels": 24,
+   "shared": 0
+  },
+  "428": {
+   "px": 0,
+   "texels": 0,
+   "shared": 0
+  },
+  "449": {
+   "px": 23,
+   "texels": 23,
+   "shared": 0
+  },
+  "519": {
+   "px": 9,
+   "texels": 8,
+   "shared": 1
+  },
+  "980": {
+   "px": 0,
+   "texels": 0,
+   "shared": 0
+  },
+  "1000": {
+   "px": 8,
+   "texels": 8,
+   "shared": 0
+  }
+ },
+ "texels": 100,
+ "texels_used": 49,
+ "family_fallback_px": {},
+ "texel_families": {
+  "arm stripe 3": 34,
+  "forearm": 30,
+  "idx0": 24,
+  "socks stripe 2": 2
+ }
+}

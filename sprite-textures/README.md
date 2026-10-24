@@ -76,7 +76,16 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 - The stick strip is at rows 0-1, cols 14-26.
 - Skate detail limit: see EXPANDED_ZONES D8-D13 and `v2_38x32/part_*.json`.
 
-**Next steps:** goalie mask, blocker, pads and glove (needs a goalie test frame set). See `PLAN_v2.md` §5.
+**Goalie first pass (2026-10-24):**
+- There are 8 goalie test frames (EXPANDED_ZONES D14) and a draft goalie companion texture, 38x32 (pad 19x21, blocker and catcher 10x10, mask 7x6). The script is `v2_38x32/scripts/gmap.py`.
+- Control: blocker 0 and catcher 0; mask 3 px per team (cage); pad 9-10 px per team. See D14-D19.
+
+**Next steps:**
+1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
+2. Hand-check the goalie segmentation.
+3. Add a cage texel to the mask block; split the pads left/right.
+4. Make skates and gloves texture-driven (see D10-D11).
+5. Second pass on stretch-sharing hotspots.
 
 **Where scripts live:** `v2_38x32/scripts/`.
 - They expect the scratch layout used in development: `/workspace/preview_back/root/sprite-textures/out` as cwd with `scripts/` on PYTHONPATH, and `/workspace/preview_v2` for outputs.

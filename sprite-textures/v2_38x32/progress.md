@@ -6,3 +6,7 @@
 - mapped/part_skates.png — skates on gear texels: control 0. 22% of skate pixels are per-frame game detail that no texel can reproduce (D10).
 - mapped/part_gloves.png — gloves now use the added glove columns: control 0, heavy stretch-sharing (D11).
 - mapped/part_stick.png — new stick strip at rows 0-1, cols 14-26 (was magenta): control 0, 22/26 texels used.
+- goalie/g_goalie_mask.png — draft goalie texture mask block 7x6: 3 px wrong per team (idx135 cage has no texel).
+- goalie/g_blocker.png — blocker 10x10: control 0 on 5 teams x 8 goalie frames.
+- goalie/g_pad.png — pad 19x21 shared by both pads: 10 px wrong per team (missing families in some rows), heavy sharing.
+- goalie/g_catcher.png — catcher 10x10: control 0.
