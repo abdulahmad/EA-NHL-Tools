@@ -915,6 +915,7 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - D137: leave the 12 still-off pad frames as they are, no hand-marked knees (pt940u).
 - D138: blocker orientation kept (no rotation); pad front not mirrored; check pixel matches myself instead of asking when the match is visible (pt942u).
 - D139: 421 ringed px = blocker glove; 408 ringed = body; 417 group = pad; 426 left edge = mask; strap rotation, catcher back x0-10 and back views on the strip confirmed by pixel match (pt942u rule).
+- D141-D142: strict 0 errors via seg + glove-atlas texel fixes; stick gets region x14-16 rows 9-22 (pt947u).
 - D140: Fuhr cuff and V tip stay as NOW (v12); do not re-ask settled questions (pt943u).
 
 ## goalie26 v11 – symmetric mask, orange on top (D133)
@@ -936,3 +937,7 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
   - Back views use the strap strip: `g27map.py` geo2 now sends every pad px whose sprite index is 181-189 to the strip texel with the same index nearest its geo2 row (226 px over 22 frames; the same px the strict maps send to the strip). Default texture renders now match the game on those px (407/980/428/520/425/429/408/411 checked, local images).
   - Still for Abdul (art, no pixel answer): Fuhr knee-cuff colour; the dark red pixel at the tip of the mask V.
 - D140 (Abdul pt943u + correction) **Fuhr knee cuff and mask V tip stay as NOW** (v12): grey/white knee cuff from his reference, dark red pixel at the tip of the mask V. No orange-cuff v13 was made or merged. Settled questions are not re-asked.
+
+## goalie28 – strict 0 errors for blocker/catcher/mask, stick part (D141-D142)
+- D141 (Abdul pt947u steering) **Strict mapping to 0 errors** (`goalie28/g28strict.py` -> `g28_map.json`, 14 frames). Totals: blocker 348 ok / 0 err (was 47 err), catcher incl. cuff 519 / 0 (was 1), mask 335 / 2, stick 437 / 0, pads unchanged 1127 / 0. Fixes, none by leaving px unmapped: segmentation - 416 (17,6), 407 (14,16), (15,16) blocker px with jersey indices 177/169/173 -> BODY; 425 (27,3) idx 0 'catcher' px is the stick's black butt -> STICK; 1044 (33,9) idx 8 'stick' px is skate colour -> SKATE; D132 1044 arm px applied. Texel mapping - a glove px whose index is not in its own block takes the nearest same-index texel of the other glove blocks (blocker <-> catcher front/back are one atlas, as D130 for the catcher): the 44 blocker-glove px with 145/148-152 (D139) map into the catcher blocks. **Cannot reach 0:** 538 mask (row 4, the two eye holes) index 45 - no texel in the layout has index 45 (Abdul's mask eyes are 0); needs a layout/palette decision.
+- D142 (Abdul pt947u steering) **Stick part.** New region in the free area x14-16 rows 9-22 (`goalie28/goalie_texture_v7_indexed.png` = v6 + region): col 15 rows 9-19 = 136 shaft, cols 14/16 rows 9-19 = 0 outline, rows 20-22 = 0 blade/tape. Strict map: v along the stick's long axis (hand 0 -> blade), u across, snapped to the nearest same-index texel; 437 ok / 0 err. Fuhr v13 (`goalie28/fuhr28.py`, `fuhr_oilers_texture_v13.png`) = v12 + the stick region in the game colours (EDM 136 (192,96,96), 0 black).
