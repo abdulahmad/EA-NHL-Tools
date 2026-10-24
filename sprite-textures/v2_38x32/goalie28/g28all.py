@@ -5,7 +5,7 @@
 # Parts: blocker/catcher/mask/stick = same-index snap inside the part's texel block at the bbox/axis position (strict; the
 # D141 glove-atlas fallback); a px with no same-index texel stays None (sprite colour, keeps the default pixel-perfect).
 # Pads = geo2 (D134/D136) + D139 strip texel, for custom art.
-import sys,os,json,numpy as np
+import sys,os,json,collections,numpy as np
 H=os.path.dirname(os.path.abspath(__file__));G=os.path.abspath(H+'/..')
 for d in ('/goalie15','/goalie14','/goalie13','/goalie12','/goalie25','/goalie27','/goalie9'):sys.path.insert(0,G+d)
 from g15pad import frame
@@ -16,8 +16,30 @@ def seg(n):
     if str(n) in E:return np.array(E[str(n)]['lab']),E[str(n)]['joints']
     if n in g25map.FR:
         if not hasattr(seg,'fr'):seg.fr=S28.seg_all();seg.j=json.load(open('/tmp/g16_seg.json'))
-        return np.array(seg.fr[str(n)]['lab']),seg.j[str(n)]['joints']
-    d=json.load(open('/tmp/g24_%d.json'%n));return np.array(d['lab']),d['joints']
+        return evidence(n,frame(n),np.array(seg.fr[str(n)]['lab']))[0],seg.j[str(n)]['joints']
+    d=json.load(open('/tmp/g24_%d.json'%n));lab=np.array(d['lab']);lab,_=evidence(n,frame(n),lab);return lab,d['joints']
+L7=S28.L
+def own_idx(l):
+    """indices a part can map exactly: gloves share one atlas (D141), mask = cols 12-20 rows 0-7, stick = its region."""
+    if l in (BLOCK,CATCH):return {int(v) for y in range(23,32) for v in L7[y,0:22]}|{int(v) for v in L7[0:7,0:10].ravel()}
+    if l==MASK:return {int(v) for v in L7[0:8,12:21].ravel()}
+    if l==STICK:return {int(v) for v in L7[9:23,14:17].ravel()}
+    if l in (PADL,PADR):return {int(v) for v in L7[9:23,0:13].ravel()}
+    return None
+def evidence(n,p,lab):
+    """D144 (pt948u-pt950u, pixel match like D139): on the auto-segmented frames a blocker/catcher/mask/stick px whose
+    sprite index no texel of that part has is not that part: it takes the most common 8-neighbour label that can hold the
+    index (skate/body/shadow hold any index), else BODY (jersey/skin 153-180 = arm/body/face) (mask/glove px: BODY, e.g. 538's eye holes, index 45, seen through the cage) or SKATE (pad/stick px <153: boot/blade
+    greys 22/30/31). Pads too (index must exist in the pad front/strip)."""
+    lab=lab.copy();h,w=lab.shape;ch=0
+    for _ in range(3):
+        for y,x in zip(*np.nonzero(np.isin(lab,[BLOCK,CATCH,MASK,STICK,PADL,PADR])&(p!=255))):
+            s=int(p[y,x]);l=lab[y,x]
+            if s in own_idx(l):continue
+            nb=collections.Counter(int(lab[yy,xx]) for yy in range(max(0,y-1),min(h,y+2)) for xx in range(max(0,x-1),min(w,x+2)) if (yy,xx)!=(y,x) and p[yy,xx]!=255)
+            ok=[k for k,_ in nb.most_common() if k not in (BG,l) and (own_idx(k) is None or s in own_idx(k))]
+            lab[y,x]=ok[0] if ok else (BODY if s>=153 or l in (MASK,BLOCK,CATCH) else SKATE);ch+=1
+    return lab,ch
 def back(n,lab,p,J):
     o=g25map.ORI.get(n)
     if o:return o=='BACK'
@@ -57,7 +79,13 @@ def maps(n):
         try:ja=g27map.leg_axis(n,leg)
         except Exception:ja=None
         v,u=g27map.geo2(q,outer_right,None,ja)
-        R['pad_'+leg]={'%d,%d'%c:([9+t[0],t[1]] if (t:=g27map.strip_texel(int(p[c]),v[i]) if 181<=int(p[c])<=189 else None) else [9+int(round(v[i])),int(round(u[i]))]) for i,c in enumerate(q)}
+        # D144 strict pads: snap the geo2 position to the nearest SAME-index texel of the pad front x0-9 / strip x10-12
+        # (rows 9-22), so the default texture reproduces the game px exactly; geo2 only chooses which texel.
+        def psnap(s,vv,uu):
+            C=[(y,x) for y in range(9,23) for x in range(0,13) if L[y,x]==s]
+            return list(min(C,key=lambda z:(z[0]-9-vv)**2+(z[1]-uu)**2)) if C else None
+        R['pad_'+leg]={'%d,%d'%c:psnap(int(p[c]),v[i],u[i]) for i,c in enumerate(q)}
+        R['geo2_'+leg]={'%d,%d'%c:([9+t[0],t[1]] if (t:=g27map.strip_texel(int(p[c]),v[i]) if 181<=int(p[c])<=189 else None) else [9+int(round(v[i])),int(round(u[i]))]) for i,c in enumerate(q)}
     return R,lab,J,B
 def run(frames=None):
     out={}
