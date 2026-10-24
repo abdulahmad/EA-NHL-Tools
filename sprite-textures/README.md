@@ -115,6 +115,8 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 
 **Goalie v8: default gear lifted from sprites, v1 style (2026-10-24, pt867u):** `v2_38x32/goalie8/`. Each part cut from its clearest frame (pads F 422, B 519, blocker 422, catcher 416, mask 416/413/519), base + shaded textures, mapped back by nearest uv: CHI HOME diff 397 / 1435 px, TOR HOME 417 (D68-D69). Readable texture first, diff reduction next.
 
+**Goalie v9: straight-on view scan (2026-10-24, pt868u):** `v2_38x32/goalie9/`. All 246 goalie frames from the SPA tables scanned with a generic segmentation and ranked per piece (pad front/back L/R, pad side, blocker, catcher, mask front/side/back) for facing, squareness, size, verticality and stick occlusion (D70-D71). Contact sheets are local; Abdul to pick the new source frames.
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.
