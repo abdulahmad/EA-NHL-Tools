@@ -1,0 +1,970 @@
+{
+ "groups": {
+  "SPAskate phase 0": {
+   "phi_deg": 15.0,
+   "scale": 58.346,
+   "joints3d": {
+    "L ankle": [
+     -0.08,
+     -0.16,
+     -0.15
+    ],
+    "L elbow": [
+     -0.07,
+     0.03,
+     0.03
+    ],
+    "L glove": [
+     -0.07,
+     -0.03,
+     0.09
+    ],
+    "L hip": [
+     -0.04,
+     -0.05,
+     -0.09
+    ],
+    "L knee": [
+     -0.06,
+     -0.09,
+     -0.09
+    ],
+    "L shoulder": [
+     -0.06,
+     0.07,
+     0.05
+    ],
+    "L skate": [
+     -0.12,
+     -0.19,
+     -0.14
+    ],
+    "L wrist": [
+     -0.07,
+     -0.0,
+     0.06
+    ],
+    "R ankle": [
+     0.07,
+     -0.14,
+     -0.0
+    ],
+    "R elbow": [
+     0.09,
+     0.09,
+     -0.06
+    ],
+    "R glove": [
+     0.08,
+     0.0,
+     0.01
+    ],
+    "R hip": [
+     0.05,
+     -0.07,
+     0.0
+    ],
+    "R knee": [
+     0.06,
+     -0.08,
+     0.01
+    ],
+    "R shoulder": [
+     0.08,
+     0.12,
+     -0.03
+    ],
+    "R skate": [
+     0.07,
+     -0.19,
+     0.01
+    ],
+    "R wrist": [
+     0.09,
+     0.04,
+     -0.05
+    ],
+    "belly": [
+     -0.01,
+     0.04,
+     -0.08
+    ],
+    "chest": [
+     0.0,
+     0.11,
+     0.0
+    ],
+    "head": [
+     0.02,
+     0.16,
+     0.09
+    ],
+    "neck": [
+     0.01,
+     0.12,
+     0.05
+    ],
+    "pelvis": [
+     -0.01,
+     0.02,
+     -0.08
+    ],
+    "stick butt": [
+     0.06,
+     0.0,
+     0.03
+    ],
+    "stick heel": [
+     -0.11,
+     -0.06,
+     0.13
+    ],
+    "stick toe": [
+     -0.16,
+     -0.01,
+     0.17
+    ]
+   },
+   "per_frame": {
+    "42": {
+     "dir": 0,
+     "mean_err_px": 1.42,
+     "max_err_px": 6.68,
+     "bone_on_sprite": 0.948,
+     "worst": [
+      [
+       "stick toe",
+       6.7
+      ],
+      [
+       "stick heel",
+       6.5
+      ],
+      [
+       "L ankle",
+       2.6
+      ]
+     ]
+    },
+    "47": {
+     "dir": 1,
+     "mean_err_px": 1.05,
+     "max_err_px": 1.46,
+     "bone_on_sprite": 1.0,
+     "worst": [
+      [
+       "R wrist",
+       1.5
+      ],
+      [
+       "L skate",
+       1.3
+      ],
+      [
+       "R glove",
+       1.3
+      ]
+     ]
+    },
+    "52": {
+     "dir": 2,
+     "mean_err_px": 1.27,
+     "max_err_px": 2.25,
+     "bone_on_sprite": 0.994,
+     "worst": [
+      [
+       "L shoulder",
+       2.2
+      ],
+      [
+       "pelvis",
+       2.2
+      ],
+      [
+       "belly",
+       2.1
+      ]
+     ]
+    },
+    "57": {
+     "dir": 3,
+     "mean_err_px": 2.07,
+     "max_err_px": 11.1,
+     "bone_on_sprite": 0.942,
+     "worst": [
+      [
+       "L skate",
+       11.1
+      ],
+      [
+       "stick butt",
+       2.9
+      ],
+      [
+       "R glove",
+       2.8
+      ]
+     ]
+    },
+    "62": {
+     "dir": 4,
+     "mean_err_px": 1.49,
+     "max_err_px": 3.8,
+     "bone_on_sprite": 0.968,
+     "worst": [
+      [
+       "L shoulder",
+       3.8
+      ],
+      [
+       "R shoulder",
+       3.2
+      ],
+      [
+       "L skate",
+       2.9
+      ]
+     ]
+    },
+    "67": {
+     "dir": 5,
+     "mean_err_px": 2.76,
+     "max_err_px": 6.66,
+     "bone_on_sprite": 0.929,
+     "worst": [
+      [
+       "R glove",
+       6.7
+      ],
+      [
+       "R elbow",
+       6.4
+      ],
+      [
+       "R shoulder",
+       5.9
+      ]
+     ]
+    },
+    "72": {
+     "dir": 6,
+     "mean_err_px": 1.47,
+     "max_err_px": 5.38,
+     "bone_on_sprite": 0.968,
+     "worst": [
+      [
+       "stick toe",
+       5.4
+      ],
+      [
+       "stick butt",
+       4.5
+      ],
+      [
+       "R wrist",
+       3.8
+      ]
+     ]
+    },
+    "77": {
+     "dir": 7,
+     "mean_err_px": 2.67,
+     "max_err_px": 13.63,
+     "bone_on_sprite": 0.987,
+     "worst": [
+      [
+       "stick butt",
+       13.6
+      ],
+      [
+       "stick toe",
+       8.0
+      ],
+      [
+       "R hip",
+       3.3
+      ]
+     ]
+    }
+   },
+   "lr_swap_improves": []
+  },
+  "SPAcrosscheck phase 0": {
+   "phi_deg": 5.0,
+   "scale": 3.129,
+   "joints3d": {
+    "L ankle": [
+     -0.76,
+     -4.12,
+     -0.51
+    ],
+    "L elbow": [
+     -2.33,
+     1.17,
+     -0.54
+    ],
+    "L glove": [
+     -2.52,
+     0.98,
+     0.74
+    ],
+    "L hip": [
+     -0.55,
+     -2.23,
+     -0.24
+    ],
+    "L knee": [
+     -0.5,
+     -2.83,
+     -0.18
+    ],
+    "L shoulder": [
+     -1.29,
+     1.5,
+     -0.66
+    ],
+    "L skate": [
+     -0.86,
+     -4.9,
+     -0.21
+    ],
+    "L wrist": [
+     -2.4,
+     1.3,
+     0.32
+    ],
+    "R ankle": [
+     1.26,
+     -4.11,
+     -0.47
+    ],
+    "R elbow": [
+     2.84,
+     1.18,
+     -0.55
+    ],
+    "R glove": [
+     2.76,
+     1.07,
+     0.72
+    ],
+    "R hip": [
+     1.13,
+     -2.23,
+     -0.33
+    ],
+    "R knee": [
+     1.09,
+     -2.8,
+     -0.26
+    ],
+    "R shoulder": [
+     1.82,
+     1.56,
+     -0.75
+    ],
+    "R skate": [
+     1.32,
+     -4.89,
+     -0.19
+    ],
+    "R wrist": [
+     2.91,
+     1.31,
+     0.3
+    ],
+    "belly": [
+     0.25,
+     -0.22,
+     -0.44
+    ],
+    "chest": [
+     0.26,
+     1.7,
+     -0.57
+    ],
+    "head": [
+     0.28,
+     3.34,
+     -0.15
+    ],
+    "neck": [
+     0.27,
+     2.2,
+     -0.42
+    ],
+    "pelvis": [
+     0.23,
+     -0.42,
+     -0.46
+    ],
+    "stick butt": [
+     4.21,
+     1.21,
+     0.61
+    ],
+    "stick heel": [
+     -3.55,
+     0.81,
+     1.33
+    ],
+    "stick toe": [
+     -4.69,
+     0.41,
+     1.19
+    ]
+   },
+   "per_frame": {
+    "889": {
+     "dir": 0,
+     "mean_err_px": 1.06,
+     "max_err_px": 3.85,
+     "bone_on_sprite": 0.955,
+     "worst": [
+      [
+       "stick butt",
+       3.8
+      ],
+      [
+       "stick heel",
+       3.3
+      ],
+      [
+       "R glove",
+       2.6
+      ]
+     ]
+    },
+    "891": {
+     "dir": 1,
+     "mean_err_px": 3.98,
+     "max_err_px": 19.02,
+     "bone_on_sprite": 0.825,
+     "worst": [
+      [
+       "stick toe",
+       19.0
+      ],
+      [
+       "stick butt",
+       17.1
+      ],
+      [
+       "stick heel",
+       13.4
+      ]
+     ]
+    },
+    "893": {
+     "dir": 2,
+     "mean_err_px": 1.91,
+     "max_err_px": 3.97,
+     "bone_on_sprite": 0.909,
+     "worst": [
+      [
+       "R glove",
+       4.0
+      ],
+      [
+       "stick butt",
+       3.9
+      ],
+      [
+       "R hip",
+       3.7
+      ]
+     ]
+    },
+    "895": {
+     "dir": 3,
+     "mean_err_px": 1.44,
+     "max_err_px": 3.69,
+     "bone_on_sprite": 0.961,
+     "worst": [
+      [
+       "stick butt",
+       3.7
+      ],
+      [
+       "L elbow",
+       3.4
+      ],
+      [
+       "L shoulder",
+       2.5
+      ]
+     ]
+    },
+    "897": {
+     "dir": 4,
+     "mean_err_px": 0.81,
+     "max_err_px": 1.98,
+     "bone_on_sprite": 0.994,
+     "worst": [
+      [
+       "stick heel",
+       2.0
+      ],
+      [
+       "stick toe",
+       1.9
+      ],
+      [
+       "L glove",
+       1.7
+      ]
+     ]
+    },
+    "899": {
+     "dir": 5,
+     "mean_err_px": 1.58,
+     "max_err_px": 4.16,
+     "bone_on_sprite": 0.961,
+     "worst": [
+      [
+       "stick heel",
+       4.2
+      ],
+      [
+       "R elbow",
+       3.5
+      ],
+      [
+       "R shoulder",
+       2.8
+      ]
+     ]
+    },
+    "901": {
+     "dir": 6,
+     "mean_err_px": 1.58,
+     "max_err_px": 3.44,
+     "bone_on_sprite": 0.974,
+     "worst": [
+      [
+       "L hip",
+       3.4
+      ],
+      [
+       "L glove",
+       2.8
+      ],
+      [
+       "L skate",
+       2.3
+      ]
+     ]
+    },
+    "903": {
+     "dir": 7,
+     "mean_err_px": 3.2,
+     "max_err_px": 18.87,
+     "bone_on_sprite": 0.812,
+     "worst": [
+      [
+       "stick butt",
+       18.9
+      ],
+      [
+       "stick toe",
+       11.3
+      ],
+      [
+       "stick heel",
+       5.9
+      ]
+     ]
+    }
+   },
+   "lr_swap_improves": []
+  },
+  "SPAanthem1 phase 0 (same frame 370 in all 8 directions)": {
+   "note": "single frame: same sprite drawn for all 8 directions, no rotation to fit",
+   "per_frame": {
+    "370": {
+     "dir": 4
+    }
+   }
+  }
+ },
+ "stick2d": {
+  "42": {
+   "butt": [
+    27.5,
+    13.0
+   ],
+   "heel": [
+    10.0365922615489,
+    11.747695187128643
+   ],
+   "toe": [
+    7.0,
+    8.0
+   ],
+   "shaft_len": 17.508251688382096,
+   "blade_len": 4.823495804758813,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.0,
+    "L": 0.4888136057807456
+   },
+   "pixels": 10,
+   "shaft_inliers": 8,
+   "blade_side": 1.0
+  },
+  "47": null,
+  "52": {
+   "butt": [
+    14.666666666666666,
+    12.444444444444445
+   ],
+   "heel": [
+    21.840584619873006,
+    14.420808847646029
+   ],
+   "toe": [
+    25.0,
+    10.0
+   ],
+   "shaft_len": 7.4411769938349535,
+   "blade_len": 5.433733192898637,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.0,
+    "L": 0.0204280180510092
+   },
+   "pixels": 11,
+   "shaft_inliers": 8,
+   "blade_side": -1.0
+  },
+  "57": {
+   "butt": [
+    8.090909090909092,
+    9.454545454545455
+   ],
+   "heel": [
+    18.059971359332742,
+    16.91310398998257
+   ],
+   "toe": [
+    22.0,
+    13.0
+   ],
+   "shaft_len": 12.450393485277884,
+   "blade_len": 5.553035973744073,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.0,
+    "L": 0.3274194539731099
+   },
+   "pixels": 12,
+   "shaft_inliers": 9,
+   "blade_side": -1.0
+  },
+  "62": {
+   "butt": [
+    5.055576245299426,
+    9.812848197723895
+   ],
+   "heel": [
+    15.217781639927171,
+    12.830597494958935
+   ],
+   "toe": [
+    18.093657021146914,
+    13.684612009879034
+   ],
+   "shaft_len": 10.600812671845674,
+   "blade_len": 3.0000000000000018,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.573614730128594,
+    "L": 0.3167832119008473
+   },
+   "pixels": 13,
+   "shaft_inliers": 13,
+   "blade_side": -1.0
+  },
+  "67": {
+   "butt": [
+    5.896522314599489,
+    8.031652631628182
+   ],
+   "heel": [
+    9.315646787809044,
+    19.209335762055392
+   ],
+   "toe": [
+    11.0,
+    16.0
+   ],
+   "shaft_len": 11.688926910864724,
+   "blade_len": 3.6244836566089877,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 1.2954637154144055
+   },
+   "pixels": 13,
+   "shaft_inliers": 13,
+   "blade_side": -1.0
+  },
+  "72": {
+   "butt": [
+    14.3,
+    13.7
+   ],
+   "heel": [
+    9.038861337335575,
+    15.122441231782465
+   ],
+   "toe": [
+    5.0,
+    11.0
+   ],
+   "shaft_len": 5.450038448089815,
+   "blade_len": 5.771215003075543,
+   "blade_longer_than_shaft": true,
+   "hand_offsets_px": {
+    "L": 0.0
+   },
+   "pixels": 9,
+   "shaft_inliers": 6,
+   "blade_side": 1.0
+  },
+  "77": {
+   "butt": [
+    5.280032513443681,
+    12.778011603307156
+   ],
+   "heel": [
+    8.770882489000627,
+    17.181626870021418
+   ],
+   "toe": [
+    12.0,
+    15.0
+   ],
+   "shaft_len": 5.619418205569403,
+   "blade_len": 3.8970111239053753,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "L": 1.2844135237848473
+   },
+   "pixels": 6,
+   "shaft_inliers": 5,
+   "blade_side": -1.0
+  },
+  "889": {
+   "butt": [
+    34.0,
+    8.0
+   ],
+   "heel": [
+    3.0,
+    8.0
+   ],
+   "toe": [
+    0.0,
+    11.0
+   ],
+   "shaft_len": 31.0,
+   "blade_len": 4.242640687119285,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 1.0,
+    "L": 1.0
+   },
+   "pixels": 12,
+   "shaft_inliers": 9,
+   "blade_side": -1.0
+  },
+  "891": {
+   "butt": [
+    4.985113435965998,
+    6.039743966185344
+   ],
+   "heel": [
+    19.383467593377738,
+    11.432814706760654
+   ],
+   "toe": [
+    22.19285982958729,
+    12.48510519095477
+   ],
+   "shaft_len": 15.375233801640398,
+   "blade_len": 3.0000000000000004,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.9410455330131876
+   },
+   "pixels": 9,
+   "shaft_inliers": 6,
+   "blade_side": -1.0
+  },
+  "893": {
+   "butt": [
+    10.166666666666666,
+    7.666666666666667
+   ],
+   "heel": [
+    14.019238815542511,
+    11.977817459305204
+   ],
+   "toe": [
+    12.0,
+    9.0
+   ],
+   "shaft_len": 5.781724078435578,
+   "blade_len": 3.597877459716551,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.0
+   },
+   "pixels": 5,
+   "shaft_inliers": 5,
+   "blade_side": -1.0
+  },
+  "895": {
+   "butt": [
+    0.03967250490137353,
+    12.351779550643876
+   ],
+   "heel": [
+    20.998657539557914,
+    9.988096286527709
+   ],
+   "toe": [
+    24.0,
+    13.0
+   ],
+   "shaft_len": 21.09184800476288,
+   "blade_len": 4.252013704597003,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.10251066197979991,
+    "L": 0.9599313262757244
+   },
+   "pixels": 21,
+   "shaft_inliers": 18,
+   "blade_side": 1.0
+  },
+  "897": {
+   "butt": [
+    0.0,
+    11.0
+   ],
+   "heel": [
+    26.0,
+    11.0
+   ],
+   "toe": [
+    29.0,
+    14.0
+   ],
+   "shaft_len": 26.0,
+   "blade_len": 4.242640687119285,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.4166666666666661,
+    "L": 0.4166666666666661
+   },
+   "pixels": 24,
+   "shaft_inliers": 21,
+   "blade_side": 1.0
+  },
+  "899": {
+   "butt": [
+    4.989087710430246,
+    10.096582526599628
+   ],
+   "heel": [
+    24.960117595798287,
+    12.352991307648805
+   ],
+   "toe": [
+    26.0,
+    14.0
+   ],
+   "shaft_len": 20.09809481690887,
+   "blade_len": 1.9478175087129508,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.5079125517367205,
+    "L": 0.12892624552228946
+   },
+   "pixels": 17,
+   "shaft_inliers": 17,
+   "blade_side": 1.0
+  },
+  "901": {
+   "butt": [
+    3.8659691453628913,
+    8.956323606803846
+   ],
+   "heel": [
+    1.9064602032309426,
+    14.96951835490242
+   ],
+   "toe": [
+    2.0,
+    13.0
+   ],
+   "shaft_len": 6.324411938896401,
+   "blade_len": 1.9717383811949112,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "L": 0.3314928206028457
+   },
+   "pixels": 7,
+   "shaft_inliers": 5,
+   "blade_side": 1.0
+  },
+  "903": {
+   "butt": [
+    2.1558421009748043,
+    13.147878241791634
+   ],
+   "heel": [
+    6.902624150287368,
+    8.145462210387294
+   ],
+   "toe": [
+    8.967611535670889,
+    5.969266654329214
+   ],
+   "shaft_len": 6.8960935300304,
+   "blade_len": 3.0000000000000004,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "L": 0.12047808264176794
+   },
+   "pixels": 12,
+   "shaft_inliers": 7,
+   "blade_side": -1.0
+  },
+  "370": {
+   "butt": [
+    3.7317098414024783,
+    6.045074431105553
+   ],
+   "heel": [
+    8.089766535054753,
+    31.98491865851114
+   ],
+   "toe": [
+    11.0,
+    35.0
+   ],
+   "shaft_len": 26.30338717137309,
+   "blade_len": 4.1904861670552584,
+   "blade_longer_than_shaft": false,
+   "hand_offsets_px": {
+    "R": 0.9982278788950631,
+    "L": 9.952301346354696
+   },
+   "pixels": 21,
+   "shaft_inliers": 17,
+   "blade_side": -1.0
+  }
+ }
+}

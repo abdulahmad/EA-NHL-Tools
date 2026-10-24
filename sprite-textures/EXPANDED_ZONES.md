@@ -286,3 +286,21 @@ flat/shading/combined renders, sheets `A_control_<team>_sheet.png`, `B_blind_geo
   897 and 889, the 95-only crosscheck frames). The crude blind rules are a lower bound on what the zone filter fixes, not a proposal.
 * **Stick fit fix (v5.2b):** toe = max(distance from grip + drop below grip) (was: farthest from the grip -> picked the butt end on
   370/889/42/67), heel searched within 8 px of the toe, blade fallback = last 4 px, isolated stray 136 px dropped (42 x29 y13).
+
+# v5.3 — one 3D stick man per SPA pose across the 8 directions + stick from the drawn stick pixels (Abdul pt793u)
+`scripts/playerlayout/spa_groups_v5.py` parses the SPA tables in `Sprite-Viewer/data/frames95pc.asm` (8 directions per SPA, frame/duration
+pairs). Groups found for the test frames:
+* **SPAskate phase 0**: 42 d0, 47 d1, 52 d2, 57 d3, 62 d4, 67 d5, 72 d6, 77 d7 (all 8 directions are already test frames).
+* **SPAcrosscheck phase 0**: 889 d0, 891 d1, 893 d2, 895 d3, 897 d4, 899 d5, 901 d6, 903 d7 (siblings 891-903 added; idx 30, missing from
+  zn.json, treated as gear on 891/893/901/903).
+* **SPAanthem1 phase 0**: 370 is the same frame for all 8 directions -> nothing to rotate; single-view only.
+`scripts/playerlayout/pose3d_v5.py` fits ONE set of 3D joints per group (body frame right/up/forward, incl. head, 4 torso segments, arm and
+leg segments, stick butt/heel/toe). Per direction only the yaw (45 deg x d; d0 facing away, player right = screen right; d4 facing camera;
+d2 near = right; d6 near = left) and a 2D offset change; one scale and one camera pitch per group. Soft-L1 least squares on the 2D joints of
+every sibling frame + bone samples kept on the sprite silhouette + equal left/right limb lengths. Per-frame L/R swap test: no swap improves.
+Mean / max joint error (px) and bone-on-sprite share in `pose3d_v5.json`. Worst: 891 and 903 (stick ends 17-19 px off; the 2D stick fit
+there disagrees with the shared pose: the stick is drawn differently or the end is misread), 77 stick butt 13.6, 57 L skate 11.1.
+**Stick (2D, per frame, from the drawn pixels):** shaft = the straight line holding the most stick pixels (a glove on the line counts 2),
+its far end = the drawn butt (370 reaches eye level), extended to a glove beyond it (42: both hands); blade = off-line stick pixels or
+black tape (idx 0, not skates) within 4-6 px of the heel; straight sticks: blade = last 3 px. 72 still has blade >= shaft (shaft hidden
+behind the body); flagged, not changed. Texture mapping unchanged.
