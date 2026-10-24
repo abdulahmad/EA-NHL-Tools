@@ -121,6 +121,8 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 
 **Goalie v10b (2026-10-24, pt870u):** texture v2 23x34 adds a pad-back piece lifted from 520 L and a horizontal catcher from 538; 164 is a texture zone (D76, supersedes D61 for this texture); rerun incl. 416/422 pads on the goalie6 seg (D77-D79).
 
+**Goalie v10c (2026-10-24, pt872u):** texture v3 (23x31, `goalie_texture_v3_indexed.png`). The pad back is Abdul's strip wrapping round; the padBack piece is dropped. 186 is the real extra pad-back zone (strip 155 -> 186). Both stripe orders exist in the game art, per animation. The unified catcher (FRONT from 538, BACK from 428) replaces catcherH, and the catcher orientation is added to the skeleton (`skel10.py`). See D80-D86.
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.

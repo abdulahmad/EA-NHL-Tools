@@ -1,0 +1,1024 @@
+{
+"totals": {
+"1/2|186": 24,
+"1/2|255": 11,
+"1/2|183": 3,
+"1/2|182": 2,
+"1/2|155": 7,
+"1/2|188": 2,
+"2/1|255": 3,
+"1/2|177": 1,
+"2/1|189": 7,
+"2/1|185": 1,
+"2/1|162": 1,
+"2/1|186": 8,
+"2/1|155": 4,
+"2/1|164": 2,
+"2/1|182": 1,
+"1/2|189": 2,
+"2/1|177": 3,
+"2/1|188": 1,
+"1/2|82": 1,
+"2/1|163": 2
+},
+"frames": {
+"410": {
+"anim": "SPAgready",
+"d": 1,
+"runs": [
+{
+"y": 21,
+"x": 16,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"411": {
+"anim": "SPAgglover",
+"d": 1,
+"runs": [
+{
+"y": 17,
+"x": 14,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"413": {
+"anim": "SPAgready",
+"d": 2,
+"runs": [
+{
+"y": 20,
+"x": 3,
+"dir": "184->left",
+"third": 255,
+"order": "1/2"
+}
+]
+},
+"416": {
+"anim": "SPAgready",
+"d": 3,
+"runs": [
+{
+"y": 19,
+"x": 3,
+"dir": "184->left",
+"third": 255,
+"order": "1/2"
+}
+]
+},
+"425": {
+"anim": "SPAgready",
+"d": 6,
+"runs": [
+{
+"y": 24,
+"x": 10,
+"dir": "184->right",
+"third": 183,
+"order": "1/2"
+}
+]
+},
+"426": {
+"anim": "SPAgglover",
+"d": 6,
+"runs": [
+{
+"y": 28,
+"x": 10,
+"dir": "184->right",
+"third": 255,
+"order": "1/2"
+}
+]
+},
+"429": {
+"anim": "SPAgglover",
+"d": 7,
+"runs": [
+{
+"y": 24,
+"x": 7,
+"dir": "184->right",
+"third": 182,
+"order": "1/2"
+}
+]
+},
+"430": {
+"anim": "SPAgglovel",
+"d": 7,
+"runs": [
+{
+"y": 23,
+"x": 12,
+"dir": "184->right",
+"third": 255,
+"order": "1/2"
+}
+]
+},
+"431": {
+"anim": "SPAgswing",
+"d": 0,
+"runs": [
+{
+"y": 22,
+"x": 11,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"432": {
+"anim": "SPAgswing",
+"d": 0,
+"runs": [
+{
+"y": 32,
+"x": 8,
+"dir": "184->right",
+"third": 186,
+"order": "1/2"
+},
+{
+"y": 32,
+"x": 16,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"433": {
+"anim": "SPAgswing",
+"d": 1,
+"runs": [
+{
+"y": 22,
+"x": 8,
+"dir": "184->right",
+"third": 155,
+"order": "1/2"
+}
+]
+},
+"443": {
+"anim": "SPAgswing",
+"d": 6,
+"runs": [
+{
+"y": 19,
+"x": 25,
+"dir": "184->left",
+"third": 155,
+"order": "1/2"
+}
+]
+},
+"445": {
+"anim": "SPAgswing",
+"d": 7,
+"runs": [
+{
+"y": 20,
+"x": 21,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+},
+{
+"y": 22,
+"x": 13,
+"dir": "184->right",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"446": {
+"anim": "SPAgswing",
+"d": 7,
+"runs": [
+{
+"y": 31,
+"x": 15,
+"dir": "184->right",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"447": {
+"anim": "SPAgstackr",
+"d": 0,
+"runs": [
+{
+"y": 20,
+"x": 6,
+"dir": "184->right",
+"third": 188,
+"order": "1/2"
+}
+]
+},
+"449": {
+"anim": "SPAgstackr",
+"d": 1,
+"runs": [
+{
+"y": 17,
+"x": 3,
+"dir": "184->right",
+"third": 186,
+"order": "1/2"
+},
+{
+"y": 18,
+"x": 8,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"454": {
+"anim": "SPAgstackr",
+"d": 4,
+"runs": [
+{
+"y": 8,
+"x": 34,
+"dir": "184->right",
+"third": 255,
+"order": "2/1"
+}
+]
+},
+"457": {
+"anim": "SPAgstackr",
+"d": 7,
+"runs": [
+{
+"y": 19,
+"x": 14,
+"dir": "184->right",
+"third": 177,
+"order": "1/2"
+}
+]
+},
+"458": {
+"anim": "SPAgstackr",
+"d": 7,
+"runs": [
+{
+"y": 20,
+"x": 24,
+"dir": "184->right",
+"third": 189,
+"order": "2/1"
+}
+]
+},
+"461": {
+"anim": "SPAgstackl",
+"d": 1,
+"runs": [
+{
+"y": 19,
+"x": 4,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"464": {
+"anim": "SPAgstackl",
+"d": 3,
+"runs": [
+{
+"y": 10,
+"x": 7,
+"dir": "184->left",
+"third": 185,
+"order": "2/1"
+}
+]
+},
+"466": {
+"anim": "SPAgstackl",
+"d": 4,
+"runs": [
+{
+"y": 5,
+"x": 13,
+"dir": "184->left",
+"third": 189,
+"order": "2/1"
+},
+{
+"y": 5,
+"x": 15,
+"dir": "184->right",
+"third": 162,
+"order": "2/1"
+}
+]
+},
+"469": {
+"anim": "SPAgstackl",
+"d": 7,
+"runs": [
+{
+"y": 18,
+"x": 14,
+"dir": "184->left",
+"third": 186,
+"order": "2/1"
+}
+]
+},
+"471": {
+"anim": "SPAgstickr",
+"d": 0,
+"runs": [
+{
+"y": 23,
+"x": 5,
+"dir": "184->left",
+"third": 186,
+"order": "2/1"
+}
+]
+},
+"472": {
+"anim": "SPAgstickl",
+"d": 0,
+"runs": [
+{
+"y": 21,
+"x": 6,
+"dir": "184->left",
+"third": 186,
+"order": "2/1"
+}
+]
+},
+"473": {
+"anim": "SPAgstickr",
+"d": 1,
+"runs": [
+{
+"y": 22,
+"x": 5,
+"dir": "184->right",
+"third": 189,
+"order": "2/1"
+}
+]
+},
+"474": {
+"anim": "SPAgstickl",
+"d": 1,
+"runs": [
+{
+"y": 24,
+"x": 18,
+"dir": "184->left",
+"third": 186,
+"order": "2/1"
+}
+]
+},
+"476": {
+"anim": "SPAgstickl",
+"d": 2,
+"runs": [
+{
+"y": 22,
+"x": 9,
+"dir": "184->left",
+"third": 186,
+"order": "2/1"
+}
+]
+},
+"487": {
+"anim": "SPAgskate",
+"d": 0,
+"runs": [
+{
+"y": 21,
+"x": 11,
+"dir": "184->right",
+"third": 155,
+"order": "2/1"
+},
+{
+"y": 23,
+"x": 19,
+"dir": "184->left",
+"third": 189,
+"order": "2/1"
+}
+]
+},
+"488": {
+"anim": "SPAgskate",
+"d": 0,
+"runs": [
+{
+"y": 24,
+"x": 15,
+"dir": "184->left",
+"third": 186,
+"order": "2/1"
+}
+]
+},
+"494": {
+"anim": "SPAgskate",
+"d": 1,
+"runs": [
+{
+"y": 23,
+"x": 9,
+"dir": "184->right",
+"third": 155,
+"order": "2/1"
+}
+]
+},
+"519": {
+"anim": "SPAgdive",
+"d": 0,
+"runs": [
+{
+"y": 23,
+"x": 7,
+"dir": "184->right",
+"third": 186,
+"order": "1/2"
+},
+{
+"y": 23,
+"x": 15,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"520": {
+"anim": "SPAgdive",
+"d": 0,
+"runs": [
+{
+"y": 25,
+"x": 7,
+"dir": "184->right",
+"third": 186,
+"order": "1/2"
+},
+{
+"y": 25,
+"x": 15,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"521": {
+"anim": "SPAgdive",
+"d": 1,
+"runs": [
+{
+"y": 23,
+"x": 16,
+"dir": "184->left",
+"third": 155,
+"order": "1/2"
+}
+]
+},
+"522": {
+"anim": "SPAgdive",
+"d": 1,
+"runs": [
+{
+"y": 18,
+"x": 7,
+"dir": "184->right",
+"third": 182,
+"order": "1/2"
+},
+{
+"y": 22,
+"x": 13,
+"dir": "184->left",
+"third": 188,
+"order": "1/2"
+}
+]
+},
+"524": {
+"anim": "SPAgdive",
+"d": 2,
+"runs": [
+{
+"y": 9,
+"x": 32,
+"dir": "184->left",
+"third": 164,
+"order": "2/1"
+}
+]
+},
+"526": {
+"anim": "SPAgdive",
+"d": 3,
+"runs": [
+{
+"y": 8,
+"x": 8,
+"dir": "184->right",
+"third": 182,
+"order": "2/1"
+},
+{
+"y": 14,
+"x": 26,
+"dir": "184->left",
+"third": 189,
+"order": "1/2"
+},
+{
+"y": 16,
+"x": 24,
+"dir": "184->left",
+"third": 177,
+"order": "2/1"
+}
+]
+},
+"530": {
+"anim": "SPAgdive",
+"d": 5,
+"runs": [
+{
+"y": 5,
+"x": 22,
+"dir": "184->right",
+"third": 188,
+"order": "2/1"
+},
+{
+"y": 18,
+"x": 9,
+"dir": "184->right",
+"third": 186,
+"order": "2/1"
+}
+]
+},
+"533": {
+"anim": "SPAgdive",
+"d": 7,
+"runs": [
+{
+"y": 21,
+"x": 24,
+"dir": "184->left",
+"third": 183,
+"order": "1/2"
+},
+{
+"y": 23,
+"x": 18,
+"dir": "184->right",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"535": {
+"anim": "SPAgglovel2",
+"d": 0,
+"runs": [
+{
+"y": 19,
+"x": 20,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"539": {
+"anim": "SPAgready",
+"d": 0,
+"runs": [
+{
+"y": 22,
+"x": 8,
+"dir": "184->right",
+"third": 186,
+"order": "1/2"
+},
+{
+"y": 22,
+"x": 14,
+"dir": "184->left",
+"third": 155,
+"order": "1/2"
+}
+]
+},
+"540": {
+"anim": "SPAgready",
+"d": 0,
+"runs": [
+{
+"y": 21,
+"x": 8,
+"dir": "184->right",
+"third": 186,
+"order": "1/2"
+},
+{
+"y": 21,
+"x": 14,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"541": {
+"anim": "SPAgready",
+"d": 1,
+"runs": [
+{
+"y": 24,
+"x": 9,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"542": {
+"anim": "SPAgready",
+"d": 1,
+"runs": [
+{
+"y": 19,
+"x": 3,
+"dir": "184->right",
+"third": 155,
+"order": "1/2"
+},
+{
+"y": 22,
+"x": 8,
+"dir": "184->left",
+"third": 155,
+"order": "1/2"
+}
+]
+},
+"554": {
+"anim": "SPAgready",
+"d": 7,
+"runs": [
+{
+"y": 22,
+"x": 20,
+"dir": "184->left",
+"third": 155,
+"order": "1/2"
+},
+{
+"y": 23,
+"x": 16,
+"dir": "184->right",
+"third": 82,
+"order": "1/2"
+}
+]
+},
+"976": {
+"anim": "SPAgofallstick",
+"d": 7,
+"runs": [
+{
+"y": 19,
+"x": 15,
+"dir": "184->left",
+"third": 155,
+"order": "2/1"
+},
+{
+"y": 23,
+"x": 5,
+"dir": "184->right",
+"third": 189,
+"order": "2/1"
+}
+]
+},
+"981": {
+"anim": "SPAgoaliepoke",
+"d": 1,
+"runs": [
+{
+"y": 21,
+"x": 9,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"982": {
+"anim": "SPAgoaliepoke",
+"d": 1,
+"runs": [
+{
+"y": 21,
+"x": 13,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"983": {
+"anim": "SPAgoaliepoke",
+"d": 2,
+"runs": [
+{
+"y": 20,
+"x": 3,
+"dir": "184->left",
+"third": 255,
+"order": "1/2"
+}
+]
+},
+"984": {
+"anim": "SPAgoaliepoke",
+"d": 2,
+"runs": [
+{
+"y": 20,
+"x": 3,
+"dir": "184->left",
+"third": 255,
+"order": "1/2"
+}
+]
+},
+"985": {
+"anim": "SPAgoaliepoke",
+"d": 3,
+"runs": [
+{
+"y": 19,
+"x": 3,
+"dir": "184->left",
+"third": 255,
+"order": "1/2"
+}
+]
+},
+"986": {
+"anim": "SPAgoaliepoke",
+"d": 3,
+"runs": [
+{
+"y": 18,
+"x": 3,
+"dir": "184->left",
+"third": 255,
+"order": "1/2"
+}
+]
+},
+"991": {
+"anim": "SPAgoaliepoke",
+"d": 6,
+"runs": [
+{
+"y": 20,
+"x": 25,
+"dir": "184->right",
+"third": 255,
+"order": "1/2"
+}
+]
+},
+"992": {
+"anim": "SPAgoaliepoke",
+"d": 6,
+"runs": [
+{
+"y": 19,
+"x": 28,
+"dir": "184->right",
+"third": 255,
+"order": "1/2"
+}
+]
+},
+"1002": {
+"anim": "SPAgoalieknee",
+"d": 2,
+"runs": [
+{
+"y": 11,
+"x": 23,
+"dir": "184->left",
+"third": 164,
+"order": "2/1"
+}
+]
+},
+"1004": {
+"anim": "SPAgoalieknee",
+"d": 3,
+"runs": [
+{
+"y": 8,
+"x": 23,
+"dir": "184->left",
+"third": 189,
+"order": "1/2"
+},
+{
+"y": 10,
+"x": 21,
+"dir": "184->left",
+"third": 177,
+"order": "2/1"
+}
+]
+},
+"1008": {
+"anim": "SPAgoalieknee",
+"d": 5,
+"runs": [
+{
+"y": 10,
+"x": 14,
+"dir": "184->right",
+"third": 186,
+"order": "2/1"
+}
+]
+},
+"1022": {
+"anim": "SPAgofallback",
+"d": 4,
+"runs": [
+{
+"y": 3,
+"x": 12,
+"dir": "184->left",
+"third": 163,
+"order": "2/1"
+},
+{
+"y": 3,
+"x": 16,
+"dir": "184->right",
+"third": 163,
+"order": "2/1"
+}
+]
+},
+"1032": {
+"anim": "SPAgofallglove",
+"d": 1,
+"runs": [
+{
+"y": 19,
+"x": 2,
+"dir": "184->right",
+"third": 155,
+"order": "2/1"
+},
+{
+"y": 23,
+"x": 12,
+"dir": "184->left",
+"third": 189,
+"order": "2/1"
+}
+]
+},
+"1053": {
+"anim": "SPAgofallstick",
+"d": 0,
+"runs": [
+{
+"y": 24,
+"x": 5,
+"dir": "184->right",
+"third": 189,
+"order": "2/1"
+}
+]
+},
+"1055": {
+"anim": "SPAgofallstick",
+"d": 0,
+"runs": [
+{
+"y": 9,
+"x": 4,
+"dir": "184->right",
+"third": 177,
+"order": "2/1"
+}
+]
+},
+"1056": {
+"anim": "SPAgofallstick",
+"d": 1,
+"runs": [
+{
+"y": 21,
+"x": 13,
+"dir": "184->left",
+"third": 186,
+"order": "1/2"
+}
+]
+},
+"1059": {
+"anim": "SPAgofallstick",
+"d": 2,
+"runs": [
+{
+"y": 20,
+"x": 3,
+"dir": "184->left",
+"third": 255,
+"order": "1/2"
+}
+]
+},
+"1061": {
+"anim": "SPAgofallstick",
+"d": 2,
+"runs": [
+{
+"y": 2,
+"x": 28,
+"dir": "184->left",
+"third": 255,
+"order": "2/1"
+}
+]
+},
+"1064": {
+"anim": "SPAgofallstick",
+"d": 3,
+"runs": [
+{
+"y": 2,
+"x": 28,
+"dir": "184->left",
+"third": 255,
+"order": "2/1"
+}
+]
+},
+"1071": {
+"anim": "SPAgofallstick",
+"d": 6,
+"runs": [
+{
+"y": 20,
+"x": 12,
+"dir": "184->right",
+"third": 183,
+"order": "1/2"
+}
+]
+}
+}
+}
