@@ -16,6 +16,7 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - goalie22: two-piece pad mapping per leg (one straight cut, best mode per piece), 14 strict errors (was 42), labels unchanged, D126.
 - goalie23: recursive pad splits, 0 strict pad errors in all 14 frames, D127.
 - goalie24: next group SPAgglover (8 frames) auto-labelled for inspection, 3 open questions; Fuhr pad test render local only, D128.
+- goalie24 (Fuhr v8): Fuhr Oilers art remapped into the current 23x32 goalie layout, mask = centre front / back on both sides, D129.
 - goalie13: strict pad remap, 95 strict errors (g12 152), D101–D104.
 
 ## Tools included
