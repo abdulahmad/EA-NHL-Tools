@@ -880,3 +880,6 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 
 ## goalie22 – two-piece pad mapping (D126)
 - D126: labels unchanged (g21 = ground truth, pad/skate pixel sets reused exactly). A pad leg may be cut once (sprite row, column, or either 45° diagonal) into two pieces, each mapped with its own best g14 mode (row/diagonal arcs or column paths); a split costs 1.5 so it is kept only if it removes ≥2 strict errors. Same texture, no new texels, strict index equality. Strict errors 42 → 14: 416 6→2, 419 2→0, 538 3→0 (Abdul's frozen 538 pixels now map), 407 2, 428 5→3, 980 6→2, 413 1, 425 2→0, 520 1, 987 6→0, 505 0, 1044 1, 422 7→2, 421 0. g22pad.py (driver), g22images.py (local before/after sheets).
+
+## goalie23 – zero strict pad errors (D127)
+- D127: g22 split made recursive (depth 2: a piece may be cut once more, so a leg has up to 4 pieces, each ≥6 px, each with its own best g14 mode) and the split cost lowered to 0.9, so a cut that removes a single error is kept. Labels unchanged, same texture, no new texels, strict index equality. Strict errors 14 → 0 in all 14 frames (1127 ok + 170 skate). Extra cuts sit at the knee/boot-cuff rows (y≈20-26) where the pad bends. g23pad.py, g23images.py (local sheets).
