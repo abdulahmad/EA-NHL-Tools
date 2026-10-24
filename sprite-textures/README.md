@@ -90,6 +90,11 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 - Why the D32 Oilers pass failed: D34 (pad backs never mapped, 59% of pad px; family-run packing; capacity-sized blocks; segmentation).
 - Fixes: D35-D39. Brighter or high-contrast glove test colours: D40.
 
+**Goalie segmentation v4 (2026-10-24, pt860u):** `v2_38x32/goalie4/`.
+- Gear parts are now segmented from their own palette zones plus logical masks (EXPANDED_ZONES D41-D43): pads front = 150-152 / 155 / socks 181-189, blocker = 144-146 + 147-149, catcher = 150-152 + 147/148, mask = 177 + 184-189 + 164, cage 135. 519 is front-facing.
+- Default gear rebuilt from it: control **0 on 8 frames x 5 teams**; 535 of 1447 px relocated by colour (D44).
+- Fuhr Oilers redone on the position map (D45). Glove contrast options A/B/C (D46).
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.

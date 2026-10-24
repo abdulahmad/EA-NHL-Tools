@@ -1,0 +1,100 @@
+{
+ "reference": {
+  "navy_black": 1.24,
+  "sky_black": 12.78,
+  "sky_orange": 2.02,
+  "orange_black": 6.31
+ },
+ "A": {
+  "name": "white",
+  "colours": {
+   "white": [
+    255,
+    255,
+    255
+   ],
+   "dark": [
+    40,
+    40,
+    40
+   ],
+   "orange": [
+    255,
+    77,
+    0
+   ],
+   "deep orange": [
+    215,
+    65,
+    0
+   ]
+  },
+  "contrast": {
+   "white vs black": 21.0,
+   "white vs orange": 3.33,
+   "orange vs black": 6.31
+  }
+ },
+ "B": {
+  "name": "white/dark stripes",
+  "colours": {
+   "white": [
+    255,
+    255,
+    255
+   ],
+   "dark": [
+    40,
+    40,
+    40
+   ],
+   "orange": [
+    255,
+    77,
+    0
+   ],
+   "deep orange": [
+    215,
+    65,
+    0
+   ]
+  },
+  "contrast": {
+   "white vs dark": 14.74,
+   "white vs black": 21.0,
+   "white vs orange": 3.33,
+   "dark vs orange": 4.43,
+   "dark vs black": 1.42
+  }
+ },
+ "C": {
+  "name": "white + deep orange",
+  "colours": {
+   "white": [
+    255,
+    255,
+    255
+   ],
+   "dark": [
+    40,
+    40,
+    40
+   ],
+   "orange": [
+    255,
+    77,
+    0
+   ],
+   "deep orange": [
+    215,
+    65,
+    0
+   ]
+  },
+  "contrast": {
+   "white vs black": 21.0,
+   "white vs deep orange": 4.52,
+   "deep orange vs black": 4.65
+  }
+ }
+}
