@@ -909,4 +909,8 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - D116–D121 (goalie15 corrections 416,419,538,407,428,980,425,1044,422 + stick butt), D122 538 blocker = green cells, D123: 980 x13-15 y19-21 inner edge of RIGHT pad, 1044 (x9,y24) pad, 538 non-green old blocker = body, 428 no blocker, glove px proximal to the wrist = arm.
 - D124: 980 ringed former-catcher px = arm; 416 ringed stay catcher; 419 catcher arm stripes 1-2 = arm; 419 green blocker cells = blocker. D125: 419 catcher = the 41 green cells.
 - D129: mask strip = centre FRONT, back split onto the left and right sides. D132: 1044 ringed blocker px = arm/body.
+- D133: Fuhr mask symmetric (front mirrored about centre, back halves mirror) and more orange on top of the mask.
 - Open: 421 ringed blocker px (goalie25 questions_2); goalie24 408/417/426.
+
+## goalie26 v11 – symmetric mask, orange on top (D133)
+- D133 (Abdul pt934u "make the fuhr texture symmetrical, and more of the orange needs to be on top") **Fuhr v11** (`goalie26/fuhr26.py` `small11`, `fuhr_oilers_texture_v11.png`). Mask front x14-18 mirrored about x16 (x14-15 -> x18-17); back halves mirror each other (x12-13 -> x20-19); the orange flame/V of the mask reference is brought into the top: row 1 x14,15,17,18 and row 2 x15-17 orange (row 1 x16 keeps the darker red point); chin kept (orange (6,16),(7,16), blue (6,15),(6,17)). Pad front was NOT mirrored: Abdul's DR pad reference itself is asymmetric (navy stripe right of centre, logo bottom-left/right differ; 86 of 140 texels differ from their mirror), so it follows the reference. Blocker/catcher refs are not symmetric designs either.
