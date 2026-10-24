@@ -1,0 +1,13 @@
+{
+ "light": 3,
+ "flat": 2,
+ "medium": 2,
+ "dark": 1,
+ "grey_hi": 4,
+ "grey_lo": 5,
+ "outline": 6,
+ "toe_shadow": 7,
+ "toe_shadow2": 8,
+ "cage_lt": 9,
+ "cage_dk": 10
+}
