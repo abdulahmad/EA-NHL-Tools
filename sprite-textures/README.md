@@ -131,6 +131,8 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 
 **Goalie v12 (2026-10-24, pt880u):** removed the unused 8x12 catcher and repacked the textures to 23x32. Per-team sheets show original | applied | errors per option. Totals over 11 frames: A 709>271, B 655>195. See D96-D97.
 
+**Goalie v12 pads/glove (2026-10-24, pt880u):** shading counts as gear (D98). FRONT catchers whose free fit was scrambled now use a coherent fit (D99). Pads use cylinder per-row UV: strict errors 368 -> 152 (54 shading, 98 row content) (D100).
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.
