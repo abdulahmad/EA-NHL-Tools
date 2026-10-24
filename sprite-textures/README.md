@@ -107,6 +107,10 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 - Default gear built from the clearest frames: control **0 on 8 frames x 5 teams**; relocation 415 of 1448 px (28.7%, v5 37%), moved 2+ texels 93 (v5 265) (D58). Fuhr Oilers re-projected (D59).
 - Player gloves v6: recolour limited to glove px, stick px changed 0 on 11 frames (D60).
 
+**Goalie v7: shading layer split from base colours, player gloves purple + lime (2026-10-24, pt864u):** `v2_38x32/goalie7/`.
+- Non-team indices in the gear (164/22 greys, idx0/109 outline, 30/31 toe navy, 134/136 cage) moved to a per-frame shading layer (`goalie7/shading/<frame>.png`, codes in `levels.json`); the texture holds team base colours only. Control 0 px (8 frames x 5 teams). Relocation 415 -> 275 px (28.7% -> 19.0%) (D61-D63).
+- Fuhr texture v7 with baked greys snapped to white/black, drawn as texture x shading (D64). Player gloves v7 deep purple + lime, stick untouched (D65).
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.
