@@ -957,3 +957,8 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - Measure: the share of neighbouring sprite pixels whose texels are exactly one step apart (no stretch, no skip). Before → now (across/down): blocker 25/42% → 30/50%, catcher 29/28% → 34/31%, mask 50/69% → 52/70%, pads 34/45% (unchanged).
 - Blocker, catcher and mask now aim at a per-pixel target and snap to the nearest texel with the same colour. A pure per-pixel pad target scored worse (30/25%), so it is off (PADPP=1 turns it on).
 - Conflict: with this 23x32 layout, pure per-pixel placement matches the game's colours on only ~26% of blocker, 15% of catcher and 36% of mask pixels. A control with 0 errors and full per-pixel mapping can't both hold until the texture layout matches the game art pixel for pixel.
+
+## D148 — Skater part/skeleton editor (Abdul pt951u)
+- `sprite-textures/skater_part_editor.html` does the same job as the goalie editor, for skater sprites: paint parts, drag joints, undo/reset, export edits JSON. Parts are the skater pipeline's own (`scripts/parts.py` PN: outline, skin, helmet, torso, crest, shoulder patch, sleeve, glove, pants, sock, skate, skate blade, stick, shadow, other).
+- Data: `skater_editor/skater_export.py` exports 881 skater frames, auto-labelled by `parts.segment()`. Joints come from the hand-fitted `pose3d_v5` joints2d (17 frames) or, for other frames, rough joints from part centres. The data is local only and holds game data, so never commit it. `skater_editor/skater_import.py` merges the edits into `/tmp/skater_edits.json`, which the next export loads.
+- Colourblind-safe: Okabe-Ito colours and greys, no red/green pairs, and a letter on every labelled pixel. No texture preview yet; the goalie texture layout is unchanged.
