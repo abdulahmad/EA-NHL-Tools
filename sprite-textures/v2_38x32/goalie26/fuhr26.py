@@ -81,3 +81,15 @@ def hires(R,mf,mb,S=20):
     return im
 if __name__=='__main__':
     T=small(*sys.argv[1:4]);Image.fromarray(T.astype(np.uint8)).save(H+'/fuhr_oilers_texture_v10.png');print('saved v10')
+# v11 (Abdul pt934u "make the fuhr texture symmetrical, and more of the orange needs to be on top", D133):
+# mask front x14-18 mirrored about x16 (left half x14-15 -> x18-17), back halves mirror each other (x12-13 -> x20-19),
+# orange flame/V brought into the top rows: row 1 x14,15,17,18 and row 2 x15-17 orange; chin kept (orange (6,16),(7,16), blue (6,15),(6,17)).
+def small11(R,mf,mb):
+    T=small(R,mf,mb)
+    for y in range(8):
+        for a,b in ((14,18),(15,17),(12,20),(13,19)):T[y,b]=T[y,a]
+    for y,x in ((1,14),(1,15),(1,17),(1,18),(2,15),(2,16),(2,17)):
+        if L[y,x]!=255:T[y,x]=ORANGE
+    return T
+if __name__=='__main__':
+    T=small11(*sys.argv[1:4]);Image.fromarray(T.astype(np.uint8)).save(H+'/fuhr_oilers_texture_v11.png');print('saved v11')
