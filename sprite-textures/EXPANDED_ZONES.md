@@ -422,3 +422,23 @@ Per team, before → after (mismatch, R/P/S/D):
 - mtl: 771 → 764
 
 All-3D would be worse: tor 773, nyr 877, chi home 882, chi away 889, mtl 786. Stripe checks (kinks, red flags, 2-px runs, angle steps, thickness) are identical for the 2D, 3D and mixed sources. Round trip, team errors and control A are all 0.
+
+## v5.8: torso row-balance review of 67, 52, 62 (all kept as main)
+
+**Frame 67** (Abdul asked whether row 12 rises too high and squeezes row 10). Variants compared (preview only, never committed):
+
+| variant | rows 9-13 px | kinks | max torso angle step | result |
+|---|---|---|---|---|
+| MAIN | 7/6/10/4/2 | 1 | 57.7° | **kept** |
+| u^1.8 stretch | - | - | - | squeezed row 10 and moved the lower-left island (rejected) |
+| A | - | - | - | crowded row 9 with a 3-px-thick row (rejected) |
+| B: equal-count rows, island pinned to row 11 | 6/5/10/5/3 | 1 | 38.8° (also 30.5°) | rejected |
+| C: harmonic field, island free (`TORSO_HARMONIC=67 TORSO_NOISLAND=1 TORSO_MODE=eq`) | 6/6/5/6/6 | 0 | 26.4° | rejected |
+
+C row angles: 103.4/77.1/95.2/119.2/126.9°, but the 4 island pixels (x7-8, y8-10) move to row 9 and ~19 body pixels shift down one row. Control errors are 0 in all variants. Decision: keep MAIN.
+
+**Frame 52**: rows r6:4 r7:8 r8:8 r9:6 r10:5 r11:4 r12:2 r13:2 r14:1; 4 kinks (6 forced), max step 56.7° between row 7 (117.9°) and row 8 (61.2°). The jump is between yoke rows 6-8, fixed by game art (~120°), and the jersey (~60°); harmonic equal-count smoothing changed 0 pixels. Decision: keep MAIN.
+
+**Frame 62**: rows r12:7 r13:8 r14:8 r15:7 r16:3; 0 kinks (6 forced), max step 8.3°. Forearms are 1-2 px long and only reach rows 15-16 (row 17 is never drawn); harmonic forearm smoothing changed 0 pixels. Decision: keep MAIN.
+
+Preview scripts lived outside the repo (scratch); no code change.
