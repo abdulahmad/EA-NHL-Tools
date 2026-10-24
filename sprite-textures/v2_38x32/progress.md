@@ -1,3 +1,8 @@
 - mapped/control_diff_sheet_before.png — the v1 mapping: control diffs of 132-171 px per team, all in pants and torso (family slips).
 - mapped/control_diff_sheet_after.png — v2map2 (family-aware + centre-contiguous): 0 px diff and 0 occupancy diff, 5 teams x 11 frames.
 - mapped/anthem_897_centre_rule.png — anthem frame before/after the centre rule: stray outer texels dropped, blocks centred; 242→234 texels.
+- mapped/part_socks.png — socks remapped family-aware: control 0 on 5 teams x 11 frames, 58 texels.
+- mapped/part_helmet.png — helmet: control 0, 1 px per texel except frame 889 (3 shared).
+- mapped/part_skates.png — skates on gear texels: control 0. 22% of skate pixels are per-frame game detail that no texel can reproduce (D10).
+- mapped/part_gloves.png — gloves now use the added glove columns: control 0, heavy stretch-sharing (D11).
+- mapped/part_stick.png — new stick strip at rows 0-1, cols 14-26 (was magenta): control 0, 22/26 texels used.

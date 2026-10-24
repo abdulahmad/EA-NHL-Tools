@@ -1,0 +1,99 @@
+{
+ "part": "gloves",
+ "parts_enabled": "socks,helmet,skates,gloves",
+ "control_total": {
+  "HOME.json tor": 0,
+  "AWAY.json nyr": 0,
+  "HOME.json chi": 0,
+  "AWAY.json chi": 0,
+  "HOME.json mtl": 0
+ },
+ "control_part": {
+  "HOME.json tor": 0,
+  "AWAY.json nyr": 0,
+  "HOME.json chi": 0,
+  "AWAY.json chi": 0,
+  "HOME.json mtl": 0
+ },
+ "stats": {
+  "370": {
+   "px": 18,
+   "texels": 13,
+   "shared": 5,
+   "dup_px": 5
+  },
+  "897": {
+   "px": 30,
+   "texels": 18,
+   "shared": 11,
+   "dup_px": 12
+  },
+  "57": {
+   "px": 34,
+   "texels": 21,
+   "shared": 13,
+   "dup_px": 13
+  },
+  "62": {
+   "px": 28,
+   "texels": 17,
+   "shared": 10,
+   "dup_px": 11
+  },
+  "67": {
+   "px": 26,
+   "texels": 18,
+   "shared": 8,
+   "dup_px": 8
+  },
+  "52": {
+   "px": 28,
+   "texels": 19,
+   "shared": 9,
+   "dup_px": 9
+  },
+  "72": {
+   "px": 22,
+   "texels": 15,
+   "shared": 7,
+   "dup_px": 7
+  },
+  "889": {
+   "px": 10,
+   "texels": 8,
+   "shared": 2,
+   "dup_px": 2
+  },
+  "42": {
+   "px": 17,
+   "texels": 12,
+   "shared": 5,
+   "dup_px": 5
+  },
+  "47": {
+   "px": 9,
+   "texels": 6,
+   "shared": 3,
+   "dup_px": 3
+  },
+  "77": {
+   "px": 16,
+   "texels": 10,
+   "shared": 6,
+   "dup_px": 6
+  }
+ },
+ "family_mismatch": 0,
+ "zone_mismatch": 0,
+ "zone_texels": 38,
+ "texels_used_any_frame": 38,
+ "fallbacks": {
+  "('pantsB', np.int64(17), 'pants stripe 2')": 3,
+  "('wrap', 'pantsB', np.int64(17), 'pants stripe 2')": 3
+ },
+ "gear_level_to_index": {
+  "flat": {
+   "0": 238
+  }
+ }
+}
