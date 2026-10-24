@@ -834,3 +834,14 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - **D107 Column shift.** Column mode may shift the sock column by ±1 once per sprite column. This follows a stripe that crosses texel columns on a turned leg (407 right pad: 185 above 189). 407 now has 0 mapping errors.
 - **D108 No shading texels.** 182/183 occur nowhere in the 23x32 texture, so no mapping can hit them. They stay as missing-colour errors and are not added.
 - **Result.** 89 strict errors = 41 mapping + 48 missing colour (all 182/183). g13: 95 (47 + 48). Same for all 4 teams.
+
+## goalie15 – sock shading, cross-referenced skeleton (Abdul pt907u)
+- **D109 Sock shading in the texture.** Texture v6 (`goalie15/goalie_texture_v6_indexed.png`) puts 181/182/183 into the sock strip (x10–12) on texture rows 13, 14 and 17. The shades are part of the texture, not a separate layer. This replaces D108: all 48 missing-colour errors are gone.
+- **D110 Colour zones.** The catcher label is allowed only on indices 144–152. It is cut down to the 4-connected piece holding the core colours 148/149/150, which stops 421's left-pad trim being read as glove. Ice spray (connected runs of 3 or more pixels with index 1–30, not 8) is labelled shadow, which takes the spray off 538's right pad.
+- **D111 Fitted skeleton.** Facings without ADJ joints are fitted to the sprite, not just projected:
+  - The head and neck come from the mask, and the pelvis sits above the pad tops.
+  - Shoulders and hips are skel10 offsets rotated to the facing. Ankles come from the pad bottoms and hands from the glove centroids.
+  - Knees and elbows use 2-bone IK with the skel10 bone lengths, bending to the same side as the rotated 3D pose. Joints that land off the sprite snap to the goalie.
+  - Labelling and fitting alternate until the labels stop changing (at most 4 rounds).
+- **D112 Mask and grow rules.** The skeleton only assigns mask when a frame has no mask evidence (980). Body pixels with a pad colour that touch a pad, within 4 rows of the pelvis, join that pad (421 left pad). The D105 smoothing is unchanged.
+- **Result.** 50 strict errors = 50 mapping + 0 missing colour (g14: 89 = 41 + 48), the same for all 4 teams. Mapping changed per frame: 407 0→1, 428 4→5, 980 1→6, 425 6→7, 987 6→7, and every other frame is unchanged. Open questions: 538 (19,19)/(19,21)/(20,21) may be stick paddle, and 1044 (24,9) is unidentified.

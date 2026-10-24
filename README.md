@@ -6,6 +6,7 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 Note that this suite of tools have only been tested on a windows machine. Some of the tools (the ones designed for NHL94/95 PC) use `gfxpak`, which is a windows only application.
 
 - goalie14: segmented skeleton + stick/blade exclusion, 89 strict errors (41 mapping + 48 missing colour), D105–D108.
+- goalie15: sock shades 182/183 in texture v6 + colour-zone/fitted-skeleton segmentation, 50 strict errors (50 mapping + 0 missing colour), D109–D112.
 - goalie13: strict pad remap, 95 strict errors (g12 152), D101–D104.
 
 ## Tools included
