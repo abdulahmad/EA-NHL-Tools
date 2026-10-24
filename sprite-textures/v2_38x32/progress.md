@@ -1,0 +1,3 @@
+- mapped/control_diff_sheet_before.png — the v1 mapping: control diffs of 132-171 px per team, all in pants and torso (family slips).
+- mapped/control_diff_sheet_after.png — v2map2 (family-aware + centre-contiguous): 0 px diff and 0 occupancy diff, 5 teams x 11 frames.
+- mapped/anthem_897_centre_rule.png — anthem frame before/after the centre rule: stray outer texels dropped, blocks centred; 242→234 texels.

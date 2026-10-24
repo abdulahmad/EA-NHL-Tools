@@ -1,5 +1,7 @@
 # sprite-textures
 
+> **Start here (agents):** the current work is the **v2 38x32 texture layout**. Read the "v2 38x32 layout — entry point" section below, then `EXPANDED_ZONES.md` (decisions log) and `v2_38x32/PLAN_v2.md`.
+
 Research tooling for per-pixel jersey textures on the NHL 95 PC player sprites. The target is the NHL Classic engine (the C port of NHL Genesis that is being converted to full colour). Retail palette limits do not apply there.
 
 **Goal.** Give each sprite pixel a body part, a (U,V) texture coordinate and a shade value. A jersey can then be any texture painted in one shared atlas layout, instead of 48 palette zones. Stripes wrap around the body at a constant thickness, and the crest, numbers, socks, pants, helmet and gloves come from the same atlas.
@@ -35,3 +37,45 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
   - `fuhr.py`: goalie gear (`textures/goalie_fuhr`).
   - `stick_demo.py`: stick (`textures/stick`).
 - Reference images (jersey photos, glove renders, the Grant Fuhr goalie textures from a third-party NHL 2004-era mod, the stick photo) are kept local in `out/jerseys/ref/` and are not committed. The committed gear and stick textures are my own low-resolution redraws at sprite capacity.
+
+
+## v2 38x32 layout — entry point (2026-10-23)
+**Layout spec / column map:**
+- `v2_38x32/textures/layout_v2_38x32_abdul.png` is the layout Abdul hand-edited.
+- `v2_38x32/column_map_v2.md` / `.json` give the mapping from the 75-wide atlas to the 38-wide one (rules, the added glove columns 0/19/20/37 on rows 18-20, and new→old column).
+- Layout:
+  - Front: right arm 0-3, torso 3-16 (rows 6-8) / 5-14 (rows 9-16), left arm 16-19.
+  - Back: left arm 20-23, torso 23-34 / 24-33, right arm 34-37.
+  - Pants rows 17-22: front 3-15, back 24-34.
+  - Legs rows 23-31.
+  - Crest cols 7-11, rows 10-13.
+
+**Mapping rules (sprite pixel → texel):**
+1. 1 pixel per texel where the counts match.
+2. Fewer pixels than texels: a contiguous block centred in the row, offset `(n-m)//2`, with the outer columns dropped first.
+3. More pixels than texels: stretch evenly from the centre, sharing texels.
+4. Pixels are grouped by (zone, row, family). They only land on texels of the same family. Fallbacks: nearest row in the zone, then the pants wrap (EXPANDED_ZONES D4).
+5. Crest (idx###), skin and gear texels are direct-mapped and never used as targets for ordinary pixels.
+6. Texels new in v2 (no old source) are filled by extending the edge texel outward in the same row (the texture authoring rule).
+
+**Test frames:** 370, 897 (anthem), 57, 62, 67, 52, 72, 889, 42, 47, 77.
+
+**Control-diff verification:** `v2_38x32/scripts/ctrl.py`.
+- Paint every v2 texel with its family's game colour.
+- Render the 11 frames through the mapping, then compare per pixel with the game palette render.
+- Teams: Leafs HOME, Rangers AWAY, Chicago HOME and AWAY, Montreal HOME.
+- Pass = 0 px diff and 0 occupancy diff.
+- Run: `before.py` (old packer) / `after.py` (current); the results are in `control_before.json` / `control_after.json`.
+
+**Status:**
+- v2map2 control diff is **0 on all 5 teams x 11 frames**. It was 132-171 px per team, all pants/torso family slips.
+- Chicago red texture vs the in-game colours: 300 texels differ because of colour choices (pants grey, helmet, stripe shade), not because of the mapping. See `PLAN_v2.md` §4.
+
+**Next steps:** socks, helmet, skates, gloves (use the glove columns), stick, then goalie mask/blocker/pads/glove (needs goalie test frames). See `PLAN_v2.md` §5.
+
+**Where scripts live:** `v2_38x32/scripts/`.
+- They expect the scratch layout used in development: `/workspace/preview_back/root/sprite-textures/out` as cwd with `scripts/` on PYTHONPATH, and `/workspace/preview_v2` for outputs.
+- `v2map2.py` builds the mapping.
+- `ctrlsheet.py` writes the control diff sheets; `anthem.py` writes the frame 897 before/after.
+
+**Textures:** `v2_38x32/textures/raw/` (all test jerseys in v2) and `textures/redraw/` (Dallas and East94 redrawn natively). Renders that contain game sprites are kept local.
