@@ -1,0 +1,321 @@
+[
+ {
+  "label": "987 padF_L<-padF",
+  "params": [
+   1.0,
+   -2,
+   0,
+   0
+  ],
+  "zone_px": 74,
+  "diff": 4,
+  "ok": 53,
+  "exp2": 6,
+  "exp1": 11,
+  "shade": 2,
+  "strict_diff": 21,
+  "after_expand_diff": 4
+ },
+ {
+  "label": "987 padF_R<-padF",
+  "params": [
+   0.95,
+   0,
+   1,
+   1
+  ],
+  "zone_px": 60,
+  "exp1": 19,
+  "ok": 39,
+  "exp2": 2,
+  "shade": 2,
+  "strict_diff": 21,
+  "after_expand_diff": 0
+ },
+ {
+  "label": "505 padF_L<-padF",
+  "params": [
+   1.0,
+   5,
+   -1,
+   0
+  ],
+  "zone_px": 19,
+  "ok": 14,
+  "exp1": 4,
+  "exp2": 1,
+  "strict_diff": 5,
+  "after_expand_diff": 0
+ },
+ {
+  "label": "505 padF_R<-padF",
+  "params": [
+   0.6,
+   0,
+   -1,
+   1
+  ],
+  "zone_px": 71,
+  "ok": 60,
+  "exp1": 9,
+  "diff": 2,
+  "shade": 1,
+  "strict_diff": 11,
+  "after_expand_diff": 2
+ },
+ {
+  "label": "1044 pad_side<-padF",
+  "params": [
+   0.65,
+   0,
+   -2,
+   1
+  ],
+  "zone_px": 44,
+  "ok": 37,
+  "exp1": 5,
+  "exp2": 2,
+  "shade": 1,
+  "strict_diff": 7,
+  "after_expand_diff": 0
+ },
+ {
+  "label": "520 padB_L<-padBack",
+  "params": [
+   1.0,
+   0,
+   0,
+   0
+  ],
+  "zone_px": 48,
+  "ok": 48,
+  "shade": 7,
+  "strict_diff": 0,
+  "after_expand_diff": 0
+ },
+ {
+  "label": "520 padB_R<-padBack",
+  "params": [
+   0.95,
+   0,
+   2,
+   0
+  ],
+  "zone_px": 42,
+  "ok": 24,
+  "exp2": 9,
+  "diff": 5,
+  "exp1": 4,
+  "shade": 7,
+  "strict_diff": 18,
+  "after_expand_diff": 5
+ },
+ {
+  "label": "520 padB_L<-padStrip",
+  "params": [
+   0.55,
+   9,
+   0,
+   0
+  ],
+  "zone_px": 45,
+  "ok": 37,
+  "exp2": 3,
+  "outzone": 3,
+  "diff": 3,
+  "exp1": 2,
+  "shade": 7,
+  "strict_diff": 8,
+  "after_expand_diff": 3
+ },
+ {
+  "label": "1021 blocker_face<-blocker",
+  "params": [
+   1.0,
+   0,
+   -2,
+   0
+  ],
+  "zone_px": 31,
+  "ok": 28,
+  "exp1": 3,
+  "strict_diff": 3,
+  "after_expand_diff": 0
+ },
+ {
+  "label": "538 catcher_face<-catcherH",
+  "params": [
+   1.0,
+   0,
+   0,
+   0
+  ],
+  "zone_px": 66,
+  "ok": 66,
+  "strict_diff": 0,
+  "after_expand_diff": 0
+ },
+ {
+  "label": "538 catcher_face<-catcher",
+  "params": [
+   1.0,
+   5,
+   0,
+   0
+  ],
+  "zone_px": 64,
+  "exp1": 20,
+  "ok": 30,
+  "exp2": 6,
+  "diff": 8,
+  "outzone": 2,
+  "strict_diff": 34,
+  "after_expand_diff": 8
+ },
+ {
+  "label": "547 mask_front<-mask",
+  "params": [
+   0.95,
+   0,
+   0,
+   0
+  ],
+  "zone_px": 36,
+  "exp1": 4,
+  "ok": 32,
+  "strict_diff": 4,
+  "after_expand_diff": 0
+ },
+ {
+  "label": "543 mask_side<-mask",
+  "params": [
+   1.0,
+   0,
+   -1,
+   0
+  ],
+  "zone_px": 22,
+  "ok": 21,
+  "outzone": 1,
+  "exp1": 1,
+  "strict_diff": 1,
+  "after_expand_diff": 0
+ },
+ {
+  "label": "539 mask_back<-mask",
+  "params": [
+   1.0,
+   3,
+   0,
+   0
+  ],
+  "zone_px": 9,
+  "ok": 4,
+  "exp1": 5,
+  "outzone": 2,
+  "strict_diff": 5,
+  "after_expand_diff": 0
+ },
+ {
+  "label": "413 mask_side<-mask",
+  "params": [
+   1.0,
+   0,
+   2,
+   1
+  ],
+  "zone_px": 26,
+  "ok": 17,
+  "exp1": 8,
+  "exp2": 1,
+  "strict_diff": 9,
+  "after_expand_diff": 0
+ },
+ {
+  "label": "416 padF_L(seg6)<-padF",
+  "params": [
+   0.8,
+   4,
+   -1,
+   0
+  ],
+  "zone_px": 21,
+  "diff": 9,
+  "exp2": 2,
+  "exp1": 1,
+  "outzone": 4,
+  "ok": 9,
+  "strict_diff": 12,
+  "after_expand_diff": 9
+ },
+ {
+  "label": "416 padF_R(seg6)<-padF",
+  "params": [
+   0.75,
+   0,
+   1,
+   0
+  ],
+  "zone_px": 49,
+  "diff": 8,
+  "exp2": 5,
+  "outzone": 13,
+  "ok": 17,
+  "exp1": 19,
+  "strict_diff": 32,
+  "after_expand_diff": 8
+ },
+ {
+  "label": "416 padB_R(seg6)<-padBack",
+  "params": [
+   1.0,
+   -1,
+   -1,
+   1
+  ],
+  "zone_px": 23,
+  "diff": 3,
+  "ok": 13,
+  "exp1": 6,
+  "outzone": 5,
+  "shade": 2,
+  "exp2": 1,
+  "strict_diff": 10,
+  "after_expand_diff": 3
+ },
+ {
+  "label": "422 padF_L(seg6)<-padF",
+  "params": [
+   0.8,
+   4,
+   1,
+   1
+  ],
+  "zone_px": 65,
+  "diff": 13,
+  "ok": 37,
+  "exp2": 6,
+  "exp1": 9,
+  "outzone": 3,
+  "shade": 5,
+  "strict_diff": 28,
+  "after_expand_diff": 13
+ },
+ {
+  "label": "422 padF_R(seg6)<-padF",
+  "params": [
+   0.85,
+   -4,
+   3,
+   0
+  ],
+  "zone_px": 66,
+  "diff": 7,
+  "outzone": 13,
+  "exp1": 17,
+  "exp2": 7,
+  "ok": 35,
+  "strict_diff": 31,
+  "after_expand_diff": 7
+ }
+]
