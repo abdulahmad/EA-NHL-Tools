@@ -508,3 +508,16 @@ Script: `v2_38x32/scripts/gmap.py <part>`. Results: `v2_38x32/goalie/g_<part>.js
   - The front/back flag from uv.py is heuristic.
   - Before a second pass: hand-check the segmentation on the 8 frames, add a cage family texel, and consider separate left/right pad blocks.
 - D19: The goalie sheets contain game sprites and are kept local.
+
+## Skate texture v1 (2026-10-24)
+- D20 **Problem:** the first pass rendered skates with the game index (gear), so the skate texels did not drive colour. In-game, skate pixels use 5 fixed indices: 0 (boot black, 76%), 8 (dark grey, 14%), 28 (steel blue 0,64,128, 8%), 31 (dark blue 0,32,64) and 1 (white 232). They are the same in every team palette and all LEV flat.
+- D21 **Layout (no canvas expansion needed):** the existing 26 skate texels per zone (legF cols 4-7/11-14, legB cols 24-27/31-34, rows 28-31) get a dedicated family each. Per foot, left foot as written and the right foot mirrored:
+  - row 28: boot boot boot
+  - row 29: hilite(1) boot boot grey(8)
+  - row 30: boot boot grey blade(28)
+  - row 31: blade-dark(31) blade(28)
+- D22 **Mapping:** skate pixels are grouped by (zone, row, in-game index) and placed on texels of that family with the usual centre-contiguous / stretch-from-centre rules. Fallback is the nearest row in the zone (59 of 292 px across the 11 frames). Stretch happens on boot rows (22 groups) and a few grey/blade groups.
+- D23 **Result:** the control texture paints each skate texel with its family colour, and the skate pixels render the texel colour (not the game index). Diff is **0 on 11 frames x 5 teams**, and the rest of the figure also stays at 0.
+- D24 **Textures:** `skates/skate_texture_test.png` uses the in-game colours and `skate_texture_realistic.png` is black boot / grey / silver blade (176,180,190) / blade shadow / white highlight. Magenta = non-skate texels (overlay these onto a jersey texture). The sheet with game frames stays local.
+- D25 **Gloves/stick on extra frames:** `scripts/glovestick.py` covers 20 extra frames with no v5 per-texel maps. It uses an approximate uv.py placement: glove arm by screen side and front/back, glove row 18+round(2V), and the stick by the SVD axis. It is for visual inspection only, not control-verified.
+- D26 **Fuhr:** `scripts/fuhr_build.py`. Grant Fuhr is #31 G, team index 1 = BUF, from the NHL95 PC KEY.DB player record. No per-goalie colour data exists, so his gear uses the Buffalo HOME/AWAY palettes. The draft goalie texture filled by family gives 13 wrong px over the 8 goalie frames (the known mask-cage and pad family limits, D18).

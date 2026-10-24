@@ -80,11 +80,13 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 - There are 8 goalie test frames (EXPANDED_ZONES D14) and a draft goalie companion texture, 38x32 (pad 19x21, blocker and catcher 10x10, mask 7x6). The script is `v2_38x32/scripts/gmap.py`.
 - Control: blocker 0 and catcher 0; mask 3 px per team (cage); pad 9-10 px per team. See D14-D19.
 
+**Skate texture v1 (2026-10-24):** `v2_38x32/skates/` - every in-game skate index has its own texel family, control diff 0 on 11 frames x 5 teams; test + realistic textures (EXPANDED_ZONES D20-D24). Fuhr goalie demo and gloves/stick extra-frame scripts: D25-D26.
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.
 3. Add a cage texel to the mask block; split the pads left/right.
-4. Make skates and gloves texture-driven (see D10-D11).
+4. Make gloves texture-driven (skates done, D20-D24).
 5. Second pass on stretch-sharing hotspots.
 
 **Where scripts live:** `v2_38x32/scripts/`.
