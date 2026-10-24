@@ -820,3 +820,10 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
     - ok 1216; shading 54, which needs shading texels in the pad texture (D98); row content 98; missing texel 0.
     - Old v12 mapping: 368 strict errors on the same px.
   - **Not yet zero.** The 98 row-content px need a 2D UV beyond a per-row arc, or new texels. They are not proven impossible.
+
+## goalie13 – strict pad remap (Abdul pt884u)
+- **D101 Strict match.** Every pad pixel counts as texture (no shading exemption). W = index 181 only. The old WHITESET eq (155/177/181–183) hid wrong pixels, e.g. the missing straps on 538 R.
+- **D102 Segmentation.** Subtract the catcher, blocker and mask from the pads. Drop other-gear indices (144/147/148/150/136) and stray helmet rows. Merge touching parts when the median row width is ≤9, then grow into unassigned pad-colour pixels. Fixes 425 (catcher pixels, one leg split) and 1044 (split pad, orphan row 23).
+- **D103 Skate exclusion.** The skate is not mapped: index 31, plus black pixels that are not enclosed by leg pixels and reach the blade or bottom, within 6 rows of the leg bottom.
+- **D104 Modes.** Row, diag/, diag\ (strap lines along anti-diagonals, as on 538 R) and column mode with per-column stripe order A/B (curved, reversed back-view sock stripes, as on 407). Non-row modes get a +0.75 tie penalty.
+- **Result.** 95 strict errors (47 content + 48 missing texel) vs g12 152, all teams. Proposal: add sock-shade texels 182/183 to the texture, which would remove 48.
