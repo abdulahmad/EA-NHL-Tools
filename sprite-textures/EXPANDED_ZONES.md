@@ -796,3 +796,9 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
   | All | 42 | 827>280 | 883>484 | 758>245 |
 
   Option B beats Abdul's piece on front views. Its back views are unchanged from Option A, still a little behind Abdul after expand. Images (`g10e_textures`, `g10e_opt{A,B}_{test,fuhr}.png`) are local only.
+- D94 **Team palettes on the index textures (Abdul pt878u, `goalie11/g11.py`).** Teams: CHI AWAY and TOR, BUF, EDM HOME, read with the goalie9/goalie8 `spal(file, code)` (team colours 128-191 -> act, then the team map). The texture stays index-based; a team version is just the index texture coloured with that team's palette. A WHITE texel takes the sprite's own white-family colour, else team 181.
+  - **Whole-goalie mapping per frame:** every goalie9 part is fitted zones-first, keeping the best piece: mask; blocker; padF / padWrap / padStrip for pads. The catcher uses the g10e piece chosen by skel10 facing. Option A and Option B differ only in the catcher.
+- D95 **Team comparison, 11 frames (416 419 421 538 407 428 980 413 425 520 987), whole goalie, strict>after expand.**
+  - Option A 706>270; Option B 652>194. These counts are palette-independent.
+  - Wrong pixels that actually change colour (A/B): CHI 182/103, TOR 164/97, BUF 179/100, EDM 181/102. They are lower than the raw counts because some zone indices share a colour in a team palette. TOR is lowest because 147/155/186 are the same navy (0,0,96) and 182=183, 187=188 (208 grey).
+  - Images are local only (`/workspace/preview_v2/goalie11/`).

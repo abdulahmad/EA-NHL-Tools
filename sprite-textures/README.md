@@ -127,6 +127,8 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 
 **Goalie v10e (2026-10-24, pt875u):** two catcher options compared. A is the v4 rectangle; B is the v5 candidate, a back rectangle plus a rimmed front oval (`goalie_texture_v5_candidate_indexed.png`). B wins on front views: 469>123 against Abdul's 8x12 at 472>162 and A at 594>362. 413 uses the high front catcher and 425 the low near-side piece. See D91-D93.
 
+**Goalie v11 (2026-10-24, pt878u):** team palettes (CHI away, TOR/BUF/EDM home) on texture Option A vs B. Whole-goalie mapping over 11 frames gives A 706>270 and B 652>194. See D94-D95; scripts in `v2_38x32/goalie11/`.
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.
