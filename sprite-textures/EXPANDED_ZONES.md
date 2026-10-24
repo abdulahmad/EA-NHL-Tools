@@ -521,3 +521,37 @@ Script: `v2_38x32/scripts/gmap.py <part>`. Results: `v2_38x32/goalie/g_<part>.js
 - D24 **Textures:** `skates/skate_texture_test.png` uses the in-game colours and `skate_texture_realistic.png` is black boot / grey / silver blade (176,180,190) / blade shadow / white highlight. Magenta = non-skate texels (overlay these onto a jersey texture). The sheet with game frames stays local.
 - D25 **Gloves/stick on extra frames:** `scripts/glovestick.py` covers 20 extra frames with no v5 per-texel maps. It uses an approximate uv.py placement: glove arm by screen side and front/back, glove row 18+round(2V), and the stick by the SVD axis. It is for visual inspection only, not control-verified.
 - D26 **Fuhr:** `scripts/fuhr_build.py`. Grant Fuhr is #31 G, team index 1 = BUF, from the NHL95 PC KEY.DB player record. No per-goalie colour data exists, so his gear uses the Buffalo HOME/AWAY palettes. The draft goalie texture filled by family gives 13 wrong px over the 8 goalie frames (the known mask-cage and pad family limits, D18).
+
+## Abdul decisions pt857 (2026-10-24)
+- D27 **Glove block 3 -> 4 columns (YES).** FR (cols 0-2) and BR (35-37) were 3 wide; FL and BL were already 4. The canvas stays 38 wide: FR takes pants-front col 3 and BR takes pants-back col 34, **on glove rows 18-20 only** (no free cells exist beside them; the free cells at rows 21-22 cols 0-2 are below the glove, not beside it).
+  - Result over 11 frames: glove texels shared by 2+ px 79 -> 65, glove texels used 157 -> 171.
+  - Cost: pants rows 18-20 shared 14 -> 19 (pants front 13 -> 12 cols and back 11 -> 10 cols on those rows only).
+  - Control diff 0 on 5 teams x 11 frames. Files: `decisions/glove4*.json`, `glove4_sheet.png`.
+- D28 **Keep 38 wide, no spacers (decision).** Per-texel lookup is unaffected by touching zones; spacers only matter for filtering/bleed, which we don't use.
+- D29 **Arm rows 11 / 15 (illustration only, layout unchanged).** Measured on the current mapping (arm groups by zone/row/family, 11 frames):
+  - row 11: 5/22 groups overflow (23%), 4 frames, 8 shared texels
+  - row 15: 7/18 (39%), 6 frames, 10 shared
+  - every other arm row 8-17: <=14%, rows 12-14 0%
+  - The earlier ~45%/~35% figures were "frames needing >=1 extra column", a different metric.
+  - Most overflow is in the BACK arms (BL/BR). The front arms could take the free cells col 4 / col 15 on rows 11/15 (8 -> 7 and 10 -> 9 shared). Fixing the back needs a whole column (canvas 40 or back torso -1): 8 -> 3 and 10 -> 3 with all 4 arms. Awaiting Abdul's decision.
+- D30 **Goalie: pads split L/R + cage texel (YES).**
+  - padL is (0,0,9,21) and padR is (9,0,10,21). Pad pixels are split per frame at the widest empty-column gap (else median x).
+  - The cage (index 135) gets its own texel at (36,0), beside the mask block.
+  - The family lookup falls back to the nearest row anywhere in the block when the family is missing within +-3 rows.
+  - Control: mask 3 -> 0 and pads 9-10 -> 0 px per team; blocker and catcher stay 0.
+  - Cost: pad shared texels 181 (one block) -> 95 + 117 (narrower blocks).
+- D31 **Stick blade (recommendation, not applied).** Over all 588 skater frames that have a stick:
+  - blade width (last 4 steps): 1 px 265, 2 px 300, 3 px 23 (96% fit in 2 rows)
+  - shaft 1 px thick in 559
+  - length median 13, p90 21, max 31; 263 frames (45%) are longer than the 13-col strip
+  - Recommendation: no extra blade rows needed. Length is the bigger limit; consider ~20 cols. A 3rd blade row only if 3-px blades look wrong. See `stick/stick_analysis.png`.
+- D32 **Oilers Fuhr from Abdul's v12 art** (`textures/v12/tex_gear_*`, the latest per git cef5d05). Laid into the D30 layout using `goalie2/fuhr_oilers.py`. Every resize is in `fuhr_oilers_resize_log.json` with the kept rows/cols:
+  - pad 15x25 -> 9x21 (L) and mirrored -> 10x21 (R), nearest
+  - blocker 8x12 -> 10x10: rows dropped 2 and 8, width edge-extended +2
+  - catcher 11x9 -> 10x10: col 5 dropped, +1 edge row
+  - mask 6x7 -> 7x6: row 3 dropped, +1 edge col
+  - cage = the darkest mask texel
+  - mask_b is reserved 1:1 at cols 29-33 rows 6-11, not mapped yet
+  - pad_b is not placed (needs a layout decision for rows 21-31)
+  - Measured 8-frame sprite extents (max px per row): pad 7-8 per side (12-13 when sprawled), blocker 6, catcher 6, mask 4-5. The blocks are kept at the capacity.json sizes.
+- D33 **Player gloves** (v12 edmonton/ottawa/redblack, 5x9) -> 4x3 per arm on the D27 block. Kept cols 0,1,3,4 and rows 1,4,7 (nearest); left arms mirrored. This is a large vertical reduction (9 -> 3 rows) because the glove block has 3 rows. Script `gloves/gloves_tex.py`, textures `gloves/glove_*_v2block.png`.

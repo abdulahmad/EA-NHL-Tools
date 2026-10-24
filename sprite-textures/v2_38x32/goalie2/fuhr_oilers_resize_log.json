@@ -1,0 +1,195 @@
+{
+ "padL": {
+  "src": [
+   15,
+   25
+  ],
+  "dst": [
+   9,
+   21
+  ],
+  "mode": "nearest resample 15x25 -> 9x21",
+  "cols_kept": [
+   0,
+   2,
+   4,
+   5,
+   7,
+   9,
+   10,
+   12,
+   14
+  ],
+  "rows_kept": [
+   0,
+   1,
+   2,
+   4,
+   5,
+   6,
+   7,
+   8,
+   10,
+   11,
+   12,
+   13,
+   14,
+   16,
+   17,
+   18,
+   19,
+   20,
+   22,
+   23,
+   24
+  ],
+  "edge_added": [
+   0,
+   0
+  ]
+ },
+ "padR": {
+  "src": [
+   15,
+   25
+  ],
+  "dst": [
+   10,
+   21
+  ],
+  "mode": "mirror, nearest resample 15x25 -> 10x21",
+  "cols_kept": [
+   0,
+   2,
+   3,
+   5,
+   6,
+   8,
+   9,
+   11,
+   12,
+   14
+  ],
+  "rows_kept": [
+   0,
+   1,
+   2,
+   4,
+   5,
+   6,
+   7,
+   8,
+   10,
+   11,
+   12,
+   13,
+   14,
+   16,
+   17,
+   18,
+   19,
+   20,
+   22,
+   23,
+   24
+  ],
+  "edge_added": [
+   0,
+   0
+  ]
+ },
+ "blocker": {
+  "src": [
+   8,
+   12
+  ],
+  "dst": [
+   10,
+   10
+  ],
+  "mode": "height 12->10 nearest, width 8->10 edge-extend",
+  "cols_kept": "all",
+  "rows_kept": [
+   0,
+   1,
+   3,
+   4,
+   5,
+   6,
+   7,
+   9,
+   10,
+   11
+  ],
+  "edge_added": [
+   2,
+   0
+  ]
+ },
+ "catcher": {
+  "src": [
+   11,
+   9
+  ],
+  "dst": [
+   10,
+   10
+  ],
+  "mode": "width 11->10 nearest, height 9->10 edge-extend",
+  "cols_kept": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "rows_kept": "all",
+  "edge_added": [
+   0,
+   1
+  ]
+ },
+ "goalie_mask": {
+  "src": [
+   6,
+   7
+  ],
+  "dst": [
+   7,
+   6
+  ],
+  "mode": "height 7->6 nearest, width 6->7 edge-extend",
+  "cols_kept": "all",
+  "rows_kept": [
+   0,
+   1,
+   2,
+   4,
+   5,
+   6
+  ],
+  "edge_added": [
+   1,
+   0
+  ]
+ },
+ "cage": {
+  "texel": [
+   36,
+   0
+  ],
+  "colour": [
+   0,
+   0,
+   0
+  ],
+  "src": "darkest mask texel (cage bars)"
+ },
+ "mask_b": "reserved at cols 29-33 rows 6-11, 1:1, not mapped yet",
+ "pad_b": "not placed: 17x24 needs ~2 blocks of 9-10x21; free area is rows 21-31 (11 rows) -> needs a layout decision"
+}

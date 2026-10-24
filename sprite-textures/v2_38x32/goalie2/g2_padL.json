@@ -1,0 +1,95 @@
+{
+ "part": "padL",
+ "frames": [
+  413,
+  416,
+  422,
+  428,
+  449,
+  519,
+  980,
+  1000
+ ],
+ "layout": [
+  0,
+  0,
+  9,
+  21
+ ],
+ "control_px_wrong": {
+  "HOME.json tor": 0,
+  "AWAY.json nyr": 0,
+  "HOME.json chi": 0,
+  "AWAY.json chi": 0,
+  "HOME.json mtl": 0
+ },
+ "stats": {
+  "413": {
+   "px": 64,
+   "texels": 50,
+   "shared": 12
+  },
+  "416": {
+   "px": 62,
+   "texels": 38,
+   "shared": 14
+  },
+  "422": {
+   "px": 70,
+   "texels": 45,
+   "shared": 13
+  },
+  "428": {
+   "px": 45,
+   "texels": 37,
+   "shared": 7
+  },
+  "449": {
+   "px": 39,
+   "texels": 30,
+   "shared": 7
+  },
+  "519": {
+   "px": 53,
+   "texels": 48,
+   "shared": 5
+  },
+  "980": {
+   "px": 50,
+   "texels": 37,
+   "shared": 9
+  },
+  "1000": {
+   "px": 122,
+   "texels": 70,
+   "shared": 28
+  }
+ },
+ "texels": 189,
+ "split": {
+  "413": 9.0,
+  "416": 9.0,
+  "422": 24.0,
+  "428": 12.0,
+  "449": 10.0,
+  "519": 11.5,
+  "980": 18.0,
+  "1000": 17.5
+ },
+ "texels_used": 139,
+ "family_fallback_px": {
+  "row_fallback": 107,
+  "block_fallback": 18
+ },
+ "texel_families": {
+  "socks stripe 2": 11,
+  "upper arm": 7,
+  "idx0": 60,
+  "arm stripe 3": 3,
+  "arm stripe 1": 45,
+  "arm stripe 2": 14,
+  "socks": 16,
+  "forearm": 6,
+  "socks stripe 1": 9
+ }
+}
