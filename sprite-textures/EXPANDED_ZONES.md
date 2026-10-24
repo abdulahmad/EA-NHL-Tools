@@ -802,3 +802,7 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
   - Option A 706>270; Option B 652>194. These counts are palette-independent.
   - Wrong pixels that actually change colour (A/B): CHI 182/103, TOR 164/97, BUF 179/100, EDM 181/102. They are lower than the raw counts because some zone indices share a colour in a team palette. TOR is lowest because 147/155/186 are the same navy (0,0,96) and 182=183, 187=188 (208 grey).
   - Images are local only (`/workspace/preview_v2/goalie11/`).
+- D96 **Abdul's 8x12 catcher piece removed (pt880u).** Since v10d no frame maps to `catcher` (15,10)-(22,21): the catcher always uses catFront/catBack from rows 24-32. The piece is cleared, and the empty row 23 is dropped, so the catcher moves up to rows 23-31. The textures are now 23x32 and still index-based: `goalie12/goalie_texture_v4b_indexed.png` (A) and `goalie_texture_v5b_candidate_indexed.png` (B). Layout: rows 0-8 blocker + mask, rows 9-22 pad front + strip (x0-12), rows 23-31 catcher.
+- D97 **goalie12 sheets.** Each team and option has ORIGINAL 95 PC PALETTE | OPTION X TEXTURE APPLIED | OPTION X ERRORS MARKED side by side, with labels repeated every 4 frames.
+  - **Missing parts:** 520's mask is now found (8 px, mask zones round the sprite's top centre). For 428, the 5 blocker-zone px near the skel10 right hand are already claimed by the catcher part, so it still has no separate blocker.
+  - **Totals, 11 frames, strict>after:** A 709>271, B 655>195.

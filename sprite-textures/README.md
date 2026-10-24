@@ -129,6 +129,8 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 
 **Goalie v11 (2026-10-24, pt878u):** team palettes (CHI away, TOR/BUF/EDM home) on texture Option A vs B. Whole-goalie mapping over 11 frames gives A 706>270 and B 652>194. See D94-D95; scripts in `v2_38x32/goalie11/`.
 
+**Goalie v12 (2026-10-24, pt880u):** removed the unused 8x12 catcher and repacked the textures to 23x32. Per-team sheets show original | applied | errors per option. Totals over 11 frames: A 709>271, B 655>195. See D96-D97.
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.
