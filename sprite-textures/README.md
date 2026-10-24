@@ -101,6 +101,12 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 - Zones revised: pad back = socks zones 181-189, pad front = 144-148 (D50). Segmentation v5 (D51).
 - Default gear control **0 on 8 frames x 5 teams**; 539 of 1457 px relocated (D52). Gloves baby blue + red (D53).
 
+**Goalie v6: stick, skeleton UV, default gear from sprites (2026-10-24, pt863u):** `v2_38x32/goalie6/`.
+- Skeleton v6 adds the goalie stick (butt, shaft, blade, held by the right/blocker hand) and labels RH/LH vs RL/LL (D55). Seg v6 removes stick px from gear: fixes the 422 "FR" blade pixels (D55). 428 blocker hidden behind the torso by the rotation check (D55).
+- Layout v6: mask is one 12x7 wrap strip (front centred, sides, back), other blocks unchanged (D56). UV = angle around leg/head from the skeleton (D57).
+- Default gear built from the clearest frames: control **0 on 8 frames x 5 teams**; relocation 415 of 1448 px (28.7%, v5 37%), moved 2+ texels 93 (v5 265) (D58). Fuhr Oilers re-projected (D59).
+- Player gloves v6: recolour limited to glove px, stick px changed 0 on 11 frames (D60).
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.

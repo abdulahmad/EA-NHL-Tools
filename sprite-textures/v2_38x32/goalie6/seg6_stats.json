@@ -1,0 +1,137 @@
+{
+ "413": {
+  "view": "F",
+  "stick_px": 23,
+  "freed_from_gear": [],
+  "blocker": 34,
+  "maskF": 27,
+  "padB_L": 29,
+  "padB_R": 1,
+  "padF_L": 35,
+  "strap": 3
+ },
+ "416": {
+  "view": "F",
+  "stick_px": 39,
+  "freed_from_gear": [
+   [
+    17,
+    24,
+    "padF_R"
+   ],
+   [
+    17,
+    26,
+    "padF_R"
+   ],
+   [
+    17,
+    25,
+    "padF_R"
+   ]
+  ],
+  "blocker": 15,
+  "catcher": 38,
+  "maskF": 32,
+  "padB_R": 30,
+  "padF_L": 25,
+  "padF_R": 62
+ },
+ "422": {
+  "view": "F",
+  "stick_px": 34,
+  "freed_from_gear": [
+   [
+    17,
+    24,
+    "padF_L"
+   ],
+   [
+    17,
+    23,
+    "padF_L"
+   ],
+   [
+    18,
+    24,
+    "padF_L"
+   ]
+  ],
+  "blocker": 35,
+  "catcher": 15,
+  "maskF": 31,
+  "padF_L": 73,
+  "padF_R": 79
+ },
+ "428": {
+  "view": "B",
+  "stick_px": 12,
+  "freed_from_gear": [
+   [
+    6,
+    25,
+    "padF_R"
+   ],
+   [
+    6,
+    24,
+    "padF_R"
+   ],
+   [
+    6,
+    23,
+    "padF_R"
+   ]
+  ],
+  "blocker": 5,
+  "catcher": 39,
+  "maskB": 17,
+  "maskF": 4,
+  "padB_L": 45,
+  "padB_R": 44,
+  "padF_R": 11,
+  "strap": 4
+ },
+ "449": {
+  "view": "B",
+  "stick_px": 10,
+  "freed_from_gear": [],
+  "blocker": 38,
+  "maskB": 20,
+  "padB_L": 38,
+  "padB_R": 48,
+  "strap": 4
+ },
+ "519": {
+  "view": "B",
+  "stick_px": 17,
+  "freed_from_gear": [],
+  "blocker": 22,
+  "catcher": 31,
+  "maskB": 30,
+  "padB_L": 58,
+  "padB_R": 48
+ },
+ "980": {
+  "view": "B",
+  "stick_px": 5,
+  "freed_from_gear": [],
+  "blocker": 11,
+  "catcher": 41,
+  "maskB": 21,
+  "padB_L": 44,
+  "padB_R": 44,
+  "strap": 2
+ },
+ "1000": {
+  "view": "B",
+  "stick_px": 11,
+  "freed_from_gear": [],
+  "blocker": 51,
+  "catcher": 16,
+  "maskB": 27,
+  "padB_L": 40,
+  "padB_R": 70,
+  "padF_L": 11
+ }
+}
