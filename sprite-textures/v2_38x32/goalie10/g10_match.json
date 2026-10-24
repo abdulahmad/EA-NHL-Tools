@@ -1,0 +1,487 @@
+[
+ {
+  "frame": 987,
+  "part": "padF_L",
+  "tex": "padF",
+  "params": [
+   1.0,
+   -2,
+   0,
+   0
+  ],
+  "zone_px": 74,
+  "diff": 4,
+  "ok": 53,
+  "exp2": 6,
+  "exp1": 11,
+  "shade": 2,
+  "strict_diff": 21,
+  "after_expand_diff": 4
+ },
+ {
+  "frame": 987,
+  "part": "padF_R",
+  "tex": "padF",
+  "params": [
+   0.95,
+   0,
+   1,
+   1
+  ],
+  "zone_px": 60,
+  "exp1": 19,
+  "ok": 39,
+  "exp2": 2,
+  "shade": 2,
+  "strict_diff": 21,
+  "after_expand_diff": 0
+ },
+ {
+  "frame": 505,
+  "part": "padF_L",
+  "tex": "padF",
+  "params": [
+   1.0,
+   5,
+   -1,
+   0
+  ],
+  "zone_px": 19,
+  "ok": 14,
+  "exp1": 4,
+  "exp2": 1,
+  "strict_diff": 5,
+  "after_expand_diff": 0
+ },
+ {
+  "frame": 505,
+  "part": "padF_R",
+  "tex": "padF",
+  "params": [
+   0.6,
+   0,
+   -1,
+   1
+  ],
+  "zone_px": 71,
+  "ok": 60,
+  "exp1": 9,
+  "diff": 2,
+  "shade": 1,
+  "strict_diff": 11,
+  "after_expand_diff": 2
+ },
+ {
+  "frame": 520,
+  "part": "padB_L",
+  "tex": "padStrip",
+  "params": [
+   0.55,
+   9,
+   0,
+   0
+  ],
+  "zone_px": 45,
+  "ok": 37,
+  "exp2": 3,
+  "outzone": 3,
+  "diff": 3,
+  "exp1": 2,
+  "shade": 7,
+  "strict_diff": 8,
+  "after_expand_diff": 3
+ },
+ {
+  "frame": 520,
+  "part": "padB_R",
+  "tex": "padStrip",
+  "params": [
+   0.45,
+   8,
+   0,
+   0
+  ],
+  "zone_px": 37,
+  "ok": 30,
+  "outzone": 5,
+  "exp1": 5,
+  "diff": 2,
+  "shade": 7,
+  "strict_diff": 7,
+  "after_expand_diff": 2
+ },
+ {
+  "frame": 1044,
+  "part": "pad_side",
+  "tex": "padF",
+  "params": [
+   0.65,
+   0,
+   -2,
+   1
+  ],
+  "zone_px": 44,
+  "ok": 37,
+  "exp1": 5,
+  "exp2": 2,
+  "shade": 1,
+  "strict_diff": 7,
+  "after_expand_diff": 0
+ },
+ {
+  "frame": 1044,
+  "part": "pad_side",
+  "tex": "padStrip",
+  "params": [
+   0.6,
+   7,
+   1,
+   0
+  ],
+  "outzone": 26,
+  "zone_px": 18,
+  "ok": 11,
+  "exp1": 2,
+  "exp2": 1,
+  "diff": 4,
+  "shade": 1,
+  "strict_diff": 7,
+  "after_expand_diff": 4
+ },
+ {
+  "frame": 1021,
+  "part": "blocker_face",
+  "tex": "blocker",
+  "params": [
+   1.0,
+   0,
+   -2,
+   0
+  ],
+  "zone_px": 31,
+  "ok": 28,
+  "exp1": 3,
+  "strict_diff": 3,
+  "after_expand_diff": 0
+ },
+ {
+  "frame": 538,
+  "part": "catcher_face",
+  "tex": "catcher",
+  "params": [
+   1.0,
+   5,
+   0,
+   0
+  ],
+  "zone_px": 64,
+  "exp1": 20,
+  "ok": 30,
+  "exp2": 6,
+  "diff": 8,
+  "outzone": 2,
+  "strict_diff": 34,
+  "after_expand_diff": 8
+ },
+ {
+  "frame": 547,
+  "part": "mask_front",
+  "tex": "mask",
+  "params": [
+   0.95,
+   0,
+   0,
+   0
+  ],
+  "zone_px": 36,
+  "exp1": 4,
+  "ok": 32,
+  "strict_diff": 4,
+  "after_expand_diff": 0
+ },
+ {
+  "frame": 543,
+  "part": "mask_side",
+  "tex": "mask",
+  "params": [
+   1.0,
+   0,
+   -1,
+   0
+  ],
+  "zone_px": 22,
+  "ok": 21,
+  "outzone": 1,
+  "exp1": 1,
+  "strict_diff": 1,
+  "after_expand_diff": 0
+ },
+ {
+  "frame": 539,
+  "part": "mask_back",
+  "tex": "mask",
+  "params": [
+   1.0,
+   3,
+   0,
+   0
+  ],
+  "zone_px": 9,
+  "ok": 4,
+  "exp1": 5,
+  "outzone": 2,
+  "strict_diff": 5,
+  "after_expand_diff": 0
+ },
+ {
+  "frame": 416,
+  "part": "padF_L",
+  "tex": "padF",
+  "params": [
+   0.75,
+   0,
+   -2,
+   0
+  ],
+  "outzone": 29,
+  "zone_px": 40,
+  "exp2": 7,
+  "diff": 5,
+  "ok": 24,
+  "exp1": 4,
+  "strict_diff": 16,
+  "after_expand_diff": 5
+ },
+ {
+  "frame": 416,
+  "part": "padF_R",
+  "tex": "padF",
+  "params": [
+   1.3,
+   3,
+   2,
+   1
+  ],
+  "shade": 3,
+  "outzone": 18,
+  "zone_px": 46,
+  "diff": 46,
+  "strict_diff": 46,
+  "after_expand_diff": 46
+ },
+ {
+  "frame": 422,
+  "part": "padF_L",
+  "tex": "padF",
+  "params": [
+   0.95,
+   0,
+   2,
+   0
+  ],
+  "zone_px": 68,
+  "ok": 37,
+  "outzone": 15,
+  "exp1": 19,
+  "exp2": 8,
+  "diff": 4,
+  "strict_diff": 31,
+  "after_expand_diff": 4
+ },
+ {
+  "frame": 422,
+  "part": "padF_R",
+  "tex": "padF",
+  "params": [
+   0.8,
+   4,
+   1,
+   1
+  ],
+  "zone_px": 64,
+  "diff": 13,
+  "ok": 40,
+  "exp2": 5,
+  "exp1": 6,
+  "outzone": 3,
+  "shade": 5,
+  "strict_diff": 24,
+  "after_expand_diff": 13
+ },
+ {
+  "frame": 413,
+  "part": "mask_side",
+  "tex": "mask",
+  "params": [
+   1.0,
+   0,
+   2,
+   1
+  ],
+  "zone_px": 26,
+  "ok": 17,
+  "exp1": 8,
+  "exp2": 1,
+  "strict_diff": 9,
+  "after_expand_diff": 0
+ },
+ {
+  "frame": 416,
+  "part": "mask_front",
+  "tex": "mask",
+  "params": [
+   1.0,
+   0,
+   1,
+   1
+  ],
+  "zone_px": 29,
+  "ok": 26,
+  "exp1": 3,
+  "strict_diff": 3,
+  "after_expand_diff": 0
+ },
+ {
+  "frame": 373,
+  "part": "wall_pad0",
+  "tex": "padF",
+  "params": [
+   1.15,
+   -1,
+   0,
+   1
+  ],
+  "zone_px": 60,
+  "diff": 3,
+  "exp1": 7,
+  "ok": 50,
+  "strict_diff": 10,
+  "after_expand_diff": 3
+ },
+ {
+  "frame": 373,
+  "part": "wall_pad1",
+  "tex": "padF",
+  "params": [
+   1.25,
+   1,
+   0,
+   1
+  ],
+  "zone_px": 80,
+  "exp1": 20,
+  "ok": 33,
+  "diff": 19,
+  "exp2": 8,
+  "strict_diff": 47,
+  "after_expand_diff": 19
+ },
+ {
+  "frame": 374,
+  "part": "wall_pad0",
+  "tex": "padF",
+  "params": [
+   0.4,
+   8,
+   -1,
+   1
+  ],
+  "zone_px": 52,
+  "ok": 37,
+  "exp1": 13,
+  "outzone": 2,
+  "exp2": 2,
+  "strict_diff": 15,
+  "after_expand_diff": 0
+ },
+ {
+  "frame": 374,
+  "part": "wall_pad1",
+  "tex": "padF",
+  "params": [
+   1.15,
+   0,
+   0,
+   0
+  ],
+  "zone_px": 43,
+  "ok": 29,
+  "outzone": 12,
+  "exp1": 11,
+  "exp2": 3,
+  "strict_diff": 14,
+  "after_expand_diff": 0
+ },
+ {
+  "frame": 375,
+  "part": "wall_pad0",
+  "tex": "padF",
+  "params": [
+   0.45,
+   2,
+   0,
+   1
+  ],
+  "outzone": 17,
+  "zone_px": 47,
+  "diff": 6,
+  "ok": 28,
+  "exp1": 9,
+  "exp2": 4,
+  "strict_diff": 19,
+  "after_expand_diff": 6
+ },
+ {
+  "frame": 375,
+  "part": "wall_pad1",
+  "tex": "padF",
+  "params": [
+   0.9,
+   3,
+   0,
+   0
+  ],
+  "zone_px": 57,
+  "diff": 5,
+  "outzone": 12,
+  "exp1": 17,
+  "ok": 34,
+  "exp2": 1,
+  "strict_diff": 23,
+  "after_expand_diff": 5
+ },
+ {
+  "frame": 376,
+  "part": "wall_pad0",
+  "tex": "padF",
+  "params": [
+   0.45,
+   8,
+   0,
+   1
+  ],
+  "zone_px": 47,
+  "ok": 37,
+  "exp1": 10,
+  "strict_diff": 10,
+  "after_expand_diff": 0
+ },
+ {
+  "frame": 376,
+  "part": "wall_pad1",
+  "tex": "padF",
+  "params": [
+   1.0,
+   0,
+   0,
+   1
+  ],
+  "zone_px": 51,
+  "ok": 47,
+  "exp1": 3,
+  "outzone": 13,
+  "exp2": 1,
+  "strict_diff": 4,
+  "after_expand_diff": 0
+ }
+]
