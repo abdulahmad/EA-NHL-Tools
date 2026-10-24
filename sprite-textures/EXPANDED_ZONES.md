@@ -877,3 +877,6 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 
 ## goalie21 – 419 catcher from Abdul's green marks (D125)
 - D125: Abdul painted every 419 catcher cell green on the g20 clean panel (pt925u). Registered by the two gold pixels (14,6) and (25,5) (21 px/cell): 41 cells are the catcher (ground truth). This adds 8 cuff cells, (29,7) (28-30,8) (28-29,9) (27-28,10), that g20 had as arm; every old catcher cell was green, so none were dropped. 42 strict errors.
+
+## goalie22 – two-piece pad mapping (D126)
+- D126: labels unchanged (g21 = ground truth, pad/skate pixel sets reused exactly). A pad leg may be cut once (sprite row, column, or either 45° diagonal) into two pieces, each mapped with its own best g14 mode (row/diagonal arcs or column paths); a split costs 1.5 so it is kept only if it removes ≥2 strict errors. Same texture, no new texels, strict index equality. Strict errors 42 → 14: 416 6→2, 419 2→0, 538 3→0 (Abdul's frozen 538 pixels now map), 407 2, 428 5→3, 980 6→2, 413 1, 425 2→0, 520 1, 987 6→0, 505 0, 1044 1, 422 7→2, 421 0. g22pad.py (driver), g22images.py (local before/after sheets).
