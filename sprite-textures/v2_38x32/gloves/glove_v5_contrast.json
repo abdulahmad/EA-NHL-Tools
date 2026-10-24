@@ -1,0 +1,28 @@
+{
+ "reference": {
+  "navy_black": 1.24,
+  "sky_black": 12.78,
+  "sky_orange": 2.02,
+  "orange_black": 6.31
+ },
+ "BR": {
+  "name": "baby blue + red",
+  "colours": {
+   "baby blue": [
+    170,
+    215,
+    255
+   ],
+   "red": [
+    210,
+    0,
+    0
+   ]
+  },
+  "contrast": {
+   "baby blue vs black": 13.87,
+   "red vs black": 3.74,
+   "baby blue vs red": 3.71
+  }
+ }
+}

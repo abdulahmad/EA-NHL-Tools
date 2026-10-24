@@ -95,6 +95,12 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 - Default gear rebuilt from it: control **0 on 8 frames x 5 teams**; 535 of 1447 px relocated by colour (D44).
 - Fuhr Oilers redone on the position map (D45). Glove contrast options A/B/C (D46).
 
+**Goalie skeleton v5, facing corrected (2026-10-24, pt861u):** `v2_38x32/goalie5/`.
+- Facing per Abdul: front 413 (side), 416, 422; back 449, 519, 980; mixed 428 and 1000. Index 135 is the helmet back strap, not the cage (D47).
+- Skeleton: SPAgready 407-428 is one pose at 8 facings; a 3D base pose is rotated and adjusted per frame (D48-D49).
+- Zones revised: pad back = socks zones 181-189, pad front = 144-148 (D50). Segmentation v5 (D51).
+- Default gear control **0 on 8 frames x 5 teams**; 539 of 1457 px relocated (D52). Gloves baby blue + red (D53).
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.
