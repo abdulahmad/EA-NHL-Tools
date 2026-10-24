@@ -11,6 +11,7 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - goalie17: Abdul's g15 segmentation corrections as ground truth (pads by connected leg, stick butt, skate vs blade, catcher), per-correction checks + coordinate inspection sheets, 42 strict errors, D116–D121.
 - goalie18: frame 538 blocker taken from Abdul's green marks, leftover old blocker cells → body, 42 strict errors, D122.
 - goalie19: Abdul's answers (980 right pad edge, 1044 pad stripe, 428 no blocker) and skeleton-bounded arm vs glove, 42 strict errors, D123.
+- goalie20: Abdul's goalie19 answers (980 arm, 416 catcher kept, 419 arm stripes and green blocker), 42 strict errors, D124.
 - goalie13: strict pad remap, 95 strict errors (g12 152), D101–D104.
 
 ## Tools included
