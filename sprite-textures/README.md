@@ -111,6 +111,8 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 - Non-team indices in the gear (164/22 greys, idx0/109 outline, 30/31 toe navy, 134/136 cage) moved to a per-frame shading layer (`goalie7/shading/<frame>.png`, codes in `levels.json`); the texture holds team base colours only. Control 0 px (8 frames x 5 teams). Relocation 415 -> 275 px (28.7% -> 19.0%) (D61-D63).
 - Fuhr texture v7 with baked greys snapped to white/black, drawn as texture x shading (D64). Player gloves v7 deep purple + lime, stick untouched (D65).
 
+**Player gloves v8 (2026-10-24, pt866u):** comparison sheets now use a fixed grid, so the A and B columns line up (D66). Added a light violet (150,90,255) + lime option: violet vs black 5.2:1, violet vs lime 3.27:1, stick px changed 0 (D67).
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.
