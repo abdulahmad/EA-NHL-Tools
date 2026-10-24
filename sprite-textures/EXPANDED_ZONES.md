@@ -874,3 +874,6 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 
 ## goalie20 – Abdul's goalie19 answers (D124)
 - D124: 980 ringed former-catcher px (x6-9, y8-14) = arm (body). 416 ringed catcher px stay catcher. 419 catcher arm: white/black/white stripes run across the arm (constant x+y); stripes 1-2 (x+y<=38) = body, stripe 3 (white 148 at x+y 39-40) kept as catcher cuff border — both options give identical mapping (42), and the white 148 line continues unbroken around the cuff, so it is the border. 419 blocker = Abdul's 31 green cells (registered on the Q4 panel by the gold pixel (14,6)), other old blocker cells = arm stripe (body). 42 strict errors.
+
+## goalie21 – 419 catcher from Abdul's green marks (D125)
+- D125: Abdul painted every 419 catcher cell green on the g20 clean panel (pt925u). Registered by the two gold pixels (14,6) and (25,5) (21 px/cell): 41 cells are the catcher (ground truth). This adds 8 cuff cells, (29,7) (28-30,8) (28-29,9) (27-28,10), that g20 had as arm; every old catcher cell was green, so none were dropped. 42 strict errors.
