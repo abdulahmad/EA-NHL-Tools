@@ -373,3 +373,22 @@ Yaw / error (shared → refined mean/max px; deviation max px / max bone °):
 | 903 | 315 | 263.3 | 257.2 | 265 | 3.16/9.30 | 0.64/2.50 | 6.91/55.8 |
 
 With the legs corrected, 57 moved off the 180° snap to about 154°. 891 (about 90°) and 903 (about 257°) still sit near the neighbouring direction, and 895 moved to about 198°. So yaw on the crosscheck art is still poorly constrained; check by eye.
+
+## v5.6: approved forearm stretch on 72 L and 77 R (Abdul pt807u)
+- **Mapping (`frames_v5.py`, `ARM_STRETCH={(72,'L'),(77,'R')}`):** forearm row = `15 + floor(3u)`, with `u = d_stripe3 / (d_stripe3 + d_end)`. Template rows 15-17 are spread evenly over the drawn forearm (4 rows, factor 1.33). Every other arm stays at factor 1.0.
+- **No skipping:** the row is capped at the unstretched `15 + floor(d_stripe3 - 0.5)`, so a stretch can only slow the rows down and never skips a texel row. Without the cap, 72 jumped from arm stripe 2 (row 13) straight to row 16.
+- **77 R has no glove pixels:** the forearm's far tip (the pixels furthest from arm stripe 3) is used as the end.
+- **Mapping changes:** 72 changes 1 pixel (17 -> 16); 77 changes 2 pixels (17 -> 16, and 17 moves one column). Both forearms are short, so the change is small.
+- **Checks:**
+  - Round trip with game colours: 0 on 5 teams x 11 frames.
+  - Team render errors: 0 on all 6 textures.
+  - Control test A: 0 mismatches.
+  - Texture vs template (`check_v5`): occupancy 0, unexplained 0.
+  - Stripe checks:
+    - kinks: unchanged (5 total; 0 on 72 and 77).
+    - red flags (contiguity): unchanged (41).
+    - 72 capacity runs: 10 -> 9.
+    - 77: one new 'other' run at row 16 (4 -> 5). This is the repeated row the stretch introduces.
+    - 77 R forearm angle step: 16.8 -> 26.6°.
+    - Arm thickness: unchanged.
+- **Sheets:** `playerlayout/v5/frames/stripe_diagnostic_with_texture_sheet.png` (the texture at 6x with row numbers, forearm rows 15-17 boxed, beside every frame) and `stretch_72_77_closeup.png`. Script: `scripts/playerlayout/stretch_sheet_v5.py`.

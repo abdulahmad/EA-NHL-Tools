@@ -66,6 +66,7 @@ def tpos(u,v):
     else:x,fig=u-38+0.0,'B'
     return x,v,fig
 # ---------- mapping
+ARM_STRETCH={(72,'L'),(77,'R')}   # approved forearm stretch (pt807u)
 def fit(n):
     q=frame(n);d=DIRS[n];NK=neck136(q)
     body=[(y,x) for y,x in zip(*np.nonzero(q!=255)) if not(int(q[y,x]) in ICE or int(q[y,x]) in(8,28) or (q[y,x]==136 and (y,x) not in NK))]
@@ -162,9 +163,14 @@ def fit(n):
             if ds is None or not pts:continue
             raw=[base+sign*int(np.floor(max(0,ds[p]-0.5))) for p in pts]
             GEO.setdefault(sname+' '+key,{})['curve_rows']=[min(raw),max(raw)]
+            # v5.6 (Abdul pt807u APPROVED): gradual forearm stretch ONLY on 72 L and 77 R forearm (3 template rows 15-17 spread evenly over
+            # the drawn forearm length, ~4 rows, factor ~1.33). All other arms stay factor 1.0. ARM_STRETCH_PREVIEW=1 still previews all arms.
+            st=(key=='lower arm' and (n,sname) in ARM_STRETCH) or os.environ.get('ARM_STRETCH_PREVIEW')=='1'
+            if st and de is None:   # no glove pixels drawn (77 R): the forearm's far tip (max distance from arm stripe 3) is the end
+                dm=max(ds[p] for p in pts);de=dfield([p for p in pts if ds[p]>=dm-0.5])
             for p,r in zip(pts,raw):
-                if os.environ.get('ARM_STRETCH_PREVIEW')=='1' and de is not None:
-                    n=max(1.0,ds[p]+de[p]-1);u=min(0.999,max(0.0,(ds[p]-0.5)/n));r=base+sign*int(np.floor(u*(hi-lo+1)))
+                if st and de is not None:
+                    nn=max(1.0,ds[p]+de[p]-1);u=min(0.999,max(0.0,(ds[p]-0.5)/nn));r=base+sign*min(int(np.floor(u*(hi-lo+1))),int(np.floor(max(0,ds[p]-0.5))))   # stretch only slows the rows: never skips a texel row
                 ROWT[p]=int(min(hi,max(lo,r)))
         # across-arm column: rank of the perpendicular coordinate, inner column = nearer the torso centre
         tc=JOINTS.get('chest') or (x0,y0)
