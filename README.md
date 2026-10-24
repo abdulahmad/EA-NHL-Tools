@@ -25,6 +25,7 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - goalie27 D137: the 12 still-off pad frames are left as they are (Abdul).
 - goalie27 D138: blocker orientation and pad mapping confirmed as they are (Abdul).
 - goalie27 D139: open questions resolved by pixel match; back-view pads use the strap strip.
+- goalie27 D140: Fuhr knee cuff and mask V tip stay as v12 (Abdul).
 - goalie13: strict pad remap, 95 strict errors (g12 152), D101–D104.
 
 ## Tools included
