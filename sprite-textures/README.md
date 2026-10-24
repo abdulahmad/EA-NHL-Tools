@@ -113,6 +113,8 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 
 **Player gloves v8 (2026-10-24, pt866u):** comparison sheets now use a fixed grid, so the A and B columns line up (D66). Added a light violet (150,90,255) + lime option: violet vs black 5.2:1, violet vs lime 3.27:1, stick px changed 0 (D67).
 
+**Goalie v8: default gear lifted from sprites, v1 style (2026-10-24, pt867u):** `v2_38x32/goalie8/`. Each part cut from its clearest frame (pads F 422, B 519, blocker 422, catcher 416, mask 416/413/519), base + shaded textures, mapped back by nearest uv: CHI HOME diff 397 / 1435 px, TOR HOME 417 (D68-D69). Readable texture first, diff reduction next.
+
 **Next steps:**
 1. Extend the v5 per-pixel mapper to goalie frames so the goalie jersey/pants can reuse the skater v2 zones.
 2. Hand-check the goalie segmentation.

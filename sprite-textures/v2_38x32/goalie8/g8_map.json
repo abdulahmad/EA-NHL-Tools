@@ -1,0 +1,892 @@
+{
+ "size": [
+  39,
+  26
+ ],
+ "pieces": [
+  {
+   "part": "padF_L",
+   "frame": 422,
+   "view": "front",
+   "frame_bbox_xywh": [
+    16,
+    10,
+    8,
+    12
+   ],
+   "texture_xy": [
+    0,
+    0
+   ],
+   "texels": 73,
+   "filled_from_shading": 30
+  },
+  {
+   "part": "padF_R",
+   "frame": 422,
+   "view": "front",
+   "frame_bbox_xywh": [
+    23,
+    9,
+    9,
+    15
+   ],
+   "texture_xy": [
+    10,
+    0
+   ],
+   "texels": 79,
+   "filled_from_shading": 23
+  },
+  {
+   "part": "padB_L",
+   "frame": 519,
+   "view": "back",
+   "frame_bbox_xywh": [
+    5,
+    19,
+    7,
+    12
+   ],
+   "texture_xy": [
+    21,
+    0
+   ],
+   "texels": 58,
+   "filled_from_shading": 21
+  },
+  {
+   "part": "padB_R",
+   "frame": 519,
+   "view": "back",
+   "frame_bbox_xywh": [
+    13,
+    21,
+    8,
+    9
+   ],
+   "texture_xy": [
+    30,
+    0
+   ],
+   "texels": 48,
+   "filled_from_shading": 19
+  },
+  {
+   "part": "blocker",
+   "frame": 422,
+   "view": "face",
+   "frame_bbox_xywh": [
+    9,
+    7,
+    6,
+    9
+   ],
+   "texture_xy": [
+    0,
+    17
+   ],
+   "texels": 35,
+   "filled_from_shading": 0
+  },
+  {
+   "part": "catcher",
+   "frame": 416,
+   "view": "face",
+   "frame_bbox_xywh": [
+    13,
+    7,
+    9,
+    6
+   ],
+   "texture_xy": [
+    8,
+    17
+   ],
+   "texels": 38,
+   "filled_from_shading": 0
+  },
+  {
+   "part": "mask",
+   "frame": 416,
+   "view": "front",
+   "frame_bbox_xywh": [
+    11,
+    0,
+    5,
+    8
+   ],
+   "texture_xy": [
+    19,
+    17
+   ],
+   "texels": 32,
+   "filled_from_shading": 9
+  },
+  {
+   "part": "mask",
+   "frame": 413,
+   "view": "side",
+   "frame_bbox_xywh": [
+    8,
+    0,
+    5,
+    7
+   ],
+   "texture_xy": [
+    26,
+    17
+   ],
+   "texels": 27,
+   "filled_from_shading": 6
+  },
+  {
+   "part": "mask",
+   "frame": 519,
+   "view": "back",
+   "frame_bbox_xywh": [
+    8,
+    0,
+    6,
+    7
+   ],
+   "texture_xy": [
+    33,
+    17
+   ],
+   "texels": 30,
+   "filled_from_shading": 10
+  }
+ ],
+ "diff": {
+  "chi_home": {
+   "413": {
+    "total": 36,
+    "by_part": {
+     "padF_L": 8,
+     "padB_R": 1,
+     "padB_L": 9,
+     "blocker": 18
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "forearm <- arm stripe 3": 9,
+     "arm stripe 3 <- forearm": 9,
+     "arm stripe 1 <- arm stripe 2": 8,
+     "socks <- arm stripe 1": 4,
+     "arm stripe 2 <- arm stripe 1": 3,
+     "socks stripe 2 <- arm stripe 1": 2
+    }
+   },
+   "416": {
+    "total": 56,
+    "by_part": {
+     "padB_R": 13,
+     "padF_L": 6,
+     "padF_R": 27,
+     "blocker": 10
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 2 <- arm stripe 3": 11,
+     "arm stripe 1 <- arm stripe 2": 9,
+     "forearm <- arm stripe 3": 8,
+     "arm stripe 1 <- forearm": 8,
+     "arm stripe 3 <- forearm": 7,
+     "arm stripe 3 <- arm stripe 2": 4
+    }
+   },
+   "422": {
+    "total": 17,
+    "by_part": {
+     "mask": 11,
+     "catcher": 6
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "socks stripe 2 <- socks stripe 1": 4,
+     "forearm <- arm stripe 3": 3,
+     "socks stripe 1 <- socks stripe 2": 2,
+     "socks stripe 2 <- pants": 2,
+     "socks stripe 1 <- pants": 2,
+     "pants <- socks stripe 2": 1
+    }
+   },
+   "428": {
+    "total": 70,
+    "by_part": {
+     "padB_R": 10,
+     "padB_L": 19,
+     "padF_R": 5,
+     "mask": 12,
+     "blocker": 3,
+     "catcher": 21
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 2 <- arm stripe 3": 14,
+     "socks <- arm stripe 1": 9,
+     "arm stripe 3 <- arm stripe 2": 8,
+     "arm stripe 1 <- arm stripe 2": 6,
+     "pants <- socks stripe 2": 5,
+     "socks <- socks stripe 2": 3
+    }
+   },
+   "449": {
+    "total": 43,
+    "by_part": {
+     "padB_R": 16,
+     "padB_L": 12,
+     "mask": 7,
+     "blocker": 8
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "socks <- arm stripe 1": 11,
+     "forearm <- arm stripe 3": 7,
+     "pants <- socks stripe 2": 4,
+     "arm stripe 1 <- arm stripe 2": 3,
+     "socks stripe 1 <- socks stripe 2": 3,
+     "socks stripe 2 <- arm stripe 1": 3
+    }
+   },
+   "519": {
+    "total": 24,
+    "by_part": {
+     "blocker": 9,
+     "catcher": 15
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 3 <- forearm": 8,
+     "forearm <- arm stripe 3": 8,
+     "arm stripe 3 <- arm stripe 2": 5,
+     "arm stripe 2 <- arm stripe 3": 3
+    }
+   },
+   "980": {
+    "total": 58,
+    "by_part": {
+     "padB_R": 19,
+     "padB_L": 18,
+     "mask": 9,
+     "blocker": 2,
+     "catcher": 10
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "socks <- arm stripe 1": 12,
+     "arm stripe 2 <- arm stripe 3": 7,
+     "arm stripe 2 <- arm stripe 1": 6,
+     "arm stripe 1 <- socks": 5,
+     "socks stripe 1 <- socks stripe 2": 4,
+     "pants <- socks stripe 2": 4
+    }
+   },
+   "1000": {
+    "total": 93,
+    "by_part": {
+     "padB_R": 33,
+     "padF_L": 3,
+     "padB_L": 9,
+     "mask": 20,
+     "blocker": 19,
+     "catcher": 9
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 1 <- arm stripe 2": 17,
+     "socks <- arm stripe 1": 12,
+     "forearm <- arm stripe 3": 12,
+     "arm stripe 3 <- forearm": 10,
+     "pants <- socks stripe 2": 9,
+     "socks stripe 2 <- pants": 6
+    }
+   },
+   "sum": 397
+  },
+  "tor_home": {
+   "413": {
+    "total": 35,
+    "by_part": {
+     "padF_L": 8,
+     "padB_R": 1,
+     "padB_L": 8,
+     "blocker": 18
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "forearm <- arm stripe 3": 9,
+     "arm stripe 3 <- forearm": 9,
+     "arm stripe 1 <- arm stripe 2": 8,
+     "socks <- arm stripe 1": 4,
+     "arm stripe 2 <- arm stripe 1": 3,
+     "socks stripe 2 <- arm stripe 1": 2
+    }
+   },
+   "416": {
+    "total": 58,
+    "by_part": {
+     "padB_R": 13,
+     "padF_L": 6,
+     "padF_R": 29,
+     "blocker": 10
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 2 <- arm stripe 3": 11,
+     "arm stripe 1 <- arm stripe 2": 9,
+     "forearm <- arm stripe 3": 8,
+     "arm stripe 1 <- forearm": 8,
+     "arm stripe 3 <- forearm": 7,
+     "arm stripe 3 <- arm stripe 2": 4
+    }
+   },
+   "422": {
+    "total": 18,
+    "by_part": {
+     "mask": 11,
+     "catcher": 7
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "socks stripe 2 <- socks stripe 1": 4,
+     "forearm <- arm stripe 3": 3,
+     "socks stripe 1 <- socks stripe 2": 2,
+     "socks stripe 2 <- pants": 2,
+     "socks stripe 1 <- pants": 2,
+     "pants <- socks stripe 2": 1
+    }
+   },
+   "428": {
+    "total": 74,
+    "by_part": {
+     "padB_R": 10,
+     "padB_L": 19,
+     "padF_R": 6,
+     "mask": 11,
+     "blocker": 3,
+     "catcher": 25
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 2 <- arm stripe 3": 14,
+     "socks <- arm stripe 1": 9,
+     "arm stripe 3 <- arm stripe 2": 8,
+     "arm stripe 1 <- arm stripe 2": 6,
+     "pants <- socks stripe 2": 5,
+     "forearm <- arm stripe 2": 4
+    }
+   },
+   "449": {
+    "total": 43,
+    "by_part": {
+     "padB_R": 17,
+     "padB_L": 11,
+     "mask": 7,
+     "blocker": 8
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "socks <- arm stripe 1": 11,
+     "forearm <- arm stripe 3": 7,
+     "pants <- socks stripe 2": 4,
+     "arm stripe 1 <- arm stripe 2": 3,
+     "socks stripe 1 <- socks stripe 2": 3,
+     "socks stripe 2 <- arm stripe 1": 3
+    }
+   },
+   "519": {
+    "total": 25,
+    "by_part": {
+     "blocker": 9,
+     "catcher": 16
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 3 <- forearm": 8,
+     "forearm <- arm stripe 3": 8,
+     "arm stripe 3 <- arm stripe 2": 5,
+     "arm stripe 2 <- arm stripe 3": 3,
+     "arm stripe 2 <- forearm": 1
+    }
+   },
+   "980": {
+    "total": 63,
+    "by_part": {
+     "padB_R": 18,
+     "padB_L": 18,
+     "mask": 8,
+     "blocker": 2,
+     "catcher": 17
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "socks <- arm stripe 1": 12,
+     "arm stripe 2 <- arm stripe 3": 7,
+     "arm stripe 2 <- arm stripe 1": 6,
+     "arm stripe 1 <- socks": 5,
+     "socks stripe 1 <- socks stripe 2": 4,
+     "pants <- socks stripe 2": 4
+    }
+   },
+   "1000": {
+    "total": 101,
+    "by_part": {
+     "padB_R": 36,
+     "padF_L": 7,
+     "padB_L": 9,
+     "mask": 20,
+     "blocker": 19,
+     "catcher": 10
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 1 <- arm stripe 2": 17,
+     "socks <- arm stripe 1": 12,
+     "forearm <- arm stripe 3": 12,
+     "arm stripe 3 <- forearm": 10,
+     "pants <- socks stripe 2": 9,
+     "socks stripe 2 <- pants": 6
+    }
+   },
+   "sum": 417
+  },
+  "chi_away": {
+   "413": {
+    "total": 37,
+    "by_part": {
+     "padF_L": 8,
+     "padB_R": 1,
+     "padB_L": 10,
+     "blocker": 18
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "forearm <- arm stripe 3": 9,
+     "arm stripe 3 <- forearm": 9,
+     "arm stripe 1 <- arm stripe 2": 8,
+     "socks <- arm stripe 1": 4,
+     "arm stripe 2 <- arm stripe 1": 3,
+     "socks stripe 2 <- arm stripe 1": 2
+    }
+   },
+   "416": {
+    "total": 58,
+    "by_part": {
+     "padB_R": 13,
+     "padF_L": 6,
+     "padF_R": 29,
+     "blocker": 10
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 2 <- arm stripe 3": 11,
+     "arm stripe 1 <- arm stripe 2": 9,
+     "forearm <- arm stripe 3": 8,
+     "arm stripe 1 <- forearm": 8,
+     "arm stripe 3 <- forearm": 7,
+     "arm stripe 3 <- arm stripe 2": 4
+    }
+   },
+   "422": {
+    "total": 18,
+    "by_part": {
+     "mask": 11,
+     "catcher": 7
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "socks stripe 2 <- socks stripe 1": 4,
+     "forearm <- arm stripe 3": 3,
+     "socks stripe 1 <- socks stripe 2": 2,
+     "socks stripe 2 <- pants": 2,
+     "socks stripe 1 <- pants": 2,
+     "pants <- socks stripe 2": 1
+    }
+   },
+   "428": {
+    "total": 78,
+    "by_part": {
+     "padB_R": 11,
+     "padB_L": 19,
+     "padF_R": 6,
+     "mask": 12,
+     "blocker": 3,
+     "catcher": 27
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 2 <- arm stripe 3": 14,
+     "socks <- arm stripe 1": 9,
+     "arm stripe 3 <- arm stripe 2": 8,
+     "arm stripe 1 <- arm stripe 2": 6,
+     "pants <- socks stripe 2": 5,
+     "forearm <- arm stripe 2": 4
+    }
+   },
+   "449": {
+    "total": 47,
+    "by_part": {
+     "padB_R": 18,
+     "padB_L": 14,
+     "mask": 7,
+     "blocker": 8
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "socks <- arm stripe 1": 11,
+     "forearm <- arm stripe 3": 7,
+     "pants <- socks stripe 2": 4,
+     "arm stripe 1 <- arm stripe 2": 3,
+     "socks stripe 1 <- socks stripe 2": 3,
+     "socks stripe 2 <- arm stripe 1": 3
+    }
+   },
+   "519": {
+    "total": 26,
+    "by_part": {
+     "blocker": 9,
+     "catcher": 17
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 3 <- forearm": 8,
+     "forearm <- arm stripe 3": 8,
+     "arm stripe 3 <- arm stripe 2": 5,
+     "arm stripe 2 <- arm stripe 3": 3,
+     "arm stripe 2 <- forearm": 2
+    }
+   },
+   "980": {
+    "total": 71,
+    "by_part": {
+     "padB_R": 19,
+     "padB_L": 20,
+     "mask": 9,
+     "blocker": 2,
+     "catcher": 21
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "socks <- arm stripe 1": 12,
+     "arm stripe 2 <- forearm": 8,
+     "arm stripe 2 <- arm stripe 3": 7,
+     "arm stripe 2 <- arm stripe 1": 6,
+     "arm stripe 1 <- socks": 5,
+     "socks stripe 1 <- socks stripe 2": 4
+    }
+   },
+   "1000": {
+    "total": 105,
+    "by_part": {
+     "padB_R": 37,
+     "padF_L": 9,
+     "padB_L": 9,
+     "mask": 20,
+     "blocker": 19,
+     "catcher": 11
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 1 <- arm stripe 2": 17,
+     "socks <- arm stripe 1": 12,
+     "forearm <- arm stripe 3": 12,
+     "arm stripe 3 <- forearm": 10,
+     "pants <- socks stripe 2": 9,
+     "forearm <- arm stripe 2": 6
+    }
+   },
+   "sum": 440
+  },
+  "nyr_away": {
+   "413": {
+    "total": 36,
+    "by_part": {
+     "padF_L": 8,
+     "padB_R": 1,
+     "padB_L": 9,
+     "blocker": 18
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "forearm <- arm stripe 3": 9,
+     "arm stripe 3 <- forearm": 9,
+     "arm stripe 1 <- arm stripe 2": 8,
+     "socks <- arm stripe 1": 4,
+     "arm stripe 2 <- arm stripe 1": 3,
+     "socks stripe 2 <- arm stripe 1": 2
+    }
+   },
+   "416": {
+    "total": 59,
+    "by_part": {
+     "padB_R": 14,
+     "padF_L": 6,
+     "padF_R": 29,
+     "blocker": 10
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 2 <- arm stripe 3": 11,
+     "arm stripe 1 <- arm stripe 2": 9,
+     "forearm <- arm stripe 3": 8,
+     "arm stripe 1 <- forearm": 8,
+     "arm stripe 3 <- forearm": 7,
+     "arm stripe 3 <- arm stripe 2": 4
+    }
+   },
+   "422": {
+    "total": 18,
+    "by_part": {
+     "mask": 11,
+     "catcher": 7
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "socks stripe 2 <- socks stripe 1": 4,
+     "forearm <- arm stripe 3": 3,
+     "socks stripe 1 <- socks stripe 2": 2,
+     "socks stripe 2 <- pants": 2,
+     "socks stripe 1 <- pants": 2,
+     "pants <- socks stripe 2": 1
+    }
+   },
+   "428": {
+    "total": 77,
+    "by_part": {
+     "padB_R": 10,
+     "padB_L": 19,
+     "padF_R": 6,
+     "mask": 12,
+     "blocker": 3,
+     "catcher": 27
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 2 <- arm stripe 3": 14,
+     "socks <- arm stripe 1": 9,
+     "arm stripe 3 <- arm stripe 2": 8,
+     "arm stripe 1 <- arm stripe 2": 6,
+     "pants <- socks stripe 2": 5,
+     "forearm <- arm stripe 2": 4
+    }
+   },
+   "449": {
+    "total": 45,
+    "by_part": {
+     "padB_R": 18,
+     "padB_L": 12,
+     "mask": 7,
+     "blocker": 8
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "socks <- arm stripe 1": 11,
+     "forearm <- arm stripe 3": 7,
+     "pants <- socks stripe 2": 4,
+     "arm stripe 1 <- arm stripe 2": 3,
+     "socks stripe 1 <- socks stripe 2": 3,
+     "socks stripe 2 <- arm stripe 1": 3
+    }
+   },
+   "519": {
+    "total": 26,
+    "by_part": {
+     "blocker": 9,
+     "catcher": 17
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 3 <- forearm": 8,
+     "forearm <- arm stripe 3": 8,
+     "arm stripe 3 <- arm stripe 2": 5,
+     "arm stripe 2 <- arm stripe 3": 3,
+     "arm stripe 2 <- forearm": 2
+    }
+   },
+   "980": {
+    "total": 69,
+    "by_part": {
+     "padB_R": 19,
+     "padB_L": 18,
+     "mask": 9,
+     "blocker": 2,
+     "catcher": 21
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "socks <- arm stripe 1": 12,
+     "arm stripe 2 <- forearm": 8,
+     "arm stripe 2 <- arm stripe 3": 7,
+     "arm stripe 2 <- arm stripe 1": 6,
+     "arm stripe 1 <- socks": 5,
+     "socks stripe 1 <- socks stripe 2": 4
+    }
+   },
+   "1000": {
+    "total": 104,
+    "by_part": {
+     "padB_R": 36,
+     "padF_L": 9,
+     "padB_L": 9,
+     "mask": 20,
+     "blocker": 19,
+     "catcher": 11
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 1 <- arm stripe 2": 17,
+     "socks <- arm stripe 1": 12,
+     "forearm <- arm stripe 3": 12,
+     "arm stripe 3 <- forearm": 10,
+     "pants <- socks stripe 2": 9,
+     "forearm <- arm stripe 2": 6
+    }
+   },
+   "sum": 434
+  },
+  "mtl_home": {
+   "413": {
+    "total": 23,
+    "by_part": {
+     "padB_L": 5,
+     "blocker": 18
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "forearm <- arm stripe 3": 9,
+     "arm stripe 3 <- forearm": 9,
+     "socks stripe 1 <- arm stripe 1": 2,
+     "socks stripe 2 <- arm stripe 1": 2,
+     "socks <- socks stripe 2": 1
+    }
+   },
+   "416": {
+    "total": 30,
+    "by_part": {
+     "padB_R": 4,
+     "padF_R": 20,
+     "blocker": 6
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "forearm <- arm stripe 3": 8,
+     "arm stripe 1 <- forearm": 8,
+     "arm stripe 3 <- forearm": 7,
+     "arm stripe 2 <- forearm": 3,
+     "socks stripe 1 <- arm stripe 2": 2,
+     "socks stripe 2 <- arm stripe 2": 2
+    }
+   },
+   "422": {
+    "total": 16,
+    "by_part": {
+     "mask": 11,
+     "catcher": 5
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "socks stripe 2 <- socks stripe 1": 4,
+     "forearm <- arm stripe 3": 3,
+     "socks stripe 1 <- socks stripe 2": 2,
+     "socks stripe 2 <- pants": 2,
+     "socks stripe 1 <- pants": 2,
+     "pants <- socks stripe 2": 1
+    }
+   },
+   "428": {
+    "total": 37,
+    "by_part": {
+     "padB_R": 6,
+     "padF_R": 4,
+     "padB_L": 6,
+     "mask": 12,
+     "blocker": 2,
+     "catcher": 7
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "pants <- socks stripe 2": 5,
+     "forearm <- arm stripe 2": 4,
+     "socks <- socks stripe 2": 3,
+     "forearm <- arm stripe 1": 3,
+     "socks stripe 1 <- socks stripe 2": 3,
+     "arm stripe 2 <- forearm": 3
+    }
+   },
+   "449": {
+    "total": 27,
+    "by_part": {
+     "padB_R": 6,
+     "padB_L": 6,
+     "mask": 7,
+     "blocker": 8
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "forearm <- arm stripe 3": 7,
+     "pants <- socks stripe 2": 4,
+     "socks stripe 1 <- socks stripe 2": 3,
+     "socks stripe 2 <- arm stripe 1": 3,
+     "socks <- socks stripe 1": 2,
+     "socks <- socks stripe 2": 2
+    }
+   },
+   "519": {
+    "total": 18,
+    "by_part": {
+     "blocker": 9,
+     "catcher": 9
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 3 <- forearm": 8,
+     "forearm <- arm stripe 3": 8,
+     "arm stripe 2 <- forearm": 2
+    }
+   },
+   "980": {
+    "total": 36,
+    "by_part": {
+     "padB_R": 5,
+     "padB_L": 10,
+     "mask": 9,
+     "blocker": 1,
+     "catcher": 11
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "arm stripe 2 <- forearm": 8,
+     "socks stripe 1 <- socks stripe 2": 4,
+     "pants <- socks stripe 2": 4,
+     "socks <- socks stripe 1": 3,
+     "socks stripe 1 <- arm stripe 1": 3,
+     "socks stripe 2 <- pants": 3
+    }
+   },
+   "1000": {
+    "total": 62,
+    "by_part": {
+     "padB_R": 8,
+     "padF_L": 6,
+     "padB_L": 4,
+     "mask": 20,
+     "blocker": 19,
+     "catcher": 5
+    },
+    "in_source_frame": 0,
+    "pairs": {
+     "forearm <- arm stripe 3": 12,
+     "arm stripe 3 <- forearm": 10,
+     "pants <- socks stripe 2": 9,
+     "forearm <- arm stripe 2": 6,
+     "socks stripe 2 <- pants": 6,
+     "socks stripe 2 <- arm stripe 1": 5
+    }
+   },
+   "sum": 249
+  }
+ },
+ "gear_px": 1435
+}
