@@ -1,0 +1,39 @@
+{
+ "zero_error_pc_frames": 601,
+ "G94": {
+  "pairs": 257,
+  "filled": 668,
+  "conflict texels": 665,
+  "used texels": 768,
+  "unfilled": 100,
+  "gap filled": 84,
+  "still unfilled": 16,
+  "mean agreement": 0.515,
+  "texels agreement<0.9": 646
+ },
+ "G93": {
+  "pairs": 265,
+  "filled": 668,
+  "conflict texels": 665,
+  "used texels": 768,
+  "unfilled": 100,
+  "gap filled": 85,
+  "still unfilled": 15,
+  "mean agreement": 0.516,
+  "texels agreement<0.9": 647
+ },
+ "G93_vs_G94 texels both": 752,
+ "G93_vs_G94 differ": 22,
+ "G94 validation": {
+  "no texel (stick/shadow/ice etc.)": 17150,
+  "px": 68203,
+  "mismatch": 31620,
+  "match": 36583
+ },
+ "G93 validation": {
+  "no texel (stick/shadow/ice etc.)": 18413,
+  "px": 70559,
+  "mismatch": 32760,
+  "match": 37799
+ }
+}

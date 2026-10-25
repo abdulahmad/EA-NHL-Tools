@@ -1071,3 +1071,10 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - Held-out accuracy is about 0.82 coarse part and 0.59 exact. Sleeve<->torso is the main error.
 - Goalies are only translated and segmented; no g28 texel snap yet. The 94S redraw (Part C) is a recolour with PC bands, not a real redraw.
 - The "0 err" rings are self-consistency only. No pixels were relabelled, and renders are not committed.
+
+## D167: 94G Leafs texture from matched frames + hard-colour exclusive mapping (Abdul pt988u)
+- `sprite-textures/docs/exclusive-expansion/d167/`: METHOD_D167.md, scripts and metrics.
+- Texture: votes from 257 pixel-matched 94G/PC-zero-error pairs. 668/768 texels voted, 84 gap-filled from unanimous same-zone neighbours, 16 unfilled. Mean agreement 0.515. 93G palette is identical, and the 93G-built texture differs on only 22 texels.
+- Validation is not met: only 54% of matched 94G pixels are reproduced. Genesis colours carry per-pose shading (within-frame agreement 0.89, across frames 0.54).
+- Exclusives under the hard colour constraint: 487 errors out of 11,501 px. Causes: skin highlight 38 (211), 93G blood decal (183), no start texel (93, mostly the gloves-on-ice frame 353). 7 frames have 0 errors, and 94G has 24 errors out of 4,467 px. Stripes are not coherent, because 45% of pixels moved about 4 texels to find their colour.
+- Ruling: a flat Genesis texture is the wrong model. Next step is a family-level texture plus a shade map. No pixels relabelled, no renders committed.
