@@ -1,0 +1,7939 @@
+{
+ "G93_353": {
+  "init": "D173",
+  "prior": null,
+  "joints": {
+   "hand0 a": [
+    16.81,
+    0.66
+   ],
+   "hand0 b": [
+    12.74,
+    3.54
+   ],
+   "hand1 a": [
+    98.26,
+    11.54
+   ],
+   "hand1 b": [
+    93.19,
+    8.66
+   ],
+   "hand2 a": [
+    14.26,
+    12.54
+   ],
+   "hand2 b": [
+    9.19,
+    9.66
+   ],
+   "hand3 a": [
+    80.81,
+    14.66
+   ],
+   "hand3 b": [
+    77.74,
+    17.54
+   ],
+   "stick4 a": [
+    89.03,
+    10.43
+   ],
+   "stick4 b": [
+    58.09,
+    12.4
+   ],
+   "stick5 a": [
+    30.91,
+    18.4
+   ],
+   "stick5 b": [
+    -0.03,
+    16.43
+   ]
+  },
+  "bones": [
+   [
+    "hand0 a",
+    "hand0 b",
+    "hand"
+   ],
+   [
+    "hand1 a",
+    "hand1 b",
+    "hand"
+   ],
+   [
+    "hand2 a",
+    "hand2 b",
+    "hand"
+   ],
+   [
+    "hand3 a",
+    "hand3 b",
+    "hand"
+   ],
+   [
+    "stick4 a",
+    "stick4 b",
+    "shaft"
+   ],
+   [
+    "stick5 a",
+    "stick5 b",
+    "shaft"
+   ]
+  ],
+  "errors": 0,
+  "nudges": 6,
+  "plaus": 6,
+  "tried": [
+   [
+    "D173",
+    0,
+    6
+   ]
+  ],
+  "flags": [
+   "no body: loose-equipment skeleton"
+  ],
+  "iou": 0
+ },
+ "G93_354": {
+  "init": "D173",
+  "prior": 37,
+  "joints": {
+   "head": [
+    11.12,
+    3.33
+   ],
+   "neck": [
+    11.25,
+    5.25
+   ],
+   "chest": [
+    7.79,
+    5.44
+   ],
+   "belly": [
+    7.0,
+    14.0
+   ],
+   "pelvis": [
+    6.65,
+    12.83
+   ],
+   "L shoulder": [
+    5.5,
+    8.0
+   ],
+   "L elbow": [
+    3.6,
+    9.2
+   ],
+   "L wrist": [
+    4.0,
+    11.0
+   ],
+   "L hip": [
+    7.5,
+    23.0
+   ],
+   "L knee": [
+    8.5,
+    23.0
+   ],
+   "L ankle": [
+    6.91,
+    25.36
+   ],
+   "L skate": [
+    6.0,
+    28.0
+   ],
+   "R shoulder": [
+    12.0,
+    11.0
+   ],
+   "R elbow": [
+    14.5,
+    12.0
+   ],
+   "R wrist": [
+    12.0,
+    16.0
+   ],
+   "R glove": [
+    10.0,
+    20.0
+   ],
+   "R skate": [
+    5.0,
+    25.0
+   ],
+   "R hip": [
+    7.59,
+    18.26
+   ],
+   "R ankle": [
+    7.0,
+    25.0
+   ],
+   "R knee": [
+    12.0,
+    23.0
+   ],
+   "stick butt": [
+    15.0,
+    11.0
+   ],
+   "stick heel": [
+    21.0,
+    0.0
+   ],
+   "stick toe": [
+    26.0,
+    1.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 12,
+  "nudges": 20,
+  "plaus": 6.0,
+  "tried": [
+   [
+    "D173",
+    12,
+    20
+   ]
+  ],
+  "flags": [],
+  "iou": 0.648
+ },
+ "G93_355": {
+  "init": "PC 351",
+  "prior": 351,
+  "joints": {
+   "head": [
+    14.07,
+    4.63
+   ],
+   "neck": [
+    13.29,
+    8.71
+   ],
+   "chest": [
+    10.21,
+    9.93
+   ],
+   "belly": [
+    8.68,
+    14.18
+   ],
+   "pelvis": [
+    6.0,
+    14.0
+   ],
+   "L skate": [
+    11.0,
+    25.0
+   ],
+   "R shoulder": [
+    11.22,
+    11.22
+   ],
+   "R elbow": [
+    11.33,
+    13.0
+   ],
+   "R wrist": [
+    14.0,
+    13.0
+   ],
+   "R glove": [
+    15.0,
+    11.0
+   ],
+   "R hip": [
+    10.5,
+    21.0
+   ],
+   "R knee": [
+    11.5,
+    22.0
+   ],
+   "R ankle": [
+    8.0,
+    27.0
+   ],
+   "R skate": [
+    9.0,
+    31.0
+   ],
+   "L glove": [
+    14.0,
+    10.0
+   ],
+   "L elbow": [
+    13.0,
+    15.0
+   ],
+   "L shoulder": [
+    13.0,
+    12.0
+   ],
+   "L wrist": [
+    15.0,
+    12.0
+   ],
+   "L hip": [
+    8.0,
+    22.0
+   ],
+   "L ankle": [
+    10.0,
+    26.0
+   ],
+   "L knee": [
+    13.0,
+    25.0
+   ],
+   "stick butt": [
+    10.0,
+    28.0
+   ],
+   "stick heel": [
+    21.0,
+    33.0
+   ],
+   "stick toe": [
+    29.0,
+    30.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 10,
+  "nudges": 24,
+  "plaus": 0.0,
+  "tried": [
+   [
+    "D173",
+    11,
+    29
+   ],
+   [
+    "PC 351",
+    10,
+    24
+   ],
+   [
+    "PC 232",
+    12,
+    32
+   ]
+  ],
+  "flags": [],
+  "iou": 0.543
+ },
+ "G93_356": {
+  "init": "D173",
+  "prior": 950,
+  "joints": {
+   "head": [
+    7.38,
+    2.85
+   ],
+   "neck": [
+    5.42,
+    8.08
+   ],
+   "chest": [
+    7.0,
+    9.0
+   ],
+   "belly": [
+    4.0,
+    13.0
+   ],
+   "pelvis": [
+    8.33,
+    14.83
+   ],
+   "R shoulder": [
+    9.0,
+    9.0
+   ],
+   "R elbow": [
+    9.5,
+    12.0
+   ],
+   "R wrist": [
+    9.0,
+    15.0
+   ],
+   "R glove": [
+    11.0,
+    16.0
+   ],
+   "R hip": [
+    5.21,
+    19.43
+   ],
+   "R knee": [
+    6.71,
+    22.71
+   ],
+   "R ankle": [
+    5.18,
+    27.64
+   ],
+   "R skate": [
+    6.0,
+    30.0
+   ],
+   "L shoulder": [
+    2.0,
+    8.0
+   ],
+   "L elbow": [
+    3.0,
+    10.0
+   ],
+   "L wrist": [
+    3.0,
+    14.0
+   ],
+   "L glove": [
+    4.0,
+    17.0
+   ],
+   "L skate": [
+    8.0,
+    27.0
+   ],
+   "stick butt": [
+    3.0,
+    17.0
+   ],
+   "stick heel": [
+    15.0,
+    15.0
+   ],
+   "stick toe": [
+    16.0,
+    11.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 23,
+  "nudges": 29,
+  "plaus": 6.0,
+  "tried": [
+   [
+    "D173",
+    23,
+    29
+   ]
+  ],
+  "flags": [],
+  "iou": 0.755
+ },
+ "G93_357": {
+  "init": "PC 891",
+  "prior": 891,
+  "joints": {
+   "L ankle": [
+    5.0,
+    25.0
+   ],
+   "L elbow": [
+    12.0,
+    9.0
+   ],
+   "L glove": [
+    16.33,
+    10.16
+   ],
+   "L hip": [
+    10.41,
+    21.17
+   ],
+   "L knee": [
+    7.68,
+    21.21
+   ],
+   "L shoulder": [
+    9.49,
+    8.99
+   ],
+   "L skate": [
+    4.0,
+    27.0
+   ],
+   "L wrist": [
+    15.0,
+    9.0
+   ],
+   "R ankle": [
+    10.0,
+    26.0
+   ],
+   "R elbow": [
+    11.0,
+    10.0
+   ],
+   "R glove": [
+    15.76,
+    11.88
+   ],
+   "R hip": [
+    9.21,
+    21.08
+   ],
+   "R knee": [
+    10.74,
+    21.96
+   ],
+   "R shoulder": [
+    8.0,
+    9.0
+   ],
+   "R skate": [
+    11.06,
+    28.18
+   ],
+   "R wrist": [
+    14.24,
+    10.42
+   ],
+   "belly": [
+    6.66,
+    14.34
+   ],
+   "chest": [
+    8.0,
+    9.0
+   ],
+   "head": [
+    9.0,
+    3.0
+   ],
+   "neck": [
+    9.0,
+    7.0
+   ],
+   "pelvis": [
+    8.0,
+    14.0
+   ],
+   "stick butt": [
+    2.94,
+    7.65
+   ],
+   "stick heel": [
+    17.11,
+    12.16
+   ],
+   "stick toe": [
+    18.26,
+    13.07
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 16,
+  "nudges": 38,
+  "plaus": 3.0,
+  "tried": [
+   [
+    "D173",
+    15,
+    45
+   ],
+   [
+    "PC 372",
+    11,
+    47
+   ],
+   [
+    "PC 891",
+    16,
+    38
+   ]
+  ],
+  "flags": [],
+  "iou": 0.717
+ },
+ "G93_358": {
+  "init": "D173",
+  "prior": 892,
+  "joints": {
+   "head": [
+    13.39,
+    4.06
+   ],
+   "neck": [
+    9.31,
+    6.77
+   ],
+   "chest": [
+    8.0,
+    9.0
+   ],
+   "belly": [
+    8.0,
+    16.0
+   ],
+   "pelvis": [
+    8.78,
+    17.67
+   ],
+   "R glove": [
+    21.25,
+    8.12
+   ],
+   "R shoulder": [
+    14.0,
+    9.0
+   ],
+   "R elbow": [
+    15.0,
+    12.0
+   ],
+   "R wrist": [
+    17.0,
+    10.0
+   ],
+   "R skate": [
+    8.0,
+    30.0
+   ],
+   "R ankle": [
+    13.0,
+    28.0
+   ],
+   "R knee": [
+    13.22,
+    23.67
+   ],
+   "R hip": [
+    12.0,
+    18.0
+   ],
+   "L skate": [
+    4.0,
+    28.0
+   ],
+   "L ankle": [
+    5.0,
+    26.0
+   ],
+   "L knee": [
+    7.0,
+    22.0
+   ],
+   "L hip": [
+    7.0,
+    18.0
+   ],
+   "stick butt": [
+    24.0,
+    11.0
+   ],
+   "stick heel": [
+    20.0,
+    7.0
+   ],
+   "stick toe": [
+    18.0,
+    5.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 24,
+  "nudges": 36,
+  "plaus": 3.0,
+  "tried": [
+   [
+    "D173",
+    24,
+    36
+   ]
+  ],
+  "flags": [],
+  "iou": 0.671
+ },
+ "G93_359": {
+  "init": "D173",
+  "prior": 898,
+  "joints": {
+   "head": [
+    10.0,
+    2.86
+   ],
+   "neck": [
+    10.0,
+    5.77
+   ],
+   "chest": [
+    7.0,
+    11.61
+   ],
+   "belly": [
+    9.91,
+    12.28
+   ],
+   "pelvis": [
+    10.0,
+    14.67
+   ],
+   "R shoulder": [
+    4.83,
+    7.0
+   ],
+   "R wrist": [
+    2.0,
+    8.0
+   ],
+   "R glove": [
+    3.43,
+    9.14
+   ],
+   "R hip": [
+    6.0,
+    18.0
+   ],
+   "R knee": [
+    7.0,
+    19.43
+   ],
+   "R ankle": [
+    7.0,
+    24.5
+   ],
+   "R skate": [
+    6.0,
+    27.0
+   ],
+   "L shoulder": [
+    14.17,
+    5.0
+   ],
+   "L wrist": [
+    20.0,
+    8.0
+   ],
+   "L glove": [
+    17.0,
+    8.69
+   ],
+   "L hip": [
+    13.03,
+    18.6
+   ],
+   "L knee": [
+    13.0,
+    20.43
+   ],
+   "L ankle": [
+    13.0,
+    24.5
+   ],
+   "L skate": [
+    14.0,
+    27.0
+   ],
+   "R elbow": [
+    5.0,
+    6.0
+   ],
+   "L elbow": [
+    16.0,
+    6.0
+   ],
+   "stick butt": [
+    -3.0,
+    9.0
+   ],
+   "stick heel": [
+    23.0,
+    9.0
+   ],
+   "stick toe": [
+    28.0,
+    12.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 14,
+  "nudges": 31,
+  "plaus": 3.0,
+  "tried": [
+   [
+    "D173",
+    14,
+    31
+   ],
+   [
+    "PC 895",
+    12,
+    36
+   ],
+   [
+    "PC 207",
+    13,
+    35
+   ]
+  ],
+  "flags": [],
+  "iou": 0.642
+ },
+ "G93_360": {
+  "init": "D173",
+  "prior": 894,
+  "joints": {
+   "head": [
+    10.91,
+    1.21
+   ],
+   "neck": [
+    10.75,
+    4.25
+   ],
+   "chest": [
+    9.35,
+    6.25
+   ],
+   "belly": [
+    7.62,
+    12.75
+   ],
+   "pelvis": [
+    5.45,
+    11.91
+   ],
+   "R shoulder": [
+    10.0,
+    7.0
+   ],
+   "R elbow": [
+    13.0,
+    10.0
+   ],
+   "R wrist": [
+    16.75,
+    8.25
+   ],
+   "R glove": [
+    18.0,
+    7.0
+   ],
+   "R hip": [
+    7.5,
+    24.0
+   ],
+   "R knee": [
+    8.5,
+    22.0
+   ],
+   "R ankle": [
+    9.0,
+    27.0
+   ],
+   "R skate": [
+    10.0,
+    29.0
+   ],
+   "stick butt": [
+    17.0,
+    13.0
+   ],
+   "stick heel": [
+    22.0,
+    4.0
+   ],
+   "stick toe": [
+    22.0,
+    2.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 17,
+  "nudges": 19,
+  "plaus": 3.0,
+  "tried": [
+   [
+    "D173",
+    17,
+    19
+   ]
+  ],
+  "flags": [],
+  "iou": 0.654
+ },
+ "G93_361": {
+  "init": "PC 1128",
+  "prior": 1128,
+  "joints": {
+   "head": [
+    10.0,
+    6.0
+   ],
+   "neck": [
+    7.0,
+    10.0
+   ],
+   "chest": [
+    9.97,
+    11.33
+   ],
+   "belly": [
+    6.93,
+    18.27
+   ],
+   "pelvis": [
+    8.45,
+    16.91
+   ],
+   "R shoulder": [
+    9.27,
+    13.27
+   ],
+   "R elbow": [
+    8.14,
+    15.1
+   ],
+   "R wrist": [
+    12.0,
+    15.0
+   ],
+   "R glove": [
+    17.0,
+    15.0
+   ],
+   "R hip": [
+    10.0,
+    23.0
+   ],
+   "R knee": [
+    10.0,
+    26.0
+   ],
+   "R ankle": [
+    9.54,
+    28.85
+   ],
+   "R skate": [
+    12.0,
+    32.0
+   ],
+   "L glove": [
+    10.45,
+    19.82
+   ],
+   "L skate": [
+    3.0,
+    30.0
+   ],
+   "L elbow": [
+    10.0,
+    14.0
+   ],
+   "L shoulder": [
+    8.29,
+    11.25
+   ],
+   "L wrist": [
+    10.72,
+    20.07
+   ],
+   "L hip": [
+    8.0,
+    25.0
+   ],
+   "L ankle": [
+    5.0,
+    30.0
+   ],
+   "L knee": [
+    11.0,
+    30.0
+   ],
+   "stick butt": [
+    15.0,
+    20.0
+   ],
+   "stick heel": [
+    15.0,
+    11.0
+   ],
+   "stick toe": [
+    15.0,
+    9.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 15,
+  "nudges": 31,
+  "plaus": 0.0,
+  "tried": [
+   [
+    "D173",
+    20,
+    34
+   ],
+   [
+    "PC 903",
+    20,
+    26
+   ],
+   [
+    "PC 1128",
+    15,
+    31
+   ]
+  ],
+  "flags": [],
+  "iou": 0.694
+ },
+ "G93_362": {
+  "init": "D173",
+  "prior": 891,
+  "joints": {
+   "L ankle": [
+    5.0,
+    26.0
+   ],
+   "L elbow": [
+    12.0,
+    13.0
+   ],
+   "L glove": [
+    17.33,
+    11.16
+   ],
+   "L hip": [
+    10.41,
+    22.17
+   ],
+   "L knee": [
+    8.68,
+    22.21
+   ],
+   "L shoulder": [
+    9.49,
+    9.99
+   ],
+   "L skate": [
+    5.26,
+    27.34
+   ],
+   "L wrist": [
+    14.0,
+    11.0
+   ],
+   "R ankle": [
+    11.0,
+    27.0
+   ],
+   "R elbow": [
+    12.61,
+    13.3
+   ],
+   "R glove": [
+    17.0,
+    11.0
+   ],
+   "R hip": [
+    9.21,
+    22.08
+   ],
+   "R knee": [
+    11.74,
+    22.96
+   ],
+   "R shoulder": [
+    10.79,
+    11.95
+   ],
+   "R skate": [
+    12.06,
+    29.18
+   ],
+   "R wrist": [
+    15.0,
+    13.0
+   ],
+   "belly": [
+    7.66,
+    15.34
+   ],
+   "chest": [
+    8.0,
+    10.0
+   ],
+   "head": [
+    10.0,
+    3.0
+   ],
+   "neck": [
+    9.1,
+    8.07
+   ],
+   "pelvis": [
+    7.63,
+    15.14
+   ],
+   "stick butt": [
+    3.94,
+    8.65
+   ],
+   "stick heel": [
+    18.11,
+    13.16
+   ],
+   "stick toe": [
+    19.26,
+    14.07
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 7,
+  "nudges": 36,
+  "plaus": 6.0,
+  "tried": [
+   [
+    "D173",
+    7,
+    36
+   ]
+  ],
+  "flags": [],
+  "iou": 0.698
+ },
+ "G93_363": {
+  "init": "D173",
+  "prior": 203,
+  "joints": {
+   "head": [
+    11.93,
+    3.71
+   ],
+   "neck": [
+    8.0,
+    6.5
+   ],
+   "chest": [
+    10.42,
+    5.81
+   ],
+   "belly": [
+    8.04,
+    14.33
+   ],
+   "pelvis": [
+    9.31,
+    14.62
+   ],
+   "R shoulder": [
+    10.78,
+    11.89
+   ],
+   "R elbow": [
+    14.0,
+    12.0
+   ],
+   "R wrist": [
+    10.0,
+    16.0
+   ],
+   "R glove": [
+    14.0,
+    19.0
+   ],
+   "R hip": [
+    11.0,
+    23.0
+   ],
+   "R knee": [
+    15.0,
+    23.0
+   ],
+   "R ankle": [
+    12.25,
+    27.25
+   ],
+   "R skate": [
+    14.0,
+    30.0
+   ],
+   "L wrist": [
+    17.0,
+    7.0
+   ],
+   "L glove": [
+    16.0,
+    6.0
+   ],
+   "L hip": [
+    5.5,
+    23.0
+   ],
+   "L knee": [
+    6.0,
+    23.0
+   ],
+   "L ankle": [
+    4.4,
+    25.2
+   ],
+   "L skate": [
+    4.0,
+    27.0
+   ],
+   "L elbow": [
+    11.0,
+    16.0
+   ],
+   "L shoulder": [
+    10.53,
+    10.9
+   ],
+   "stick butt": [
+    17.0,
+    16.0
+   ],
+   "stick heel": [
+    27.0,
+    5.0
+   ],
+   "stick toe": [
+    26.0,
+    0.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 20,
+  "nudges": 32,
+  "plaus": 3.0,
+  "tried": [
+   [
+    "D173",
+    20,
+    32
+   ]
+  ],
+  "flags": [],
+  "iou": 0.629
+ },
+ "G93_364": {
+  "init": "PC 207",
+  "prior": 207,
+  "joints": {
+   "head": [
+    11.0,
+    1.0
+   ],
+   "neck": [
+    12.0,
+    7.46
+   ],
+   "chest": [
+    8.24,
+    6.9
+   ],
+   "belly": [
+    9.45,
+    12.17
+   ],
+   "pelvis": [
+    9.0,
+    14.0
+   ],
+   "R shoulder": [
+    2.2,
+    6.8
+   ],
+   "R elbow": [
+    3.0,
+    9.0
+   ],
+   "R wrist": [
+    8.0,
+    12.0
+   ],
+   "R glove": [
+    7.0,
+    16.0
+   ],
+   "R hip": [
+    6.64,
+    18.91
+   ],
+   "R knee": [
+    6.0,
+    21.43
+   ],
+   "R ankle": [
+    3.75,
+    25.75
+   ],
+   "R skate": [
+    4.0,
+    28.0
+   ],
+   "L shoulder": [
+    14.0,
+    6.0
+   ],
+   "L elbow": [
+    18.0,
+    9.0
+   ],
+   "L wrist": [
+    20.0,
+    11.5
+   ],
+   "L glove": [
+    22.0,
+    11.27
+   ],
+   "L hip": [
+    13.26,
+    15.58
+   ],
+   "L knee": [
+    13.0,
+    18.0
+   ],
+   "L ankle": [
+    12.0,
+    24.0
+   ],
+   "L skate": [
+    12.0,
+    27.0
+   ],
+   "stick butt": [
+    6.0,
+    16.0
+   ],
+   "stick heel": [
+    21.0,
+    12.0
+   ],
+   "stick toe": [
+    26.0,
+    7.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 22,
+  "nudges": 37,
+  "plaus": 3.0,
+  "tried": [
+   [
+    "D173",
+    31,
+    33
+   ],
+   [
+    "PC 207",
+    22,
+    37
+   ],
+   [
+    "PC 203",
+    26,
+    45
+   ]
+  ],
+  "flags": [],
+  "iou": 0.589
+ },
+ "G93_365": {
+  "init": "D173",
+  "prior": 346,
+  "joints": {
+   "head": [
+    12.58,
+    5.0
+   ],
+   "neck": [
+    11.83,
+    9.67
+   ],
+   "chest": [
+    9.8,
+    6.11
+   ],
+   "belly": [
+    9.22,
+    15.75
+   ],
+   "pelvis": [
+    12.35,
+    15.91
+   ],
+   "R shoulder": [
+    13.12,
+    11.0
+   ],
+   "R elbow": [
+    16.0,
+    14.0
+   ],
+   "R wrist": [
+    18.83,
+    11.0
+   ],
+   "R glove": [
+    21.0,
+    10.0
+   ],
+   "R hip": [
+    12.5,
+    21.0
+   ],
+   "R knee": [
+    11.71,
+    20.29
+   ],
+   "R ankle": [
+    11.83,
+    26.0
+   ],
+   "R skate": [
+    11.0,
+    28.0
+   ],
+   "L hip": [
+    6.5,
+    23.0
+   ],
+   "L knee": [
+    6.0,
+    21.0
+   ],
+   "L ankle": [
+    5.0,
+    25.0
+   ],
+   "L skate": [
+    5.0,
+    28.0
+   ],
+   "stick butt": [
+    14.0,
+    8.0
+   ],
+   "stick heel": [
+    27.0,
+    -2.0
+   ],
+   "stick toe": [
+    25.0,
+    -8.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 20,
+  "nudges": 45,
+  "plaus": 3.0,
+  "tried": [
+   [
+    "D173",
+    20,
+    45
+   ]
+  ],
+  "flags": [],
+  "iou": 0.618
+ },
+ "G93_366": {
+  "init": "D173",
+  "prior": 1115,
+  "joints": {
+   "head": [
+    12.97,
+    5.38
+   ],
+   "neck": [
+    14.0,
+    9.0
+   ],
+   "chest": [
+    14.1,
+    10.73
+   ],
+   "belly": [
+    12.63,
+    16.17
+   ],
+   "pelvis": [
+    12.0,
+    17.0
+   ],
+   "L shoulder": [
+    18.0,
+    9.5
+   ],
+   "L elbow": [
+    19.0,
+    12.0
+   ],
+   "L wrist": [
+    20.0,
+    15.0
+   ],
+   "L glove": [
+    21.0,
+    16.0
+   ],
+   "R shoulder": [
+    9.0,
+    10.0
+   ],
+   "R elbow": [
+    7.5,
+    14.0
+   ],
+   "R wrist": [
+    7.5,
+    18.0
+   ],
+   "R glove": [
+    6.67,
+    20.0
+   ],
+   "R hip": [
+    9.25,
+    20.25
+   ],
+   "R knee": [
+    11.0,
+    23.0
+   ],
+   "R ankle": [
+    12.22,
+    28.0
+   ],
+   "R skate": [
+    11.0,
+    31.0
+   ],
+   "stick butt": [
+    23.0,
+    14.0
+   ],
+   "stick heel": [
+    14.0,
+    33.0
+   ],
+   "stick toe": [
+    9.0,
+    34.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 25,
+  "nudges": 41,
+  "plaus": 3.0,
+  "tried": [
+   [
+    "D173",
+    25,
+    41
+   ]
+  ],
+  "flags": [],
+  "iou": 0.633
+ },
+ "G93_367": {
+  "init": "D173",
+  "prior": 53,
+  "joints": {
+   "head": [
+    15.97,
+    4.0
+   ],
+   "neck": [
+    13.17,
+    7.33
+   ],
+   "chest": [
+    10.12,
+    8.6
+   ],
+   "belly": [
+    7.0,
+    11.0
+   ],
+   "pelvis": [
+    8.33,
+    13.17
+   ],
+   "R shoulder": [
+    10.25,
+    8.75
+   ],
+   "R elbow": [
+    7.31,
+    11.38
+   ],
+   "R wrist": [
+    10.0,
+    14.0
+   ],
+   "R glove": [
+    11.0,
+    16.0
+   ],
+   "R hip": [
+    11.0,
+    20.0
+   ],
+   "R knee": [
+    7.0,
+    19.3
+   ],
+   "R ankle": [
+    6.0,
+    23.0
+   ],
+   "R skate": [
+    5.0,
+    26.0
+   ],
+   "L shoulder": [
+    16.0,
+    9.0
+   ],
+   "L elbow": [
+    14.0,
+    10.0
+   ],
+   "L wrist": [
+    15.0,
+    13.0
+   ],
+   "L skate": [
+    9.0,
+    26.0
+   ],
+   "stick butt": [
+    10.0,
+    16.0
+   ],
+   "stick heel": [
+    20.0,
+    16.0
+   ],
+   "stick toe": [
+    23.0,
+    12.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 16,
+  "nudges": 36,
+  "plaus": 6.0,
+  "tried": [
+   [
+    "D173",
+    16,
+    36
+   ]
+  ],
+  "flags": [],
+  "iou": 0.692
+ },
+ "G93_368": {
+  "init": "D173",
+  "prior": 161,
+  "joints": {
+   "head": [
+    6.0,
+    4.0
+   ],
+   "neck": [
+    9.0,
+    5.0
+   ],
+   "chest": [
+    5.41,
+    8.08
+   ],
+   "belly": [
+    8.0,
+    16.0
+   ],
+   "pelvis": [
+    8.0,
+    16.0
+   ],
+   "R shoulder": [
+    15.0,
+    8.5
+   ],
+   "R elbow": [
+    12.0,
+    8.0
+   ],
+   "R wrist": [
+    14.0,
+    10.0
+   ],
+   "R hip": [
+    15.0,
+    22.0
+   ],
+   "R knee": [
+    13.67,
+    22.17
+   ],
+   "R ankle": [
+    16.0,
+    25.0
+   ],
+   "R skate": [
+    15.0,
+    26.0
+   ],
+   "L shoulder": [
+    3.0,
+    9.0
+   ],
+   "L elbow": [
+    2.2,
+    11.0
+   ],
+   "L wrist": [
+    2.0,
+    14.4
+   ],
+   "L glove": [
+    2.4,
+    16.2
+   ],
+   "L hip": [
+    5.07,
+    20.6
+   ],
+   "L knee": [
+    4.0,
+    22.5
+   ],
+   "L ankle": [
+    4.0,
+    26.83
+   ],
+   "L skate": [
+    4.0,
+    29.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 34,
+  "nudges": 20,
+  "plaus": 0.0,
+  "tried": [
+   [
+    "D173",
+    34,
+    20
+   ],
+   [
+    "PC 372",
+    30,
+    19
+   ],
+   [
+    "PC 163",
+    30,
+    20
+   ]
+  ],
+  "flags": [],
+  "iou": 0.587
+ },
+ "G93_369": {
+  "init": "D173",
+  "prior": 254,
+  "joints": {
+   "head": [
+    2.31,
+    4.83
+   ],
+   "neck": [
+    3.12,
+    9.62
+   ],
+   "chest": [
+    7.23,
+    7.04
+   ],
+   "belly": [
+    11.0,
+    10.0
+   ],
+   "pelvis": [
+    14.0,
+    12.0
+   ],
+   "R hip": [
+    12.0,
+    16.0
+   ],
+   "R knee": [
+    11.4,
+    19.0
+   ],
+   "R ankle": [
+    13.5,
+    22.0
+   ],
+   "R skate": [
+    13.0,
+    26.0
+   ],
+   "L shoulder": [
+    9.22,
+    9.67
+   ],
+   "L elbow": [
+    11.0,
+    12.0
+   ],
+   "L wrist": [
+    8.0,
+    15.0
+   ],
+   "L glove": [
+    5.81,
+    14.56
+   ],
+   "L hip": [
+    13.5,
+    15.0
+   ],
+   "L knee": [
+    13.5,
+    17.0
+   ],
+   "L ankle": [
+    19.2,
+    17.9
+   ],
+   "L skate": [
+    21.0,
+    20.0
+   ],
+   "R glove": [
+    8.33,
+    14.0
+   ],
+   "R elbow": [
+    6.0,
+    10.0
+   ],
+   "R shoulder": [
+    7.71,
+    7.78
+   ],
+   "R wrist": [
+    8.0,
+    14.0
+   ],
+   "stick butt": [
+    3.0,
+    13.0
+   ],
+   "stick heel": [
+    16.0,
+    20.0
+   ],
+   "stick toe": [
+    22.0,
+    16.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 27,
+  "nudges": 35,
+  "plaus": 0.0,
+  "tried": [
+   [
+    "D173",
+    27,
+    35
+   ],
+   [
+    "PC 184",
+    33,
+    24
+   ],
+   [
+    "PC 947",
+    36,
+    28
+   ]
+  ],
+  "flags": [],
+  "iou": 0.604
+ },
+ "G93_370": {
+  "init": "D173",
+  "prior": 913,
+  "joints": {
+   "head": [
+    5.97,
+    2.12
+   ],
+   "neck": [
+    4.83,
+    8.17
+   ],
+   "chest": [
+    4.24,
+    7.35
+   ],
+   "belly": [
+    8.58,
+    11.0
+   ],
+   "pelvis": [
+    13.3,
+    9.9
+   ],
+   "R glove": [
+    12.25,
+    18.25
+   ],
+   "R shoulder": [
+    5.0,
+    12.0
+   ],
+   "R elbow": [
+    5.0,
+    15.0
+   ],
+   "R wrist": [
+    10.0,
+    18.0
+   ],
+   "L glove": [
+    15.0,
+    6.0
+   ],
+   "L shoulder": [
+    9.0,
+    8.0
+   ],
+   "L elbow": [
+    13.0,
+    8.0
+   ],
+   "L wrist": [
+    15.0,
+    6.0
+   ],
+   "R skate": [
+    24.0,
+    21.0
+   ],
+   "R ankle": [
+    17.0,
+    22.0
+   ],
+   "R knee": [
+    16.0,
+    17.0
+   ],
+   "R hip": [
+    13.0,
+    12.0
+   ],
+   "stick butt": [
+    13.0,
+    18.0
+   ],
+   "stick heel": [
+    29.0,
+    11.0
+   ],
+   "stick toe": [
+    30.0,
+    6.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 17,
+  "nudges": 23,
+  "plaus": 3.0,
+  "tried": [
+   [
+    "D173",
+    17,
+    23
+   ]
+  ],
+  "flags": [],
+  "iou": 0.618
+ },
+ "G93_371": {
+  "init": "PC 917",
+  "prior": 917,
+  "joints": {
+   "head": [
+    6.0,
+    3.0
+   ],
+   "neck": [
+    8.0,
+    2.0
+   ],
+   "chest": [
+    8.0,
+    7.0
+   ],
+   "belly": [
+    10.0,
+    10.0
+   ],
+   "pelvis": [
+    12.71,
+    9.0
+   ],
+   "R glove": [
+    17.75,
+    11.88
+   ],
+   "R shoulder": [
+    10.0,
+    6.0
+   ],
+   "R elbow": [
+    17.0,
+    6.0
+   ],
+   "R wrist": [
+    17.0,
+    10.0
+   ],
+   "L glove": [
+    20.0,
+    6.0
+   ],
+   "L shoulder": [
+    11.0,
+    4.0
+   ],
+   "L elbow": [
+    13.0,
+    13.0
+   ],
+   "L wrist": [
+    18.0,
+    8.0
+   ],
+   "R skate": [
+    25.0,
+    13.0
+   ],
+   "R ankle": [
+    23.0,
+    13.0
+   ],
+   "R knee": [
+    20.86,
+    14.71
+   ],
+   "R hip": [
+    16.0,
+    10.0
+   ],
+   "L skate": [
+    20.0,
+    7.0
+   ],
+   "L ankle": [
+    18.0,
+    9.0
+   ],
+   "L knee": [
+    22.0,
+    12.0
+   ],
+   "L hip": [
+    17.0,
+    12.0
+   ],
+   "stick butt": [
+    21.0,
+    4.0
+   ],
+   "stick heel": [
+    32.0,
+    -6.0
+   ],
+   "stick toe": [
+    30.0,
+    -10.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 18,
+  "nudges": 20,
+  "plaus": 8.0,
+  "tried": [
+   [
+    "D173",
+    14,
+    29
+   ],
+   [
+    "PC 917",
+    18,
+    20
+   ],
+   [
+    "PC 320",
+    20,
+    26
+   ]
+  ],
+  "flags": [],
+  "iou": 0.527
+ },
+ "G93_372": {
+  "init": "PC 299",
+  "prior": 299,
+  "joints": {
+   "head": [
+    9.38,
+    8.03
+   ],
+   "neck": [
+    13.0,
+    10.0
+   ],
+   "chest": [
+    13.46,
+    6.86
+   ],
+   "belly": [
+    21.44,
+    9.12
+   ],
+   "pelvis": [
+    22.91,
+    9.73
+   ],
+   "L glove": [
+    8.0,
+    13.0
+   ],
+   "L shoulder": [
+    12.0,
+    11.0
+   ],
+   "L elbow": [
+    15.0,
+    14.0
+   ],
+   "L wrist": [
+    10.0,
+    13.0
+   ],
+   "R glove": [
+    12.0,
+    2.0
+   ],
+   "R shoulder": [
+    13.0,
+    4.0
+   ],
+   "R elbow": [
+    13.0,
+    2.0
+   ],
+   "R wrist": [
+    9.0,
+    1.0
+   ],
+   "L skate": [
+    39.0,
+    15.0
+   ],
+   "L ankle": [
+    35.0,
+    15.0
+   ],
+   "L knee": [
+    31.17,
+    12.0
+   ],
+   "L hip": [
+    24.0,
+    12.0
+   ],
+   "R skate": [
+    37.0,
+    7.0
+   ],
+   "R hip": [
+    29.0,
+    8.0
+   ],
+   "R ankle": [
+    34.0,
+    7.0
+   ],
+   "R knee": [
+    32.0,
+    17.0
+   ],
+   "stick butt": [
+    7.0,
+    1.0
+   ],
+   "stick heel": [
+    -7.0,
+    5.0
+   ],
+   "stick toe": [
+    -11.0,
+    11.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 11,
+  "nudges": 19,
+  "plaus": 6.0,
+  "tried": [
+   [
+    "D173",
+    15,
+    19
+   ],
+   [
+    "PC 299",
+    11,
+    19
+   ],
+   [
+    "PC 1104",
+    25,
+    21
+   ]
+  ],
+  "flags": [],
+  "iou": 0.645
+ },
+ "G93_373": {
+  "init": "PC 299",
+  "prior": 299,
+  "joints": {
+   "head": [
+    9.38,
+    10.03
+   ],
+   "neck": [
+    11.0,
+    7.0
+   ],
+   "chest": [
+    12.46,
+    9.86
+   ],
+   "belly": [
+    20.44,
+    9.12
+   ],
+   "pelvis": [
+    21.91,
+    8.73
+   ],
+   "L glove": [
+    7.0,
+    14.0
+   ],
+   "L shoulder": [
+    13.0,
+    12.0
+   ],
+   "L elbow": [
+    12.0,
+    15.0
+   ],
+   "L wrist": [
+    9.0,
+    14.0
+   ],
+   "R glove": [
+    6.6,
+    1.0
+   ],
+   "R shoulder": [
+    15.0,
+    5.0
+   ],
+   "R elbow": [
+    12.0,
+    2.0
+   ],
+   "R wrist": [
+    8.0,
+    4.0
+   ],
+   "L skate": [
+    38.0,
+    15.0
+   ],
+   "L ankle": [
+    33.0,
+    15.0
+   ],
+   "L knee": [
+    29.17,
+    13.0
+   ],
+   "L hip": [
+    23.0,
+    13.0
+   ],
+   "R skate": [
+    37.0,
+    6.0
+   ],
+   "R hip": [
+    28.0,
+    9.0
+   ],
+   "R ankle": [
+    34.0,
+    9.0
+   ],
+   "R knee": [
+    31.0,
+    16.0
+   ],
+   "stick butt": [
+    6.0,
+    1.0
+   ],
+   "stick heel": [
+    -8.0,
+    5.0
+   ],
+   "stick toe": [
+    -12.0,
+    11.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 7,
+  "nudges": 30,
+  "plaus": 6.0,
+  "tried": [
+   [
+    "D173",
+    13,
+    27
+   ],
+   [
+    "PC 299",
+    7,
+    30
+   ],
+   [
+    "PC 1104",
+    24,
+    27
+   ]
+  ],
+  "flags": [],
+  "iou": 0.67
+ },
+ "G93_374": {
+  "init": "D173",
+  "prior": 283,
+  "joints": {
+   "head": [
+    10.12,
+    11.0
+   ],
+   "neck": [
+    12.31,
+    8.85
+   ],
+   "chest": [
+    14.27,
+    5.81
+   ],
+   "belly": [
+    20.32,
+    8.92
+   ],
+   "pelvis": [
+    22.83,
+    7.83
+   ],
+   "R glove": [
+    5.0,
+    14.5
+   ],
+   "R shoulder": [
+    9.0,
+    9.0
+   ],
+   "R elbow": [
+    13.0,
+    14.0
+   ],
+   "R wrist": [
+    8.0,
+    12.0
+   ],
+   "L glove": [
+    7.0,
+    1.0
+   ],
+   "L shoulder": [
+    13.0,
+    6.0
+   ],
+   "L elbow": [
+    12.0,
+    2.0
+   ],
+   "L wrist": [
+    8.0,
+    4.0
+   ],
+   "R skate": [
+    36.0,
+    11.0
+   ],
+   "R ankle": [
+    33.0,
+    13.0
+   ],
+   "R knee": [
+    30.0,
+    12.0
+   ],
+   "R hip": [
+    23.0,
+    12.0
+   ],
+   "L skate": [
+    37.0,
+    8.0
+   ],
+   "L ankle": [
+    36.0,
+    8.0
+   ],
+   "L knee": [
+    37.0,
+    8.0
+   ],
+   "L hip": [
+    23.0,
+    8.0
+   ],
+   "stick butt": [
+    4.0,
+    14.0
+   ],
+   "stick heel": [
+    -11.0,
+    9.0
+   ],
+   "stick toe": [
+    -14.0,
+    3.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 12,
+  "nudges": 9,
+  "plaus": 9.0,
+  "tried": [
+   [
+    "D173",
+    12,
+    9
+   ],
+   [
+    "PC 1104",
+    17,
+    22
+   ],
+   [
+    "PC 316",
+    23,
+    22
+   ]
+  ],
+  "flags": [],
+  "iou": 0.669
+ },
+ "G93_375": {
+  "init": "D173",
+  "prior": 283,
+  "joints": {
+   "head": [
+    9.12,
+    8.0
+   ],
+   "neck": [
+    12.31,
+    5.85
+   ],
+   "chest": [
+    17.27,
+    11.81
+   ],
+   "belly": [
+    21.32,
+    8.92
+   ],
+   "pelvis": [
+    23.83,
+    10.83
+   ],
+   "R glove": [
+    6.0,
+    14.5
+   ],
+   "R shoulder": [
+    16.0,
+    11.0
+   ],
+   "R elbow": [
+    12.0,
+    14.0
+   ],
+   "R wrist": [
+    10.0,
+    12.0
+   ],
+   "L glove": [
+    8.0,
+    1.0
+   ],
+   "L shoulder": [
+    14.0,
+    5.0
+   ],
+   "L elbow": [
+    14.0,
+    2.0
+   ],
+   "L wrist": [
+    11.0,
+    3.0
+   ],
+   "R skate": [
+    38.0,
+    15.0
+   ],
+   "R ankle": [
+    34.0,
+    15.0
+   ],
+   "R knee": [
+    31.2,
+    16.2
+   ],
+   "R hip": [
+    24.0,
+    12.0
+   ],
+   "L skate": [
+    36.0,
+    7.0
+   ],
+   "L ankle": [
+    37.0,
+    6.0
+   ],
+   "L knee": [
+    37.0,
+    6.0
+   ],
+   "L hip": [
+    24.0,
+    8.0
+   ],
+   "stick butt": [
+    5.0,
+    14.0
+   ],
+   "stick heel": [
+    -10.0,
+    9.0
+   ],
+   "stick toe": [
+    -13.0,
+    3.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 14,
+  "nudges": 9,
+  "plaus": 6.0,
+  "tried": [
+   [
+    "D173",
+    14,
+    9
+   ],
+   [
+    "PC 299",
+    10,
+    17
+   ],
+   [
+    "PC 1104",
+    23,
+    35
+   ]
+  ],
+  "flags": [],
+  "iou": 0.627
+ },
+ "G93_376": {
+  "init": "PC 299",
+  "prior": 299,
+  "joints": {
+   "head": [
+    9.38,
+    10.03
+   ],
+   "neck": [
+    11.0,
+    7.0
+   ],
+   "chest": [
+    12.46,
+    9.86
+   ],
+   "belly": [
+    20.44,
+    9.12
+   ],
+   "pelvis": [
+    21.91,
+    8.73
+   ],
+   "L glove": [
+    7.0,
+    14.0
+   ],
+   "L shoulder": [
+    13.0,
+    12.0
+   ],
+   "L elbow": [
+    12.0,
+    15.0
+   ],
+   "L wrist": [
+    9.0,
+    14.0
+   ],
+   "R glove": [
+    6.6,
+    1.0
+   ],
+   "R shoulder": [
+    15.0,
+    5.0
+   ],
+   "R elbow": [
+    12.0,
+    2.0
+   ],
+   "R wrist": [
+    8.0,
+    4.0
+   ],
+   "L skate": [
+    38.0,
+    15.0
+   ],
+   "L ankle": [
+    33.0,
+    15.0
+   ],
+   "L knee": [
+    29.17,
+    13.0
+   ],
+   "L hip": [
+    23.0,
+    13.0
+   ],
+   "R skate": [
+    37.0,
+    6.0
+   ],
+   "R hip": [
+    28.0,
+    9.0
+   ],
+   "R ankle": [
+    34.0,
+    9.0
+   ],
+   "R knee": [
+    31.0,
+    16.0
+   ],
+   "stick butt": [
+    6.0,
+    1.0
+   ],
+   "stick heel": [
+    -8.0,
+    5.0
+   ],
+   "stick toe": [
+    -12.0,
+    11.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 7,
+  "nudges": 30,
+  "plaus": 6.0,
+  "tried": [
+   [
+    "D173",
+    13,
+    27
+   ],
+   [
+    "PC 299",
+    7,
+    30
+   ],
+   [
+    "PC 1104",
+    24,
+    27
+   ]
+  ],
+  "flags": [],
+  "iou": 0.67
+ },
+ "G94_738": {
+  "init": "D173",
+  "prior": 161,
+  "joints": {
+   "head": [
+    9.0,
+    2.68
+   ],
+   "neck": [
+    12.0,
+    7.0
+   ],
+   "chest": [
+    7.41,
+    8.08
+   ],
+   "belly": [
+    8.0,
+    15.0
+   ],
+   "pelvis": [
+    8.0,
+    18.0
+   ],
+   "R shoulder": [
+    11.0,
+    10.5
+   ],
+   "R elbow": [
+    13.8,
+    10.3
+   ],
+   "R wrist": [
+    14.0,
+    11.0
+   ],
+   "R hip": [
+    13.0,
+    19.0
+   ],
+   "R knee": [
+    12.67,
+    22.17
+   ],
+   "R ankle": [
+    14.0,
+    26.0
+   ],
+   "R skate": [
+    15.0,
+    27.0
+   ],
+   "L shoulder": [
+    1.0,
+    8.0
+   ],
+   "L elbow": [
+    4.0,
+    9.0
+   ],
+   "L wrist": [
+    6.0,
+    14.0
+   ],
+   "L glove": [
+    4.0,
+    17.0
+   ],
+   "L hip": [
+    4.0,
+    20.0
+   ],
+   "L knee": [
+    4.0,
+    23.5
+   ],
+   "L ankle": [
+    5.0,
+    26.83
+   ],
+   "L skate": [
+    4.0,
+    28.0
+   ],
+   "stick butt": [
+    3.0,
+    17.0
+   ],
+   "stick toe": [
+    5.0,
+    12.0
+   ],
+   "stick heel": [
+    0.0,
+    19.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 10,
+  "nudges": 19,
+  "plaus": 0.1,
+  "tried": [
+   [
+    "D173",
+    10,
+    19
+   ]
+  ],
+  "flags": [],
+  "iou": 0.587
+ },
+ "G94_739": {
+  "init": "PC 122",
+  "prior": 122,
+  "joints": {
+   "head": [
+    17.0,
+    1.5
+   ],
+   "neck": [
+    13.21,
+    4.43
+   ],
+   "chest": [
+    15.27,
+    5.75
+   ],
+   "belly": [
+    17.07,
+    10.79
+   ],
+   "pelvis": [
+    15.0,
+    12.0
+   ],
+   "R shoulder": [
+    8.0,
+    8.0
+   ],
+   "R elbow": [
+    11.0,
+    8.0
+   ],
+   "R wrist": [
+    12.0,
+    13.0
+   ],
+   "R glove": [
+    17.0,
+    13.5
+   ],
+   "R hip": [
+    12.08,
+    14.77
+   ],
+   "R knee": [
+    9.83,
+    18.67
+   ],
+   "R ankle": [
+    10.2,
+    22.8
+   ],
+   "R skate": [
+    9.0,
+    25.0
+   ],
+   "L shoulder": [
+    21.0,
+    7.0
+   ],
+   "L elbow": [
+    22.0,
+    5.0
+   ],
+   "L wrist": [
+    22.0,
+    7.0
+   ],
+   "L glove": [
+    24.0,
+    7.0
+   ],
+   "L hip": [
+    21.12,
+    15.06
+   ],
+   "L knee": [
+    17.83,
+    16.33
+   ],
+   "L ankle": [
+    20.0,
+    20.0
+   ],
+   "L skate": [
+    21.0,
+    23.0
+   ],
+   "stick butt": [
+    11.0,
+    12.0
+   ],
+   "stick heel": [
+    4.0,
+    15.0
+   ],
+   "stick toe": [
+    0.0,
+    20.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 6,
+  "nudges": 17,
+  "plaus": 3.0,
+  "tried": [
+   [
+    "D173",
+    6,
+    15
+   ],
+   [
+    "PC 292",
+    3,
+    17
+   ],
+   [
+    "PC 122",
+    6,
+    17
+   ]
+  ],
+  "flags": [],
+  "iou": 0.517
+ },
+ "G94_740": {
+  "init": "PC 305",
+  "prior": 305,
+  "joints": {
+   "head": [
+    9.0,
+    9.17
+   ],
+   "neck": [
+    11.0,
+    12.0
+   ],
+   "chest": [
+    8.02,
+    14.38
+   ],
+   "belly": [
+    9.0,
+    20.0
+   ],
+   "pelvis": [
+    9.0,
+    22.0
+   ],
+   "R shoulder": [
+    16.5,
+    14.0
+   ],
+   "R elbow": [
+    16.0,
+    16.0
+   ],
+   "R wrist": [
+    15.0,
+    18.0
+   ],
+   "R glove": [
+    14.0,
+    18.0
+   ],
+   "R hip": [
+    13.0,
+    22.0
+   ],
+   "R knee": [
+    12.67,
+    26.17
+   ],
+   "R ankle": [
+    14.0,
+    29.0
+   ],
+   "R skate": [
+    12.0,
+    30.0
+   ],
+   "L shoulder": [
+    1.2,
+    12.8
+   ],
+   "L elbow": [
+    4.0,
+    16.0
+   ],
+   "L wrist": [
+    4.0,
+    16.5
+   ],
+   "L glove": [
+    4.67,
+    17.67
+   ],
+   "L hip": [
+    8.33,
+    25.22
+   ],
+   "L knee": [
+    8.33,
+    27.17
+   ],
+   "L ankle": [
+    8.0,
+    30.5
+   ],
+   "L skate": [
+    6.0,
+    32.0
+   ],
+   "stick butt": [
+    16.0,
+    11.0
+   ],
+   "stick heel": [
+    5.0,
+    1.0
+   ],
+   "stick toe": [
+    0.0,
+    0.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 11,
+  "nudges": 14,
+  "plaus": 0.0,
+  "tried": [
+   [
+    "D173",
+    12,
+    19
+   ],
+   [
+    "PC 305",
+    11,
+    14
+   ],
+   [
+    "PC 215",
+    17,
+    24
+   ]
+  ],
+  "flags": [],
+  "iou": 0.641
+ },
+ "G94_741": {
+  "init": "PC 942",
+  "prior": 942,
+  "joints": {
+   "head": [
+    5.0,
+    12.0
+   ],
+   "neck": [
+    5.0,
+    9.0
+   ],
+   "chest": [
+    9.0,
+    12.0
+   ],
+   "belly": [
+    8.0,
+    17.0
+   ],
+   "pelvis": [
+    8.71,
+    18.0
+   ],
+   "R glove": [
+    14.75,
+    18.88
+   ],
+   "R shoulder": [
+    9.0,
+    11.0
+   ],
+   "R elbow": [
+    13.0,
+    12.0
+   ],
+   "R wrist": [
+    13.0,
+    18.0
+   ],
+   "L glove": [
+    18.0,
+    14.14
+   ],
+   "L shoulder": [
+    10.0,
+    11.0
+   ],
+   "L elbow": [
+    14.0,
+    18.0
+   ],
+   "L wrist": [
+    16.0,
+    15.0
+   ],
+   "R skate": [
+    23.0,
+    17.0
+   ],
+   "R ankle": [
+    21.0,
+    18.0
+   ],
+   "R knee": [
+    18.86,
+    17.71
+   ],
+   "R hip": [
+    12.0,
+    19.0
+   ],
+   "L skate": [
+    18.0,
+    13.0
+   ],
+   "L ankle": [
+    17.0,
+    14.0
+   ],
+   "L knee": [
+    16.0,
+    14.0
+   ],
+   "L hip": [
+    12.0,
+    19.0
+   ],
+   "stick butt": [
+    23.0,
+    14.0
+   ],
+   "stick heel": [
+    36.0,
+    4.0
+   ],
+   "stick toe": [
+    37.0,
+    0.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 13,
+  "nudges": 29,
+  "plaus": 0.0,
+  "tried": [
+   [
+    "D173",
+    10,
+    30
+   ],
+   [
+    "PC 942",
+    13,
+    29
+   ],
+   [
+    "PC 917",
+    20,
+    20
+   ]
+  ],
+  "flags": [],
+  "iou": 0.671
+ },
+ "G94_742": {
+  "init": "D173",
+  "prior": 343,
+  "joints": {
+   "head": [
+    9.0,
+    2.12
+   ],
+   "neck": [
+    6.25,
+    5.25
+   ],
+   "chest": [
+    5.0,
+    6.0
+   ],
+   "belly": [
+    8.31,
+    11.38
+   ],
+   "pelvis": [
+    11.0,
+    12.0
+   ],
+   "L glove": [
+    7.93,
+    20.24
+   ],
+   "L shoulder": [
+    4.0,
+    10.0
+   ],
+   "L elbow": [
+    3.0,
+    15.0
+   ],
+   "L wrist": [
+    5.0,
+    15.0
+   ],
+   "R glove": [
+    14.67,
+    8.83
+   ],
+   "R shoulder": [
+    11.0,
+    6.0
+   ],
+   "R elbow": [
+    12.0,
+    5.0
+   ],
+   "R wrist": [
+    16.0,
+    9.0
+   ],
+   "L skate": [
+    10.0,
+    23.0
+   ],
+   "L ankle": [
+    8.0,
+    23.0
+   ],
+   "L knee": [
+    7.0,
+    24.0
+   ],
+   "L hip": [
+    10.0,
+    13.0
+   ],
+   "R skate": [
+    12.0,
+    21.0
+   ],
+   "R ankle": [
+    12.0,
+    21.0
+   ],
+   "R knee": [
+    12.0,
+    21.0
+   ],
+   "R hip": [
+    12.0,
+    13.0
+   ],
+   "stick butt": [
+    20.0,
+    9.0
+   ],
+   "stick heel": [
+    29.0,
+    20.0
+   ],
+   "stick toe": [
+    34.0,
+    21.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 13,
+  "nudges": 18,
+  "plaus": 0.0,
+  "tried": [
+   [
+    "D173",
+    13,
+    18
+   ]
+  ],
+  "flags": [],
+  "iou": 0.57
+ },
+ "G94_743": {
+  "init": "D173",
+  "prior": 243,
+  "joints": {
+   "head": [
+    19.0,
+    3.0
+   ],
+   "neck": [
+    16.0,
+    8.0
+   ],
+   "chest": [
+    15.0,
+    7.0
+   ],
+   "belly": [
+    10.33,
+    13.24
+   ],
+   "pelvis": [
+    11.0,
+    13.0
+   ],
+   "R shoulder": [
+    14.2,
+    8.6
+   ],
+   "R elbow": [
+    12.0,
+    10.8
+   ],
+   "R wrist": [
+    11.5,
+    9.0
+   ],
+   "R glove": [
+    16.0,
+    12.5
+   ],
+   "R hip": [
+    10.0,
+    20.0
+   ],
+   "R knee": [
+    9.0,
+    20.0
+   ],
+   "R ankle": [
+    4.0,
+    21.0
+   ],
+   "R skate": [
+    3.0,
+    25.0
+   ],
+   "L elbow": [
+    18.5,
+    10.0
+   ],
+   "L wrist": [
+    18.0,
+    13.0
+   ],
+   "L glove": [
+    22.0,
+    12.0
+   ],
+   "L ankle": [
+    11.5,
+    22.0
+   ],
+   "L skate": [
+    11.0,
+    25.0
+   ],
+   "L shoulder": [
+    16.28,
+    8.41
+   ],
+   "L hip": [
+    9.99,
+    17.57
+   ],
+   "L knee": [
+    4.0,
+    20.0
+   ],
+   "stick butt": [
+    23.0,
+    14.0
+   ],
+   "stick heel": [
+    42.0,
+    19.0
+   ],
+   "stick toe": [
+    50.0,
+    16.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 13,
+  "nudges": 15,
+  "plaus": 0.0,
+  "tried": [
+   [
+    "D173",
+    13,
+    15
+   ]
+  ],
+  "flags": [],
+  "iou": 0.507
+ },
+ "G94_744": {
+  "init": "PC 332",
+  "prior": 332,
+  "joints": {
+   "head": [
+    23.71,
+    2.74
+   ],
+   "neck": [
+    20.86,
+    4.64
+   ],
+   "chest": [
+    21.88,
+    10.78
+   ],
+   "belly": [
+    15.14,
+    9.0
+   ],
+   "pelvis": [
+    14.0,
+    9.0
+   ],
+   "L glove": [
+    25.0,
+    10.0
+   ],
+   "L shoulder": [
+    26.0,
+    7.0
+   ],
+   "L elbow": [
+    20.0,
+    11.0
+   ],
+   "L wrist": [
+    25.0,
+    13.0
+   ],
+   "R glove": [
+    26.0,
+    17.0
+   ],
+   "R shoulder": [
+    25.0,
+    7.0
+   ],
+   "R elbow": [
+    21.0,
+    13.0
+   ],
+   "R wrist": [
+    28.0,
+    16.0
+   ],
+   "L skate": [
+    6.0,
+    22.0
+   ],
+   "L ankle": [
+    7.0,
+    14.0
+   ],
+   "L knee": [
+    11.0,
+    16.0
+   ],
+   "L hip": [
+    11.0,
+    12.0
+   ],
+   "stick butt": [
+    25.0,
+    19.0
+   ],
+   "stick heel": [
+    46.0,
+    18.0
+   ],
+   "stick toe": [
+    49.0,
+    12.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 11,
+  "nudges": 21,
+  "plaus": 3.0,
+  "tried": [
+   [
+    "D173",
+    14,
+    26
+   ],
+   [
+    "PC 316",
+    10,
+    31
+   ],
+   [
+    "PC 332",
+    11,
+    21
+   ]
+  ],
+  "flags": [],
+  "iou": 0.537
+ },
+ "G94_745": {
+  "init": "PC 314",
+  "prior": 314,
+  "joints": {
+   "head": [
+    25.71,
+    1.74
+   ],
+   "neck": [
+    25.0,
+    5.0
+   ],
+   "chest": [
+    24.48,
+    6.95
+   ],
+   "belly": [
+    17.48,
+    7.11
+   ],
+   "pelvis": [
+    15.0,
+    10.0
+   ],
+   "R glove": [
+    26.0,
+    11.0
+   ],
+   "R shoulder": [
+    26.0,
+    6.0
+   ],
+   "R elbow": [
+    25.0,
+    13.0
+   ],
+   "R wrist": [
+    29.0,
+    9.0
+   ],
+   "R skate": [
+    5.0,
+    19.0
+   ],
+   "R ankle": [
+    5.0,
+    14.0
+   ],
+   "R knee": [
+    11.0,
+    15.0
+   ],
+   "R hip": [
+    17.0,
+    9.0
+   ],
+   "stick butt": [
+    31.0,
+    16.0
+   ],
+   "stick heel": [
+    46.0,
+    13.0
+   ],
+   "stick toe": [
+    50.0,
+    8.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 12,
+  "nudges": 16,
+  "plaus": 3.0,
+  "tried": [
+   [
+    "D173",
+    11,
+    19
+   ],
+   [
+    "PC 332",
+    15,
+    18
+   ],
+   [
+    "PC 314",
+    12,
+    16
+   ]
+  ],
+  "flags": [],
+  "iou": 0.879
+ },
+ "G94_746": {
+  "init": "D173",
+  "prior": 614,
+  "joints": {
+   "head": [
+    15.97,
+    3.38
+   ],
+   "neck": [
+    19.93,
+    6.07
+   ],
+   "chest": [
+    14.0,
+    7.0
+   ],
+   "belly": [
+    18.0,
+    14.0
+   ],
+   "pelvis": [
+    14.67,
+    14.33
+   ],
+   "R shoulder": [
+    10.67,
+    7.83
+   ],
+   "R elbow": [
+    10.33,
+    10.33
+   ],
+   "R wrist": [
+    8.2,
+    12.8
+   ],
+   "R glove": [
+    6.0,
+    15.0
+   ],
+   "R hip": [
+    15.5,
+    15.0
+   ],
+   "R knee": [
+    14.33,
+    17.17
+   ],
+   "R ankle": [
+    14.0,
+    20.0
+   ],
+   "R skate": [
+    13.0,
+    22.0
+   ],
+   "L shoulder": [
+    21.6,
+    7.2
+   ],
+   "L elbow": [
+    22.0,
+    9.0
+   ],
+   "L wrist": [
+    23.5,
+    10.0
+   ],
+   "L glove": [
+    26.85,
+    12.69
+   ],
+   "L hip": [
+    20.8,
+    18.32
+   ],
+   "L knee": [
+    21.0,
+    20.0
+   ],
+   "L ankle": [
+    22.5,
+    26.0
+   ],
+   "L skate": [
+    23.0,
+    29.0
+   ],
+   "stick butt": [
+    7.0,
+    15.0
+   ],
+   "stick heel": [
+    0.0,
+    9.0
+   ],
+   "stick toe": [
+    0.0,
+    4.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 8,
+  "nudges": 21,
+  "plaus": 3.0,
+  "tried": [
+   [
+    "D173",
+    8,
+    21
+   ]
+  ],
+  "flags": [],
+  "iou": 0.688
+ },
+ "G94_747": {
+  "init": "D173",
+  "prior": 290,
+  "joints": {
+   "head": [
+    30.0,
+    5.0
+   ],
+   "neck": [
+    29.0,
+    9.2
+   ],
+   "chest": [
+    34.0,
+    10.0
+   ],
+   "belly": [
+    31.7,
+    12.03
+   ],
+   "pelvis": [
+    31.0,
+    12.0
+   ],
+   "R shoulder": [
+    27.0,
+    8.0
+   ],
+   "R elbow": [
+    23.0,
+    10.0
+   ],
+   "R wrist": [
+    23.0,
+    10.5
+   ],
+   "R glove": [
+    20.17,
+    12.33
+   ],
+   "R hip": [
+    28.0,
+    17.0
+   ],
+   "R knee": [
+    28.86,
+    18.43
+   ],
+   "R ankle": [
+    27.75,
+    23.25
+   ],
+   "R skate": [
+    27.0,
+    26.0
+   ],
+   "L shoulder": [
+    36.17,
+    9.0
+   ],
+   "L elbow": [
+    39.0,
+    7.11
+   ],
+   "L wrist": [
+    40.5,
+    10.0
+   ],
+   "L glove": [
+    43.0,
+    11.0
+   ],
+   "L hip": [
+    35.0,
+    18.0
+   ],
+   "L knee": [
+    36.14,
+    18.43
+   ],
+   "L ankle": [
+    37.0,
+    24.0
+   ],
+   "L skate": [
+    38.0,
+    27.0
+   ],
+   "stick butt": [
+    18.0,
+    12.0
+   ],
+   "stick heel": [
+    2.0,
+    6.0
+   ],
+   "stick toe": [
+    0.0,
+    0.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 6,
+  "nudges": 30,
+  "plaus": 0.0,
+  "tried": [
+   [
+    "D173",
+    6,
+    30
+   ]
+  ],
+  "flags": [],
+  "iou": 0.514
+ },
+ "G94_748": {
+  "init": "D173",
+  "prior": 928,
+  "joints": {
+   "head": [
+    16.0,
+    0.0
+   ],
+   "neck": [
+    18.0,
+    3.83
+   ],
+   "chest": [
+    12.0,
+    2.0
+   ],
+   "belly": [
+    15.0,
+    7.0
+   ],
+   "pelvis": [
+    12.0,
+    7.0
+   ],
+   "L shoulder": [
+    23.0,
+    4.0
+   ],
+   "L elbow": [
+    22.0,
+    6.0
+   ],
+   "L wrist": [
+    23.8,
+    8.8
+   ],
+   "L glove": [
+    25.0,
+    10.88
+   ],
+   "L hip": [
+    18.0,
+    11.0
+   ],
+   "L knee": [
+    19.83,
+    12.33
+   ],
+   "L ankle": [
+    19.25,
+    15.25
+   ],
+   "L skate": [
+    21.0,
+    16.0
+   ],
+   "R shoulder": [
+    11.33,
+    1.83
+   ],
+   "R elbow": [
+    9.0,
+    4.0
+   ],
+   "R wrist": [
+    8.0,
+    7.0
+   ],
+   "R glove": [
+    6.0,
+    9.0
+   ],
+   "R hip": [
+    12.0,
+    10.0
+   ],
+   "R knee": [
+    12.0,
+    12.0
+   ],
+   "R ankle": [
+    9.0,
+    12.0
+   ],
+   "R skate": [
+    10.0,
+    15.0
+   ],
+   "stick butt": [
+    6.0,
+    11.0
+   ],
+   "stick heel": [
+    0.0,
+    22.0
+   ],
+   "stick toe": [
+    1.0,
+    27.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 10,
+  "nudges": 20,
+  "plaus": 0.0,
+  "tried": [
+   [
+    "D173",
+    10,
+    20
+   ],
+   [
+    "PC 63",
+    11,
+    23
+   ],
+   [
+    "PC 118",
+    14,
+    22
+   ]
+  ],
+  "flags": [],
+  "iou": 0.519
+ },
+ "G94_749": {
+  "init": "PC 288",
+  "prior": 288,
+  "joints": {
+   "head": [
+    14.97,
+    3.0
+   ],
+   "neck": [
+    16.0,
+    6.0
+   ],
+   "chest": [
+    14.0,
+    13.0
+   ],
+   "belly": [
+    11.0,
+    11.07
+   ],
+   "pelvis": [
+    8.0,
+    13.0
+   ],
+   "L glove": [
+    15.0,
+    16.0
+   ],
+   "L shoulder": [
+    16.0,
+    11.0
+   ],
+   "L elbow": [
+    18.0,
+    16.0
+   ],
+   "L wrist": [
+    15.0,
+    14.0
+   ],
+   "R glove": [
+    4.89,
+    6.33
+   ],
+   "R shoulder": [
+    11.0,
+    7.0
+   ],
+   "R elbow": [
+    7.0,
+    12.0
+   ],
+   "R wrist": [
+    5.0,
+    9.0
+   ],
+   "R skate": [
+    0.0,
+    20.0
+   ],
+   "R ankle": [
+    3.0,
+    17.0
+   ],
+   "R knee": [
+    4.0,
+    12.5
+   ],
+   "R hip": [
+    6.0,
+    10.0
+   ],
+   "L skate": [
+    1.0,
+    21.0
+   ],
+   "L ankle": [
+    4.0,
+    17.0
+   ],
+   "L knee": [
+    7.0,
+    16.0
+   ],
+   "L hip": [
+    9.0,
+    10.0
+   ],
+   "stick butt": [
+    4.0,
+    20.0
+   ],
+   "stick heel": [
+    16.0,
+    33.0
+   ],
+   "stick toe": [
+    22.0,
+    34.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 18,
+  "nudges": 27,
+  "plaus": 0.0,
+  "tried": [
+   [
+    "D173",
+    16,
+    35
+   ],
+   [
+    "PC 300",
+    23,
+    22
+   ],
+   [
+    "PC 288",
+    18,
+    27
+   ]
+  ],
+  "flags": [],
+  "iou": 0.579
+ },
+ "G94_750": {
+  "init": "PC 945",
+  "prior": 945,
+  "joints": {
+   "head": [
+    25.09,
+    2.09
+   ],
+   "neck": [
+    26.75,
+    5.75
+   ],
+   "chest": [
+    23.04,
+    7.06
+   ],
+   "belly": [
+    23.0,
+    14.0
+   ],
+   "pelvis": [
+    22.18,
+    14.23
+   ],
+   "L shoulder": [
+    19.0,
+    7.8
+   ],
+   "L elbow": [
+    16.0,
+    10.0
+   ],
+   "L wrist": [
+    17.0,
+    11.0
+   ],
+   "L hip": [
+    23.0,
+    18.0
+   ],
+   "L knee": [
+    25.0,
+    21.0
+   ],
+   "L ankle": [
+    25.0,
+    23.5
+   ],
+   "L skate": [
+    26.0,
+    25.0
+   ],
+   "R shoulder": [
+    26.67,
+    7.17
+   ],
+   "R elbow": [
+    29.0,
+    10.0
+   ],
+   "R wrist": [
+    29.0,
+    13.0
+   ],
+   "R glove": [
+    31.0,
+    15.0
+   ],
+   "R hip": [
+    29.0,
+    19.0
+   ],
+   "R knee": [
+    30.83,
+    21.33
+   ],
+   "R ankle": [
+    33.75,
+    22.25
+   ],
+   "R skate": [
+    33.0,
+    24.0
+   ],
+   "stick butt": [
+    14.0,
+    9.0
+   ],
+   "stick heel": [
+    5.0,
+    20.0
+   ],
+   "stick toe": [
+    0.0,
+    21.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 12,
+  "nudges": 21,
+  "plaus": 0.0,
+  "tried": [
+   [
+    "D173",
+    14,
+    16
+   ],
+   [
+    "PC 939",
+    19,
+    15
+   ],
+   [
+    "PC 945",
+    12,
+    21
+   ]
+  ],
+  "flags": [],
+  "iou": 0.57
+ },
+ "G94_751": {
+  "init": "PC 87",
+  "prior": 87,
+  "joints": {
+   "head": [
+    30.0,
+    7.0
+   ],
+   "neck": [
+    30.0,
+    4.0
+   ],
+   "chest": [
+    34.0,
+    4.0
+   ],
+   "belly": [
+    36.2,
+    8.76
+   ],
+   "pelvis": [
+    36.92,
+    9.72
+   ],
+   "R shoulder": [
+    34.0,
+    1.0
+   ],
+   "R elbow": [
+    37.0,
+    2.0
+   ],
+   "R wrist": [
+    39.0,
+    5.0
+   ],
+   "R hip": [
+    36.0,
+    16.0
+   ],
+   "R knee": [
+    37.0,
+    16.5
+   ],
+   "R ankle": [
+    39.0,
+    22.0
+   ],
+   "R skate": [
+    37.0,
+    22.0
+   ],
+   "L shoulder": [
+    27.0,
+    7.0
+   ],
+   "L elbow": [
+    30.86,
+    10.79
+   ],
+   "L wrist": [
+    28.0,
+    11.0
+   ],
+   "L glove": [
+    31.0,
+    13.0
+   ],
+   "L hip": [
+    41.0,
+    16.0
+   ],
+   "L knee": [
+    41.0,
+    16.0
+   ],
+   "L ankle": [
+    43.75,
+    20.25
+   ],
+   "L skate": [
+    44.0,
+    21.0
+   ],
+   "R glove": [
+    28.0,
+    13.0
+   ],
+   "stick butt": [
+    27.0,
+    14.0
+   ],
+   "stick toe": [
+    0.0,
+    16.0
+   ],
+   "stick heel": [
+    8.0,
+    19.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 14,
+  "nudges": 11,
+  "plaus": 3.9,
+  "tried": [
+   [
+    "D173",
+    10,
+    26
+   ],
+   [
+    "PC 87",
+    14,
+    11
+   ],
+   [
+    "PC 244",
+    6,
+    28
+   ]
+  ],
+  "flags": [],
+  "iou": 0.507
+ },
+ "G94_752": {
+  "init": "D173",
+  "prior": 329,
+  "joints": {
+   "head": [
+    24.0,
+    1.0
+   ],
+   "neck": [
+    26.38,
+    3.88
+   ],
+   "chest": [
+    30.03,
+    5.13
+   ],
+   "belly": [
+    33.26,
+    8.4
+   ],
+   "pelvis": [
+    32.67,
+    9.29
+   ],
+   "R skate": [
+    37.0,
+    21.0
+   ],
+   "L shoulder": [
+    28.0,
+    8.0
+   ],
+   "L elbow": [
+    27.5,
+    10.0
+   ],
+   "L wrist": [
+    26.0,
+    12.0
+   ],
+   "L glove": [
+    23.0,
+    11.0
+   ],
+   "L hip": [
+    34.5,
+    16.0
+   ],
+   "L knee": [
+    34.5,
+    16.0
+   ],
+   "L ankle": [
+    43.0,
+    16.0
+   ],
+   "L skate": [
+    41.0,
+    17.0
+   ],
+   "R glove": [
+    24.0,
+    16.0
+   ],
+   "R elbow": [
+    28.0,
+    10.0
+   ],
+   "R shoulder": [
+    28.0,
+    6.0
+   ],
+   "R wrist": [
+    25.36,
+    13.34
+   ],
+   "R hip": [
+    36.0,
+    14.0
+   ],
+   "R ankle": [
+    40.0,
+    19.0
+   ],
+   "R knee": [
+    42.0,
+    14.0
+   ],
+   "stick butt": [
+    23.0,
+    19.0
+   ],
+   "stick heel": [
+    3.0,
+    18.0
+   ],
+   "stick toe": [
+    0.0,
+    12.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 15,
+  "nudges": 24,
+  "plaus": 3.6,
+  "tried": [
+   [
+    "D173",
+    15,
+    24
+   ]
+  ],
+  "flags": [],
+  "iou": 0.537
+ },
+ "G94_753": {
+  "init": "PC 314",
+  "prior": 314,
+  "joints": {
+   "head": [
+    20.29,
+    2.74
+   ],
+   "neck": [
+    24.0,
+    4.0
+   ],
+   "chest": [
+    25.0,
+    8.0
+   ],
+   "belly": [
+    30.52,
+    7.11
+   ],
+   "pelvis": [
+    33.0,
+    8.0
+   ],
+   "L glove": [
+    23.0,
+    11.0
+   ],
+   "L shoulder": [
+    22.0,
+    7.0
+   ],
+   "L elbow": [
+    24.0,
+    14.0
+   ],
+   "L wrist": [
+    20.0,
+    10.0
+   ],
+   "L skate": [
+    44.0,
+    20.0
+   ],
+   "L ankle": [
+    44.0,
+    15.0
+   ],
+   "L knee": [
+    40.0,
+    16.0
+   ],
+   "L hip": [
+    34.0,
+    10.0
+   ],
+   "stick butt": [
+    20.0,
+    11.0
+   ],
+   "stick heel": [
+    4.0,
+    15.0
+   ],
+   "stick toe": [
+    0.0,
+    19.0
+   ]
+  },
+  "bones": [
+   [
+    "head",
+    "neck",
+    "head"
+   ],
+   [
+    "neck",
+    "chest",
+    "torso"
+   ],
+   [
+    "chest",
+    "pelvis",
+    "torso"
+   ],
+   [
+    "L shoulder",
+    "L elbow",
+    "L upperarm"
+   ],
+   [
+    "R shoulder",
+    "R elbow",
+    "R upperarm"
+   ],
+   [
+    "L elbow",
+    "L wrist",
+    "L forearm"
+   ],
+   [
+    "R elbow",
+    "R wrist",
+    "R forearm"
+   ],
+   [
+    "L wrist",
+    "L glove",
+    "L hand"
+   ],
+   [
+    "R wrist",
+    "R glove",
+    "R hand"
+   ],
+   [
+    "L hip",
+    "L knee",
+    "L thigh"
+   ],
+   [
+    "R hip",
+    "R knee",
+    "R thigh"
+   ],
+   [
+    "L knee",
+    "L ankle",
+    "L shin"
+   ],
+   [
+    "R knee",
+    "R ankle",
+    "R shin"
+   ],
+   [
+    "L ankle",
+    "L skate",
+    "L skate"
+   ],
+   [
+    "R ankle",
+    "R skate",
+    "R skate"
+   ],
+   [
+    "stick butt",
+    "stick heel",
+    "shaft"
+   ],
+   [
+    "stick heel",
+    "stick toe",
+    "blade"
+   ]
+  ],
+  "errors": 10,
+  "nudges": 29,
+  "plaus": 0.0,
+  "tried": [
+   [
+    "D173",
+    9,
+    36
+   ],
+   [
+    "PC 316",
+    13,
+    31
+   ],
+   [
+    "PC 314",
+    10,
+    29
+   ]
+  ],
+  "flags": [],
+  "iou": 0.863
+ }
+}
