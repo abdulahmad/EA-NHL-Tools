@@ -59,8 +59,8 @@ function show(){if(!D)return;const f=fr(),g=get(),h=f.px.length,w=f.px[0].length
  const pv=(cv,fn)=>{cv.width=w*PZ;cv.height=h*PZ;const c=cv.getContext('2d');c.fillStyle='#464646';c.fillRect(0,0,cv.width,cv.height);
   for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;c.fillStyle=fn(y,x,s);c.fillRect(x*PZ,y*PZ,PZ,PZ)}};
  const tm=f.tmap,TX=(D.textures||{})[$('tsel').value];
- if(tm&&TX){pv($('pt'),(y,x,s)=>{const t=tm[y+','+x];if(!t)return `rgb(${D.palette[s]})`;const c=TX[t[1]][t[0]];return (c[0]==252&&c[1]==0&&c[2]==252)?`rgb(${D.palette[s]})`:`rgb(${c})`});$('tnote').textContent='Mapped by the skater pipeline (v2 38x32 layout). Unmapped px keep game colours.'}
- else{const c=$('pt');c.width=c.height=0;$('tnote').textContent='No pipeline texture map for this frame yet (mapped frames: '+F.filter(n=>D.frames[n].tmap).join(', ')+').'}
+ if(tm&&TX){pv($('pt'),(y,x,s)=>{const t=tm[y+','+x];if(!t)return `rgb(${D.palette[s]})`;const c=TX[t[1]][t[0]];return (c[0]==252&&c[1]==0&&c[2]==252)?`rgb(${D.palette[s]})`:`rgb(${c})`});$('tnote').textContent=(f.tmap_src=='auto'?'AUTO-FITTED map (v5 fit + SPA facing, not hand-checked; back-view torso columns may differ). ':'Hand-checked pipeline map. ')+'v2 38x32 layout; unmapped px keep game colours.'}
+ else{const c=$('pt');c.width=c.height=0;$('tnote').textContent='No texture map for this frame (the fit needs uniform px and a game facing; '+F.filter(n=>D.frames[n].tmap).length+' of '+F.length+' frames are mapped).'}
  pv($('pg'),(y,x,s)=>`rgb(${D.palette[s]})`);pv($('pp'),(y,x,s)=>P[g.lab[y][x]][2]||'#464646')}
 const cell=e=>{const r=ed.getBoundingClientRect();return[(e.clientX-r.left)/Z,(e.clientY-r.top)/Z]};
 function paint(e){const [fx,fy]=cell(e),x=Math.floor(fx),y=Math.floor(fy),f=fr();if(y<0||x<0||y>=f.px.length||x>=f.px[0].length||f.px[y][x]==255)return;

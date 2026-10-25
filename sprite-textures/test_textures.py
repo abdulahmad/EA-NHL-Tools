@@ -23,6 +23,22 @@ def make(base,used,regions=None,pads=None):
                 if a<=x<a+w and b<=y<b+h:return CB[(i*3+1)%10] if i%2 else CB[(i*3+2)%10]
             return (128,128,128)
         out['Part regions (solid)']=f(pid)
+    # D153 (Abdul pt961u): the first UV-proof tests (scripts/atlas.py: uv, checker, candy) per part block, colour-blind safe
+    # (atlas.py used red/green ramps and red candy; here: luminance down, blue amount across; orange/white candy).
+    R=list((regions or {'all':(0,0,W,H)}).values())
+    def blk(y,x):
+        for (a,b,w,h) in R:
+            if a<=x<a+w and b<=y<b+h:return a,b,w,h
+        return 0,0,W,H
+    def uvg(y,x):
+        a,b,w,h=blk(y,x);u=(x-a)/max(1,w-1);v=(y-b)/max(1,h-1);return (int(40+200*(1-v)),int(30+180*(1-v)),int(40+215*u))
+    out['UV gradient per part (light top, blue right)']=f(uvg)
+    def chk4(y,x):
+        a,b,w,h=blk(y,x);c=((x-a)*4//max(1,w)+(y-b)*max(2,round(4*h/max(1,w)))//max(1,h))%2;return (240,240,240) if c==0 else (30,30,200)
+    out['Checker per part (4 across)']=f(chk4)
+    def candy(y,x):
+        a,b,w,h=blk(y,x);st=max(2,max(w,h)//5);return (213,94,0) if ((x-a)+(y-b))%(2*st)<st else (255,255,255)
+    out['Candy stripe per part (diagonal)']=f(candy)
     if pads:
         a,b,w,h=pads
         def cuff(y,x):
