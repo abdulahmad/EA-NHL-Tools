@@ -153,3 +153,11 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 - D173: full skeleton for the 40 Genesis exclusives (24 flagged) plus skeleton-driven warp. 1,938 errors and 1,080 nudges; worse than D172. See `docs/exclusive-expansion/d173/`.
 - D174: joint+warp fit with palette-index key and palette-zone constraint (docs/exclusive-expansion/d174).
 - D175: shade groups collapsed in the 94G control; joint+warp refit (docs/exclusive-expansion/d175).
+
+## Sprite editor (skater + goalie, turnkey)
+
+    python3 sprite-textures/editor/launch.py        # --rebuild to regenerate data, --no-browser
+
+Builds `editor/data/bundle.js` locally from your ROM-derived exports (gitignored; game data is never committed),
+serves on 127.0.0.1:8765 and opens a worst-first fix queue. A/D or arrows = prev/next, O labels, J skeleton, Z undo, S save.
+Saves go to `editor/edits/<kind>_edits.json`.
