@@ -31,6 +31,17 @@ def straighten(tm,fam,FAM2):
         if not r or k not in fam:continue
         part=r[0]+('' if 'torso' in r[0] else (' up' if v<=12 else ' low'))
         seg[part].append(k)
+    return _run(tm,fam,FAM2,seg,lambda part,k:range(reg(*tm[k])[1],reg(*tm[k])[1]+reg(*tm[k])[2]))
+# D159: same pass on the PANTS rows (v17-22). Segment = v2 pants zone of the px's texel (pantsF = front figure cols,
+# pantsB = back), allowed texels = that zone's texels in the row with the px's family (NZ from v2map3.py).
+def straighten_pants(tm,fam,FAM2,NZ):
+    seg=collections.defaultdict(list)
+    for k,(u,v) in tm.items():
+        z=NZ.get((u,v))
+        if 17<=v<=22 and z in('pantsF','pantsB') and k in fam:seg[z].append(k)
+    cols={z:sorted({u for (u,v),zz in NZ.items() if zz==z}) for z in('pantsF','pantsB')}
+    return _run(tm,fam,FAM2,seg,lambda part,k:cols[part],lambda part,u,v:NZ.get((u,v))==part)
+def _run(tm,fam,FAM2,seg,colsf,okf=lambda part,u,v:True):
     out=dict(tm)
     for part,ks in seg.items():
         if len(ks)<3:continue
@@ -42,11 +53,11 @@ def straighten(tm,fam,FAM2):
         s=(P-c0)@d;u0=np.array([tm[k][0] for k in ks],float)
         sg=1.0 if np.std(s)==0 or np.std(u0)==0 or np.corrcoef(s,u0)[0,1]>=0 else -1.0
         c=float(np.median(u0-sg*s));T={k:c+sg*si for k,si in zip(ks,s)}
-        _,x0,wd=reg(*tm[ks[0]])
+        C=colsf(part,ks[0])
         grp=collections.defaultdict(list)
         for k in ks:grp[(tm[k][1],fam[k])].append(k)
         for (v,f),g in grp.items():
-            us=sorted(u for u in range(x0,x0+wd) if (f in FAM2.get((u,v),()) or os.environ.get('ANYFAM')=='1') and FAM2.get((u,v)))
+            us=sorted(u for u in C if okf(part,u,v) and (f in FAM2.get((u,v),()) or os.environ.get('ANYFAM')=='1') and FAM2.get((u,v)))
             if not us:continue
             g.sort(key=lambda k:T[k]*sg);ts=[T[k] for k in g]
             if sg<0:us=us[::-1]
