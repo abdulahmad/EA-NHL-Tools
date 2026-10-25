@@ -1,0 +1,191 @@
+{
+ "pairs_used": 281,
+ "texels_voted": 668,
+ "agreement_votes_vs_final": 0.866,
+ "gaps": 100,
+ "gaps_by_method": {
+  "row band": 92,
+  "neighbour": 4,
+  "PC Leafs family": 4
+ },
+ "changed_vs_D168": 40,
+ "changed_by_method": {
+  "row band": 36,
+  "PC Leafs family": 4
+ },
+ "columns_kept": [
+  [
+   "sleeve",
+   4,
+   "navy",
+   3,
+   4
+  ],
+  [
+   "sleeve",
+   15,
+   "navy",
+   3,
+   4
+  ]
+ ],
+ "band": {
+  "6": {
+   "sleeve": "navy",
+   "torso": "navy"
+  },
+  "7": {
+   "sleeve": "white",
+   "torso": "navy"
+  },
+  "8": {
+   "sleeve": "white",
+   "torso": "navy"
+  },
+  "9": {
+   "sleeve": "white",
+   "torso": "white"
+  },
+  "10": {
+   "sleeve": "white",
+   "torso": "white"
+  },
+  "11": {
+   "sleeve": "white",
+   "torso": "white"
+  },
+  "12": {
+   "sleeve": "navy",
+   "torso": "white"
+  },
+  "13": {
+   "sleeve": "navy",
+   "torso": "white"
+  },
+  "14": {
+   "sleeve": "white",
+   "torso": "white"
+  },
+  "15": {
+   "sleeve": "white",
+   "torso": "navy"
+  },
+  "16": {
+   "sleeve": "white",
+   "torso": "navy"
+  },
+  "17": {
+   "sleeve": "navy",
+   "torso": "navy"
+  },
+  "18": {
+   "sleeve": "black",
+   "torso": "navy"
+  },
+  "19": {
+   "sleeve": "black",
+   "torso": "navy"
+  },
+  "20": {
+   "sleeve": "black",
+   "torso": "navy"
+  },
+  "21": {
+   "legs": "navy"
+  },
+  "22": {
+   "legs": "navy"
+  },
+  "23": {
+   "legs": "navy"
+  },
+  "24": {
+   "legs": "white"
+  },
+  "25": {
+   "legs": "white"
+  },
+  "26": {
+   "legs": "navy"
+  },
+  "27": {
+   "legs": "white"
+  },
+  "28": {
+   "legs": "black"
+  },
+  "29": {
+   "legs": "black"
+  },
+  "30": {
+   "legs": "black"
+  },
+  "31": {
+   "legs": "black"
+  }
+ },
+ "changed_rows": {
+  "6": [
+   "8:skin->navy",
+   "9:skin->navy",
+   "10:skin->navy"
+  ],
+  "7": [
+   "8:skin->navy",
+   "9:skin->navy",
+   "10:skin->navy",
+   "4:navy->white",
+   "15:navy->white",
+   "23:navy->white",
+   "34:navy->white"
+  ],
+  "8": [
+   "4:navy->white",
+   "9:skin->navy",
+   "15:navy->white"
+  ],
+  "13": [
+   "0:white->navy",
+   "1:white->navy"
+  ],
+  "14": [
+   "23:navy->white"
+  ],
+  "17": [
+   "0:white->navy",
+   "1:white->navy",
+   "2:white->navy",
+   "16:white->navy",
+   "17:white->navy",
+   "18:white->navy",
+   "19:white->navy",
+   "20:white->navy",
+   "21:white->navy",
+   "22:white->navy",
+   "23:white->navy",
+   "35:white->navy",
+   "36:white->navy",
+   "37:white->navy"
+  ],
+  "18": [
+   "3:navy->black",
+   "34:navy->black"
+  ],
+  "19": [
+   "3:navy->black",
+   "34:navy->black"
+  ],
+  "20": [
+   "3:navy->black",
+   "34:navy->black"
+  ],
+  "24": [
+   "5:navy->white"
+  ],
+  "25": [
+   "13:navy->white",
+   "27:navy->white",
+   "28:navy->white"
+  ]
+ }
+}

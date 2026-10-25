@@ -918,6 +918,7 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - D141-D142: strict 0 errors via seg + glove-atlas texel fixes; stick gets region x14-16 rows 9-22 (pt947u).
 - D140: Fuhr cuff and V tip stay as NOW (v12); do not re-ask settled questions (pt943u).
 
+- D168 (pt991u): compare Genesis and PC by colour family, ignoring shade on both. D169 (pt992u): fix the 94G texture first. Stripes must be straight bands, and every texture gap must be filled (evidence first, then PC Leafs family).
 ## goalie26 v11 – symmetric mask, orange on top (D133)
 - D133 (Abdul pt934u "make the fuhr texture symmetrical, and more of the orange needs to be on top") **Fuhr v11** (`goalie26/fuhr26.py` `small11`, `fuhr_oilers_texture_v11.png`). Mask front x14-18 mirrored about x16 (x14-15 -> x18-17); back halves mirror each other (x12-13 -> x20-19); the orange flame/V of the mask reference is brought into the top: row 1 x14,15,17,18 and row 2 x15-17 orange (row 1 x16 keeps the darker red point); chin kept (orange (6,16),(7,16), blue (6,15),(6,17)). Pad front was NOT mirrored: Abdul's DR pad reference itself is asymmetric (navy stripe right of centre, logo bottom-left/right differ; 86 of 140 texels differ from their mirror), so it follows the reference. Blocker/catcher refs are not symmetric designs either.
 
@@ -1078,3 +1079,11 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - Validation is not met: only 54% of matched 94G pixels are reproduced. Genesis colours carry per-pose shading (within-frame agreement 0.89, across frames 0.54).
 - Exclusives under the hard colour constraint: 487 errors out of 11,501 px. Causes: skin highlight 38 (211), 93G blood decal (183), no start texel (93, mostly the gloves-on-ice frame 353). 7 frames have 0 errors, and 94G has 24 errors out of 4,467 px. Stripes are not coherent, because 45% of pixels moved about 4 texels to find their colour.
 - Ruling: a flat Genesis texture is the wrong model. Next step is a family-level texture plus a shade map. No pixels relabelled, no renders committed.
+
+## D169: straight-band 94G Leafs family texture + gap fill (Abdul pt992u)
+- Folder: `sprite-textures/docs/exclusive-expansion/d169/`. Contains `METHOD_D169.md`, `tex169.py`, `run169.py`, `tex169.json` and `final169.json`. `align.py` is in `d168/`; it was rewritten and reproduces 18/18 sampled `align.pkl` entries.
+- Each texture row is one colour family per zone: sleeve or torso for rows 6-20, legs for rows 21-31. The family is the majority of all votes in that band. Rows 0-5 (head/face) stay per texel.
+- Column test (own family in >=60% of a column's zone rows): only cols 4 and 15 (navy yoke, rows 6-8) are kept.
+- 40 texels changed vs D168. 100 gaps filled: row band 92, unanimous neighbour 4, PC Leafs family 4.
+- Votes agreeing with the final texture: 0.866, down from 0.885 per texel. Validation: family 86.6%, exact index 53.6%.
+- Fight frames got worse: 1,805 errors out of 11,318 px (D168: 1,559). The pipeline texel maps put stripe pixels on the wrong rows, and per-texel D168 had partly absorbed that. No pixels relabelled, no renders committed.

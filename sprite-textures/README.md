@@ -146,3 +146,4 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 - `ctrlsheet.py` writes the control diff sheets; `anthem.py` writes the frame 897 before/after.
 
 **Textures:** `v2_38x32/textures/raw/` (all test jerseys in v2) and `textures/redraw/` (Dallas and East94 redrawn natively). Renders that contain game sprites are kept local.
+- D169: 94G family texture straightened into row bands and all 100 gaps filled (92 by row band). Fight-frame errors rose from 1,559 to 1,805 out of 11,318 px, so the next fix is the pipeline texel map. See `docs/exclusive-expansion/d169/`.
