@@ -1,0 +1,29 @@
+{
+ "_note": "D183 auto no-stick flags (t1032u), edits format; editor toggle later. auto=true means detected, not reviewed.",
+ "frames": {
+  "G94 50": {
+   "nostick": true,
+   "auto": true
+  },
+  "G94 224": {
+   "nostick": true,
+   "auto": true
+  },
+  "G94 720": {
+   "nostick": true,
+   "auto": true
+  },
+  "S94 106": {
+   "nostick": true,
+   "auto": true
+  },
+  "S94 47": {
+   "nostick": true,
+   "auto": true
+  },
+  "S94 221": {
+   "nostick": true,
+   "auto": true
+  }
+ }
+}

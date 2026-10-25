@@ -43,12 +43,25 @@ def run(it):
     from refs import load_edits,pasteref
     EDITS=load_edits()
     def convert(a,J=None,sn=None,abl=(),ref=None):
-        ed=EDITS.get(f'S94 {sn}',{}) if sn is not None else {}
+        ed=EDITS.get(f'S94 {sn}',{}) if sn is not None and 'noedits' not in abl else {}
         if J is None and ed.get('joints'):J={k:tuple(v) for k,v in ed['joints'].items()}
         J=J or sk.fit(a);c0=c1=None
         if it.get('skc') and 'noskc' not in abl and not ed.get('joints'):
             F=FS[a];mask=a>0;body=mask&(F!=6);al={(y,x):FAMOK[F[y,x]] for y,x in zip(*np.nonzero(mask)) if F[y,x] in FAMOK}
             c0=check(mask,body,al,J,BONES,0.5);J,c1=enforce(mask,body,al,J,BONES,0.5)
+        lf=None
+        if it.get('bfit') and not ed.get('joints') and 'nobfit' not in abl:
+            from limbfit import stickfit,limbfit
+            from limbfit import drop_stick,attach,tree_ok
+            F=FS[a];Sj=None if ed.get('nostick') else stickfit(F==5,F==1,body=a>0)
+            nost=Sj is None                                   # t1032u: no stick (auto, or flagged in the edits)
+            J=drop_stick(J) if nost else {**J,**Sj}           # stick first: hard constraint from the stick colour zone
+            J,lf=limbfit(F==1,a>0,J,BONES)                    # limbs follow the black pixels
+            grip=None;att=None
+            if not nost:J,grip,att=attach(J,F==1,a>0,BONES)   # t1031u: the stick hangs from a glove
+            tree=tree_ok(J,BONES,grip);lf=dict(moves=lf,nostick=nost,grip=grip,attach=att,tree=tree)
+        from limbfit import uncovered
+        ub=len(uncovered(FS[a]==1,a>0,J,BONES)[0])
         PT=np.array(ed['bp']) if ed.get('bp') else parts(a,J);O,OP,JN2=pose_scale(a,J,PT,R)
         Op=np.pad(O,it['dil']);OPp=np.pad(OP,it['dil']);m=binary_dilation(Op>0,iterations=it['dil']).ravel()
         o=np.zeros(Op.size,int)
@@ -63,7 +76,7 @@ def run(it):
             g,ga=ref;D=it['dil'];o,hd=pasteref(o,Op,OPp,g,ga,(JN2['head'][1]+D-.5,JN2['head'][0]+D-.5))
         else:o,hd=pastehead(o,Op,[h for h in lib if h['dir']==d and h['cls']==cl]) if it['head'] and 'nohead' not in abl else (o,None)
         o=repair(Op,o);pc=partcheck(PT,OPp,o)
-        return dict(J=J,PT=PT,O=o,S=Op,OP=OPp,disc=disconnected(Op,o),head=hd,dir=d,dsrc='table' if t is not None else 'classifier',cls=cl,skc=(c0,c1),parts=pc)
+        return dict(J=J,PT=PT,O=o,S=Op,OP=OPp,disc=disconnected(Op,o),head=hd,dir=d,dsrc='table' if t is not None else 'classifier',cls=cl,skc=(c0,c1),parts=pc,ublack=ub,limbfit=lf)
     res=dict(joint_err=[],parts_acc=[],final=[],disc=0,jag=[])
     for p in TE:
         a=A['S94'][p['s']];r=convert(a,sn=p['s']);G=A['G94'][p['g']]
@@ -76,7 +89,7 @@ def run(it):
     if it.get('oracle'):
         f=[score(place(convert(A['S94'][p['s']],p['JS'])['O'],A['G94'][p['g']])[0],A['G94'][p['g']]) for p in TE];out['oracle_gt_skeleton']=np.mean(f,0).round(3).tolist()
     pickle.dump((sk.__dict__,R),open('/tmp/d178_last.pkl','wb'))
-    out['_res']=res
+    out['_res']=res;out['_sk']=sk
     return out,convert
 PNAME={1:'head',2:'torso',3:'pelvis',4:'upper arm',5:'forearm',6:'hand',7:'thigh',8:'shin',9:'skate',10:'shaft',11:'blade'}
 def partcheck(PT,OP,o,lo=0.5):

@@ -72,7 +72,7 @@ for a_,b_ in BONES:
 FAMOK={4:{1},5:{10,11},6:{12},1:{6,9,11,1,10}}   # skin->head, stick->shaft/blade, ice->other, black->hand/skate/blade/head(eyes)/shaft
 def parts(a,J):
     H,W=a.shape;o=np.zeros((H,W),int);F=FS[a]
-    segs=[(PARTOF[(p,q)],np.array(J[p]),np.array(J[q])) for p,q in BONES]
+    segs=[(PARTOF[(p,q)],np.array(J[p]),np.array(J[q])) for p,q in BONES if p in J and q in J]
     for y,x in zip(*np.nonzero(a)):
         c=np.array([x+.5,y+.5]);best=None
         ok=FAMOK.get(F[y,x])
@@ -97,7 +97,8 @@ def pose_scale(a,J,PT,R):
     ch={}
     for p,q in BONES:ch.setdefault(p,[]).append(q)
     # BFS from all roots (pelvis-connected skeleton + stick chain)
-    roots=['pelvis','stick butt'];JN2['stick butt']=np.array(J['stick butt'])*np.array([SX,SY])
+    roots=['pelvis']+(['stick butt'] if 'stick butt' in J else [])
+    if 'stick butt' in J:JN2['stick butt']=np.array(J['stick butt'])*np.array([SX,SY])
     # head chain may hang from neck; neck chain from belly... walk undirected
     adj={}
     for p,q in BONES:adj.setdefault(p,[]).append((q,1));adj.setdefault(q,[]).append((p,-1))
@@ -110,7 +111,8 @@ def pose_scale(a,J,PT,R):
             key=(u,v) if (u,v) in R else (v,u);r=R[key]
             vec=(np.array(J[v])-np.array(J[u]))*np.array([SX,SY])*(r/np.hypot(SX,SY)*np.sqrt(2) if False else r/((SX+SY)/2))
             JN2[v]=JN2[u]+vec;dq.append(v)
-    for k in JN:JN2.setdefault(k,np.array(J[k])*np.array([SX,SY]))
+    for k in JN:
+        if k in J:JN2.setdefault(k,np.array(J[k])*np.array([SX,SY]))
     # pixel transform per part: anchor at the bone start joint
     anchor={}
     for (p,q),part in PARTOF.items():anchor.setdefault(part,(p,q))

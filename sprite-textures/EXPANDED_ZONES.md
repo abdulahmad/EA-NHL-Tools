@@ -1150,3 +1150,10 @@ D179 names were too big and too many. The editor (N) and the sheets now show onl
 - **S800:** the arm was raised over the head, but the fit put it at the waist, so the arm was labelled head and erased by the head paste. Fixed with a reviewed joint correction in `fixes_d182.json` (editor edits format; joints only, no pixel relabelled). Its part check now passes and the arm is drawn.
 - **Editor edits wired:** `refs.load_edits` reads `editor/edits/*_edits.json` plus `fixes_d182.json` and overrides joints and parts in SNES refits. They are not yet used for training.
 - **The pipeline:** the 8-step shared pipeline and its 4 routes are now the top section of WORKFLOW.md, with the gap status for each.
+
+## D183: stick first, black-coverage gate, one tree, no-stick flag (t1025u–t1032u)
+- Rules as in WORKFLOW.md (SNES pipeline, D183). Code: `docs/snes-redraw/blackcov.py`, `limbfit.py`, `stages.py convert`, `d183_run.py`, `d183_pc.py`, `d183_stickpc.py`, `d183_crops.py`.
+- 95PC: the stick and skin share index 136 (verified). Stick-first by shape is worse than the hand skeletons (0.69 vs 0.94 GT stick coverage), so the hand skeletons are kept. PC skaters: 82% of black is covered.
+- 5% sample, gate-fail frames before→after: G94 skaters 18→4, G94 goalies 8→7, S94 skaters 11→2, S94 goalies 9→5. "Other" uncovered black: G94 skaters 206→60, S94 skaters 78→18. Part-check fails 3→4 of 38.
+- Auto no-stick (6): G94 50, 224, 720; S94 106, 47, 221. Tree not connected (hand can't reach the shaft): 23 frames, listed in `d183_checks.json`. Held-out joint error 3.43 px (same as before); parts accuracy 0.555→0.541.
+- 18 non-player sprites (arrows, digits, letters) are excluded from fitting. S800 fails the gate (8 px auto, 3 px with the reviewed joints).
