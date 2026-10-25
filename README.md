@@ -145,3 +145,4 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - D155: pad pieces with 1-3 pixels get strict pad texels (30 px in 19 frames); full goalie render has 0 errors.
 - D156: auto-fitted skater back views use the back-torso column remap; 100% agreement with all 11 hand frames.
 - D157: skater texel columns straightened per body segment (one across-axis per segment, strict same-family match); auto and hand frames.
+- D158: ruling, keep D157 strict colour-band columns (straight-column options a/b rejected).
