@@ -65,13 +65,21 @@ if os.path.exists(EXC+'/skel175.json') and os.path.exists('/tmp/d175_dump.pkl'):
       bones=[b[:2] for b in sk.get('bones',[])],tmap={f'{y},{x}':[int(u),int(v)] for (y,x),(u,v) in r['M'].items()},src='D175 joint+warp fit',
       why=why,err=[list(map(int,p)) for p in r['IM']],nud=[list(map(int,p)) for p in r['EX']],edited=bool(e)))
 else:print('exclusive D175 data missing:',EXC)
+# D180b hard skeleton constraints (pixel existence, colour zone, coverage): enforce on auto-fit joints, flag the rest
+import numpy as np, sys as _s;_s.path.insert(0,E);from skelcheck import check,enforce
+from skelcheck import constrain_frame as _constrain,SKC
+if os.environ.get('SKC')=='1':   # full-set enforcement is opt-in; use skc_sample.py on the fixed sample (t1020u)
+  for f in B['frames']:_constrain(f)
+  print('skeleton constraints exist/zone/orphan before',SKC['before'],'after',SKC['after'],'frames with any',SKC['frames_before'],'->',SKC['frames_after'])
+  B['skc']=SKC
 # worst-first queue: wrong-zone px + 0.5*nudges + 25 per skeleton flag / hand-joint item + 15 for no map
 def score(f):
   if f['kind']=='skater' and f['lab'] and sum(v in(2,3,4) for row in f['lab'] for v in row)<10:   # arrows, puck, UI: not a player sprite
     f['why']=['not a player sprite (no helmet/skin/torso px)'];return 0
   s=len(f['err'])+0.5*len(f['nud'])+0.5*f.get('unm',0)
   if any('no texture map' in w for w in f['why']):s+=15
-  if any(not any(t in w for t in('no texture map','wrong control','Leafs errors','nudged','unmapped')) for w in f['why']):s+=25   # skeleton flag / hand-joint pass
+  k=f.get('skc');s+=(3*k['exist']+0.5*k['zone']+k['orphan']) if k else 0
+  if any(not any(t in w for t in('no texture map','wrong control','Leafs errors','nudged','unmapped','off-pixel','zone-part','orphan px')) for w in f['why']):s+=25   # skeleton flag / hand-joint pass
   return s
 for f in B['frames']:f['score']=round(score(f),1)
 B['frames'].sort(key=lambda f:-f['score'])

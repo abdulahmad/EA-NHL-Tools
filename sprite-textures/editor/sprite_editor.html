@@ -32,7 +32,7 @@ canvas{image-rendering:pixelated;background:#3a3a3a;border:1px solid #777}
 </div>
 <div id="legend"></div>
 <p class="small" id="help">PARTS view: click/drag paints the body part, F toggles flood fill (fills same palette index + same part), Tab switches LEFT/RIGHT, Shift+click picks, keys 1-0/q/e/x pick parts. Labels view: click/drag paints the selected part. Drag a ring to move a joint. Shift+click picks the part under the cursor. Keys: A/D or arrows = prev/next, O labels, J skeleton, N skeleton part names (yellow = bone, white = joint), Z undo, S save, part keys on the buttons.</p>
-<script src="data/bundle.js"></script>
+<script>document.write('<script src="data/'+(location.search.includes('sample')?'bundle_sample.js':'bundle.js')+'"><\/script>')</script>
 <script>
 const B=window.BUNDLE,$=i=>document.getElementById(i),Z=12,PZ=5;
 if(!B){$('item').textContent='No data bundle. Run: python3 sprite-textures/editor/launch.py --rebuild'}

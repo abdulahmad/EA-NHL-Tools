@@ -1,0 +1,82 @@
+{
+ "metrics": {
+  "name": "it6 = it5 + hard skeleton constraints + table facing",
+  "joint_err_px": 3.43,
+  "parts_acc": 0.555,
+  "exact": 0.338,
+  "family": 0.503,
+  "sil_iou": 0.737,
+  "disconnected": 0,
+  "jagged": 0.146,
+  "n": 31
+ },
+ "breakdown_share_of_union": {
+  "silhouette: extra converted px": 0.204,
+  "shade only (family right, index wrong)": 0.165,
+  "family wrong: jersey/pants interior": 0.12,
+  "family wrong: outline / edge px": 0.069,
+  "silhouette: missing px": 0.062,
+  "family wrong: head area": 0.032,
+  "family wrong: stick": 0.01
+ },
+ "family_acc_on_overlap": 0.684,
+ "ablations_and_oracles": {
+  "full it6": [
+   0.338,
+   0.503,
+   0.737
+  ],
+  "without skc": [
+   0.339,
+   0.504,
+   0.738
+  ],
+  "without head": [
+   0.358,
+   0.526,
+   0.753
+  ],
+  "without smooth": [
+   0.34,
+   0.502,
+   0.734
+  ],
+  "without rf": [
+   0.313,
+   0.482,
+   0.739
+  ],
+  "oracle skeleton (GT joints)": [
+   0.352,
+   0.519,
+   0.737
+  ],
+  "oracle shape (94G silhouette, converter colours)": [
+   0.467,
+   0.686,
+   1.0
+  ],
+  "oracle colour on overlap (family = sil IoU)": [
+   null,
+   0.737,
+   null
+  ]
+ },
+ "skeleton_violations_heldout": {
+  "order": [
+   "exist",
+   "zone",
+   "orphan"
+  ],
+  "before": [
+   311,
+   1996,
+   1716
+  ],
+  "after": [
+   81,
+   1793,
+   694
+  ]
+ }
+}

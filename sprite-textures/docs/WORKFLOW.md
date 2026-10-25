@@ -34,6 +34,13 @@ This is the single entry point. Rulings are D-numbers. The full rulings log is i
 5. **Same facing:** an 8-way classifier, verified against the reference. The nearest 94G pose is a reference only. **Never warp SNES to it.**
 6. **Training:** train on matching pairs. Held-out animations (skatewp, hook, stop, duck) stay unseen. Report joint error, parts accuracy, and exact/family/silhouette agreement for **every iteration**, and state the plateau honestly (see `RULES_D177_D178.md`).
 
+## Facing, constraints, sample (D180)
+- **Facing:** taken from the animation tables (`docs/snes-redraw/dirmap.py`); 0 = N, counting clockwise. 94G covers 596/845 frames and 94S 687/976; the classifier is only a flagged fallback. SNES frame numbers diverge from 94G after 224.
+- **References:** must have the same table direction and the same sprite class (skater or goalie).
+- **Hard skeleton constraints** (`skelcheck.py`: exist, zone, cover) apply in the SNES converter and the editor bundle. Violations are flagged in the fix queue.
+- **Sample:** work on the fixed ~5% sample `docs/snes-redraw/sample_d180.json` (`launch.py --sample`) until the method is settled. No full rebuilds.
+- **Deep analysis and ranked next steps:** `docs/snes-redraw/ANALYSIS_D180.md`. Top item: the shape/scaling stage (silhouette oracle 68.6% family against 50.3% now).
+
 ## Image and sheet conventions
 - Skeleton columns use the editor's part names (`docs/snes-redraw/skel_labels.py`).
 - At most 1000 px wide, with big labels, column headings centred over their columns, and a legend on every sheet.

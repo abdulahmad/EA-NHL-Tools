@@ -1,10 +1,12 @@
 import sys
 from stages import *
 from facing import gdir
+from dirmap import NAMES as DN
 from PIL import Image,ImageDraw
 from skel_labels import draw_labels
-it=dict(name='it5',k=5,snap=True,R=4,dil=2,n=300,leaf=1,head=True,sil=True)
-met,convert=run(it);print(met,flush=True)
+it=dict(name='it6',k=5,snap=True,R=4,dil=2,n=300,leaf=1,head=True,sil=True,skc=True)
+if 'convert' not in globals():
+    met,convert=run(it);met.pop('_res',None);print(met,flush=True)
 BPC={1:'#ffffff',2:'#56b4e9',3:'#0072b2',4:'#e69f00',5:'#f0e442',6:'#cc79a7',7:'#9a8cff',8:'#9ad0f0',9:'#5a5a5a',10:'#bdbdbd',11:'#a0662a',12:'#2a2a2a'}
 NAMES={1:'head',2:'torso',3:'pelvis',4:'upper arm',5:'forearm',6:'hand',7:'thigh',8:'shin',9:'skate',10:'shaft',11:'blade',12:'other'}
 hx=lambda c:tuple(int(c[i:i+2],16) for i in(1,3,5))
@@ -36,26 +38,26 @@ def sheet(items,title,cols,path,k=3,note=''):
         d.rectangle((x,y+2,x+14,y+16),fill=hx(BPC[p]),outline=(200,200,200));d.text((x+18,y),NAMES[p],fill='white',font=font(13));x+=18+int(d.textlength(NAMES[p],font=font(13)))+12
     y+=26;d.text((10,y),'Diagonal line = right side. Yellow square = joint. Black lines = skeleton.\nNames: yellow = bone, white = joint (same as editor key N).',fill='white',font=font(13))
     d.multiline_text((10,y+40),note,fill=(230,230,230),font=font(13));im.save(path);print(path,im.size)
-GL=lambda n:gdir(n)[0]
+GL=lambda n:tdir('G94',n)
 items=[];seen=set()
 for p in sorted(TE,key=lambda p:p['g']):
     if p['grp']!='skatewp':continue
     td=GL(p['g'])
     if td in seen:continue
-    seen.add(td);a=A['S94'][p['s']];r=convert(a);G=A['G94'][p['g']];C,_=place(r['O'],G);sc=score(C,G)
-    items.append((f"S{p['s']}/G{p['g']}\ndir {td} (pred {r['dir']})\nfam {sc[1]:.0%}\nhead G{r['head']['n'] if r['head'] else '-'}",
+    seen.add(td);a=A['S94'][p['s']];r=convert(a,sn=p['s']);G=A['G94'][p['g']];C,_=place(r['O'],G);sc=score(C,G)
+    items.append((f"S{p['s']}/G{p['g']}\ndir {td} {DN[td]}\nfam {sc[1]:.0%}\nhead G{r['head']['n'] if r['head'] else '-'}",
         [rgbim(rgbS(a),3),partimg(np.pad(a,6),np.pad(r['PT'],6),{q:(v[0]+6,v[1]+6) for q,v in r['J'].items()},6),rgbim(rgbG(crop(r['O'])),3),rgbim(rgbG(G),3)]))
-sheet(items,'D178 held-out skatewp (unseen)',['94 SNES','skeleton|+ parts','converted','real 94G'],'/workspace/snesredraw/d178_val_skatewp.png',
+sheet(items,'D180 held-out skatewp (unseen)',['94 SNES','skeleton|+ parts','converted','real 94G'],'/workspace/snesredraw/d180_val_skatewp.png',
       note='One frame per direction (n-1)//5 that has a 94G skeleton.\nfam = colour-family agreement with real 94G.')
 # exclusives: nearest 94G pose = reference only, same facing
-GD={n:(GL(n) if GL(n) is not None else int(fclf.predict([feat(g,1)])[0])) for n,g in A['G94'].items() if pl(g)}
+GD={n:tdir('G94',n) for n in A['G94'] if tdir('G94',n) is not None and sclass('G94',n)=='skater'}
 items=[];chk=[]
 for s in(196,527,800):
-    a=A['S94'][s];r=convert(a);Ss=sscale(a)
-    cand=[(off_align(Ss,A['G94'][n])[0],n) for n,d in GD.items() if d==r['dir']];iou,n=max(cand)
+    a=A['S94'][s];r=convert(a,sn=s);Ss=sscale(a)
+    cand=[(off_align(Ss,A['G94'][n])[0],n) for n,d in GD.items() if d==r['dir'] and sclass('G94',n)==r['cls']];iou,n=max(cand)
     chk.append(dict(s=s,dir=r['dir'],ref=n,ref_dir=GD[n],same=GD[n]==r['dir'],disc=r['disc'],head=r['head']))
-    items.append((f"S{s}\nfacing dir {r['dir']}\nref G{n} dir {GD[n]}\nhead G{r['head']['n'] if r['head'] else '-'}",
+    items.append((f"S{s} {r['cls']}\nfacing {r['dir']} {DN[r['dir']]} ({r['dsrc']})\nref G{n} {DN[GD[n]]}\nhead G{r['head']['n'] if r['head'] else '-'}",
         [rgbim(rgbS(a),3),partimg(np.pad(a,6),np.pad(r['PT'],6),{q:(v[0]+6,v[1]+6) for q,v in r['J'].items()},6),rgbim(rgbG(crop(r['O'])),3),rgbim(rgbG(A['G94'][n]),3)]))
-sheet(items,'D178 SNES-only frames (no warp to the reference)',['94 SNES','skeleton|+ parts','converted','94G ref|(same facing)'],'/workspace/snesredraw/d178_exclusives.png',
+sheet(items,'D180 SNES-only frames (no warp to the reference)',['94 SNES','skeleton|+ parts','converted','94G ref|(same facing)'],'/workspace/snesredraw/d180_exclusives.png',
       note='The 94G reference is only for heads and facing.\nThe converted frame keeps the SNES pose.')
-json.dump(dict(metrics=met,exclusive_checks=chk),open('d178_sheet_checks.json','w'),indent=1,default=int);print(chk)
+json.dump(dict(metrics=met,exclusive_checks=chk),open('d180_sheet_checks.json','w'),indent=1,default=int);print(chk)

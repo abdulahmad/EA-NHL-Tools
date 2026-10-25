@@ -1,0 +1,57 @@
+{
+ "metrics": {
+  "name": "it6 = it5 + hard skeleton constraints + table facing",
+  "joint_err_px": 3.43,
+  "parts_acc": 0.555,
+  "exact": 0.338,
+  "family": 0.503,
+  "sil_iou": 0.737,
+  "disconnected": 0,
+  "jagged": 0.146,
+  "n": 31
+ },
+ "exclusive_checks": [
+  {
+   "s": 196,
+   "dir": 5,
+   "ref": 222,
+   "ref_dir": 5,
+   "same": true,
+   "disc": 0,
+   "head": {
+    "n": 268,
+    "mir": false,
+    "f": "F",
+    "iou": 0.65
+   }
+  },
+  {
+   "s": 527,
+   "dir": 4,
+   "ref": 122,
+   "ref_dir": 4,
+   "same": true,
+   "disc": 0,
+   "head": {
+    "n": 806,
+    "mir": false,
+    "f": "R",
+    "iou": 0.6
+   }
+  },
+  {
+   "s": 800,
+   "dir": 2,
+   "ref": 168,
+   "ref_dir": 2,
+   "same": true,
+   "disc": 0,
+   "head": {
+    "n": 615,
+    "mir": false,
+    "f": "F",
+    "iou": 0.44
+   }
+  }
+ ]
+}

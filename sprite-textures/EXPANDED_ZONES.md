@@ -1135,3 +1135,6 @@ Staged pipeline: skeleton → parts → scale → smooth/colour, with per-stage 
 
 ## D179
 Skeleton parts labelled in the editor and in sheet skeleton columns (pt1011u). N toggles the labels, on by default in Parts and Labels + skeleton. Bone names are yellow and joint names white, with a dark halo and greedy placement to avoid overlap.
+
+## D180
+Facing comes from the animation tables (94G 596/845 frames, 94S 687/976). References must match direction and class, which corrects S196/S527/S800. Hard skeleton constraints (exist, zone, cover) are added, with fix-queue flags. The fixed 5% sample is in use, and the deep analysis is in docs/snes-redraw/ANALYSIS_D180.md (t1015u-t1020u).

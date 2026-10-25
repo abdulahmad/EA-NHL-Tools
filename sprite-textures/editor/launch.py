@@ -6,6 +6,8 @@ import os,sys,json,subprocess,webbrowser,http.server,functools
 E=os.path.dirname(os.path.abspath(__file__));PORT=int(os.environ.get('PORT',8765))
 if '--rebuild' in sys.argv or not os.path.exists(E+'/data/bundle.js'):
   subprocess.run([sys.executable,E+'/build_bundle.py'],check=True)
+if '--sample' in sys.argv:   # fixed ~5% sample with D180b skeleton checks (t1020u)
+  subprocess.run([sys.executable,E+'/skc_sample.py'],check=True)
 class H(http.server.SimpleHTTPRequestHandler):
   def do_POST(s):
     if s.path!='/save':s.send_error(404);return
@@ -21,6 +23,7 @@ for PORT in range(PORT,PORT+20):   # first free port
   try:srv=http.server.ThreadingHTTPServer(('127.0.0.1',PORT),functools.partial(H,directory=E));break
   except OSError:continue
 url=f'http://127.0.0.1:{PORT}/sprite_editor.html';print('Sprite editor:',url,flush=True)
+if '--sample' in sys.argv:url+='?sample=1'
 if '--no-browser' not in sys.argv:webbrowser.open(url)
 try:srv.serve_forever()
 except KeyboardInterrupt:pass
