@@ -81,6 +81,34 @@ def backremap(A,TF,P=None):
                     if best is None or key<best[0]:best=(key,o)
                 for i,p in enumerate(ps):A[p]=(us[best[1]+i],v)
     return A
+# D159 (Abdul pt973u): skater PANTS. COMP (column_map_v2) only covers the pants texels of the old side-panel strip (old u>=28);
+# the old figure's own pants rows (old u<28, v17-22: 120 of 282 old pants texels) have no COMP entry, so those px got NO texel
+# and kept the game colour (~39% of pants px). v2map3.py never used COMP for them: it packs each (zone,row,family) group onto
+# the v2 pants texels of the same zone, row and family (ftargets). Same pass here for every px whose old texel is in the
+# pantsF/pantsB zone: order by old u then screen x, contiguous centred block, even stretch only when the group has more px
+# than texels. Strict: target family == old family; rows kept (ftargets' nearest-row fallback is counted, see PANTSFB).
+PANTSFB=collections.Counter()
+def pantsremap(A,GG):
+    TF=GG['TF'];ozone=GG['ozone'];OLDROW=GG['OLDROW'];grp=collections.defaultdict(list);out={}
+    for p,(u,v) in A.items():
+        f=TF.get((u,v))
+        if f is None or GG['SPECIAL'](f):continue
+        z=ozone(u,v)
+        if z in('pantsF','pantsB'):grp[(z,v,f)].append(p)
+    for (z,v,fam),ps in grp.items():
+        try:ts,tv=GG['ftargets'](z,v,fam)
+        except SystemExit:PANTSFB['no target']+=len(ps);continue
+        if tv!=v:PANTSFB['row fallback']+=len(ps)
+        xs=[p[1] for p in ps];us=[A[p][0] for p in ps]
+        import numpy as np
+        sg=1 if len(ps)<3 or np.std(xs)==0 or np.std(us)==0 or np.corrcoef(xs,us)[0,1]>=0 else -1
+        ps.sort(key=lambda p:(A[p][0],sg*p[1],p[0]));m,nT=len(ps),len(ts)
+        if m<=nT:
+            o=(nT-m)//2
+            for i,p in enumerate(ps):out['%d,%d'%p]=[int(ts[o+i]),int(tv)]
+        else:
+            for i,p in enumerate(ps):out['%d,%d'%p]=[int(ts[min(nT-1,i*nT//m)]),int(tv)]
+    return out
 def autofit(frames,V):
     cwd=os.getcwd();argv=list(sys.argv);os.chdir(PB+'/out');sys.argv=['x','/tmp/_pb_chk/frames'];os.makedirs('/tmp/_pb_chk/frames',exist_ok=True)
     sys.path[:0]=[PB+'/scripts',PB+'/scripts/playerlayout']
@@ -101,9 +129,11 @@ def autofit(frames,V):
         G['ICE']=set(G['ICE'])|UNK
         s2=open(V+'scripts/v2map3.py').read();s2=s2[:s2.index('def category')]
         s2=s2.replace("B=runpy.run_path('/workspace/preview_back/scripts/backmap.py')","B={'G':G}")
+        s3=open(V+'scripts/v2map3.py').read();s3=s3[s3.index('def category'):s3.index('A2={};SHARED')]   # D159 pants row remap helpers
         G['FRAMES']=[];G['MAPS']={};GG={'G':G}
         with contextlib.redirect_stdout(io.StringIO()):exec(s2,GG)
         COMP=GG['COMP'];out={};CH={}
+        with contextlib.redirect_stdout(io.StringIO()):exec(s3,GG)
         import skater_colstraight as CS;FAM2=collections.defaultdict(set)
         for (u,w),t in COMP.items():
             if (u,w) in G['TF']:FAM2[tuple(map(int,t))].add(G['TF'][(u,w)]);err=collections.Counter()
@@ -113,9 +143,12 @@ def autofit(frames,V):
                 with contextlib.redirect_stdout(io.StringIO()):q,A,LEV,fx,sh,bb=G['fit'](n)
             except BaseException as e:err['fit failed: '+('goalie mask px' if 'goalie mask' in str(e) else 'no uniform px')]+=1;continue
             if os.environ.get('NOBACK')!='1' and G['DIRS'][n] in (0,1,2,6,7):A=backremap({p:tuple(map(int,uv)) for p,uv in A.items()},G['TF'],G['SEGS'].get(n,{}).get('part'));CH[n]=1
-            out[n]={'%d,%d'%(int(y),int(x)):list(map(int,COMP[(int(u),int(w))])) for (y,x),(u,w) in A.items() if (int(u),int(w)) in COMP}
+            A={p:(int(u),int(w)) for p,(u,w) in A.items()}
+            out[n]={'%d,%d'%(int(y),int(x)):list(map(int,COMP[(u,w)])) for (y,x),(u,w) in A.items() if (u,w) in COMP}
+            if os.environ.get('NOPANTS')!='1':out[n].update(pantsremap(A,GG))   # D159
             if os.environ.get('NOSTRAIGHT')!='1':   # D157: straight texel columns per body segment
                 fam={'%d,%d'%(int(y),int(x)):G['TF'].get((int(u),int(w))) for (y,x),(u,w) in A.items() if (int(u),int(w)) in COMP}
                 out[n]=CS.straighten(out[n],fam,FAM2)
+                if os.environ.get('NOPANTS')!='1':out[n]=CS.straighten_pants(out[n],{'%d,%d'%p:G['TF'].get(t) for p,t in A.items()},FAM2,GG['NZ'])   # D159
         err['back-torso remapped']=len(CH);return out,dict(err)
     finally:os.chdir(cwd);sys.argv=argv

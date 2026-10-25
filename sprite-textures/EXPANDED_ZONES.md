@@ -1012,3 +1012,8 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 
 ## D158 — Ruling: keep D157 strict colour-band columns (Abdul pt973u)
 - Three options were compared on upright frames (local renders only): a = straight columns that may break the colour band (10384 of 99571 arm/torso px in a wrong band); b = a plus one redrawn texture (8938 wrong); c = D157 (0 wrong). Ruling: keep c. a and b are rejected and were not merged.
+
+## D159 — Skater pants mapping (Abdul pt973u)
+- Cause: autofit converted old texels to v2 only through COMP (column_map_v2). COMP covers just the pants texels of the old side-panel strip; the old figure's own pants rows (120 of 282 old pants texels) have no entry, so those px got no texel and kept the game colour (10512 of 26872 auto pants px, 235 of 552 hand px). v2map3.py never used COMP for them; it packs each (zone, row, family) group onto same-zone, same-row, same-family v2 texels.
+- Fix (`skater_autofit.pantsremap`): that v2map3 packing for every px whose old texel is in the pantsF/pantsB zone, then `skater_colstraight.straighten_pants` (D157 pass per pants zone, strict same-family 1:1 match, rows unchanged). `NOPANTS=1` disables.
+- Numbers (auto / hand): px with no texel 10512 → 1162 / 235 → 7; wrong colour band 0 → 0; px outside pants rows unchanged (1547 / 19, the old hem row ruled into leg row 23). Vertically adjacent mapped px pairs 8947 → 17673; pairs with a column jump >1 are 36.7% (18.2% before, but over half as many pairs). Arms, torso and legs are unchanged except 1027 px with pants palette colours on other labels.
