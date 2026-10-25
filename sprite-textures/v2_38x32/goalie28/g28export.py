@@ -15,4 +15,11 @@ sys.path.insert(0,G+'/..');import test_textures as TT
 dRGB=np.array([[sp[i] if i!=255 else (252,0,252) for i in r] for r in out['texDefault']]);used=np.array(out['texDefault'])!=255
 out['textures']={'Default (v8)':dRGB.astype(int).tolist(),'Fuhr v14':out['texFuhr']}
 out['textures'].update(TT.make(dRGB,used,regions={'blocker':(0,0,10,7),'mask':(12,0,9,8),'pad':(0,9,10,14),'strip':(10,9,3,14),'stick':(14,9,3,14),'catcher back':(0,23,11,9),'catcher front':(11,23,11,9)},pads=(0,9,10,14)))
+# D153: goalie27 tp.py pad tests H and V (pad front only, the rest stays default), as used for the D134-D135 pad maps
+for _k,_fn in (('Pad lines H (pads only)',lambda y,x:TT.CB[(y-9)%10]),('Pad lines V (pads only)',lambda y,x:TT.CB[x])):
+    _T=np.array(dRGB).copy()
+    for _y in range(9,23):
+        for _x in range(10):
+            if used[_y,_x]:_T[_y,_x]=_fn(_y,_x)
+    out['textures'][_k]=_T.astype(int).tolist()
 o=sys.argv[1] if len(sys.argv)>1 else '/tmp/goalie_editor_data.json';json.dump(out,open(o,'w'),separators=(',',':'));print(o,len(out['frames']),'frames')
