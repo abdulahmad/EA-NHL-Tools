@@ -147,3 +147,4 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - D157: skater texel columns straightened per body segment (one across-axis per segment, strict same-family match); auto and hand frames.
 - D158: ruling, keep D157 strict colour-band columns (straight-column options a/b rejected).
 - D159: skater pants px now get texels (unmapped 10512 -> 1162 auto, 235 -> 7 hand), strict colour band, straightened per pants zone.
+- D160: last skater pants px (old hem row) mapped onto the row-23 pants texels: no-texel pants px 1162 -> 0 auto, 7 -> 0 hand, 0 wrong band.
