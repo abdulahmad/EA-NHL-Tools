@@ -55,7 +55,7 @@ def estimate(lab,d):
     if 'chest' in J and 'pelvis' in J:J['belly']=(0.5*np.array(J['chest'])+0.5*np.array(J['pelvis'])).tolist()
     tcx=J.get('chest',[lab.shape[1]/2,0])[0];front=d in(3,4,5);back=d in(0,1,7)
     side=lambda x:('R' if x<tcx else 'L') if front else ('R' if x>tcx else 'L') if back else None
-    gl=_comps(lab,['glove'])[:2];sk=_comps(lab,['skate','skate_blade'])[:2]
+    gl=_comps(lab,['glove'])[:2];sk=_skates(lab)[:2]
     used=set()
     for nm,cs,end in (('glove',gl,'glove'),('skate',sk,'skate')):
         for i,Q in enumerate(cs):
@@ -80,18 +80,87 @@ def build(lab,d,v5=None,anchor=None):
     """returns (joints {name:[x,y]}, source, confident bool, reasons list).
     Upright frames keep the v5 skeleton (median 0.2 px from the hand-fitted anchors); special poses (falls, dives, crouches:
     torso > 35 deg from vertical, or the v5 skeleton fails the checks) use posefit (median 1.4 px from the anchors)."""
-    lab=np.asarray(lab);pf=posefit(lab,d);tl=tilt(pf) if pf else None
-    if anchor:J={k:list(map(float,v)) for k,v in anchor.items()};src='hand-fitted'
-    elif v5 and (tl is None or tl<=35) and check(lab,v5)==[]:J={k:list(map(float,v)) for k,v in v5.items()};src='v5 fit'
-    elif pf:J=dict(pf);src='special-pose fit' if (tl or 0)>35 or v5 else 'pose fit'
-    else:J={};src='part labels'
-    E=estimate(lab,d)
-    for k,v in E.items():J.setdefault(k,v)
-    if not any(k.startswith('stick') for k in J):J.update(stick(lab,[J[s+' glove'] for s in 'RL' if s+' glove' in J]))
-    why=check(lab,J)
+    lab=np.asarray(lab);pf=posefit(lab,d);tl=tilt(pf) if pf else None;E=estimate(lab,d)
+    def fin(J):   # D162: snap to the drawn px, fill gaps, then check
+        J={k:list(map(float,v)) for k,v in J.items()}
+        for k,v in E.items():J.setdefault(k,v)
+        J=snap(lab,J);return J,check(lab,J,d)
+    if anchor:
+        J={k:list(map(float,v)) for k,v in anchor.items()};src='hand-fitted'
+        for k,v in E.items():J.setdefault(k,v)
+        if not any(k.startswith('stick') for k in J):J.update(stick(lab,[J[s+' glove'] for s in 'RL' if s+' glove' in J]))
+        why=check(lab,J,d)
+    else:
+        C=[]   # candidates: (problems, preference, joints, source)
+        if v5:J,w=fin(v5);C.append((len(w)+(2 if tl is not None and tl>35 else 0),0,J,'v5 fit',w))   # lying/diving: v5 is upright-only, trust it less
+        if pf:J,w=fin(pf);C.append((len(w),1,J,'special-pose fit' if (tl or 0)>35 or v5 else 'pose fit',w))
+        if C:_,_,J,src,why=min(C,key=lambda c:c[:2])
+        else:J,why=fin({});src='part labels'
     return {k:[round(v[0],2),round(v[1],2)] for k,v in J.items()},src,not why,why
-def check(lab,J):
+def _near(lab,ids,p,mask=None):
+    P=_pts(lab,ids) if mask is None else mask
+    if not len(P):return None
+    return P[np.argmin(np.hypot(*(P-np.asarray(p)).T))]
+def _on(lab,ids,p,r=0.75):
+    q=_near(lab,ids,p);return q is not None and np.hypot(*(q-np.asarray(p)))<=r
+def _skates(lab):
+    """D162: skate blobs, dropping stray skate labels on the stick (a blob that touches stick px but no sock px)."""
+    lab=np.asarray(lab);st=ndi.binary_dilation(lab==PNI['stick']);so=ndi.binary_dilation(lab==PNI['sock'])
+    return [K for K in _comps(lab,['skate','skate_blade'],1) if not(st[K[:,1].astype(int),K[:,0].astype(int)].any() and not so[K[:,1].astype(int),K[:,0].astype(int)].any())]
+def snap(lab,J):
+    """D162: skates on skate px (one skate blob per leg when two are drawn), ankles on the sock/skate px just above,
+    stick from the stick px (shaft through them, blade heel-toe), the stick hand on the glove px touching the stick."""
+    J={k:list(v) for k,v in J.items()};SK=['skate','skate_blade']
+    K=[k for k in _skates(lab) if len(k)>=2][:2];AK=np.vstack(_skates(lab)) if _skates(lab) else np.zeros((0,2))
+    if not len(AK):   # no skate drawn (lying, hidden): no skate joint; leg ends at the ankle
+        for s in 'RL':J.pop(s+' skate',None)
+    for s in 'RL':
+        k=s+' skate'
+        if k not in J:continue
+        if len(K)==2:   # give each leg its own skate blob (nearest to its knee/ankle)
+            o='L' if s=='R' else 'R';ref=np.array(J.get(s+' ankle',J[k]))
+            dd=[np.hypot(*(Q-ref).T).min() for Q in K]
+            if o+' skate' in J:
+                oref=np.array(J.get(o+' ankle',J[o+' skate']));od=[np.hypot(*(Q-oref).T).min() for Q in K]
+                i=0 if dd[0]+od[1]<=dd[1]+od[0] else 1
+            else:i=int(np.argmin(dd))
+            q=K[i][np.argmin(np.hypot(*(K[i]-np.array(J[k])).T))]
+        else:q=_near(lab,SK,J[k],AK)
+        if q is not None:J[k]=q.tolist()
+        a=s+' ankle'
+        if a in J and not _on(lab,['sock']+SK,J[a],1.0):
+            q=_near(lab,['sock'],J[k]);q=q if q is not None and np.hypot(*(q-np.array(J[k])))<=4 else _near(lab,SK,J[a],AK)
+            if q is not None:J[a]=q.tolist()
+    for k in [k for k in J if k.startswith('stick')]:del J[k]
+    J.update(stick(lab,[J[s+' glove'] for s in 'RL' if s+' glove' in J]))
+    if 'stick butt' in J:
+        St=_pts(lab,['stick']);gl=[s for s in 'RL' if s+' glove' in J]
+        if gl:
+            s=min(gl,key=lambda s:np.hypot(*np.subtract(J[s+' glove'],J['stick butt'])));G=_pts(lab,['glove'])
+            if len(G) and len(St):
+                d=np.array([np.hypot(*(St-g).T).min() for g in G]);touch=G[d<=1.5]
+                if len(touch):
+                    c=touch[np.hypot(*(touch-np.array(J[s+' glove'])).T)<=4]
+                    if len(c):J[s+' glove']=c.mean(0).tolist()
+    return J
+def _cross(a,b,c,d):
+    f=lambda p,q,r:(q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0])
+    return f(a,b,c)*f(a,b,d)<0 and f(c,d,a)*f(c,d,b)<0
+def check(lab,J,d=None):
     lab=np.asarray(lab);why=[]
+    for s in 'RL':   # D162 sanity checks
+        k=s+' skate'
+        AK=_skates(lab);q=_near(lab,[],J[k],np.vstack(AK)) if (k in J and AK) else None
+        if k in J and (q is None or np.hypot(*(q-np.asarray(J[k])))>1.0):why.append(k+(' on the stick' if _on(lab,['stick'],J[k],1.0) else ' not on a skate'))
+    if all(s+' '+j in J for s in 'RL' for j in('hip','knee','skate')) and d in(0,1,3,4,5,7):
+        R=[J['R hip'],J['R knee'],J['R skate']];L=[J['L hip'],J['L knee'],J['L skate']]
+        if any(_cross(R[i],R[i+1],L[j],L[j+1]) for i in(0,1) for j in(0,1)):why.append('legs cross')
+    up=tilt(J) is not None and tilt(J)<=35
+    for s in 'RL':   # leg folds back on itself (ankle much nearer the hip than the knee is) on upright frames
+        if up and all(s+' '+j in J for j in('hip','knee','ankle')):
+            dh=lambda j:np.hypot(*np.subtract(J[s+' '+j],J[s+' hip']))
+            if dh('knee')>2 and dh('ankle')<0.8*dh('knee'):why.append(s+' leg folds back')
+    if 'head' in J and 'chest' in J and 'pelvis' in J and tilt(J) is not None and tilt(J)<=35 and J['head'][1]>J['chest'][1]+1:why.append('head below the chest')
     for k in CORE:
         if k not in J:why.append('no '+k)
     on=np.isin(lab,list(range(2,14)))
@@ -106,7 +175,7 @@ def check(lab,J):
         if a in J and b in J and not a.startswith('stick') and np.hypot(*np.subtract(J[a],J[b]))>0.8*size:why.append(f'{a}-{b} too long')
     for sd in 'RL':
         if sd+' hip' in J and sd+' skate' in J and np.hypot(*np.subtract(J[sd+' hip'],J[sd+' skate']))<2.5:why.append(sd+' leg collapsed')
-    if len(_comps(lab,['skate','skate_blade'],3))>=2 and sum(s_+' skate' in J for s_ in 'RL')<2:why.append('a drawn skate has no leg')
+    if len([K for K in _skates(lab) if len(K)>=3])>=2 and sum(s_+' skate' in J for s_ in 'RL')<2:why.append('a drawn skate has no leg')
     return why
 def axes(J,why=()):
     """body-axis directions (unit [dx,dy], pointing 'down the body') per texture segment. A segment whose joints are named in
@@ -172,7 +241,7 @@ def posefit(lab,d):
                 el=sl[np.argmin(mid-0.5*off)]
             else:el=C(sl)
             J[s+' shoulder']=sh.tolist();J[s+' elbow']=el.tolist();J[s+' wrist']=wr.tolist()
-    sock=np.isin(lab,[PNI['sock']]);sk=[K for K in _comps(lab,['skate','skate_blade']) if len(K)>=4 or any(sock[max(0,int(y)-1):int(y)+2,max(0,int(x)-1):int(x)+2].any() for x,y in K)][:2];got=[]   # skate px must touch a sock (else stray label)
+    sock=np.isin(lab,[PNI['sock']]);sk=[K for K in _skates(lab) if len(K)>=4 or any(sock[max(0,int(y)-1):int(y)+2,max(0,int(x)-1):int(x)+2].any() for x,y in K)][:2];got=[]   # skate px must touch a sock (else stray label)
     for i,K in enumerate(sk):
         s=side(K) or ('R','L')[i]
         if s in got:s={'R':'L','L':'R'}[s]
@@ -185,7 +254,8 @@ def posefit(lab,d):
         elif len(so):kn=so[np.argmax(np.hypot(*(so-an).T))]
         else:kn=an
         J[s+' knee']=kn.tolist()
-        if len(pa):
-            near=pa[np.hypot(*(pa-kn).T)<=4];J[s+' hip']=(C(near) if len(near) else 0.5*(kn+np.array(J['pelvis']))).tolist()
+        if len(pa):   # D162: hip at the waist line, 2 px across from the pelvis toward this leg (lying poses drew the hip on the knee)
+            pv=np.array(J['pelvis']);sg=np.sign((kn-pv)@perp) or (1 if s=='R' else -1);h=pv+2*sg*perp
+            J[s+' hip']=pa[np.argmin(np.hypot(*(pa-h).T))].tolist()
         else:J[s+' hip']=J['pelvis']
     return {k:list(map(float,v)) for k,v in J.items()}
