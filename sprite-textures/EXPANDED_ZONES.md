@@ -1142,3 +1142,11 @@ Facing comes from the animation tables (94G 596/845 frames, 94S 687/976). Refere
 ## D181 — short skeleton tags (pt1021u)
 
 D179 names were too big and too many. The editor (N) and the sheets now show only 9 small boxed tags: H, LH, RH, LK, RK, LF, RF, SHAFT, BLADE. SHAFT and BLADE sit at the middle of the stick bones. A legend explains them under the editor and on the sheets.
+
+## D182: reference heads, part preservation, edits wiring, the canonical pipeline (t1022u–t1024u)
+
+- **References:** chosen among same-facing, same-class 94G frames by head clarity and neutrality (`refs.refscore`: no occlusion, upright, compact head, then pose). The head is pasted verbatim, anchored on the head joint, and never over arm, hand or stick pixels. Pin: S196 uses G222 (Abdul); the scorer itself ranks G222 14th of 53 because the raised arms count as occlusion. S527 now uses G173 (score rank 1, upright). S800 uses G167.
+- **Part preservation (`stages.partcheck`):** every source part must keep at least 50% of its expected pixels through scaling and colouring. An arm part missing on both sides is a hard fail and goes to the fix queue; missing on one side only is a review flag. On the 5% sample (52 S94 frames): 41 pass, 11 fail, 21 review.
+- **S800:** the arm was raised over the head, but the fit put it at the waist, so the arm was labelled head and erased by the head paste. Fixed with a reviewed joint correction in `fixes_d182.json` (editor edits format; joints only, no pixel relabelled). Its part check now passes and the arm is drawn.
+- **Editor edits wired:** `refs.load_edits` reads `editor/edits/*_edits.json` plus `fixes_d182.json` and overrides joints and parts in SNES refits. They are not yet used for training.
+- **The pipeline:** the 8-step shared pipeline and its 4 routes are now the top section of WORKFLOW.md, with the gap status for each.

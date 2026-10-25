@@ -40,12 +40,16 @@ def run(it):
     lib=[h for h in headlib(exclude={n for n,g in {int(x['frame']):x['spf_group'] for x in rows if x['set']=='G94'}.items() if g in HOLD}) if not h['mir']]
     for h in lib:
         t=tdir('G94',h['n']);h['dir']=t if t is not None else int(fclf.predict([feat(A['G94'][h['n']],1)])[0]);h['dsrc']='table' if t is not None else 'classifier';h['cls']=sclass('G94',h['n'])
-    def convert(a,J=None,sn=None,abl=()):
+    from refs import load_edits,pasteref
+    EDITS=load_edits()
+    def convert(a,J=None,sn=None,abl=(),ref=None):
+        ed=EDITS.get(f'S94 {sn}',{}) if sn is not None else {}
+        if J is None and ed.get('joints'):J={k:tuple(v) for k,v in ed['joints'].items()}
         J=J or sk.fit(a);c0=c1=None
-        if it.get('skc') and 'noskc' not in abl:
+        if it.get('skc') and 'noskc' not in abl and not ed.get('joints'):
             F=FS[a];mask=a>0;body=mask&(F!=6);al={(y,x):FAMOK[F[y,x]] for y,x in zip(*np.nonzero(mask)) if F[y,x] in FAMOK}
             c0=check(mask,body,al,J,BONES,0.5);J,c1=enforce(mask,body,al,J,BONES,0.5)
-        PT=parts(a,J);O,OP,JN2=pose_scale(a,J,PT,R)
+        PT=np.array(ed['bp']) if ed.get('bp') else parts(a,J);O,OP,JN2=pose_scale(a,J,PT,R)
         Op=np.pad(O,it['dil']);OPp=np.pad(OP,it['dil']);m=binary_dilation(Op>0,iterations=it['dil']).ravel()
         o=np.zeros(Op.size,int)
         if 'norf' in abl:o=np.array([imap.get(int(v),0) if v else 0 for v in Op.ravel()])
@@ -55,8 +59,11 @@ def run(it):
             o=smooth(o)
             if it.get('sil'):o=silsmooth(o)
         t=tdir('S94',sn) if sn else None;d=t if t is not None else int(fclf.predict([feat(sscale(a),0)])[0]);cl=sclass('S94',sn) if sn else 'skater'
-        o,hd=pastehead(o,Op,[h for h in lib if h['dir']==d and h['cls']==cl]) if it['head'] and 'nohead' not in abl else (o,None)
-        o=repair(Op,o);return dict(J=J,PT=PT,O=o,S=Op,disc=disconnected(Op,o),head=hd,dir=d,dsrc='table' if t is not None else 'classifier',cls=cl,skc=(c0,c1))
+        if ref is not None and it['head'] and 'nohead' not in abl:
+            g,ga=ref;D=it['dil'];o,hd=pasteref(o,Op,OPp,g,ga,(JN2['head'][1]+D-.5,JN2['head'][0]+D-.5))
+        else:o,hd=pastehead(o,Op,[h for h in lib if h['dir']==d and h['cls']==cl]) if it['head'] and 'nohead' not in abl else (o,None)
+        o=repair(Op,o);pc=partcheck(PT,OPp,o)
+        return dict(J=J,PT=PT,O=o,S=Op,OP=OPp,disc=disconnected(Op,o),head=hd,dir=d,dsrc='table' if t is not None else 'classifier',cls=cl,skc=(c0,c1),parts=pc)
     res=dict(joint_err=[],parts_acc=[],final=[],disc=0,jag=[])
     for p in TE:
         a=A['S94'][p['s']];r=convert(a,sn=p['s']);G=A['G94'][p['g']]
@@ -71,6 +78,22 @@ def run(it):
     pickle.dump((sk.__dict__,R),open('/tmp/d178_last.pkl','wb'))
     out['_res']=res
     return out,convert
+PNAME={1:'head',2:'torso',3:'pelvis',4:'upper arm',5:'forearm',6:'hand',7:'thigh',8:'shin',9:'skate',10:'shaft',11:'blade'}
+def partcheck(PT,OP,o,lo=0.5):
+    """D182 part preservation: every part seen in the source (parts labels) must survive scaling (OP) and colouring (o>0 on its
+    footprint) with a comparable pixel count. Head is checked for presence only (it is pasted from 94G)."""
+    out={};fail=[]
+    for p,nm in PNAME.items():
+        src=int((PT==p).sum())
+        if src<3:continue
+        sc=int((OP%100==p).sum());kept=int(((OP%100==p)&(o>0)).sum());exp=src*SX*SY
+        r1=sc/exp;r2=kept/max(1,sc);out[nm]=dict(src=src,scaled=sc,kept=kept,r_scale=round(r1,2),r_kept=round(r2,2))
+        if (p!=1 and (r1<lo or r2<lo)) or sc==0:fail.append(nm)
+    review=[]
+    for p in (4,5):   # arm part with no pixels on either side = arm lost in the labels (hard); one side only = review (may be hidden)
+        if (PT%100==p).sum()<2:fail.append(PNAME[p]+' missing (both sides)')
+        else:review+=[sd+' '+PNAME[p]+' missing' for sd,v in (('L',p),('R',p+100)) if (PT==v).sum()<2]
+    return dict(ok=not fail,fail=fail,review=review,detail=out)
 def silsmooth(O):
     O=O.copy()
     for _ in range(3):

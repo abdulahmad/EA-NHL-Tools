@@ -1,0 +1,713 @@
+{
+ "metrics": {
+  "name": "it6",
+  "joint_err_px": 3.43,
+  "parts_acc": 0.555,
+  "exact": 0.338,
+  "family": 0.503,
+  "sil_iou": 0.737,
+  "disconnected": 0,
+  "jagged": 0.146,
+  "n": 31
+ },
+ "sample": {
+  "n": 52,
+  "passed": 41,
+  "fix_queue": [
+   {
+    "frame": 729,
+    "anim": "SPAgbutterfly",
+    "cls": "goalie",
+    "fail": [],
+    "review": [
+     "L upper arm missing",
+     "R forearm missing"
+    ]
+   },
+   {
+    "frame": 717,
+    "anim": "SPAgcover",
+    "cls": "goalie",
+    "fail": [],
+    "review": [
+     "R upper arm missing",
+     "L forearm missing"
+    ]
+   },
+   {
+    "frame": 545,
+    "anim": "SPAgglovel",
+    "cls": "goalie",
+    "fail": [],
+    "review": [
+     "L forearm missing"
+    ]
+   },
+   {
+    "frame": 657,
+    "anim": "SPAgready",
+    "cls": "goalie",
+    "fail": [],
+    "review": [
+     "R forearm missing"
+    ]
+   },
+   {
+    "frame": 629,
+    "anim": "SPAgskate",
+    "cls": "goalie",
+    "fail": [],
+    "review": [
+     "R forearm missing"
+    ]
+   },
+   {
+    "frame": 765,
+    "anim": "SPAgsprawll",
+    "cls": "goalie",
+    "fail": [],
+    "review": [
+     "R forearm missing"
+    ]
+   },
+   {
+    "frame": 785,
+    "anim": "SPAgsprawlr",
+    "cls": "goalie",
+    "fail": [],
+    "review": [
+     "L forearm missing"
+    ]
+   },
+   {
+    "frame": 612,
+    "anim": "SPAgstickr",
+    "cls": "goalie",
+    "fail": [
+     "forearm missing (both sides)"
+    ],
+    "review": []
+   },
+   {
+    "frame": 597,
+    "anim": "none",
+    "cls": "goalie",
+    "fail": [],
+    "review": [
+     "R upper arm missing",
+     "R forearm missing"
+    ]
+   },
+   {
+    "frame": 500,
+    "anim": "SPAcatch",
+    "cls": "skater",
+    "fail": [],
+    "review": [
+     "R forearm missing"
+    ]
+   },
+   {
+    "frame": 190,
+    "anim": "SPAcelebrate",
+    "cls": "skater",
+    "fail": [],
+    "review": [
+     "R forearm missing"
+    ]
+   },
+   {
+    "frame": 320,
+    "anim": "SPAfallfwd",
+    "cls": "skater",
+    "fail": [],
+    "review": [
+     "L upper arm missing",
+     "R upper arm missing"
+    ]
+   },
+   {
+    "frame": 130,
+    "anim": "SPAonetimerb",
+    "cls": "skater",
+    "fail": [],
+    "review": [
+     "L forearm missing"
+    ]
+   },
+   {
+    "frame": 216,
+    "anim": "SPApump",
+    "cls": "skater",
+    "fail": [
+     "forearm missing (both sides)"
+    ],
+    "review": [
+     "L upper arm missing"
+    ]
+   },
+   {
+    "frame": 809,
+    "anim": "SPApump2",
+    "cls": "skater",
+    "fail": [],
+    "review": [
+     "R upper arm missing"
+    ]
+   },
+   {
+    "frame": 249,
+    "anim": "SPAshoulderchkl",
+    "cls": "skater",
+    "fail": [],
+    "review": [
+     "R forearm missing"
+    ]
+   },
+   {
+    "frame": 22,
+    "anim": "SPAskatewp",
+    "cls": "skater",
+    "fail": [],
+    "review": [
+     "L forearm missing"
+    ]
+   },
+   {
+    "frame": 221,
+    "anim": "SPAstanley",
+    "cls": "skater",
+    "fail": [],
+    "review": [
+     "L forearm missing"
+    ]
+   },
+   {
+    "frame": 81,
+    "anim": "SPAturnl",
+    "cls": "skater",
+    "fail": [],
+    "review": [
+     "L forearm missing"
+    ]
+   },
+   {
+    "frame": 229,
+    "anim": "none",
+    "cls": "skater",
+    "fail": [
+     "forearm missing (both sides)"
+    ],
+    "review": [
+     "L upper arm missing"
+    ]
+   },
+   {
+    "frame": 377,
+    "anim": "none",
+    "cls": "skater",
+    "fail": [
+     "upper arm missing (both sides)",
+     "forearm missing (both sides)"
+    ],
+    "review": []
+   },
+   {
+    "frame": 397,
+    "anim": "none",
+    "cls": "skater",
+    "fail": [
+     "upper arm missing (both sides)",
+     "forearm missing (both sides)"
+    ],
+    "review": []
+   },
+   {
+    "frame": 417,
+    "anim": "none",
+    "cls": "skater",
+    "fail": [
+     "upper arm missing (both sides)",
+     "forearm missing (both sides)"
+    ],
+    "review": []
+   },
+   {
+    "frame": 437,
+    "anim": "none",
+    "cls": "skater",
+    "fail": [
+     "upper arm missing (both sides)",
+     "forearm missing (both sides)"
+    ],
+    "review": []
+   },
+   {
+    "frame": 876,
+    "anim": "none",
+    "cls": "skater",
+    "fail": [],
+    "review": [
+     "L upper arm missing",
+     "L forearm missing"
+    ]
+   },
+   {
+    "frame": 916,
+    "anim": "none",
+    "cls": "skater",
+    "fail": [],
+    "review": [
+     "R upper arm missing",
+     "L forearm missing"
+    ]
+   },
+   {
+    "frame": 936,
+    "anim": "none",
+    "cls": "skater",
+    "fail": [
+     "upper arm missing (both sides)"
+    ],
+    "review": [
+     "R forearm missing"
+    ]
+   },
+   {
+    "frame": 956,
+    "anim": "none",
+    "cls": "skater",
+    "fail": [
+     "forearm missing (both sides)"
+    ],
+    "review": [
+     "L upper arm missing"
+    ]
+   },
+   {
+    "frame": 976,
+    "anim": "none",
+    "cls": "skater",
+    "fail": [
+     "upper arm missing (both sides)",
+     "forearm missing (both sides)"
+    ],
+    "review": []
+   },
+   {
+    "frame": 196,
+    "anim": "must",
+    "cls": "skater",
+    "fail": [],
+    "review": [
+     "L upper arm missing"
+    ]
+   },
+   {
+    "frame": 527,
+    "anim": "must",
+    "cls": "skater",
+    "fail": [],
+    "review": [
+     "R forearm missing"
+    ]
+   },
+   {
+    "frame": 800,
+    "anim": "must",
+    "cls": "skater",
+    "fail": [
+     "hand"
+    ],
+    "review": []
+   }
+  ]
+ },
+ "exclusives": [
+  {
+   "s": 196,
+   "dir": 5,
+   "ref": 222,
+   "pinned": true,
+   "anchor": "head centroid",
+   "top3": [
+    [
+     211,
+     {
+      "score": 0.798,
+      "iou": 0.48,
+      "occl": 0.03,
+      "lean": 0.03,
+      "compact": 0.89,
+      "top": 0.0,
+      "f": "F"
+     }
+    ],
+    [
+     212,
+     {
+      "score": 0.786,
+      "iou": 0.45,
+      "occl": 0.03,
+      "lean": 0.03,
+      "compact": 0.89,
+      "top": 0.0,
+      "f": "F"
+     }
+    ],
+    [
+     177,
+     {
+      "score": 0.781,
+      "iou": 0.48,
+      "occl": 0.03,
+      "lean": 0.04,
+      "compact": 0.86,
+      "top": 0.0,
+      "f": "F"
+     }
+    ]
+   ],
+   "head": {
+    "pasted": 24,
+    "of": 29
+   },
+   "parts": {
+    "ok": true,
+    "fail": [],
+    "review": [
+     "L upper arm missing"
+    ],
+    "detail": {
+     "head": {
+      "src": 34,
+      "scaled": 36,
+      "kept": 26,
+      "r_scale": 0.88,
+      "r_kept": 0.72
+     },
+     "torso": {
+      "src": 83,
+      "scaled": 105,
+      "kept": 105,
+      "r_scale": 1.05,
+      "r_kept": 1.0
+     },
+     "pelvis": {
+      "src": 52,
+      "scaled": 68,
+      "kept": 68,
+      "r_scale": 1.08,
+      "r_kept": 1.0
+     },
+     "forearm": {
+      "src": 13,
+      "scaled": 16,
+      "kept": 16,
+      "r_scale": 1.02,
+      "r_kept": 1.0
+     },
+     "hand": {
+      "src": 3,
+      "scaled": 5,
+      "kept": 5,
+      "r_scale": 1.38,
+      "r_kept": 1.0
+     },
+     "thigh": {
+      "src": 13,
+      "scaled": 26,
+      "kept": 26,
+      "r_scale": 1.65,
+      "r_kept": 1.0
+     },
+     "shin": {
+      "src": 9,
+      "scaled": 26,
+      "kept": 26,
+      "r_scale": 2.39,
+      "r_kept": 1.0
+     },
+     "skate": {
+      "src": 37,
+      "scaled": 68,
+      "kept": 68,
+      "r_scale": 1.52,
+      "r_kept": 1.0
+     },
+     "shaft": {
+      "src": 30,
+      "scaled": 36,
+      "kept": 36,
+      "r_scale": 0.99,
+      "r_kept": 1.0
+     },
+     "blade": {
+      "src": 15,
+      "scaled": 17,
+      "kept": 17,
+      "r_scale": 0.94,
+      "r_kept": 1.0
+     }
+    }
+   },
+   "disc": 0
+  },
+  {
+   "s": 527,
+   "dir": 4,
+   "ref": 173,
+   "pinned": false,
+   "anchor": "head joint",
+   "top3": [
+    [
+     173,
+     {
+      "score": 0.827,
+      "iou": 0.53,
+      "occl": 0.06,
+      "lean": 0.0,
+      "compact": 0.89,
+      "top": 0.0,
+      "f": "F"
+     }
+    ],
+    [
+     209,
+     {
+      "score": 0.822,
+      "iou": 0.52,
+      "occl": 0.06,
+      "lean": 0.0,
+      "compact": 0.89,
+      "top": 0.0,
+      "f": "F"
+     }
+    ],
+    [
+     210,
+     {
+      "score": 0.789,
+      "iou": 0.52,
+      "occl": 0.06,
+      "lean": 0.04,
+      "compact": 0.89,
+      "top": 0.0,
+      "f": "F"
+     }
+    ]
+   ],
+   "head": {
+    "pasted": 31,
+    "of": 31
+   },
+   "parts": {
+    "ok": true,
+    "fail": [],
+    "review": [
+     "R forearm missing"
+    ],
+    "detail": {
+     "head": {
+      "src": 46,
+      "scaled": 52,
+      "kept": 45,
+      "r_scale": 0.93,
+      "r_kept": 0.87
+     },
+     "torso": {
+      "src": 25,
+      "scaled": 33,
+      "kept": 33,
+      "r_scale": 1.09,
+      "r_kept": 1.0
+     },
+     "pelvis": {
+      "src": 17,
+      "scaled": 20,
+      "kept": 20,
+      "r_scale": 0.97,
+      "r_kept": 1.0
+     },
+     "upper arm": {
+      "src": 5,
+      "scaled": 9,
+      "kept": 9,
+      "r_scale": 1.49,
+      "r_kept": 1.0
+     },
+     "forearm": {
+      "src": 8,
+      "scaled": 8,
+      "kept": 8,
+      "r_scale": 0.83,
+      "r_kept": 1.0
+     },
+     "hand": {
+      "src": 21,
+      "scaled": 46,
+      "kept": 46,
+      "r_scale": 1.81,
+      "r_kept": 1.0
+     },
+     "thigh": {
+      "src": 8,
+      "scaled": 12,
+      "kept": 12,
+      "r_scale": 1.24,
+      "r_kept": 1.0
+     },
+     "skate": {
+      "src": 30,
+      "scaled": 33,
+      "kept": 33,
+      "r_scale": 0.91,
+      "r_kept": 1.0
+     },
+     "shaft": {
+      "src": 40,
+      "scaled": 45,
+      "kept": 45,
+      "r_scale": 0.93,
+      "r_kept": 1.0
+     },
+     "blade": {
+      "src": 26,
+      "scaled": 30,
+      "kept": 30,
+      "r_scale": 0.95,
+      "r_kept": 1.0
+     }
+    }
+   },
+   "disc": 0
+  },
+  {
+   "s": 800,
+   "dir": 2,
+   "ref": 167,
+   "pinned": false,
+   "anchor": "head centroid",
+   "top3": [
+    [
+     167,
+     {
+      "score": 0.806,
+      "iou": 0.48,
+      "occl": 0.03,
+      "lean": 0.02,
+      "compact": 0.88,
+      "top": 0.0,
+      "f": "F"
+     }
+    ],
+    [
+     339,
+     {
+      "score": 0.783,
+      "iou": 0.42,
+      "occl": 0.03,
+      "lean": 0.01,
+      "compact": 0.79,
+      "top": 0.0,
+      "f": "F"
+     }
+    ],
+    [
+     189,
+     {
+      "score": 0.782,
+      "iou": 0.44,
+      "occl": 0.03,
+      "lean": 0.0,
+      "compact": 0.73,
+      "top": 0.0,
+      "f": "F"
+     }
+    ]
+   ],
+   "head": {
+    "pasted": 36,
+    "of": 37
+   },
+   "parts": {
+    "ok": true,
+    "fail": [],
+    "review": [],
+    "detail": {
+     "head": {
+      "src": 28,
+      "scaled": 39,
+      "kept": 34,
+      "r_scale": 1.15,
+      "r_kept": 0.87
+     },
+     "torso": {
+      "src": 54,
+      "scaled": 60,
+      "kept": 60,
+      "r_scale": 0.92,
+      "r_kept": 1.0
+     },
+     "pelvis": {
+      "src": 7,
+      "scaled": 8,
+      "kept": 8,
+      "r_scale": 0.94,
+      "r_kept": 1.0
+     },
+     "upper arm": {
+      "src": 5,
+      "scaled": 21,
+      "kept": 21,
+      "r_scale": 3.47,
+      "r_kept": 1.0
+     },
+     "forearm": {
+      "src": 4,
+      "scaled": 7,
+      "kept": 7,
+      "r_scale": 1.45,
+      "r_kept": 1.0
+     },
+     "hand": {
+      "src": 5,
+      "scaled": 18,
+      "kept": 18,
+      "r_scale": 2.98,
+      "r_kept": 1.0
+     },
+     "shin": {
+      "src": 13,
+      "scaled": 23,
+      "kept": 23,
+      "r_scale": 1.46,
+      "r_kept": 1.0
+     },
+     "skate": {
+      "src": 8,
+      "scaled": 52,
+      "kept": 52,
+      "r_scale": 5.37,
+      "r_kept": 1.0
+     },
+     "shaft": {
+      "src": 55,
+      "scaled": 66,
+      "kept": 66,
+      "r_scale": 0.99,
+      "r_kept": 1.0
+     },
+     "blade": {
+      "src": 19,
+      "scaled": 22,
+      "kept": 22,
+      "r_scale": 0.96,
+      "r_kept": 1.0
+     }
+    }
+   },
+   "disc": 0
+  }
+ ]
+}
