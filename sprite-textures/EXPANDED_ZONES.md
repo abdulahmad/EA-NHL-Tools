@@ -1123,3 +1123,12 @@ Joint+warp fit, palette-zone constraint, palette-index texture key. See docs/exc
 
 ## D175
 Shade groups collapsed in the 94G control (pt1005u). See docs/exclusive-expansion/d175/METHOD_D175.md. Control mismatches 800, Leafs errors 708, nudges 1,180; 0-error goal not met; PC 601 not checked.
+
+## D176
+SNES→94G converter (pt1008u, PR #135). See docs/snes-redraw/RULES.md. Held-out: 51.2% family, 34.8% exact.
+
+## D177
+Verbatim same-facing heads, smoothing, an automatic connectivity check and repair, and a facing classifier. The nearest pose is a reference only, with no warp (pt1010u, t1012u). See docs/snes-redraw/RULES_D177_D178.md. Split zones: 20 frames → 0. Jagged steps: 0.183 → 0.147.
+
+## D178
+Staged pipeline: skeleton → parts → scale → smooth/colour, with per-stage metrics over 5 iterations (t1013u). Held-out it5: joint error 3.48 px, parts 54.7%, family 50.7%, exact 33.9%, jagged 0.144. Plateau at about 50% (oracle 52.5%). Added docs/WORKFLOW.md (t1014u).

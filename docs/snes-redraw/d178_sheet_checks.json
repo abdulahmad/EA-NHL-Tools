@@ -1,0 +1,57 @@
+{
+ "metrics": {
+  "name": "it5",
+  "joint_err_px": 3.48,
+  "parts_acc": 0.547,
+  "exact": 0.339,
+  "family": 0.507,
+  "sil_iou": 0.741,
+  "disconnected": 0,
+  "jagged": 0.144,
+  "n": 31
+ },
+ "exclusive_checks": [
+  {
+   "s": 196,
+   "dir": 2,
+   "ref": 192,
+   "ref_dir": 2,
+   "same": true,
+   "disc": 0,
+   "head": {
+    "n": 203,
+    "mir": false,
+    "f": "F",
+    "iou": 0.67
+   }
+  },
+  {
+   "s": 527,
+   "dir": 3,
+   "ref": 207,
+   "ref_dir": 3,
+   "same": true,
+   "disc": 0,
+   "head": {
+    "n": 208,
+    "mir": false,
+    "f": "F",
+    "iou": 0.5
+   }
+  },
+  {
+   "s": 800,
+   "dir": 3,
+   "ref": 498,
+   "ref_dir": 3,
+   "same": true,
+   "disc": 0,
+   "head": {
+    "n": 119,
+    "mir": false,
+    "f": "F",
+    "iou": 0.54
+   }
+  }
+ ]
+}

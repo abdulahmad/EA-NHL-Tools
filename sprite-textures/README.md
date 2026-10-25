@@ -1,5 +1,7 @@
 # sprite-textures
 
+**Start here:** [docs/WORKFLOW.md](docs/WORKFLOW.md), covering the roadmap, pipelines, editor, rules, status and how to resume.
+
 > **Start here (agents):** the current work is the **v2 38x32 texture layout**. Read the "v2 38x32 layout — entry point" section below, then `EXPANDED_ZONES.md` (decisions log) and `v2_38x32/PLAN_v2.md`.
 
 Research tooling for per-pixel jersey textures on the NHL 95 PC player sprites. The target is the NHL Classic engine (the C port of NHL Genesis that is being converted to full colour). Retail palette limits do not apply there.
