@@ -150,3 +150,4 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 - D170: D169 texture frozen (pt994u); exclusive maps re-fit with family constraint, row snapping and part split. 0 of 11,318 px errors (was 1,805), but the test-pattern renders are still incoherent. See `docs/exclusive-expansion/d170/`.
 - D171: smooth per-part affine warp vs the D169 texture. 1,581 errors and 1,986 exceptions out of 11,318 px; more coherent than D170 but not clean. See `docs/exclusive-expansion/d171/`.
 - D172: outline ruling (b) plus per-bone warp. 1,284 errors and 1,243 nudges out of 11,318 px; 93G 353 has 0 errors. See `docs/exclusive-expansion/d172/`.
+- D173: full skeleton for the 40 Genesis exclusives (24 flagged) plus skeleton-driven warp. 1,938 errors and 1,080 nudges; worse than D172. See `docs/exclusive-expansion/d173/`.
