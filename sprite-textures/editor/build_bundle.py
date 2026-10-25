@@ -1,5 +1,5 @@
 # Sprite editor bundle (Abdul pt1006u/pt1007u): python3 sprite-textures/editor/build_bundle.py
-# Builds editor/data/bundle.js (gitignored: it holds game sprite data) from the local pipelines:
+# Builds editor/data/bundle.js and the single self-contained editor editor/data/sprite_editor.html (both gitignored: game sprite data) from the local pipelines:
 #   skaters  - skater_editor/skater_export.py (D161/D163 skeletons, hand + auto texture maps)
 #   goalies  - v2_38x32/goalie28 (<tempdir>/g28_all.json from g28all.py: labels, joints, pipeline maps)
 #   exclusives - D175 run (preview_v2/exclusive_samples/v3: skel175.json + <tempdir>/d175_dump.pkl from run175.py), if present
@@ -93,7 +93,12 @@ for f in B['frames']:
   if 'nostick' in e:f['nostick']=bool(e['nostick']);f['nostick_src']='edit'
   elif f['id'] in NSEED:f['nostick']=True;f['nostick_src']='auto (D183)'
 B['nostick_seed']=sorted(NSEED)
+# D187: one connected skeleton tree per frame (missing joints inferred, canonical bones); not for non-player sprites
+from skeltree import connect
+for f in B['frames']:
+  if not any('not a player' in w for w in f['why']):connect(f)
 B['frames'].sort(key=lambda f:-f['score'])
 os.makedirs(os.path.join(E,'data'),exist_ok=True)
 open(os.path.join(E,'data','bundle.js'),'w').write('window.BUNDLE='+json.dumps(B,separators=(',',':'))+';')
-print('bundle:',len(B['frames']),'frames,',len(B['textures']),'textures ->',os.path.join(E,'data','bundle.js'))
+from single import write_html
+print('bundle:',len(B['frames']),'frames,',len(B['textures']),'textures ->',write_html(B,'sprite_editor.html'))

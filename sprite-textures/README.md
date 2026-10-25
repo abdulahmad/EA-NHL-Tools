@@ -160,6 +160,6 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 
     python3 sprite-textures/editor/launch.py        # --rebuild to regenerate data, --no-browser
 
-Builds `editor/data/bundle.js` locally from your ROM-derived exports (gitignored; game data is never committed),
-serves on 127.0.0.1:8765 and opens a worst-first fix queue. A/D or arrows = prev/next, O labels, J skeleton, Z undo, S save.
+Builds one self-contained editor file `editor/data/sprite_editor.html` locally from your ROM-derived exports (gitignored; game data is never committed).
+Open it directly from disk (no server; Save downloads sprite_edits.json), or let launch.py serve it on 127.0.0.1:8765 and opens a worst-first fix queue. A/D or arrows = prev/next, O labels, J skeleton, Z undo, S save.
 Saves go to `editor/edits/<kind>_edits.json`.
