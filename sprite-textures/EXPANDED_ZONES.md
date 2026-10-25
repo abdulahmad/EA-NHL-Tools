@@ -1059,3 +1059,8 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 
 ## D164: process history doc (Abdul pt981u)
 - `sprite-textures/docs/PROCESS_HISTORY.md`: the stages from early mapping to D163, with rulings, metrics and one screenshot per stage. Images (<=800 px, 256-colour PNG) are in `docs/process/`; they are allowed only for this doc.
+
+## D165: platform frame census (Abdul pt986u/pt987u)
+- `sprite-textures/docs/platform-census/`: every frame of 92G/93G/94G/94S/95PC compared (plus 93S as reference). Includes `REPORT.md`, `frames_matrix.csv/json` (best match per other set + class), `roadmap_*.csv`, `intra.json` and the pipeline `scripts/`.
+- Exclusives: 93G blood `finjury` 371-376. 92G/93G share the fights 353-370; 94G blanks them and PC has none. 94G has 79 exclusives (boards, bench checks, crosscheck, ghigh/gstick2/gslam). 94S has 145. PC has 174.
+- Match classes are thresholds only; no pixels are relabelled. Pickles, raw dumps and full contact sheets are not committed. Only four 800 px sample sheets are allowed, for this doc.
