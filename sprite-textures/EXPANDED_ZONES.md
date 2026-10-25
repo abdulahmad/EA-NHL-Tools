@@ -973,3 +973,6 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - Result, default texture (EDM): 0 errors on mask, blocker, catcher and pads (the current layout also has 0). Per-pixel share (neighbour step exactly 1, same block; one metric for both): mask 48/62% -> 86/85% across/down, blocker 26/37% -> 52/53%, catcher 21/18% -> 44/41%, pads 32/40% -> 40/35%.
 - Cost: the layout grows from 23x32 to 64x78 (mask 44x23, blocker 19x16, catcher back 21x22, catcher front 35x27, pad 23x26). The blocks are averages of many poses, so they look like collages, not a paintable glove or pad; a custom design would be hard to draw on them. Splitting gloves/pads into 2-3 pose variants barely helped (pads 45/43%, blocker 57/58%).
 - Finding: the mask can be near per-pixel. Gloves and pads can't reach "mostly per-pixel with 0 errors" from one block, because the game redraws them differently per pose. Options for Abdul: (a) adopt per-pixel for the mask only; (b) accept the large collage blocks; (c) keep geometric glove/pad mapping. Files are local in preview_v2/layout_draft/.
+
+## D151 — Keep the CURRENT 23x32 goalie layout (Abdul pt955u)
+- Ruling: "Current". The D150 draft per-pixel layout (64x78) is dropped; the pipeline stays on the v8 23x32 layout. Draft files stay local and are never committed.

@@ -138,3 +138,4 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - D148: skater part/skeleton editor (skater_part_editor.html + skater_editor/skater_export.py, skater_import.py).
 - D149: test textures (lines, checker, grid, part regions, solid cuff) in both part editors; live texture preview in the skater editor.
 - D150: draft per-pixel goalie layout measured (review only; pipeline unchanged).
+- D151: keep the current 23x32 goalie layout; D150 draft dropped.
