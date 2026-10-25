@@ -23,7 +23,7 @@ canvas{image-rendering:pixelated;background:#3a3a3a;border:1px solid #777}
 <button id="prev">&larr; prev (A)</button><button id="next">next (D) &rarr;</button>
 <select id="q" title="fix queue, worst first"></select>
 <label>texture <select id="tsel"></select></label>
-<button id="ovl" class="on">labels (O)</button><button id="jt" class="on">skeleton (J)</button>
+<button id="ovl" class="on">labels (O)</button><button id="jt" class="on">skeleton (J)</button><button id="nm" class="on">part names (N)</button>
 <button id="fill">flood fill (F)</button><button id="side" class="on">side: LEFT (Tab)</button><button id="undo">undo (Z)</button><button id="reset">reset frame</button><button id="save">save (S)</button><span id="st" class="small"></span></div>
 <div id="why"></div><div id="parts"></div>
 <div id="grid">
@@ -31,7 +31,7 @@ canvas{image-rendering:pixelated;background:#3a3a3a;border:1px solid #777}
  <div class="c"><canvas id="ed"></canvas></div><div class="c"><canvas id="pg"></canvas></div><div class="c"><canvas id="pt"></canvas></div><div class="c"><canvas id="tx"></canvas></div>
 </div>
 <div id="legend"></div>
-<p class="small" id="help">PARTS view: click/drag paints the body part, F toggles flood fill (fills same palette index + same part), Tab switches LEFT/RIGHT, Shift+click picks, keys 1-0/q/e/x pick parts. Labels view: click/drag paints the selected part. Drag a ring to move a joint. Shift+click picks the part under the cursor. Keys: A/D or arrows = prev/next, O labels, J skeleton, Z undo, S save, part keys on the buttons.</p>
+<p class="small" id="help">PARTS view: click/drag paints the body part, F toggles flood fill (fills same palette index + same part), Tab switches LEFT/RIGHT, Shift+click picks, keys 1-0/q/e/x pick parts. Labels view: click/drag paints the selected part. Drag a ring to move a joint. Shift+click picks the part under the cursor. Keys: A/D or arrows = prev/next, O labels, J skeleton, N skeleton part names (yellow = bone, white = joint), Z undo, S save, part keys on the buttons.</p>
 <script src="data/bundle.js"></script>
 <script>
 const B=window.BUNDLE,$=i=>document.getElementById(i),Z=12,PZ=5;
@@ -67,7 +67,7 @@ function bpViol(f,bp){const v=[],h=f.px.length,w=f.px[0].length,M=MATOK[f.kind];
   if(!ok)v.push([y,x])}return v}
 const DARKTXT=['#000000','#0072b2','#003a66','#404040','#7a4a00','#6b5b95','#5a3a1a'];
 const BCOL=(a,b)=>{const s=a+' '+b;return s.includes('stick')?(b.includes('toe')?'#f0e442':'#bdbdbd'):/(R |R)(sh|el|wr|gl|hand|Rsh|Relb)/.test(s)||/Rsh|Relb|Rhand/.test(s)?'#e69f00':/(L )(sh|el|wr|gl)|Lsh|Lelb|Lhand/.test(s)?'#56b4e9':/R (hip|kn|an|sk)|Rhip|Rknee|Rank/.test(s)?'#cc79a7':/L (hip|kn|an|sk)|Lhip|Lknee|Lank/.test(s)?'#9ad0f0':'#ffffff'};
-let view='parts',bcur=2,side=0,fill=false,qi=0,cur=4,ovl=true,jt=true,edits={},undo=[],drag=null,painting=false;
+let nm=true,view='parts',bcur=2,side=0,fill=false,qi=0,cur=4,ovl=true,jt=true,edits={},undo=[],drag=null,painting=false;
 const ALL=B?B.frames:[];ALL.forEach(f=>{f.pv=bpViol(f,bpOf(f)).length;if(f.score>0||f.pv>=8){if(f.pv>=8)f.why=f.why.concat([`${f.pv} body-part / colour-zone violations`]);f.score=+(f.score+0.5*f.pv).toFixed(1)}});
 const Q=ALL.filter(f=>f.score>0&&!(f.why||[]).some(w=>/not a player/.test(w))).sort((a,b)=>b.score-a.score);if(!Q.length)Q.push(...ALL);
 const fr=()=>Q[qi],get=()=>edits[fr().id]||fr();
@@ -82,11 +82,11 @@ function texOpts(){const k=fr().kind=='goalie'?'goalie':'v2',T=Object.keys(B.tex
  $('tsel').value=T.includes(old)?old:(T.includes(pref)?pref:T[0])}
 function legend(){const f=fr();let s='<b>Legend</b><br>';
  if(view=='parts'){s+='Body parts: '+BP.slice(1).map(p=>`<span class="sw" style="background:${p[1]}"></span>${p[2]} ${p[0]}`).join('');
-  s+='<br><span class="sw" style="background:repeating-linear-gradient(45deg,#e69f00 0 3px,#000 3px 6px)"></span>striped = RIGHT side, solid = LEFT side (arms, legs, skates)<span class="sw" style="border:3px solid #fff;outline:2px solid #000;border-radius:50%"></span>ring: part not allowed for this colour zone (D174 table / material label)<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint';$('legend').innerHTML=s;return}
+  s+='<br><span class="sw" style="background:repeating-linear-gradient(45deg,#e69f00 0 3px,#000 3px 6px)"></span>striped = RIGHT side, solid = LEFT side (arms, legs, skates)<span class="sw" style="border:3px solid #fff;outline:2px solid #000;border-radius:50%"></span>ring: part not allowed for this colour zone (D174 table / material label)<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint. Names (N): <b style="color:#ffe000;background:#000">bone</b> <b style="color:#fff;background:#000">joint</b>';$('legend').innerHTML=s;return}
  s+='<span class="sw" style="background:#3a3a3a"></span>empty / background';
  if(f.kind=='exclusive')s+='<span class="sw" style="border:3px solid #fff;outline:2px solid #000;border-radius:50%"></span>ring: wrong control zone (texel shade group differs from the pixel\'s)<span class="sw" style="border:2px solid #00ffff;background:none"></span>cyan box: nudged 1 texel';
  s+='<span class="sw" style="background:repeating-linear-gradient(45deg,#000 0 3px,#fff 3px 6px)"></span>hatched: pixel has no texel (preview keeps game colour)<br>';
- s+='Skeleton: <span class="sw" style="background:#fff"></span>head/torso<span class="sw" style="background:#e69f00"></span>R arm<span class="sw" style="background:#56b4e9"></span>L arm<span class="sw" style="background:#cc79a7"></span>R leg<span class="sw" style="background:#9ad0f0"></span>L leg<span class="sw" style="background:#bdbdbd"></span>stick shaft<span class="sw" style="background:#f0e442"></span>blade.<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint = yellow square (drag to move)';
+ s+='Skeleton: <span class="sw" style="background:#fff"></span>head/torso<span class="sw" style="background:#e69f00"></span>R arm<span class="sw" style="background:#56b4e9"></span>L arm<span class="sw" style="background:#cc79a7"></span>R leg<span class="sw" style="background:#9ad0f0"></span>L leg<span class="sw" style="background:#bdbdbd"></span>stick shaft<span class="sw" style="background:#f0e442"></span>blade.<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint = yellow square (drag to move). Names (N): <b style="color:#ffe000;background:#000">bone</b> <b style="color:#fff;background:#000">joint</b>';
  if(f.kind!='exclusive')s+='<br>Labels: coloured square + letter per pixel (see part buttons).';$('legend').innerHTML=s}
 function sizeFor(cv,w,h,z){cv.width=w*z;cv.height=h*z;const c=cv.getContext('2d');c.fillStyle='#3a3a3a';c.fillRect(0,0,cv.width,cv.height);return c}
 function hatch(c,x,y,z){c.fillStyle='#000';c.fillRect(x,y,z,z);c.strokeStyle='#fff';c.lineWidth=1;c.beginPath();for(let d=-z;d<z;d+=3){c.moveTo(x+Math.max(0,d),y+Math.max(0,-d));c.lineTo(x+Math.min(z,d+z),y+Math.min(z,z-d))}c.stroke()}
@@ -106,7 +106,8 @@ function show(){if(!B)return;const f=fr(),g=get(),pal=B.palettes[f.pal],h=f.px.l
  if(view!="parts")marks(c,f,Z);
  if(jt){const J=g.joints,p=k=>[(J[k][0]+.5)*Z,(J[k][1]+.5)*Z];
   for(const [col,lw] of [['#000',5],[null,2.5]]){c.lineWidth=lw;f.bones.forEach(([a,b])=>{if(J[a]&&J[b]){c.strokeStyle=col||BCOL(a,b);c.beginPath();c.moveTo(...p(a));c.lineTo(...p(b));c.stroke()}})}
-  for(const k in J){const [X,Y]=p(k);c.beginPath();c.rect(X-4.5,Y-4.5,9,9);c.fillStyle='#ffe000';c.fill();c.lineWidth=2;c.strokeStyle='#000';c.stroke()}}
+  for(const k in J){const [X,Y]=p(k);c.beginPath();c.rect(X-4.5,Y-4.5,9,9);c.fillStyle='#ffe000';c.fill();c.lineWidth=2;c.strokeStyle='#000';c.stroke()}
+  if(nm)skLabels(c,J,f.bones,p,c.canvas.width,c.canvas.height)}
  const pg=sizeFor($('pg'),w,h,PZ),pt=sizeFor($('pt'),w,h,PZ);
  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;pg.fillStyle=`rgb(${pal[s]})`;pg.fillRect(x*PZ,y*PZ,PZ,PZ);
   const t=f.tmap[y+','+x],cc=t&&T[t[1]]&&T[t[1]][t[0]];
@@ -128,11 +129,32 @@ $('ed').onmousedown=e=>{const [fx,fy]=cell(e),g=get();if(view=='parts'&&e.shiftK
  undo.push([qi,JSON.stringify(edits[fr().id]||null)]);if(jt)for(const k in g.joints){const j=g.joints[k];if(Math.hypot(j[0]+.5-fx,j[1]+.5-fy)<.6){drag=k;return}}painting=true;paint(e)};
 $('ed').onmousemove=e=>{if(drag){const [fx,fy]=cell(e);mut().joints[drag]=[Math.round(fx-.5),Math.round(fy-.5)];show()}else if(painting)paint(e)};
 onmouseup=()=>{drag=null;painting=false};
+
+// D179: skeleton part names (Abdul pt1011u)
+const JN={head:'head',neck:'neck',chest:'chest',belly:'belly',pelvis:'pelvis','stick butt':'butt','stick heel':'heel','stick toe':'toe'};
+function jName(k){if(JN[k])return JN[k];let m=k.match(/^([LR]) ?(.*)$/);if(m){const a={shoulder:'shld',sh:'shld',elbow:'elb',elb:'elb',wrist:'wrist',glove:'glove',hand:'glove',hip:'hip',knee:'knee',ankle:'ank',ank:'ank',skate:'skate'}[m[2]]||m[2];return m[1]+' '+a}
+ m=k.match(/^(hand|stick)\d+ ([ab])$/);if(m)return m[1]=='hand'?'hand':'stick';return k}
+function bName(a,b){const s=(a+' '+b).toLowerCase(),side=(/^[lr] ?/i.test(b)?b[0].toUpperCase():/^[lr] ?/i.test(a)?a[0].toUpperCase():'')+' ';
+ if(s.includes('head'))return 'head';if(/neck.*(chest|pelvis)/.test(s))return 'torso';if(/neck.*(sh)/.test(s))return side+'collar';
+ if(/chest|belly/.test(s)&&/pelvis|belly/.test(s))return 'torso';if(/pelvis.*hip/.test(s))return side+'pelvis';
+ if(/sh(oulder)? .*elb|sh.*elb/.test(s))return side+'up arm';if(/elb.*(wrist|hand)/.test(s))return side+'forearm';if(/wrist.*glove|hand\d/.test(s))return /hand\d/.test(s)?'hand':side+'hand';
+ if(/hip.*knee/.test(s))return side+'thigh';if(/knee.*ank/.test(s))return side+'shin';if(/ank.*skate/.test(s))return side+'skate';
+ if(/butt.*heel|stick\d/.test(s))return 'shaft';if(/heel.*toe/.test(s))return 'blade';return a+'-'+b}
+function skLabels(c,J,bones,p,W,H){const placed=[],L=[];c.font='bold 11px sans-serif';c.textBaseline='middle';c.textAlign='left';
+ bones.forEach(([a,b])=>{if(J[a]&&J[b]){const [x1,y1]=p(a),[x2,y2]=p(b);L.push([bName(a,b),(x1+x2)/2,(y1+y2)/2,'#ffe000',1])}});
+ for(const k in J){const [x,y]=p(k);L.push([jName(k),x,y,'#ffffff',0])}
+ const ok=r=>r[0]>=0&&r[1]>=0&&r[2]<=W&&r[3]<=H&&!placed.some(q=>r[0]<q[2]&&r[2]>q[0]&&r[1]<q[3]&&r[3]>q[1]);
+ L.sort((u,v)=>v[4]-u[4]);
+ for(const [t,x,y,col,isB] of L){const w=c.measureText(t).width+4,h=13;let best=null;
+  for(const [dx,dy] of [[8,0],[-8-w,0],[-w/2,-14],[-w/2,14],[8,-12],[8,12],[-8-w,-12],[-8-w,12],[16,0],[-16-w,0],[-w/2,-26],[-w/2,26]]){const r=[x+dx,y+dy-h/2,x+dx+w,y+dy+h/2];if(ok(r)){best=r;break}}
+  if(!best)continue;placed.push(best);
+  c.lineWidth=3.5;c.strokeStyle='rgba(0,0,0,.95)';c.lineJoin='round';c.strokeText(t,best[0]+2,(best[1]+best[3])/2);c.fillStyle=col;c.fillText(t,best[0]+2,(best[1]+best[3])/2)}
+ c.textAlign='center'}
 function setView(v){view=v;$('tabP').classList.toggle('on',v=='parts');$('tabL').classList.toggle('on',v!='parts');partsBar();legend();show()}
 function setSide(v){side=v;$('side').textContent='side: '+(v?'RIGHT (striped)':'LEFT')+' (Tab)';$('side').classList.toggle('on',true)}
 $('tabP').onclick=()=>setView('parts');$('tabL').onclick=()=>setView('labels');$('side').onclick=()=>setSide(1-side);$('fill').onclick=()=>{fill=!fill;$('fill').classList.toggle('on',fill)};
 $('prev').onclick=()=>go(qi-1);$('next').onclick=()=>go(qi+1);$('q').onchange=e=>go(+e.target.value);$('tsel').onchange=show;
-$('ovl').onclick=()=>{ovl=!ovl;$('ovl').classList.toggle('on',ovl);show()};$('jt').onclick=()=>{jt=!jt;$('jt').classList.toggle('on',jt);show()};
+$('ovl').onclick=()=>{ovl=!ovl;$('ovl').classList.toggle('on',ovl);show()};$('nm').onclick=()=>{nm=!nm;$('nm').classList.toggle('on',nm);show()};$('jt').onclick=()=>{jt=!jt;$('jt').classList.toggle('on',jt);show()};
 $('undo').onclick=()=>{const u=undo.pop();if(!u)return;qi=u[0];const id=Q[qi].id;if(u[1]=='null')delete edits[id];else edits[id]=JSON.parse(u[1]);go(qi)};
 $('reset').onclick=()=>{delete edits[fr().id];show()};
 $('save').onclick=async()=>{const out={};for(const id in edits){const f=Q.find(q=>q.id==id),k=f.kind=='exclusive'?id.replace(' ','_'):id.split(' ').pop();(out[f.kind]=out[f.kind]||{})[k]=edits[id]}
@@ -141,7 +163,7 @@ $('save').onclick=async()=>{const out={};for(const id in edits){const f=Q.find(q
 onkeydown=e=>{if(e.target.tagName=='SELECT'||e.target.tagName=='INPUT')return;const k=e.key;
  if(k=='p'||k=='P'){setView('parts');return}if(k=='l'||k=='L'){setView('labels');return}if(k=='Tab'){e.preventDefault();setSide(1-side);return}if(k=='f'){$('fill').click();return}
  if(view=='parts'){const i=BP.findIndex(p=>p[3]==k);if(i>=0){bpick(i);return}}
- if(k=='ArrowRight'||k=='d')go(qi+1);else if(k=='ArrowLeft'||k=='a')go(qi-1);else if(k=='o')$('ovl').click();else if(k=='j')$('jt').click();
+ if(k=='ArrowRight'||k=='d')go(qi+1);else if(k=='ArrowLeft'||k=='a')go(qi-1);else if(k=='o')$('ovl').click();else if(k=='j')$('jt').click();else if(k=='n')$('nm').click();
  else if(k=='z')$('undo').click();else if(k=='s')$('save').click();else{const P=PARTS[fr().kind];if(P){const i=P.findIndex(p=>p[3]==k);if(i>=0)pick(i)}}};
 if(B)go(0);
 </script></body></html>
