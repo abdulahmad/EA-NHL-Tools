@@ -61,6 +61,10 @@ try:
         if 'tmap' in F[k]:F[k]['tmap_src']='hand'
     import skater_autofit as AF   # D153: auto-fitted map for every other frame
     AM,AE=AF.autofit([n for n in F if 'tmap' not in F[n]],V)
+    if os.environ.get('NOSTRAIGHT')!='1':   # D157: hand frames get the same straight-column pass (their pipeline = autofit at 100%)
+        HM,_=AF.autofit([n for n in F if F[n].get('tmap_src')=='hand'],V)
+        for n,tm in HM.items():
+            if tm:F[n]['tmap']=tm
     for n,tm in AM.items():
         if tm:F[n]['tmap']=tm;F[n]['tmap_src']='auto'
     print('texture maps: hand',sum(1 for r in F.values() if r.get('tmap_src')=='hand'),'auto',sum(1 for r in F.values() if r.get('tmap_src')=='auto'),'none',sum(1 for r in F.values() if 'tmap' not in r),AE)

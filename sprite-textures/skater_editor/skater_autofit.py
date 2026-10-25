@@ -103,7 +103,10 @@ def autofit(frames,V):
         s2=s2.replace("B=runpy.run_path('/workspace/preview_back/scripts/backmap.py')","B={'G':G}")
         G['FRAMES']=[];G['MAPS']={};GG={'G':G}
         with contextlib.redirect_stdout(io.StringIO()):exec(s2,GG)
-        COMP=GG['COMP'];out={};CH={};err=collections.Counter()
+        COMP=GG['COMP'];out={};CH={}
+        import skater_colstraight as CS;FAM2=collections.defaultdict(set)
+        for (u,w),t in COMP.items():
+            if (u,w) in G['TF']:FAM2[tuple(map(int,t))].add(G['TF'][(u,w)]);err=collections.Counter()
         for n in frames:
             if n not in G['DIRS']:err['no SPA direction']+=1;continue
             try:
@@ -111,5 +114,8 @@ def autofit(frames,V):
             except BaseException as e:err['fit failed: '+('goalie mask px' if 'goalie mask' in str(e) else 'no uniform px')]+=1;continue
             if os.environ.get('NOBACK')!='1' and G['DIRS'][n] in (0,1,2,6,7):A=backremap({p:tuple(map(int,uv)) for p,uv in A.items()},G['TF'],G['SEGS'].get(n,{}).get('part'));CH[n]=1
             out[n]={'%d,%d'%(int(y),int(x)):list(map(int,COMP[(int(u),int(w))])) for (y,x),(u,w) in A.items() if (int(u),int(w)) in COMP}
+            if os.environ.get('NOSTRAIGHT')!='1':   # D157: straight texel columns per body segment
+                fam={'%d,%d'%(int(y),int(x)):G['TF'].get((int(u),int(w))) for (y,x),(u,w) in A.items() if (int(u),int(w)) in COMP}
+                out[n]=CS.straighten(out[n],fam,FAM2)
         err['back-torso remapped']=len(CH);return out,dict(err)
     finally:os.chdir(cwd);sys.argv=argv

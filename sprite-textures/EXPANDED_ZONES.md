@@ -1001,3 +1001,11 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - Agreement with the hand maps: back/side frames 42 70.1, 47 76.1, 52 95.5, 72 79.9, 77 71.2, 889 78.9 percent before, 100% on all after. The 5 front frames stay at 100%.
 - Auto frames: 379 remapped, 375 changed (19912 px). Coverage is unchanged (590 auto + 11 hand).
 - Remaining weak frames are falls, crouches and lying poses (273, 274, 276, 277, 279, 301, 302, 332, 361, 943): there the v5 fit itself is rough. This is not caused by the remap.
+
+## D157 — Straight texture columns on skater arms and torso (Abdul pt969u)
+- Ruling: "the vertical lines are not straight in many cases and there's no reason for them to not be."
+- New `skater_editor/skater_colstraight.py` runs after the fit, for auto and hand frames. Rows (texel v) are unchanged. For each body segment (each torso region, and each arm split into upper v<=12 and lower v>=13), one across-axis is fixed for the whole segment: the PCA long axis if the segment is elongated (lean, diagonal arm), else screen vertical. Every pixel gets one target column = c + sign*s, where s is its distance across that axis (1 texel per pixel; c and sign are fitted once per segment). In each (row, family) group, pixels are matched to that row's texels of the same family (strict, so the control texture is unchanged) with an order-preserving 1:1 match (min sum |target-u|). Rows with more pixels than texels take the nearest texel.
+- This replaces the per-row independent packing (D156 back torso, and the v5 per-row columns) that made the columns wander.
+- Column straightness on auto frames (590): adjacent-row column offsets from the straight-line fit >1 px went from 12279/48631 (25.2%) to 10828/51798 (20.9%); mean offset from straight 0.73 to 0.69 px. Raw >1 px jumps: back torso 13.3% to 7.9%, front torso 17.1% to 13.9%; arms unchanged (about 16-20%, already 3-4 columns wide). Hand frames (11): 20.7% to 16.9%.
+- Hand frames now go through the same pass. Their agreement with the old per-row columns is 65-97%; this is intended (rows unchanged, columns straightened).
+- Not fully straight yet: when a row only has texels of one family at other columns (yoke corners, shoulder patch, waist), pixels still have to shift, and falling or lying poses keep the rough v5 rows.
