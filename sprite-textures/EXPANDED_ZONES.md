@@ -1138,3 +1138,7 @@ Skeleton parts labelled in the editor and in sheet skeleton columns (pt1011u). N
 
 ## D180
 Facing comes from the animation tables (94G 596/845 frames, 94S 687/976). References must match direction and class, which corrects S196/S527/S800. Hard skeleton constraints (exist, zone, cover) are added, with fix-queue flags. The fixed 5% sample is in use, and the deep analysis is in docs/snes-redraw/ANALYSIS_D180.md (t1015u-t1020u).
+
+## D181 — short skeleton tags (pt1021u)
+
+D179 names were too big and too many. The editor (N) and the sheets now show only 9 small boxed tags: H, LH, RH, LK, RK, LF, RF, SHAFT, BLADE. SHAFT and BLADE sit at the middle of the stick bones. A legend explains them under the editor and on the sheets.

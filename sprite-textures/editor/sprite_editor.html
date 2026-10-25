@@ -23,7 +23,7 @@ canvas{image-rendering:pixelated;background:#3a3a3a;border:1px solid #777}
 <button id="prev">&larr; prev (A)</button><button id="next">next (D) &rarr;</button>
 <select id="q" title="fix queue, worst first"></select>
 <label>texture <select id="tsel"></select></label>
-<button id="ovl" class="on">labels (O)</button><button id="jt" class="on">skeleton (J)</button><button id="nm" class="on">part names (N)</button>
+<button id="ovl" class="on">labels (O)</button><button id="jt" class="on">skeleton (J)</button><button id="nm" class="on">skeleton tags (N)</button>
 <button id="fill">flood fill (F)</button><button id="side" class="on">side: LEFT (Tab)</button><button id="undo">undo (Z)</button><button id="reset">reset frame</button><button id="save">save (S)</button><span id="st" class="small"></span></div>
 <div id="why"></div><div id="parts"></div>
 <div id="grid">
@@ -31,7 +31,7 @@ canvas{image-rendering:pixelated;background:#3a3a3a;border:1px solid #777}
  <div class="c"><canvas id="ed"></canvas></div><div class="c"><canvas id="pg"></canvas></div><div class="c"><canvas id="pt"></canvas></div><div class="c"><canvas id="tx"></canvas></div>
 </div>
 <div id="legend"></div>
-<p class="small" id="help">PARTS view: click/drag paints the body part, F toggles flood fill (fills same palette index + same part), Tab switches LEFT/RIGHT, Shift+click picks, keys 1-0/q/e/x pick parts. Labels view: click/drag paints the selected part. Drag a ring to move a joint. Shift+click picks the part under the cursor. Keys: A/D or arrows = prev/next, O labels, J skeleton, N skeleton part names (yellow = bone, white = joint), Z undo, S save, part keys on the buttons.</p>
+<p class="small" id="help">PARTS view: click/drag paints the body part, F toggles flood fill (fills same palette index + same part), Tab switches LEFT/RIGHT, Shift+click picks, keys 1-0/q/e/x pick parts. Labels view: click/drag paints the selected part. Drag a ring to move a joint. Shift+click picks the part under the cursor. Keys: A/D or arrows = prev/next, O labels, J skeleton, N skeleton tags (H, LH/RH, LK/RK, LF/RF, SHAFT, BLADE), Z undo, S save, part keys on the buttons.</p>
 <script>document.write('<script src="data/'+(location.search.includes('sample')?'bundle_sample.js':'bundle.js')+'"><\/script>')</script>
 <script>
 const B=window.BUNDLE,$=i=>document.getElementById(i),Z=12,PZ=5;
@@ -82,11 +82,11 @@ function texOpts(){const k=fr().kind=='goalie'?'goalie':'v2',T=Object.keys(B.tex
  $('tsel').value=T.includes(old)?old:(T.includes(pref)?pref:T[0])}
 function legend(){const f=fr();let s='<b>Legend</b><br>';
  if(view=='parts'){s+='Body parts: '+BP.slice(1).map(p=>`<span class="sw" style="background:${p[1]}"></span>${p[2]} ${p[0]}`).join('');
-  s+='<br><span class="sw" style="background:repeating-linear-gradient(45deg,#e69f00 0 3px,#000 3px 6px)"></span>striped = RIGHT side, solid = LEFT side (arms, legs, skates)<span class="sw" style="border:3px solid #fff;outline:2px solid #000;border-radius:50%"></span>ring: part not allowed for this colour zone (D174 table / material label)<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint. Names (N): <b style="color:#ffe000;background:#000">bone</b> <b style="color:#fff;background:#000">joint</b>';$('legend').innerHTML=s;return}
+  s+='<br><span class="sw" style="background:repeating-linear-gradient(45deg,#e69f00 0 3px,#000 3px 6px)"></span>striped = RIGHT side, solid = LEFT side (arms, legs, skates)<span class="sw" style="border:3px solid #fff;outline:2px solid #000;border-radius:50%"></span>ring: part not allowed for this colour zone (D174 table / material label)<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint. <br>'+TAGLEG;$('legend').innerHTML=s;return}
  s+='<span class="sw" style="background:#3a3a3a"></span>empty / background';
  if(f.kind=='exclusive')s+='<span class="sw" style="border:3px solid #fff;outline:2px solid #000;border-radius:50%"></span>ring: wrong control zone (texel shade group differs from the pixel\'s)<span class="sw" style="border:2px solid #00ffff;background:none"></span>cyan box: nudged 1 texel';
  s+='<span class="sw" style="background:repeating-linear-gradient(45deg,#000 0 3px,#fff 3px 6px)"></span>hatched: pixel has no texel (preview keeps game colour)<br>';
- s+='Skeleton: <span class="sw" style="background:#fff"></span>head/torso<span class="sw" style="background:#e69f00"></span>R arm<span class="sw" style="background:#56b4e9"></span>L arm<span class="sw" style="background:#cc79a7"></span>R leg<span class="sw" style="background:#9ad0f0"></span>L leg<span class="sw" style="background:#bdbdbd"></span>stick shaft<span class="sw" style="background:#f0e442"></span>blade.<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint = yellow square (drag to move). Names (N): <b style="color:#ffe000;background:#000">bone</b> <b style="color:#fff;background:#000">joint</b>';
+ s+='Skeleton: <span class="sw" style="background:#fff"></span>head/torso<span class="sw" style="background:#e69f00"></span>R arm<span class="sw" style="background:#56b4e9"></span>L arm<span class="sw" style="background:#cc79a7"></span>R leg<span class="sw" style="background:#9ad0f0"></span>L leg<span class="sw" style="background:#bdbdbd"></span>stick shaft<span class="sw" style="background:#f0e442"></span>blade.<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint = yellow square (drag to move). <br>'+TAGLEG;
  if(f.kind!='exclusive')s+='<br>Labels: coloured square + letter per pixel (see part buttons).';$('legend').innerHTML=s}
 function sizeFor(cv,w,h,z){cv.width=w*z;cv.height=h*z;const c=cv.getContext('2d');c.fillStyle='#3a3a3a';c.fillRect(0,0,cv.width,cv.height);return c}
 function hatch(c,x,y,z){c.fillStyle='#000';c.fillRect(x,y,z,z);c.strokeStyle='#fff';c.lineWidth=1;c.beginPath();for(let d=-z;d<z;d+=3){c.moveTo(x+Math.max(0,d),y+Math.max(0,-d));c.lineTo(x+Math.min(z,d+z),y+Math.min(z,z-d))}c.stroke()}
@@ -130,25 +130,21 @@ $('ed').onmousedown=e=>{const [fx,fy]=cell(e),g=get();if(view=='parts'&&e.shiftK
 $('ed').onmousemove=e=>{if(drag){const [fx,fy]=cell(e);mut().joints[drag]=[Math.round(fx-.5),Math.round(fy-.5)];show()}else if(painting)paint(e)};
 onmouseup=()=>{drag=null;painting=false};
 
-// D179: skeleton part names (Abdul pt1011u)
-const JN={head:'head',neck:'neck',chest:'chest',belly:'belly',pelvis:'pelvis','stick butt':'butt','stick heel':'heel','stick toe':'toe'};
-function jName(k){if(JN[k])return JN[k];let m=k.match(/^([LR]) ?(.*)$/);if(m){const a={shoulder:'shld',sh:'shld',elbow:'elb',elb:'elb',wrist:'wrist',glove:'glove',hand:'glove',hip:'hip',knee:'knee',ankle:'ank',ank:'ank',skate:'skate'}[m[2]]||m[2];return m[1]+' '+a}
- m=k.match(/^(hand|stick)\d+ ([ab])$/);if(m)return m[1]=='hand'?'hand':'stick';return k}
-function bName(a,b){const s=(a+' '+b).toLowerCase(),side=(/^[lr] ?/i.test(b)?b[0].toUpperCase():/^[lr] ?/i.test(a)?a[0].toUpperCase():'')+' ';
- if(s.includes('head'))return 'head';if(/neck.*(chest|pelvis)/.test(s))return 'torso';if(/neck.*(sh)/.test(s))return side+'collar';
- if(/chest|belly/.test(s)&&/pelvis|belly/.test(s))return 'torso';if(/pelvis.*hip/.test(s))return side+'pelvis';
- if(/sh(oulder)? .*elb|sh.*elb/.test(s))return side+'up arm';if(/elb.*(wrist|hand)/.test(s))return side+'forearm';if(/wrist.*glove|hand\d/.test(s))return /hand\d/.test(s)?'hand':side+'hand';
- if(/hip.*knee/.test(s))return side+'thigh';if(/knee.*ank/.test(s))return side+'shin';if(/ank.*skate/.test(s))return side+'skate';
- if(/butt.*heel|stick\d/.test(s))return 'shaft';if(/heel.*toe/.test(s))return 'blade';return a+'-'+b}
-function skLabels(c,J,bones,p,W,H){const placed=[],L=[];c.font='bold 11px sans-serif';c.textBaseline='middle';c.textAlign='left';
- bones.forEach(([a,b])=>{if(J[a]&&J[b]){const [x1,y1]=p(a),[x2,y2]=p(b);L.push([bName(a,b),(x1+x2)/2,(y1+y2)/2,'#ffe000',1])}});
- for(const k in J){const [x,y]=p(k);L.push([jName(k),x,y,'#ffffff',0])}
+// D181: short skeleton tags only (Abdul pt1021u): H, LH, RH, LK, RK, LF, RF, SHAFT, BLADE
+const TAGJ=[['H',['head']],['LH',['L glove','Lhand']],['RH',['R glove','Rhand']],['LK',['L knee','Lknee']],['RK',['R knee','Rknee']],['LF',['L skate','L ankle','Lank']],['RF',['R skate','R ankle','Rank']]];
+const TAGLEG='Skeleton tags (N): H head, LH/RH left/right hand, LK/RK left/right knee, LF/RF left/right foot, SHAFT stick shaft, BLADE stick blade.';
+function skLabels(c,J,bones,p,W,H){const L=[],placed=[];
+ for(const [t,ks] of TAGJ){const k=ks.find(k=>J[k]);if(k)L.push([t,...p(k)])}
+ const mid=(a,b)=>{const A=p(a),B=p(b);return [(A[0]+B[0])/2,(A[1]+B[1])/2]};
+ if(J['stick butt']&&J['stick heel'])L.push(['SHAFT',...mid('stick butt','stick heel')]);
+ if(J['stick heel']&&J['stick toe'])L.push(['BLADE',...mid('stick heel','stick toe')]);
+ c.font='bold 9px sans-serif';c.textBaseline='middle';c.textAlign='left';
  const ok=r=>r[0]>=0&&r[1]>=0&&r[2]<=W&&r[3]<=H&&!placed.some(q=>r[0]<q[2]&&r[2]>q[0]&&r[1]<q[3]&&r[3]>q[1]);
- L.sort((u,v)=>v[4]-u[4]);
- for(const [t,x,y,col,isB] of L){const w=c.measureText(t).width+4,h=13;let best=null;
-  for(const [dx,dy] of [[8,0],[-8-w,0],[-w/2,-14],[-w/2,14],[8,-12],[8,12],[-8-w,-12],[-8-w,12],[16,0],[-16-w,0],[-w/2,-26],[-w/2,26]]){const r=[x+dx,y+dy-h/2,x+dx+w,y+dy+h/2];if(ok(r)){best=r;break}}
+ for(const [t,x,y] of L){const w=c.measureText(t).width+6,h=12;let best=null;
+  for(const [dx,dy] of [[6,-6],[-6-w,-6],[6,6-h+12],[-6-w,6],[-w/2,-18],[-w/2,8],[10,0],[-10-w,0]]){const r=[x+dx,y+dy-h/2,x+dx+w,y+dy+h/2];if(ok(r)){best=r;break}}
   if(!best)continue;placed.push(best);
-  c.lineWidth=3.5;c.strokeStyle='rgba(0,0,0,.95)';c.lineJoin='round';c.strokeText(t,best[0]+2,(best[1]+best[3])/2);c.fillStyle=col;c.fillText(t,best[0]+2,(best[1]+best[3])/2)}
+  c.fillStyle='rgba(0,0,0,.85)';c.fillRect(best[0],best[1],w,h);c.strokeStyle='#bbb';c.lineWidth=1;c.strokeRect(best[0]+.5,best[1]+.5,w-1,h-1);
+  c.fillStyle='#fff';c.fillText(t,best[0]+3,(best[1]+best[3])/2+.5)}
  c.textAlign='center'}
 function setView(v){view=v;$('tabP').classList.toggle('on',v=='parts');$('tabL').classList.toggle('on',v!='parts');partsBar();legend();show()}
 function setSide(v){side=v;$('side').textContent='side: '+(v?'RIGHT (striped)':'LEFT')+' (Tab)';$('side').classList.toggle('on',true)}
