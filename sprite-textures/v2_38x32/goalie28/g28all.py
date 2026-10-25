@@ -158,6 +158,20 @@ def maps(n):
             R['pad_'+leg]={'%d,%d'%c:psnap(int(p[c]),*pp(c)) for c in q}
         else:R['pad_'+leg]={'%d,%d'%c:psnap(int(p[c]),v[i],u[i]) for i,c in enumerate(q)}
         R['geo2_'+leg]={'%d,%d'%c:([9+t[0],t[1]] if (t:=g27map.strip_texel(int(p[c]),v[i]) if 181<=int(p[c])<=189 else None) else [9+int(round(v[i])),int(round(u[i]))]) for i,c in enumerate(q)}
+    # D155 (Abdul pt965u): a leg piece with 1-3 px (pad mostly hidden behind the other pad, glove or stick) was skipped
+    # (geo2 needs >=4 px for an axis), so those px had no texel. Map them with the same strict same-index snap: v = the
+    # px's height inside the frame's whole pad span (knee 0 -> toe 13), u = pad centre; the snap picks the nearest
+    # pad texel of the SAME index, so the default texture reproduces the game px exactly. Labels are unchanged.
+    allp=np.argwhere(np.isin(lab,(PADL,PADR))&(p!=255))
+    for code,leg in ((PADL,'padF_L'),(PADR,'padF_R')):
+        q=[tuple(map(int,c)) for c in np.argwhere((lab==code)&(p!=255))]
+        if not q or len(q)>=4:continue
+        t0,t1=allp[:,0].min(),allp[:,0].max()
+        C=lambda s:[(y,x) for y in range(9,23) for x in range(0,13) if L[y,x]==s]
+        def sn(c):
+            vv=13*(c[0]-t0)/max(1,t1-t0);cc=C(int(p[c]))
+            return list(min(cc,key=lambda z:(z[0]-9-vv)**2+(z[1]-4.5)**2)) if cc else None
+        R['pad_'+leg]={'%d,%d'%c:sn(c) for c in q}
     return R,lab,J,B
 def run(frames=None):
     out={}

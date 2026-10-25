@@ -142,3 +142,4 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - D152: leg px D146 made body are pads again (540, 1040, 1059); 407 back-view helmet is mask.
 - D153: earlier test textures added to both part editors; skater texture preview auto-fitted on 601/881 frames.
 - D154: both part editors show the active texture image next to the preview.
+- D155: pad pieces with 1-3 pixels get strict pad texels (30 px in 19 frames); full goalie render has 0 errors.

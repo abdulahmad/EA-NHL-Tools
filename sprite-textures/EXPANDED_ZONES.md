@@ -990,3 +990,8 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 
 ## D154 — Editors show the active texture image (Abdul pt962u)
 - Ruling: "The texture previews mean nothing if you don't give me the texture you are using." Both part editors now draw the selected texture next to the preview, 8 px per texel, with a texel grid, unused texels in grey and yellow ticks every 5 texels. It updates when the texture changes.
+
+## D155 — Small pad pieces get strict texels (Abdul pt965u)
+- Problem: 30 pixels in 19 frames (410 415 458 466 495 498 525 527 530 1000 1003-1006 1012 1013 1016 1017 1027) were labelled pad but had no texel. They belong to leg pieces with only 1-3 visible pad pixels, and `g28all.py` skipped any leg with fewer than 4 pixels because geo2 needs at least 4 to fit an axis.
+- Fix (mapping only, no labels changed): such pieces now use the same strict same-index snap. v = the pixel height inside the frame's whole pad span (knee 0 to toe 13), u = pad centre. The nearest pad-block texel (rows 9-22, cols 0-12) with the same palette index is used.
+- Result: the full render check over all 246 frames on default v8 has 0 errors. pads 17484, cuff 3990, mask 5591, blocker 5278, catcher 10722, stick 7158 correct. Fuhr v14 now textures these pixels instead of showing the game colour.
