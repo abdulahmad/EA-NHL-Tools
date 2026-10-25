@@ -151,3 +151,4 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - D161: full skater skeleton (limbs, stick, blade) for all frames; skeleton axes straighten columns on falls/dives/crouches; editor shows/edits/imports it.
 - D162: skater skeleton refit: skates/stick snapped to their px, stick hand at the stick, new sanity checks; SKELROWS still off.
 - D163: wrap-up: face shade 136 labelled skin (wrong band 1086 -> 0), full skater render 0 errors, sprite-textures/HANDOFF.md.
+- D164: sprite-textures/docs/PROCESS_HISTORY.md: illustrated history of how the sprite texture work was directed.

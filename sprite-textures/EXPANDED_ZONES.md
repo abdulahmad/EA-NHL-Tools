@@ -945,6 +945,7 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - D144 (Abdul pt948u-pt950u) **Strict 0 errors on all 246 goalie frames** (`goalie28/g28all.py`). Pixel-match relabel (like D139): a blocker/catcher/mask/stick/pad px whose sprite index no texel of that part has takes the most common 8-neighbour label that can hold it, else BODY (jersey/skin 153-180; mask/glove px) or SKATE (pad/stick px, boot greys 22/30/31). 5283 px relabelled on the auto-segmented frames (mostly mask->body 2270, blocker->body 2067, pads->shadow/skate 548). Pads are now index-exact too: geo2 picks the position and the px snaps to the nearest SAME-index texel of the pad front/strip (x0-12 rows 9-22). Totals: blocker 5376 / 0 err, catcher incl. cuff 10710 / 0, mask 5388 / 0, stick 7151 / 0, pads 17348 / 0. The two 538 eye-hole px (index 45, no texel) are BODY (face seen through the cage), not unmapped. Remaining seg mistakes (e.g. orange/red patches where body is labelled catcher on 455, 1041) are for the D143 editor.
 - D162 (Abdul pt978u) **Rework the skater skeleton fit**: skates on skate px, stick on stick px, stick hand at the glove/stick contact, sanity checks demote 'confident', hand-fitted stays top trust; skeleton-driven torso rows stay off unless they help.
 - D163 (Abdul pt979u: wrap up) **Handoff.** Index 136 next to the head is face/neck shade (as the v5 fit's neck136), so the editor export labels it skin, not stick. Full render check and `HANDOFF.md`.
+- D164 (Abdul pt981u) **Process history doc.** `docs/PROCESS_HISTORY.md` with 15 downscaled review screenshots in `docs/process/` (doc-only exception to the no-renders rule; no game files).
 
 ## D145 — Eye holes in the mask texture (Abdul's ruling)
 - Ruling: eye holes belong in the mask texture. Texture v8 (`goalie29/goalie_texture_v8_indexed.png`) adds the game's eye shade 45 at (7,15),(7,17) and helmet-strap variant 134 at (6,12),(6,20). Fuhr v14 copies Fuhr's own eyes/strap into these cells.
@@ -1055,3 +1056,6 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
   With 136 treated as skin, wrong band = 0. Side effect: the stick fit no longer grabs the face (frames 8 and 16 butt now on the stick).
 - Full render, Leafs home, 601 mapped frames: 0 errors on every textured part (counts in `HANDOFF.md`).
 - Special-pose column breaks 5659 -> 5669 (skeleton changes from the label fix), row breaks 4011 unchanged.
+
+## D164: process history doc (Abdul pt981u)
+- `sprite-textures/docs/PROCESS_HISTORY.md`: the stages from early mapping to D163, with rulings, metrics and one screenshot per stage. Images (<=800 px, 256-colour PNG) are in `docs/process/`; they are allowed only for this doc.
