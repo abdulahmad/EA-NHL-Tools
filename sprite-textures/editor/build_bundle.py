@@ -1,5 +1,5 @@
 # Sprite editor bundle (Abdul pt1006u/pt1007u): python3 sprite-textures/editor/build_bundle.py
-# Builds editor/data/bundle.js and the single self-contained editor editor/data/sprite_editor.html (both gitignored: game sprite data) from the local pipelines:
+# Builds editor/data/bundle.js and the single self-contained editor editor/data/sprite_editor.html (both committed, D188/D190) from the pipelines:
 #   skaters  - skater_editor/skater_export.py (D161/D163 skeletons, hand + auto texture maps)
 #   goalies  - v2_38x32/goalie28 (<tempdir>/g28_all.json from g28all.py: labels, joints, pipeline maps)
 #   exclusives - D175 run (preview_v2/exclusive_samples/v3: skel175.json + <tempdir>/d175_dump.pkl from run175.py), if present
@@ -11,6 +11,17 @@ need();need_data()   # friendly errors: missing packages / missing out/data (run
 import numpy as np
 S=ROOT;V=os.path.join(S,'v2_38x32','')
 EXC=os.environ.get('EXCL_DIR',os.path.join(os.path.dirname(os.path.dirname(S)),'preview_v2','exclusive_samples','v3'))
+# D190 (Abdul: all data in the repo): editor/inputs/ holds committed copies of the inputs that live outside the repo
+# (goalie g28_all.json, exclusive D175 skel/dump/textures, Genesis palette). Used when the local originals are missing;
+# a build from local originals refreshes them.
+INP=os.path.join(E,'inputs')
+import shutil
+def inp(name,local):
+  if os.path.exists(local):
+    if os.path.abspath(os.path.dirname(local))!=INP:shutil.copyfile(local,os.path.join(INP,name))
+    return local
+  return os.path.join(INP,name)
+if not os.path.exists(os.path.join(EXC,'skel175.json')):EXC=INP
 from PIL import Image
 def edits(kind):
   p=os.path.join(E,'edits',f'{kind}_edits.json');return json.load(open(p)).get('frames',{}) if os.path.exists(p) else {}
@@ -33,10 +44,11 @@ for n,r in D['frames'].items():
 # ---- goalies (texture coords stored as [col,row] like the skaters)
 GB=[['head','neck'],['neck','pelvis'],['neck','Rsh'],['neck','Lsh'],['Rsh','Relb'],['Relb','Rhand'],['Lsh','Lelb'],['Lelb','Lhand'],['pelvis','Rhip'],['pelvis','Lhip'],
  ['Rhip','Rknee'],['Rknee','Rank'],['Lhip','Lknee'],['Lknee','Lank']]
-if not os.path.exists(tmp('g28_all.json')):subprocess.run([sys.executable,'g28all.py'],cwd=os.path.join(V,'goalie28'),check=False)
-if os.path.exists(tmp('g28_all.json')):
+if not os.path.exists(tmp('g28_all.json')) and not os.path.exists(os.path.join(INP,'g28_all.json')):subprocess.run([sys.executable,'g28all.py'],cwd=os.path.join(V,'goalie28'),check=False)
+G28=inp('g28_all.json',tmp('g28_all.json'))
+if os.path.exists(G28):
   subprocess.run([sys.executable,os.path.join(V,'goalie28','g28export.py'),tmp('_g_bundle.json')],check=True,cwd=os.path.join(V,'goalie12'))
-  G=json.load(open(tmp('_g_bundle.json')));A=json.load(open(tmp('g28_all.json')));B['palettes']['goalie']=G['palette']
+  G=json.load(open(tmp('_g_bundle.json')));A=json.load(open(G28));B['palettes']['goalie']=G['palette']
   for k,v in G['textures'].items():tex('Goalie: '+k,v,'goalie')
   ed=edits('goalie')
   for n,r in G['frames'].items():
@@ -51,9 +63,12 @@ if os.path.exists(tmp('g28_all.json')):
       tmap=tm,src='goalie28 pipeline map',why=why,err=[],nud=[],edited=bool(e),unm=um))
 else:print('goalie data missing (run v2_38x32/goalie28/g28all.py locally)')
 # ---- Genesis exclusives (D175) + the D169 Leafs and D175 control textures
-if os.path.exists(os.path.join(EXC,'skel175.json')) and os.path.exists(tmp('d175_dump.pkl')):
+D175=inp('d175_dump.pkl',tmp('d175_dump.pkl'))
+for _n in ('skel175.json','tex_G94_d169.pkl','tex175_ctl.pkl'):inp(_n,os.path.join(EXC,_n))
+if os.path.exists(os.path.join(EXC,'skel175.json')) and os.path.exists(D175):
   sys.path[:0]=[EXC,os.path.dirname(EXC),os.path.dirname(EXC)+'/v2']
-  from gpal import GP
+  try:from gpal import GP;json.dump([list(map(int,c)) for c in GP],open(os.path.join(INP,'genesis_palette.json'),'w'))
+  except Exception:GP=np.array(json.load(open(os.path.join(INP,'genesis_palette.json'))))
   PC={33:(255,255,255),34:(90,90,90),35:(0,90,255),36:(255,220,0),37:(150,0,200),38:(255,140,0),39:(0,220,255),40:(130,60,0),41:(255,120,220),42:(0,0,140),43:(255,255,150),44:(0,140,140),45:(200,0,0)}
   B['palettes']['genesis']=[list(map(int,c)) for c in GP]
   os.chdir(EXC);_,_,FT=pickle.load(open(os.path.join(EXC,'tex_G94_d169.pkl'),'rb'));_,FI=pickle.load(open(os.path.join(EXC,'tex175_ctl.pkl'),'rb'))
@@ -61,7 +76,7 @@ if os.path.exists(os.path.join(EXC,'skel175.json')) and os.path.exists(tmp('d175
   for (u,v),f in FT.items():L[v,u]=GP[REP[f]]
   for (u,v),i in FI.items():C[v,u]=PC[i]
   tex('D169 Leafs (frozen key)',L,'v2');tex('D175 control (shade groups)',C,'v2')
-  SK=json.load(open(os.path.join(EXC,'skel175.json')));DU=pickle.load(open(tmp('d175_dump.pkl'),'rb'));ed=edits('exclusive')
+  SK=json.load(open(os.path.join(EXC,'skel175.json')));DU=pickle.load(open(D175,'rb'));ed=edits('exclusive')
   for k,r in DU.items():
     g=np.asarray(r['g']);px=np.where(g>0,g,255).astype(int).tolist();sk=SK.get(k,{})
     why=[f"{len(r['IM'])} wrong control zone",f"{r['err']} Leafs errors",f"{len(r['EX'])} nudged"]+list(sk.get('flags',[]))

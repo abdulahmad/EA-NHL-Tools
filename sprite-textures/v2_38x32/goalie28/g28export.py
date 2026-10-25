@@ -6,7 +6,9 @@ H=os.path.dirname(os.path.abspath(__file__));G=os.path.abspath(H+'/..');sys.path
 from g17inspect import TEAMS,spal,frame
 from PIL import Image
 t=[t for t in TEAMS if t[0]=='edm_home'][0];sp=spal(t[1],t[2])
-A=json.load(open(os.path.join(tempfile.gettempdir(),'g28_all.json')))
+_G=os.path.join(tempfile.gettempdir(),'g28_all.json')
+if not os.path.exists(_G):_G=os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','..','editor','inputs','g28_all.json')   # D190 committed copy
+A=json.load(open(_G))
 out=dict(palette=[list(map(int,c)) for c in sp],
   texDefault=np.array(Image.open(G+'/goalie29/goalie_texture_v8_indexed.png')).astype(int).tolist(),
   texFuhr=np.asarray(Image.open(G+'/goalie29/fuhr_oilers_texture_v14.png').convert('RGB')).astype(int).tolist(),

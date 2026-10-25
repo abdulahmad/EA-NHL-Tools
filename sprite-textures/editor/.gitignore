@@ -2,3 +2,6 @@
 data/*
 !data/sprite_editor.html
 !data/sprite_editor_sample.html
+# D190: the bundles too, so the editor and rebuilds work from a fresh clone
+!data/bundle.js
+!data/bundle_sample.js
