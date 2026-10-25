@@ -119,6 +119,28 @@ B['nostick_seed']=sorted(NSEED)
 from skeltree import connect
 for f in B['frames']:
   if not any('not a player' in w for w in f['why']):connect(f)
+# D191 (Abdul pt1054u): game-extracted 54x32 v4 textures in the jersey dropdown, converted EXACTLY to the 38x32 layout.
+# For each v2 texel, the v4 texel(s) that cover the same sprite pixels in the 11 v4-mapped skater frames (frames_v4.json) give its colour;
+# a texel is filled only when every such v4 texel has the same colour. Texels with no v4 evidence stay magenta (= no texel; the editor hatches them).
+V4=os.path.join(S,'playerlayout','v4','frames')
+if os.path.exists(os.path.join(V4,'frames_v4.json')):
+  import collections
+  FV=json.load(open(os.path.join(V4,'frames_v4.json')));C=collections.defaultdict(set);TMk={f['id']:f['tmap'] for f in B['frames'] if f['kind']=='skater'}
+  for n,r in FV.items():
+    tm=TMk.get(f'skater {n}') or {}
+    for k,uv in r['_A'].items():
+      x,y=k.split(',')
+      if f'{y},{x}' in tm:C[tuple(tm[f'{y},{x}'])].add(tuple(uv))
+  B['v4_conv']={}
+  for fn,lab in (('chicago_away','Chicago away'),('leafs_home','Leafs home'),('leafs_home_gamecolours','Leafs home, game colours'),
+                 ('rangers_away','Rangers away'),('rangers_away_gamecolours','Rangers away, game colours'),('montreal_home','Montreal home')):
+    T=np.array(Image.open(os.path.join(V4,fn+'_texture.png')).convert('RGB'));O=np.full((32,38,3),(252,0,252));conf=0
+    for (c,r),U in C.items():
+      cols={tuple(map(int,T[v,u])) for u,v in U}
+      if len(cols)==1:O[r,c]=next(iter(cols))
+      else:conf+=1
+    tex(lab+' (game)',O,'v2');B['v4_conv'][lab+' (game)']=dict(filled=len(C)-conf,conflicts=conf)
+  print('D191 v4 game textures:',B['v4_conv'])
 B['frames'].sort(key=lambda f:-f['score'])
 import time;B['tree']='D189';B['built']=time.strftime('%Y-%m-%d %H:%M %Z')   # D189: the editor warns when its data predates the connected-tree build
 os.makedirs(os.path.join(E,'data'),exist_ok=True)

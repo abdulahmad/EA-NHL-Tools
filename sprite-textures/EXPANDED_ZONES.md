@@ -1204,3 +1204,8 @@ and no stale local bundle. Now tracked:
 `build_bundle.py --from-inputs` (or `FROM_INPUTS=1`) rebuilds from these alone. A normal build refreshes them, and a failed
 export falls back to them. Fresh-clone test with an empty temp dir and no EXCL_DIR: the bundle is identical to the local build
 (except the `built` stamp), no file outside the clone was opened (checked with an audit hook), and the editor opened with no errors.
+
+## D191: game-extracted v4 textures in the editor jersey dropdown (Abdul pt1054u)
+Six 54x32 playerlayout/v4/frames textures (chicago_away, leafs_home, leafs_home_gamecolours, rangers_away, rangers_away_gamecolours, montreal_home) are now jersey options labelled "... (game)".
+Method: exact conversion to the 38x32 layout, no guessing. Each v2 texel takes the colour of the v4 texel(s) covering the same sprite pixels in the 11 v4-mapped skater frames (frames_v4.json); 0 colour conflicts. 553 of the 757 used v2 texels (77% of textured skater px) have v4 evidence; the rest stay magenta (no texel), so those px are hatched and keep the game colour. Built in build_bundle.py (reads the repo copies, works --from-inputs).
+
