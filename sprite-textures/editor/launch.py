@@ -4,7 +4,7 @@
 # old skater_import.py / g28import.py read). Ctrl+C to stop.
 import os,sys,json,subprocess,webbrowser,http.server,functools
 E=os.path.dirname(os.path.abspath(__file__));PORT=int(os.environ.get('PORT',8765))
-if '--rebuild' in sys.argv or not os.path.exists(os.path.join(E,'data','bundle.js')):
+if '--rebuild' in sys.argv or not os.path.exists(os.path.join(E,'data','bundle.js')) or not os.path.exists(os.path.join(E,'data','sprite_editor.html')):
   r=subprocess.run([sys.executable,os.path.join(E,'build_bundle.py')])
   if r.returncode:sys.exit('Rebuild failed (see the message above).')
 if '--sample' in sys.argv:   # fixed ~5% sample with D180b skeleton checks (t1020u)
@@ -24,8 +24,8 @@ class H(http.server.SimpleHTTPRequestHandler):
 for PORT in range(PORT,PORT+20):   # first free port
   try:srv=http.server.ThreadingHTTPServer(('127.0.0.1',PORT),functools.partial(H,directory=E));break
   except OSError:continue
-url=f'http://127.0.0.1:{PORT}/sprite_editor.html';print('Sprite editor:',url,flush=True)
-if '--sample' in sys.argv:url+='?sample=1'
+# D187: one self-contained file (data/sprite_editor.html, or data/sprite_editor_sample.html with --sample); it also opens from file:// without this server
+url=f'http://127.0.0.1:{PORT}/data/'+('sprite_editor_sample.html' if '--sample' in sys.argv else 'sprite_editor.html');print('Sprite editor:',url,flush=True)
 if '--no-browser' not in sys.argv:webbrowser.open(url)
 try:srv.serve_forever()
 except KeyboardInterrupt:pass

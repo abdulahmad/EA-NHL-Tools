@@ -131,7 +131,7 @@ function legend(){const f=fr();let s='';
  s+='<span class="sw" style="background:#3a3a3a"></span>empty / background';
  if(f.kind=='exclusive')s+='<span class="sw" style="border:3px solid #fff;outline:2px solid #000;border-radius:50%"></span>ring: wrong control zone (texel shade group differs from the pixel\'s)<span class="sw" style="border:2px solid #00ffff;background:none"></span>cyan box: nudged 1 texel';
  s+='<span class="sw" style="background:repeating-linear-gradient(45deg,#000 0 3px,#fff 3px 6px)"></span>hatched: pixel has no texel (preview keeps game colour)<br>';
- s+='Skeleton: <span class="sw" style="background:#fff"></span>head/torso<span class="sw" style="background:#e69f00"></span>R arm<span class="sw" style="background:#56b4e9"></span>L arm<span class="sw" style="background:#cc79a7"></span>R leg<span class="sw" style="background:#9ad0f0"></span>L leg<span class="sw" style="background:#bdbdbd"></span>stick shaft<span class="sw" style="background:#f0e442"></span>blade.<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint = yellow square (drag to move). Dashed white = hand holding the stick. <br>'+TAGLEG;
+ s+='Skeleton: <span class="sw" style="background:#fff"></span>head/torso<span class="sw" style="background:#e69f00"></span>R arm<span class="sw" style="background:#56b4e9"></span>L arm<span class="sw" style="background:#cc79a7"></span>R leg<span class="sw" style="background:#9ad0f0"></span>L leg<span class="sw" style="background:#bdbdbd"></span>stick shaft<span class="sw" style="background:#f0e442"></span>blade.<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint = yellow square (drag to move)<span class="sw" style="background:#56b4e9;border:2px solid #000"></span>inferred joint (filled in so the skeleton is one tree; drag to fix). Dashed white = hand holding the stick. <br>'+TAGLEG;
  if(f.kind!='exclusive')s+='<br>Labels: coloured square + letter per pixel (see part buttons).';$('legend').innerHTML=s}
 
 // ---- D185 (t1036u item 2e/2f/2g): connected skeleton, no-stick flag, violations overlay
@@ -145,7 +145,7 @@ const GRIP=1.5;
 function liveBones(f){const ns=noStick(f);return f.bones.filter(([a,b])=>!(ns&&(STICKJ(a)||STICKJ(b))))}
 function floating(f,J){const ns=noStick(f),ks=Object.keys(J).filter(k=>!(ns&&STICKJ(k)));if(!ks.length)return[];const par={};ks.forEach(k=>par[k]=k);
  const fd=k=>par[k]==k?k:(par[k]=fd(par[k]));liveBones(f).forEach(([a,b])=>{if(a in par&&b in par)par[fd(a)]=fd(b)});
- const gp=!ns&&grip(J);if(gp&&gp[1]<=GRIP)par[fd(gp[0])]=fd('stick butt');const root=fd(J.head?'head':ks[0]);return ks.filter(k=>fd(k)!=root)}
+ const gp=!ns&&grip(J);if(gp)par[fd(gp[0])]=fd('stick butt');/* D187: the stick always hangs off the nearest hand (one tree) */const root=fd(J.head?'head':ks[0]);return ks.filter(k=>fd(k)!=root)}
 const ISBLACK=c=>c&&Math.max(c[0],c[1],c[2])<60,LIMBP=new Set([4,5,6,7,8,9,11]);
 function vioList(f,g){const out=[],J=g.joints,h=f.px.length,w=f.px[0].length,pal=B.palettes[f.pal],bp=bpOf(f),bones=liveBones(f).filter(([a,b])=>J[a]&&J[b]);
  const zoneTxt=(y,x)=>f.pal=='genesis'?`palette index ${f.px[y][x]}`:(f.lab&&PARTS[f.kind]?`material "${(PARTS[f.kind][g.lab?g.lab[y][x]:f.lab[y][x]]||['?'])[0]}"`:`palette index ${f.px[y][x]}`);
@@ -195,9 +195,9 @@ function show(){if(!B)return;const f=fr(),g=get(),pal=B.palettes[f.pal],h=f.px.l
   const l=g.lab?g.lab[y][x]:0;if(ovl&&LOP&&P&&l&&P[l]&&P[l][2]){c.fillStyle=P[l][2];c.globalAlpha=.75*LOP;c.fillRect(x*Z+2,y*Z+2,Z-4,Z-4);c.globalAlpha=LOP;c.fillStyle=DARKTXT.includes(P[l][2])?'#fff':'#000';if(TXT)c.fillText(P[l][1],x*Z+Z/2,y*Z+Z/2+1);c.globalAlpha=1}}
  if(view!="parts"&&!vio)marks(c,f,Z);
  if(jt){const J0=g.joints,J={};for(const k in J0)if(!(noStick(f)&&STICKJ(k)))J[k]=J0[k];const p=k=>[(J[k][0]+.5)*Z,(J[k][1]+.5)*Z];
-  if(gp&&gp[1]<=GRIP){c.setLineDash([3,2]);c.strokeStyle='#fff';c.lineWidth=2;c.beginPath();c.moveTo(...p(gp[0]));c.lineTo((gp[2][0]+.5)*Z,(gp[2][1]+.5)*Z);c.stroke();c.setLineDash([])}
+  if(gp){c.setLineDash([3,2]);c.strokeStyle='#fff';c.lineWidth=2;c.beginPath();c.moveTo(...p(gp[0]));c.lineTo((gp[2][0]+.5)*Z,(gp[2][1]+.5)*Z);c.stroke();c.setLineDash([])}
   for(const [col,lw] of [['#000',5],[null,2.5]]){c.lineWidth=lw;liveBones(f).forEach(([a,b])=>{if(J[a]&&J[b]){c.strokeStyle=col||BCOL(a,b);c.beginPath();c.moveTo(...p(a));c.lineTo(...p(b));c.stroke()}})}
-  for(const k in J){const [X,Y]=p(k);c.beginPath();c.rect(X-4.5,Y-4.5,9,9);c.fillStyle='#ffe000';c.fill();c.lineWidth=2;c.strokeStyle='#000';c.stroke()}
+  const INF=new Set(f.inferred||[]);for(const k in J){const [X,Y]=p(k);c.beginPath();c.rect(X-4.5,Y-4.5,9,9);c.fillStyle=INF.has(k)?'#56b4e9':'#ffe000';c.fill();c.lineWidth=2;c.strokeStyle='#000';c.stroke()}
   if(nm)skLabels(c,J,f.bones,p,c.canvas.width,c.canvas.height)}
  if(vio)V.forEach(v=>{const X=v.x*Z,Y=v.y*Z;c.lineWidth=2;c.strokeStyle=VCOL[v.t];
   if(v.t=='zone'){c.beginPath();c.arc(X+Z/2,Y+Z/2,Z*.45,0,7);c.stroke()}else if(v.t=='orphan'){c.fillStyle=VCOL.orphan;c.fillRect(X+3,Y+3,Z-6,Z-6)}
@@ -234,7 +234,7 @@ $('ed').onmousemove=e=>{if(drag){const [fx,fy]=cell(e),f=fr(),J=mut().joints,gp0
   show()}else if(painting)paint(e);else hover(e)};
 $('ed').onmouseleave=()=>{$('tip').style.display='none'};
 function hover(e){const f=fr(),g=get(),[fx,fy]=cell(e),X=Math.floor(fx),Y=Math.floor(fy);let html='';
- if(jt)for(const k in g.joints){if(noStick(f)&&STICKJ(k))continue;const j=g.joints[k];if(Math.hypot(j[0]+.5-fx,j[1]+.5-fy)<.8){html=`<b>${jcode(k)}</b> · ${jfull(k)}<br><span class="small">joint "${k}" at (${j[0]},${j[1]}); drag to move${HANDS.includes(k)?', a hand on the shaft slides along it':''}${STICKJ(k)?', the holding hand stays on the shaft':''}</span>`;break}}
+ if(jt)for(const k in g.joints){if(noStick(f)&&STICKJ(k))continue;const j=g.joints[k];if(Math.hypot(j[0]+.5-fx,j[1]+.5-fy)<.8){html=`<b>${jcode(k)}</b> · ${jfull(k)}<br><span class="small">joint "${k}" at (${j[0]},${j[1]}); drag to move${(fr().inferred||[]).includes(k)?', <b>inferred</b> (was missing)':''}${HANDS.includes(k)?', a hand on the shaft slides along it':''}${STICKJ(k)?', the holding hand stays on the shaft':''}</span>`;break}}
  if(!html&&vio&&f._V)html=f._V.filter(v=>v.x==X&&v.y==Y).map(v=>v.txt).join('<hr style="border-color:#33414d">');
  const t=$('tip');if(html){t.innerHTML=html;t.style.display='block';t.style.left=(e.clientX+16)+'px';t.style.top=(e.clientY+12)+'px';$('hover').innerHTML=html}else t.style.display='none'}
 onmouseup=()=>{drag=null;painting=false};

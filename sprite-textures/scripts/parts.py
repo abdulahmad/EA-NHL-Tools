@@ -5,7 +5,7 @@ import collections
 ARMZ=set(range(144,159)); SOCKZ=set(range(181,190)); PANTZ={177,178,179,180}
 BODYZ={159,160,161,162,163,165,166,167}|set(range(168,177)); HELM={190,191}; SKIN={133,134,135,140}
 CREST={i for r in (192,208,224,240) for i in range(r,r+5)}
-GOALIE=set(range(373,381))|set(range(408,555))|set(range(975,1073))
+GOALIE=set(range(373,381))|set(range(407,555))|set(range(975,1073))   # D187: 407 is a goalie (in g28; the range started at 408)
 NEW95=set(range(877,1135))
 PN=['none','outline','skin','helmet','torso','crest','shoulder_patch','sleeve','glove','pants','sock','skate','skate_blade','stick','shadow','goalie_mask','catcher','blocker','pad','other']
 P={n:i for i,n in enumerate(PN)}
