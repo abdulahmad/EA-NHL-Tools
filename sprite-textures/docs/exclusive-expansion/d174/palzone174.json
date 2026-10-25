@@ -1,0 +1,242 @@
+{
+ "33": {
+  "total": 101,
+  "parts": {
+   "skate": 69,
+   "hand": 20,
+   "lab19": 12
+  },
+  "allowed": [
+   "hand",
+   "skate"
+  ]
+ },
+ "34": {
+  "total": 725,
+  "parts": {
+   "skate": 360,
+   "hand": 319,
+   "lab1": 29,
+   "lab13": 12,
+   "head": 4,
+   "lab18": 1
+  },
+  "allowed": [
+   "hand",
+   "skate"
+  ]
+ },
+ "35": {
+  "total": 164,
+  "parts": {
+   "thigh": 159,
+   "lab1": 4,
+   "skate": 1
+  },
+  "allowed": [
+   "thigh"
+  ]
+ },
+ "36": {
+  "total": 317,
+  "parts": {
+   "thigh": 302,
+   "torso": 9,
+   "lab1": 4,
+   "shin": 2
+  },
+  "allowed": [
+   "thigh",
+   "torso"
+  ]
+ },
+ "37": {
+  "total": 239,
+  "parts": {
+   "thigh": 235,
+   "torso": 4
+  },
+  "allowed": [
+   "thigh"
+  ]
+ },
+ "38": {
+  "total": 23,
+  "parts": {
+   "head": 23
+  },
+  "allowed": [
+   "head"
+  ]
+ },
+ "39": {
+  "total": 90,
+  "parts": {
+   "head": 83,
+   "lab13": 3,
+   "torso": 2,
+   "lab18": 1,
+   "lab15": 1
+  },
+  "allowed": [
+   "head"
+  ]
+ },
+ "40": {
+  "total": 279,
+  "parts": {
+   "torso": 107,
+   "thigh": 83,
+   "forearm": 51,
+   "shin": 19,
+   "upperarm": 5,
+   "hand": 5,
+   "head": 3,
+   "lab18": 2,
+   "lab15": 1,
+   "lab14": 1,
+   "lab19": 1,
+   "lab1": 1
+  },
+  "allowed": [
+   "forearm",
+   "shin",
+   "thigh",
+   "torso",
+   "upperarm"
+  ]
+ },
+ "41": {
+  "total": 323,
+  "parts": {
+   "torso": 210,
+   "forearm": 59,
+   "shin": 26,
+   "lab15": 9,
+   "thigh": 6,
+   "upperarm": 4,
+   "lab18": 4,
+   "lab1": 2,
+   "skate": 1,
+   "hand": 1,
+   "lab14": 1
+  },
+  "allowed": [
+   "forearm",
+   "shin",
+   "torso",
+   "upperarm"
+  ]
+ },
+ "42": {
+  "total": 424,
+  "parts": {
+   "torso": 217,
+   "thigh": 72,
+   "shin": 58,
+   "forearm": 46,
+   "lab15": 10,
+   "hand": 7,
+   "lab18": 5,
+   "lab13": 3,
+   "lab14": 2,
+   "skate": 1,
+   "head": 1,
+   "lab1": 1,
+   "lab19": 1
+  },
+  "allowed": [
+   "forearm",
+   "shin",
+   "thigh",
+   "torso",
+   "upperarm"
+  ]
+ },
+ "43": {
+  "total": 742,
+  "parts": {
+   "torso": 275,
+   "forearm": 189,
+   "shin": 104,
+   "head": 95,
+   "lab18": 25,
+   "hand": 11,
+   "lab1": 9,
+   "thigh": 9,
+   "lab14": 9,
+   "skate": 6,
+   "lab13": 5,
+   "lab15": 4,
+   "lab19": 1
+  },
+  "allowed": [
+   "forearm",
+   "head",
+   "shin",
+   "torso",
+   "upperarm"
+  ]
+ },
+ "44": {
+  "total": 714,
+  "parts": {
+   "torso": 345,
+   "head": 129,
+   "forearm": 118,
+   "shin": 67,
+   "lab18": 17,
+   "hand": 12,
+   "lab1": 8,
+   "thigh": 8,
+   "lab14": 7,
+   "lab13": 3
+  },
+  "allowed": [
+   "forearm",
+   "head",
+   "shin",
+   "torso",
+   "upperarm"
+  ]
+ },
+ "45": {
+  "total": 326,
+  "parts": {
+   "head": 85,
+   "torso": 64,
+   "lab13": 40,
+   "forearm": 39,
+   "hand": 33,
+   "lab14": 29,
+   "lab18": 23,
+   "lab1": 9,
+   "thigh": 4
+  },
+  "allowed": [
+   "forearm",
+   "hand",
+   "head",
+   "torso",
+   "upperarm"
+  ]
+ },
+ "46": {
+  "total": 453,
+  "parts": {
+   "lab13": 424,
+   "lab17": 11,
+   "skate": 11,
+   "lab14": 5,
+   "lab1": 2
+  },
+  "allowed": null
+ },
+ "47": {
+  "total": 770,
+  "parts": {
+   "lab14": 770
+  },
+  "allowed": null
+ }
+}

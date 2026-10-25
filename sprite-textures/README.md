@@ -151,3 +151,4 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 - D171: smooth per-part affine warp vs the D169 texture. 1,581 errors and 1,986 exceptions out of 11,318 px; more coherent than D170 but not clean. See `docs/exclusive-expansion/d171/`.
 - D172: outline ruling (b) plus per-bone warp. 1,284 errors and 1,243 nudges out of 11,318 px; 93G 353 has 0 errors. See `docs/exclusive-expansion/d172/`.
 - D173: full skeleton for the 40 Genesis exclusives (24 flagged) plus skeleton-driven warp. 1,938 errors and 1,080 nudges; worse than D172. See `docs/exclusive-expansion/d173/`.
+- D174: joint+warp fit with palette-index key and palette-zone constraint (docs/exclusive-expansion/d174).

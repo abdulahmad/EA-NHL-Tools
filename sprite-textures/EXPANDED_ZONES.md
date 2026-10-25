@@ -923,6 +923,7 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - D171 (pt995u): "Yes please fix". Replace D170's pixel-by-pixel snapping with a smooth per-part warp.
 - D172 (pt995s3501, option b): Genesis black outline pixels are textured. Family = the adjacent body pixels' family, rendered as that family's darkest shade.
 - D173 (pt996u): build a full skeleton (all limbs, shaft and blade) for the Genesis exclusives before warping.
+- D174 (t996s3513 option a; pt997u, pt999u, pt1002u, pt1003u): fit joints and warp together; palette-index zone -> body-part table as a hard constraint; a palette-index texture (helmet/skin shading collapsed in head rows) is the primary key; Abdul layout added as a test texture. 0 index errors not reached (3,604 mismatches).
 ## goalie26 v11 – symmetric mask, orange on top (D133)
 - D133 (Abdul pt934u "make the fuhr texture symmetrical, and more of the orange needs to be on top") **Fuhr v11** (`goalie26/fuhr26.py` `small11`, `fuhr_oilers_texture_v11.png`). Mask front x14-18 mirrored about x16 (x14-15 -> x18-17); back halves mirror each other (x12-13 -> x20-19); the orange flame/V of the mask reference is brought into the top: row 1 x14,15,17,18 and row 2 x15-17 orange (row 1 x16 keeps the darker red point); chin kept (orange (6,16),(7,16), blue (6,15),(6,17)). Pad front was NOT mirrored: Abdul's DR pad reference itself is asymmetric (navy stripe right of centre, logo bottom-left/right differ; 86 of 140 texels differ from their mirror), so it follows the reference. Blocker/catcher refs are not symmetric designs either.
 
@@ -1115,3 +1116,6 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - Folder: `sprite-textures/docs/exclusive-expansion/d173/`.
 - Skeleton: 19 bones, with best-pose PC D163 skeletons as priors, D162-style snapping and sanity checks. 24 of 40 frames are flagged; 35 have prior IoU < 0.7.
 - Warp: 1,938 errors (D172: 1,284) and 1,080 nudges (D172: 1,243). 93G 353: 0 errors, 8 nudges. Limbs are a little more coherent; overall errors are worse. No pixels relabelled.
+
+## D174
+Joint+warp fit, palette-zone constraint, palette-index texture key. See docs/exclusive-expansion/d174/METHOD_D174.md. Leafs errors 1,645, nudges 1,076, index mismatches 3,604; 0-error goal not met.
