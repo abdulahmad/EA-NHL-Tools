@@ -21,7 +21,7 @@ This is the single entry point. Rulings are D-numbers. The full rulings log is i
 ## Editor
 - **Launch:** run `python3 sprite-textures/editor/launch.py`. Use `--rebuild` to rebuild `editor/data/bundle.js` from your own ROM exports (gitignored), and `--no-browser` to skip opening a browser. It serves on 127.0.0.1:8765.
 - **Views:** Parts (the main view, PR #136), labels, skeleton, texture.
-- **Keys:** A/D or the arrow keys go to the previous/next frame. O = labels, J = skeleton, N = skeleton part names (D179, on by default in both views; yellow = bone, white = joint; dark halo, placed to avoid overlap), Z = undo, S = save.
+- **Keys:** A/D or the arrow keys go to the previous/next frame. O = labels, J = skeleton, N = skeleton tags (D181, on by default; only H, LH/RH hands, LK/RK knees, LF/RF feet, SHAFT, BLADE; small dark boxed tags placed to avoid overlap; legend under the editor and on the sheets), Z = undo, S = save.
 - **Fix queue:** worst frames first, with a live counter.
 - **Saving:** edits go to `editor/edits/<kind>_edits.json`.
 - **Not yet wired:** part/skeleton edits are saved but are **not yet fed back into the refit**.
@@ -59,7 +59,7 @@ This is the single entry point. Rulings are D-numbers. The full rulings log is i
 - **PC frames:** 601 have not yet been checked in the editor queue.
 - **95PC analysis:** not done yet. 95PC is also a source of verbatim heads.
 - **Goalie exclusives:** not expanded yet.
-- **Editor:** skeleton parts are labelled (D179). Part edits are not wired into the refit yet.
+- **Editor:** skeleton parts are tagged with 9 short tags (D181, replaces the D179 long names). Part edits are not wired into the refit yet.
 - **Decision for Abdul:** stick on white (how the stick renders over white jersey areas).
 - **Decision for Abdul:** the fix-queue threshold.
 - **SNES converter:** the plateau is about 50.7% family / 33.9% exact on held-out frames (the previous result was 51.2% / 34.8% on the 71-pair set). The limit is the redraw pose gap, because warping is disallowed. Next ideas: an RF skeleton regressor, more GT from 95PC, and part-aware colouring.

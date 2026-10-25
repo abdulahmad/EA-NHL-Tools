@@ -3,7 +3,7 @@ from stages import *
 from facing import gdir
 from dirmap import NAMES as DN
 from PIL import Image,ImageDraw
-from skel_labels import draw_labels
+from skel_labels import draw_labels, LEGEND
 it=dict(name='it6',k=5,snap=True,R=4,dil=2,n=300,leaf=1,head=True,sil=True,skc=True)
 if 'convert' not in globals():
     met,convert=run(it);met.pop('_res',None);print(met,flush=True)
@@ -17,13 +17,13 @@ def partimg(a,PT,J,k):
         if p>=100:d.line((x*k,y*k+k-1,x*k+k-1,y*k),fill=(255,255,255) if p%100 in(9,3,11) else (0,0,0),width=1)
     for p_,q_ in BONES:d.line((J[p_][0]*k,J[p_][1]*k,J[q_][0]*k,J[q_][1]*k),fill=(0,0,0),width=2)
     for v in J.values():d.rectangle((v[0]*k-2,v[1]*k-2,v[0]*k+2,v[1]*k+2),fill=(255,224,0),outline=(0,0,0))
-    draw_labels(d,J,BONES,k,W*k,H*k,11)
+    draw_labels(d,J,BONES,k,W*k,H*k,9)
     return im
 def rgbim(rgb,k):return Image.fromarray(rgb).resize((rgb.shape[1]*k,rgb.shape[0]*k),0)
 crop=lambda a:a[np.ix_((a>0).any(1),(a>0).any(0))]
 def sheet(items,title,cols,path,k=3,note=''):
     CW=[max(ims[c].width for _,ims in items)+16 for c in range(len(cols))];X0=[150+sum(CW[:c]) for c in range(len(cols))];cw=0;ch=max(max(i.height for i in ims) for _,ims in items)+12;lw=150
-    W=lw+sum(CW)+10;H=95+len(items)*ch+190
+    W=lw+sum(CW)+10;H=95+len(items)*ch+235
     im=Image.new('RGB',(W,H),(20,20,20));d=ImageDraw.Draw(im);d.text((10,8),title,fill='white',font=font(21))
     for c,h in enumerate(cols):
         cx=X0[c]+CW[c]//2
@@ -32,12 +32,12 @@ def sheet(items,title,cols,path,k=3,note=''):
     for r,(lab,ims) in enumerate(items):
         y=82+r*ch;d.multiline_text((8,y+ch//2-30),lab,fill='white',font=font(14))
         for c,t in enumerate(ims):im.paste(t,(X0[c]+(CW[c]-t.width)//2,y+(ch-t.height)//2))
-    y=H-125;d.text((10,y),'Legend (parts column): ',fill='white',font=font(14));x=210
+    y=H-150;d.text((10,y),'Legend (parts column): ',fill='white',font=font(14));x=210
     for p in range(1,13):
         if x>W-110:x=10;y+=24
         d.rectangle((x,y+2,x+14,y+16),fill=hx(BPC[p]),outline=(200,200,200));d.text((x+18,y),NAMES[p],fill='white',font=font(13));x+=18+int(d.textlength(NAMES[p],font=font(13)))+12
-    y+=26;d.text((10,y),'Diagonal line = right side. Yellow square = joint. Black lines = skeleton.\nNames: yellow = bone, white = joint (same as editor key N).',fill='white',font=font(13))
-    d.multiline_text((10,y+40),note,fill=(230,230,230),font=font(13));im.save(path);print(path,im.size)
+    y+=26;d.text((10,y),'Diagonal line = right side. Yellow square = joint. Black lines = skeleton.\n'+LEGEND.replace(', SHAFT','\n   SHAFT')+' (same as editor key N).',fill='white',font=font(13))
+    d.multiline_text((10,y+60),note,fill=(230,230,230),font=font(13));im.save(path);print(path,im.size)
 GL=lambda n:tdir('G94',n)
 items=[];seen=set()
 for p in sorted(TE,key=lambda p:p['g']):
