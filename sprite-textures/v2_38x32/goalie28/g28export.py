@@ -11,4 +11,8 @@ out=dict(palette=[list(map(int,c)) for c in sp],
   texDefault=np.array(Image.open(G+'/goalie29/goalie_texture_v8_indexed.png')).astype(int).tolist(),
   texFuhr=np.asarray(Image.open(G+'/goalie29/fuhr_oilers_texture_v14.png').convert('RGB')).astype(int).tolist(),
   frames={n:dict(px=frame(int(n)).astype(int).tolist(),lab=r['lab'],joints=r['joints'],back=r['back']) for n,r in A.items()})
+sys.path.insert(0,G+'/..');import test_textures as TT
+dRGB=np.array([[sp[i] if i!=255 else (252,0,252) for i in r] for r in out['texDefault']]);used=np.array(out['texDefault'])!=255
+out['textures']={'Default (v8)':dRGB.astype(int).tolist(),'Fuhr v14':out['texFuhr']}
+out['textures'].update(TT.make(dRGB,used,regions={'blocker':(0,0,10,7),'mask':(12,0,9,8),'pad':(0,9,10,14),'strip':(10,9,3,14),'stick':(14,9,3,14),'catcher back':(0,23,11,9),'catcher front':(11,23,11,9)},pads=(0,9,10,14)))
 o=sys.argv[1] if len(sys.argv)>1 else '/tmp/goalie_editor_data.json';json.dump(out,open(o,'w'),separators=(',',':'));print(o,len(out['frames']),'frames')

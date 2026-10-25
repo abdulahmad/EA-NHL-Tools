@@ -22,8 +22,8 @@ canvas{image-rendering:pixelated;background:#464646;border:1px solid #666}
 </div>
 <div class="row">
 <canvas id="ed"></canvas>
-<div><div>Game</div><canvas id="pg"></canvas><div>Parts only</div><canvas id="pp"></canvas>
-<p class="small">Click/drag: paint the selected part.<br>Drag a white ring: move a joint.<br>Keys shown on each button pick a part.<br>Shift+click: pick the part under the cursor.<br>Every labelled pixel carries a letter, so parts never depend on colour alone.</p></div>
+<div><div>Game</div><canvas id="pg"></canvas><div>Parts only</div><canvas id="pp"></canvas><div>Texture preview: <select id="tsel"></select></div><canvas id="pt"></canvas><div id="tnote" class="small"></div>
+<p class="small">Click/drag: paint the selected part.<br>Drag a white ring: move a joint.<br>Keys shown on each button pick a part.<br>Shift+click: pick the part under the cursor.<br>Every labelled pixel carries a letter, so parts never depend on colour alone.<br>Test textures (lines, checker) show stretched or skipped texels.</p></div>
 </div>
 <script>
 // Codes = scripts/parts.py PN. Colourblind-safe: Okabe-Ito colours + greys, high contrast, no red/green pairs, a letter on every px.
@@ -38,7 +38,8 @@ SHOW.forEach(i=>{const p=P[i],b=document.createElement('button');b.innerHTML=`<s
 const bg=document.createElement('button');bg.textContent='erase=none (x)';bg.id='p0';bg.onclick=()=>pick(0);$('parts').appendChild(bg);
 function pick(i){cur=i;document.querySelectorAll('#parts button').forEach(b=>b.classList.toggle('on',b.id=='p'+i))}pick(4);
 $('file').onchange=e=>{const r=new FileReader();r.onload=()=>load(r.result);r.readAsText(e.target.files[0])};
-function load(t){D=JSON.parse(t);F=Object.keys(D.frames).sort((a,b)=>a-b);fi=0;show()}
+function load(t){D=JSON.parse(t);F=Object.keys(D.frames).sort((a,b)=>a-b);fi=0;const T=D.textures||{};
+ $('tsel').innerHTML=Object.keys(T).map(k=>`<option>${k}</option>`).join('');{const tq=new URLSearchParams(location.search).get('tex');if(tq&&D.textures&&D.textures[tq])$('tsel').value=tq}$('tsel').onchange=show;show()}
 const qs=new URLSearchParams(location.search),q=qs.get('data');if(q)fetch(q).then(r=>r.text()).then(t=>{load(t);const f=qs.get('frame');if(f&&F.includes(f)){fi=F.indexOf(f);show()}});
 const fr=()=>D.frames[F[fi]],get=()=>edits[F[fi]]||fr();
 function mut(){const n=F[fi];if(!edits[n])edits[n]={lab:fr().lab.map(r=>r.slice()),joints:JSON.parse(JSON.stringify(fr().joints))};return edits[n]}
@@ -57,6 +58,9 @@ function show(){if(!D)return;const f=fr(),g=get(),h=f.px.length,w=f.px[0].length
  $('dirty').textContent=Object.keys(edits).length+' frame(s) edited';
  const pv=(cv,fn)=>{cv.width=w*PZ;cv.height=h*PZ;const c=cv.getContext('2d');c.fillStyle='#464646';c.fillRect(0,0,cv.width,cv.height);
   for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;c.fillStyle=fn(y,x,s);c.fillRect(x*PZ,y*PZ,PZ,PZ)}};
+ const tm=f.tmap,TX=(D.textures||{})[$('tsel').value];
+ if(tm&&TX){pv($('pt'),(y,x,s)=>{const t=tm[y+','+x];if(!t)return `rgb(${D.palette[s]})`;const c=TX[t[1]][t[0]];return (c[0]==252&&c[1]==0&&c[2]==252)?`rgb(${D.palette[s]})`:`rgb(${c})`});$('tnote').textContent='Mapped by the skater pipeline (v2 38x32 layout). Unmapped px keep game colours.'}
+ else{const c=$('pt');c.width=c.height=0;$('tnote').textContent='No pipeline texture map for this frame yet (mapped frames: '+F.filter(n=>D.frames[n].tmap).join(', ')+').'}
  pv($('pg'),(y,x,s)=>`rgb(${D.palette[s]})`);pv($('pp'),(y,x,s)=>P[g.lab[y][x]][2]||'#464646')}
 const cell=e=>{const r=ed.getBoundingClientRect();return[(e.clientX-r.left)/Z,(e.clientY-r.top)/Z]};
 function paint(e){const [fx,fy]=cell(e),x=Math.floor(fx),y=Math.floor(fy),f=fr();if(y<0||x<0||y>=f.px.length||x>=f.px[0].length||f.px[y][x]==255)return;

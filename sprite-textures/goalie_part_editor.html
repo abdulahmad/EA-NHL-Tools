@@ -23,8 +23,8 @@ canvas{image-rendering:pixelated;background:#464646;border:1px solid #666}
 </div>
 <div class="row">
 <canvas id="ed"></canvas>
-<div><div>Default texture</div><canvas id="pd"></canvas><div>Fuhr v13</div><canvas id="pf"></canvas><div>Game</div><canvas id="pg"></canvas>
-<p class="small">Click/drag: paint the selected part.<br>Drag a white ring: move a joint.<br>Keys 1-9/0: pick part. Shift+click: pick the part under the cursor.<br>Previews use a simple live mapping; the pipeline (g28all.py) does the exact one.</p></div>
+<div><div>Default texture</div><canvas id="pd"></canvas><div>Preview texture: <select id="tsel"></select></div><canvas id="pf"></canvas><div>Game</div><canvas id="pg"></canvas>
+<p class="small">Test textures (lines, checker, cuff...) show stretched or skipped texels:<br>a clean line pattern = one texel per sprite pixel.<br>Click/drag: paint the selected part.<br>Drag a white ring: move a joint.<br>Keys 1-9/0: pick part. Shift+click: pick the part under the cursor.<br>Previews use a simple live mapping; the pipeline (g28all.py) does the exact one.</p></div>
 </div>
 <script>
 // labels 0-9 = BG,BODY,MASK,CATCH,BLOCK,STICK,PADL,PADR,SKATE,SHADOW (g16/g21 codes). Okabe-Ito colours + a letter on every px (colourblind-safe).
@@ -35,7 +35,8 @@ P.forEach((p,i)=>{if(!i)return;const b=document.createElement('button');b.innerH
 const bg=document.createElement('button');bg.textContent='erase=BG (0)';bg.id='p0';bg.onclick=()=>pick(0);$('parts').appendChild(bg);
 function pick(i){cur=i;document.querySelectorAll('#parts button').forEach(b=>b.classList.toggle('on',b.id=='p'+i))}pick(1);
 $('file').onchange=e=>{const r=new FileReader();r.onload=()=>load(r.result);r.readAsText(e.target.files[0])};
-function load(t){D=JSON.parse(t);F=Object.keys(D.frames).sort((a,b)=>a-b);fi=0;show()}
+function load(t){D=JSON.parse(t);F=Object.keys(D.frames).sort((a,b)=>a-b);fi=0;D.textures=D.textures||{'Fuhr':D.texFuhr};
+ $('tsel').innerHTML=Object.keys(D.textures).map(k=>`<option>${k}</option>`).join('');$('tsel').value=D.textures['Fuhr v14']?'Fuhr v14':Object.keys(D.textures)[0];{const tq=new URLSearchParams(location.search).get('tex');if(tq&&D.textures&&D.textures[tq])$('tsel').value=tq}$('tsel').onchange=show;show()}
 const q=new URLSearchParams(location.search).get('data');if(q)fetch(q).then(r=>r.text()).then(load);
 const fr=()=>D.frames[F[fi]],get=()=>edits[F[fi]]||fr();
 function mut(){const n=F[fi];if(!edits[n])edits[n]={lab:fr().lab.map(r=>r.slice()),joints:JSON.parse(JSON.stringify(fr().joints))};return edits[n]}
@@ -73,7 +74,7 @@ function paintPrev(cv,fn){const f=fr(),h=f.px.length,w=f.px[0].length;cv.width=w
 function preview(){const M=mapFrame(),pal=D.palette;
  paintPrev($('pg'),(y,x,s)=>pal[s]);
  paintPrev($('pd'),(y,x,s)=>{const t=M[y+','+x];if(!t)return pal[s];const i=D.texDefault[t[0]][t[1]];return i==255?pal[s]:pal[i]});
- paintPrev($('pf'),(y,x,s)=>{const t=M[y+','+x];if(!t)return pal[s];const c=D.texFuhr[t[0]][t[1]];return (c[0]==252&&c[1]==0&&c[2]==252)?pal[s]:c})}
+ paintPrev($('pf'),(y,x,s)=>{const t=M[y+','+x];if(!t)return pal[s];const c=D.textures[$('tsel').value][t[0]][t[1]];return (c[0]==252&&c[1]==0&&c[2]==252)?pal[s]:c})}
 // ---- interaction ----
 const cell=e=>{const r=ed.getBoundingClientRect();return[(e.clientX-r.left)/Z,(e.clientY-r.top)/Z]};
 function paint(e){const [fx,fy]=cell(e),x=Math.floor(fx),y=Math.floor(fy),f=fr();if(y<0||x<0||y>=f.px.length||x>=f.px[0].length||f.px[y][x]==255)return;
