@@ -1,0 +1,62 @@
+[
+ {
+  "name": "it1 kNN k=1, no snap, 5x5 colour window",
+  "joint_err_px": 4.36,
+  "parts_acc": 0.523,
+  "exact": 0.336,
+  "family": 0.498,
+  "sil_iou": 0.738,
+  "disconnected": 0,
+  "jagged": 0.183,
+  "n": 31
+ },
+ {
+  "name": "it2 kNN k=3 + joint snapping",
+  "joint_err_px": 3.67,
+  "parts_acc": 0.541,
+  "exact": 0.332,
+  "family": 0.497,
+  "sil_iou": 0.737,
+  "disconnected": 0,
+  "jagged": 0.183,
+  "n": 31
+ },
+ {
+  "name": "it3 + 7x7 colour window",
+  "joint_err_px": 3.67,
+  "parts_acc": 0.541,
+  "exact": 0.332,
+  "family": 0.499,
+  "sil_iou": 0.738,
+  "disconnected": 0,
+  "jagged": 0.183,
+  "n": 31
+ },
+ {
+  "name": "it4 k=5, 9x9 window, leaf 1",
+  "joint_err_px": 3.48,
+  "parts_acc": 0.547,
+  "exact": 0.343,
+  "family": 0.504,
+  "sil_iou": 0.741,
+  "disconnected": 0,
+  "jagged": 0.183,
+  "n": 31,
+  "oracle_gt_skeleton": [
+   0.357,
+   0.525,
+   0.744
+  ]
+ },
+ {
+  "name": "it5 = it4 + silhouette smoothing pass",
+  "joint_err_px": 3.48,
+  "parts_acc": 0.547,
+  "exact": 0.339,
+  "family": 0.507,
+  "sil_iou": 0.741,
+  "disconnected": 0,
+  "jagged": 0.144,
+  "n": 31
+ }
+]

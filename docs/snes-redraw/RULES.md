@@ -29,3 +29,6 @@ It is trained on 311 frames and validated on 71 **held-out animations** (skatewp
 **Quality.** The output reads as Genesis-coloured (navy shading, 2-tone faces, white helmet), but the drawing is still SNES. The pose and outline are not redrawn, and the low scores mostly reflect pose and silhouette differences that no per-pixel translator can fix. Known artefacts: flat ice blobs under the skates, and blotchy navy where SNES had stripes.
 
 Run: `python3 analyse.py && python3 train.py && python3 sheets.py`. This needs the local census and ROM extracts; no game data is committed.
+
+
+See [RULES_D177_D178.md](RULES_D177_D178.md) for the staged converter (D177–D178).
