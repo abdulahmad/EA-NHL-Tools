@@ -5,6 +5,11 @@ exec(open('/workspace/snesredraw/train2.py').read().split("P=pairs();data={}")[0
 P=pickle.load(open('/tmp/skel_pairs.pkl','rb'))
 TR=[p for p in P if p['grp'] not in HOLD];TE=[p for p in P if p['grp'] in HOLD]
 fclf=ftrain()
+from dirmap import build as _db,sclass
+from skelcheck import check,enforce
+_,MG,_=_db('G94');_,MS,_=_db('S94')
+def tdir(game,n):
+    M=MG if game=='G94' else MS;v=M.get(n);return v['dir'] if v and v['src']=='table' else None
 def win(F,R,vals):
     Pd=np.pad(F,R);H,W=F.shape;ys,xs=np.mgrid[0:H,0:W];ys=ys.ravel();xs=xs.ravel()
     w=np.stack([Pd[ys+dy+R,xs+dx+R] for dy in range(-R,R+1) for dx in range(-R,R+1)],1)
@@ -33,19 +38,28 @@ def run(it):
         m=binary_dilation(Oc>0,iterations=it['dil']).ravel();X=cfeat(Oc,OPc,it['R']);Xs.append(X[m]);Ys.append(G.ravel()[m])
     cm=RandomForestClassifier(it['n'],min_samples_leaf=it['leaf'],n_jobs=-1,random_state=0).fit(np.concatenate(Xs),np.concatenate(Ys))
     lib=[h for h in headlib(exclude={n for n,g in {int(x['frame']):x['spf_group'] for x in rows if x['set']=='G94'}.items() if g in HOLD}) if not h['mir']]
-    for h in lib:h['dir']=gdir(h['n'])[0] if gdir(h['n'])[0] is not None else int(fclf.predict([feat(A['G94'][h['n']],1)])[0])
-    def convert(a,J=None):
-        J=J or sk.fit(a);PT=parts(a,J);O,OP,JN2=pose_scale(a,J,PT,R)
+    for h in lib:
+        t=tdir('G94',h['n']);h['dir']=t if t is not None else int(fclf.predict([feat(A['G94'][h['n']],1)])[0]);h['dsrc']='table' if t is not None else 'classifier';h['cls']=sclass('G94',h['n'])
+    def convert(a,J=None,sn=None,abl=()):
+        J=J or sk.fit(a);c0=c1=None
+        if it.get('skc') and 'noskc' not in abl:
+            F=FS[a];mask=a>0;body=mask&(F!=6);al={(y,x):FAMOK[F[y,x]] for y,x in zip(*np.nonzero(mask)) if F[y,x] in FAMOK}
+            c0=check(mask,body,al,J,BONES,0.5);J,c1=enforce(mask,body,al,J,BONES,0.5)
+        PT=parts(a,J);O,OP,JN2=pose_scale(a,J,PT,R)
         Op=np.pad(O,it['dil']);OPp=np.pad(OP,it['dil']);m=binary_dilation(Op>0,iterations=it['dil']).ravel()
-        o=np.zeros(Op.size,int);o[m]=cm.predict(cfeat(Op,OPp,it['R'])[m]);o=o.reshape(Op.shape);k=(Op>0)&(o==0);o[k]=[imap.get(int(v),int(v)) for v in Op[k]]
-        o=smooth(o)
-        if it.get('sil'):o=silsmooth(o)
-        d=int(fclf.predict([feat(sscale(a),0)])[0])
-        o,hd=pastehead(o,Op,[h for h in lib if h['dir']==d]) if it['head'] else (o,None)
-        o=repair(Op,o);return dict(J=J,PT=PT,O=o,S=Op,disc=disconnected(Op,o),head=hd,dir=d)
+        o=np.zeros(Op.size,int)
+        if 'norf' in abl:o=np.array([imap.get(int(v),0) if v else 0 for v in Op.ravel()])
+        else:o[m]=cm.predict(cfeat(Op,OPp,it['R'])[m])
+        o=o.reshape(Op.shape);k=(Op>0)&(o==0);o[k]=[imap.get(int(v),int(v)) for v in Op[k]]
+        if 'nosmooth' not in abl:
+            o=smooth(o)
+            if it.get('sil'):o=silsmooth(o)
+        t=tdir('S94',sn) if sn else None;d=t if t is not None else int(fclf.predict([feat(sscale(a),0)])[0]);cl=sclass('S94',sn) if sn else 'skater'
+        o,hd=pastehead(o,Op,[h for h in lib if h['dir']==d and h['cls']==cl]) if it['head'] and 'nohead' not in abl else (o,None)
+        o=repair(Op,o);return dict(J=J,PT=PT,O=o,S=Op,disc=disconnected(Op,o),head=hd,dir=d,dsrc='table' if t is not None else 'classifier',cls=cl,skc=(c0,c1))
     res=dict(joint_err=[],parts_acc=[],final=[],disc=0,jag=[])
     for p in TE:
-        a=A['S94'][p['s']];r=convert(a);G=A['G94'][p['g']]
+        a=A['S94'][p['s']];r=convert(a,sn=p['s']);G=A['G94'][p['g']]
         res['joint_err'].append(jerr(r['J'],p['JS']));gp=parts(a,p['JS']);m=a>0;res['parts_acc'].append(float((r['PT'][m]==gp[m]).mean()))
         C,_=place(r['O'],G);res['final'].append(score(C,G));res['disc']+=r['disc']>0;res['jag'].append(jag(r['O']))
     out=dict(name=it['name'],joint_err_px=round(float(np.mean(res['joint_err'])),2),parts_acc=round(float(np.mean(res['parts_acc'])),3),
@@ -55,6 +69,7 @@ def run(it):
     if it.get('oracle'):
         f=[score(place(convert(A['S94'][p['s']],p['JS'])['O'],A['G94'][p['g']])[0],A['G94'][p['g']]) for p in TE];out['oracle_gt_skeleton']=np.mean(f,0).round(3).tolist()
     pickle.dump((sk.__dict__,R),open('/tmp/d178_last.pkl','wb'))
+    out['_res']=res
     return out,convert
 def silsmooth(O):
     O=O.copy()
@@ -85,4 +100,4 @@ if __name__=='__main__':
     if len(sys.argv)>1:ITS[:]=[dict(name='it5 = it4 + silhouette smoothing pass',k=5,snap=True,R=4,dil=2,n=300,leaf=1,head=True,sil=True)]
     print('train pairs',len(TR),'held-out',len(TE),Counter(p['grp'] for p in TE),flush=True)
     for it in ITS:
-        o,_=run(it);outs.append(o);print(json.dumps(o),flush=True);json.dump(outs,open('iterations_d178.json','w'),indent=1)
+        o,_=run(it);o.pop('_res',None);outs.append(o);print(json.dumps(o),flush=True);json.dump(outs,open('iterations_d178.json','w'),indent=1)

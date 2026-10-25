@@ -1,0 +1,10741 @@
+{
+"G94": {
+"407": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"539": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 1
+},
+"540": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"541": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 3
+},
+"410": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"542": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 1
+},
+"543": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"544": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 3
+},
+"413": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"545": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 1
+},
+"546": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"547": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 3
+},
+"416": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"548": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 1
+},
+"549": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"550": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 3
+},
+"419": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"551": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 1
+},
+"552": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"553": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 3
+},
+"422": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"554": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 1
+},
+"555": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"556": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 3
+},
+"425": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"557": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 1
+},
+"558": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"559": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 3
+},
+"428": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"560": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 1
+},
+"561": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"562": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 3
+},
+"408": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"411": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"414": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"417": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"420": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"423": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"426": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"429": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"409": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgglovel"
+],
+"step": 0
+},
+"412": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgglovel",
+"SPAgglovel2"
+],
+"step": 0
+},
+"415": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgglovel",
+"SPAgglovel2"
+],
+"step": 0
+},
+"418": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgglovel",
+"SPAgglovel2"
+],
+"step": 0
+},
+"421": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgglovel"
+],
+"step": 0
+},
+"424": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgglovel",
+"SPAgglovel2"
+],
+"step": 0
+},
+"427": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgglovel",
+"SPAgglovel2"
+],
+"step": 0
+},
+"430": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgglovel",
+"SPAgglovel2"
+],
+"step": 0
+},
+"535": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgglovel2"
+],
+"step": 0
+},
+"536": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgglovel2"
+],
+"step": 1
+},
+"537": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgglovel2"
+],
+"step": 0
+},
+"538": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgglovel2"
+],
+"step": 1
+},
+"471": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"473": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"475": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"477": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"479": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"481": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"483": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"485": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"472": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"474": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"476": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"478": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"480": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"482": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"484": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"486": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"519": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"520": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"521": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"522": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"523": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"524": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"525": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"526": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"527": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"528": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"529": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"530": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"531": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"532": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"533": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"534": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"431": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"432": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"433": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"434": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"435": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"436": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"437": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"438": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"439": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"440": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"441": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"442": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"443": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"444": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"445": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"446": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"487": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"488": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"489": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"490": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"491": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"492": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"493": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"494": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"495": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"496": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"497": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"498": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"499": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"500": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"501": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"502": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"503": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"504": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"505": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"506": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"507": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"508": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"509": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"510": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"511": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"512": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"513": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"514": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"515": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"516": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"517": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"518": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"1": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAglide"
+],
+"step": 0
+},
+"6": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAglide"
+],
+"step": 0
+},
+"11": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAglide"
+],
+"step": 0
+},
+"16": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAglide"
+],
+"step": 0
+},
+"21": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAglide"
+],
+"step": 0
+},
+"26": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAglide"
+],
+"step": 0
+},
+"31": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAglide"
+],
+"step": 0
+},
+"36": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAglide"
+],
+"step": 0
+},
+"2": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"3": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"4": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"5": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"7": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"8": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"9": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"10": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"12": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"13": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"14": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"15": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"17": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"18": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"19": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"20": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"22": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"23": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"24": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"25": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"27": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"28": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"29": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"30": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"32": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"33": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"34": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"35": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"37": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"38": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"39": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"40": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"42": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"43": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"44": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"45": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"47": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"48": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"49": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"50": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"52": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"53": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"54": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"55": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"57": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"58": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"59": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"60": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"62": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"63": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"64": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"65": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"67": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"68": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"69": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"70": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"72": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"73": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"74": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"75": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"77": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"78": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"79": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"80": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"81": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"82": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"83": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"84": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"85": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"86": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"87": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"88": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"89": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"90": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"91": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"92": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"93": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"94": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"95": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"96": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"145": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"146": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"147": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"148": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"149": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"150": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"151": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"152": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"153": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"154": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"155": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"156": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"157": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"158": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"159": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"160": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"100": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"101": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"102": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"106": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"107": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"108": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"112": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"113": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"114": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"118": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"119": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"120": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"124": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"125": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"126": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"130": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"131": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"132": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"136": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"137": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"138": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"142": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"143": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"144": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"99": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"98": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"105": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"104": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"111": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"110": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"117": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"116": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"123": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"122": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"129": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"128": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"135": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"134": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"141": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"140": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"97": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"103": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"109": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"115": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"121": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"127": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"133": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"139": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"161": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"164": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"167": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"170": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"173": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"176": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"179": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"182": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"162": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"163": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"165": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"166": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"168": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"169": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"171": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"172": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"174": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"175": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"177": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"178": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"180": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"181": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"183": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"184": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"257": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"258": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"259": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"260": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"261": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"262": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"263": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"264": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"265": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"266": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"267": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"268": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"269": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"270": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"271": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"272": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"241": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"242": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"243": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"244": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"245": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"246": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"247": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"248": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"249": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"250": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"251": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"252": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"253": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"254": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"255": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"256": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"225": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"226": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"227": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"228": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"229": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"230": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"231": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"232": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"233": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"234": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"235": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"236": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"237": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"238": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"239": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"240": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"41": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail"
+],
+"step": 0
+},
+"46": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail"
+],
+"step": 0
+},
+"51": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail"
+],
+"step": 0
+},
+"56": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail"
+],
+"step": 0
+},
+"61": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail"
+],
+"step": 0
+},
+"66": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail"
+],
+"step": 0
+},
+"71": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail"
+],
+"step": 0
+},
+"76": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail"
+],
+"step": 0
+},
+"345": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"346": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"347": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"348": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"349": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"350": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"351": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"352": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"305": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"306": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"307": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"308": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"337": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"309": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"310": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"311": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"312": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"338": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"313": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"314": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"315": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"316": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"339": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"317": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"318": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"319": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"320": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"340": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"321": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"322": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"323": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"324": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"341": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"325": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"326": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"327": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"328": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"342": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"329": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"330": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"331": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"332": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"343": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"333": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"334": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"335": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"336": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"344": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"273": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"274": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"275": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"276": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"277": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"278": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"279": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"280": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"281": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"282": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"283": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"284": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"285": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"286": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"287": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"288": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"289": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"290": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"291": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"292": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"293": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"294": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"295": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"296": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"297": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"298": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"299": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"300": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"301": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"302": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"303": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"304": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"185": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 0
+},
+"186": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 1
+},
+"187": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 0
+},
+"188": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 1
+},
+"189": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 0
+},
+"190": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 1
+},
+"191": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 0
+},
+"192": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 1
+},
+"193": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 0
+},
+"194": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 1
+},
+"195": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 0
+},
+"196": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 1
+},
+"197": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 0
+},
+"198": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 1
+},
+"199": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 0
+},
+"200": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAcelebrate"
+],
+"step": 1
+},
+"201": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 0
+},
+"202": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"203": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 0
+},
+"204": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"205": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 0
+},
+"206": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"207": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 0
+},
+"208": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"209": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 0
+},
+"210": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"211": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 0
+},
+"212": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"213": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 0
+},
+"214": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"215": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 0
+},
+"216": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"217": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"218": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"219": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"220": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"221": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"222": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"223": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"224": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"577": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"578": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"579": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"580": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"581": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"582": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"583": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"584": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"585": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"586": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"587": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"588": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"589": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"590": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"591": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"592": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"593": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"595": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"597": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"599": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"601": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"603": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"605": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"607": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"594": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"596": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"598": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"600": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"602": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"604": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"606": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"608": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"609": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"610": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"611": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"612": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"613": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"614": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"615": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"616": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"617": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"618": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"619": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"620": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"621": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"622": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"623": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"624": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"625": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"626": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"627": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"628": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"629": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"630": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"631": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"632": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"658": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAghighr"
+],
+"step": 0
+},
+"660": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAghighr"
+],
+"step": 0
+},
+"662": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAghighr"
+],
+"step": 0
+},
+"664": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAghighr"
+],
+"step": 0
+},
+"666": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAghighr"
+],
+"step": 0
+},
+"668": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAghighr"
+],
+"step": 0
+},
+"670": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAghighr"
+],
+"step": 0
+},
+"672": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAghighr"
+],
+"step": 0
+},
+"659": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAghighl"
+],
+"step": 0
+},
+"661": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAghighl"
+],
+"step": 0
+},
+"663": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAghighl"
+],
+"step": 0
+},
+"665": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAghighl"
+],
+"step": 0
+},
+"667": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAghighl"
+],
+"step": 0
+},
+"669": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAghighl"
+],
+"step": 0
+},
+"671": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAghighl"
+],
+"step": 0
+},
+"673": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAghighl"
+],
+"step": 0
+},
+"674": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 0
+},
+"675": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 1
+},
+"678": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 0
+},
+"679": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 1
+},
+"682": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 0
+},
+"683": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 1
+},
+"686": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 0
+},
+"687": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 1
+},
+"690": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 0
+},
+"691": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 1
+},
+"694": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 0
+},
+"695": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 1
+},
+"698": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 0
+},
+"699": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 1
+},
+"702": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 0
+},
+"703": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgstick2r"
+],
+"step": 1
+},
+"676": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 0
+},
+"677": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 1
+},
+"680": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 0
+},
+"681": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 1
+},
+"684": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 0
+},
+"685": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 1
+},
+"688": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 0
+},
+"689": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 1
+},
+"692": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 0
+},
+"693": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 1
+},
+"696": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 0
+},
+"697": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 1
+},
+"700": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 0
+},
+"701": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 1
+},
+"704": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 0
+},
+"705": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgstick2l"
+],
+"step": 1
+},
+"830": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"831": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"832": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"833": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"834": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"835": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"836": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"837": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+}
+},
+"S94": {
+"534": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"646": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgbutterfly",
+"SPAgcover",
+"SPAgcover2",
+"SPAgready",
+"SPAgsprawll",
+"SPAgsprawlr"
+],
+"step": 1
+},
+"647": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"537": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"648": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgbutterfly",
+"SPAgcover",
+"SPAgcover2",
+"SPAgready",
+"SPAgsprawll",
+"SPAgsprawlr"
+],
+"step": 1
+},
+"649": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"540": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"650": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgbutterfly",
+"SPAgcover",
+"SPAgcover2",
+"SPAgready",
+"SPAgsprawll",
+"SPAgsprawlr"
+],
+"step": 1
+},
+"651": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"543": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"652": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgbutterfly",
+"SPAgcover",
+"SPAgcover2",
+"SPAgready",
+"SPAgsprawll",
+"SPAgsprawlr"
+],
+"step": 1
+},
+"653": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"546": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"654": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgbutterfly",
+"SPAgcover",
+"SPAgcover2",
+"SPAgready",
+"SPAgsprawll",
+"SPAgsprawlr"
+],
+"step": 1
+},
+"655": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"549": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"656": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgbutterfly",
+"SPAgcover",
+"SPAgcover2",
+"SPAgready",
+"SPAgsprawll",
+"SPAgsprawlr"
+],
+"step": 1
+},
+"657": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"552": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"658": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgbutterfly",
+"SPAgcover",
+"SPAgcover2",
+"SPAgready",
+"SPAgsprawll",
+"SPAgsprawlr"
+],
+"step": 1
+},
+"659": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"555": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgready",
+"SPAgready2"
+],
+"step": 0
+},
+"660": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgbutterfly",
+"SPAgcover",
+"SPAgcover2",
+"SPAgready",
+"SPAgsprawll",
+"SPAgsprawlr"
+],
+"step": 1
+},
+"661": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgready"
+],
+"step": 2
+},
+"535": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"538": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"541": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"544": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"547": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"550": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"553": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"556": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgglover"
+],
+"step": 0
+},
+"536": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgglovel"
+],
+"step": 0
+},
+"539": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgglovel"
+],
+"step": 0
+},
+"542": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgglovel"
+],
+"step": 0
+},
+"545": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgglovel"
+],
+"step": 0
+},
+"548": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgglovel"
+],
+"step": 0
+},
+"551": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgglovel"
+],
+"step": 0
+},
+"554": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgglovel"
+],
+"step": 0
+},
+"557": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgglovel"
+],
+"step": 0
+},
+"598": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"600": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"602": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"604": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"606": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"608": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"610": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"612": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgstickr"
+],
+"step": 0
+},
+"599": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"601": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"603": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"605": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"607": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"609": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"611": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"613": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgstickl"
+],
+"step": 0
+},
+"558": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"559": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"560": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"561": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"562": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"563": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"564": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"565": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"566": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"567": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"568": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"569": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"570": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"571": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"572": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 0
+},
+"573": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgswing"
+],
+"step": 1
+},
+"614": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"615": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"616": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"617": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"618": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"619": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"620": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"621": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"622": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"623": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"624": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"625": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"626": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"627": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"628": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"629": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"630": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"631": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"632": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"633": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"634": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"635": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"636": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"637": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"638": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"639": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"640": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"641": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"642": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 0
+},
+"643": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 1
+},
+"644": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 2
+},
+"645": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgskate"
+],
+"step": 3
+},
+"662": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"663": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"664": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"665": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"666": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"667": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"668": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"669": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"670": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"671": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"672": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"673": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"674": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"675": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"676": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 0
+},
+"677": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgdive"
+],
+"step": 1
+},
+"678": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 0
+},
+"679": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 1
+},
+"680": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 0
+},
+"681": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 1
+},
+"682": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 0
+},
+"683": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 1
+},
+"684": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 0
+},
+"685": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 1
+},
+"686": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 0
+},
+"687": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 1
+},
+"688": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 0
+},
+"689": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 1
+},
+"690": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 0
+},
+"691": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 1
+},
+"692": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 0
+},
+"693": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgpoke"
+],
+"step": 1
+},
+"694": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 0
+},
+"695": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 1
+},
+"696": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 2
+},
+"697": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 0
+},
+"698": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 1
+},
+"699": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 2
+},
+"700": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 0
+},
+"701": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 1
+},
+"702": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 2
+},
+"703": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 0
+},
+"704": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 1
+},
+"705": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 2
+},
+"706": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 0
+},
+"707": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 1
+},
+"708": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 2
+},
+"709": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 0
+},
+"710": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 1
+},
+"711": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 2
+},
+"712": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 0
+},
+"713": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 1
+},
+"714": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 2
+},
+"715": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 0
+},
+"716": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 1
+},
+"717": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgcover",
+"SPAgcover2"
+],
+"step": 2
+},
+"718": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 0
+},
+"719": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 1
+},
+"720": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 2
+},
+"721": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 0
+},
+"722": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 1
+},
+"723": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 2
+},
+"724": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 0
+},
+"725": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 1
+},
+"726": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 2
+},
+"727": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 0
+},
+"728": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 1
+},
+"729": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 2
+},
+"730": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 0
+},
+"731": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 1
+},
+"732": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 2
+},
+"733": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 0
+},
+"734": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 1
+},
+"735": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 2
+},
+"736": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 0
+},
+"737": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 1
+},
+"738": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 2
+},
+"739": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 0
+},
+"740": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 1
+},
+"741": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgbutterfly"
+],
+"step": 2
+},
+"742": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 0
+},
+"743": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 1
+},
+"744": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 2
+},
+"745": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 0
+},
+"746": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 1
+},
+"747": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 2
+},
+"748": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 0
+},
+"749": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 1
+},
+"750": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 2
+},
+"751": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 0
+},
+"752": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 1
+},
+"753": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 2
+},
+"754": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 0
+},
+"755": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 1
+},
+"756": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 2
+},
+"757": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 0
+},
+"758": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 1
+},
+"759": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 2
+},
+"760": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 0
+},
+"761": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 1
+},
+"762": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 2
+},
+"763": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 0
+},
+"764": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 1
+},
+"765": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgsprawll"
+],
+"step": 2
+},
+"766": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 0
+},
+"767": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 1
+},
+"768": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 2
+},
+"769": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 0
+},
+"770": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 1
+},
+"771": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 2
+},
+"772": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 0
+},
+"773": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 1
+},
+"774": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 2
+},
+"775": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 0
+},
+"776": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 1
+},
+"777": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 2
+},
+"778": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 0
+},
+"779": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 1
+},
+"780": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 2
+},
+"781": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 0
+},
+"782": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 1
+},
+"783": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 2
+},
+"784": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 0
+},
+"785": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 1
+},
+"786": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 2
+},
+"787": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 0
+},
+"788": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 1
+},
+"789": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAgsprawlr"
+],
+"step": 2
+},
+"1": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAglide",
+"SPApump2",
+"SPAskatewp"
+],
+"step": 0
+},
+"6": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAglide",
+"SPApump2",
+"SPAskatewp"
+],
+"step": 0
+},
+"11": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAglide",
+"SPApump2",
+"SPAskatewp"
+],
+"step": 0
+},
+"16": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAglide",
+"SPApump2",
+"SPAskatewp"
+],
+"step": 0
+},
+"21": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAglide",
+"SPApump2",
+"SPAskatewp"
+],
+"step": 0
+},
+"26": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAglide",
+"SPApump2",
+"SPAskatewp"
+],
+"step": 0
+},
+"31": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAglide",
+"SPApump2",
+"SPAskatewp"
+],
+"step": 0
+},
+"36": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAglide",
+"SPApump2",
+"SPAskatewp"
+],
+"step": 0
+},
+"2": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"3": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"4": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"5": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"7": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"8": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"9": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"10": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"12": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"13": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"14": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"15": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"17": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"18": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"19": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"20": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"22": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"23": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"24": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"25": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"27": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"28": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"29": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"30": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"32": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"33": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"34": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"35": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"37": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 0
+},
+"38": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 1
+},
+"39": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 2
+},
+"40": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskatewp"
+],
+"step": 3
+},
+"42": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"43": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"44": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"45": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"41": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail",
+"SPAskate"
+],
+"step": 4
+},
+"47": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"48": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"49": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"50": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"46": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail",
+"SPAskate"
+],
+"step": 4
+},
+"52": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"53": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"54": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"55": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"51": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail",
+"SPAskate"
+],
+"step": 4
+},
+"57": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"58": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"59": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"60": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"56": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail",
+"SPAskate"
+],
+"step": 4
+},
+"62": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"63": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"64": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"65": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"61": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail",
+"SPAskate"
+],
+"step": 4
+},
+"67": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"68": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"69": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"70": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"66": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail",
+"SPAskate"
+],
+"step": 4
+},
+"72": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"73": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"74": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"75": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"71": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail",
+"SPAskate"
+],
+"step": 4
+},
+"77": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 0
+},
+"78": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 1
+},
+"79": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 2
+},
+"80": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskate"
+],
+"step": 3
+},
+"76": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAburst",
+"SPAflail",
+"SPAskate"
+],
+"step": 4
+},
+"81": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"82": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"83": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"84": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"85": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"86": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"87": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"88": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAturnl"
+],
+"step": 0
+},
+"89": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"90": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"91": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"92": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"93": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"94": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"95": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"96": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAturnr"
+],
+"step": 0
+},
+"145": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"146": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"147": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"148": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"149": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"150": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"151": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"152": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"153": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"154": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"155": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"156": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"157": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"158": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"159": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 0
+},
+"160": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAstop"
+],
+"step": 1
+},
+"100": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"101": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"102": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"106": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"107": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"108": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"112": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"113": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"114": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"118": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"119": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"120": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"124": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"125": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"126": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"130": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"131": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"132": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"136": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"137": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"138": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"142": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 0
+},
+"143": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"144": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassf",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"99": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"98": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"105": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"104": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"111": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"110": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"117": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"116": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"123": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"122": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"129": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"128": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"135": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"134": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"141": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 1
+},
+"140": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAonetimerb",
+"SPAonetimerf",
+"SPApassb",
+"SPAshotb",
+"SPAshotf"
+],
+"step": 2
+},
+"97": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"103": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"109": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"115": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"121": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"127": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"133": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"139": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAshotf"
+],
+"step": 3
+},
+"161": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"164": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"167": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"170": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"173": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"176": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"179": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"182": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAglideback",
+"SPAskateback"
+],
+"step": 0
+},
+"162": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"163": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"165": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"166": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"168": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"169": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"171": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"172": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"174": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"175": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"177": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"178": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"180": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"181": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"183": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 1
+},
+"184": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAskateback"
+],
+"step": 2
+},
+"518": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"519": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 1
+},
+"520": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"521": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 1
+},
+"522": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"523": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 1
+},
+"524": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"525": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 1
+},
+"526": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"527": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 1
+},
+"528": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"529": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 1
+},
+"530": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"531": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 1
+},
+"532": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 0
+},
+"533": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAcrosscheck"
+],
+"step": 1
+},
+"265": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"266": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"267": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"268": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"269": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"270": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"271": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"272": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"273": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"274": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"275": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"276": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"277": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"278": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"279": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 0
+},
+"280": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAsweepchk"
+],
+"step": 1
+},
+"249": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"250": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"251": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"252": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"253": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"254": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"255": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"256": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAshoulderchkl"
+],
+"step": 0
+},
+"257": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"258": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"259": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"260": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"261": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"262": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"263": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"264": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAshoulderchkr"
+],
+"step": 0
+},
+"233": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"234": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"235": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"236": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"237": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"238": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"239": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"240": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAhipchkl"
+],
+"step": 0
+},
+"241": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"242": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"243": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"244": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"245": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"246": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"247": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"248": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAhipchkr"
+],
+"step": 0
+},
+"353": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"354": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"355": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"356": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"357": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"358": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"359": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"360": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAHold",
+"SPAHold2"
+],
+"step": 0
+},
+"481": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"482": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"483": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"484": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"485": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"486": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"487": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"488": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"489": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"490": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"491": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"492": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"493": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"494": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"495": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAhook",
+"SPAhook2"
+],
+"step": 0
+},
+"496": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAhook2"
+],
+"step": 1
+},
+"313": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"314": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"315": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"316": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"345": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"317": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"318": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"319": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"320": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"346": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"321": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"322": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"323": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"324": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"347": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"325": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"326": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"327": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"328": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"348": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"329": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"330": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"331": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"332": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"349": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"333": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"334": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"335": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"336": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"350": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"337": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"338": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"339": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"340": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"351": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"341": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 0
+},
+"342": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 1
+},
+"343": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 2
+},
+"344": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallfwd"
+],
+"step": 3
+},
+"352": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallback",
+"SPAfallfwd"
+],
+"step": 4
+},
+"281": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"282": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"283": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"284": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"285": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"286": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"287": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"288": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"289": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"290": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"291": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"292": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"293": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"294": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"295": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"296": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"297": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"298": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"299": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"300": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"301": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"302": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"303": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"304": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"305": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"306": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"307": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"308": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"309": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 0
+},
+"310": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 1
+},
+"311": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 2
+},
+"312": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAfallback"
+],
+"step": 3
+},
+"217": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"218": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"219": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"220": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"221": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"222": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"223": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"224": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAstanley"
+],
+"step": 0
+},
+"457": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"458": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"459": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"460": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"461": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"462": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"463": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"464": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"465": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"466": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"467": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"468": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"469": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"470": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"471": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"472": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"473": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"474": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"475": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"476": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"477": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"478": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 0
+},
+"479": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 1
+},
+"480": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAstumble"
+],
+"step": 2
+},
+"497": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"498": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"499": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"500": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"501": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"502": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"503": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"504": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"505": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"506": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"507": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"508": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"509": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"510": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"511": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 0
+},
+"512": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAcatch"
+],
+"step": 1
+},
+"201": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump"
+],
+"step": 0
+},
+"185": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 1
+},
+"186": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 2
+},
+"203": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump"
+],
+"step": 0
+},
+"187": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 1
+},
+"188": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 2
+},
+"205": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump"
+],
+"step": 0
+},
+"189": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 1
+},
+"190": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 2
+},
+"207": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump"
+],
+"step": 0
+},
+"191": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 1
+},
+"192": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 2
+},
+"209": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump"
+],
+"step": 0
+},
+"193": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 1
+},
+"194": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 2
+},
+"211": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump"
+],
+"step": 0
+},
+"195": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 1
+},
+"196": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 2
+},
+"213": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump"
+],
+"step": 0
+},
+"197": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 1
+},
+"198": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 2
+},
+"215": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump",
+"SPApump2"
+],
+"step": 0
+},
+"199": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 1
+},
+"200": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPAcelebrate",
+"SPApump2"
+],
+"step": 2
+},
+"202": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"204": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"206": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"208": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"210": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"212": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"214": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"216": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPApump"
+],
+"step": 1
+},
+"790": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 2
+},
+"791": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 3
+},
+"792": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 4
+},
+"793": {
+"dir": 0,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 5
+},
+"794": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 2
+},
+"795": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 3
+},
+"796": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 4
+},
+"797": {
+"dir": 1,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 5
+},
+"798": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 2
+},
+"799": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 3
+},
+"800": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 4
+},
+"801": {
+"dir": 2,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 5
+},
+"802": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 2
+},
+"803": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 3
+},
+"804": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 4
+},
+"805": {
+"dir": 3,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 5
+},
+"806": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 2
+},
+"807": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 3
+},
+"808": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 4
+},
+"809": {
+"dir": 4,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 5
+},
+"810": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 2
+},
+"811": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 3
+},
+"812": {
+"dir": 5,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 4
+},
+"813": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 2
+},
+"814": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 3
+},
+"815": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 4
+},
+"816": {
+"dir": 6,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 5
+},
+"817": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 3
+},
+"818": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 4
+},
+"819": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 5
+},
+"820": {
+"dir": 7,
+"src": "table",
+"anims": [
+"SPApump2"
+],
+"step": 6
+}
+}
+}
