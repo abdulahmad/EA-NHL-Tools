@@ -1,0 +1,105 @@
+{
+ "G94_711": {
+  "title": "94G gslambot",
+  "px": 406,
+  "lowconf": 339,
+  "zones": {
+   "outline": 1,
+   "helmet": 13,
+   "torso": 75,
+   "shoulder_patch": 1,
+   "sleeve": 39,
+   "pants": 26,
+   "sock": 4,
+   "stick": 13,
+   "shadow": 41,
+   "goalie_mask": 51,
+   "blocker": 12,
+   "pad": 129,
+   "other": 1
+  }
+ },
+ "G94_665": {
+  "title": "94G ghighl",
+  "px": 366,
+  "lowconf": 287,
+  "zones": {
+   "outline": 2,
+   "helmet": 5,
+   "torso": 86,
+   "shoulder_patch": 2,
+   "sleeve": 35,
+   "pants": 14,
+   "sock": 4,
+   "stick": 20,
+   "shadow": 49,
+   "goalie_mask": 17,
+   "pad": 127,
+   "other": 5
+  }
+ },
+ "S94_705": {
+  "title": "94S gcover",
+  "px": 354,
+  "lowconf": 260,
+  "zones": {
+   "outline": 73,
+   "helmet": 15,
+   "torso": 39,
+   "sleeve": 18,
+   "glove": 80,
+   "pants": 37,
+   "sock": 1,
+   "stick": 19,
+   "shadow": 71,
+   "other": 1
+  }
+ },
+ "S94_733": {
+  "title": "94S gbutterfly",
+  "px": 371,
+  "lowconf": 298,
+  "zones": {
+   "outline": 22,
+   "torso": 73,
+   "sleeve": 14,
+   "pants": 24,
+   "sock": 10,
+   "skate_blade": 4,
+   "stick": 22,
+   "shadow": 24,
+   "goalie_mask": 8,
+   "blocker": 24,
+   "pad": 144,
+   "other": 2
+  }
+ },
+ "C_S94_796": {
+  "title": "94S pump2 (celebration)",
+  "pc": 351,
+  "score": 0.584,
+  "scale": 1.0476190476190477,
+  "s94": [
+   42,
+   25
+  ],
+  "pcshape": [
+   44,
+   25
+  ]
+ },
+ "C_S94_529": {
+  "title": "94S crosscheck",
+  "pc": 705,
+  "score": 0.61,
+  "scale": 0.9375,
+  "s94": [
+   32,
+   26
+  ],
+  "pcshape": [
+   30,
+   25
+  ]
+ }
+}

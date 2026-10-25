@@ -1,0 +1,166 @@
+{
+ "M": {
+  "G93_360": {
+   "title": "93G fhigh (fight punch)",
+   "dir": 2,
+   "px": 345,
+   "mapped": 293,
+   "lowconf": 201,
+   "errors_leafs": 0,
+   "parts": {
+    "sock": {
+     "px": 31,
+     "ok": 31
+    },
+    "helmet": {
+     "px": 17,
+     "ok": 17
+    },
+    "glove": {
+     "px": 8,
+     "ok": 8
+    },
+    "skin": {
+     "px": 15,
+     "ok": 15
+    },
+    "torso": {
+     "px": 100,
+     "ok": 100
+    },
+    "sleeve": {
+     "px": 22,
+     "ok": 22
+    },
+    "pants": {
+     "px": 56,
+     "ok": 56
+    },
+    "skate": {
+     "px": 32,
+     "ok": 32
+    },
+    "14": {
+     "px": 52
+    },
+    "skate_blade": {
+     "px": 12,
+     "ok": 12
+    }
+   }
+  },
+  "G93_374": {
+   "title": "93G finjury (bloody injury)",
+   "dir": 7,
+   "px": 365,
+   "mapped": 301,
+   "lowconf": 227,
+   "errors_leafs": 0,
+   "parts": {
+    "part 1": {
+     "px": 7,
+     "ok": 7
+    },
+    "sleeve": {
+     "px": 43,
+     "ok": 43
+    },
+    "torso": {
+     "px": 74,
+     "ok": 74
+    },
+    "skin": {
+     "px": 21,
+     "ok": 21
+    },
+    "helmet": {
+     "px": 12,
+     "ok": 12
+    },
+    "14": {
+     "px": 64
+    },
+    "glove": {
+     "px": 65,
+     "ok": 65
+    },
+    "crest": {
+     "px": 5,
+     "ok": 5
+    },
+    "pants": {
+     "px": 58,
+     "ok": 58
+    },
+    "sock": {
+     "px": 12,
+     "ok": 12
+    },
+    "skate_blade": {
+     "px": 3,
+     "ok": 3
+    },
+    "stick": {
+     "px": 1,
+     "ok": 1
+    }
+   }
+  },
+  "G94_742": {
+   "title": "94G boardfront (board check)",
+   "dir": 2,
+   "px": 330,
+   "mapped": 272,
+   "lowconf": 190,
+   "errors_leafs": 0,
+   "parts": {
+    "helmet": {
+     "px": 22,
+     "ok": 22
+    },
+    "torso": {
+     "px": 74,
+     "ok": 74
+    },
+    "skin": {
+     "px": 4,
+     "ok": 4
+    },
+    "sleeve": {
+     "px": 30,
+     "ok": 30
+    },
+    "stick": {
+     "px": 33,
+     "ok": 9
+    },
+    "part 1": {
+     "px": 2,
+     "ok": 2
+    },
+    "14": {
+     "px": 34
+    },
+    "pants": {
+     "px": 66,
+     "ok": 66
+    },
+    "sock": {
+     "px": 23,
+     "ok": 23
+    },
+    "skate": {
+     "px": 39,
+     "ok": 39
+    },
+    "skate_blade": {
+     "px": 3,
+     "ok": 3
+    }
+   }
+  }
+ },
+ "autofit": {
+  "back-torso remapped": 3
+ }
+}

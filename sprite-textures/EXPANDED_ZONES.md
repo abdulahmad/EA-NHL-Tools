@@ -1064,3 +1064,10 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - `sprite-textures/docs/platform-census/`: every frame of 92G/93G/94G/94S/95PC compared (plus 93S as reference). Includes `REPORT.md`, `frames_matrix.csv/json` (best match per other set + class), `roadmap_*.csv`, `intra.json` and the pipeline `scripts/`.
 - Exclusives: 93G blood `finjury` 371-376. 92G/93G share the fights 353-370; 94G blanks them and PC has none. 94G has 79 exclusives (boards, bench checks, crosscheck, ghigh/gstick2/gslam). 94S has 145. PC has 174.
 - Match classes are thresholds only; no pixels are relabelled. Pickles, raw dumps and full contact sheets are not committed. Only four 800 px sample sheets are allowed, for this doc.
+
+## D166: expanding console-exclusive frames to 95PC zones (Abdul pt987u)
+- `sprite-textures/docs/exclusive-expansion/`: METHOD.md, scripts and metrics.
+- A palette lookup cannot recover zones because console indices are colours, not zones. Instead, a learned context translator turns console pixels into 95PC indices, which then go through the unchanged PC skater pipeline.
+- Held-out accuracy is about 0.82 coarse part and 0.59 exact. Sleeve<->torso is the main error.
+- Goalies are only translated and segmented; no g28 texel snap yet. The 94S redraw (Part C) is a recolour with PC bands, not a real redraw.
+- The "0 err" rings are self-consistency only. No pixels were relabelled, and renders are not committed.
