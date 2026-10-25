@@ -1,0 +1,23 @@
+{
+ "zero_error_pc_frames": 601,
+ "G94": {
+  "pairs": 281,
+  "texels_voted": 668,
+  "used": 768,
+  "gap_filled": 83,
+  "unfilled": 17,
+  "pixel_agreement": 0.885,
+  "within_frame": 0.971,
+  "texels_lt_0_9": 221
+ },
+ "G93": {
+  "pairs": 282,
+  "texels_voted": 668,
+  "used": 768,
+  "gap_filled": 83,
+  "unfilled": 17,
+  "pixel_agreement": 0.885,
+  "within_frame": 0.971,
+  "texels_lt_0_9": 221
+ }
+}
