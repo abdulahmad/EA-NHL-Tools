@@ -1,0 +1,17 @@
+# D170: re-fit exclusive texel maps against the frozen D169 texture (Abdul pt994u)
+- **Answer key:** the D169 texture is frozen, as Abdul approved: "Texture is good now". File: `texture_key_D169.json`.
+- **Re-fit (`refit170.py`, `run170.py`):** for each Genesis pixel (pixels are never relabelled):
+  - **Part split:** the D166 skeleton/part label puts it in a texture zone. Sleeve/glove/patch go to sleeve (cols 0-2, 16-23, 34-37), torso/crest to torso, pants/sock/skate to legs, and skin/helmet to head.
+  - **Kept:** if its pipeline texel is in that zone and has the pixel's family, it stays.
+  - **Moved:** otherwise it moves to the closest texel in the zone with that family, cost 4*|du| + |dv|. This keeps the column and snaps the row first.
+  - **No texel (240 px):** seeded from the nearest mapped pixel, with the same part preferred.
+- **Moves:** kept 9,222; column kept, row snapped 1,358; column moved 738; zone widened (no texel of that family in the zone, e.g. skin on torso) 254; seeded 240.
+- **Result:** 0 family errors out of 11,318 px (D169: 1,805), and that includes 93G 353's gloves. Stick (574), shadow (2,040) and blood (183) keep their game colour.
+- **Shade:** the texture is family-level (shade ignored, as ruled in pt991u). The render therefore shows each pixel's original Genesis shade, so the original colours are reproduced exactly. The PC-index-to-shade table cannot be used here: exclusives have no PC frame.
+- **Honest quality:**
+  - 0 is guaranteed by construction: every pixel is forced to a texel of its own family.
+  - The maps are still not coherent. The vertical and horizontal test renders are scrambled, because the snapping is per pixel; 2,096 px moved. That is not a smooth warp.
+  - Next: a smooth per-part warp (row and column offset per part) fitted under the family constraint.
+- **D169 changelog fix:** "cols 4 and 15 navy yoke rows 6-8" was wrong.
+  - Those texels had no votes. D168 had gap-filled them navy, and the D169 row band (sleeve rows 7-8 = white) replaced them.
+  - The column test actually kept cols 4 and 15 navy in rows 17-20, the pants side. There, 3 of 4 voted rows were navy, against a black sleeve band in rows 18-20.

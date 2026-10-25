@@ -1,0 +1,286 @@
+{
+ "validation": {
+  "px": 72056,
+  "family ok": 62417,
+  "exact ok": 38654,
+  "no texel": 307
+ },
+ "G93_353": {
+  "dir": 0,
+  "errors": 0,
+  "px": 88,
+  "shadow (game colour)": 116,
+  "stick (game colour)": 72
+ },
+ "G93_354": {
+  "dir": 7,
+  "errors": 0,
+  "px": 262,
+  "stick (game colour)": 23,
+  "shadow (game colour)": 25
+ },
+ "G93_355": {
+  "dir": 1,
+  "errors": 0,
+  "px": 256,
+  "shadow (game colour)": 45,
+  "stick (game colour)": 26
+ },
+ "G93_356": {
+  "dir": 0,
+  "errors": 0,
+  "px": 245,
+  "shadow (game colour)": 43
+ },
+ "G93_357": {
+  "dir": 0,
+  "errors": 0,
+  "px": 298,
+  "shadow (game colour)": 40
+ },
+ "G93_358": {
+  "dir": 1,
+  "errors": 0,
+  "px": 318,
+  "shadow (game colour)": 40
+ },
+ "G93_359": {
+  "dir": 6,
+  "errors": 0,
+  "px": 340,
+  "shadow (game colour)": 47
+ },
+ "G93_360": {
+  "dir": 1,
+  "errors": 0,
+  "px": 293,
+  "shadow (game colour)": 52
+ },
+ "G93_361": {
+  "dir": 1,
+  "errors": 0,
+  "px": 287,
+  "shadow (game colour)": 49
+ },
+ "G93_362": {
+  "dir": 0,
+  "errors": 0,
+  "px": 285,
+  "shadow (game colour)": 34
+ },
+ "G93_363": {
+  "dir": 1,
+  "errors": 0,
+  "px": 300,
+  "shadow (game colour)": 49
+ },
+ "G93_364": {
+  "dir": 1,
+  "errors": 0,
+  "px": 338,
+  "shadow (game colour)": 50
+ },
+ "G93_365": {
+  "dir": 7,
+  "errors": 0,
+  "px": 337,
+  "shadow (game colour)": 52
+ },
+ "G93_366": {
+  "dir": 6,
+  "errors": 0,
+  "px": 309,
+  "shadow (game colour)": 52
+ },
+ "G93_367": {
+  "dir": 2,
+  "errors": 0,
+  "px": 286,
+  "shadow (game colour)": 29
+ },
+ "G93_368": {
+  "dir": 1,
+  "errors": 0,
+  "px": 307,
+  "shadow (game colour)": 39
+ },
+ "G93_369": {
+  "dir": 7,
+  "errors": 0,
+  "px": 289,
+  "shadow (game colour)": 68
+ },
+ "G93_370": {
+  "dir": 6,
+  "errors": 0,
+  "px": 303,
+  "shadow (game colour)": 68
+ },
+ "G93_371": {
+  "dir": 2,
+  "errors": 0,
+  "px": 278,
+  "shadow (game colour)": 56,
+  "blood/decal (game colour)": 16
+ },
+ "G93_372": {
+  "dir": 6,
+  "errors": 0,
+  "px": 289,
+  "shadow (game colour)": 69,
+  "blood/decal (game colour)": 33
+ },
+ "G93_373": {
+  "dir": 6,
+  "errors": 0,
+  "px": 288,
+  "shadow (game colour)": 61,
+  "blood/decal (game colour)": 38
+ },
+ "G93_374": {
+  "dir": 6,
+  "errors": 0,
+  "px": 278,
+  "shadow (game colour)": 56,
+  "blood/decal (game colour)": 31
+ },
+ "G93_375": {
+  "dir": 6,
+  "errors": 0,
+  "px": 289,
+  "shadow (game colour)": 69,
+  "blood/decal (game colour)": 27
+ },
+ "G93_376": {
+  "dir": 6,
+  "errors": 0,
+  "px": 288,
+  "shadow (game colour)": 61,
+  "blood/decal (game colour)": 38
+ },
+ "G94_738": {
+  "dir": 0,
+  "errors": 0,
+  "stick (game colour)": 24,
+  "px": 286,
+  "shadow (game colour)": 28
+ },
+ "G94_739": {
+  "dir": 0,
+  "errors": 0,
+  "px": 284,
+  "stick (game colour)": 23,
+  "shadow (game colour)": 36
+ },
+ "G94_740": {
+  "dir": 0,
+  "errors": 0,
+  "stick (game colour)": 24,
+  "px": 250,
+  "shadow (game colour)": 28
+ },
+ "G94_741": {
+  "dir": 4,
+  "errors": 0,
+  "stick (game colour)": 24,
+  "shadow (game colour)": 53,
+  "px": 191
+ },
+ "G94_742": {
+  "dir": 3,
+  "errors": 0,
+  "px": 270,
+  "stick (game colour)": 27,
+  "shadow (game colour)": 33
+ },
+ "G94_743": {
+  "dir": 3,
+  "errors": 0,
+  "px": 302,
+  "stick (game colour)": 36,
+  "shadow (game colour)": 39
+ },
+ "G94_744": {
+  "dir": 2,
+  "errors": 0,
+  "px": 322,
+  "stick (game colour)": 39,
+  "shadow (game colour)": 55
+ },
+ "G94_745": {
+  "dir": 2,
+  "errors": 0,
+  "px": 310,
+  "stick (game colour)": 31,
+  "shadow (game colour)": 81
+ },
+ "G94_746": {
+  "dir": 4,
+  "errors": 0,
+  "px": 292,
+  "stick (game colour)": 15,
+  "shadow (game colour)": 44
+ },
+ "G94_747": {
+  "dir": 0,
+  "errors": 0,
+  "stick (game colour)": 30,
+  "px": 296,
+  "shadow (game colour)": 41
+ },
+ "G94_748": {
+  "dir": 4,
+  "errors": 0,
+  "px": 221,
+  "stick (game colour)": 22,
+  "shadow (game colour)": 46
+ },
+ "G94_749": {
+  "dir": 3,
+  "errors": 0,
+  "px": 239,
+  "shadow (game colour)": 76,
+  "stick (game colour)": 26
+ },
+ "G94_750": {
+  "dir": 3,
+  "errors": 0,
+  "px": 270,
+  "stick (game colour)": 27,
+  "shadow (game colour)": 33
+ },
+ "G94_751": {
+  "dir": 3,
+  "errors": 0,
+  "px": 302,
+  "stick (game colour)": 36,
+  "shadow (game colour)": 39
+ },
+ "G94_752": {
+  "dir": 2,
+  "errors": 0,
+  "px": 322,
+  "stick (game colour)": 39,
+  "shadow (game colour)": 55
+ },
+ "G94_753": {
+  "dir": 6,
+  "errors": 0,
+  "px": 310,
+  "stick (game colour)": 30,
+  "shadow (game colour)": 83
+ },
+ "total": {
+  "px": 11318,
+  "shadow (game colour)": 2040,
+  "stick (game colour)": 574,
+  "blood/decal (game colour)": 183
+ },
+ "refit": {
+  "seeded": 240,
+  "column moved": 738,
+  "kept": 9222,
+  "column kept, row snapped": 1358,
+  "zone widened": 254
+ }
+}

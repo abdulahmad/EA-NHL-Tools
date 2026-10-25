@@ -919,6 +919,7 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - D140: Fuhr cuff and V tip stay as NOW (v12); do not re-ask settled questions (pt943u).
 
 - D168 (pt991u): compare Genesis and PC by colour family, ignoring shade on both. D169 (pt992u): fix the 94G texture first. Stripes must be straight bands, and every texture gap must be filled (evidence first, then PC Leafs family).
+- D170 (pt994u): "Texture is good now". The D169 94G family texture is frozen as the answer key.
 ## goalie26 v11 – symmetric mask, orange on top (D133)
 - D133 (Abdul pt934u "make the fuhr texture symmetrical, and more of the orange needs to be on top") **Fuhr v11** (`goalie26/fuhr26.py` `small11`, `fuhr_oilers_texture_v11.png`). Mask front x14-18 mirrored about x16 (x14-15 -> x18-17); back halves mirror each other (x12-13 -> x20-19); the orange flame/V of the mask reference is brought into the top: row 1 x14,15,17,18 and row 2 x15-17 orange (row 1 x16 keeps the darker red point); chin kept (orange (6,16),(7,16), blue (6,15),(6,17)). Pad front was NOT mirrored: Abdul's DR pad reference itself is asymmetric (navy stripe right of centre, logo bottom-left/right differ; 86 of 140 texels differ from their mirror), so it follows the reference. Blocker/catcher refs are not symmetric designs either.
 
@@ -1087,3 +1088,10 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - 40 texels changed vs D168. 100 gaps filled: row band 92, unanimous neighbour 4, PC Leafs family 4.
 - Votes agreeing with the final texture: 0.866, down from 0.885 per texel. Validation: family 86.6%, exact index 53.6%.
 - Fight frames got worse: 1,805 errors out of 11,318 px (D168: 1,559). The pipeline texel maps put stripe pixels on the wrong rows, and per-texel D168 had partly absorbed that. No pixels relabelled, no renders committed.
+
+## D170: re-fit exclusive texel maps against the frozen D169 texture (Abdul pt994u)
+- Folder: `sprite-textures/docs/exclusive-expansion/d170/`.
+- The re-fit uses three rules: a pixel only maps to texels of its own family; it keeps its column and snaps to the nearest band row; part labels split sleeve from torso. The 240 no-texel px are seeded from the nearest mapped pixel.
+- Result: 0 errors out of 11,318 px (D169: 1,805), including 93G 353. Moves: kept 9,222; row snapped 1,358; column moved 738; zone widened 254; seeded 240.
+- Zero errors is by construction. The vertical and horizontal test renders are still incoherent, so a smooth per-part warp is next. No pixels relabelled.
+- D169 fix: cols 4 and 15 were kept navy in rows 17-20 (pants side), not rows 6-8. Rows 7-8 there had no votes, so they took the white sleeve band.
