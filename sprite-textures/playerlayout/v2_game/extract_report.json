@@ -1,0 +1,1286 @@
+{
+ "Chicago away": {
+  "palette": "AWAY.json chi",
+  "frames": 601,
+  "pixels": 125952,
+  "texels": 586,
+  "conflict_texels": 31,
+  "conflict_px": 1080,
+  "no_medium_skipped": 0,
+  "conflicts": [
+   {
+    "texel": [
+     7,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 79,
+     "(np.int64(160), np.int64(96), np.int64(96))": 8
+    }
+   },
+   {
+    "texel": [
+     8,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 106,
+     "(np.int64(160), np.int64(96), np.int64(96))": 3
+    }
+   },
+   {
+    "texel": [
+     5,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 35,
+     "(np.int64(160), np.int64(96), np.int64(96))": 8
+    }
+   },
+   {
+    "texel": [
+     7,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 82,
+     "(np.int64(160), np.int64(96), np.int64(96))": 24
+    }
+   },
+   {
+    "texel": [
+     9,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 163,
+     "(np.int64(160), np.int64(96), np.int64(96))": 12
+    }
+   },
+   {
+    "texel": [
+     9,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 113,
+     "(np.int64(160), np.int64(96), np.int64(96))": 5
+    }
+   },
+   {
+    "texel": [
+     6,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 53,
+     "(np.int64(160), np.int64(96), np.int64(96))": 13
+    }
+   },
+   {
+    "texel": [
+     8,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 138,
+     "(np.int64(160), np.int64(96), np.int64(96))": 15
+    }
+   },
+   {
+    "texel": [
+     8,
+     6
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 130,
+     "(np.int64(160), np.int64(96), np.int64(96))": 37
+    }
+   },
+   {
+    "texel": [
+     10,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 149,
+     "(np.int64(160), np.int64(96), np.int64(96))": 17
+    }
+   },
+   {
+    "texel": [
+     11,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 108,
+     "(np.int64(160), np.int64(96), np.int64(96))": 29
+    }
+   },
+   {
+    "texel": [
+     9,
+     6
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 130,
+     "(np.int64(160), np.int64(96), np.int64(96))": 12
+    }
+   },
+   {
+    "texel": [
+     10,
+     6
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 135,
+     "(np.int64(160), np.int64(96), np.int64(96))": 39
+    }
+   },
+   {
+    "texel": [
+     12,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 65,
+     "(np.int64(160), np.int64(96), np.int64(96))": 27
+    }
+   },
+   {
+    "texel": [
+     9,
+     7
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 137,
+     "(np.int64(160), np.int64(96), np.int64(96))": 32
+    }
+   },
+   {
+    "texel": [
+     10,
+     7
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 173,
+     "(np.int64(160), np.int64(96), np.int64(96))": 59
+    }
+   },
+   {
+    "texel": [
+     8,
+     7
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 157,
+     "(np.int64(160), np.int64(96), np.int64(96))": 44
+    }
+   },
+   {
+    "texel": [
+     9,
+     8
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 186,
+     "(np.int64(160), np.int64(96), np.int64(96))": 69
+    }
+   },
+   {
+    "texel": [
+     10,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 101,
+     "(np.int64(160), np.int64(96), np.int64(96))": 6
+    }
+   },
+   {
+    "texel": [
+     11,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 72,
+     "(np.int64(160), np.int64(96), np.int64(96))": 18
+    }
+   },
+   {
+    "texel": [
+     13,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 31,
+     "(np.int64(160), np.int64(96), np.int64(96))": 12
+    }
+   },
+   {
+    "texel": [
+     29,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 103,
+     "(np.int64(160), np.int64(96), np.int64(96))": 22
+    }
+   },
+   {
+    "texel": [
+     28,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 190,
+     "(np.int64(160), np.int64(96), np.int64(96))": 32
+    }
+   },
+   {
+    "texel": [
+     30,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 188,
+     "(np.int64(160), np.int64(96), np.int64(96))": 20
+    }
+   },
+   {
+    "texel": [
+     30,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 140,
+     "(np.int64(160), np.int64(96), np.int64(96))": 106
+    }
+   },
+   {
+    "texel": [
+     27,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 198,
+     "(np.int64(160), np.int64(96), np.int64(96))": 109
+    }
+   },
+   {
+    "texel": [
+     31,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 203,
+     "(np.int64(160), np.int64(96), np.int64(96))": 58
+    }
+   },
+   {
+    "texel": [
+     29,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 135,
+     "(np.int64(160), np.int64(96), np.int64(96))": 122
+    }
+   },
+   {
+    "texel": [
+     28,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 123,
+     "(np.int64(160), np.int64(96), np.int64(96))": 116
+    }
+   },
+   {
+    "texel": [
+     8,
+     3
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 62,
+     "(np.int64(160), np.int64(96), np.int64(96))": 2
+    }
+   },
+   {
+    "texel": [
+     10,
+     3
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 78,
+     "(np.int64(160), np.int64(96), np.int64(96))": 4
+    }
+   }
+  ]
+ },
+ "Leafs home": {
+  "palette": "HOME.json tor",
+  "frames": 601,
+  "pixels": 125952,
+  "texels": 586,
+  "conflict_texels": 31,
+  "conflict_px": 1080,
+  "no_medium_skipped": 0,
+  "conflicts": [
+   {
+    "texel": [
+     7,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 79,
+     "(np.int64(160), np.int64(96), np.int64(96))": 8
+    }
+   },
+   {
+    "texel": [
+     8,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 106,
+     "(np.int64(160), np.int64(96), np.int64(96))": 3
+    }
+   },
+   {
+    "texel": [
+     5,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 35,
+     "(np.int64(160), np.int64(96), np.int64(96))": 8
+    }
+   },
+   {
+    "texel": [
+     7,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 82,
+     "(np.int64(160), np.int64(96), np.int64(96))": 24
+    }
+   },
+   {
+    "texel": [
+     9,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 163,
+     "(np.int64(160), np.int64(96), np.int64(96))": 12
+    }
+   },
+   {
+    "texel": [
+     9,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 113,
+     "(np.int64(160), np.int64(96), np.int64(96))": 5
+    }
+   },
+   {
+    "texel": [
+     6,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 53,
+     "(np.int64(160), np.int64(96), np.int64(96))": 13
+    }
+   },
+   {
+    "texel": [
+     8,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 138,
+     "(np.int64(160), np.int64(96), np.int64(96))": 15
+    }
+   },
+   {
+    "texel": [
+     8,
+     6
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 130,
+     "(np.int64(160), np.int64(96), np.int64(96))": 37
+    }
+   },
+   {
+    "texel": [
+     10,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 149,
+     "(np.int64(160), np.int64(96), np.int64(96))": 17
+    }
+   },
+   {
+    "texel": [
+     11,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 108,
+     "(np.int64(160), np.int64(96), np.int64(96))": 29
+    }
+   },
+   {
+    "texel": [
+     9,
+     6
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 130,
+     "(np.int64(160), np.int64(96), np.int64(96))": 12
+    }
+   },
+   {
+    "texel": [
+     10,
+     6
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 135,
+     "(np.int64(160), np.int64(96), np.int64(96))": 39
+    }
+   },
+   {
+    "texel": [
+     12,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 65,
+     "(np.int64(160), np.int64(96), np.int64(96))": 27
+    }
+   },
+   {
+    "texel": [
+     9,
+     7
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 137,
+     "(np.int64(160), np.int64(96), np.int64(96))": 32
+    }
+   },
+   {
+    "texel": [
+     10,
+     7
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 173,
+     "(np.int64(160), np.int64(96), np.int64(96))": 59
+    }
+   },
+   {
+    "texel": [
+     8,
+     7
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 157,
+     "(np.int64(160), np.int64(96), np.int64(96))": 44
+    }
+   },
+   {
+    "texel": [
+     9,
+     8
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 186,
+     "(np.int64(160), np.int64(96), np.int64(96))": 69
+    }
+   },
+   {
+    "texel": [
+     10,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 101,
+     "(np.int64(160), np.int64(96), np.int64(96))": 6
+    }
+   },
+   {
+    "texel": [
+     11,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 72,
+     "(np.int64(160), np.int64(96), np.int64(96))": 18
+    }
+   },
+   {
+    "texel": [
+     13,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 31,
+     "(np.int64(160), np.int64(96), np.int64(96))": 12
+    }
+   },
+   {
+    "texel": [
+     29,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 103,
+     "(np.int64(160), np.int64(96), np.int64(96))": 22
+    }
+   },
+   {
+    "texel": [
+     28,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 190,
+     "(np.int64(160), np.int64(96), np.int64(96))": 32
+    }
+   },
+   {
+    "texel": [
+     30,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 188,
+     "(np.int64(160), np.int64(96), np.int64(96))": 20
+    }
+   },
+   {
+    "texel": [
+     30,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 140,
+     "(np.int64(160), np.int64(96), np.int64(96))": 106
+    }
+   },
+   {
+    "texel": [
+     27,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 198,
+     "(np.int64(160), np.int64(96), np.int64(96))": 109
+    }
+   },
+   {
+    "texel": [
+     31,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 203,
+     "(np.int64(160), np.int64(96), np.int64(96))": 58
+    }
+   },
+   {
+    "texel": [
+     29,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 135,
+     "(np.int64(160), np.int64(96), np.int64(96))": 122
+    }
+   },
+   {
+    "texel": [
+     28,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 123,
+     "(np.int64(160), np.int64(96), np.int64(96))": 116
+    }
+   },
+   {
+    "texel": [
+     8,
+     3
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 62,
+     "(np.int64(160), np.int64(96), np.int64(96))": 2
+    }
+   },
+   {
+    "texel": [
+     10,
+     3
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 78,
+     "(np.int64(160), np.int64(96), np.int64(96))": 4
+    }
+   }
+  ]
+ },
+ "Rangers away": {
+  "palette": "AWAY.json nyr",
+  "frames": 601,
+  "pixels": 125952,
+  "texels": 586,
+  "conflict_texels": 31,
+  "conflict_px": 1080,
+  "no_medium_skipped": 0,
+  "conflicts": [
+   {
+    "texel": [
+     7,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 79,
+     "(np.int64(160), np.int64(96), np.int64(96))": 8
+    }
+   },
+   {
+    "texel": [
+     8,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 106,
+     "(np.int64(160), np.int64(96), np.int64(96))": 3
+    }
+   },
+   {
+    "texel": [
+     5,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 35,
+     "(np.int64(160), np.int64(96), np.int64(96))": 8
+    }
+   },
+   {
+    "texel": [
+     7,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 82,
+     "(np.int64(160), np.int64(96), np.int64(96))": 24
+    }
+   },
+   {
+    "texel": [
+     9,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 163,
+     "(np.int64(160), np.int64(96), np.int64(96))": 12
+    }
+   },
+   {
+    "texel": [
+     9,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 113,
+     "(np.int64(160), np.int64(96), np.int64(96))": 5
+    }
+   },
+   {
+    "texel": [
+     6,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 53,
+     "(np.int64(160), np.int64(96), np.int64(96))": 13
+    }
+   },
+   {
+    "texel": [
+     8,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 138,
+     "(np.int64(160), np.int64(96), np.int64(96))": 15
+    }
+   },
+   {
+    "texel": [
+     8,
+     6
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 130,
+     "(np.int64(160), np.int64(96), np.int64(96))": 37
+    }
+   },
+   {
+    "texel": [
+     10,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 149,
+     "(np.int64(160), np.int64(96), np.int64(96))": 17
+    }
+   },
+   {
+    "texel": [
+     11,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 108,
+     "(np.int64(160), np.int64(96), np.int64(96))": 29
+    }
+   },
+   {
+    "texel": [
+     9,
+     6
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 130,
+     "(np.int64(160), np.int64(96), np.int64(96))": 12
+    }
+   },
+   {
+    "texel": [
+     10,
+     6
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 135,
+     "(np.int64(160), np.int64(96), np.int64(96))": 39
+    }
+   },
+   {
+    "texel": [
+     12,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 65,
+     "(np.int64(160), np.int64(96), np.int64(96))": 27
+    }
+   },
+   {
+    "texel": [
+     9,
+     7
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 137,
+     "(np.int64(160), np.int64(96), np.int64(96))": 32
+    }
+   },
+   {
+    "texel": [
+     10,
+     7
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 173,
+     "(np.int64(160), np.int64(96), np.int64(96))": 59
+    }
+   },
+   {
+    "texel": [
+     8,
+     7
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 157,
+     "(np.int64(160), np.int64(96), np.int64(96))": 44
+    }
+   },
+   {
+    "texel": [
+     9,
+     8
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 186,
+     "(np.int64(160), np.int64(96), np.int64(96))": 69
+    }
+   },
+   {
+    "texel": [
+     10,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 101,
+     "(np.int64(160), np.int64(96), np.int64(96))": 6
+    }
+   },
+   {
+    "texel": [
+     11,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 72,
+     "(np.int64(160), np.int64(96), np.int64(96))": 18
+    }
+   },
+   {
+    "texel": [
+     13,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 31,
+     "(np.int64(160), np.int64(96), np.int64(96))": 12
+    }
+   },
+   {
+    "texel": [
+     29,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 103,
+     "(np.int64(160), np.int64(96), np.int64(96))": 22
+    }
+   },
+   {
+    "texel": [
+     28,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 190,
+     "(np.int64(160), np.int64(96), np.int64(96))": 32
+    }
+   },
+   {
+    "texel": [
+     30,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 188,
+     "(np.int64(160), np.int64(96), np.int64(96))": 20
+    }
+   },
+   {
+    "texel": [
+     30,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 140,
+     "(np.int64(160), np.int64(96), np.int64(96))": 106
+    }
+   },
+   {
+    "texel": [
+     27,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 198,
+     "(np.int64(160), np.int64(96), np.int64(96))": 109
+    }
+   },
+   {
+    "texel": [
+     31,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 203,
+     "(np.int64(160), np.int64(96), np.int64(96))": 58
+    }
+   },
+   {
+    "texel": [
+     29,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 135,
+     "(np.int64(160), np.int64(96), np.int64(96))": 122
+    }
+   },
+   {
+    "texel": [
+     28,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 123,
+     "(np.int64(160), np.int64(96), np.int64(96))": 116
+    }
+   },
+   {
+    "texel": [
+     8,
+     3
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 62,
+     "(np.int64(160), np.int64(96), np.int64(96))": 2
+    }
+   },
+   {
+    "texel": [
+     10,
+     3
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 78,
+     "(np.int64(160), np.int64(96), np.int64(96))": 4
+    }
+   }
+  ]
+ },
+ "Montreal home": {
+  "palette": "HOME.json mtl",
+  "frames": 601,
+  "pixels": 125952,
+  "texels": 586,
+  "conflict_texels": 31,
+  "conflict_px": 1080,
+  "no_medium_skipped": 0,
+  "conflicts": [
+   {
+    "texel": [
+     7,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 79,
+     "(np.int64(160), np.int64(96), np.int64(96))": 8
+    }
+   },
+   {
+    "texel": [
+     8,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 106,
+     "(np.int64(160), np.int64(96), np.int64(96))": 3
+    }
+   },
+   {
+    "texel": [
+     5,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 35,
+     "(np.int64(160), np.int64(96), np.int64(96))": 8
+    }
+   },
+   {
+    "texel": [
+     7,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 82,
+     "(np.int64(160), np.int64(96), np.int64(96))": 24
+    }
+   },
+   {
+    "texel": [
+     9,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 163,
+     "(np.int64(160), np.int64(96), np.int64(96))": 12
+    }
+   },
+   {
+    "texel": [
+     9,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 113,
+     "(np.int64(160), np.int64(96), np.int64(96))": 5
+    }
+   },
+   {
+    "texel": [
+     6,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 53,
+     "(np.int64(160), np.int64(96), np.int64(96))": 13
+    }
+   },
+   {
+    "texel": [
+     8,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 138,
+     "(np.int64(160), np.int64(96), np.int64(96))": 15
+    }
+   },
+   {
+    "texel": [
+     8,
+     6
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 130,
+     "(np.int64(160), np.int64(96), np.int64(96))": 37
+    }
+   },
+   {
+    "texel": [
+     10,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 149,
+     "(np.int64(160), np.int64(96), np.int64(96))": 17
+    }
+   },
+   {
+    "texel": [
+     11,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 108,
+     "(np.int64(160), np.int64(96), np.int64(96))": 29
+    }
+   },
+   {
+    "texel": [
+     9,
+     6
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 130,
+     "(np.int64(160), np.int64(96), np.int64(96))": 12
+    }
+   },
+   {
+    "texel": [
+     10,
+     6
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 135,
+     "(np.int64(160), np.int64(96), np.int64(96))": 39
+    }
+   },
+   {
+    "texel": [
+     12,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 65,
+     "(np.int64(160), np.int64(96), np.int64(96))": 27
+    }
+   },
+   {
+    "texel": [
+     9,
+     7
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 137,
+     "(np.int64(160), np.int64(96), np.int64(96))": 32
+    }
+   },
+   {
+    "texel": [
+     10,
+     7
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 173,
+     "(np.int64(160), np.int64(96), np.int64(96))": 59
+    }
+   },
+   {
+    "texel": [
+     8,
+     7
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 157,
+     "(np.int64(160), np.int64(96), np.int64(96))": 44
+    }
+   },
+   {
+    "texel": [
+     9,
+     8
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 186,
+     "(np.int64(160), np.int64(96), np.int64(96))": 69
+    }
+   },
+   {
+    "texel": [
+     10,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 101,
+     "(np.int64(160), np.int64(96), np.int64(96))": 6
+    }
+   },
+   {
+    "texel": [
+     11,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 72,
+     "(np.int64(160), np.int64(96), np.int64(96))": 18
+    }
+   },
+   {
+    "texel": [
+     13,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 31,
+     "(np.int64(160), np.int64(96), np.int64(96))": 12
+    }
+   },
+   {
+    "texel": [
+     29,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 103,
+     "(np.int64(160), np.int64(96), np.int64(96))": 22
+    }
+   },
+   {
+    "texel": [
+     28,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 190,
+     "(np.int64(160), np.int64(96), np.int64(96))": 32
+    }
+   },
+   {
+    "texel": [
+     30,
+     4
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 188,
+     "(np.int64(160), np.int64(96), np.int64(96))": 20
+    }
+   },
+   {
+    "texel": [
+     30,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 140,
+     "(np.int64(160), np.int64(96), np.int64(96))": 106
+    }
+   },
+   {
+    "texel": [
+     27,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 198,
+     "(np.int64(160), np.int64(96), np.int64(96))": 109
+    }
+   },
+   {
+    "texel": [
+     31,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 203,
+     "(np.int64(160), np.int64(96), np.int64(96))": 58
+    }
+   },
+   {
+    "texel": [
+     29,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 135,
+     "(np.int64(160), np.int64(96), np.int64(96))": 122
+    }
+   },
+   {
+    "texel": [
+     28,
+     5
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 123,
+     "(np.int64(160), np.int64(96), np.int64(96))": 116
+    }
+   },
+   {
+    "texel": [
+     8,
+     3
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 62,
+     "(np.int64(160), np.int64(96), np.int64(96))": 2
+    }
+   },
+   {
+    "texel": [
+     10,
+     3
+    ],
+    "votes": {
+     "(np.int64(224), np.int64(128), np.int64(128))": 78,
+     "(np.int64(160), np.int64(96), np.int64(96))": 4
+    }
+   }
+  ]
+ }
+}
