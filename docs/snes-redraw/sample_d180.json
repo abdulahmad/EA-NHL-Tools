@@ -1,0 +1,1073 @@
+[
+{
+"platform": "G94",
+"cls": "goalie",
+"anim": "SPAgdive",
+"dir": 3,
+"frame": 526
+},
+{
+"platform": "G94",
+"cls": "goalie",
+"anim": "SPAgglovel2",
+"dir": 4,
+"frame": 538
+},
+{
+"platform": "G94",
+"cls": "goalie",
+"anim": "SPAgready",
+"dir": 2,
+"frame": 547
+},
+{
+"platform": "G94",
+"cls": "goalie",
+"anim": "SPAgready",
+"dir": 7,
+"frame": 562
+},
+{
+"platform": "G94",
+"cls": "goalie",
+"anim": "SPAgskate",
+"dir": 4,
+"frame": 506
+},
+{
+"platform": "G94",
+"cls": "goalie",
+"anim": "SPAgstickl",
+"dir": 7,
+"frame": 486
+},
+{
+"platform": "G94",
+"cls": "goalie",
+"anim": "SPAgswing",
+"dir": 5,
+"frame": 442
+},
+{
+"platform": "G94",
+"cls": "goalie",
+"anim": "none",
+"dir": -1,
+"frame": 462
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAburst",
+"dir": 3,
+"frame": 56
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAcatch",
+"dir": 7,
+"frame": 592
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAcrosscheck",
+"dir": 3,
+"frame": 833
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAfallback",
+"dir": 3,
+"frame": 285
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAfallback",
+"dir": 7,
+"frame": 301
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAfallfwd",
+"dir": 3,
+"frame": 320
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAghighl",
+"dir": 3,
+"frame": 665
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAglide",
+"dir": 7,
+"frame": 36
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAgstick2l",
+"dir": 5,
+"frame": 697
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAgstick2r",
+"dir": 7,
+"frame": 703
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAhook",
+"dir": 3,
+"frame": 599
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPApassb",
+"dir": 2,
+"frame": 111
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPApassf",
+"dir": 1,
+"frame": 108
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPApump",
+"dir": 3,
+"frame": 208
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAshoulderchkl",
+"dir": 3,
+"frame": 244
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAskate",
+"dir": 1,
+"frame": 50
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAskate",
+"dir": 6,
+"frame": 75
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAskateback",
+"dir": 7,
+"frame": 184
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAskatewp",
+"dir": 4,
+"frame": 25
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAstanley",
+"dir": 7,
+"frame": 224
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAstumble",
+"dir": 1,
+"frame": 612
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAstumble",
+"dir": 7,
+"frame": 632
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "SPAturnl",
+"dir": 3,
+"frame": 84
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 360
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 380
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 400
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 576
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 652
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 720
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 740
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 760
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 780
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 800
+},
+{
+"platform": "G94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 820
+},
+{
+"platform": "GENEX",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "G93 355"
+},
+{
+"platform": "GENEX",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "G93 375"
+},
+{
+"platform": "PC",
+"cls": "goalie",
+"anim": "bundle",
+"dir": -1,
+"frame": "goalie 1002"
+},
+{
+"platform": "PC",
+"cls": "goalie",
+"anim": "bundle",
+"dir": -1,
+"frame": "goalie 1022"
+},
+{
+"platform": "PC",
+"cls": "goalie",
+"anim": "bundle",
+"dir": -1,
+"frame": "goalie 1042"
+},
+{
+"platform": "PC",
+"cls": "goalie",
+"anim": "bundle",
+"dir": -1,
+"frame": "goalie 1062"
+},
+{
+"platform": "PC",
+"cls": "goalie",
+"anim": "bundle",
+"dir": -1,
+"frame": "goalie 416"
+},
+{
+"platform": "PC",
+"cls": "goalie",
+"anim": "bundle",
+"dir": -1,
+"frame": "goalie 436"
+},
+{
+"platform": "PC",
+"cls": "goalie",
+"anim": "bundle",
+"dir": -1,
+"frame": "goalie 456"
+},
+{
+"platform": "PC",
+"cls": "goalie",
+"anim": "bundle",
+"dir": -1,
+"frame": "goalie 476"
+},
+{
+"platform": "PC",
+"cls": "goalie",
+"anim": "bundle",
+"dir": -1,
+"frame": "goalie 496"
+},
+{
+"platform": "PC",
+"cls": "goalie",
+"anim": "bundle",
+"dir": -1,
+"frame": "goalie 516"
+},
+{
+"platform": "PC",
+"cls": "goalie",
+"anim": "bundle",
+"dir": -1,
+"frame": "goalie 536"
+},
+{
+"platform": "PC",
+"cls": "goalie",
+"anim": "bundle",
+"dir": -1,
+"frame": "goalie 976"
+},
+{
+"platform": "PC",
+"cls": "goalie",
+"anim": "bundle",
+"dir": -1,
+"frame": "goalie 996"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 1079"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 1097"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 1114"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 1132"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 13"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 148"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 166"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 184"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 201"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 22"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 238"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 256"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 274"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 292"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 31"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 328"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 346"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 364"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 39"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 407"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 558"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 576"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 594"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 611"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 63"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 648"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 666"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 684"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 701"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 72"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 738"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 756"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 774"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 792"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 81"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 828"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 846"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 864"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 882"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 90"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 918"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 936"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 954"
+},
+{
+"platform": "PC",
+"cls": "skater",
+"anim": "bundle",
+"dir": -1,
+"frame": "skater 972"
+},
+{
+"platform": "S94",
+"cls": "goalie",
+"anim": "SPAgbutterfly",
+"dir": 3,
+"frame": 729
+},
+{
+"platform": "S94",
+"cls": "goalie",
+"anim": "SPAgcover",
+"dir": 1,
+"frame": 697
+},
+{
+"platform": "S94",
+"cls": "goalie",
+"anim": "SPAgcover",
+"dir": 7,
+"frame": 717
+},
+{
+"platform": "S94",
+"cls": "goalie",
+"anim": "SPAgglovel",
+"dir": 3,
+"frame": 545
+},
+{
+"platform": "S94",
+"cls": "goalie",
+"anim": "SPAgpoke",
+"dir": 3,
+"frame": 685
+},
+{
+"platform": "S94",
+"cls": "goalie",
+"anim": "SPAgready",
+"dir": 5,
+"frame": 657
+},
+{
+"platform": "S94",
+"cls": "goalie",
+"anim": "SPAgskate",
+"dir": 3,
+"frame": 629
+},
+{
+"platform": "S94",
+"cls": "goalie",
+"anim": "SPAgsprawll",
+"dir": 1,
+"frame": 745
+},
+{
+"platform": "S94",
+"cls": "goalie",
+"anim": "SPAgsprawll",
+"dir": 7,
+"frame": 765
+},
+{
+"platform": "S94",
+"cls": "goalie",
+"anim": "SPAgsprawlr",
+"dir": 6,
+"frame": 785
+},
+{
+"platform": "S94",
+"cls": "goalie",
+"anim": "SPAgstickr",
+"dir": 7,
+"frame": 612
+},
+{
+"platform": "S94",
+"cls": "goalie",
+"anim": "none",
+"dir": -1,
+"frame": 577
+},
+{
+"platform": "S94",
+"cls": "goalie",
+"anim": "none",
+"dir": -1,
+"frame": 597
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAcatch",
+"dir": 1,
+"frame": 500
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAcelebrate",
+"dir": 2,
+"frame": 190
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAcrosscheck",
+"dir": 1,
+"frame": 521
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAfallback",
+"dir": 1,
+"frame": 287
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAfallback",
+"dir": 5,
+"frame": 303
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAfallfwd",
+"dir": 1,
+"frame": 320
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAfallfwd",
+"dir": 6,
+"frame": 340
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAglideback",
+"dir": 7,
+"frame": 182
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAhook",
+"dir": 3,
+"frame": 487
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAonetimerb",
+"dir": 1,
+"frame": 106
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAonetimerb",
+"dir": 5,
+"frame": 130
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPApump",
+"dir": 7,
+"frame": 216
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPApump2",
+"dir": 4,
+"frame": 809
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAshoulderchkl",
+"dir": 0,
+"frame": 249
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAskate",
+"dir": 1,
+"frame": 47
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAskate",
+"dir": 6,
+"frame": 72
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAskateback",
+"dir": 6,
+"frame": 180
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAskatewp",
+"dir": 4,
+"frame": 22
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAstanley",
+"dir": 4,
+"frame": 221
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAstumble",
+"dir": 0,
+"frame": 457
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAstumble",
+"dir": 6,
+"frame": 477
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "SPAturnl",
+"dir": 0,
+"frame": 81
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 229
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 377
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 397
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 417
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 437
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 513
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 836
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 856
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 876
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 896
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 916
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 936
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 956
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "none",
+"dir": -1,
+"frame": 976
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "must",
+"dir": -1,
+"frame": 196
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "must",
+"dir": -1,
+"frame": 527
+},
+{
+"platform": "S94",
+"cls": "skater",
+"anim": "must",
+"dir": -1,
+"frame": 800
+}
+]
