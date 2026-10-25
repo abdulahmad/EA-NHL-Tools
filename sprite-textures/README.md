@@ -148,3 +148,4 @@ Run the Python scripts from `out/` with `../scripts` on `PYTHONPATH` (for exampl
 **Textures:** `v2_38x32/textures/raw/` (all test jerseys in v2) and `textures/redraw/` (Dallas and East94 redrawn natively). Renders that contain game sprites are kept local.
 - D169: 94G family texture straightened into row bands and all 100 gaps filled (92 by row band). Fight-frame errors rose from 1,559 to 1,805 out of 11,318 px, so the next fix is the pipeline texel map. See `docs/exclusive-expansion/d169/`.
 - D170: D169 texture frozen (pt994u); exclusive maps re-fit with family constraint, row snapping and part split. 0 of 11,318 px errors (was 1,805), but the test-pattern renders are still incoherent. See `docs/exclusive-expansion/d170/`.
+- D171: smooth per-part affine warp vs the D169 texture. 1,581 errors and 1,986 exceptions out of 11,318 px; more coherent than D170 but not clean. See `docs/exclusive-expansion/d171/`.
