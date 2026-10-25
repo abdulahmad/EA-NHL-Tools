@@ -1,8 +1,10 @@
 # Generated from retail game data: never commit
-out/
+out/*
 data/
 # D188: editor/.gitignore tracks only the two built editor files
 !editor/data/
+# D190 (Abdul: all data in the repo, public accepted): the scripts/dump.js output the pipelines read
+!out/data/
 progress/
 *_grid.png
 *_proof*.png

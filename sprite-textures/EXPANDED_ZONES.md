@@ -1192,3 +1192,15 @@ Fix: `skeltree._grip_and_spread` (run inside `connect`, and again after the samp
 along the chain. The build stamps `B.tree='D189'`, and the editor shows an orange STALE DATA banner for older bundles.
 Scan of all player frames in the committed HTML (missing / bone not drawn / joint on its parent's px / no hand within 1.5 px of shaft):
 full 894: before 0 / 0 / 601 / 295, after 0 / 0 / 0 / 0. Sample 46: before 0 / 0 / 23 / 24, after 0 / 0 / 0 / 0.
+
+## D190: all editor data in the repo (Abdul, public accepted)
+Abdul asked for all the data to be in the repo, so the editor opens and rebuilds from a fresh clone with no local build steps
+and no stale local bundle. Now tracked:
+- `editor/data/bundle.js` and `bundle_sample.js`. `editor/sprite_editor.html` loads the committed `data/bundle.js`, so a pull
+  updates it, and a local rebuild shows up in `git status`.
+- `out/data/` (the scripts/dump.js output: frames.json/.bin, HOME/AWAY.json, zn.json).
+- `editor/inputs/`, a snapshot of the export inputs that live outside the repo: `_sk_bundle.json`, `_g_bundle.json`,
+  `g28_all.json`, the D175 `skel175.json`, `d175_dump.pkl` and the texture pkls, and the Genesis palette.
+`build_bundle.py --from-inputs` (or `FROM_INPUTS=1`) rebuilds from these alone. A normal build refreshes them, and a failed
+export falls back to them. Fresh-clone test with an empty temp dir and no EXCL_DIR: the bundle is identical to the local build
+(except the `built` stamp), no file outside the clone was opened (checked with an audit hook), and the editor opened with no errors.
