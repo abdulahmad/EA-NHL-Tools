@@ -94,7 +94,7 @@ def pantsremap(A,GG):
         f=TF.get((u,v))
         if f is None or GG['SPECIAL'](f):continue
         z=ozone(u,v)
-        if z in('pantsF','pantsB'):grp[(z,v,f)].append(p)
+        if z in('pantsF','pantsB') or (v==23 and u>=28 and z in('legF','legB')):grp[(z,v,f)].append(p)   # D160: old side-panel hem row
     for (z,v,fam),ps in grp.items():
         try:ts,tv=GG['ftargets'](z,v,fam)
         except SystemExit:PANTSFB['no target']+=len(ps);continue
