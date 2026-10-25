@@ -920,6 +920,7 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 
 - D168 (pt991u): compare Genesis and PC by colour family, ignoring shade on both. D169 (pt992u): fix the 94G texture first. Stripes must be straight bands, and every texture gap must be filled (evidence first, then PC Leafs family).
 - D170 (pt994u): "Texture is good now". The D169 94G family texture is frozen as the answer key.
+- D171 (pt995u): "Yes please fix". Replace D170's pixel-by-pixel snapping with a smooth per-part warp.
 ## goalie26 v11 – symmetric mask, orange on top (D133)
 - D133 (Abdul pt934u "make the fuhr texture symmetrical, and more of the orange needs to be on top") **Fuhr v11** (`goalie26/fuhr26.py` `small11`, `fuhr_oilers_texture_v11.png`). Mask front x14-18 mirrored about x16 (x14-15 -> x18-17); back halves mirror each other (x12-13 -> x20-19); the orange flame/V of the mask reference is brought into the top: row 1 x14,15,17,18 and row 2 x15-17 orange (row 1 x16 keeps the darker red point); chin kept (orange (6,16),(7,16), blue (6,15),(6,17)). Pad front was NOT mirrored: Abdul's DR pad reference itself is asymmetric (navy stripe right of centre, logo bottom-left/right differ; 86 of 140 texels differ from their mirror), so it follows the reference. Blocker/catcher refs are not symmetric designs either.
 
@@ -1095,3 +1096,9 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - Result: 0 errors out of 11,318 px (D169: 1,805), including 93G 353. Moves: kept 9,222; row snapped 1,358; column moved 738; zone widened 254; seeded 240.
 - Zero errors is by construction. The vertical and horizontal test renders are still incoherent, so a smooth per-part warp is next. No pixels relabelled.
 - D169 fix: cols 4 and 15 were kept navy in rows 17-20 (pants side), not rows 6-8. Rows 7-8 there had no votes, so they took the white sleeve band.
+
+## D171: smooth per-part affine warp vs the frozen D169 texture (Abdul pt995u)
+- Folder: `sprite-textures/docs/exclusive-expansion/d171/`.
+- One affine per part segment (torso, each arm, each leg, head). The objective is the colour-family match, with straight rows and columns within each segment.
+- Result: 1,581 errors out of 11,318 px (D170: 0, by snapping). Exceptions (1-texel local snap): 1,986. Exact warp: 7,751.
+- Horizontal bands are now visible across torsos. Limbs and 93G 353 are still poor. Next: piecewise-affine per bone. No pixels relabelled.
