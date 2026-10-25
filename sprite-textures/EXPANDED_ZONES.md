@@ -1009,3 +1009,6 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 - Column straightness on auto frames (590): adjacent-row column offsets from the straight-line fit >1 px went from 12279/48631 (25.2%) to 10828/51798 (20.9%); mean offset from straight 0.73 to 0.69 px. Raw >1 px jumps: back torso 13.3% to 7.9%, front torso 17.1% to 13.9%; arms unchanged (about 16-20%, already 3-4 columns wide). Hand frames (11): 20.7% to 16.9%.
 - Hand frames now go through the same pass. Their agreement with the old per-row columns is 65-97%; this is intended (rows unchanged, columns straightened).
 - Not fully straight yet: when a row only has texels of one family at other columns (yoke corners, shoulder patch, waist), pixels still have to shift, and falling or lying poses keep the rough v5 rows.
+
+## D158 — Ruling: keep D157 strict colour-band columns (Abdul pt973u)
+- Three options were compared on upright frames (local renders only): a = straight columns that may break the colour band (10384 of 99571 arm/torso px in a wrong band); b = a plus one redrawn texture (8938 wrong); c = D157 (0 wrong). Ruling: keep c. a and b are rejected and were not merged.
