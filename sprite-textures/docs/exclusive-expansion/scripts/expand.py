@@ -15,6 +15,7 @@ def synth(src,n,flip=False):
     if flip:g=g[:,::-1]
     clf=pickle.load(open(f'{ES}/clf_{src}.pkl','rb'));F,C=feats(g);pr=clf.predict_proba(F);cl=clf.classes_.copy()
     pr[:,cl==255]=0   # a console pixel always becomes a PC pixel
+    if os.environ.get('SKATER')=='1':pr[:,np.isin(cl,[164])]=0   # D167: skater frames never get the goalie-mask index
     q=np.full(g.shape,255,np.uint8)
     for (y,x),p in zip(C,pr):q[y,x]=cl[p.argmax()]
     conf=np.zeros(g.shape);
