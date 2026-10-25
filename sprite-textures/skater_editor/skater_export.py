@@ -21,6 +21,14 @@ def rough(part):
         cs=sorted([c(l==i) for i in range(1,nk+1) if (l==i).sum()>=3])[:2]
         for s,p in zip('LR',cs):J[s+' '+k]=p
     return J
+def face136(p,part):
+    """D163: index 136 is both the stick colour and the face/neck shade. parts.segment() labels every 136 px 'stick', so faces
+    were labelled stick (1086 wrong-band px, and the stick fit grabbed the face). Like the v5 fit's neck136(): 136 px that
+    grow from helmet/skin px within the top 11 rows of the sprite are skin."""
+    part=part.copy();ys,_=np.nonzero(p!=255);y0=ys.min();hd=np.isin(part,[PN.index('helmet'),PN.index('skin')]);N=np.zeros_like(hd);grow=True
+    while grow:
+        nb=ndi.binary_dilation(hd|N,np.ones((3,3),bool));new=nb&(p==136)&~N;new[y0+12:]=False;grow=new.any();N|=new
+    part[N]=PN.index('skin');return part
 t=team(ARGS[2] if len(ARGS)>2 else 'edm');pal=spritepal(t)
 F={}
 for n in range(1,len(H)+1):
@@ -29,6 +37,7 @@ for n in range(1,len(H)+1):
     if p.size==0 or (p!=255).sum()<10:continue
     part,g=segment(n,p)
     if g:continue
+    part=face136(p,part)
     j=J2.get(str(n));j={k:[int(round(v[0])),int(round(v[1]))] for k,v in j.items()} if j else rough(part)
     r=dict(px=p.astype(int).tolist(),lab=part.astype(int).tolist(),joints=j,fitted=str(n) in J2)
     if str(n) in E:r.update(E[str(n)]);r['edited']=True
