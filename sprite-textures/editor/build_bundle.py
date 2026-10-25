@@ -31,8 +31,15 @@ def tex(name,arr,kind):B['textures'][name]=dict(kind=kind,px=np.asarray(arr).ast
 SKB=[['head','neck'],['neck','chest'],['chest','belly'],['belly','pelvis'],['neck','R shoulder'],['neck','L shoulder'],['pelvis','R hip'],['pelvis','L hip'],
  ['R shoulder','R elbow'],['R elbow','R wrist'],['R wrist','R glove'],['L shoulder','L elbow'],['L elbow','L wrist'],['L wrist','L glove'],
  ['R hip','R knee'],['R knee','R ankle'],['R ankle','R skate'],['L hip','L knee'],['L knee','L ankle'],['L ankle','L skate'],['stick butt','stick heel'],['stick heel','stick toe']]
-subprocess.run([sys.executable,os.path.join(S,'skater_editor','skater_export.py'),tmp('_sk_bundle.json')],check=True,cwd=S)
-D=json.load(open(tmp('_sk_bundle.json')));B['palettes']['skater']=D['palette'];B['parts_skater']=D['parts']
+SNAP='--from-inputs' in sys.argv or os.environ.get('FROM_INPUTS')=='1'
+def export(name,cmd,cwd):
+  """D190: run a pipeline export and keep a committed copy in editor/inputs/; --from-inputs (or a failed export) uses that copy.
+  The exporters read local assets outside the repo (texture PNGs, preview_* dirs), so a fresh clone builds from the copies."""
+  if not SNAP:
+    try:subprocess.run(cmd+[tmp(name)],check=True,cwd=cwd);shutil.copyfile(tmp(name),os.path.join(INP,name));return tmp(name)
+    except Exception as e:print(name,'export failed (',e,') -> committed editor/inputs copy')
+  return os.path.join(INP,name)
+D=json.load(open(export('_sk_bundle.json',[sys.executable,os.path.join(S,'skater_editor','skater_export.py')],S)));B['palettes']['skater']=D['palette'];B['parts_skater']=D['parts']
 for k,v in D['textures'].items():tex(k,v,'v2')
 ed=edits('skater')
 for n,r in D['frames'].items():
@@ -44,11 +51,10 @@ for n,r in D['frames'].items():
 # ---- goalies (texture coords stored as [col,row] like the skaters)
 GB=[['head','neck'],['neck','pelvis'],['neck','Rsh'],['neck','Lsh'],['Rsh','Relb'],['Relb','Rhand'],['Lsh','Lelb'],['Lelb','Lhand'],['pelvis','Rhip'],['pelvis','Lhip'],
  ['Rhip','Rknee'],['Rknee','Rank'],['Lhip','Lknee'],['Lknee','Lank']]
-if not os.path.exists(tmp('g28_all.json')) and not os.path.exists(os.path.join(INP,'g28_all.json')):subprocess.run([sys.executable,'g28all.py'],cwd=os.path.join(V,'goalie28'),check=False)
-G28=inp('g28_all.json',tmp('g28_all.json'))
+if not SNAP and not os.path.exists(tmp('g28_all.json')) and not os.path.exists(os.path.join(INP,'g28_all.json')):subprocess.run([sys.executable,'g28all.py'],cwd=os.path.join(V,'goalie28'),check=False)
+G28=os.path.join(INP,'g28_all.json') if SNAP else inp('g28_all.json',tmp('g28_all.json'))
 if os.path.exists(G28):
-  subprocess.run([sys.executable,os.path.join(V,'goalie28','g28export.py'),tmp('_g_bundle.json')],check=True,cwd=os.path.join(V,'goalie12'))
-  G=json.load(open(tmp('_g_bundle.json')));A=json.load(open(G28));B['palettes']['goalie']=G['palette']
+  G=json.load(open(export('_g_bundle.json',[sys.executable,os.path.join(V,'goalie28','g28export.py')],os.path.join(V,'goalie12'))));A=json.load(open(G28));B['palettes']['goalie']=G['palette']
   for k,v in G['textures'].items():tex('Goalie: '+k,v,'goalie')
   ed=edits('goalie')
   for n,r in G['frames'].items():
@@ -63,7 +69,8 @@ if os.path.exists(G28):
       tmap=tm,src='goalie28 pipeline map',why=why,err=[],nud=[],edited=bool(e),unm=um))
 else:print('goalie data missing (run v2_38x32/goalie28/g28all.py locally)')
 # ---- Genesis exclusives (D175) + the D169 Leafs and D175 control textures
-D175=inp('d175_dump.pkl',tmp('d175_dump.pkl'))
+if SNAP:EXC=INP
+D175=os.path.join(INP,'d175_dump.pkl') if SNAP else inp('d175_dump.pkl',tmp('d175_dump.pkl'))
 for _n in ('skel175.json','tex_G94_d169.pkl','tex175_ctl.pkl'):inp(_n,os.path.join(EXC,_n))
 if os.path.exists(os.path.join(EXC,'skel175.json')) and os.path.exists(D175):
   sys.path[:0]=[EXC,os.path.dirname(EXC),os.path.dirname(EXC)+'/v2']
