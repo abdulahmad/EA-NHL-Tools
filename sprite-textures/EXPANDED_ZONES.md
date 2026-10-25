@@ -976,3 +976,9 @@ Scripts `g10b.py` (texture v2 + rerun, numbers `g10b_match.json`), `g10diagram.p
 
 ## D151 — Keep the CURRENT 23x32 goalie layout (Abdul pt955u)
 - Ruling: "Current". The D150 draft per-pixel layout (64x78) is dropped; the pipeline stays on the v8 23x32 layout. Draft files stay local and are never committed.
+
+## D152 — Legs D146 made BODY are pads; 407 helmet is mask (Abdul pt955u)
+- region(): a piece the D146 rule took off a glove becomes PAD when it is in pad colours (155, 164, strip 181-189, outline 0 touching), shows >=2 strip px, sits in the lower half of the sprite, and touches the frame's pads if it has any (side = nearest pad; else front-view convention, L pad on image right). Pants 177/180 stay BODY, as in all 14 hand-checked frames.
+- A scan of every frame changes 3 frames: 540 (57 px, both legs), 1040 (16), 1059 (5). Rejected: 462 chest, 1028 and 1038 glove px (not legs and not touching pads).
+- 407 (hand-checked): the back-view helmet, rows 1-5 in mask colours (17 px), BODY -> MASK via the g28strict FIX.
+- Default texture: still 0 errors (blocker 5278, catcher 10722, mask 5574 -> 5591, stick 7158, pads 17381 -> 17454 ok).

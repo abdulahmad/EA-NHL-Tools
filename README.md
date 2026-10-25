@@ -139,3 +139,4 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - D149: test textures (lines, checker, grid, part regions, solid cuff) in both part editors; live texture preview in the skater editor.
 - D150: draft per-pixel goalie layout measured (review only; pipeline unchanged).
 - D151: keep the current 23x32 goalie layout; D150 draft dropped.
+- D152: leg px D146 made body are pads again (540, 1040, 1059); 407 back-view helmet is mask.
