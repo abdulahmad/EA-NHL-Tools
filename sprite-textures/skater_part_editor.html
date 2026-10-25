@@ -22,10 +22,15 @@ canvas{image-rendering:pixelated;background:#464646;border:1px solid #666}
 </div>
 <div class="row">
 <canvas id="ed"></canvas>
-<div><div>Game</div><canvas id="pg"></canvas><div>Parts only</div><canvas id="pp"></canvas><div>Texture preview: <select id="tsel"></select></div><canvas id="pt"></canvas><div id="tnote" class="small"></div>
+<div><div>Game</div><canvas id="pg"></canvas><div>Parts only</div><canvas id="pp"></canvas><div>Texture preview: <select id="tsel"></select></div><canvas id="pt"></canvas><div>Active texture (8 px per texel, grey = unused, yellow ticks every 5 texels)</div><canvas id="ptex"></canvas><div id="tnote" class="small"></div>
 <p class="small">Click/drag: paint the selected part.<br>Drag a white ring: move a joint.<br>Keys shown on each button pick a part.<br>Shift+click: pick the part under the cursor.<br>Every labelled pixel carries a letter, so parts never depend on colour alone.<br>Test textures (lines, checker) show stretched or skipped texels.</p></div>
 </div>
 <script>
+function drawTex(cv,TX){if(!TX){cv.width=cv.height=0;return}const S=8,H=TX.length,W=TX[0].length;cv.width=W*S;cv.height=H*S;const c=cv.getContext('2d');
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++){const p=TX[y][x];c.fillStyle=(p[0]==252&&p[1]==0&&p[2]==252)?'#464646':`rgb(${p})`;c.fillRect(x*S,y*S,S,S)}
+ c.strokeStyle='rgba(0,0,0,.35)';c.lineWidth=1;for(let x=0;x<=W;x++){c.beginPath();c.moveTo(x*S+.5,0);c.lineTo(x*S+.5,H*S);c.stroke()}for(let y=0;y<=H;y++){c.beginPath();c.moveTo(0,y*S+.5);c.lineTo(W*S,y*S+.5);c.stroke()}
+ c.strokeStyle='#ffe000';for(let x=0;x<=W;x+=5){c.beginPath();c.moveTo(x*S+.5,0);c.lineTo(x*S+.5,4);c.stroke()}for(let y=0;y<=H;y+=5){c.beginPath();c.moveTo(0,y*S+.5);c.lineTo(4,y*S+.5);c.stroke()}}
+
 // Codes = scripts/parts.py PN. Colourblind-safe: Okabe-Ito colours + greys, high contrast, no red/green pairs, a letter on every px.
 const P=[['none','',null,''],['outline','o','#000000','`'],['skin','k','#e69f00','1'],['helmet','H','#0072b2','2'],['torso','T','#56b4e9','3'],
 ['crest','C','#f0e442','4'],['shoulder patch','P','#cc79a7','5'],['sleeve','V','#9ad0f0','6'],['glove','G','#ffd27a','7'],['pants','N','#003a66','8'],
@@ -46,7 +51,7 @@ function mut(){const n=F[fi];if(!edits[n])edits[n]={lab:fr().lab.map(r=>r.slice(
 const BONES=[['L shoulder','R shoulder'],['L shoulder','L elbow'],['L elbow','L wrist'],['L wrist','L glove'],['R shoulder','R elbow'],['R elbow','R wrist'],['R wrist','R glove'],
 ['L hip','R hip'],['L hip','L knee'],['L knee','L ankle'],['L ankle','L skate'],['R hip','R knee'],['R knee','R ankle'],['R ankle','R skate'],['head','neck'],['neck','L shoulder'],['neck','R shoulder'],
 ['head','chest'],['chest','pelvis'],['chest','L glove'],['chest','R glove'],['pelvis','L skate'],['pelvis','R skate']];
-function show(){if(!D)return;const f=fr(),g=get(),h=f.px.length,w=f.px[0].length;ed.width=w*Z;ed.height=h*Z;
+function show(){if(!D)return;drawTex($('ptex'),(D.textures||{})[$('tsel').value]);const f=fr(),g=get(),h=f.px.length,w=f.px[0].length;ed.width=w*Z;ed.height=h*Z;
  cx.fillStyle='#464646';cx.fillRect(0,0,ed.width,ed.height);cx.textAlign='center';cx.textBaseline='middle';cx.font='bold 11px sans-serif';
  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;const c=D.palette[s];cx.fillStyle=`rgb(${c})`;cx.fillRect(x*Z,y*Z,Z,Z);
   const l=g.lab[y][x];if(ovl&&l){cx.fillStyle=P[l][2];cx.globalAlpha=.72;cx.fillRect(x*Z+2,y*Z+2,Z-4,Z-4);cx.globalAlpha=1;

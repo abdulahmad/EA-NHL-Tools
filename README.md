@@ -141,3 +141,4 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - D151: keep the current 23x32 goalie layout; D150 draft dropped.
 - D152: leg px D146 made body are pads again (540, 1040, 1059); 407 back-view helmet is mask.
 - D153: earlier test textures added to both part editors; skater texture preview auto-fitted on 601/881 frames.
+- D154: both part editors show the active texture image next to the preview.
