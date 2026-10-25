@@ -24,7 +24,7 @@ for n,r in D['frames'].items():
   why=[] if r.get('skel_ok',True) else list(r.get('skel_why') or ['skeleton flagged'])
   if r.get('skel_src')=='part labels':why.append('hand-joint pass: skeleton is only from part labels')
   if not r.get('tmap'):why.append('no texture map')
-  e=ed.get(str(n),{});B['frames'].append(dict(id=f'skater {n}',kind='skater',pal='skater',px=r['px'],lab=e.get('lab',r['lab']),joints=e.get('joints',r['joints']),bones=SKB,
+  e=ed.get(str(n),{});B['frames'].append(dict(id=f'skater {n}',kind='skater',pal='skater',px=r['px'],lab=e.get('lab',r['lab']),bp=e.get('bp'),joints=e.get('joints',r['joints']),bones=SKB,
     tmap=r.get('tmap') or {},src=r.get('tmap_src','none')+' map, '+str(r.get('skel_src')),why=why,err=[],nud=[],edited=bool(e)))
 # ---- goalies (texture coords stored as [col,row] like the skaters)
 GB=[['head','neck'],['neck','pelvis'],['neck','Rsh'],['neck','Lsh'],['Rsh','Relb'],['Relb','Rhand'],['Lsh','Lelb'],['Lelb','Lhand'],['pelvis','Rhip'],['pelvis','Lhip'],
@@ -43,7 +43,7 @@ if os.path.exists('/tmp/g28_all.json'):
     eq=[(y,x) for y,row in enumerate(r['lab']) for x,v in enumerate(row) if 2<=v<=7]   # mask, catcher, blocker, stick, pads carry texels; body/skates keep game colour
     um=sum(1 for y,x in eq if f'{y},{x}' not in tm);nb=len(eq);why=[] if tm else ['no texture map']
     if um>max(3,0.1*nb):why.append(f'{um} equipment px unmapped')
-    e=ed.get(str(n),{});B['frames'].append(dict(id=f'goalie {n}',kind='goalie',pal='goalie',px=r['px'],lab=e.get('lab',r['lab']),joints=e.get('joints',r['joints']),bones=GB,
+    e=ed.get(str(n),{});B['frames'].append(dict(id=f'goalie {n}',kind='goalie',pal='goalie',px=r['px'],lab=e.get('lab',r['lab']),bp=e.get('bp'),joints=e.get('joints',r['joints']),bones=GB,
       tmap=tm,src='goalie28 pipeline map',why=why,err=[],nud=[],edited=bool(e),unm=um))
 else:print('goalie data missing (run v2_38x32/goalie28/g28all.py locally)')
 # ---- Genesis exclusives (D175) + the D169 Leafs and D175 control textures
@@ -61,7 +61,7 @@ if os.path.exists(EXC+'/skel175.json') and os.path.exists('/tmp/d175_dump.pkl'):
   for k,r in DU.items():
     g=np.asarray(r['g']);px=np.where(g>0,g,255).astype(int).tolist();sk=SK.get(k,{})
     why=[f"{len(r['IM'])} wrong control zone",f"{r['err']} Leafs errors",f"{len(r['EX'])} nudged"]+list(sk.get('flags',[]))
-    e=ed.get(k,{});B['frames'].append(dict(id=k.replace('_',' '),kind='exclusive',pal='genesis',px=px,lab=None,joints=e.get('joints',sk.get('joints',{})),
+    e=ed.get(k,{});B['frames'].append(dict(id=k.replace('_',' '),kind='exclusive',pal='genesis',px=px,lab=None,bp=e.get('bp'),joints=e.get('joints',sk.get('joints',{})),
       bones=[b[:2] for b in sk.get('bones',[])],tmap={f'{y},{x}':[int(u),int(v)] for (y,x),(u,v) in r['M'].items()},src='D175 joint+warp fit',
       why=why,err=[list(map(int,p)) for p in r['IM']],nud=[list(map(int,p)) for p in r['EX']],edited=bool(e)))
 else:print('exclusive D175 data missing:',EXC)

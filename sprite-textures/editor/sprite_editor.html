@@ -15,21 +15,23 @@ button.on{border-color:#ffe000;background:#4a4520}
 canvas{image-rendering:pixelated;background:#3a3a3a;border:1px solid #777}
 #legend{margin-top:10px;font-size:15px;line-height:1.8}
 .sw{display:inline-block;width:16px;height:16px;vertical-align:-3px;margin:0 6px 0 14px;border:1px solid #000}
+.tab{font-size:19px;padding:8px 18px}#tabs{margin-bottom:8px}
 .small{font-size:13px;color:#ccc}
 </style></head><body>
+<div id="tabs"><button id="tabP" class="tab on">PARTS (P)</button><button id="tabL" class="tab">Labels + skeleton (L)</button></div>
 <div id="bar"><span id="item">loading…</span>
 <button id="prev">&larr; prev (A)</button><button id="next">next (D) &rarr;</button>
 <select id="q" title="fix queue, worst first"></select>
 <label>texture <select id="tsel"></select></label>
 <button id="ovl" class="on">labels (O)</button><button id="jt" class="on">skeleton (J)</button>
-<button id="undo">undo (Z)</button><button id="reset">reset frame</button><button id="save">save (S)</button><span id="st" class="small"></span></div>
+<button id="fill">flood fill (F)</button><button id="side" class="on">side: LEFT (Tab)</button><button id="undo">undo (Z)</button><button id="reset">reset frame</button><button id="save">save (S)</button><span id="st" class="small"></span></div>
 <div id="why"></div><div id="parts"></div>
 <div id="grid">
- <div class="h">Edit: labels + skeleton</div><div class="h">Game</div><div class="h">Texture preview</div><div class="h">Texture</div>
+ <div class="h" id="edh">Edit</div><div class="h">Game</div><div class="h">Texture preview</div><div class="h">Texture</div>
  <div class="c"><canvas id="ed"></canvas></div><div class="c"><canvas id="pg"></canvas></div><div class="c"><canvas id="pt"></canvas></div><div class="c"><canvas id="tx"></canvas></div>
 </div>
 <div id="legend"></div>
-<p class="small">Click/drag paints the selected part. Drag a ring to move a joint. Shift+click picks the part under the cursor. Keys: A/D or arrows = prev/next, O labels, J skeleton, Z undo, S save, part keys on the buttons.</p>
+<p class="small" id="help">PARTS view: click/drag paints the body part, F toggles flood fill (fills same palette index + same part), Tab switches LEFT/RIGHT, Shift+click picks, keys 1-0/q/e/x pick parts. Labels view: click/drag paints the selected part. Drag a ring to move a joint. Shift+click picks the part under the cursor. Keys: A/D or arrows = prev/next, O labels, J skeleton, Z undo, S save, part keys on the buttons.</p>
 <script src="data/bundle.js"></script>
 <script>
 const B=window.BUNDLE,$=i=>document.getElementById(i),Z=12,PZ=5;
@@ -41,23 +43,50 @@ const PARTS={skater:[['none','',null,'x'],['outline','o','#000000','`'],['skin',
  ['goalie mask','M','#888','r'],['catcher','c','#888','t'],['blocker','B','#888','y'],['pad','D','#888','u'],['other','?','#d0d0d0','i']],
  goalie:[['BG','',null,'x'],['body','b','#9a9a9a','1'],['Mask','M','#f0e442','2'],['Catcher','C','#56b4e9','3'],['Blocker','B','#e69f00','4'],['Stick','S','#ffffff','5'],
  ['Left pad','L','#0072b2','6'],['Right pad','R','#cc79a7','7'],['sKate','K','#000000','8'],['shadow','s','#5a3a1a','9']]};
+// BODY PARTS (pt1009u): hue = segment, LEFT = solid, RIGHT = same hue with black diagonal stripes; letter on every px
+const BP=[['none',null,'','x'],['head','#ffffff','H','1'],['torso','#56b4e9','T','2'],['pelvis','#0072b2','P','3'],['upper arm','#e69f00','U','4'],['forearm','#f0e442','F','5'],
+ ['hand','#cc79a7','N','6'],['thigh','#9a8cff','I','7'],['shin','#9ad0f0','S','8'],['skate','#5a5a5a','K','9'],['stick shaft','#bdbdbd','/','0'],['blade','#a0662a','B','q'],['other','#2a2a2a','?','e']];
+const SIDED=new Set([4,5,6,7,8,9]),bpBase=v=>v%100,bpRight=v=>v>=100;
+const BONEPART=(a,b)=>{const s=a+' '+b;if(s.includes('stick'))return b.includes('toe')?11:10;if(/^head/.test(a))return 1;
+ if(/glove|hand/.test(b))return 6;if(/wrist|elb/i.test(b)&&/elb/i.test(b))return 4;if(/wrist/.test(b))return 5;if(/elb/i.test(a)&&/hand|wrist/i.test(b))return 5;
+ if(/hip/i.test(b)&&/pelvis/.test(a))return 3;if(/knee/i.test(b))return 7;if(/ank/i.test(b))return 8;if(/skate/.test(b))return 9;return 2};
+// D174 palette-zone table (Genesis index -> allowed body parts); unlisted indices allow anything
+const ZONE={33:[6,9,10,11],34:[6,9,10,11],35:[7,3],37:[7,3],36:[7,2,3],38:[1],39:[1],40:[5,8,7,2,4,3],42:[5,8,7,2,4,3],41:[5,8,2,4,3],43:[5,1,8,2,4,3],44:[5,1,8,2,4,3],45:[5,6,1,2,4]};
+// material label -> allowed body parts (skater / goalie tables)
+const MATOK={skater:{2:[1,6],3:[1],4:[2,3,4],5:[2],6:[2,4],7:[4,5],8:[6,5],9:[7,3],10:[8],11:[9],12:[9],13:[10,11,6]},goalie:{2:[1],3:[6,5],4:[6,5],5:[10,11,6],6:[8,7,9],7:[8,7,9],8:[9]}};
+function allowed(f,y,x){if(f.pal=='genesis')return ZONE[f.px[y][x]]||null;const M=MATOK[f.kind];return M&&f.lab?M[f.lab[y][x]]||null:null}
+function autoBP(f){const J=f.joints,h=f.px.length,w=f.px[0].length,o=[];
+ for(let y=0;y<h;y++){const r=[];for(let x=0;x<w;x++){if(f.px[y][x]==255){r.push(0);continue}const al=allowed(f,y,x);let best=12,bd=7,ab=null,abd=4;
+  f.bones.forEach(([a,b])=>{if(!J[a]||!J[b])return;const[ax,ay]=J[a],[bx,by]=J[b],dx=bx-ax,dy=by-ay,L=dx*dx+dy*dy,t=L?Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/L)):0,d=Math.hypot(ax+t*dx-x,ay+t*dy-y);
+   const p=BONEPART(a,b),v=SIDED.has(p)&&/^R/.test(b)?p+100:p;if(d<bd){bd=d;best=v}if((!al||al.includes(p))&&d<abd){abd=d;ab=v}});if(ab!==null)best=ab;
+  if((f.lab&&f.kind=='skater'&&f.lab[y][x]==14)||(f.pal=='genesis'&&f.px[y][x]==47))best=12;r.push(best)}o.push(r)}return o}
+function bpOf(f){const g=edits[f.id];if(g&&g.bp)return g.bp;if(!f._bp)f._bp=f.bp||autoBP(f);return f._bp}
+function bpViol(f,bp){const v=[],h=f.px.length,w=f.px[0].length,M=MATOK[f.kind];
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){const p=bpBase(bp[y][x]);if(!p||p==12||f.px[y][x]==255)continue;
+  const al=allowed(f,y,x),ok=!al||al.includes(p)||(f.pal=='genesis'&&(p==10||p==11));
+  if(!ok)v.push([y,x])}return v}
 const DARKTXT=['#000000','#0072b2','#003a66','#404040','#7a4a00','#6b5b95','#5a3a1a'];
 const BCOL=(a,b)=>{const s=a+' '+b;return s.includes('stick')?(b.includes('toe')?'#f0e442':'#bdbdbd'):/(R |R)(sh|el|wr|gl|hand|Rsh|Relb)/.test(s)||/Rsh|Relb|Rhand/.test(s)?'#e69f00':/(L )(sh|el|wr|gl)|Lsh|Lelb|Lhand/.test(s)?'#56b4e9':/R (hip|kn|an|sk)|Rhip|Rknee|Rank/.test(s)?'#cc79a7':/L (hip|kn|an|sk)|Lhip|Lknee|Lank/.test(s)?'#9ad0f0':'#ffffff'};
-let qi=0,cur=4,ovl=true,jt=true,edits={},undo=[],drag=null,painting=false;
-const Q=B?B.frames:[],fr=()=>Q[qi],get=()=>edits[fr().id]||fr();
+let view='parts',bcur=2,side=0,fill=false,qi=0,cur=4,ovl=true,jt=true,edits={},undo=[],drag=null,painting=false;
+const ALL=B?B.frames:[];ALL.forEach(f=>{f.pv=bpViol(f,bpOf(f)).length;if(f.score>0||f.pv>=8){if(f.pv>=8)f.why=f.why.concat([`${f.pv} body-part / colour-zone violations`]);f.score=+(f.score+0.5*f.pv).toFixed(1)}});
+const Q=ALL.filter(f=>f.score>0&&!(f.why||[]).some(w=>/not a player/.test(w))).sort((a,b)=>b.score-a.score);if(!Q.length)Q.push(...ALL);
+const fr=()=>Q[qi],get=()=>edits[fr().id]||fr();
 $('q').innerHTML=Q.map((f,i)=>`<option value="${i}">${i+1}. ${f.id} (score ${f.score})</option>`).join('');
-function mut(){const f=fr();if(!edits[f.id])edits[f.id]={lab:f.lab?f.lab.map(r=>r.slice()):null,joints:JSON.parse(JSON.stringify(f.joints))};return edits[f.id]}
-function partsBar(){const f=fr(),P=PARTS[f.kind];$('parts').innerHTML='';if(!P||!f.lab){$('parts').innerHTML='<span class="small">Exclusive frames: skeleton joints are editable; part labels come from the pipeline.</span>';return}
+function mut(){const f=fr();if(!edits[f.id])edits[f.id]={lab:f.lab?f.lab.map(r=>r.slice()):null,joints:JSON.parse(JSON.stringify(f.joints))};const g=edits[f.id];if(!g.bp)g.bp=bpOf(f).map(r=>r.slice());return g}
+function partsBar(){const f=fr(),P=PARTS[f.kind];if(view=='parts'){$('parts').innerHTML='';BP.forEach((p,i)=>{const b=document.createElement('button');b.innerHTML=(p[1]?`<span class="sw" style="margin:0 4px 0 0;background:${p[1]}"></span>`:'')+`${p[0]} (${p[3]})`;b.id='b'+i;b.onclick=()=>bpick(i);$('parts').appendChild(b)});bpick(bcur);return}$('parts').innerHTML='';if(!P||!f.lab){$('parts').innerHTML='<span class="small">Exclusive frames: skeleton joints are editable; part labels come from the pipeline.</span>';return}
  P.forEach((p,i)=>{const b=document.createElement('button');b.innerHTML=(p[2]?`<span class="sw" style="margin:0 4px 0 0;background:${p[2]}"></span>`:'')+`${p[0]} (${p[3]})`;b.id='p'+i;b.onclick=()=>pick(i);$('parts').appendChild(b)});pick(Math.min(cur,P.length-1))}
+function bpick(i){bcur=i;document.querySelectorAll('#parts button').forEach(b=>b.classList.toggle('on',b.id=='b'+i))}
 function pick(i){cur=i;document.querySelectorAll('#parts button').forEach(b=>b.classList.toggle('on',b.id=='p'+i))}
 function texOpts(){const k=fr().kind=='goalie'?'goalie':'v2',T=Object.keys(B.textures).filter(n=>B.textures[n].kind==k),old=$('tsel').value;
  $('tsel').innerHTML=T.map(n=>`<option>${n}</option>`).join('');const pref=fr().kind=='exclusive'?'D175 control (shade groups)':fr().kind=='goalie'?'Goalie: Fuhr v14':'Leafs home';
  $('tsel').value=T.includes(old)?old:(T.includes(pref)?pref:T[0])}
 function legend(){const f=fr();let s='<b>Legend</b><br>';
+ if(view=='parts'){s+='Body parts: '+BP.slice(1).map(p=>`<span class="sw" style="background:${p[1]}"></span>${p[2]} ${p[0]}`).join('');
+  s+='<br><span class="sw" style="background:repeating-linear-gradient(45deg,#e69f00 0 3px,#000 3px 6px)"></span>striped = RIGHT side, solid = LEFT side (arms, legs, skates)<span class="sw" style="border:3px solid #fff;outline:2px solid #000;border-radius:50%"></span>ring: part not allowed for this colour zone (D174 table / material label)<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint';$('legend').innerHTML=s;return}
  s+='<span class="sw" style="background:#3a3a3a"></span>empty / background';
  if(f.kind=='exclusive')s+='<span class="sw" style="border:3px solid #fff;outline:2px solid #000;border-radius:50%"></span>ring: wrong control zone (texel shade group differs from the pixel\'s)<span class="sw" style="border:2px solid #00ffff;background:none"></span>cyan box: nudged 1 texel';
  s+='<span class="sw" style="background:repeating-linear-gradient(45deg,#000 0 3px,#fff 3px 6px)"></span>hatched: pixel has no texel (preview keeps game colour)<br>';
- s+='Skeleton: <span class="sw" style="background:#fff"></span>head/torso<span class="sw" style="background:#e69f00"></span>R arm<span class="sw" style="background:#56b4e9"></span>L arm<span class="sw" style="background:#cc79a7"></span>R leg<span class="sw" style="background:#9ad0f0"></span>L leg<span class="sw" style="background:#bdbdbd"></span>stick shaft<span class="sw" style="background:#f0e442"></span>blade.<span class="sw" style="background:#ffe000;border-radius:50%;border:2px solid #000"></span>joint (drag to move)';
+ s+='Skeleton: <span class="sw" style="background:#fff"></span>head/torso<span class="sw" style="background:#e69f00"></span>R arm<span class="sw" style="background:#56b4e9"></span>L arm<span class="sw" style="background:#cc79a7"></span>R leg<span class="sw" style="background:#9ad0f0"></span>L leg<span class="sw" style="background:#bdbdbd"></span>stick shaft<span class="sw" style="background:#f0e442"></span>blade.<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint = yellow square (drag to move)';
  if(f.kind!='exclusive')s+='<br>Labels: coloured square + letter per pixel (see part buttons).';$('legend').innerHTML=s}
 function sizeFor(cv,w,h,z){cv.width=w*z;cv.height=h*z;const c=cv.getContext('2d');c.fillStyle='#3a3a3a';c.fillRect(0,0,cv.width,cv.height);return c}
 function hatch(c,x,y,z){c.fillStyle='#000';c.fillRect(x,y,z,z);c.strokeStyle='#fff';c.lineWidth=1;c.beginPath();for(let d=-z;d<z;d+=3){c.moveTo(x+Math.max(0,d),y+Math.max(0,-d));c.lineTo(x+Math.min(z,d+z),y+Math.min(z,z-d))}c.stroke()}
@@ -67,12 +96,17 @@ function show(){if(!B)return;const f=fr(),g=get(),pal=B.palettes[f.pal],h=f.px.l
  $('item').textContent=`${qi+1}/${Q.length}: ${f.kind=='exclusive'?'exclusive '+f.id:f.id}`+(edits[f.id]?'  (edited)':'');
  $('why').innerHTML=`<span class="small">${f.src} · score ${f.score} · </span>`+(f.why.length?f.why.map(x=>`<span class="chip">${x}</span>`).join(''):'<span class="chip">no open issues</span>');$('q').value=qi;
  const P=PARTS[f.kind],e=$('ed'),c=sizeFor(e,w,h,Z);c.textAlign='center';c.textBaseline='middle';c.font='bold 10px sans-serif';
- for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;c.fillStyle=`rgb(${pal[s]})`;c.fillRect(x*Z,y*Z,Z,Z);
+ $('edh').textContent=view=='parts'?'Edit: BODY PARTS':'Edit: labels + skeleton';
+ if(view=='parts'){const bp=bpOf(f);for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;const v=bp[y][x],p=BP[bpBase(v)];
+   c.fillStyle=p&&p[1]?p[1]:`rgb(${pal[s]})`;c.fillRect(x*Z,y*Z,Z,Z);if(bpRight(v)){c.save();c.beginPath();c.rect(x*Z,y*Z,Z,Z);c.clip();c.strokeStyle=['#5a5a5a','#0072b2','#a0662a','#2a2a2a'].includes(p[1])?'#fff':'#000';c.lineWidth=2;for(let d=-Z;d<Z;d+=5){c.beginPath();c.moveTo(x*Z+d,y*Z+Z);c.lineTo(x*Z+d+Z,y*Z);c.stroke()}c.restore()}
+   if(p&&p[2]){c.fillStyle=['#ffffff','#f0e442','#9ad0f0','#bdbdbd','#56b4e9','#e69f00','#cc79a7','#9a8cff'].includes(p[1])?'#000':'#fff';c.fillText(p[2],x*Z+Z/2,y*Z+Z/2+1)}}
+  bpViol(f,bp).forEach(([y,x])=>{c.beginPath();c.arc((x+.5)*Z,(y+.5)*Z,Z*.55,0,7);c.strokeStyle='#000';c.lineWidth=3;c.stroke();c.strokeStyle='#fff';c.lineWidth=1.5;c.stroke()})}
+ else for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;c.fillStyle=`rgb(${pal[s]})`;c.fillRect(x*Z,y*Z,Z,Z);
   const l=g.lab?g.lab[y][x]:0;if(ovl&&P&&l&&P[l]&&P[l][2]){c.fillStyle=P[l][2];c.globalAlpha=.75;c.fillRect(x*Z+2,y*Z+2,Z-4,Z-4);c.globalAlpha=1;c.fillStyle=DARKTXT.includes(P[l][2])?'#fff':'#000';c.fillText(P[l][1],x*Z+Z/2,y*Z+Z/2+1)}}
- marks(c,f,Z);
+ if(view!="parts")marks(c,f,Z);
  if(jt){const J=g.joints,p=k=>[(J[k][0]+.5)*Z,(J[k][1]+.5)*Z];
   for(const [col,lw] of [['#000',5],[null,2.5]]){c.lineWidth=lw;f.bones.forEach(([a,b])=>{if(J[a]&&J[b]){c.strokeStyle=col||BCOL(a,b);c.beginPath();c.moveTo(...p(a));c.lineTo(...p(b));c.stroke()}})}
-  for(const k in J){const [X,Y]=p(k);c.beginPath();c.arc(X,Y,5,0,7);c.fillStyle='#ffe000';c.fill();c.lineWidth=2;c.strokeStyle='#000';c.stroke()}}
+  for(const k in J){const [X,Y]=p(k);c.beginPath();c.rect(X-4.5,Y-4.5,9,9);c.fillStyle='#ffe000';c.fill();c.lineWidth=2;c.strokeStyle='#000';c.stroke()}}
  const pg=sizeFor($('pg'),w,h,PZ),pt=sizeFor($('pt'),w,h,PZ);
  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;pg.fillStyle=`rgb(${pal[s]})`;pg.fillRect(x*PZ,y*PZ,PZ,PZ);
   const t=f.tmap[y+','+x],cc=t&&T[t[1]]&&T[t[1]][t[0]];
@@ -84,11 +118,19 @@ function show(){if(!B)return;const f=fr(),g=get(),pal=B.palettes[f.pal],h=f.px.l
  $('st').textContent=Object.keys(edits).length+' edited (unsaved)'}
 function go(i){qi=(i+Q.length)%Q.length;texOpts();partsBar();legend();show()}
 const cell=e=>{const r=$('ed').getBoundingClientRect();return[(e.clientX-r.left)/Z,(e.clientY-r.top)/Z]};
-function paint(e){const f=fr();if(!f.lab)return;const [fx,fy]=cell(e),x=Math.floor(fx),y=Math.floor(fy);if(y<0||x<0||y>=f.px.length||x>=f.px[0].length||f.px[y][x]==255)return;const g=mut();if(g.lab[y][x]!=cur){g.lab[y][x]=cur;show()}}
-$('ed').onmousedown=e=>{const [fx,fy]=cell(e),g=get();if(e.shiftKey&&g.lab){const v=g.lab[Math.floor(fy)][Math.floor(fx)];if(v!==undefined)pick(v);return}
+function bpPaint(e,flood){const f=fr(),[fx,fy]=cell(e),x=Math.floor(fx),y=Math.floor(fy);if(y<0||x<0||y>=f.px.length||x>=f.px[0].length||f.px[y][x]==255)return;
+ const g=mut(),v=bcur&&SIDED.has(bcur)&&side?bcur+100:bcur;if(!flood){if(g.bp[y][x]!=v){g.bp[y][x]=v;show()}return}
+ const idx=f.px[y][x],old=g.bp[y][x],st=[[y,x]],seen=new Set();while(st.length){const[a,b]=st.pop(),k=a*999+b;if(seen.has(k)||a<0||b<0||a>=f.px.length||b>=f.px[0].length)continue;seen.add(k);
+  if(f.px[a][b]!=idx||g.bp[a][b]!=old)continue;g.bp[a][b]=v;st.push([a+1,b],[a-1,b],[a,b+1],[a,b-1])}show()}
+function paint(e){if(view=='parts')return bpPaint(e,false);const f=fr();if(!f.lab)return;const [fx,fy]=cell(e),x=Math.floor(fx),y=Math.floor(fy);if(y<0||x<0||y>=f.px.length||x>=f.px[0].length||f.px[y][x]==255)return;const g=mut();if(g.lab[y][x]!=cur){g.lab[y][x]=cur;show()}}
+$('ed').onmousedown=e=>{const [fx,fy]=cell(e),g=get();if(view=='parts'&&e.shiftKey){const v=bpOf(fr())[Math.floor(fy)]?.[Math.floor(fx)];if(v!==undefined){bpick(bpBase(v));setSide(bpRight(v)?1:0)}return}
+ if(view=='parts'&&fill){undo.push([qi,JSON.stringify(edits[fr().id]||null)]);bpPaint(e,true);return}if(e.shiftKey&&g.lab){const v=g.lab[Math.floor(fy)][Math.floor(fx)];if(v!==undefined)pick(v);return}
  undo.push([qi,JSON.stringify(edits[fr().id]||null)]);if(jt)for(const k in g.joints){const j=g.joints[k];if(Math.hypot(j[0]+.5-fx,j[1]+.5-fy)<.6){drag=k;return}}painting=true;paint(e)};
 $('ed').onmousemove=e=>{if(drag){const [fx,fy]=cell(e);mut().joints[drag]=[Math.round(fx-.5),Math.round(fy-.5)];show()}else if(painting)paint(e)};
 onmouseup=()=>{drag=null;painting=false};
+function setView(v){view=v;$('tabP').classList.toggle('on',v=='parts');$('tabL').classList.toggle('on',v!='parts');partsBar();legend();show()}
+function setSide(v){side=v;$('side').textContent='side: '+(v?'RIGHT (striped)':'LEFT')+' (Tab)';$('side').classList.toggle('on',true)}
+$('tabP').onclick=()=>setView('parts');$('tabL').onclick=()=>setView('labels');$('side').onclick=()=>setSide(1-side);$('fill').onclick=()=>{fill=!fill;$('fill').classList.toggle('on',fill)};
 $('prev').onclick=()=>go(qi-1);$('next').onclick=()=>go(qi+1);$('q').onchange=e=>go(+e.target.value);$('tsel').onchange=show;
 $('ovl').onclick=()=>{ovl=!ovl;$('ovl').classList.toggle('on',ovl);show()};$('jt').onclick=()=>{jt=!jt;$('jt').classList.toggle('on',jt);show()};
 $('undo').onclick=()=>{const u=undo.pop();if(!u)return;qi=u[0];const id=Q[qi].id;if(u[1]=='null')delete edits[id];else edits[id]=JSON.parse(u[1]);go(qi)};
@@ -97,6 +139,8 @@ $('save').onclick=async()=>{const out={};for(const id in edits){const f=Q.find(q
  try{const r=await fetch('/save',{method:'POST',body:JSON.stringify(out)});const j=await r.json();$('st').textContent='saved: '+j.saved.join('; ')}
  catch(e){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(out)]));a.download='sprite_edits.json';a.click();$('st').textContent='no launcher: downloaded sprite_edits.json'}};
 onkeydown=e=>{if(e.target.tagName=='SELECT'||e.target.tagName=='INPUT')return;const k=e.key;
+ if(k=='p'||k=='P'){setView('parts');return}if(k=='l'||k=='L'){setView('labels');return}if(k=='Tab'){e.preventDefault();setSide(1-side);return}if(k=='f'){$('fill').click();return}
+ if(view=='parts'){const i=BP.findIndex(p=>p[3]==k);if(i>=0){bpick(i);return}}
  if(k=='ArrowRight'||k=='d')go(qi+1);else if(k=='ArrowLeft'||k=='a')go(qi-1);else if(k=='o')$('ovl').click();else if(k=='j')$('jt').click();
  else if(k=='z')$('undo').click();else if(k=='s')$('save').click();else{const P=PARTS[fr().kind];if(P){const i=P.findIndex(p=>p[3]==k);if(i>=0)pick(i)}}};
 if(B)go(0);
