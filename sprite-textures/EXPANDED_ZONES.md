@@ -1132,3 +1132,6 @@ Verbatim same-facing heads, smoothing, an automatic connectivity check and repai
 
 ## D178
 Staged pipeline: skeleton → parts → scale → smooth/colour, with per-stage metrics over 5 iterations (t1013u). Held-out it5: joint error 3.48 px, parts 54.7%, family 50.7%, exact 33.9%, jagged 0.144. Plateau at about 50% (oracle 52.5%). Added docs/WORKFLOW.md (t1014u).
+
+## D179
+Skeleton parts labelled in the editor and in sheet skeleton columns (pt1011u). N toggles the labels, on by default in Parts and Labels + skeleton. Bone names are yellow and joint names white, with a dark halo and greedy placement to avoid overlap.
