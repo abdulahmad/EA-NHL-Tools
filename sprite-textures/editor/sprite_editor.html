@@ -34,14 +34,17 @@ canvas{image-rendering:pixelated;background:#0b0f12;border:1px solid var(--line)
 .sw{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin:0 5px 0 10px;border:1px solid #000;border-radius:3px}
 .small{font-size:12px;color:var(--muted)}#help{padding:0 18px 18px;max-width:1100px}
 #tip{position:fixed;pointer-events:none;z-index:50;max-width:340px;background:var(--raise-2);border:1px solid var(--amber);border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5;color:var(--text);box-shadow:var(--shadow);display:none}
-#tip b{color:var(--amber)}#hover{min-height:60px;font-size:12px;color:var(--ice-2)}
+#tip b{color:var(--amber)}
+#edwrap{overflow:auto;max-width:calc(100vw - 380px);max-height:78vh}input[type=range]{accent-color:var(--amber);width:110px}
+.txs{display:flex;gap:10px;flex-wrap:wrap}.txs .small{margin-top:2px}#hover{min-height:60px;font-size:12px;color:var(--ice-2)}
 .keys{font-family:var(--mono);font-size:11px;color:var(--muted)}
 </style></head><body>
 <header class="head"><div class="brand"><span class="lamp" aria-hidden="true"></span><div><h1>NHL9x Studio · Sprite editor</h1><p>skaters, goalies and exclusives: body parts, labels, skeleton</p></div></div>
 <div id="tabs" class="seg"><button id="tabP" class="tab on">Parts (P)</button><button id="tabL" class="tab">Labels + skeleton (L)</button></div></header>
 <div id="bar">
  <div class="grp"><span id="item">loading…</span><button id="prev">&larr; A</button><button id="next">D &rarr;</button><select id="q" title="fix queue, worst first"></select></div>
- <div class="grp"><span class="lbl">Texture</span><select id="tsel"></select></div>
+ <div class="grp"><span class="lbl">Textures</span><select id="tsel" title="player jersey texture (v2): jersey, pants, socks, helmet; also goalie body/jersey"></select><select id="gsel" title="goalie equipment texture: mask, catcher, blocker, stick, pads"></select><select id="lsel" title="player gloves texture (glove texels of a v2 texture)"></select></div>
+ <div class="grp"><span class="lbl">View</span><span class="small">Scale <b id="zr">12×</b></span><input id="scale" type="range" min="1" max="30" value="12" title="zoom the edit view (Ctrl+wheel on the sprite)"><span class="small">Labels <b id="lor">100%</b></span><input id="lop" type="range" min="0" max="100" value="100" title="part-label opacity over the raw pixels: 0 = raw pixels only, 100 = labels opaque"></div>
  <div class="grp"><span class="lbl">Show</span><button id="ovl" class="on">labels (O)</button><button id="jt" class="on">skeleton (J)</button><button id="nm" class="on">joint tags (N)</button><button id="vio" title="show only problems, hover each one for the rule">violations only (V)</button></div>
  <div class="grp"><span class="lbl">Edit</span><button id="fill">flood fill (F)</button><button id="side" class="on">side: LEFT (Tab)</button><button id="nst" title="frame has no stick: skip the stick fit and blade rules">no stick (K)</button></div>
  <div class="grp"><button id="undo" title="Ctrl+Z or Z">undo</button><button id="redo" title="Ctrl+Y, Ctrl+Shift+Z or Shift+Z">redo</button><button id="reset">reset frame</button><button id="save">save (S)</button><span id="st" class="small"></span></div>
@@ -49,17 +52,17 @@ canvas{image-rendering:pixelated;background:#0b0f12;border:1px solid var(--line)
 <div class="app"><div class="main">
 <div id="why"></div><div id="parts"></div>
 <div id="grid">
- <div class="card"><div class="h" id="edh">Edit</div><canvas id="ed"></canvas></div>
+ <div class="card"><div class="h" id="edh">Edit</div><div id="edwrap"><canvas id="ed"></canvas></div></div>
  <div class="card"><div class="h">Game</div><canvas id="pg"></canvas></div>
  <div class="card"><div class="h">Texture preview</div><canvas id="pt"></canvas><div class="small" id="ptn"></div></div>
- <div class="card"><div class="h">Texture</div><canvas id="tx"></canvas></div>
+ <div class="card"><div class="h">Textures</div><div class="txs"><div><canvas id="tx"></canvas><div class="small">jersey</div></div><div><canvas id="txg"></canvas><div class="small">goalie equipment</div></div><div><canvas id="txl"></canvas><div class="small">gloves</div></div></div></div>
 </div></div>
 <aside class="meta"><h2>Under the cursor</h2><div id="hover" class="small">Hover a joint or (in violations view) a marked pixel.</div><h2 style="margin-top:14px">Legend</h2><div id="legend"></div></aside></div>
 <div id="tip"></div>
 <p class="small" id="help">PARTS view: click/drag paints the body part, F toggles flood fill (fills same palette index + same part), Tab switches LEFT/RIGHT, Shift+click picks, keys 1-0/q/e/x pick parts. Labels view: click/drag paints the selected part. Drag a ring to move a joint. Shift+click picks the part under the cursor. Keys: A/D or arrows = prev/next, Ctrl+Z / Z undo, Ctrl+Y / Ctrl+Shift+Z / Shift+Z redo, V violations only, K no stick, O labels, J skeleton, N skeleton tags (H, LH/RH, LK/RK, LF/RF, SHAFT, BLADE), Z undo, S save, part keys on the buttons.</p>
 <script>document.write('<script src="data/'+(location.search.includes('sample')?'bundle_sample.js':'bundle.js')+'"><\/script>')</script>
 <script>
-const B=window.BUNDLE,$=i=>document.getElementById(i),Z=12,PZ=5;
+const B=window.BUNDLE,$=i=>document.getElementById(i),PZ=5;let Z=12,LOP=1;
 if(!B){$('item').textContent='No data bundle. Run: python3 sprite-textures/editor/launch.py --rebuild'}
 // part tables reused from the old skater / goalie editors (Okabe-Ito colours, a letter on every px, no red next to green)
 const PARTS={skater:[['none','',null,'x'],['outline','o','#000000','`'],['skin','k','#e69f00','1'],['helmet','H','#0072b2','2'],['torso','T','#56b4e9','3'],
@@ -102,9 +105,25 @@ function partsBar(){const f=fr(),P=PARTS[f.kind];if(view=='parts'){$('parts').in
  P.forEach((p,i)=>{const b=document.createElement('button');b.innerHTML=(p[2]?`<span class="sw" style="margin:0 4px 0 0;background:${p[2]}"></span>`:'')+`${p[0]} (${p[3]})`;b.id='p'+i;b.onclick=()=>pick(i);$('parts').appendChild(b)});pick(Math.min(cur,P.length-1))}
 function bpick(i){bcur=i;document.querySelectorAll('#parts button').forEach(b=>b.classList.toggle('on',b.id=='b'+i))}
 function pick(i){cur=i;document.querySelectorAll('#parts button').forEach(b=>b.classList.toggle('on',b.id=='p'+i))}
-function texOpts(){const k=fr().kind=='goalie'?'goalie':'v2',T=Object.keys(B.textures).filter(n=>B.textures[n].kind==k),old=$('tsel').value;
- $('tsel').innerHTML=T.map(n=>`<option>${n}</option>`).join('');const pref=fr().kind=='exclusive'?'D175 control (shade groups)':fr().kind=='goalie'?'Goalie: Fuhr v14':'Leafs home';
- $('tsel').value=T.includes(old)?old:(T.includes(pref)?pref:T[0])}
+// D186 (pt1038u): three texture dropdowns. Jersey (v2) also dresses the goalie body; goalie equipment texture; gloves (glove texels of a v2 texture).
+function fillSel(id,k,pref,lbl){const T=Object.keys(B.textures).filter(n=>B.textures[n].kind==k),el=$(id),old=el.value;if(el.options.length!=T.length)el.innerHTML=T.map(n=>`<option value="${n}">${lbl}: ${n.replace(/^Goalie: /,'')}</option>`).join('');
+ el.value=T.includes(old)?old:(T.includes(pref)?pref:T[0]||'')}
+let _kind=null;function texOpts(){const k=fr().kind;if(k!=_kind){_kind=k;$('tsel').value='';}fillSel('tsel','v2',k=='exclusive'?'D175 control (shade groups)':'Leafs home','Jersey');fillSel('gsel','goalie','Goalie: Fuhr v14','Goalie');fillSel('lsel','v2','Leafs home','Gloves')}
+// per-part texel regions [c0,r0,c1,r1]: jersey materials learnt from the skater pipeline maps (10th-90th percentile), goalie equipment from g28export
+const GREG={2:[12,0,20,7],3:[11,23,21,31],4:[0,0,9,6],5:[14,9,16,22],6:[0,9,9,22],7:[0,9,9,22]};
+const MREG=(()=>{const D={3:[6,0,31,4],4:[6,6,32,16],5:[7,10,11,13],6:[5,7,33,7],7:[1,9,36,16],8:[1,18,36,28],9:[3,17,32,23],10:[5,24,33,27]},acc={};
+ (B?B.frames:[]).forEach(f=>{if(f.kind!='skater'||!f.lab)return;for(const k in f.tmap){const[y,x]=k.split(',').map(Number),m=f.lab[y][x];if(!D[m])continue;(acc[m]=acc[m]||[[],[]]);acc[m][0].push(f.tmap[k][0]);acc[m][1].push(f.tmap[k][1])}});
+ const q=(a,p)=>{a.sort((x,y)=>x-y);return a[Math.floor(p*(a.length-1))]};for(const m in acc)if(acc[m][0].length>=50)D[m]=[q(acc[m][0],.1),q(acc[m][1],.1),q(acc[m][0],.9),q(acc[m][1],.9)];return D})();
+const GBODY={2:4,4:7,5:7,3:9,7:9,8:10,6:8};   // goalie body px by body part: torso->torso, arms->sleeve, pelvis/thigh->pants, shin->sock, hand->glove
+// compose(f): per px -> {src:'jersey'|'goalie'|'glove', t:[col,row], how:'map'|'auto'}; auto = linear box fit of the part's sprite bbox into its texel region (approximate)
+function compose(f,g){const h=f.px.length,w=f.px[0].length,lab=g.lab||f.lab,bp=bpOf(f),out={},grp={};
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){if(f.px[y][x]==255)continue;const k=y+','+x,t=f.tmap[k],l=lab?lab[y][x]:0;let src,key=null,reg=null;
+  if(f.kind=='goalie'){if(l>=2&&l<=7){src='goalie';reg=GREG[l];key='g'+l}else if(l==1){const m=GBODY[bpBase(bp[y][x])];if(m){src=m==8?'glove':'jersey';reg=MREG[m];key='b'+bp[y][x]}}}
+  else{src=f.kind=='skater'&&l==8?'glove':'jersey';if(f.kind=='skater'&&MREG[l]){reg=MREG[l];key='m'+l}}
+  if(!src)continue;if(t){out[k]={src,t,how:'map'};continue}if(!key)continue;(grp[key]=grp[key]||{reg,src,px:[]}).px.push([y,x])}
+ for(const key in grp){const G=grp[key],xs=G.px.map(p=>p[1]),ys=G.px.map(p=>p[0]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys),[c0,r0,c1,r1]=G.reg;
+  G.px.forEach(([y,x])=>{out[y+','+x]={src:G.src,how:'auto',t:[Math.round(c0+(x1>x0?(x-x0)/(x1-x0):.5)*(c1-c0)),Math.round(r0+(y1>y0?(y-y0)/(y1-y0):.5)*(r1-r0))]}})}
+ return out}
 function legend(){const f=fr();let s='';
  if(vio){s+='<b>Violations only</b> (sprite greyed):<br><span class="sw" style="border:2px solid #f0b429;border-radius:50%;background:none"></span>part / colour-zone conflict<br><span class="sw" style="background:#56b4e9"></span>orphan px (over 3 px from every bone)<br><span class="sw" style="background:none;border:2px solid #cc79a7"></span>✕ off-pixel joint<br><span class="sw" style="background:none;border:2px solid #fff"></span>uncovered black (no part / ambiguous)<br>Hover a marker for the part, its allowed zones and the rule.<br><br>'}
  if(view=='parts'){s+='Body parts: '+BP.slice(1).map(p=>`<span class="sw" style="background:${p[1]}"></span>${p[2]} ${p[0]}`).join('');
@@ -156,10 +175,10 @@ function sizeFor(cv,w,h,z){cv.width=w*z;cv.height=h*z;const c=cv.getContext('2d'
 function hatch(c,x,y,z){c.strokeStyle='rgba(0,0,0,.55)';c.lineWidth=1;c.beginPath();for(let d=-z;d<z;d+=3){c.moveTo(x+Math.max(0,d),y+Math.max(0,-d));c.lineTo(x+Math.min(z,d+z),y+Math.min(z,z-d))}c.stroke()}
 function marks(c,f,z){(f.nud||[]).forEach(([y,x])=>{c.strokeStyle='#00ffff';c.lineWidth=1.5;c.strokeRect(x*z+.5,y*z+.5,z-1,z-1)});
  (f.err||[]).forEach(([y,x])=>{c.beginPath();c.arc((x+.5)*z,(y+.5)*z,z*.75,0,7);c.strokeStyle='#000';c.lineWidth=3;c.stroke();c.strokeStyle='#fff';c.lineWidth=1.3;c.stroke()})}
-function show(){if(!B)return;const f=fr(),g=get(),pal=B.palettes[f.pal],h=f.px.length,w=f.px[0].length,T=B.textures[$('tsel').value].px;
+function show(){if(!B)return;const f=fr(),g=get(),pal=B.palettes[f.pal],h=f.px.length,w=f.px[0].length,TX={jersey:B.textures[$('tsel').value].px,goalie:($('gsel').value&&B.textures[$('gsel').value]||{}).px,glove:B.textures[$('lsel').value].px},T=TX.jersey;
  $('item').textContent=`${qi+1}/${Q.length}: ${f.kind=='exclusive'?'exclusive '+f.id:f.id}`+(edits[f.id]?'  (edited)':'');
  $('why').innerHTML=`<span class="small">${f.src} · score ${f.score} · </span>`+(f.why.length?f.why.map(x=>`<span class="chip">${x}</span>`).join(''):'<span class="chip">no open issues</span>');$('q').value=qi;
- const P=PARTS[f.kind],e=$('ed'),c=sizeFor(e,w,h,Z);c.textAlign='center';c.textBaseline='middle';c.font='bold 10px sans-serif';
+ const P=PARTS[f.kind],e=$('ed'),c=sizeFor(e,w,h,Z);c.textAlign='center';c.textBaseline='middle';c.font=`bold ${Math.max(7,Math.round(Z*.8))}px sans-serif`;const TXT=Z>=9;
  $('edh').textContent=vio?'Edit: violations only':view=='parts'?'Edit: body parts':'Edit: labels + skeleton';
  const V=vioList(f,g),fl=floating(f,g.joints),gp=!noStick(f)&&grip(g.joints),cnt=t=>V.filter(v=>v.t==t).length;f._V=V;
  $('why').innerHTML+=` <span class="chip ${V.length?'warn':''}">violations: ${cnt('zone')} part/zone · ${cnt('orphan')} orphan · ${cnt('joint')} off-pixel joint · ${cnt('black')} uncovered black</span>`+
@@ -168,11 +187,12 @@ function show(){if(!B)return;const f=fr(),g=get(),pal=B.palettes[f.pal],h=f.px.l
  $('nst').classList.toggle('on',noStick(f));
  if(vio){for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;const q=pal[s],l=Math.round((q[0]*.3+q[1]*.59+q[2]*.11)*.45+20);c.fillStyle=`rgb(${l},${l},${l})`;c.fillRect(x*Z,y*Z,Z,Z)}}
  else if(view=='parts'){const bp=bpOf(f);for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;const v=bp[y][x],p=BP[bpBase(v)];
-   c.fillStyle=p&&p[1]?p[1]:`rgb(${pal[s]})`;c.fillRect(x*Z,y*Z,Z,Z);if(bpRight(v)){c.save();c.beginPath();c.rect(x*Z,y*Z,Z,Z);c.clip();c.strokeStyle=['#5a5a5a','#0072b2','#a0662a','#2a2a2a'].includes(p[1])?'#fff':'#000';c.lineWidth=2;for(let d=-Z;d<Z;d+=5){c.beginPath();c.moveTo(x*Z+d,y*Z+Z);c.lineTo(x*Z+d+Z,y*Z);c.stroke()}c.restore()}
-   if(p&&p[2]){c.fillStyle=['#ffffff','#f0e442','#9ad0f0','#bdbdbd','#56b4e9','#e69f00','#cc79a7','#9a8cff'].includes(p[1])?'#000':'#fff';c.fillText(p[2],x*Z+Z/2,y*Z+Z/2+1)}}
+   c.globalAlpha=1;c.fillStyle=`rgb(${pal[s]})`;c.fillRect(x*Z,y*Z,Z,Z);if(!LOP||!p||!p[1])continue;c.globalAlpha=LOP;   // D186: raw pixel under, part label on top at the slider opacity
+   c.fillStyle=p[1];c.fillRect(x*Z,y*Z,Z,Z);if(bpRight(v)){c.save();c.beginPath();c.rect(x*Z,y*Z,Z,Z);c.clip();c.strokeStyle=['#5a5a5a','#0072b2','#a0662a','#2a2a2a'].includes(p[1])?'#fff':'#000';c.lineWidth=2;for(let d=-Z;d<Z;d+=5){c.beginPath();c.moveTo(x*Z+d,y*Z+Z);c.lineTo(x*Z+d+Z,y*Z);c.stroke()}c.restore()}
+   if(p[2]&&TXT){c.fillStyle=['#ffffff','#f0e442','#9ad0f0','#bdbdbd','#56b4e9','#e69f00','#cc79a7','#9a8cff'].includes(p[1])?'#000':'#fff';c.fillText(p[2],x*Z+Z/2,y*Z+Z/2+1)}}c.globalAlpha=1;
   bpViol(f,bp).forEach(([y,x])=>{c.beginPath();c.arc((x+.5)*Z,(y+.5)*Z,Z*.55,0,7);c.strokeStyle='#000';c.lineWidth=3;c.stroke();c.strokeStyle='#fff';c.lineWidth=1.5;c.stroke()})}
  else for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;c.fillStyle=`rgb(${pal[s]})`;c.fillRect(x*Z,y*Z,Z,Z);
-  const l=g.lab?g.lab[y][x]:0;if(ovl&&P&&l&&P[l]&&P[l][2]){c.fillStyle=P[l][2];c.globalAlpha=.75;c.fillRect(x*Z+2,y*Z+2,Z-4,Z-4);c.globalAlpha=1;c.fillStyle=DARKTXT.includes(P[l][2])?'#fff':'#000';c.fillText(P[l][1],x*Z+Z/2,y*Z+Z/2+1)}}
+  const l=g.lab?g.lab[y][x]:0;if(ovl&&LOP&&P&&l&&P[l]&&P[l][2]){c.fillStyle=P[l][2];c.globalAlpha=.75*LOP;c.fillRect(x*Z+2,y*Z+2,Z-4,Z-4);c.globalAlpha=LOP;c.fillStyle=DARKTXT.includes(P[l][2])?'#fff':'#000';if(TXT)c.fillText(P[l][1],x*Z+Z/2,y*Z+Z/2+1);c.globalAlpha=1}}
  if(view!="parts"&&!vio)marks(c,f,Z);
  if(jt){const J0=g.joints,J={};for(const k in J0)if(!(noStick(f)&&STICKJ(k)))J[k]=J0[k];const p=k=>[(J[k][0]+.5)*Z,(J[k][1]+.5)*Z];
   if(gp&&gp[1]<=GRIP){c.setLineDash([3,2]);c.strokeStyle='#fff';c.lineWidth=2;c.beginPath();c.moveTo(...p(gp[0]));c.lineTo((gp[2][0]+.5)*Z,(gp[2][1]+.5)*Z);c.stroke();c.setLineDash([])}
@@ -183,15 +203,18 @@ function show(){if(!B)return;const f=fr(),g=get(),pal=B.palettes[f.pal],h=f.px.l
   if(v.t=='zone'){c.beginPath();c.arc(X+Z/2,Y+Z/2,Z*.45,0,7);c.stroke()}else if(v.t=='orphan'){c.fillStyle=VCOL.orphan;c.fillRect(X+3,Y+3,Z-6,Z-6)}
   else if(v.t=='joint'){c.beginPath();c.moveTo(X,Y);c.lineTo(X+Z,Y+Z);c.moveTo(X+Z,Y);c.lineTo(X,Y+Z);c.lineWidth=3;c.stroke()}else{c.strokeRect(X+1.5,Y+1.5,Z-3,Z-3)}});
  const pg=sizeFor($('pg'),w,h,PZ),pt=sizeFor($('pt'),w,h,PZ);pt.fillStyle='#0b0f12';pt.fillRect(0,0,w*PZ,h*PZ);pg.fillStyle='#0b0f12';pg.fillRect(0,0,w*PZ,h*PZ);
- for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;pg.fillStyle=`rgb(${pal[s]})`;pg.fillRect(x*PZ,y*PZ,PZ,PZ);
-  const t=f.tmap[y+','+x],cc=t&&T[t[1]]&&T[t[1]][t[0]];
-  if(cc&&!(cc[0]==252&&cc[1]==0&&cc[2]==252)){pt.fillStyle=`rgb(${cc})`;pt.fillRect(x*PZ,y*PZ,PZ,PZ)}else{pt.fillStyle=`rgb(${pal[s]})`;pt.fillRect(x*PZ,y*PZ,PZ,PZ);if(f.kind!='exclusive'||!t)hatch(pt,x*PZ,y*PZ,PZ)}}
- const nm_=Object.keys(f.tmap).length,np_=f.px.flat().filter(v=>v!=255).length;$('ptn').textContent=nm_?`${nm_} of ${np_} px mapped to the texture; hatched px keep the game colour`:'no texture map for this frame: game colours shown, hatched';
+ const CM=compose(f,g),n={};for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;pg.fillStyle=`rgb(${pal[s]})`;pg.fillRect(x*PZ,y*PZ,PZ,PZ);
+  const m=CM[y+','+x],TT=m&&TX[m.src],cc=m&&TT&&TT[m.t[1]]&&TT[m.t[1]][m.t[0]];
+  if(cc&&!(cc[0]==252&&cc[1]==0&&cc[2]==252)){pt.fillStyle=`rgb(${cc})`;pt.fillRect(x*PZ,y*PZ,PZ,PZ);n[m.src+m.how]=(n[m.src+m.how]||0)+1}else{pt.fillStyle=`rgb(${pal[s]})`;pt.fillRect(x*PZ,y*PZ,PZ,PZ);if(f.kind!='exclusive'||!m)hatch(pt,x*PZ,y*PZ,PZ)}}
+ const np_=f.px.flat().filter(v=>v!=255).length,sm=k=>(n[k+'map']||0)+(n[k+'auto']||0),tot=sm('jersey')+sm('goalie')+sm('glove'),au=(n.jerseyauto||0)+(n.goalieauto||0)+(n.gloveauto||0);f._mapn=n;
+ $('ptn').innerHTML=`${tot} of ${np_} px textured: jersey ${sm('jersey')} · goalie equipment ${sm('goalie')} · gloves ${sm('glove')}<br>${tot-au} from the pipeline map, ${au} auto-fitted per part (approximate box fit); hatched px keep the game colour`;
  marks(pt,f,PZ);
- const TS=Math.max(6,Math.floor(300/T[0].length)),tc=sizeFor($('tx'),T[0].length,T.length,TS);
- for(let y=0;y<T.length;y++)for(let x=0;x<T[0].length;x++){const p=T[y][x];if(p[0]==252&&p[1]==0&&p[2]==252)continue;tc.fillStyle=`rgb(${p})`;tc.fillRect(x*TS,y*TS,TS,TS)}
- tc.strokeStyle='rgba(0,0,0,.35)';for(let x=0;x<=T[0].length;x++){tc.beginPath();tc.moveTo(x*TS+.5,0);tc.lineTo(x*TS+.5,T.length*TS);tc.stroke()}for(let y=0;y<=T.length;y++){tc.beginPath();tc.moveTo(0,y*TS+.5);tc.lineTo(T[0].length*TS,y*TS+.5);tc.stroke()}
+ drawTex('tx',TX.jersey,6);drawTex('txg',TX.goalie,6);drawTex('txl',TX.glove,4,MREG[8]);
  $('st').textContent=Object.keys(edits).length+' edited (unsaved)'}
+function drawTex(id,T,TS,reg){const cv=$(id);if(!T){cv.width=cv.height=0;return}const tc=sizeFor(cv,T[0].length,T.length,TS);
+ for(let y=0;y<T.length;y++)for(let x=0;x<T[0].length;x++){const p=T[y][x];if(p[0]==252&&p[1]==0&&p[2]==252)continue;if(reg&&(x<reg[0]||x>reg[2]||y<reg[1]||y>reg[3]))continue;tc.fillStyle=`rgb(${p})`;tc.fillRect(x*TS,y*TS,TS,TS)}
+ tc.strokeStyle='rgba(0,0,0,.35)';for(let x=0;x<=T[0].length;x++){tc.beginPath();tc.moveTo(x*TS+.5,0);tc.lineTo(x*TS+.5,T.length*TS);tc.stroke()}for(let y=0;y<=T.length;y++){tc.beginPath();tc.moveTo(0,y*TS+.5);tc.lineTo(T[0].length*TS,y*TS+.5);tc.stroke()}}
+function setZ(z){Z=Math.max(1,Math.min(30,Math.round(z)));$('scale').value=Z;$('zr').textContent=Z+'×';show()}
 function go(i){qi=(i+Q.length)%Q.length;texOpts();partsBar();legend();show()}
 const cell=e=>{const r=$('ed').getBoundingClientRect();return[(e.clientX-r.left)/Z,(e.clientY-r.top)/Z]};
 function bpPaint(e,flood){const f=fr(),[fx,fy]=cell(e),x=Math.floor(fx),y=Math.floor(fy);if(y<0||x<0||y>=f.px.length||x>=f.px[0].length||f.px[y][x]==255)return;
@@ -244,7 +267,9 @@ function setSide(v){side=v;$('side').textContent='side: '+(v?'RIGHT (striped)':'
 $('tabP').onclick=()=>setView('parts');$('tabL').onclick=()=>setView('labels');$('side').onclick=()=>setSide(1-side);$('fill').onclick=()=>{fill=!fill;$('fill').classList.toggle('on',fill)};
 $('vio').onclick=()=>{vio=!vio;$('vio').classList.toggle('on',vio);legend();show()};
 $('nst').onclick=()=>{pushUndo();const f=fr(),g=mut();g.nostick=!noStick(f);show()};
-$('prev').onclick=()=>go(qi-1);$('next').onclick=()=>go(qi+1);$('q').onchange=e=>go(+e.target.value);$('tsel').onchange=show;
+$('prev').onclick=()=>go(qi-1);$('next').onclick=()=>go(qi+1);$('q').onchange=e=>go(+e.target.value);$('tsel').onchange=$('gsel').onchange=$('lsel').onchange=show;
+$('scale').oninput=e=>setZ(+e.target.value);$('lop').oninput=e=>{LOP=+e.target.value/100;$('lor').textContent=e.target.value+'%';show()};
+$('ed').addEventListener('wheel',e=>{if(!(e.ctrlKey||e.metaKey))return;e.preventDefault();const wr=$('edwrap'),r=$('ed').getBoundingClientRect(),fx=(e.clientX-r.left)/Z,fy=(e.clientY-r.top)/Z,z0=Z;setZ(Z+(e.deltaY<0?1:-1));wr.scrollLeft+=fx*(Z-z0);wr.scrollTop+=fy*(Z-z0)},{passive:false});
 $('ovl').onclick=()=>{ovl=!ovl;$('ovl').classList.toggle('on',ovl);show()};$('nm').onclick=()=>{nm=!nm;$('nm').classList.toggle('on',nm);show()};$('jt').onclick=()=>{jt=!jt;$('jt').classList.toggle('on',jt);show()};
 function snap(i){return [i,JSON.stringify(edits[Q[i].id]||null)]}
 function pushUndo(){undo.push(snap(qi));redo.length=0}

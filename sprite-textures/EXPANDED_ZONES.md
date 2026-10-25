@@ -1166,3 +1166,8 @@ D179 names were too big and too many. The editor (N) and the sheets now show onl
 ## D185: editor restyle, redo, joint codes, preview fix, connected skeleton, no-stick toggle, violations view, Windows rebuild (t1036u item 2)
 - Details in WORKFLOW.md (Editor). Headless screenshots checked: Parts view, violations view with hover, joint hover, the hand holding the stick, and no-stick.
 - The no-stick seed has 6 D183 frames (G94 50, 224, 720; S94 106, 47, 221). None of them is in the editor bundle (95PC skaters and goalies, G93/G94 exclusives 738–753 and 353–376), so no editor frame starts flagged. The toggle is per frame.
+
+## D186: per-part texture preview (jersey / goalie / gloves), raw pixels + label opacity, zoom (pt1038u)
+- Three dropdowns; preview composed per part. Goalie maps cover only equipment (labels 2-7), so goalie bodies had no texels; they now take the jersey texture by body part through an approximate box fit (marked "auto" in the counts, never written back to the maps).
+- Sample counts (textured px / sprite px; pipeline + auto): goalie 476 238/339 (goalie 142 map, jersey 92 auto, gloves 4 auto); goalie 1002 310/448; goalie 1062 376/466; goalie 436 297/386; skater 972 247/258 (all map); skater 407 239/360 (no pipeline map, all auto).
+- Edit view: Scale 1-30x + Ctrl+wheel, label opacity 0-100 over the raw pixels.
