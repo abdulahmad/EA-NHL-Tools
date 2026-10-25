@@ -1,0 +1,2486 @@
+{
+ "dups": {
+  "G92": [
+   [
+    153,
+    154,
+    0.993
+   ],
+   [
+    155,
+    156,
+    0.996
+   ],
+   [
+    159,
+    160,
+    0.988
+   ],
+   [
+    378,
+    381,
+    1.0
+   ],
+   [
+    379,
+    382,
+    1.0
+   ],
+   [
+    380,
+    383,
+    1.0
+   ],
+   [
+    388,
+    392,
+    1.0
+   ],
+   [
+    389,
+    391,
+    1.0
+   ],
+   [
+    389,
+    393,
+    1.0
+   ],
+   [
+    389,
+    394,
+    1.0
+   ],
+   [
+    391,
+    393,
+    1.0
+   ],
+   [
+    391,
+    394,
+    1.0
+   ],
+   [
+    393,
+    394,
+    1.0
+   ],
+   [
+    396,
+    397,
+    1.0
+   ],
+   [
+    536,
+    542,
+    1.0
+   ],
+   [
+    537,
+    541,
+    0.996
+   ],
+   [
+    538,
+    540,
+    1.0
+   ],
+   [
+    543,
+    549,
+    1.0
+   ],
+   [
+    544,
+    548,
+    1.0
+   ]
+  ],
+  "G93": [
+   [
+    153,
+    154,
+    0.993
+   ],
+   [
+    155,
+    156,
+    0.996
+   ],
+   [
+    159,
+    160,
+    0.988
+   ],
+   [
+    290,
+    632,
+    1.0
+   ],
+   [
+    321,
+    629,
+    1.0
+   ],
+   [
+    373,
+    376,
+    1.0
+   ],
+   [
+    384,
+    387,
+    1.0
+   ],
+   [
+    385,
+    388,
+    1.0
+   ],
+   [
+    386,
+    389,
+    1.0
+   ],
+   [
+    390,
+    391,
+    1.0
+   ],
+   [
+    395,
+    399,
+    1.0
+   ],
+   [
+    396,
+    398,
+    1.0
+   ],
+   [
+    396,
+    400,
+    1.0
+   ],
+   [
+    396,
+    401,
+    1.0
+   ],
+   [
+    398,
+    400,
+    1.0
+   ],
+   [
+    398,
+    401,
+    1.0
+   ],
+   [
+    400,
+    401,
+    1.0
+   ],
+   [
+    403,
+    404,
+    1.0
+   ],
+   [
+    555,
+    561,
+    1.0
+   ],
+   [
+    556,
+    560,
+    0.996
+   ],
+   [
+    557,
+    559,
+    1.0
+   ],
+   [
+    562,
+    568,
+    1.0
+   ],
+   [
+    563,
+    567,
+    1.0
+   ],
+   [
+    635,
+    638,
+    1.0
+   ],
+   [
+    641,
+    644,
+    1.0
+   ]
+  ],
+  "G94": [
+   [
+    142,
+    715,
+    1.0
+   ],
+   [
+    153,
+    154,
+    0.993
+   ],
+   [
+    155,
+    156,
+    0.996
+   ],
+   [
+    159,
+    160,
+    0.988
+   ],
+   [
+    290,
+    640,
+    1.0
+   ],
+   [
+    321,
+    637,
+    1.0
+   ],
+   [
+    384,
+    387,
+    1.0
+   ],
+   [
+    384,
+    838,
+    1.0
+   ],
+   [
+    384,
+    841,
+    1.0
+   ],
+   [
+    385,
+    388,
+    1.0
+   ],
+   [
+    385,
+    839,
+    1.0
+   ],
+   [
+    385,
+    842,
+    1.0
+   ],
+   [
+    386,
+    389,
+    1.0
+   ],
+   [
+    386,
+    840,
+    1.0
+   ],
+   [
+    386,
+    843,
+    1.0
+   ],
+   [
+    387,
+    838,
+    1.0
+   ],
+   [
+    387,
+    841,
+    1.0
+   ],
+   [
+    388,
+    839,
+    1.0
+   ],
+   [
+    388,
+    842,
+    1.0
+   ],
+   [
+    389,
+    840,
+    1.0
+   ],
+   [
+    389,
+    843,
+    1.0
+   ],
+   [
+    390,
+    391,
+    1.0
+   ],
+   [
+    390,
+    844,
+    1.0
+   ],
+   [
+    390,
+    845,
+    1.0
+   ],
+   [
+    391,
+    844,
+    1.0
+   ],
+   [
+    391,
+    845,
+    1.0
+   ],
+   [
+    395,
+    399,
+    1.0
+   ],
+   [
+    396,
+    398,
+    1.0
+   ],
+   [
+    396,
+    400,
+    1.0
+   ],
+   [
+    396,
+    401,
+    1.0
+   ],
+   [
+    398,
+    400,
+    1.0
+   ],
+   [
+    398,
+    401,
+    1.0
+   ],
+   [
+    400,
+    401,
+    1.0
+   ],
+   [
+    403,
+    404,
+    1.0
+   ],
+   [
+    563,
+    569,
+    1.0
+   ],
+   [
+    564,
+    568,
+    0.996
+   ],
+   [
+    565,
+    567,
+    1.0
+   ],
+   [
+    570,
+    576,
+    1.0
+   ],
+   [
+    571,
+    575,
+    1.0
+   ],
+   [
+    642,
+    645,
+    0.997
+   ],
+   [
+    643,
+    646,
+    1.0
+   ],
+   [
+    647,
+    650,
+    1.0
+   ],
+   [
+    648,
+    651,
+    0.998
+   ],
+   [
+    649,
+    652,
+    1.0
+   ],
+   [
+    740,
+    770,
+    1.0
+   ],
+   [
+    742,
+    750,
+    1.0
+   ],
+   [
+    743,
+    751,
+    1.0
+   ],
+   [
+    744,
+    752,
+    1.0
+   ],
+   [
+    744,
+    776,
+    1.0
+   ],
+   [
+    744,
+    784,
+    1.0
+   ],
+   [
+    745,
+    777,
+    1.0
+   ],
+   [
+    749,
+    765,
+    1.0
+   ],
+   [
+    749,
+    797,
+    1.0
+   ],
+   [
+    752,
+    776,
+    1.0
+   ],
+   [
+    752,
+    784,
+    1.0
+   ],
+   [
+    753,
+    785,
+    1.0
+   ],
+   [
+    756,
+    772,
+    1.0
+   ],
+   [
+    756,
+    788,
+    1.0
+   ],
+   [
+    757,
+    773,
+    1.0
+   ],
+   [
+    757,
+    789,
+    1.0
+   ],
+   [
+    758,
+    798,
+    1.0
+   ],
+   [
+    759,
+    799,
+    1.0
+   ],
+   [
+    761,
+    793,
+    1.0
+   ],
+   [
+    764,
+    796,
+    1.0
+   ],
+   [
+    765,
+    797,
+    1.0
+   ],
+   [
+    766,
+    790,
+    1.0
+   ],
+   [
+    769,
+    801,
+    1.0
+   ],
+   [
+    772,
+    788,
+    1.0
+   ],
+   [
+    773,
+    789,
+    1.0
+   ],
+   [
+    774,
+    782,
+    1.0
+   ],
+   [
+    775,
+    783,
+    1.0
+   ],
+   [
+    776,
+    784,
+    1.0
+   ],
+   [
+    792,
+    800,
+    1.0
+   ],
+   [
+    802,
+    816,
+    1.0
+   ],
+   [
+    803,
+    817,
+    1.0
+   ],
+   [
+    805,
+    819,
+    1.0
+   ],
+   [
+    806,
+    820,
+    1.0
+   ],
+   [
+    807,
+    821,
+    1.0
+   ],
+   [
+    808,
+    822,
+    1.0
+   ],
+   [
+    815,
+    823,
+    1.0
+   ],
+   [
+    838,
+    841,
+    1.0
+   ],
+   [
+    839,
+    842,
+    1.0
+   ],
+   [
+    840,
+    843,
+    1.0
+   ],
+   [
+    844,
+    845,
+    1.0
+   ]
+  ],
+  "S93": [
+   [
+    290,
+    565,
+    1.0
+   ],
+   [
+    321,
+    562,
+    1.0
+   ],
+   [
+    371,
+    374,
+    1.0
+   ],
+   [
+    372,
+    375,
+    1.0
+   ],
+   [
+    373,
+    376,
+    1.0
+   ],
+   [
+    384,
+    387,
+    1.0
+   ],
+   [
+    385,
+    388,
+    1.0
+   ],
+   [
+    386,
+    389,
+    1.0
+   ],
+   [
+    390,
+    391,
+    1.0
+   ],
+   [
+    394,
+    398,
+    1.0
+   ],
+   [
+    395,
+    397,
+    1.0
+   ],
+   [
+    395,
+    399,
+    1.0
+   ],
+   [
+    395,
+    400,
+    1.0
+   ],
+   [
+    397,
+    399,
+    1.0
+   ],
+   [
+    397,
+    400,
+    1.0
+   ],
+   [
+    399,
+    400,
+    1.0
+   ],
+   [
+    402,
+    403,
+    1.0
+   ],
+   [
+    518,
+    524,
+    1.0
+   ],
+   [
+    519,
+    523,
+    0.996
+   ],
+   [
+    520,
+    522,
+    1.0
+   ],
+   [
+    525,
+    531,
+    1.0
+   ],
+   [
+    526,
+    530,
+    1.0
+   ],
+   [
+    681,
+    712,
+    1.0
+   ],
+   [
+    684,
+    685,
+    1.0
+   ],
+   [
+    684,
+    686,
+    1.0
+   ],
+   [
+    685,
+    686,
+    1.0
+   ],
+   [
+    687,
+    688,
+    1.0
+   ],
+   [
+    687,
+    689,
+    1.0
+   ],
+   [
+    688,
+    689,
+    1.0
+   ],
+   [
+    715,
+    716,
+    1.0
+   ],
+   [
+    715,
+    717,
+    1.0
+   ],
+   [
+    716,
+    717,
+    1.0
+   ],
+   [
+    718,
+    719,
+    1.0
+   ],
+   [
+    718,
+    720,
+    1.0
+   ],
+   [
+    719,
+    720,
+    1.0
+   ]
+  ],
+  "S94": [
+   [
+    159,
+    160,
+    0.986
+   ],
+   [
+    225,
+    229,
+    0.992
+   ],
+   [
+    323,
+    339,
+    1.0
+   ],
+   [
+    374,
+    377,
+    1.0
+   ],
+   [
+    375,
+    378,
+    1.0
+   ],
+   [
+    376,
+    379,
+    1.0
+   ],
+   [
+    380,
+    383,
+    1.0
+   ],
+   [
+    381,
+    384,
+    1.0
+   ],
+   [
+    382,
+    385,
+    1.0
+   ],
+   [
+    390,
+    391,
+    1.0
+   ],
+   [
+    392,
+    393,
+    1.0
+   ],
+   [
+    397,
+    401,
+    1.0
+   ],
+   [
+    398,
+    400,
+    1.0
+   ],
+   [
+    398,
+    402,
+    1.0
+   ],
+   [
+    398,
+    403,
+    1.0
+   ],
+   [
+    400,
+    402,
+    1.0
+   ],
+   [
+    400,
+    403,
+    1.0
+   ],
+   [
+    402,
+    403,
+    1.0
+   ],
+   [
+    405,
+    406,
+    1.0
+   ],
+   [
+    409,
+    415,
+    1.0
+   ],
+   [
+    410,
+    414,
+    0.996
+   ],
+   [
+    411,
+    413,
+    1.0
+   ],
+   [
+    416,
+    422,
+    1.0
+   ],
+   [
+    417,
+    421,
+    1.0
+   ],
+   [
+    549,
+    657,
+    0.988
+   ],
+   [
+    654,
+    655,
+    0.996
+   ],
+   [
+    658,
+    659,
+    0.995
+   ],
+   [
+    900,
+    905,
+    1.0
+   ],
+   [
+    900,
+    915,
+    1.0
+   ],
+   [
+    905,
+    915,
+    1.0
+   ],
+   [
+    912,
+    914,
+    1.0
+   ],
+   [
+    967,
+    968,
+    1.0
+   ],
+   [
+    967,
+    970,
+    1.0
+   ],
+   [
+    967,
+    971,
+    1.0
+   ],
+   [
+    967,
+    973,
+    1.0
+   ],
+   [
+    967,
+    974,
+    1.0
+   ],
+   [
+    968,
+    970,
+    1.0
+   ],
+   [
+    968,
+    971,
+    1.0
+   ],
+   [
+    968,
+    973,
+    1.0
+   ],
+   [
+    968,
+    974,
+    1.0
+   ],
+   [
+    969,
+    975,
+    1.0
+   ],
+   [
+    970,
+    971,
+    1.0
+   ],
+   [
+    970,
+    973,
+    1.0
+   ],
+   [
+    970,
+    974,
+    1.0
+   ],
+   [
+    971,
+    973,
+    1.0
+   ],
+   [
+    971,
+    974,
+    1.0
+   ],
+   [
+    973,
+    974,
+    1.0
+   ]
+  ],
+  "PC": [
+   [
+    290,
+    927,
+    1.0
+   ],
+   [
+    337,
+    909,
+    1.0
+   ],
+   [
+    339,
+    914,
+    1.0
+   ],
+   [
+    340,
+    924,
+    1.0
+   ],
+   [
+    395,
+    399,
+    1.0
+   ],
+   [
+    398,
+    400,
+    1.0
+   ],
+   [
+    661,
+    712,
+    1.0
+   ],
+   [
+    700,
+    702,
+    0.992
+   ],
+   [
+    707,
+    708,
+    0.998
+   ],
+   [
+    845,
+    847,
+    1.0
+   ],
+   [
+    879,
+    883,
+    1.0
+   ],
+   [
+    880,
+    884,
+    1.0
+   ],
+   [
+    880,
+    964,
+    1.0
+   ],
+   [
+    880,
+    968,
+    1.0
+   ],
+   [
+    884,
+    964,
+    1.0
+   ],
+   [
+    884,
+    968,
+    1.0
+   ],
+   [
+    892,
+    904,
+    0.986
+   ],
+   [
+    894,
+    902,
+    0.985
+   ],
+   [
+    916,
+    941,
+    1.0
+   ],
+   [
+    958,
+    973,
+    1.0
+   ],
+   [
+    964,
+    968,
+    1.0
+   ]
+  ]
+ },
+ "spa_groups": {
+  "G92": {
+   "gready": [
+    "Goalie"
+   ],
+   "gglover": [
+    "Goalie"
+   ],
+   "gglovel": [
+    "Goalie"
+   ],
+   "gstickr": [
+    "Goalie"
+   ],
+   "gstickl": [
+    "Goalie"
+   ],
+   "gstackr": [
+    "Goalie"
+   ],
+   "gstackl": [
+    "Goalie"
+   ],
+   "gswing": [
+    "Goalie"
+   ],
+   "pflip": [
+    "puck",
+    "skatewp"
+   ],
+   "faceoff": [
+    "skatewp",
+    "sweep"
+   ],
+   "glide": [
+    "skatewp"
+   ],
+   "stop": [
+    "skatewp",
+    "stop"
+   ],
+   "gskate": [
+    "Goalie",
+    "skatewp"
+   ],
+   "faceoffr": [
+    "skatewp"
+   ],
+   "skatewp": [
+    "skatewp"
+   ],
+   "skate": [
+    "skate"
+   ],
+   "burst": [
+    "skate"
+   ],
+   "flail": [
+    "skate"
+   ],
+   "turnl": [
+    "turnl"
+   ],
+   "turnr": [
+    "turnr"
+   ],
+   "shotf": [
+    "swing"
+   ],
+   "passb": [
+    "swing"
+   ],
+   "passf": [
+    "swing"
+   ],
+   "shotb": [
+    "swing"
+   ],
+   "skateback": [
+    "skateb"
+   ],
+   "glideback": [
+    "skateb"
+   ],
+   "sweepchk": [
+    "sweep"
+   ],
+   "shoulderchkl": [
+    "shoulderl"
+   ],
+   "shoulderchkr": [
+    "shoulderr"
+   ],
+   "hipchkl": [
+    "hipl"
+   ],
+   "hipchkr": [
+    "hipr"
+   ],
+   "Hold2": [
+    "Hold"
+   ],
+   "Hold": [
+    "Hold"
+   ],
+   "fallfwd": [
+    "duck",
+    "fallfwd"
+   ],
+   "fallback": [
+    "duck",
+    "fallback"
+   ],
+   "celebrate": [
+    "celebrate"
+   ],
+   "pump": [
+    "pump"
+   ],
+   "fight": [
+    "fight"
+   ],
+   "fheld": [
+    "fight"
+   ],
+   "fgrab": [
+    "fight"
+   ],
+   "flow": [
+    "fight"
+   ],
+   "fhith": [
+    "fight"
+   ],
+   "fhigh": [
+    "fight"
+   ],
+   "fhitl": [
+    "fight"
+   ],
+   "ffall": [
+    "fight"
+   ],
+   "wallleft": [
+    "Pen"
+   ],
+   "wallright": [
+    "Pen"
+   ],
+   "siren": [
+    "Siren"
+   ],
+   "stanley": [
+    "cup"
+   ]
+  },
+  "G93": {
+   "gready2": [
+    "Goalie"
+   ],
+   "gready": [
+    "Goalie",
+    "gready"
+   ],
+   "gglover": [
+    "Goalie"
+   ],
+   "gglovel": [
+    "Goalie"
+   ],
+   "gglovel2": [
+    "Goalie",
+    "glovel2"
+   ],
+   "gstickr": [
+    "Goalie"
+   ],
+   "gstickl": [
+    "Goalie"
+   ],
+   "gstackr": [
+    "Goalie"
+   ],
+   "gstackl": [
+    "Goalie"
+   ],
+   "gdive": [
+    "gdive"
+   ],
+   "gswing": [
+    "Goalie"
+   ],
+   "gskate": [
+    "Goalie"
+   ],
+   "pflip": [
+    "puck"
+   ],
+   "faceoff": [
+    "skatewp",
+    "sweep"
+   ],
+   "glide": [
+    "skatewp"
+   ],
+   "faceoffr": [
+    "skatewp"
+   ],
+   "skatewp": [
+    "skatewp"
+   ],
+   "skate": [
+    "skate"
+   ],
+   "fake": [
+    "sweep",
+    "turnl",
+    "turnr"
+   ],
+   "turnl": [
+    "turnl"
+   ],
+   "turnr": [
+    "turnr"
+   ],
+   "stop": [
+    "stop"
+   ],
+   "shotf": [
+    "swing"
+   ],
+   "passb": [
+    "swing"
+   ],
+   "passf": [
+    "swing"
+   ],
+   "shotb": [
+    "swing"
+   ],
+   "skateback": [
+    "skateb"
+   ],
+   "glideback": [
+    "skateb"
+   ],
+   "sweepchk": [
+    "sweep"
+   ],
+   "shoulderchkl": [
+    "shoulderl"
+   ],
+   "shoulderchkr": [
+    "shoulderr"
+   ],
+   "hipchkl": [
+    "hipl"
+   ],
+   "hipchkr": [
+    "hipr"
+   ],
+   "burst": [
+    "skate"
+   ],
+   "flail": [
+    "skate"
+   ],
+   "Hold2": [
+    "Hold"
+   ],
+   "Hold": [
+    "Hold"
+   ],
+   "fallfwd": [
+    "duck",
+    "fallfwd"
+   ],
+   "flip": [
+    "duck",
+    "fallback",
+    "flip"
+   ],
+   "fallback": [
+    "duck",
+    "fallback"
+   ],
+   "injury1": [
+    "fallback",
+    "injury1"
+   ],
+   "celebrate": [
+    "celebrate"
+   ],
+   "pump": [
+    "pump"
+   ],
+   "fight": [
+    "fight"
+   ],
+   "fheld": [
+    "fight"
+   ],
+   "fgrab": [
+    "fight"
+   ],
+   "flow": [
+    "fight"
+   ],
+   "fhith": [
+    "fight"
+   ],
+   "fhigh": [
+    "fight"
+   ],
+   "fhitl": [
+    "fight"
+   ],
+   "finjury": [
+    "fight",
+    "finjury"
+   ],
+   "ffall": [
+    "fight"
+   ],
+   "wallleft": [
+    "Pen"
+   ],
+   "wallright": [
+    "Pen"
+   ],
+   "siren": [
+    "Siren"
+   ],
+   "bglass": [
+    "bglass"
+   ],
+   "stanley": [
+    "cup"
+   ],
+   "catch": [
+    "catch"
+   ],
+   "hook": [
+    "hook"
+   ],
+   "hook2": [
+    "hook"
+   ],
+   "stumble": [
+    "stumble"
+   ]
+  },
+  "G94": {
+   "gslambot": [
+    "Goalie",
+    "slambot",
+    "slamtop"
+   ],
+   "gready2": [
+    "Goalie"
+   ],
+   "gready": [
+    "Goalie",
+    "gready"
+   ],
+   "gslamtop": [
+    "Goalie",
+    "ghighr",
+    "slamtop"
+   ],
+   "gglover": [
+    "Goalie"
+   ],
+   "gglovel": [
+    "Goalie"
+   ],
+   "gglovel2": [
+    "Goalie",
+    "glovel2"
+   ],
+   "gstickr": [
+    "Goalie"
+   ],
+   "gstickl": [
+    "Goalie"
+   ],
+   "gstackr": [
+    "Goalie"
+   ],
+   "gstackl": [
+    "Goalie"
+   ],
+   "gdive": [
+    "gdive"
+   ],
+   "gswing": [
+    "Goalie"
+   ],
+   "gskate": [
+    "Goalie"
+   ],
+   "pflip": [
+    "puck"
+   ],
+   "faceoff": [
+    "skatewp",
+    "sweep"
+   ],
+   "glide": [
+    "skatewp"
+   ],
+   "faceoffr": [
+    "skatewp"
+   ],
+   "skatewp": [
+    "skatewp"
+   ],
+   "skate": [
+    "skate"
+   ],
+   "fake": [
+    "sweep",
+    "turnl",
+    "turnr"
+   ],
+   "turnl": [
+    "turnl"
+   ],
+   "turnr": [
+    "turnr"
+   ],
+   "stop": [
+    "stop"
+   ],
+   "shotf": [
+    "swing"
+   ],
+   "passb": [
+    "swing"
+   ],
+   "passf": [
+    "swing"
+   ],
+   "shotb": [
+    "swing"
+   ],
+   "skateback": [
+    "skateb"
+   ],
+   "glideback": [
+    "skateb"
+   ],
+   "sweepchk": [
+    "sweep"
+   ],
+   "shoulderchkl": [
+    "shoulderl"
+   ],
+   "shoulderchkr": [
+    "shoulderr"
+   ],
+   "hipchkl": [
+    "hipl"
+   ],
+   "hipchkr": [
+    "hipr"
+   ],
+   "burst": [
+    "skate"
+   ],
+   "flail": [
+    "skate"
+   ],
+   "Hold2": [
+    "Hold"
+   ],
+   "Hold": [
+    "Hold"
+   ],
+   "fallfwd": [
+    "duck",
+    "fallfwd"
+   ],
+   "boardleft": [
+    "duck",
+    "fallback",
+    "fallfwd",
+    "slambot"
+   ],
+   "boardback": [
+    "duck",
+    "fallback",
+    "fallfwd",
+    "slambot"
+   ],
+   "boardright": [
+    "duck",
+    "fallback",
+    "fallfwd",
+    "slambot"
+   ],
+   "boardfront": [
+    "duck",
+    "fallback",
+    "fallfwd",
+    "slambot"
+   ],
+   "flip": [
+    "duck",
+    "fallback",
+    "flip"
+   ],
+   "fallback": [
+    "duck",
+    "fallback"
+   ],
+   "benchcheckr": [
+    "duck",
+    "fallback",
+    "slambot"
+   ],
+   "benchcheckl": [
+    "duck",
+    "fallback",
+    "slambot"
+   ],
+   "injuryfall": [
+    "fallback"
+   ],
+   "injury1": [
+    "fallback",
+    "injury1"
+   ],
+   "celebrate": [
+    "celebrate"
+   ],
+   "pump": [
+    "pump"
+   ],
+   "wallleft": [
+    "Pen"
+   ],
+   "wallright": [
+    "Pen"
+   ],
+   "siren": [
+    "Siren"
+   ],
+   "bglass": [
+    "bglass"
+   ],
+   "stanley": [
+    "cup"
+   ],
+   "catch": [
+    "catch"
+   ],
+   "hook": [
+    "hook"
+   ],
+   "hook2": [
+    "hook"
+   ],
+   "stumble": [
+    "stumble"
+   ],
+   "ghighr": [
+    "ghighr"
+   ],
+   "ghighl": [
+    "ghighr"
+   ],
+   "gstick2r": [
+    "ghighr"
+   ],
+   "gstick2l": [
+    "ghighr"
+   ],
+   "crosscheck": [
+    "slambot"
+   ]
+  },
+  "S93": {
+   "gready2": [
+    "Goalie"
+   ],
+   "gready": [
+    "Goalie",
+    "gready"
+   ],
+   "gglover": [
+    "Goalie"
+   ],
+   "gglovel": [
+    "Goalie"
+   ],
+   "gstickr": [
+    "Goalie"
+   ],
+   "gstickl": [
+    "Goalie"
+   ],
+   "gstackr": [
+    "Goalie"
+   ],
+   "gstackl": [
+    "Goalie"
+   ],
+   "gswing": [
+    "Goalie"
+   ],
+   "gskate": [
+    "Goalie"
+   ],
+   "pflip": [
+    "puck"
+   ],
+   "faceoff": [
+    "skatewp",
+    "sweep"
+   ],
+   "glide": [
+    "skatewp"
+   ],
+   "skatewp": [
+    "skatewp"
+   ],
+   "faceoffr": [
+    "skatewp"
+   ],
+   "skate": [
+    "skate"
+   ],
+   "burst": [
+    "skate"
+   ],
+   "flail": [
+    "skate"
+   ],
+   "turnl": [
+    "turnl"
+   ],
+   "turnr": [
+    "turnr"
+   ],
+   "stop": [
+    "stop"
+   ],
+   "shotf": [
+    "swing"
+   ],
+   "passb": [
+    "swing"
+   ],
+   "passf": [
+    "swing"
+   ],
+   "shotb": [
+    "swing"
+   ],
+   "skateback": [
+    "skateb"
+   ],
+   "glideback": [
+    "skateb"
+   ],
+   "sweepchk": [
+    "sweep"
+   ],
+   "shoulderchkl": [
+    "shoulderl"
+   ],
+   "shoulderchkr": [
+    "shoulderr"
+   ],
+   "hipchkl": [
+    "hipl"
+   ],
+   "hipchkr": [
+    "hipr"
+   ],
+   "Hold2": [
+    "hold"
+   ],
+   "Hold": [
+    "hold"
+   ],
+   "fallfwd": [
+    "duck",
+    "fallfwd"
+   ],
+   "flip": [
+    "duck",
+    "fallback",
+    "flip"
+   ],
+   "fallback": [
+    "duck",
+    "fallback"
+   ],
+   "injury1": [
+    "fallback"
+   ],
+   "celebrate": [
+    "celebrate"
+   ],
+   "pump": [
+    "pump"
+   ],
+   "fight": [
+    "fight"
+   ],
+   "fheld": [
+    "fight"
+   ],
+   "fgrab": [
+    "fight"
+   ],
+   "flow": [
+    "fight"
+   ],
+   "fhith": [
+    "fight"
+   ],
+   "fhigh": [
+    "fight"
+   ],
+   "fhitl": [
+    "fight"
+   ],
+   "finjury": [
+    "fight",
+    "finjury"
+   ],
+   "ffall": [
+    "fight"
+   ],
+   "wallleft": [
+    "Pen"
+   ],
+   "wallright": [
+    "Pen"
+   ],
+   "siren": [
+    "Siren"
+   ],
+   "stanley": [
+    "cup"
+   ],
+   "stumble": [
+    "stumble"
+   ],
+   "hook": [
+    "hook"
+   ],
+   "hook2": [
+    "hook"
+   ],
+   "catch": [
+    "catch"
+   ],
+   "bglass": [
+    "bglass"
+   ],
+   "gdive": [
+    "gdive"
+   ]
+  },
+  "S94": {
+   "gready2": [
+    "Goalie"
+   ],
+   "gready": [
+    "Goalie",
+    "gready"
+   ],
+   "gbutterfly": [
+    "gbutterfly",
+    "gready"
+   ],
+   "gsprawlr": [
+    "gready",
+    "gsprawlr"
+   ],
+   "gsprawll": [
+    "gready",
+    "gsprawll"
+   ],
+   "gcover2": [
+    "gcover",
+    "gready"
+   ],
+   "gcover": [
+    "gcover",
+    "gready"
+   ],
+   "gglover": [
+    "Goalie"
+   ],
+   "gglovel": [
+    "Goalie"
+   ],
+   "gstickr": [
+    "Goalie"
+   ],
+   "gstickl": [
+    "Goalie"
+   ],
+   "gstackr": [
+    "Goalie"
+   ],
+   "gstackl": [
+    "Goalie"
+   ],
+   "gswing": [
+    "Goalie"
+   ],
+   "gskate": [
+    "Goalie"
+   ],
+   "gwallleft": [
+    "gwall"
+   ],
+   "gwallright": [
+    "gwall"
+   ],
+   "gdive": [
+    "gdive"
+   ],
+   "gpoke": [
+    "gpoke"
+   ],
+   "wallleft": [
+    "Pen"
+   ],
+   "wallright": [
+    "Pen"
+   ],
+   "pflip": [
+    "puck"
+   ],
+   "faceoff": [
+    "skatewp",
+    "sweep"
+   ],
+   "glide": [
+    "skatewp"
+   ],
+   "pump2": [
+    "celebrate",
+    "pump",
+    "pump2",
+    "skatewp"
+   ],
+   "faceoffr": [
+    "skatewp"
+   ],
+   "skatewp": [
+    "skatewp"
+   ],
+   "unused1": [
+    "skateb",
+    "skatewp",
+    "unused"
+   ],
+   "skate": [
+    "skate"
+   ],
+   "burst": [
+    "skate"
+   ],
+   "flail": [
+    "skate"
+   ],
+   "turnl": [
+    "turnl"
+   ],
+   "turnr": [
+    "turnr"
+   ],
+   "stop": [
+    "stop"
+   ],
+   "passf": [
+    "swing"
+   ],
+   "onetimerf": [
+    "swing"
+   ],
+   "shotf": [
+    "swing"
+   ],
+   "passb": [
+    "swing"
+   ],
+   "shotb": [
+    "swing"
+   ],
+   "onetimerb": [
+    "swing"
+   ],
+   "skateback": [
+    "skateb"
+   ],
+   "glideback": [
+    "skateb"
+   ],
+   "unused2": [
+    "skateb",
+    "unused"
+   ],
+   "unused3": [
+    "skateb"
+   ],
+   "crosscheck": [
+    "crosscheck"
+   ],
+   "sweepchk": [
+    "sweep"
+   ],
+   "shoulderchkl": [
+    "shoulderl"
+   ],
+   "shoulderchkr": [
+    "shoulderr"
+   ],
+   "hipchkl": [
+    "hipl"
+   ],
+   "hipchkr": [
+    "hipr"
+   ],
+   "Hold2": [
+    "hold"
+   ],
+   "Hold": [
+    "hold"
+   ],
+   "hook": [
+    "hook"
+   ],
+   "hook2": [
+    "hook"
+   ],
+   "fallfwd": [
+    "duck",
+    "fallfwd"
+   ],
+   "boardleft": [
+    "boardleft",
+    "fallback",
+    "fallfwd"
+   ],
+   "boardback": [
+    "boardback",
+    "fallback",
+    "fallfwd"
+   ],
+   "flip": [
+    "duck",
+    "fallback",
+    "flip"
+   ],
+   "fallback": [
+    "duck",
+    "fallback"
+   ],
+   "boardfront": [
+    "boardfront",
+    "fallfwd"
+   ],
+   "injury1": [
+    "fallback"
+   ],
+   "boardright": [
+    "boardright",
+    "fallback"
+   ],
+   "siren": [
+    "Siren"
+   ],
+   "stanley": [
+    "cup"
+   ],
+   "stumble": [
+    "stumble"
+   ],
+   "catch": [
+    "catch"
+   ],
+   "bglass": [
+    "bglass"
+   ],
+   "pump": [
+    "pump"
+   ],
+   "celebrate": [
+    "celebrate",
+    "pump"
+   ],
+   "benchcheckr": [
+    "benchcheck"
+   ],
+   "benchcheckl": [
+    "benchcheck"
+   ]
+  }
+ },
+ "unused": {
+  "G92": [
+   379,
+   380,
+   382,
+   383,
+   513,
+   514,
+   515,
+   516,
+   517,
+   518,
+   519,
+   520,
+   521,
+   522,
+   523,
+   524,
+   525,
+   526,
+   527,
+   528,
+   529,
+   530,
+   531,
+   532,
+   533,
+   534,
+   535
+  ],
+  "G93": [
+   385,
+   386,
+   388,
+   389
+  ],
+  "G94": [
+   355,
+   356,
+   357,
+   358,
+   359,
+   360,
+   361,
+   362,
+   363,
+   364,
+   365,
+   366,
+   367,
+   368,
+   369,
+   370,
+   371,
+   372,
+   373,
+   374,
+   375,
+   376,
+   385,
+   386,
+   388,
+   389,
+   714,
+   715,
+   716,
+   717,
+   718,
+   719,
+   720,
+   721,
+   722,
+   723,
+   724,
+   725,
+   726,
+   727,
+   728,
+   729,
+   730,
+   731,
+   732,
+   733,
+   734,
+   735,
+   736,
+   737,
+   838,
+   839,
+   840,
+   841,
+   842,
+   843,
+   844,
+   845
+  ],
+  "S93": [
+   385,
+   386,
+   388,
+   389,
+   533,
+   534,
+   535,
+   536,
+   537,
+   538,
+   539,
+   540,
+   541,
+   543,
+   544,
+   545,
+   546,
+   547,
+   548,
+   549,
+   550,
+   551,
+   552,
+   553,
+   554,
+   555,
+   556,
+   660,
+   661,
+   662,
+   663,
+   664,
+   665,
+   666,
+   667,
+   668,
+   669,
+   670,
+   671,
+   672,
+   673,
+   674,
+   675,
+   676,
+   677,
+   678,
+   679,
+   680,
+   681,
+   682,
+   683,
+   684,
+   685,
+   686,
+   687,
+   688,
+   689,
+   690,
+   691,
+   692,
+   693,
+   694,
+   695,
+   696,
+   697,
+   698,
+   699,
+   700,
+   701,
+   702,
+   703,
+   704,
+   705,
+   706,
+   707,
+   708,
+   709,
+   710,
+   711,
+   712,
+   713,
+   714,
+   715,
+   716,
+   717,
+   718,
+   719,
+   720
+  ],
+  "S94": [
+   226,
+   227,
+   228,
+   229,
+   230,
+   231,
+   232,
+   375,
+   376,
+   378,
+   379,
+   381,
+   382,
+   384,
+   385,
+   387,
+   388,
+   424,
+   425,
+   426,
+   427,
+   428,
+   429,
+   430,
+   431,
+   432,
+   435,
+   436,
+   437,
+   438,
+   439,
+   440,
+   441,
+   442,
+   443,
+   444,
+   445,
+   446,
+   447,
+   918,
+   919,
+   920,
+   921,
+   922,
+   924,
+   925,
+   926,
+   927,
+   928,
+   930,
+   931,
+   932,
+   933,
+   934,
+   935,
+   936,
+   937,
+   938,
+   939,
+   940,
+   941,
+   942,
+   943,
+   944,
+   945,
+   946,
+   947,
+   948,
+   949,
+   950,
+   951,
+   952,
+   953,
+   954,
+   955,
+   956,
+   957,
+   958,
+   959,
+   960,
+   961,
+   962,
+   963,
+   964,
+   965,
+   966,
+   968,
+   969,
+   970,
+   971,
+   972,
+   973,
+   974,
+   975
+  ],
+  "PC": [
+   353,
+   354,
+   355,
+   356,
+   357,
+   360,
+   365,
+   384,
+   385,
+   386,
+   387,
+   388,
+   389,
+   390,
+   391,
+   392,
+   393,
+   394,
+   405,
+   406,
+   1124
+  ]
+ },
+ "rev93_extra_frame": null
+}
