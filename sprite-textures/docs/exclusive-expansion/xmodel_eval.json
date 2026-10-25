@@ -1,0 +1,335 @@
+{
+ "G94": {
+  "pairs": 357,
+  "test": 24334,
+  "exact": 0.5924632201857484,
+  "family": 0.7035012739377003,
+  "coarse": 0.8225117120078902,
+  "coarse_conf": [
+   [
+    "sleeve",
+    "torso",
+    594
+   ],
+   [
+    "torso",
+    "sleeve",
+    299
+   ],
+   [
+    "torso",
+    "pants",
+    257
+   ],
+   [
+    "sock",
+    "pants",
+    241
+   ],
+   [
+    "sock",
+    "sleeve",
+    203
+   ],
+   [
+    "sleeve",
+    "outline",
+    193
+   ],
+   [
+    "other",
+    "sleeve",
+    175
+   ],
+   [
+    "blade",
+    "outline",
+    146
+   ],
+   [
+    "sleeve",
+    "other",
+    122
+   ],
+   [
+    "sock",
+    "helmet",
+    106
+   ]
+  ],
+  "conf": [
+   [
+    "upper arm",
+    "jersey",
+    187
+   ],
+   [
+    "waist 3",
+    "pants",
+    180
+   ],
+   [
+    "arm stripe 2",
+    "arm stripe 1",
+    141
+   ],
+   [
+    "pants stripe 1",
+    "pants",
+    129
+   ],
+   [
+    "socks",
+    "pants",
+    127
+   ],
+   [
+    "arm stripe 3",
+    "forearm",
+    125
+   ],
+   [
+    "pants stripe 2",
+    "pants",
+    119
+   ],
+   [
+    "waist 1",
+    "jersey",
+    118
+   ],
+   [
+    "arm stripe 2",
+    "arm stripe 3",
+    117
+   ],
+   [
+    "arm stripe 2",
+    "forearm",
+    108
+   ]
+  ]
+ },
+ "G93": {
+  "pairs": 374,
+  "test": 25319,
+  "exact": 0.5880958963624155,
+  "family": 0.7010940400489751,
+  "coarse": 0.817844306647182,
+  "coarse_conf": [
+   [
+    "sleeve",
+    "torso",
+    722
+   ],
+   [
+    "sock",
+    "sleeve",
+    329
+   ],
+   [
+    "torso",
+    "sleeve",
+    279
+   ],
+   [
+    "torso",
+    "pants",
+    277
+   ],
+   [
+    "sock",
+    "pants",
+    240
+   ],
+   [
+    "sleeve",
+    "outline",
+    179
+   ],
+   [
+    "blade",
+    "outline",
+    144
+   ],
+   [
+    "other",
+    "sleeve",
+    124
+   ],
+   [
+    "sleeve",
+    "other",
+    118
+   ],
+   [
+    "sock",
+    "outline",
+    115
+   ]
+  ],
+  "conf": [
+   [
+    "upper arm",
+    "jersey",
+    212
+   ],
+   [
+    "waist 3",
+    "pants",
+    200
+   ],
+   [
+    "waist 1",
+    "jersey",
+    148
+   ],
+   [
+    "pants stripe 1",
+    "pants",
+    143
+   ],
+   [
+    "pants stripe 2",
+    "pants",
+    143
+   ],
+   [
+    "socks",
+    "pants",
+    141
+   ],
+   [
+    "arm stripe 2",
+    "arm stripe 1",
+    126
+   ],
+   [
+    "socks",
+    "arm stripe 1",
+    124
+   ],
+   [
+    "arm stripe 2",
+    "arm stripe 3",
+    120
+   ],
+   [
+    "arm stripe 3",
+    "forearm",
+    113
+   ]
+  ]
+ },
+ "S94": {
+  "pairs": 154,
+  "test": 9186,
+  "exact": 0.549967341606793,
+  "family": 0.6801654691922491,
+  "coarse": 0.8143914652732419,
+  "coarse_conf": [
+   [
+    "sleeve",
+    "outline",
+    256
+   ],
+   [
+    "sock",
+    "pants",
+    163
+   ],
+   [
+    "sleeve",
+    "torso",
+    108
+   ],
+   [
+    "sock",
+    "outline",
+    105
+   ],
+   [
+    "torso",
+    "pants",
+    80
+   ],
+   [
+    "torso",
+    "sleeve",
+    74
+   ],
+   [
+    "blade",
+    "outline",
+    74
+   ],
+   [
+    "other",
+    "outline",
+    54
+   ],
+   [
+    "transparent",
+    "outline",
+    48
+   ],
+   [
+    "transparent",
+    "shadow",
+    46
+   ]
+  ],
+  "conf": [
+   [
+    "forearm",
+    "gear",
+    133
+   ],
+   [
+    "socks",
+    "pants",
+    92
+   ],
+   [
+    "socks",
+    "gear",
+    73
+   ],
+   [
+    "pants stripe 2",
+    "pants",
+    69
+   ],
+   [
+    "waist 1",
+    "jersey",
+    65
+   ],
+   [
+    "arm stripe 3",
+    "gear",
+    54
+   ],
+   [
+    "pants stripe 1",
+    "pants",
+    53
+   ],
+   [
+    "gear",
+    "idx88",
+    52
+   ],
+   [
+    "transparent",
+    "gear",
+    48
+   ],
+   [
+    "waist 3",
+    "pants",
+    48
+   ]
+  ]
+ }
+}
