@@ -1,0 +1,105 @@
+{
+ "_note": "D182 reviewed skeleton fixes, same format as editor/edits/<kind>_edits.json. S800: the right arm is raised over the head (the D180 fit put it at the waist, so the arm was labelled head and lost under the head paste). Joints only; no pixel is relabelled.",
+ "frames": {
+  "S94 800": {
+   "joints": {
+    "head": [
+     5.0,
+     5.0
+    ],
+    "neck": [
+     6.0,
+     9.0
+    ],
+    "chest": [
+     4.37,
+     12.34
+    ],
+    "belly": [
+     7.22,
+     14.03
+    ],
+    "pelvis": [
+     7.62,
+     14.45
+    ],
+    "R shoulder": [
+     9.5,
+     8.5
+    ],
+    "R elbow": [
+     10.5,
+     4.5
+    ],
+    "R wrist": [
+     9.5,
+     2.5
+    ],
+    "R glove": [
+     8.5,
+     1.0
+    ],
+    "R hip": [
+     6.44,
+     16.06
+    ],
+    "R knee": [
+     8.09,
+     18.45
+    ],
+    "R ankle": [
+     8.7,
+     21.37
+    ],
+    "R skate": [
+     8.07,
+     23.92
+    ],
+    "L shoulder": [
+     6.91,
+     10.77
+    ],
+    "L elbow": [
+     8.27,
+     13.18
+    ],
+    "L wrist": [
+     8.31,
+     15.61
+    ],
+    "L glove": [
+     7.12,
+     20.27
+    ],
+    "L hip": [
+     8.0,
+     15.87
+    ],
+    "L knee": [
+     8.04,
+     18.22
+    ],
+    "L ankle": [
+     5.25,
+     18.3
+    ],
+    "L skate": [
+     6.43,
+     20.02
+    ],
+    "stick butt": [
+     9.24,
+     15.79
+    ],
+    "stick heel": [
+     21.16,
+     23.38
+    ],
+    "stick toe": [
+     22.49,
+     22.34
+    ]
+   }
+  }
+ }
+}

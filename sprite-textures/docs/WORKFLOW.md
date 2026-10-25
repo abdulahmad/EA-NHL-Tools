@@ -2,6 +2,29 @@
 
 This is the single entry point. Rulings are D-numbers. The full rulings log is in [`../EXPANDED_ZONES.md`](../EXPANDED_ZONES.md), and the narrative is in [`PROCESS_HISTORY.md`](PROCESS_HISTORY.md).
 
+## The pipeline (canonical, Abdul t1023u)
+One shared pipeline (steps 1–8 below) is used by four routes (Abdul t1024u). Every converter, check and editor feature follows these steps, in this order.
+
+**Routes**
+| Route | Pre-steps (route-specific) | Gap status |
+|---|---|---|
+| **R1 95PC → expanded** | none (native PC frames, 38×32 skater / 23×32 goalie layouts) | Most mature: steps 1–3 and 5–7 exist (PC 0-error control, stripe checks). Step 4 edits are not yet used for training; step 8 missing. |
+| **R2 94G → expanded** | match to PC poses where they exist; Genesis exclusives use the frozen D169 texture (`exclusive-expansion/`) | Steps 1–3 partial (D173 skeleton, D174/D175 zone rule). Step 5 via D170 re-fit. Steps 6–7 not run on exclusives; step 8 missing. |
+| **R3 94S → 94G/95PC art style → expanded** | redraw: scale to 94G proportions, smooth, keep zones connected, verbatim 94G heads (D176–D182, `docs/snes-redraw/`); then the R2 path | Pre-steps partial (it6 family 50%). Steps 1–4 partial (D180 skelcheck, D182 part check and edits wiring). Steps 5–8 not yet run on SNES output. |
+| **R4 94S → expanded natively** | none. **No resizing; SNES proportions kept.** Needs an SNES-proportion texture layout. | Missing beyond steps 1–3 (shared skeleton and parts on raw SNES frames). Steps 4–8 not built. |
+
+
+| # | Step | Status | Where / gap |
+|---|------|--------|-------------|
+| 1 | **Skeleton fit, validated against colour zones.** Flags: orphan pixels (too far from the skeleton), and skeleton not on pixels. | partial | `skelcheck.py` (D180) checks exist / zone / coverage and nudges joints. Gap: no separate orphan-distance and off-pixel flags in the editor or the sheets. |
+| 2 | **Part identification** from colour zones plus skeleton. A part must be valid for both. | partial | `skel.py parts()` (skeleton + family whitelist) and editor `bpViol` (zone side). D182 adds an "arm part missing" flag. Gap: no check that a part sits on its own bone (skeleton side). |
+| 3 | **Per-pixel part labels.** | exists | `PT` in the converter; `bp` in the editor Parts view (PR #136). |
+| 4 | **Human in the loop.** Review examples with Abdul, or he corrects parts and joints in the editor. Saved `bp`/joint edits feed back into training and refits. | partial | D182: saved editor edits (`editor/edits/*_edits.json`) and reviewed fixes (`docs/snes-redraw/fixes_d182.json`) now override joints and parts in SNES refits (`refs.load_edits`). Gap: edits are not yet used to *train* the skeleton or part models, and not in the PC/Genesis texture refit. |
+| 5 | **Map the texture onto the new sprite.** | partial | PC/Genesis: D169–D175 texel maps. Gap: SNES conversions are coloured by a learned colour model, not by mapping the texture. |
+| 6 | **Control: round-trip** the original sprite through the texture. It must reproduce the original with 0 errors. | partial | Exists for PC (0-error control). Gap: not run for converted SNES frames or the exclusives. |
+| 7 | **Line tests:** detailed vertical and horizontal line textures. Lines must have no kinks. | partial | `scripts/playerlayout/stripe_checks_v5.py` (kink / run / contiguity) on the PC layout. Gap: not on the exclusives or SNES conversions; no horizontal-line texture test. |
+| 8 | **Optional: automatic kink adjustment** at the end. | missing | — |
+
 ## Roadmap
 1. **Expand the PC sprites.** Give every NHL95 PC frame an editable texel map and a 0-error control (the 38×32 skater layout, the 23×32 goalie layout).
 2. **Add the Genesis frames missing from PC.** These are the Genesis exclusives (93G/94G). Expand them against the frozen D169 texture (see `exclusive-expansion/`).
@@ -24,9 +47,11 @@ This is the single entry point. Rulings are D-numbers. The full rulings log is i
 - **Keys:** A/D or the arrow keys go to the previous/next frame. O = labels, J = skeleton, N = skeleton tags (D181, on by default; only H, LH/RH hands, LK/RK knees, LF/RF feet, SHAFT, BLADE; small dark boxed tags placed to avoid overlap; legend under the editor and on the sheets), Z = undo, S = save.
 - **Fix queue:** worst frames first, with a live counter.
 - **Saving:** edits go to `editor/edits/<kind>_edits.json`.
-- **Not yet wired:** part/skeleton edits are saved but are **not yet fed back into the refit**.
+- **Wiring (D182):** saved part/skeleton edits now override the SNES refit (`docs/snes-redraw/refs.py load_edits`). They are not yet used for training or for the PC/Genesis refit (pipeline step 4).
 
-## SNES pipeline (D176–D178, `docs/snes-redraw/`)
+## SNES pipeline (D176–D178, D182, `docs/snes-redraw/`)
+- **D182 references:** a reference is chosen among same-facing, same-class 94G frames by head clarity and neutrality (`refs.refscore`: no occlusion, upright, compact head, then pose). The head is pasted verbatim from that reference, anchored on the head joint; arm, hand and stick pixels are never overwritten. Pins: S196 → G222 (Abdul).
+- **D182 part preservation:** `stages.partcheck`. Every source part must survive scaling and colouring (≥ 50% of its expected pixels), and an arm part may not be missing on both sides. A failure is a hard red flag and goes into the fix queue; an arm missing on one side only is a review flag.
 1. **Stages:** skeleton (19 bones, including the stick shaft and blade) → body part per pixel → scale to 94G proportions (≈ +8% height, +11% width) using skeleton and parts → smooth while keeping zones connected → colour by part and zone.
 2. **Heads:** pasted verbatim from 94G/95PC, chosen by facing and score. Held-out animations are excluded from the head library.
 3. **Smoothness:** steps of at most 1 px where the source contour is smooth. The jagged-step share is 0.144, against 0.152 for real 94G.
