@@ -6,6 +6,7 @@
 # D141 glove-atlas fallback); a px with no same-index texel stays None (sprite colour, keeps the default pixel-perfect).
 # Pads = geo2 (D134/D136) + D139 strip texel, for custom art.
 import sys,os,json,collections,numpy as np
+import scipy.ndimage as ndi
 H=os.path.dirname(os.path.abspath(__file__));G=os.path.abspath(H+'/..')
 for d in ('/goalie15','/goalie14','/goalie13','/goalie12','/goalie25','/goalie27','/goalie9'):sys.path.insert(0,G+d)
 from g15pad import frame
@@ -49,6 +50,24 @@ def region(n,p,lab,J=None):
         mi=own_idx(MASK)
         for y,x in zip(*np.nonzero(lab<0)):
             if y<=J['neck'][1] and int(p[y,x]) in mi:lab[y,x]=MASK
+    # D152 (pt955u): legs the auto-seg gave to a glove (540) are pads when they are in pad colours (155, strip 181-189, white 164)
+    # and the piece shows the pad strip (>=2 px 181-189). Pants 177/180 stay body (as in all 14 hand-checked frames).
+    PI=set(own_idx(PADL))-{0,255}-set(GLOVE);moved=lab<0
+    cand=moved&np.isin(p,list(PI))
+    cl,k=ndi.label(cand|(moved&(p==0)),np.ones((3,3),bool));acc=np.zeros_like(cand)
+    ys_,_=np.nonzero(p!=255);ymid=(ys_.min()+ys_.max())/2   # legs only: piece centre in the lower half of the sprite (462's chest stays body)
+    for c in range(1,k+1):
+        cm=cl==c
+        if (cm&np.isin(p,list(range(181,190)))).sum()<2 or np.nonzero(cm)[0].mean()<=ymid:continue
+        if ((lab==PADL)|(lab==PADR)).any() and not (ndi.binary_dilation(cm,np.ones((3,3),bool))&((lab==PADL)|(lab==PADR))).any():continue   # must touch the frame's pads (1038/1028 glove px stay)
+        acc|=cm&(cand|((p==0)&ndi.binary_dilation(cm&cand,np.ones((3,3),bool))))
+    if acc.any():
+        ex6,ex7=lab==PADL,lab==PADR;ys,xs=np.nonzero(acc);mid=(xs.min()+xs.max())/2
+        for y,x in zip(ys,xs):
+            if ex6.any() or ex7.any():
+                d6=np.abs(np.nonzero(ex6)[1]-x).min() if ex6.any() else 99;d7=np.abs(np.nonzero(ex7)[1]-x).min() if ex7.any() else 99
+                lab[y,x]=PADL if d6<=d7 else PADR
+            else:lab[y,x]=PADR if x<=mid else PADL   # no pad yet: front-view convention (L pad on image right)
     m=lab==MASK
     if m.any():
         top=np.nonzero(m)[0].min();mm=m.copy();mm[:top+9]=False;lab[mm]=-10-MASK

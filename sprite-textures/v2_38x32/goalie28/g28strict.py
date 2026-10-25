@@ -26,7 +26,8 @@ def texture_v7():
     return T
 L=texture_v7()
 BG,BODY,MASK,CATCH,BLOCK,STICK,PADL,PADR,SKATE,SHADOW=range(10)
-FIX={416:[((17,6),BODY)],407:[((14,16),BODY),((15,16),BODY)],425:[((27,3),STICK)],1044:[((33,9),SKATE)]}
+# D152: 407 back-view helmet (rows 1-5, mask colours) is MASK
+FIX={416:[((17,6),BODY)],407:[((14,16),BODY),((15,16),BODY)]+[((y,x),MASK) for y,xs in ((1,(10,11,12)),(2,(10,11,12,13)),(3,(10,11,12,13)),(4,(10,11,12,13)),(5,(12,13))) for x in xs],425:[((27,3),STICK)],1044:[((33,9),SKATE)]}
 BLK={'blocker':(0,0,10,7),'catFront':(11,23,11,9),'catBack':(0,23,11,9),'stick':(14,9,3,14)}
 def snap_box(s,box,v,u):
     x0,y0,w,h=box;C=[(y,x) for y in range(y0,y0+h) for x in range(x0,x0+w) if L[y,x]==s]
