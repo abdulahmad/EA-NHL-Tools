@@ -98,6 +98,7 @@ from skeltree import connect
 for f in B['frames']:
   if not any('not a player' in w for w in f['why']):connect(f)
 B['frames'].sort(key=lambda f:-f['score'])
+import time;B['tree']='D189';B['built']=time.strftime('%Y-%m-%d %H:%M %Z')   # D189: the editor warns when its data predates the connected-tree build
 os.makedirs(os.path.join(E,'data'),exist_ok=True)
 open(os.path.join(E,'data','bundle.js'),'w').write('window.BUNDLE='+json.dumps(B,separators=(',',':'))+';')
 from single import write_html

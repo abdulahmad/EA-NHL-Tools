@@ -77,7 +77,41 @@ def connect(f):
       for s_,q in zip(STICK,(b,hq,t)):
         if N[s_] not in J:J[N[s_]]=[int(q[0]),int(q[1])];inf.append(N[s_])
     else:f['nostick']=True;f['nostick_src']='auto (no stick px)'
+  for _ in range(3):inf+=_grip_and_spread(f,J,N)   # repeat: a spread can unseat the grip and vice versa
   B=[]
   for chain,_ in CHAINS:B+=[[N[a],N[b]] for a,b in zip(chain,chain[1:])]
   if not f.get('nostick'):B+=[[N[a],N[b]] for a,b in zip(STICK,STICK[1:]) if N[a] in J and N[b] in J]
   f['bones']=B;f['inferred']=sorted(set(f.get('inferred',[]))|set(inf));return f
+
+GRIP=1.5
+def _STEP(dx,dy):v=np.array([dx,dy],float);return v*1.5/np.hypot(*v)
+def _seg(J):
+  return (np.array(J['stick butt'],float),np.array(J['stick heel'],float)) if 'stick butt' in J and 'stick heel' in J else None
+def _grip_and_spread(f,J,N):
+  """D189 (Abdul pt1044u): a hand holds the stick and every arm joint is drawn on its own px.
+  1) stick frames: if no hand is within GRIP px of the shaft, the nearer hand moves onto the shaft (nearest point, rounded)
+     and its wrist goes 2/3 of the way from the elbow to it.  2) joints (any chain) that sit on the px of their chain parent
+     are spread out along the chain (interpolated, else stepped 1 px outward) so none hides under another."""
+  moved=[]
+  sg=None if f.get('nostick') else _seg(J)
+  if sg:
+    A,Bp=sg;d=Bp-A;L=max(1e-9,d@d);best=None
+    for s in ('LH','RH'):
+      P=np.array(J[N[s]],float);t=np.clip((P-A)@d/L,0,1);q=A+t*d;dist=np.hypot(*(q-P))
+      if best is None or dist<best[0]:best=(dist,s,q)
+    if best[0]>GRIP:
+      s=best[1];q=np.round(best[2]);J[N[s]]=[int(q[0]),int(q[1])];e=np.array(J[N[s[0]+'E']],float)
+      w=np.round(e+(q-e)*2/3);J[N[s[0]+'W']]=[int(w[0]),int(w[1])];moved+=[N[s],N[s[0]+'W']]
+  for ch,(dx,dy) in CHAINS:
+    dx,dy=np.sign(dx) or 0,np.sign(dy) or 1;P=[np.array(J[N[c]],float) for c in ch]
+    for i in range(1,5):
+      if np.hypot(*(P[i]-P[i-1]))<1 and i==4 and N[ch[4]] in moved:   # held hand stays on the shaft: move the wrist back instead
+        q=np.round(P[2]+(P[4]-P[2])/2)
+        if np.hypot(*(q-P[4]))<1 or np.hypot(*(q-P[2]))<1:q=P[4]-_STEP(dx,dy)
+        P[3]=q;J[N[ch[3]]]=[int(q[0]),int(q[1])];continue
+      if np.hypot(*(P[i]-P[i-1]))<1:
+        nxt=next((P[k] for k in range(i+1,5) if np.hypot(*(P[k]-P[i-1]))>=(k-i+1)),None)
+        q=P[i-1]+(nxt-P[i-1])/2 if nxt is not None else P[i-1]+_STEP(dx,dy)
+        if np.hypot(*(q-P[i-1]))<1:q=P[i-1]+_STEP(dx,dy)
+        q=np.round(q,2);P[i]=q;J[N[ch[i]]]=[float(q[0]),float(q[1])];moved.append(N[ch[i]])
+  return moved
