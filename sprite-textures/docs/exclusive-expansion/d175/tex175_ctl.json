@@ -1,0 +1,42 @@
+{
+ "pairs_used": 281,
+ "texels_voted": 668,
+ "agreement_votes_vs_final": 0.809,
+ "gaps": 100,
+ "gaps_by_method": {
+  "row band": 92,
+  "neighbour": 4,
+  "PC Leafs family -> commonest 94G index": 4
+ },
+ "columns_kept": [
+  [
+   "sleeve",
+   "4",
+   "42",
+   "3",
+   "4"
+  ]
+ ],
+ "index_counts": {
+  "44": 333,
+  "39": 25,
+  "42": 167,
+  "36": 140,
+  "34": 95,
+  "33": 8
+ },
+ "family_disagree_with_D169": [
+  [
+   15,
+   18
+  ],
+  [
+   15,
+   19
+  ],
+  [
+   15,
+   20
+  ]
+ ]
+}
