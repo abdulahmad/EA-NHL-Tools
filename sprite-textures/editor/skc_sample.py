@@ -12,6 +12,7 @@ from skeltree import connect
 for f in B['frames']:
     if not any('not a player' in w for w in f['why']):connect(f)   # D187 connected tree
     f['why']=[w for w in f['why'] if not any(t in w for t in('off-pixel','zone-part','orphan px'))];constrain_frame(f)
+    if not any('not a player' in w for w in f['why']):connect(f)   # D189: re-grip / re-spread after the constraint pass
     k=f.get('skc');f['score']=round(f['score']+((3*k['exist']+0.5*k['zone']+k['orphan']) if k else 0),1)
 B['frames'].sort(key=lambda f:-f['score']);B['skc']=SKC
 open(os.path.join(E,'data','bundle_sample.js'),'w').write('window.BUNDLE='+json.dumps(B,separators=(',',':'))+';')

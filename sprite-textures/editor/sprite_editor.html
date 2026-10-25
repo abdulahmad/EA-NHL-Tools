@@ -63,6 +63,8 @@ canvas{image-rendering:pixelated;background:#0b0f12;border:1px solid var(--line)
 <script>document.write('<script src="data/'+(location.search.includes('sample')?'bundle_sample.js':'bundle.js')+'"><\/script>')</script>
 <script>
 const B=window.BUNDLE,$=i=>document.getElementById(i),PZ=5;let Z=12,LOP=1;
+/* D189: data built before D187/D189 (e.g. an old local data/bundle.js) has no left arm on some frames and no hand on the stick */
+if(!B.tree||B.tree<'D189'){const w=document.createElement('div');w.style.cssText='background:#d55e00;color:#fff;padding:8px;font:bold 15px sans-serif';w.textContent='STALE DATA: this bundle predates the connected-skeleton build (missing arms / hands off the stick). Open editor/data/sprite_editor.html from git, or run build_bundle.py.';document.body.prepend(w)}
 if(!B){$('item').textContent='No data bundle. Run: python3 sprite-textures/editor/launch.py --rebuild'}
 // part tables reused from the old skater / goalie editors (Okabe-Ito colours, a letter on every px, no red next to green)
 const PARTS={skater:[['none','',null,'x'],['outline','o','#000000','`'],['skin','k','#e69f00','1'],['helmet','H','#0072b2','2'],['torso','T','#56b4e9','3'],

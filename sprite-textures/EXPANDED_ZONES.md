@@ -1179,3 +1179,16 @@ D179 names were too big and too many. The editor (N) and the sheets now show onl
 
 ## D188: built single-file editor committed (pt1043u)
 - Abdul confirmed, knowing the repo is public: editor/data/sprite_editor.html (11.9 MB) and sprite_editor_sample.html (1.3 MB) are tracked; .gitignore un-ignores only these two. Rebuild and recommit when data changes.
+
+## D189: both arms drawn, a hand on the stick, stale-data warning (pt1044u)
+Abdul's frame (skater 1108: facing SW, butt upper right, blade at the left foot) showed no left arm and RS hanging off NK.
+That is the pre-D187 data: the raw skater export has 60 frames with no left-arm joints at all (1108 among them), and the
+old SKB bones run neck→shoulder. The committed D188 HTML already had LS/LE/LW/LH for every player frame, so the view came
+from a stale local `editor/data/bundle.js` (gitignored, built before D187), which `editor/sprite_editor.html` loads.
+D187's check only asked "is each joint name present". It did not ask whether the joint is drawn on its own px or whether a
+hand is on the shaft. In the committed D188 HTML, 1108's L wrist and L glove sat on the same px, and no hand was on the stick.
+Fix: `skeltree._grip_and_spread` (run inside `connect`, and again after the sample's constraint pass). When no hand is within
+1.5 px of the shaft, the nearer hand moves onto it and its wrist is re-placed. A joint that sits on its chain parent is spread
+along the chain. The build stamps `B.tree='D189'`, and the editor shows an orange STALE DATA banner for older bundles.
+Scan of all player frames in the committed HTML (missing / bone not drawn / joint on its parent's px / no hand within 1.5 px of shaft):
+full 894: before 0 / 0 / 601 / 295, after 0 / 0 / 0 / 0. Sample 46: before 0 / 0 / 23 / 24, after 0 / 0 / 0 / 0.
