@@ -1,11 +1,11 @@
-# goalie28 full set (Abdul pt947u): texel maps for all 246 goalie frames -> /tmp/g28_all.json (derived, regenerate locally).
+# goalie28 full set (Abdul pt947u): texel maps for all 246 goalie frames -> <tempdir>/g28_all.json (derived, regenerate locally).
 # Seg: the 14 FR frames use g21 + D141 fixes (g28strict.seg_all); the other frames use g24seg.one (g16 joint fit + g21 rules),
-# run per frame into /tmp/g24_<n>.json (OMP_NUM_THREADS=1, 8 in parallel). Editor overrides (/tmp/g28_edits.json from
+# run per frame into <tempdir>/g24_<n>.json (OMP_NUM_THREADS=1, 8 in parallel). Editor overrides (<tempdir>/g28_edits.json from
 # g28import.py) replace lab/joints per frame.
 # Parts: blocker/catcher/mask/stick = same-index snap inside the part's texel block at the bbox/axis position (strict; the
 # D141 glove-atlas fallback); a px with no same-index texel stays None (sprite colour, keeps the default pixel-perfect).
 # Pads = geo2 (D134/D136) + D139 strip texel, for custom art.
-import sys,os,json,collections,numpy as np
+import sys,os,json,tempfile,collections,numpy as np
 import scipy.ndimage as ndi
 H=os.path.dirname(os.path.abspath(__file__));G=os.path.abspath(H+'/..')
 for d in ('/goalie15','/goalie14','/goalie13','/goalie12','/goalie25','/goalie27','/goalie9'):sys.path.insert(0,G+d)
@@ -19,12 +19,12 @@ from PIL import Image as _I
 L8=S28.L.copy();L8[7,15]=L8[7,17]=45;L8[6,12]=L8[6,20]=134
 S28.L=L8;g25map.L=L8
 def seg(n):
-    E=json.load(open('/tmp/g28_edits.json')) if os.path.exists('/tmp/g28_edits.json') else {}
+    E=json.load(open(os.path.join(tempfile.gettempdir(),'g28_edits.json'))) if os.path.exists(os.path.join(tempfile.gettempdir(),'g28_edits.json')) else {}
     if str(n) in E:return np.array(E[str(n)]['lab']),E[str(n)]['joints']
     if n in g25map.FR:
-        if not hasattr(seg,'fr'):seg.fr=S28.seg_all();seg.j=json.load(open('/tmp/g16_seg.json'))
+        if not hasattr(seg,'fr'):seg.fr=S28.seg_all();seg.j=json.load(open(os.path.join(tempfile.gettempdir(),'g16_seg.json')))
         return evidence(n,frame(n),np.array(seg.fr[str(n)]['lab']))[0],seg.j[str(n)]['joints']
-    d=json.load(open('/tmp/g24_%d.json'%n));lab=region(n,frame(n),np.array(d['lab']),d['joints']);lab,_=evidence(n,frame(n),lab);return lab,d['joints']
+    d=json.load(open(os.path.join(tempfile.gettempdir(),'g24_%d.json'%n)));lab=region(n,frame(n),np.array(d['lab']),d['joints']);lab,_=evidence(n,frame(n),lab);return lab,d['joints']
 L7=L8
 def own_idx(l):
     """indices a part can map exactly: gloves share one atlas (D141), mask = cols 12-20 rows 0-7, stick = its region."""
@@ -178,5 +178,5 @@ def run(frames=None):
     for n in frames or g9common.goalie_frames():
         try:R,lab,J,B=maps(n);out[n]=dict(maps=R,lab=lab.tolist(),joints=J,back=B)
         except FileNotFoundError:print('no seg',n)
-    json.dump(out,open('/tmp/g28_all.json','w'),default=int);return out
+    json.dump(out,open(os.path.join(tempfile.gettempdir(),'g28_all.json'),'w'),default=int);return out
 if __name__=='__main__':run([int(a) for a in sys.argv[1:]] or None)

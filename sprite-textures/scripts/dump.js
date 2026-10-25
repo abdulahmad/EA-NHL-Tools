@@ -1,5 +1,6 @@
 const fs=require('fs');const P=require((process.env.NHL9XSTUDIO||'../../../NHL9XStudio')+'/lib/pc95.js'),J=require((process.env.NHL9XSTUDIO||'../../../NHL9XStudio')+'/lib/pc-jersey.js');
-const D=(process.env.NHL95_DIR||process.argv[2])+'/',O=__dirname+'/../out/data/';
+const path=require('path');if(!(process.env.NHL95_DIR||process.argv[2])){console.error('Usage: node dump.js <NHL95 folder with *.PPV, HOMEPALS.BIN, AWAYPALS.BIN>  (set NHL9XSTUDIO to your NHL9XStudio checkout)');process.exit(1)}
+const D=path.resolve(process.env.NHL95_DIR||process.argv[2])+path.sep,O=path.join(__dirname,'..','out','data')+path.sep;fs.mkdirSync(O,{recursive:true});
 const files=fs.readdirSync(D).filter(f=>/^(\d{3}_\d{3}|\d{8})\.PPV$/.test(f)).map(f=>({name:f,data:new Uint8Array(fs.readFileSync(D+f))}));
 const bank=P.buildSpriteBank(files,'players','95');
 const hdr=[],bufs=[];let off=0;

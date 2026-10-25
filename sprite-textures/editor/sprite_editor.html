@@ -3,35 +3,60 @@
      It opens on a worst-first fix queue; data comes from data/bundle.js (built locally by build_bundle.py, gitignored). -->
 <html><head><meta charset="utf-8"><title>Sprite editor</title>
 <style>
-body{background:#161616;color:#f2f2f2;font:16px sans-serif;margin:10px}
-button,select{font:bold 15px sans-serif;margin:2px;padding:5px 9px;border:2px solid #666;background:#2c2c2c;color:#fff;cursor:pointer}
-button.on{border-color:#ffe000;background:#4a4520}
-#bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
-#item{font-size:20px;font-weight:bold}#why{margin:6px 0;font-size:16px}
-.chip{display:inline-block;background:#333;border:1px solid #888;border-radius:4px;padding:2px 7px;margin:2px}
-#grid{display:grid;grid-template-columns:repeat(4,auto);justify-content:start;column-gap:22px;margin-top:8px}
-.h{text-align:center;font-weight:bold;font-size:17px;padding:4px 0;border-bottom:2px solid #777;margin-bottom:6px}
-.c{text-align:center}
-canvas{image-rendering:pixelated;background:#3a3a3a;border:1px solid #777}
-#legend{margin-top:10px;font-size:15px;line-height:1.8}
-.sw{display:inline-block;width:16px;height:16px;vertical-align:-3px;margin:0 6px 0 14px;border:1px solid #000}
-.tab{font-size:19px;padding:8px 18px}#tabs{margin-bottom:8px}
-.small{font-size:13px;color:#ccc}
+/* Look matches NHL9x Studio (abdulahmad/NHL9XStudio public/viewer.css): tokens, header, panels, ghost buttons, pressed state. */
+:root{--bg:#101418;--raise:#1a2129;--raise-2:#24303a;--line:#33414d;--text:#e8eef3;--muted:#8ea0b0;--ice:#d7e7ef;--ice-2:#c3d9e4;--red:#e23b32;--amber:#f0b429;--good:#8fd0a8;
+ --shadow:0 18px 50px rgba(0,0,0,.35);--font:Inter,"Segoe UI",sans-serif;--mono:"JetBrains Mono","Cascadia Mono",ui-monospace,monospace;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px}
+button,select,input{font:inherit;color:inherit}
+.head{display:flex;justify-content:space-between;gap:20px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line);background:linear-gradient(90deg,rgba(226,59,50,.16),transparent 220px),var(--raise)}
+.brand{display:flex;gap:12px;align-items:center}.brand h1{margin:0;font-size:18px;letter-spacing:.04em;font-weight:700}.brand p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.lamp{width:14px;height:14px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red);flex:none}
+button,select{background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--ice-2);font-size:13px;padding:6px 11px;margin:0;cursor:pointer}
+button:hover{border-color:var(--amber);color:var(--ice)}button.on,button[aria-pressed=true]{background:var(--text);color:var(--bg);border-color:var(--text)}
+select:focus,button:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}.seg button{border:0;border-radius:0}.seg button+button{border-left:1px solid var(--line)}
+.tab{font-weight:650}#tabs{display:flex}
+#bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 18px;background:var(--raise);border-bottom:1px solid var(--line)}
+.grp{display:flex;gap:6px;align-items:center;padding-right:8px;border-right:1px solid var(--line)}.grp:last-child{border:0}
+.lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:650}
+#item{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--ice)}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 300px;min-height:calc(100vh - 120px)}
+.main{padding:12px 18px;min-width:0}.meta{background:var(--raise);border-left:1px solid var(--line);padding:14px;font-size:13px;line-height:1.6}
+.meta h2,.card h2{margin:0 0 8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:650}
+#why{margin:0 0 8px}.chip{display:inline-block;background:var(--raise-2);border:1px solid var(--line);border-radius:999px;padding:2px 9px;margin:2px;font-size:12px;color:var(--ice-2)}
+.chip.warn{border-color:var(--amber);color:var(--amber)}
+#parts{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}#parts button{padding:4px 8px;font-size:12px}
+#grid{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start}
+.card{background:var(--raise);border:1px solid var(--line);border-radius:10px;padding:10px}.card.wide{grid-row:span 1}
+.h{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:650;margin-bottom:8px}
+canvas{image-rendering:pixelated;background:#0b0f12;border:1px solid var(--line);border-radius:4px;display:block}
+#legend{font-size:13px;line-height:1.9;color:var(--ice-2)}#legend b{color:var(--text)}
+.sw{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin:0 5px 0 10px;border:1px solid #000;border-radius:3px}
+.small{font-size:12px;color:var(--muted)}#help{padding:0 18px 18px;max-width:1100px}
+#tip{position:fixed;pointer-events:none;z-index:50;max-width:340px;background:var(--raise-2);border:1px solid var(--amber);border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5;color:var(--text);box-shadow:var(--shadow);display:none}
+#tip b{color:var(--amber)}#hover{min-height:60px;font-size:12px;color:var(--ice-2)}
+.keys{font-family:var(--mono);font-size:11px;color:var(--muted)}
 </style></head><body>
-<div id="tabs"><button id="tabP" class="tab on">PARTS (P)</button><button id="tabL" class="tab">Labels + skeleton (L)</button></div>
-<div id="bar"><span id="item">loading…</span>
-<button id="prev">&larr; prev (A)</button><button id="next">next (D) &rarr;</button>
-<select id="q" title="fix queue, worst first"></select>
-<label>texture <select id="tsel"></select></label>
-<button id="ovl" class="on">labels (O)</button><button id="jt" class="on">skeleton (J)</button><button id="nm" class="on">skeleton tags (N)</button>
-<button id="fill">flood fill (F)</button><button id="side" class="on">side: LEFT (Tab)</button><button id="undo">undo (Z)</button><button id="reset">reset frame</button><button id="save">save (S)</button><span id="st" class="small"></span></div>
+<header class="head"><div class="brand"><span class="lamp" aria-hidden="true"></span><div><h1>NHL9x Studio · Sprite editor</h1><p>skaters, goalies and exclusives: body parts, labels, skeleton</p></div></div>
+<div id="tabs" class="seg"><button id="tabP" class="tab on">Parts (P)</button><button id="tabL" class="tab">Labels + skeleton (L)</button></div></header>
+<div id="bar">
+ <div class="grp"><span id="item">loading…</span><button id="prev">&larr; A</button><button id="next">D &rarr;</button><select id="q" title="fix queue, worst first"></select></div>
+ <div class="grp"><span class="lbl">Texture</span><select id="tsel"></select></div>
+ <div class="grp"><span class="lbl">Show</span><button id="ovl" class="on">labels (O)</button><button id="jt" class="on">skeleton (J)</button><button id="nm" class="on">joint tags (N)</button><button id="vio" title="show only problems, hover each one for the rule">violations only (V)</button></div>
+ <div class="grp"><span class="lbl">Edit</span><button id="fill">flood fill (F)</button><button id="side" class="on">side: LEFT (Tab)</button><button id="nst" title="frame has no stick: skip the stick fit and blade rules">no stick (K)</button></div>
+ <div class="grp"><button id="undo" title="Ctrl+Z or Z">undo</button><button id="redo" title="Ctrl+Y, Ctrl+Shift+Z or Shift+Z">redo</button><button id="reset">reset frame</button><button id="save">save (S)</button><span id="st" class="small"></span></div>
+</div>
+<div class="app"><div class="main">
 <div id="why"></div><div id="parts"></div>
 <div id="grid">
- <div class="h" id="edh">Edit</div><div class="h">Game</div><div class="h">Texture preview</div><div class="h">Texture</div>
- <div class="c"><canvas id="ed"></canvas></div><div class="c"><canvas id="pg"></canvas></div><div class="c"><canvas id="pt"></canvas></div><div class="c"><canvas id="tx"></canvas></div>
-</div>
-<div id="legend"></div>
-<p class="small" id="help">PARTS view: click/drag paints the body part, F toggles flood fill (fills same palette index + same part), Tab switches LEFT/RIGHT, Shift+click picks, keys 1-0/q/e/x pick parts. Labels view: click/drag paints the selected part. Drag a ring to move a joint. Shift+click picks the part under the cursor. Keys: A/D or arrows = prev/next, O labels, J skeleton, N skeleton tags (H, LH/RH, LK/RK, LF/RF, SHAFT, BLADE), Z undo, S save, part keys on the buttons.</p>
+ <div class="card"><div class="h" id="edh">Edit</div><canvas id="ed"></canvas></div>
+ <div class="card"><div class="h">Game</div><canvas id="pg"></canvas></div>
+ <div class="card"><div class="h">Texture preview</div><canvas id="pt"></canvas><div class="small" id="ptn"></div></div>
+ <div class="card"><div class="h">Texture</div><canvas id="tx"></canvas></div>
+</div></div>
+<aside class="meta"><h2>Under the cursor</h2><div id="hover" class="small">Hover a joint or (in violations view) a marked pixel.</div><h2 style="margin-top:14px">Legend</h2><div id="legend"></div></aside></div>
+<div id="tip"></div>
+<p class="small" id="help">PARTS view: click/drag paints the body part, F toggles flood fill (fills same palette index + same part), Tab switches LEFT/RIGHT, Shift+click picks, keys 1-0/q/e/x pick parts. Labels view: click/drag paints the selected part. Drag a ring to move a joint. Shift+click picks the part under the cursor. Keys: A/D or arrows = prev/next, Ctrl+Z / Z undo, Ctrl+Y / Ctrl+Shift+Z / Shift+Z redo, V violations only, K no stick, O labels, J skeleton, N skeleton tags (H, LH/RH, LK/RK, LF/RF, SHAFT, BLADE), Z undo, S save, part keys on the buttons.</p>
 <script>document.write('<script src="data/'+(location.search.includes('sample')?'bundle_sample.js':'bundle.js')+'"><\/script>')</script>
 <script>
 const B=window.BUNDLE,$=i=>document.getElementById(i),Z=12,PZ=5;
@@ -67,7 +92,7 @@ function bpViol(f,bp){const v=[],h=f.px.length,w=f.px[0].length,M=MATOK[f.kind];
   if(!ok)v.push([y,x])}return v}
 const DARKTXT=['#000000','#0072b2','#003a66','#404040','#7a4a00','#6b5b95','#5a3a1a'];
 const BCOL=(a,b)=>{const s=a+' '+b;return s.includes('stick')?(b.includes('toe')?'#f0e442':'#bdbdbd'):/(R |R)(sh|el|wr|gl|hand|Rsh|Relb)/.test(s)||/Rsh|Relb|Rhand/.test(s)?'#e69f00':/(L )(sh|el|wr|gl)|Lsh|Lelb|Lhand/.test(s)?'#56b4e9':/R (hip|kn|an|sk)|Rhip|Rknee|Rank/.test(s)?'#cc79a7':/L (hip|kn|an|sk)|Lhip|Lknee|Lank/.test(s)?'#9ad0f0':'#ffffff'};
-let nm=true,view='parts',bcur=2,side=0,fill=false,qi=0,cur=4,ovl=true,jt=true,edits={},undo=[],drag=null,painting=false;
+let redo=[],vio=false,nm=true,view='parts',bcur=2,side=0,fill=false,qi=0,cur=4,ovl=true,jt=true,edits={},undo=[],drag=null,painting=false;
 const ALL=B?B.frames:[];ALL.forEach(f=>{f.pv=bpViol(f,bpOf(f)).length;if(f.score>0||f.pv>=8){if(f.pv>=8)f.why=f.why.concat([`${f.pv} body-part / colour-zone violations`]);f.score=+(f.score+0.5*f.pv).toFixed(1)}});
 const Q=ALL.filter(f=>f.score>0&&!(f.why||[]).some(w=>/not a player/.test(w))).sort((a,b)=>b.score-a.score);if(!Q.length)Q.push(...ALL);
 const fr=()=>Q[qi],get=()=>edits[fr().id]||fr();
@@ -80,38 +105,88 @@ function pick(i){cur=i;document.querySelectorAll('#parts button').forEach(b=>b.c
 function texOpts(){const k=fr().kind=='goalie'?'goalie':'v2',T=Object.keys(B.textures).filter(n=>B.textures[n].kind==k),old=$('tsel').value;
  $('tsel').innerHTML=T.map(n=>`<option>${n}</option>`).join('');const pref=fr().kind=='exclusive'?'D175 control (shade groups)':fr().kind=='goalie'?'Goalie: Fuhr v14':'Leafs home';
  $('tsel').value=T.includes(old)?old:(T.includes(pref)?pref:T[0])}
-function legend(){const f=fr();let s='<b>Legend</b><br>';
+function legend(){const f=fr();let s='';
+ if(vio){s+='<b>Violations only</b> (sprite greyed):<br><span class="sw" style="border:2px solid #f0b429;border-radius:50%;background:none"></span>part / colour-zone conflict<br><span class="sw" style="background:#56b4e9"></span>orphan px (over 3 px from every bone)<br><span class="sw" style="background:none;border:2px solid #cc79a7"></span>✕ off-pixel joint<br><span class="sw" style="background:none;border:2px solid #fff"></span>uncovered black (no part / ambiguous)<br>Hover a marker for the part, its allowed zones and the rule.<br><br>'}
  if(view=='parts'){s+='Body parts: '+BP.slice(1).map(p=>`<span class="sw" style="background:${p[1]}"></span>${p[2]} ${p[0]}`).join('');
-  s+='<br><span class="sw" style="background:repeating-linear-gradient(45deg,#e69f00 0 3px,#000 3px 6px)"></span>striped = RIGHT side, solid = LEFT side (arms, legs, skates)<span class="sw" style="border:3px solid #fff;outline:2px solid #000;border-radius:50%"></span>ring: part not allowed for this colour zone (D174 table / material label)<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint. <br>'+TAGLEG;$('legend').innerHTML=s;return}
+  s+='<br><span class="sw" style="background:repeating-linear-gradient(45deg,#e69f00 0 3px,#000 3px 6px)"></span>striped = RIGHT side, solid = LEFT side (arms, legs, skates)<span class="sw" style="border:3px solid #fff;outline:2px solid #000;border-radius:50%"></span>ring: part not allowed for this colour zone (D174 table / material label)<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint. Dashed white = hand holding the stick.<br>'+TAGLEG;$('legend').innerHTML=s;return}
  s+='<span class="sw" style="background:#3a3a3a"></span>empty / background';
  if(f.kind=='exclusive')s+='<span class="sw" style="border:3px solid #fff;outline:2px solid #000;border-radius:50%"></span>ring: wrong control zone (texel shade group differs from the pixel\'s)<span class="sw" style="border:2px solid #00ffff;background:none"></span>cyan box: nudged 1 texel';
  s+='<span class="sw" style="background:repeating-linear-gradient(45deg,#000 0 3px,#fff 3px 6px)"></span>hatched: pixel has no texel (preview keeps game colour)<br>';
- s+='Skeleton: <span class="sw" style="background:#fff"></span>head/torso<span class="sw" style="background:#e69f00"></span>R arm<span class="sw" style="background:#56b4e9"></span>L arm<span class="sw" style="background:#cc79a7"></span>R leg<span class="sw" style="background:#9ad0f0"></span>L leg<span class="sw" style="background:#bdbdbd"></span>stick shaft<span class="sw" style="background:#f0e442"></span>blade.<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint = yellow square (drag to move). <br>'+TAGLEG;
+ s+='Skeleton: <span class="sw" style="background:#fff"></span>head/torso<span class="sw" style="background:#e69f00"></span>R arm<span class="sw" style="background:#56b4e9"></span>L arm<span class="sw" style="background:#cc79a7"></span>R leg<span class="sw" style="background:#9ad0f0"></span>L leg<span class="sw" style="background:#bdbdbd"></span>stick shaft<span class="sw" style="background:#f0e442"></span>blade.<span class="sw" style="background:#ffe000;border:2px solid #000"></span>joint = yellow square (drag to move). Dashed white = hand holding the stick. <br>'+TAGLEG;
  if(f.kind!='exclusive')s+='<br>Labels: coloured square + letter per pixel (see part buttons).';$('legend').innerHTML=s}
+
+// ---- D185 (t1036u item 2e/2f/2g): connected skeleton, no-stick flag, violations overlay
+const STICKJ=k=>/^stick/.test(k),HANDS=['L glove','R glove','Lhand','Rhand'];
+function noStick(f){const g=edits[f.id];return g&&('nostick' in g)?!!g.nostick:!!f.nostick}
+function segPt(P,A,B){const dx=B[0]-A[0],dy=B[1]-A[1],L=dx*dx+dy*dy,t=L?Math.max(0,Math.min(1,((P[0]-A[0])*dx+(P[1]-A[1])*dy)/L)):0;return[A[0]+t*dx,A[1]+t*dy]}
+function segD(P,A,B){const q=segPt(P,A,B);return Math.hypot(q[0]-P[0],q[1]-P[1])}
+function grip(J){if(!J['stick butt']||!J['stick heel'])return null;let best=null;
+ for(const h of HANDS){if(!J[h])continue;const q=segPt(J[h],J['stick butt'],J['stick heel']),d=Math.hypot(q[0]-J[h][0],q[1]-J[h][1]);if(!best||d<best[1])best=[h,d,q]}return best}
+const GRIP=1.5;
+function liveBones(f){const ns=noStick(f);return f.bones.filter(([a,b])=>!(ns&&(STICKJ(a)||STICKJ(b))))}
+function floating(f,J){const ns=noStick(f),ks=Object.keys(J).filter(k=>!(ns&&STICKJ(k)));if(!ks.length)return[];const par={};ks.forEach(k=>par[k]=k);
+ const fd=k=>par[k]==k?k:(par[k]=fd(par[k]));liveBones(f).forEach(([a,b])=>{if(a in par&&b in par)par[fd(a)]=fd(b)});
+ const gp=!ns&&grip(J);if(gp&&gp[1]<=GRIP)par[fd(gp[0])]=fd('stick butt');const root=fd(J.head?'head':ks[0]);return ks.filter(k=>fd(k)!=root)}
+const ISBLACK=c=>c&&Math.max(c[0],c[1],c[2])<60,LIMBP=new Set([4,5,6,7,8,9,11]);
+function vioList(f,g){const out=[],J=g.joints,h=f.px.length,w=f.px[0].length,pal=B.palettes[f.pal],bp=bpOf(f),bones=liveBones(f).filter(([a,b])=>J[a]&&J[b]);
+ const zoneTxt=(y,x)=>f.pal=='genesis'?`palette index ${f.px[y][x]}`:(f.lab&&PARTS[f.kind]?`material "${(PARTS[f.kind][g.lab?g.lab[y][x]:f.lab[y][x]]||['?'])[0]}"`:`palette index ${f.px[y][x]}`);
+ const pn=v=>BP[bpBase(v)]?BP[bpBase(v)][0]+(SIDED.has(bpBase(v))?(bpRight(v)?' (right)':' (left)'):''):'?';
+ bpViol(f,bp).forEach(([y,x])=>{const al=allowed(f,y,x)||[];out.push({y,x,t:'zone',txt:`<b>Part/zone violation</b> at (${x},${y})<br>Part: <b>${pn(bp[y][x])}</b> on ${zoneTxt(y,x)}.<br>Allowed parts for this zone: ${al.map(p=>BP[p][0]).join(', ')||'none'}.<br>Rule: a body part may only cover the colour zones listed for it (D174 zone table / material labels).`})});
+ const dB=(x,y,sel)=>{let d=1e9;bones.forEach(([a,b])=>{if(!sel||sel(a,b))d=Math.min(d,segD([x,y],J[a],J[b]))});return d};
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){if(f.px[y][x]==255)continue;const d=dB(x,y);
+  if(d>3&&bones.length)out.push({y,x,t:'orphan',txt:`<b>Orphan pixel</b> at (${x},${y}), ${d.toFixed(1)} px from the nearest bone.<br>Part: ${pn(bp[y][x])} on ${zoneTxt(y,x)}.<br>Rule: every sprite pixel must lie within 3 px of a bone of the one connected skeleton.`})}
+ for(const k in J){if(noStick(f)&&STICKJ(k))continue;const [x,y]=J[k],X=Math.round(x),Y=Math.round(y);
+  if(Y<0||X<0||Y>=h||X>=w||f.px[Y][X]==255)out.push({y:Y,x:X,t:'joint',k,txt:`<b>Off-pixel joint</b>: ${jcode(k)} (${jfull(k)}) at (${x},${y}) is on an empty pixel.<br>Rule: every joint must sit on a sprite pixel.`})}
+ const ends=Object.keys(J).filter(k=>/glove|hand|skate|Lank|Rank/.test(k)&&!(noStick(f)&&STICKJ(k)));
+ const limb=(a,b)=>LIMBP.has(BONEPART(a,b));
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){const v=f.px[y][x];if(v==255||!ISBLACK(pal[v]))continue;
+  if(dB(x,y,limb)<=1.6||ends.some(k=>Math.hypot(J[k][0]-x,J[k][1]-y)<=3))continue;
+  // outline rule b: walk through black to the first non-black px; their parts give the darkest shade
+  const seen=new Set([y*999+x]);let fr_=[[y,x]],hit=[];
+  while(fr_.length&&!hit.length){const nf=[];for(const [a,b] of fr_)for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const Y=a+dy,X=b+dx;if(Y<0||X<0||Y>=h||X>=w||seen.has(Y*999+X))continue;seen.add(Y*999+X);
+   const u=f.px[Y][X];if(u==255)continue;if(ISBLACK(pal[u]))nf.push([Y,X]);else if(bpBase(bp[Y][X])&&bpBase(bp[Y][X])!=12)hit.push([Y,X])}fr_=nf}
+  if(!hit.length){out.push({y,x,t:'black',txt:`<b>Uncovered black</b> at (${x},${y}): no labelled part touches this black run.<br>Rule: black must lie on a limb or blade bone, or border a part (it then takes that part's darkest shade, outline rule b). An island of black is an error.`});continue}
+  const parts={};hit.forEach(([Y,X])=>{const p=bp[Y][X];(parts[p]=parts[p]||new Set()).add(f.px[Y][X])});const keys=Object.keys(parts).map(Number);
+  if(keys.length>1){const dd=keys.map(p=>[dB(x,y,(a,b)=>BONEPART(a,b)==bpBase(p)),p]).sort((a,b)=>a[0]-b[0]);
+   const z0=[...parts[dd[0][1]]].join(),z1=[...parts[dd[1][1]]].join();
+   if(z0!=z1&&dd[1][0]-dd[0][0]<0.75)out.push({y,x,t:'black',txt:`<b>Ambiguous black</b> at (${x},${y}): borders ${keys.map(pn).join(' and ')}, which have different colour zones, and neither bone is clearly nearer.<br>Rule: border black takes the darkest shade of the part it outlines; when two parts with conflicting zones tie, it must be resolved by hand.`})}}
+ return out}
+const VCOL={zone:'#f0b429',orphan:'#56b4e9',joint:'#cc79a7',black:'#ffffff'};
 function sizeFor(cv,w,h,z){cv.width=w*z;cv.height=h*z;const c=cv.getContext('2d');c.fillStyle='#3a3a3a';c.fillRect(0,0,cv.width,cv.height);return c}
-function hatch(c,x,y,z){c.fillStyle='#000';c.fillRect(x,y,z,z);c.strokeStyle='#fff';c.lineWidth=1;c.beginPath();for(let d=-z;d<z;d+=3){c.moveTo(x+Math.max(0,d),y+Math.max(0,-d));c.lineTo(x+Math.min(z,d+z),y+Math.min(z,z-d))}c.stroke()}
+function hatch(c,x,y,z){c.strokeStyle='rgba(0,0,0,.55)';c.lineWidth=1;c.beginPath();for(let d=-z;d<z;d+=3){c.moveTo(x+Math.max(0,d),y+Math.max(0,-d));c.lineTo(x+Math.min(z,d+z),y+Math.min(z,z-d))}c.stroke()}
 function marks(c,f,z){(f.nud||[]).forEach(([y,x])=>{c.strokeStyle='#00ffff';c.lineWidth=1.5;c.strokeRect(x*z+.5,y*z+.5,z-1,z-1)});
  (f.err||[]).forEach(([y,x])=>{c.beginPath();c.arc((x+.5)*z,(y+.5)*z,z*.75,0,7);c.strokeStyle='#000';c.lineWidth=3;c.stroke();c.strokeStyle='#fff';c.lineWidth=1.3;c.stroke()})}
 function show(){if(!B)return;const f=fr(),g=get(),pal=B.palettes[f.pal],h=f.px.length,w=f.px[0].length,T=B.textures[$('tsel').value].px;
  $('item').textContent=`${qi+1}/${Q.length}: ${f.kind=='exclusive'?'exclusive '+f.id:f.id}`+(edits[f.id]?'  (edited)':'');
  $('why').innerHTML=`<span class="small">${f.src} · score ${f.score} · </span>`+(f.why.length?f.why.map(x=>`<span class="chip">${x}</span>`).join(''):'<span class="chip">no open issues</span>');$('q').value=qi;
  const P=PARTS[f.kind],e=$('ed'),c=sizeFor(e,w,h,Z);c.textAlign='center';c.textBaseline='middle';c.font='bold 10px sans-serif';
- $('edh').textContent=view=='parts'?'Edit: BODY PARTS':'Edit: labels + skeleton';
- if(view=='parts'){const bp=bpOf(f);for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;const v=bp[y][x],p=BP[bpBase(v)];
+ $('edh').textContent=vio?'Edit: violations only':view=='parts'?'Edit: body parts':'Edit: labels + skeleton';
+ const V=vioList(f,g),fl=floating(f,g.joints),gp=!noStick(f)&&grip(g.joints),cnt=t=>V.filter(v=>v.t==t).length;f._V=V;
+ $('why').innerHTML+=` <span class="chip ${V.length?'warn':''}">violations: ${cnt('zone')} part/zone · ${cnt('orphan')} orphan · ${cnt('joint')} off-pixel joint · ${cnt('black')} uncovered black</span>`+
+  (noStick(f)?` <span class="chip">no stick (${(edits[f.id]&&'nostick' in edits[f.id])?'edit':f.nostick_src||'flag'})</span>`:'')+
+  (fl.length?` <span class="chip warn">skeleton not one tree: ${fl.map(jcode).join(', ')}</span>`:'')+(!noStick(f)&&g.joints['stick butt']&&!(gp&&gp[1]<=GRIP)?' <span class="chip warn">stick not held: drag a hand onto the shaft</span>':'');
+ $('nst').classList.toggle('on',noStick(f));
+ if(vio){for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;const q=pal[s],l=Math.round((q[0]*.3+q[1]*.59+q[2]*.11)*.45+20);c.fillStyle=`rgb(${l},${l},${l})`;c.fillRect(x*Z,y*Z,Z,Z)}}
+ else if(view=='parts'){const bp=bpOf(f);for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;const v=bp[y][x],p=BP[bpBase(v)];
    c.fillStyle=p&&p[1]?p[1]:`rgb(${pal[s]})`;c.fillRect(x*Z,y*Z,Z,Z);if(bpRight(v)){c.save();c.beginPath();c.rect(x*Z,y*Z,Z,Z);c.clip();c.strokeStyle=['#5a5a5a','#0072b2','#a0662a','#2a2a2a'].includes(p[1])?'#fff':'#000';c.lineWidth=2;for(let d=-Z;d<Z;d+=5){c.beginPath();c.moveTo(x*Z+d,y*Z+Z);c.lineTo(x*Z+d+Z,y*Z);c.stroke()}c.restore()}
    if(p&&p[2]){c.fillStyle=['#ffffff','#f0e442','#9ad0f0','#bdbdbd','#56b4e9','#e69f00','#cc79a7','#9a8cff'].includes(p[1])?'#000':'#fff';c.fillText(p[2],x*Z+Z/2,y*Z+Z/2+1)}}
   bpViol(f,bp).forEach(([y,x])=>{c.beginPath();c.arc((x+.5)*Z,(y+.5)*Z,Z*.55,0,7);c.strokeStyle='#000';c.lineWidth=3;c.stroke();c.strokeStyle='#fff';c.lineWidth=1.5;c.stroke()})}
  else for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;c.fillStyle=`rgb(${pal[s]})`;c.fillRect(x*Z,y*Z,Z,Z);
   const l=g.lab?g.lab[y][x]:0;if(ovl&&P&&l&&P[l]&&P[l][2]){c.fillStyle=P[l][2];c.globalAlpha=.75;c.fillRect(x*Z+2,y*Z+2,Z-4,Z-4);c.globalAlpha=1;c.fillStyle=DARKTXT.includes(P[l][2])?'#fff':'#000';c.fillText(P[l][1],x*Z+Z/2,y*Z+Z/2+1)}}
- if(view!="parts")marks(c,f,Z);
- if(jt){const J=g.joints,p=k=>[(J[k][0]+.5)*Z,(J[k][1]+.5)*Z];
-  for(const [col,lw] of [['#000',5],[null,2.5]]){c.lineWidth=lw;f.bones.forEach(([a,b])=>{if(J[a]&&J[b]){c.strokeStyle=col||BCOL(a,b);c.beginPath();c.moveTo(...p(a));c.lineTo(...p(b));c.stroke()}})}
+ if(view!="parts"&&!vio)marks(c,f,Z);
+ if(jt){const J0=g.joints,J={};for(const k in J0)if(!(noStick(f)&&STICKJ(k)))J[k]=J0[k];const p=k=>[(J[k][0]+.5)*Z,(J[k][1]+.5)*Z];
+  if(gp&&gp[1]<=GRIP){c.setLineDash([3,2]);c.strokeStyle='#fff';c.lineWidth=2;c.beginPath();c.moveTo(...p(gp[0]));c.lineTo((gp[2][0]+.5)*Z,(gp[2][1]+.5)*Z);c.stroke();c.setLineDash([])}
+  for(const [col,lw] of [['#000',5],[null,2.5]]){c.lineWidth=lw;liveBones(f).forEach(([a,b])=>{if(J[a]&&J[b]){c.strokeStyle=col||BCOL(a,b);c.beginPath();c.moveTo(...p(a));c.lineTo(...p(b));c.stroke()}})}
   for(const k in J){const [X,Y]=p(k);c.beginPath();c.rect(X-4.5,Y-4.5,9,9);c.fillStyle='#ffe000';c.fill();c.lineWidth=2;c.strokeStyle='#000';c.stroke()}
   if(nm)skLabels(c,J,f.bones,p,c.canvas.width,c.canvas.height)}
- const pg=sizeFor($('pg'),w,h,PZ),pt=sizeFor($('pt'),w,h,PZ);
+ if(vio)V.forEach(v=>{const X=v.x*Z,Y=v.y*Z;c.lineWidth=2;c.strokeStyle=VCOL[v.t];
+  if(v.t=='zone'){c.beginPath();c.arc(X+Z/2,Y+Z/2,Z*.45,0,7);c.stroke()}else if(v.t=='orphan'){c.fillStyle=VCOL.orphan;c.fillRect(X+3,Y+3,Z-6,Z-6)}
+  else if(v.t=='joint'){c.beginPath();c.moveTo(X,Y);c.lineTo(X+Z,Y+Z);c.moveTo(X+Z,Y);c.lineTo(X,Y+Z);c.lineWidth=3;c.stroke()}else{c.strokeRect(X+1.5,Y+1.5,Z-3,Z-3)}});
+ const pg=sizeFor($('pg'),w,h,PZ),pt=sizeFor($('pt'),w,h,PZ);pt.fillStyle='#0b0f12';pt.fillRect(0,0,w*PZ,h*PZ);pg.fillStyle='#0b0f12';pg.fillRect(0,0,w*PZ,h*PZ);
  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;pg.fillStyle=`rgb(${pal[s]})`;pg.fillRect(x*PZ,y*PZ,PZ,PZ);
   const t=f.tmap[y+','+x],cc=t&&T[t[1]]&&T[t[1]][t[0]];
-  if(cc&&!(cc[0]==252&&cc[1]==0&&cc[2]==252)){pt.fillStyle=`rgb(${cc})`;pt.fillRect(x*PZ,y*PZ,PZ,PZ)}else if(f.kind!='exclusive'||!t){hatch(pt,x*PZ,y*PZ,PZ)}else{pt.fillStyle=`rgb(${pal[s]})`;pt.fillRect(x*PZ,y*PZ,PZ,PZ)}}
+  if(cc&&!(cc[0]==252&&cc[1]==0&&cc[2]==252)){pt.fillStyle=`rgb(${cc})`;pt.fillRect(x*PZ,y*PZ,PZ,PZ)}else{pt.fillStyle=`rgb(${pal[s]})`;pt.fillRect(x*PZ,y*PZ,PZ,PZ);if(f.kind!='exclusive'||!t)hatch(pt,x*PZ,y*PZ,PZ)}}
+ const nm_=Object.keys(f.tmap).length,np_=f.px.flat().filter(v=>v!=255).length;$('ptn').textContent=nm_?`${nm_} of ${np_} px mapped to the texture; hatched px keep the game colour`:'no texture map for this frame: game colours shown, hatched';
  marks(pt,f,PZ);
  const TS=Math.max(6,Math.floor(300/T[0].length)),tc=sizeFor($('tx'),T[0].length,T.length,TS);
  for(let y=0;y<T.length;y++)for(let x=0;x<T[0].length;x++){const p=T[y][x];if(p[0]==252&&p[1]==0&&p[2]==252)continue;tc.fillStyle=`rgb(${p})`;tc.fillRect(x*TS,y*TS,TS,TS)}
@@ -125,38 +200,66 @@ function bpPaint(e,flood){const f=fr(),[fx,fy]=cell(e),x=Math.floor(fx),y=Math.f
   if(f.px[a][b]!=idx||g.bp[a][b]!=old)continue;g.bp[a][b]=v;st.push([a+1,b],[a-1,b],[a,b+1],[a,b-1])}show()}
 function paint(e){if(view=='parts')return bpPaint(e,false);const f=fr();if(!f.lab)return;const [fx,fy]=cell(e),x=Math.floor(fx),y=Math.floor(fy);if(y<0||x<0||y>=f.px.length||x>=f.px[0].length||f.px[y][x]==255)return;const g=mut();if(g.lab[y][x]!=cur){g.lab[y][x]=cur;show()}}
 $('ed').onmousedown=e=>{const [fx,fy]=cell(e),g=get();if(view=='parts'&&e.shiftKey){const v=bpOf(fr())[Math.floor(fy)]?.[Math.floor(fx)];if(v!==undefined){bpick(bpBase(v));setSide(bpRight(v)?1:0)}return}
- if(view=='parts'&&fill){undo.push([qi,JSON.stringify(edits[fr().id]||null)]);bpPaint(e,true);return}if(e.shiftKey&&g.lab){const v=g.lab[Math.floor(fy)][Math.floor(fx)];if(v!==undefined)pick(v);return}
- undo.push([qi,JSON.stringify(edits[fr().id]||null)]);if(jt)for(const k in g.joints){const j=g.joints[k];if(Math.hypot(j[0]+.5-fx,j[1]+.5-fy)<.6){drag=k;return}}painting=true;paint(e)};
-$('ed').onmousemove=e=>{if(drag){const [fx,fy]=cell(e);mut().joints[drag]=[Math.round(fx-.5),Math.round(fy-.5)];show()}else if(painting)paint(e)};
+ if(view=='parts'&&fill){pushUndo();bpPaint(e,true);return}if(e.shiftKey&&g.lab){const v=g.lab[Math.floor(fy)][Math.floor(fx)];if(v!==undefined)pick(v);return}
+ pushUndo();if(jt)for(const k in g.joints){const j=g.joints[k];if(Math.hypot(j[0]+.5-fx,j[1]+.5-fy)<.6){drag=k;return}}painting=true;paint(e)};
+$('ed').onmousemove=e=>{if(drag){const [fx,fy]=cell(e),f=fr(),J=mut().joints,gp0=!noStick(f)&&grip(J),held=gp0&&gp0[1]<=GRIP?gp0[0]:null;
+  J[drag]=[Math.round(fx-.5),Math.round(fy-.5)];
+  // bones are drawn joint-to-joint so they stay attached; the stick stays in one tree with its hand (stick first: the hand slides on the shaft)
+  if(!noStick(f)&&J['stick butt']&&J['stick heel']&&!e.altKey){
+   if(HANDS.includes(drag)&&(drag==held||segD(J[drag],J['stick butt'],J['stick heel'])<=GRIP)){const q=segPt(J[drag],J['stick butt'],J['stick heel']);J[drag]=[Math.round(q[0]),Math.round(q[1])]}
+   else if(STICKJ(drag)&&held){const q=segPt(J[held],J['stick butt'],J['stick heel']);J[held]=[Math.round(q[0]),Math.round(q[1])]}}
+  show()}else if(painting)paint(e);else hover(e)};
+$('ed').onmouseleave=()=>{$('tip').style.display='none'};
+function hover(e){const f=fr(),g=get(),[fx,fy]=cell(e),X=Math.floor(fx),Y=Math.floor(fy);let html='';
+ if(jt)for(const k in g.joints){if(noStick(f)&&STICKJ(k))continue;const j=g.joints[k];if(Math.hypot(j[0]+.5-fx,j[1]+.5-fy)<.8){html=`<b>${jcode(k)}</b> · ${jfull(k)}<br><span class="small">joint "${k}" at (${j[0]},${j[1]}); drag to move${HANDS.includes(k)?', a hand on the shaft slides along it':''}${STICKJ(k)?', the holding hand stays on the shaft':''}</span>`;break}}
+ if(!html&&vio&&f._V)html=f._V.filter(v=>v.x==X&&v.y==Y).map(v=>v.txt).join('<hr style="border-color:#33414d">');
+ const t=$('tip');if(html){t.innerHTML=html;t.style.display='block';t.style.left=(e.clientX+16)+'px';t.style.top=(e.clientY+12)+'px';$('hover').innerHTML=html}else t.style.display='none'}
 onmouseup=()=>{drag=null;painting=false};
 
-// D181: short skeleton tags only (Abdul pt1021u): H, LH, RH, LK, RK, LF, RF, SHAFT, BLADE
-const TAGJ=[['H',['head']],['LH',['L glove','Lhand']],['RH',['R glove','Rhand']],['LK',['L knee','Lknee']],['RK',['R knee','Rknee']],['LF',['L skate','L ankle','Lank']],['RF',['R skate','R ankle','Rank']]];
-const TAGLEG='Skeleton tags (N): H head, LH/RH left/right hand, LK/RK left/right knee, LF/RF left/right foot, SHAFT stick shaft, BLADE stick blade.';
+// D185 (t1036u item 2c): every draggable joint has a short code (D181 style) and its full name on hover.
+const JCODE=[['H','head',['head']],['NK','neck',['neck']],['CH','chest',['chest']],['BY','belly',['belly']],['PV','pelvis',['pelvis']],
+ ['LS','left shoulder',['L shoulder','Lsh']],['RS','right shoulder',['R shoulder','Rsh']],['LE','left elbow',['L elbow','Lelb']],['RE','right elbow',['R elbow','Relb']],
+ ['LW','left wrist',['L wrist']],['RW','right wrist',['R wrist']],['LH','left hand (glove)',['L glove','Lhand']],['RH','right hand (glove)',['R glove','Rhand']],
+ ['LP','left hip',['L hip','Lhip']],['RP','right hip',['R hip','Rhip']],['LK','left knee',['L knee','Lknee']],['RK','right knee',['R knee','Rknee']],
+ ['LA','left ankle',['L ankle']],['RA','right ankle',['R ankle']],['LF','left foot (skate)',['L skate','Lank']],['RF','right foot (skate)',['R skate','Rank']],
+ ['BT','stick butt (top of shaft)',['stick butt']],['HL','stick heel (shaft meets blade)',['stick heel']],['TO','stick toe (blade tip)',['stick toe']]];
+const CODEOF={},FULLOF={};JCODE.forEach(([c,f,ks])=>ks.forEach(k=>{CODEOF[k]=c;FULLOF[k]=f}));
+const jcode=k=>CODEOF[k]||k.replace(/[^A-Za-z]/g,'').slice(0,3).toUpperCase(),jfull=k=>FULLOF[k]||k;
+const TAGLEG='Joint tags (N): '+JCODE.map(([c,f])=>`<b>${c}</b> ${f}`).join(', ')+'; bone tags <b>SHAFT</b> stick shaft, <b>BLADE</b> stick blade. Hover a joint for its full name.';
 function skLabels(c,J,bones,p,W,H){const L=[],placed=[];
- for(const [t,ks] of TAGJ){const k=ks.find(k=>J[k]);if(k)L.push([t,...p(k)])}
+ for(const k in J)L.push([jcode(k),...p(k)]);
  const mid=(a,b)=>{const A=p(a),B=p(b);return [(A[0]+B[0])/2,(A[1]+B[1])/2]};
  if(J['stick butt']&&J['stick heel'])L.push(['SHAFT',...mid('stick butt','stick heel')]);
  if(J['stick heel']&&J['stick toe'])L.push(['BLADE',...mid('stick heel','stick toe')]);
  c.font='bold 9px sans-serif';c.textBaseline='middle';c.textAlign='left';
- const ok=r=>r[0]>=0&&r[1]>=0&&r[2]<=W&&r[3]<=H&&!placed.some(q=>r[0]<q[2]&&r[2]>q[0]&&r[1]<q[3]&&r[3]>q[1]);
- for(const [t,x,y] of L){const w=c.measureText(t).width+6,h=12;let best=null;
-  for(const [dx,dy] of [[6,-6],[-6-w,-6],[6,6-h+12],[-6-w,6],[-w/2,-18],[-w/2,8],[10,0],[-10-w,0]]){const r=[x+dx,y+dy-h/2,x+dx+w,y+dy+h/2];if(ok(r)){best=r;break}}
-  if(!best)continue;placed.push(best);
-  c.fillStyle='rgba(0,0,0,.85)';c.fillRect(best[0],best[1],w,h);c.strokeStyle='#bbb';c.lineWidth=1;c.strokeRect(best[0]+.5,best[1]+.5,w-1,h-1);
+ const inb=r=>r[0]>=0&&r[1]>=0&&r[2]<=W&&r[3]<=H,free=r=>!placed.some(q=>r[0]<q[2]&&r[2]>q[0]&&r[1]<q[3]&&r[3]>q[1]);
+ for(const [t,x,y] of L){const w=c.measureText(t).width+6,h=12;let best=null,first=null;
+  for(const [dx,dy] of [[6,-6],[-6-w,-6],[6,6],[-6-w,6],[-w/2,-18],[-w/2,8],[10,0],[-10-w,0],[14,-14],[-14-w,-14],[14,14],[-14-w,14]]){const r=[x+dx,y+dy-h/2,x+dx+w,y+dy+h/2];if(!inb(r))continue;first=first||r;if(free(r)){best=r;break}}
+  best=best||first;if(!best)continue;placed.push(best);
+  c.fillStyle='rgba(16,20,24,.9)';c.fillRect(best[0],best[1],w,h);c.strokeStyle='#8ea0b0';c.lineWidth=1;c.strokeRect(best[0]+.5,best[1]+.5,w-1,h-1);
   c.fillStyle='#fff';c.fillText(t,best[0]+3,(best[1]+best[3])/2+.5)}
  c.textAlign='center'}
 function setView(v){view=v;$('tabP').classList.toggle('on',v=='parts');$('tabL').classList.toggle('on',v!='parts');partsBar();legend();show()}
 function setSide(v){side=v;$('side').textContent='side: '+(v?'RIGHT (striped)':'LEFT')+' (Tab)';$('side').classList.toggle('on',true)}
 $('tabP').onclick=()=>setView('parts');$('tabL').onclick=()=>setView('labels');$('side').onclick=()=>setSide(1-side);$('fill').onclick=()=>{fill=!fill;$('fill').classList.toggle('on',fill)};
+$('vio').onclick=()=>{vio=!vio;$('vio').classList.toggle('on',vio);legend();show()};
+$('nst').onclick=()=>{pushUndo();const f=fr(),g=mut();g.nostick=!noStick(f);show()};
 $('prev').onclick=()=>go(qi-1);$('next').onclick=()=>go(qi+1);$('q').onchange=e=>go(+e.target.value);$('tsel').onchange=show;
 $('ovl').onclick=()=>{ovl=!ovl;$('ovl').classList.toggle('on',ovl);show()};$('nm').onclick=()=>{nm=!nm;$('nm').classList.toggle('on',nm);show()};$('jt').onclick=()=>{jt=!jt;$('jt').classList.toggle('on',jt);show()};
-$('undo').onclick=()=>{const u=undo.pop();if(!u)return;qi=u[0];const id=Q[qi].id;if(u[1]=='null')delete edits[id];else edits[id]=JSON.parse(u[1]);go(qi)};
-$('reset').onclick=()=>{delete edits[fr().id];show()};
+function snap(i){return [i,JSON.stringify(edits[Q[i].id]||null)]}
+function pushUndo(){undo.push(snap(qi));redo.length=0}
+function restore(u){qi=u[0];const id=Q[qi].id;if(u[1]=='null')delete edits[id];else edits[id]=JSON.parse(u[1]);go(qi)}
+$('undo').onclick=()=>{const u=undo.pop();if(!u)return;redo.push(snap(u[0]));restore(u)};
+$('redo').onclick=()=>{const r=redo.pop();if(!r)return;undo.push(snap(r[0]));restore(r)};
+$('reset').onclick=()=>{pushUndo();delete edits[fr().id];show()};
 $('save').onclick=async()=>{const out={};for(const id in edits){const f=Q.find(q=>q.id==id),k=f.kind=='exclusive'?id.replace(' ','_'):id.split(' ').pop();(out[f.kind]=out[f.kind]||{})[k]=edits[id]}
  try{const r=await fetch('/save',{method:'POST',body:JSON.stringify(out)});const j=await r.json();$('st').textContent='saved: '+j.saved.join('; ')}
  catch(e){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(out)]));a.download='sprite_edits.json';a.click();$('st').textContent='no launcher: downloaded sprite_edits.json'}};
 onkeydown=e=>{if(e.target.tagName=='SELECT'||e.target.tagName=='INPUT')return;const k=e.key;
+ if((e.ctrlKey||e.metaKey)&&(k=='y'||k=='Y'||(e.shiftKey&&(k=='z'||k=='Z')))){e.preventDefault();$('redo').click();return}
+ if((e.ctrlKey||e.metaKey)&&(k=='z'||k=='Z')){e.preventDefault();$('undo').click();return}
+ if(k=='Z'&&e.shiftKey){$('redo').click();return}
+ if(k=='v'||k=='V'){$('vio').click();return}if(k=='k'||k=='K'){$('nst').click();return}
  if(k=='p'||k=='P'){setView('parts');return}if(k=='l'||k=='L'){setView('labels');return}if(k=='Tab'){e.preventDefault();setSide(1-side);return}if(k=='f'){$('fill').click();return}
  if(view=='parts'){const i=BP.findIndex(p=>p[3]==k);if(i>=0){bpick(i);return}}
  if(k=='ArrowRight'||k=='d')go(qi+1);else if(k=='ArrowLeft'||k=='a')go(qi-1);else if(k=='o')$('ovl').click();else if(k=='j')$('jt').click();else if(k=='n')$('nm').click();
