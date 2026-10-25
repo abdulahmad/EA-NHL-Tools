@@ -23,10 +23,15 @@ canvas{image-rendering:pixelated;background:#464646;border:1px solid #666}
 </div>
 <div class="row">
 <canvas id="ed"></canvas>
-<div><div>Default texture</div><canvas id="pd"></canvas><div>Preview texture: <select id="tsel"></select></div><canvas id="pf"></canvas><div>Game</div><canvas id="pg"></canvas>
+<div><div>Default texture</div><canvas id="pd"></canvas><div>Preview texture: <select id="tsel"></select></div><canvas id="pf"></canvas><div>Active texture (8 px per texel, grey = unused, yellow ticks every 5 texels)</div><canvas id="ptex"></canvas><div>Game</div><canvas id="pg"></canvas>
 <p class="small">Test textures (lines, checker, cuff...) show stretched or skipped texels:<br>a clean line pattern = one texel per sprite pixel.<br>Click/drag: paint the selected part.<br>Drag a white ring: move a joint.<br>Keys 1-9/0: pick part. Shift+click: pick the part under the cursor.<br>Previews use a simple live mapping; the pipeline (g28all.py) does the exact one.</p></div>
 </div>
 <script>
+function drawTex(cv,TX){if(!TX){cv.width=cv.height=0;return}const S=8,H=TX.length,W=TX[0].length;cv.width=W*S;cv.height=H*S;const c=cv.getContext('2d');
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++){const p=TX[y][x];c.fillStyle=(p[0]==252&&p[1]==0&&p[2]==252)?'#464646':`rgb(${p})`;c.fillRect(x*S,y*S,S,S)}
+ c.strokeStyle='rgba(0,0,0,.35)';c.lineWidth=1;for(let x=0;x<=W;x++){c.beginPath();c.moveTo(x*S+.5,0);c.lineTo(x*S+.5,H*S);c.stroke()}for(let y=0;y<=H;y++){c.beginPath();c.moveTo(0,y*S+.5);c.lineTo(W*S,y*S+.5);c.stroke()}
+ c.strokeStyle='#ffe000';for(let x=0;x<=W;x+=5){c.beginPath();c.moveTo(x*S+.5,0);c.lineTo(x*S+.5,4);c.stroke()}for(let y=0;y<=H;y+=5){c.beginPath();c.moveTo(0,y*S+.5);c.lineTo(4,y*S+.5);c.stroke()}}
+
 // labels 0-9 = BG,BODY,MASK,CATCH,BLOCK,STICK,PADL,PADR,SKATE,SHADOW (g16/g21 codes). Okabe-Ito colours + a letter on every px (colourblind-safe).
 const P=[['BG','',null],['body','b','#9a9a9a'],['Mask','M','#f0e442'],['Catcher','C','#56b4e9'],['Blocker','B','#e69f00'],['Stick','S','#ffffff'],['Left pad','L','#0072b2'],['Right pad','R','#cc79a7'],['sKate','K','#000000'],['shadow','s','#5a3a1a']];
 const KEY='1234567890',Z=14,PZ=5;let D=null,F=[],fi=0,cur=1,ovl=true,jt=true,edits={},undo=[],drag=null,painting=false;
@@ -40,7 +45,7 @@ function load(t){D=JSON.parse(t);F=Object.keys(D.frames).sort((a,b)=>a-b);fi=0;D
 const q=new URLSearchParams(location.search).get('data');if(q)fetch(q).then(r=>r.text()).then(load);
 const fr=()=>D.frames[F[fi]],get=()=>edits[F[fi]]||fr();
 function mut(){const n=F[fi];if(!edits[n])edits[n]={lab:fr().lab.map(r=>r.slice()),joints:JSON.parse(JSON.stringify(fr().joints))};return edits[n]}
-function show(){if(!D)return;const f=fr(),g=get(),h=f.px.length,w=f.px[0].length;ed.width=w*Z;ed.height=h*Z;
+function show(){if(!D)return;drawTex($('ptex'),(D.textures||{})[$('tsel').value]);const f=fr(),g=get(),h=f.px.length,w=f.px[0].length;ed.width=w*Z;ed.height=h*Z;
  cx.fillStyle='#464646';cx.fillRect(0,0,ed.width,ed.height);cx.textAlign='center';cx.textBaseline='middle';cx.font='bold 11px sans-serif';
  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;const c=D.palette[s];cx.fillStyle=`rgb(${c})`;cx.fillRect(x*Z,y*Z,Z,Z);
   const l=g.lab[y][x];if(ovl&&l){cx.fillStyle=P[l][2];cx.globalAlpha=.72;cx.fillRect(x*Z+2,y*Z+2,Z-4,Z-4);cx.globalAlpha=1;
