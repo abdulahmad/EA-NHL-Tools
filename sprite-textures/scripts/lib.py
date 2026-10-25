@@ -1,6 +1,8 @@
-import json,os,numpy as np
+import json,os,sys,numpy as np
 from PIL import Image
-D=os.path.join(os.path.dirname(os.path.abspath(__file__)),'../out/data/')
+D=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'out','data','')
+if not os.path.exists(D+'frames.json'):
+    sys.path.insert(0,os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'editor'));from envcheck import need_data;need_data()
 H=json.load(open(D+'frames.json'));B=np.fromfile(D+'frames.bin',np.uint8)
 HOME=json.load(open(D+'HOME.json'));ZN=json.load(open(D+'zn.json'))
 act=np.fromfile(os.path.join(os.path.dirname(os.path.abspath(__file__)),'../../PAL-To-ACT/rinkpalShadowfixed.act'),np.uint8)[:768].reshape(256,3)

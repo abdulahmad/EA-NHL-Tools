@@ -1162,3 +1162,7 @@ D179 names were too big and too many. The editor (N) and the sheets now show onl
 - Uncovered black next to a labelled part takes that part's darkest shade and passes. Only black islands (no part) and ties between parts with conflicting zones are flagged. Code: `docs/snes-redraw/blackcov.py gate_b`, `d184_run.py`; counts in `d184_gate.json`.
 - Frames failing the gate on the 5% sample, D183 gate → D184 gate (D183 fitted joints): G94 skaters 4 → 1 (G94 652), G94 goalies 7 → 2 (G94 538, 547), S94 skaters 2 → 0, S94 goalies 5 → 1 (S94 697). With the pre-D183 joints: G94 skaters 18 → 6, G94 goalies 8 → 5, S94 skaters 11 → 1, S94 goalies 9 → 0.
 - Flagged px left (D183 joints): G94 skaters 27 (11 no-part, 16 ambiguous), G94 goalies 19 (4, 15), S94 skaters 4 (0, 4), S94 goalies 10 (0, 10). The no-part px are black specks in the ice-shadow spray.
+
+## D185: editor restyle, redo, joint codes, preview fix, connected skeleton, no-stick toggle, violations view, Windows rebuild (t1036u item 2)
+- Details in WORKFLOW.md (Editor). Headless screenshots checked: Parts view, violations view with hover, joint hover, the hand holding the stick, and no-stick.
+- The no-stick seed has 6 D183 frames (G94 50, 224, 720; S94 106, 47, 221). None of them is in the editor bundle (95PC skaters and goalies, G93/G94 exclusives 738–753 and 353–376), so no editor frame starts flagged. The toggle is per frame.
