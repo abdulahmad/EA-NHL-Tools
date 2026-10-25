@@ -18,7 +18,7 @@ canvas{image-rendering:pixelated;background:#464646;border:1px solid #666}
 <button id="ovl" class="on">Overlay (O)</button><button id="jt" class="on">Skeleton (J)</button>
 <button id="prev">&larr; prev (A / Left)</button><button id="next">next (D / Right) &rarr;</button>
 <input id="goto" size="6" placeholder="frame #"> <button id="undo">Undo (Z)</button><button id="reset">Reset frame</button>
-<button id="exp">Export edits JSON</button> <span id="dirty" class="small"></span>
+<button id="exp">Export edits JSON</button> Import edits JSON <input type="file" id="imp" accept=".json"> <span id="dirty" class="small"></span>
 </div>
 <div class="row">
 <canvas id="ed"></canvas>
@@ -48,18 +48,20 @@ function load(t){D=JSON.parse(t);F=Object.keys(D.frames).sort((a,b)=>a-b);fi=0;c
 const qs=new URLSearchParams(location.search),q=qs.get('data');if(q)fetch(q).then(r=>r.text()).then(t=>{load(t);const f=qs.get('frame');if(f&&F.includes(f)){fi=F.indexOf(f);show()}});
 const fr=()=>D.frames[F[fi]],get=()=>edits[F[fi]]||fr();
 function mut(){const n=F[fi];if(!edits[n])edits[n]={lab:fr().lab.map(r=>r.slice()),joints:JSON.parse(JSON.stringify(fr().joints))};return edits[n]}
-const BONES=[['L shoulder','R shoulder'],['L shoulder','L elbow'],['L elbow','L wrist'],['L wrist','L glove'],['R shoulder','R elbow'],['R elbow','R wrist'],['R wrist','R glove'],
-['L hip','R hip'],['L hip','L knee'],['L knee','L ankle'],['L ankle','L skate'],['R hip','R knee'],['R knee','R ankle'],['R ankle','R skate'],['head','neck'],['neck','L shoulder'],['neck','R shoulder'],
-['head','chest'],['chest','pelvis'],['chest','L glove'],['chest','R glove'],['pelvis','L skate'],['pelvis','R skate']];
+const BONES=[['head','neck'],['neck','chest'],['chest','belly'],['belly','pelvis'],['neck','R shoulder'],['neck','L shoulder'],['pelvis','R hip'],['pelvis','L hip'],
+['R shoulder','R elbow'],['R elbow','R wrist'],['R wrist','R glove'],['L shoulder','L elbow'],['L elbow','L wrist'],['L wrist','L glove'],
+['R hip','R knee'],['R knee','R ankle'],['R ankle','R skate'],['L hip','L knee'],['L knee','L ankle'],['L ankle','L skate'],['stick butt','stick heel'],['stick heel','stick toe']];
+// D161 segment colours (no red next to green): head/torso, R arm, L arm, R leg, L leg, stick shaft, blade
+const BCOL=(a,b)=>a.startsWith('stick')?(b=='stick toe'?'#f0e442':'#bdbdbd'):(a+b).match(/R (sh|el|wr|gl)/)?'#e69f00':(a+b).match(/L (sh|el|wr|gl)/)?'#56b4e9':(a+b).match(/R (hip|kn|an|sk)/)?'#cc79a7':(a+b).match(/L (hip|kn|an|sk)/)?'#9ad0f0':'#ffffff';
 function show(){if(!D)return;drawTex($('ptex'),(D.textures||{})[$('tsel').value]);const f=fr(),g=get(),h=f.px.length,w=f.px[0].length;ed.width=w*Z;ed.height=h*Z;
  cx.fillStyle='#464646';cx.fillRect(0,0,ed.width,ed.height);cx.textAlign='center';cx.textBaseline='middle';cx.font='bold 11px sans-serif';
  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;const c=D.palette[s];cx.fillStyle=`rgb(${c})`;cx.fillRect(x*Z,y*Z,Z,Z);
   const l=g.lab[y][x];if(ovl&&l){cx.fillStyle=P[l][2];cx.globalAlpha=.72;cx.fillRect(x*Z+2,y*Z+2,Z-4,Z-4);cx.globalAlpha=1;
    cx.fillStyle=LIGHT.includes(P[l][2])?'#000':'#fff';cx.fillText(P[l][1],x*Z+Z/2,y*Z+Z/2+1)}}
  if(jt){const J=g.joints,c=k=>[(J[k][0]+.5)*Z,(J[k][1]+.5)*Z];
-  for(const pass of [['#000',5],['#fff',2]]){cx.strokeStyle=pass[0];cx.lineWidth=pass[1];BONES.forEach(([a,b])=>{if(J[a]&&J[b]){cx.beginPath();cx.moveTo(...c(a));cx.lineTo(...c(b));cx.stroke()}})}
+  for(const pass of [['#000',5],[null,2]]){cx.lineWidth=pass[1];BONES.forEach(([a,b])=>{if(J[a]&&J[b]){cx.strokeStyle=pass[0]||BCOL(a,b);cx.beginPath();cx.moveTo(...c(a));cx.lineTo(...c(b));cx.stroke()}})}
   cx.font='bold 12px sans-serif';for(const k in J){const [X,Y]=c(k);cx.beginPath();cx.arc(X,Y,7,0,7);cx.fillStyle='#000';cx.fill();cx.lineWidth=2;cx.strokeStyle='#fff';cx.stroke();cx.fillStyle='#ffe000';cx.fillText(k,X,Y-13)}}
- $('info').textContent=`frame ${F[fi]}  (${fi+1}/${F.length})  ${w}x${h}  team ${D.team}  ${f.fitted?'skeleton: hand-fitted pose':'skeleton: rough, from part centres'}`;
+ $('info').textContent=`frame ${F[fi]}  (${fi+1}/${F.length})  ${w}x${h}  team ${D.team}  skeleton: ${edits[F[fi]]?'edited':(f.skel_src||(f.fitted?'hand-fitted':'rough'))}${f.skel_ok===false?'  FLAGGED: '+(f.skel_why||[]).join('; '):(f.skel_src?'  confident':'')}`;
  $('dirty').textContent=Object.keys(edits).length+' frame(s) edited';
  const pv=(cv,fn)=>{cv.width=w*PZ;cv.height=h*PZ;const c=cv.getContext('2d');c.fillStyle='#464646';c.fillRect(0,0,cv.width,cv.height);
   for(let y=0;y<h;y++)for(let x=0;x<w;x++){const s=f.px[y][x];if(s==255)continue;c.fillStyle=fn(y,x,s);c.fillRect(x*PZ,y*PZ,PZ,PZ)}};
@@ -83,6 +85,7 @@ $('goto').onchange=e=>{const i=F.indexOf(e.target.value.trim());if(i>=0){fi=i;sh
 $('ovl').onclick=()=>{ovl=!ovl;$('ovl').classList.toggle('on',ovl);show()};$('jt').onclick=()=>{jt=!jt;$('jt').classList.toggle('on',jt);show()};
 $('undo').onclick=()=>{const u=undo.pop();if(!u)return;fi=F.indexOf(u[0]);edits[u[0]]=JSON.parse(u[1]);show()};
 $('reset').onclick=()=>{delete edits[F[fi]];show()};
+$('imp').onchange=e=>{const r=new FileReader();r.onload=()=>{const E=JSON.parse(r.result).frames||{};for(const k in E)if(D.frames[k])edits[k]=E[k];show()};r.readAsText(e.target.files[0])};
 $('exp').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({frames:edits})],{type:'application/json'}));a.download='skater_edits.json';a.click()};
 onkeydown=e=>{if(e.target.tagName=='INPUT')return;const k=e.key;
  if(k=='ArrowRight'||k=='d')go(1);else if(k=='ArrowLeft'||k=='a')go(-1);else if(k=='o')$('ovl').click();else if(k=='j')$('jt').click();

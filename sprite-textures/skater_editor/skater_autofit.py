@@ -109,6 +109,7 @@ def pantsremap(A,GG):
         else:
             for i,p in enumerate(ps):out['%d,%d'%p]=[int(ts[min(nT-1,i*nT//m)]),int(tv)]
     return out
+LABS={};ANCH={};SKEL={};DIRS={}   # D161: set by skater_export (editor part labels, hand-fitted joints); SKEL filled per frame
 def autofit(frames,V):
     cwd=os.getcwd();argv=list(sys.argv);os.chdir(PB+'/out');sys.argv=['x','/tmp/_pb_chk/frames'];os.makedirs('/tmp/_pb_chk/frames',exist_ok=True)
     sys.path[:0]=[PB+'/scripts',PB+'/scripts/playerlayout']
@@ -120,7 +121,7 @@ def autofit(frames,V):
         for a,dirs in json.load(open('/workspace/preview_back/spa95pc.json')).items():
             for d,fl in enumerate(dirs):
                 for f in fl:D.setdefault(f,collections.Counter())[d]+=1
-        G['DIRS'].update({f:c.most_common(1)[0][0] for f,c in D.items() if f not in G['DIRS']})
+        G['DIRS'].update({f:c.most_common(1)[0][0] for f,c in D.items() if f not in G['DIRS']});DIRS.update(G['DIRS'])
         UNK=set()
         for i in range(256):
             if i==255 or i in G['ICE'] or i==136:continue
@@ -148,7 +149,15 @@ def autofit(frames,V):
             if os.environ.get('NOPANTS')!='1':out[n].update(pantsremap(A,GG))   # D159
             if os.environ.get('NOSTRAIGHT')!='1':   # D157: straight texel columns per body segment
                 fam={'%d,%d'%(int(y),int(x)):G['TF'].get((int(u),int(w))) for (y,x),(u,w) in A.items() if (int(u),int(w)) in COMP}
+                CS.AXD={}
+                if n in LABS:   # D161 skeleton; special poses drive the torso rows and the column axes
+                    import skater_skeleton as SKM
+                    SKEL[n]=SKM.build(LABS[n],G['DIRS'][n],G['SEGS'][n]['joints'],ANCH.get(str(n)))
+                    J,src,ok,why=SKEL[n]
+                    if src=='special-pose fit' and os.environ.get('NOSKEL')!='1':
+                        out[n]=CS.skel_rows(out[n],fam,J,why) if os.environ.get('SKELROWS')=='1' else out[n];CS.AXD=CS.skel_axes(SKM.axes(J,why))
                 out[n]=CS.straighten(out[n],fam,FAM2)
                 if os.environ.get('NOPANTS')!='1':out[n]=CS.straighten_pants(out[n],{'%d,%d'%p:G['TF'].get(t) for p,t in A.items()},FAM2,GG['NZ'])   # D159
+                CS.AXD={}
         err['back-torso remapped']=len(CH);return out,dict(err)
     finally:os.chdir(cwd);sys.argv=argv

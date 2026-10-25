@@ -2,7 +2,7 @@
 # Writes a LOCAL json with every skater frame's sprite indices, part labels (scripts/parts.py segment(), the skater
 # pipeline's own parts) and skeleton joints (playerlayout pose3d_v5 joints2d where hand-fitted, else rough joints from
 # part centres). It holds game data: keep it on your machine, never commit it. Open sprite-textures/skater_part_editor.html.
-import sys,os,json,numpy as np
+import sys,os,json,collections,numpy as np
 S=os.path.dirname(os.path.abspath(__file__))+'/..';sys.path.insert(0,S+'/scripts')
 from lib import frame,H,team,spritepal
 from parts import segment,PN,GOALIE
@@ -60,6 +60,7 @@ try:
     for k in F:
         if 'tmap' in F[k]:F[k]['tmap_src']='hand'
     import skater_autofit as AF   # D153: auto-fitted map for every other frame
+    AF.LABS={n:F[n]['lab'] for n in F};AF.ANCH=dict(J2);AF.ANCH.update({str(n):F[n]['joints'] for n in F if F[n].get('edited')})   # D161 skeleton inputs (editor edits = anchors)
     AM,AE=AF.autofit([n for n in F if 'tmap' not in F[n]],V)
     if os.environ.get('NOSTRAIGHT')!='1':   # D157: hand frames get the same straight-column pass (their pipeline = autofit at 100%)
         HM,_=AF.autofit([n for n in F if F[n].get('tmap_src')=='hand'],V)
@@ -67,6 +68,12 @@ try:
             if tm:F[n]['tmap']=tm
     for n,tm in AM.items():
         if tm:F[n]['tmap']=tm;F[n]['tmap_src']='auto'
+    import skater_skeleton as SKM   # D161: every frame gets the full skeleton (frames the v5 fit could not do: label-based fit)
+    for n in F:
+        if F[n].get('edited'):F[n].update(skel_src='edited in the editor',skel_ok=True,skel_why=[]);continue
+        j,src,ok,why=AF.SKEL.get(n) or SKM.build(F[n]['lab'],AF.DIRS.get(n,4),None,AF.ANCH.get(str(n)))
+        F[n].update(joints=j,skel_src=src,skel_ok=ok,skel_why=why)
+    print('skeletons:',dict(collections.Counter((r.get('skel_src'),r.get('skel_ok')) for r in F.values())))
     print('texture maps: hand',sum(1 for r in F.values() if r.get('tmap_src')=='hand'),'auto',sum(1 for r in F.values() if r.get('tmap_src')=='auto'),'none',sum(1 for r in F.values() if 'tmap' not in r),AE)
 except Exception as e:print('no skater texture map (needs the local preview_back pipeline):',e)
 out=dict(parts=PN,textures=textures,palette=[list(map(int,c)) for c in pal],team=t['code'],frames=F)
