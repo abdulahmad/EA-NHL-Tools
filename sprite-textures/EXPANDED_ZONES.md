@@ -1157,3 +1157,8 @@ D179 names were too big and too many. The editor (N) and the sheets now show onl
 - 5% sample, gate-fail frames before→after: G94 skaters 18→4, G94 goalies 8→7, S94 skaters 11→2, S94 goalies 9→5. "Other" uncovered black: G94 skaters 206→60, S94 skaters 78→18. Part-check fails 3→4 of 38.
 - Auto no-stick (6): G94 50, 224, 720; S94 106, 47, 221. Tree not connected (hand can't reach the shaft): 23 frames, listed in `d183_checks.json`. Held-out joint error 3.43 px (same as before); parts accuracy 0.555→0.541.
 - 18 non-player sprites (arrows, digits, letters) are excluded from fitting. S800 fails the gate (8 px auto, 3 px with the reviewed joints).
+
+## D184: black gate uses outline rule b (t1036u)
+- Uncovered black next to a labelled part takes that part's darkest shade and passes. Only black islands (no part) and ties between parts with conflicting zones are flagged. Code: `docs/snes-redraw/blackcov.py gate_b`, `d184_run.py`; counts in `d184_gate.json`.
+- Frames failing the gate on the 5% sample, D183 gate → D184 gate (D183 fitted joints): G94 skaters 4 → 1 (G94 652), G94 goalies 7 → 2 (G94 538, 547), S94 skaters 2 → 0, S94 goalies 5 → 1 (S94 697). With the pre-D183 joints: G94 skaters 18 → 6, G94 goalies 8 → 5, S94 skaters 11 → 1, S94 goalies 9 → 0.
+- Flagged px left (D183 joints): G94 skaters 27 (11 no-part, 16 ambiguous), G94 goalies 19 (4, 15), S94 skaters 4 (0, 4), S94 goalies 10 (0, 10). The no-part px are black specks in the ice-shadow spray.
