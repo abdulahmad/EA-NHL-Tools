@@ -6,9 +6,9 @@ EDIR='/workspace/EA-NHL-Tools/sprite-textures/editor/edits';FIX='/workspace/EA-N
 def load_edits():
     """saved editor edits (any kind) + reviewed fix file; key 'S94 800' -> {joints, bp}"""
     E={}
-    for p in ([os.path.join(EDIR,f) for f in sorted(os.listdir(EDIR)) if f.endswith('_edits.json')] if os.path.isdir(EDIR) else [])+[FIX]:
+    for p in ([os.path.join(EDIR,f) for f in sorted(os.listdir(EDIR)) if f.endswith('_edits.json')] if os.path.isdir(EDIR) else [])+[FIX,'/workspace/EA-NHL-Tools/docs/snes-redraw/nostick_d183.json']:
         if os.path.exists(p):
-            for k,v in json.load(open(p))['frames'].items():E[k.replace('_',' ')]=v
+            for k,v in json.load(open(p))['frames'].items():E.setdefault(k.replace('_',' '),{}).update(v)
     return E
 def headinfo(a):
     hm,f,c=head(a,SK_G,HD_G)

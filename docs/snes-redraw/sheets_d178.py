@@ -6,7 +6,7 @@ from PIL import Image,ImageDraw
 from skel_labels import draw_labels, LEGEND
 it=dict(name='it6',k=5,snap=True,R=4,dil=2,n=300,leaf=1,head=True,sil=True,skc=True)
 if 'convert' not in globals():
-    met,convert=run(it);met.pop('_res',None);print(met,flush=True)
+    met,convert=run(it);met.pop('_res',None);SK=met.pop('_sk',None);print(met,flush=True)
 BPC={1:'#ffffff',2:'#56b4e9',3:'#0072b2',4:'#e69f00',5:'#f0e442',6:'#cc79a7',7:'#9a8cff',8:'#9ad0f0',9:'#5a5a5a',10:'#bdbdbd',11:'#a0662a',12:'#2a2a2a'}
 NAMES={1:'head',2:'torso',3:'pelvis',4:'upper arm',5:'forearm',6:'hand',7:'thigh',8:'shin',9:'skate',10:'shaft',11:'blade',12:'other'}
 hx=lambda c:tuple(int(c[i:i+2],16) for i in(1,3,5))
@@ -15,7 +15,9 @@ def partimg(a,PT,J,k):
     for y,x in zip(*np.nonzero(a)):
         p=PT[y,x];c=hx(BPC.get(p%100,'#2a2a2a'));d.rectangle((x*k,y*k,x*k+k-1,y*k+k-1),fill=c)
         if p>=100:d.line((x*k,y*k+k-1,x*k+k-1,y*k),fill=(255,255,255) if p%100 in(9,3,11) else (0,0,0),width=1)
-    for p_,q_ in BONES:d.line((J[p_][0]*k,J[p_][1]*k,J[q_][0]*k,J[q_][1]*k),fill=(0,0,0),width=2)
+    for p_,q_ in BONES+[b for b in [J.get('_grip')] if b]:
+        if p_ not in J or q_ not in J:continue
+        d.line((J[p_][0]*k,J[p_][1]*k,J[q_][0]*k,J[q_][1]*k),fill=(0,0,0),width=2)
     for v in J.values():d.rectangle((v[0]*k-2,v[1]*k-2,v[0]*k+2,v[1]*k+2),fill=(255,224,0),outline=(0,0,0))
     draw_labels(d,J,BONES,k,W*k,H*k,9)
     return im
