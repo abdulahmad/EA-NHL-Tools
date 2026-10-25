@@ -1176,3 +1176,6 @@ D179 names were too big and too many. The editor (N) and the sheets now show onl
 - 407 was exported as a skater because `parts.GOALIE` used range(408,555); g28 has 407 as a goalie. Fixed to 407. Checked every other skater frame with under 5 helmet px (626, 631, 641, 880, 884, 964, 968, 220, 639, 640, 642-644, 875) by eye: all skaters (falls, skates-only sprites); none changed. Bundle 1167 -> 1166 frames.
 - One self-contained editor HTML (editor/single.py; data/sprite_editor.html and data/sprite_editor_sample.html, gitignored).
 - skeltree.connect: canonical tree with inferred joints. Sample player frames disconnected 16/47 -> 0/46; frames missing joints 31/46 -> 0/46. Full set: missing 563/894 -> 0 limb joints (25 frames have no stick px and are flagged no-stick auto); disconnected after: 1 (G93 353, a multi-hand frame with non-standard joints).
+
+## D188: built single-file editor committed (pt1043u)
+- Abdul confirmed, knowing the repo is public: editor/data/sprite_editor.html (11.9 MB) and sprite_editor_sample.html (1.3 MB) are tracked; .gitignore un-ignores only these two. Rebuild and recommit when data changes.

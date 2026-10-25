@@ -1,1 +1,4 @@
-data/
+# D188 (Abdul pt1043u, confirmed public): only the two built single-file editors in data/ are tracked
+data/*
+!data/sprite_editor.html
+!data/sprite_editor_sample.html
