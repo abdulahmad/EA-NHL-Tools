@@ -1,4 +1,6 @@
 # EA-NHL-Tools 0.8
+
+> **Making a mod, hack, port or other derivative work from this repo? You must credit me (abdulahmad) and everyone credited in this repo, clearly, in your own repo and in every release. See [Credits and derivative works](#credits-and-derivative-works).**
 Tools for various EA NHL games
 
 Recommend checking out Releases for latest stable release: https://github.com/abdulahmad/EA-NHL-Tools/releases
@@ -152,3 +154,17 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - D162: skater skeleton refit: skates/stick snapped to their px, stick hand at the stick, new sanity checks; SKELROWS still off.
 - D163: wrap-up: face shade 136 labelled skin (wrong band 1086 -> 0), full skater render 0 errors, sprite-textures/HANDOFF.md.
 - D164: sprite-textures/docs/PROCESS_HISTORY.md: illustrated history of how the sprite texture work was directed.
+
+## Credits and derivative works
+
+Thanks to chaos, StaticEck, McMarkis (Mhopkinsinc) and Drezz, with special thanks to smozoma and kingraph.
+
+This project is the result of my work (abdulahmad) and the work of the people credited above. If you build anything from it, including mods, ROM or EXE hacks, ports, released forks, tools, or any other derivative work, you must credit us:
+
+- Put the credit in your repo's README, near the top and not buried in a footer, and in the notes of every release you publish, including any text file shipped inside a release archive.
+- Name me (abdulahmad) and link to this repository.
+- Name everyone credited here: chaos, StaticEck, McMarkis (Mhopkinsinc) and Drezz, with special thanks to smozoma and kingraph.
+- If you only use part of this repo (docs, a tool, labels, a file format description), the credit still applies.
+- If you are unsure, over-credit.
+
+Credit is the condition for using this work. Please do not release a derivative without it.
