@@ -1,0 +1,287 @@
+<title>NHL 94 PC PPV Viewer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a rink-board toolbar over a contact sheet of shapes; a side panel shows the selected shape's header. */
+:root {
+  --bg: #eef1f4;          /* ice */
+  --panel: #ffffff;
+  --fg: #16202b;
+  --muted: #5a6876;
+  --line: #cfd7df;
+  --accent: #c8102e;      /* goal-line red */
+  --accent-fg: #ffffff;
+  --blue: #1d4f91;        /* blue line */
+  --chk-a: #d9dee4;
+  --chk-b: #f4f6f8;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --body: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #10161d; --panel: #18212b; --fg: #e4eaf0; --muted: #94a3b2; --line: #2b3846;
+  --accent: #ff4d5e; --accent-fg: #10161d; --blue: #6fa3e8; --chk-a: #222c37; --chk-b: #2b3744; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #10161d; --panel: #18212b; --fg: #e4eaf0; --muted: #94a3b2; --line: #2b3846;
+  --accent: #ff4d5e; --accent-fg: #10161d; --blue: #6fa3e8; --chk-a: #222c37; --chk-b: #2b3744; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 14px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 16px 32px; }
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; border-bottom: 3px solid var(--accent); padding-bottom: 8px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: 30px; letter-spacing: .02em; margin: 0; text-transform: uppercase; text-wrap: balance }
+header p { margin: 0; color: var(--muted); max-width: 70ch }
+.bar { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: end; margin-block: 14px; }
+.field { display: grid; gap: 4px; min-width: 0 }
+.field label, .lbl { font-family: var(--display); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; font-size: 12px; color: var(--muted) }
+select, input[type=range], button { font: inherit; }
+select { background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 4px; padding: 5px 8px; max-width: 100% }
+button, .filebtn { background: var(--blue); color: #fff; border: 0; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-weight: 500 }
+button.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line) }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.drop { border: 2px dashed var(--line); border-radius: 6px; padding: 10px 14px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center }
+.drop.over { border-color: var(--accent); color: var(--fg) }
+.drop input { display: none }
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start }
+@media (max-width: 820px) { .main { grid-template-columns: minmax(0, 1fr) } }
+.sheet { display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; min-width: 0 }
+.cell { background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 6px; display: grid; gap: 4px; justify-items: center; cursor: pointer; }
+.cell[aria-selected=true] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) }
+.cell span { font-family: var(--mono); font-size: 11px; color: var(--muted) }
+canvas { image-rendering: pixelated; display: block; max-width: 100% }
+.chk canvas { background-color: var(--chk-b); background-image: conic-gradient(var(--chk-a) 25%, transparent 0 50%, var(--chk-a) 0 75%, transparent 0); background-size: 8px 8px }
+aside { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px; display: grid; gap: 12px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px) }
+aside h2 { font-family: var(--display); font-size: 22px; margin: 0; text-transform: uppercase }
+.big { display: grid; place-items: center; min-height: 140px; overflow: auto; background: var(--bg); border-radius: 4px; padding: 8px }
+dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0; font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums }
+dt { color: var(--muted) }
+dd { margin: 0 }
+.row { display: flex; gap: 8px; flex-wrap: wrap }
+.status { font-family: var(--mono); font-size: 12px; color: var(--muted); min-height: 1.4em }
+.status.err { color: var(--accent) }
+.note { font-size: 12px; color: var(--muted); margin: 0 }
+</style>
+
+<header>
+  <h1>NHL 94 PC · PPV viewer</h1>
+  <p>Mode X shape banks from NHL Hockey ’94 for DOS. Drop <b>.PPV</b> banks, a game palette, and HOMEPALS / AWAYPALS to see team colors.</p>
+</header>
+
+<div class="bar">
+  <label class="drop" id="drop" for="files">
+    <span class="filebtn" role="button">Open files</span>
+    <span>or drop .PPV, RINKPAL (unpacked), .pal / .act, HOMEPALS.BIN, AWAYPALS.BIN</span>
+    <input type="file" id="files" multiple>
+  </label>
+</div>
+
+<div class="bar">
+  <div class="field"><label for="bank">Bank</label><select id="bank"></select></div>
+  <div class="field"><label for="pal">Palette</label><select id="pal"></select></div>
+  <div class="field"><label for="team">Team colors</label><select id="team"></select></div>
+  <div class="field"><label for="side">Jersey</label><select id="side"><option value="home">Home</option><option value="away">Away</option></select></div>
+  <div class="field"><label for="zoom">Zoom <output id="zoomv">3×</output></label><input type="range" id="zoom" min="1" max="8" value="3"></div>
+  <div class="field"><label for="bgmode">Index 255</label><select id="bgmode"><option value="chk">Transparent</option><option value="show">Show color</option></select></div>
+</div>
+<div class="status" id="status"></div>
+
+<div class="main">
+  <div class="sheet chk" id="sheet"></div>
+  <aside>
+    <div class="row" style="justify-content:space-between;align-items:baseline"><h2 id="dname">—</h2><span class="lbl" id="dindex"></span></div>
+    <div class="big chk"><canvas id="dcanvas" width="1" height="1"></canvas></div>
+    <div class="row">
+      <button id="play" type="button">Play bank</button>
+      <button id="prev" type="button" class="ghost">Prev</button>
+      <button id="next" type="button" class="ghost">Next</button>
+      <label class="row" style="align-items:center;gap:4px"><input type="checkbox" id="hot" checked> hotspot</label>
+    </div>
+    <dl id="dl"></dl>
+    <p class="note">The red cross marks (hotX, hotY) from the shape's top-left; on player frames it sits near the skates. Fields marked ? are not traced in the disassembly yet.</p>
+  </aside>
+</div>
+
+<script src="ppv94.js"></script>
+<script>
+(function () {
+  const P = window.Ppv94;
+  const $ = (id) => document.getElementById(id);
+  const state = { banks: [], palettes: [], teams: { home: null, away: null }, sel: 0, timer: null };
+
+  function status(msg, err) { const s = $('status'); s.textContent = msg; s.className = 'status' + (err ? ' err' : ''); }
+
+  function addFile(name, bytes) {
+    const up = name.toUpperCase();
+    if (bytes[0] === 0x30 && bytes[1] === 0xfb || bytes[0] === 0x46 && bytes[1] === 0xfb) {
+      throw new Error(`${name} is packed (EA ${bytes[0].toString(16).toUpperCase()}FB). Unpack it with QPP94-To-BMP first.`);
+    }
+    if (/(HOME|AWAY)PALS\.BIN$/.test(up)) {
+      state.teams[up.startsWith('AWAY') ? 'away' : 'home'] = P.readTeamPalettes(bytes);
+      return `${name}: ${state.teams[up.startsWith('AWAY') ? 'away' : 'home'].length} teams`;
+    }
+    if (bytes.length === 768 || bytes.length === 772) {
+      state.palettes.push({ name, rgb: P.readPalette(bytes) });
+      return `${name}: palette`;
+    }
+    const bank = P.parseBank(bytes);
+    const pals = bank.entries.filter((e) => e.kind === 'palette');
+    for (const e of pals) state.palettes.push({ name: `${name} ${e.name}`, rgb: P.vgaToRgb(e.palette) });
+    const shapes = bank.entries.filter((e) => e.kind === 'shape');
+    if (shapes.length) state.banks.push({ name, bank, shapes, own: pals.find((e) => e.name === '!pal') || pals[0] || null });
+    const parts = [];
+    if (shapes.length) parts.push(`${shapes.length} shapes`);
+    if (pals.length) parts.push(pals.length === 1 ? 'palette' : `${pals.length} palettes`);
+    return `${name}: ${parts.join(', ')}`;
+  }
+
+  function refreshSelects(pickBank) {
+    const b = $('bank'), p = $('pal'), t = $('team');
+    const bv = b.value, pv = p.value, tv = t.value;
+    b.innerHTML = state.banks.map((x, i) => `<option value="${i}">${x.name} (${x.shapes.length})</option>`).join('');
+    p.innerHTML = '<option value="own">Bank’s own / grey</option>' +
+      state.palettes.map((x, i) => `<option value="${i}">${x.name}</option>`).join('');
+    const teams = state.teams.home || state.teams.away;
+    t.innerHTML = '<option value="">None (raw indices)</option>' +
+      (teams ? teams.map((x) => `<option value="${x.index}">${x.abbr}</option>`).join('') : '');
+    b.value = pickBank != null ? String(pickBank) : (bv || '0');
+    const rink = state.palettes.findIndex((x) => /RINKPAL.*!pal/i.test(x.name));
+    p.value = [...p.options].some((o) => o.value === pv) && pv !== 'own' ? pv : (rink >= 0 ? String(rink) : 'own');
+    t.value = [...t.options].some((o) => o.value === tv) ? tv : '';
+    t.disabled = !teams;
+  }
+
+  function colors() {
+    const bank = state.banks[+$('bank').value];
+    let rgb;
+    const pv = $('pal').value;
+    if (pv !== 'own' && state.palettes[+pv]) rgb = state.palettes[+pv].rgb;
+    else rgb = bank && bank.own ? P.vgaToRgb(bank.own.palette) : P.greyPalette();
+    let remap = null;
+    const tv = $('team').value;
+    const list = state.teams[$('side').value] || state.teams.home || state.teams.away;
+    if (tv !== '' && list && list[+tv]) { const tc = P.teamColors(rgb, list[+tv]); rgb = tc.rgb; remap = tc.remap; }
+    return { rgb, remap, transparent: $('bgmode').value === 'chk' };
+  }
+
+  function paint(canvas, e, c, zoom, hot) {
+    const px = P.toLinear(e);
+    const w = Math.max(1, e.width), h = Math.max(1, e.height);
+    const img = new ImageData(w, h);
+    for (let i = 0; i < px.length; i++) {
+      const raw = px[i];
+      if (raw === P.TRANSPARENT && c.transparent) continue;
+      const v = c.remap ? c.remap[raw] : raw;
+      const [r, g, b] = c.rgb[v];
+      img.data[i * 4] = r; img.data[i * 4 + 1] = g; img.data[i * 4 + 2] = b; img.data[i * 4 + 3] = 255;
+    }
+    canvas.width = w * zoom; canvas.height = h * zoom;
+    const tmp = document.createElement('canvas'); tmp.width = w; tmp.height = h;
+    tmp.getContext('2d').putImageData(img, 0, 0);
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(tmp, 0, 0, w * zoom, h * zoom);
+    if (hot) {
+      const x = (e.hotX + 0.5) * zoom, y = (e.hotY - 0.5) * zoom;
+      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+      ctx.lineWidth = Math.max(1, zoom / 3);
+      ctx.beginPath(); ctx.moveTo(x - 2 * zoom, y); ctx.lineTo(x + 2 * zoom, y); ctx.moveTo(x, y - 2 * zoom); ctx.lineTo(x, y + 2 * zoom); ctx.stroke();
+    }
+  }
+
+  function render() {
+    const sheet = $('sheet');
+    sheet.innerHTML = '';
+    const bank = state.banks[+$('bank').value];
+    if (!bank) { sheet.innerHTML = '<p class="note">Open a .PPV file to see its shapes.</p>'; detail(); return; }
+    const c = colors(), zoom = +$('zoom').value;
+    sheet.classList.toggle('chk', c.transparent);
+    bank.shapes.forEach((e, i) => {
+      const cell = document.createElement('div');
+      cell.className = 'cell'; cell.tabIndex = 0; cell.setAttribute('role', 'option');
+      cell.setAttribute('aria-selected', i === state.sel);
+      const cv = document.createElement('canvas');
+      paint(cv, e, c, zoom, false);
+      const lab = document.createElement('span'); lab.textContent = e.name;
+      cell.append(cv, lab);
+      cell.onclick = () => select(i);
+      cell.onkeydown = (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); select(i); } };
+      sheet.append(cell);
+    });
+    detail();
+  }
+
+  function select(i) {
+    const bank = state.banks[+$('bank').value]; if (!bank) return;
+    state.sel = (i + bank.shapes.length) % bank.shapes.length;
+    [...$('sheet').children].forEach((el, k) => el.setAttribute('aria-selected', k === state.sel));
+    detail();
+  }
+
+  function detail() {
+    const bank = state.banks[+$('bank').value];
+    const e = bank && bank.shapes[state.sel];
+    if (!e) { $('dname').textContent = '—'; $('dl').innerHTML = ''; return; }
+    $('dname').textContent = e.name;
+    $('dindex').textContent = `entry ${e.index} of ${bank.bank.entries.length}`;
+    paint($('dcanvas'), e, colors(), Math.max(3, +$('zoom').value + 2), $('hot').checked);
+    const rows = [['size', `${e.width} × ${e.height}`], ['width/4', e.quads], ['hotX, hotY', `${e.hotX}, ${e.hotY}`],
+      ['srcX, srcY ?', `${e.srcX}, ${e.srcY}`], ['+12 ?', `${e.extra} (0x${(e.extra & 0xffff).toString(16).padStart(4, '0')})`],
+      ['+14 flags', `0x${e.flags.toString(16).padStart(4, '0')}`], ['file offset', `0x${e.offset.toString(16)}`],
+      ['packed bytes', e.packedEnd - e.offset - 16], ['unpacked', 4 * e.quads * e.height]];
+    $('dl').innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+  }
+
+  async function readFiles(list) {
+    const msgs = [];
+    let firstNew = null;
+    for (const f of list) {
+      try {
+        const before = state.banks.length;
+        msgs.push(addFile(f.name, new Uint8Array(await f.arrayBuffer())));
+        if (state.banks.length > before && firstNew == null) firstNew = before;
+      } catch (e) { status(e.message, true); }
+    }
+    if (firstNew != null) state.sel = 0;
+    refreshSelects(firstNew);
+    if (msgs.length) status('Loaded ' + msgs.join(' · '));
+    render();
+  }
+
+  $('files').onchange = (ev) => readFiles(ev.target.files);
+  const drop = $('drop');
+  ['dragenter', 'dragover'].forEach((t) => document.addEventListener(t, (ev) => { ev.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach((t) => document.addEventListener(t, (ev) => { ev.preventDefault(); drop.classList.remove('over'); }));
+  document.addEventListener('drop', (ev) => readFiles(ev.dataTransfer.files));
+  ['bank', 'pal', 'team', 'side', 'bgmode'].forEach((id) => $(id).onchange = () => {
+    if (id === 'bank') {
+      state.sel = 0;
+      // A bank with its own !pal (STOP*, TROPBACK) is drawn with it, without team colors.
+      if (state.banks[+$('bank').value].own) { $('pal').value = 'own'; $('team').value = ''; }
+    }
+    render();
+  });
+  $('zoom').oninput = () => { $('zoomv').textContent = $('zoom').value + '×'; render(); };
+  $('hot').onchange = detail;
+  $('prev').onclick = () => select(state.sel - 1);
+  $('next').onclick = () => select(state.sel + 1);
+  $('play').onclick = () => {
+    if (state.timer) { clearInterval(state.timer); state.timer = null; $('play').textContent = 'Play bank'; return; }
+    $('play').textContent = 'Stop';
+    state.timer = setInterval(() => select(state.sel + 1), 120);
+  };
+
+  // Optional built-in sample (the published page carries one; the repo copy does not).
+  const sample = window.PPV94_SAMPLE;
+  if (sample) {
+    const dec = (s) => Uint8Array.from(atob(s), (ch) => ch.charCodeAt(0));
+    const msgs = [];
+    for (const [name, b64] of sample.files) { try { msgs.push(addFile(name, dec(b64))); } catch (e) { status(e.message, true); } }
+    refreshSelects(0);
+    if (sample.team != null) $('team').value = String(sample.team);
+    status('Sample from the retail game: ' + msgs.join(' · '));
+  } else refreshSelects();
+  render();
+})();
+</script>
