@@ -61,6 +61,8 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 
 `PPV-To-BMP` - Extracts NHL95 PC `.PPV` files (in-game sprites), WIP: with ability to pass in .ACT palette
 
+`PPV94-To-BMP` - Decodes NHL94 PC `.PPV` shape banks (a different format from NHL95 PC) to `.BMP`, with team colors from `HOMEPALS.BIN`/`AWAYPALS.BIN` and a drag-and-drop browser viewer. No `gfxpak` needed
+
 `QFS-To-BMP` - Convert NHL95 PC `.QFS` files to `.BMP` using defined mapping to ensure correct palette is used
 
 `Roster-Generator` - Pulls Teams, Players & Stats from public NHL APIs & scrapes `nhlratings.net` for NHL23 ratings to create a base for a modern roster for NHL 94/95
