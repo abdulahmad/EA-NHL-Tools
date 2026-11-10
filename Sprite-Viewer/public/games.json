@@ -2462,6 +2462,20 @@
       {
         "id": "sprites",
         "label": "Sprites"
+      },
+      {
+        "id": "Crowd.anim",
+        "label": "Crowd",
+        "kind": "frames",
+        "start": 1619496,
+        "end": 1628840
+      },
+      {
+        "id": "FaceOff.anim",
+        "label": "Face Off sprites",
+        "kind": "frames",
+        "start": 1352848,
+        "end": 1360200
       }
     ],
     "images": [
@@ -3913,6 +3927,22 @@
         "start": 803818,
         "end": 804692,
         "paletteAt": 662980
+      },
+      {
+        "id": "Crowd.anim",
+        "label": "Crowd",
+        "group": "Sprites",
+        "kind": "frames",
+        "start": 1619496,
+        "end": 1628840
+      },
+      {
+        "id": "FaceOff.anim",
+        "label": "Face Off sprites",
+        "group": "Sprites",
+        "kind": "frames",
+        "start": 1352848,
+        "end": 1360200
       },
       {
         "id": "Rinktilelist.map.jim",

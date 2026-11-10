@@ -173,7 +173,14 @@
       platform: 'genesis',
       kind: 'sheet',
       paletteKind: 'genesis',
-      banks: [{ id: 'sprites', label: 'Sprites' }],
+      banks: sheetGameBanks(
+        stampLogos('nhl95', stampPortraits('nhl95', generated.nhl95)).map((image) => {
+          if (!/^ArenaGfx/.test(image.id)) return image;
+          const next = Object.assign({}, image);
+          delete next.paletteAt;
+          return next;
+        })
+      ),
       images: stampLogos('nhl95', stampPortraits('nhl95', generated.nhl95)).map((image) => {
         if (!/^ArenaGfx/.test(image.id)) return image;
         const next = Object.assign({}, image);

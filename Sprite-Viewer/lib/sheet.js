@@ -154,10 +154,13 @@
   // Crowd, faceoff, zamboni and the title sprites are a packed (or raw) tile
   // bank plus a word table of frame offsets. Frame 0 is unused. Sprite bytes
   // are the 93/94 record: X, Y, tile, flags, size.
-  function openFrames(buffer, jim, donorPalette) {
+  function openFrames(buffer, jim, donorPalette, options) {
     const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
     const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
     if (bytes.length < 16 || !jim) throw new Error('Frame bank is too small');
+    const record = (options && options.record) || '94';
+    const readSprite = record === '95' ? parse95Sprite : parse94Sprite;
+    const maxSpritesPerFrame = record === '95' ? 96 : 48;
     const noPalette = view.getUint32(0) === 0xffffffff;
     const palOff = noPalette ? 0 : view.getUint32(0);
     const table = view.getUint32(4);
@@ -175,13 +178,13 @@
       const start = view.getUint16(wordAt);
       const next = view.getUint16(wordAt + 2);
       const span = next - start;
-      if (span <= 0 || span % 8 !== 0 || span / 8 > 48) break;
+      if (span <= 0 || span % 8 !== 0 || span / 8 > maxSpritesPerFrame) break;
       if (start < (frame + 2) * 2) break;
       const data = table + start;
       const count = span / 8;
       if (data + count * 8 > bytes.length) break;
       const sprites = [];
-      for (let s = 0; s < count; s++) sprites.push(parse94Sprite(view, data + s * 8));
+      for (let s = 0; s < count; s++) sprites.push(readSprite(view, data + s * 8));
       let minX = Infinity;
       let minY = Infinity;
       let maxX = -Infinity;

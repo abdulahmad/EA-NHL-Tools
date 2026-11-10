@@ -1,6 +1,6 @@
 # NHL9X Studio
 
-Browse sprite frames and the animations that play them for NHL 92, NHLPA 93, NHL 94, and NHL 95 on the Genesis, NHLPA 93 and NHL 94 on the SNES, and NHL 95 on PC. Roadmap and platform priority: [`docs/DESIGN.md`](docs/DESIGN.md).
+Browse sprite frames and the animations that play them for NHL 92, NHLPA 93, NHL 94, and NHL 95 on the Genesis, NHLPA 93 and NHL 94 on the SNES, and NHL 95 on PC. Roadmap and platform priority: [`docs/DESIGN.md`](docs/DESIGN.md). Continuation notes for agents: [`../docs/AGENT-HANDOFF.md`](../docs/AGENT-HANDOFF.md).
 
 NHL 92 pictures come from the `.ANIM` files in `ANIM-To-BMP`, or from the same bytes in a retail ROM when one is present. NHLPA 93, NHL 94, and NHL 95 Genesis read a player sprite sheet out of the ROM. The SNES ports read planar 4bpp tiles from their ROMs. Names come from each game's `frames.asm`: an **SPF** symbol is a run of frames, and an **SPA** entry is an 8-facing sequence of those frames. Genesis pixels are 4bpp column-major tiles, nibble 0 transparent, four Genesis palettes.
 
