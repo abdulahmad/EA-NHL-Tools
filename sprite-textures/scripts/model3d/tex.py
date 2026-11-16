@@ -5,8 +5,8 @@ from PIL import Image
 import parts as PT
 ALLOW={C['head']:PT.HELM,C['skin']:PT.SKIN,C['torso']:PT.BODYZ|PT.CREST,C['sleeve']:PT.ARMZ,C['glove']:{0},C['pants']:PT.PANTZ,C['sock']:PT.SOCKZ,C['skate']:{0},C['stick']:{136}}
 DEF={C['head']:190,C['skin']:134,C['torso']:166,C['sleeve']:157,C['glove']:0,C['pants']:180,C['sock']:182,C['skate']:0,C['stick']:136}
-def model(x,step=0.3):
-    parts,J,p=build(x,step);pts=np.concatenate([q['pts'] for q in parts]);cls=np.concatenate([q['cls'] for q in parts])
+def model(x,step=0.3,stick=None):
+    parts,J,p=build(x,step,stick);pts=np.concatenate([q['pts'] for q in parts]);cls=np.concatenate([q['cls'] for q in parts])
     pid=np.concatenate([np.full(len(q['pts']),i) for i,q in enumerate(parts)]);return parts,J,pts,cls,pid
 def texture(x,V,phi,offs,step=0.3,R=3):
     parts,J,pts,cls,pid=model(x,step);N=len(pts);votes=np.zeros((N,256),np.float32)

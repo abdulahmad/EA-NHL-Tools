@@ -6,8 +6,8 @@ from PIL import Image
 from carve import proj
 from lib import spritepal,team,BG
 from tex3 import SHADE
-def part_meshes(x,M,seg=28,step=0.3):
-    tmpl.MESHSEG=seg;parts=tmpl.build(np.asarray(x),step)[0];tmpl.MESHSEG=0;out=[]
+def part_meshes(x,M,seg=28,step=0.3,stick=None):
+    tmpl.MESHSEG=seg;parts=tmpl.build(np.asarray(x),step,stick)[0];tmpl.MESHSEG=0;out=[]
     for i,q in enumerate(parts):
         P=q['pts'];nr=len(P)//seg;idx=np.arange(nr*seg).reshape(nr,seg);a=idx[:-1];b=idx[1:]
         quads=np.stack([a,np.roll(a,-1,1),np.roll(b,-1,1),b],-1).reshape(-1,4)
@@ -49,7 +49,7 @@ def gif(path,frames,ms=90):
     ims=[Image.fromarray(f) for f in frames];ims[0].save(path,save_all=True,append_images=ims[1:],duration=ms,loop=0)
 if __name__=='__main__':
     F=json.load(open(sys.argv[1]));M=np.load(sys.argv[2]);out=sys.argv[3];tm=sys.argv[4] if len(sys.argv)>4 else 'tor'
-    import os;os.makedirs(out,exist_ok=True);pal=spritepal(team(tm));pm=part_meshes(F['x'],M)
+    import os;os.makedirs(out,exist_ok=True);pal=spritepal(team(tm));pm=part_meshes(F['x'],M,stick=F.get('rest_stick'))
     tm_,ci=to_trimesh(pm,pal,1.8);tm_.export(f'{out}/nhl95pc_player_mesh.glb');print('verts',len(tm_.vertices),'faces',len(tm_.faces))
     P,c,n=sample(pm);cy=(P[:,1].max()+P[:,1].min())/2*np.cos(np.deg2rad(25))
     big=[render(P,c,n,pal,360*k/48,25,8,(352,352),cy,game=False) for k in range(48)];gif(f'{out}/turntable_mesh_large.gif',big)

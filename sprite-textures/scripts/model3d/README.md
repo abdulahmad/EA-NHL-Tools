@@ -27,3 +27,9 @@ Arms come out thin, the stick pose is unreliable (it is drawn differently in eve
 
 ## v2 (same day): smooth mesh
 After review ("hunch backed, arms don't join the shoulders, stick looks wrong") the template got a waist / chest / shoulder-line torso, a neck, minimum limb radii, and a stick that is held in the right glove. `fit5.py` refits from an older fit (parameters matched by name, 4 processes). `mesh.py` exports every part as a closed smooth surface (GLB with vertex colours) and renders turntables. The rest pose is the front control pose made left / right symmetric and upright.
+
+## v3
+- Fixed: a part whose point count changed with the pose (the neck) shifted every later part's colours in posed frames (blue on the helmet, lost pant stripes). All parts now keep a fixed point count; the stick is excluded from votes.
+- `stickfit.py`: the stick is no longer fitted. It is read from its own pixels (best straight line through the shaft pixels, blade from the black stick pixels) and lifted to 3D through the nearest glove, with the heel on the ice when that gives a sane length.
+- Template: shoulder pads, rounded-box jersey, no neck, taller head, skates with blades. Crest votes come from the front control only.
+- Camera pitch (`phiscan.py`): the upright frames used here fit best at 15 to 35 degrees. Lying-flat fall frames are drawn as if from about 55 degrees (foreshortening of the body), so the art does not use one camera; treat pitch as per-frame if flat frames are added.

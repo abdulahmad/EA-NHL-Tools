@@ -4,7 +4,7 @@ SHAPE={'Lt','rh','ws','wh','rxw','rzw','rxc','rzc','Lua','Lfa','rua','rfa','rg',
 POSE=np.array([n not in SHAPE for n in NAMES])
 def cost1(x,xs,v,d,phi,off,lam=0.15):
     parts,J,p=build(x,0.6);pts=np.concatenate([q['pts'] for q in parts]);cls=np.concatenate([q['cls'] for q in parts])
-    img,_,nout=rast(pts,cls,d,phi,v,off);c=viewcost(img,v,nout)
+    k=cls!=C['stick'];img,_,nout=rast(pts[k],cls[k],d,phi,v,off);c=viewcost(img,v,nout,(C['stick'],))
     for sd in 'RL': c+=0.3*abs(J[sd+' ankle'][1]-(p['y0']+2.2))
     return c+lam*np.mean(((x-xs)/SIG)[POSE]**2)
 def refine(xs,v,d,phi,off,iters=150,seed=1):

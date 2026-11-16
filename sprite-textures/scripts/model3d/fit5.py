@@ -7,7 +7,7 @@ def one(a):
     n,d,x0,off,iters,seed=a;v=load([n])[0];prep([v]);x,f=refine(np.array(x0),v,d,PHI,off,iters=iters,seed=seed);return x.tolist(),f
 def vc(x,v,d,off):
     parts,J,p=build(x,0.6);pts=np.concatenate([q['pts'] for q in parts]);cls=np.concatenate([q['cls'] for q in parts])
-    img,_,nout=rast(pts,cls,d,PHI,v,off);return viewcost(img,v,nout,(C['stick'],))
+    k=cls!=C['stick'];img,_,nout=rast(pts[k],cls[k],d,PHI,v,off);return viewcost(img,v,nout,(C['stick'],))
 PHI=25.0
 if __name__=='__main__':
     F=json.load(open(sys.argv[1]));t=time.time();old=F['names']
