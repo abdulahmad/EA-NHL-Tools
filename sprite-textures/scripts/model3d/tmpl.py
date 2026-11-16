@@ -18,13 +18,14 @@ MESHSEG=0     # >0: fixed number of points per ring (mesh export)
 def unit(v): return v/max(1e-9,np.linalg.norm(v))
 def limb(sgn,a1,a2):
     a1,a2=np.deg2rad(a1),np.deg2rad(a2);return np.array([sgn*np.sin(a2),-np.cos(a2)*np.cos(a1),np.cos(a2)*np.sin(a1)])
-def tube(A,B,ra,rb,ref,step=0.45,caps=(True,True),ez=None,sq=1.0,capk=1.0):
+def tube(A,B,ra,rb,ref,step=0.45,caps=(True,True),ez=None,sq=1.0,capk=1.0,nrings=0):
     """points on a tapered tube A->B. ra/rb = (rx,rz) half-axes at each end (rx along 'side', rz along 'front').
     returns pts, t (0..1 along the bone, <0 / >1 in caps), ang (0 = front, +90 = side)"""
     ax=B-A;L=np.linalg.norm(ax);ax=ax/max(L,1e-9);L=round(float(L),2);side=unit(np.cross(ref,ax)) if ez is None else ez;front=np.cross(ax,side)
     ra=np.atleast_1d(ra)*np.ones(2);rb=np.atleast_1d(rb)*np.ones(2)
     c0=max(ra)*capk if caps[0] else 0;c1=max(rb)*capk if caps[1] else 0
     ss=-c0+step/2+np.arange(max(1,int(round((c0+L+c1)/step-1e-6))))*step;P=[];T=[];AN=[]
+    if nrings:ss=np.linspace(0,L,nrings)
     for s in ss:
         t=np.clip(s/max(L,1e-9),0,1);r=ra+(rb-ra)*t;k=1.0
         if s<0:k=np.sqrt(max(0,1-(s/c0)**2))
@@ -68,6 +69,7 @@ def build(x,step=0.45,stick=None):
     P,T,A=tube(J['shline'],J['neck']-0.2*s,top,(0.82*p['ws'],0.75*p['rzc']),None,step,caps=(False,True),ez=ex,sq=0.8,capk=0.3);add('yoke',C['torso'],P,T,A)
     for sd,sg in (('R',1),('L',-1)):
         P,U=ellipsoid(J[sd+' shoulder']-0.5*s,(p['rua']+0.45,p['rua']+0.2,p['rua']+0.7),step);add(sd+' shoulder pad',C['torso'],P,U[:,1],np.arctan2(sg*U[:,0],U[:,2]))
+    P,T,A=tube(J['neck']-0.4*s,J['head'],1.25,1.25,None,step,caps=(False,False),ez=ex,nrings=14);add('neck',C['skin'],P,T,A)
     P,U=ellipsoid(J['head'],(p['rh'],p['rh']*1.3,p['rh']*1.1),step)
     face=(U[:,2]>0.15)&(U[:,1]<0.15);add('head',np.where(face,C['skin'],C['head']),P,U[:,1],np.arctan2(U[:,0],U[:,2]))
     P,U=ellipsoid(J['pelvis']-2.2*s,(min(p['wh']+p['rth'],0.95*p['rxw']),p['rth']*1.1,0.9*p['rzw']),step);add('hips',C['pants'],P,U[:,1],np.arctan2(U[:,0],U[:,2]))

@@ -6,7 +6,7 @@ from PIL import Image
 from carve import proj
 from lib import spritepal,team,BG
 from tex3 import SHADE
-def part_meshes(x,M,seg=28,step=0.3,stick=None):
+def part_meshes(x,M,seg=48,step=0.3,stick=None):
     tmpl.MESHSEG=seg;parts=tmpl.build(np.asarray(x),step,stick)[0];tmpl.MESHSEG=0;out=[]
     for i,q in enumerate(parts):
         P=q['pts'];nr=len(P)//seg;idx=np.arange(nr*seg).reshape(nr,seg);a=idx[:-1];b=idx[1:]
