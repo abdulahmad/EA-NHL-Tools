@@ -38,7 +38,7 @@ def cost(x,V,phi,offs,full=False):
     reg=0
     for sd in 'RL':
         reg+=0.3*abs(J[sd+' ankle'][1]-(p['y0']+2.2))            # skates on the ice
-        a,b=J['stick heel'],J['stick butt'];g=J[sd+' glove'];t=np.clip((g-a)@(b-a)/((b-a)@(b-a)),0,1);reg+=0.15*np.linalg.norm(g-(a+t*(b-a)))   # hands on the stick
+        reg+=0.2*abs(J['stick heel'][1]-(p['y0']+0.4))*(0)
     reg+=0.02*np.sum(((x-X0)/SIG)**2)/len(x)
     return (np.mean(cs)+reg,cs) if full else np.mean(cs)+reg
 def optimise(V,phi,offs,x0=None,sig=0.5,iters=250,seed=1):

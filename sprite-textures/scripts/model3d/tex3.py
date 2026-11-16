@@ -17,7 +17,7 @@ def pool(parts,pts,cls,pid,col,votes):
     """stripes wrap round a limb and the left and right halves mirror: pool the votes that way before picking each zone"""
     names=[q['name'] for q in parts];col=col.copy()
     groups=[([('R upper arm',1),('L upper arm',-1)],1),([('R forearm',1),('L forearm',-1)],1),([('R shin',1),('L shin',-1)],1),
-            ([('R thigh',1),('L thigh',-1)],8),([('torso',1),('torso',-1)],16),([('hips',1),('hips',-1)],12),([('head',1),('head',-1)],12)]
+            ([('R thigh',1),('L thigh',-1)],8),([('torso',1),('torso',-1)],1),([('chest',1),('chest',-1)],16),([('yoke',1),('yoke',-1)],16),([('hips',1),('hips',-1)],12),([('head',1),('head',-1)],12)]
     for members,na in groups:
         keys=[];idxs=[];
         q0=parts[names.index(members[0][0])];ext=np.linalg.norm(q0['pts'].max(0)-q0['pts'].min(0));tr=q0['t'].max()-q0['t'].min();nt=max(2,int(round(ext/0.7)))
@@ -25,7 +25,6 @@ def pool(parts,pts,cls,pid,col,votes):
         for nm,sg in members:
             i=names.index(nm);q=parts[i];ii=np.flatnonzero(pid==i)
             tb=np.clip(((q['t']-q0['t'].min())/tr*nt).astype(int),0,nt-1);ab=(np.floor(((sg*q['ang'])%(2*np.pi))/(2*np.pi)*na).astype(int))%na
-            if nm=='torso': ab=np.where(q['t']<0.5,0,ab)      # waist stripes run all the way round
             if nm in('R thigh','L thigh','hips'): ab=np.minimum(ab,(na//2-ab)%na) if False else ab
             k=tb*na+ab;np.add.at(acc,k,votes[ii]);own[(nm,sg)]=(ii,k)
         acc[:,CRESTI]=0;acc[:,list(PT.SKIN)]=0;best=acc.argmax(1);has=acc.sum(1)>0
@@ -38,7 +37,7 @@ def pool(parts,pts,cls,pid,col,votes):
 def texture3(F,V,step=0.3,R=2.5):
     x=np.array(F['x']);phi=F['phi'];parts,J,pts,cls,pid=model(x,step);N=len(pts);votes=np.zeros((N,256),np.float32)
     for i,v in enumerate(V):
-        d=F['dirs'][i];pd=model(np.array(F['xv'][i]),step)[2];assert len(pd)==N
+        d=F['dirs'][i];N0=int((cls!=C['stick']).sum());pd=model(np.array(F['xv'][i]),step)[2][:N0];pd=np.concatenate([pd,np.full((N-N0,3),1e6)])
         sx,sy,dep=proj(pd[:,0],pd[:,1],pd[:,2],d,phi)
         px=np.floor(sx+v['a'][0]+F['offs'][i][0]).astype(int)+PAD;py=np.floor(sy+v['a'][1]+F['offs'][i][1]).astype(int)+PAD
         h,w=v['cls'].shape;ok=(px>=0)&(px<w)&(py>=0)&(py<h);zb=np.full((h,w),1e9);np.minimum.at(zb,(py[ok],px[ok]),dep[ok])
@@ -65,7 +64,8 @@ def sheet_pv(F,V,col,pal,path,s=8):
     for i,v in enumerate(V):
         d=F['dirs'][i];p=v['p'];a=np.zeros(p.shape+(3,),np.uint8);a[:]=BG;a[v['fg']]=np.clip(pal[p[v['fg']]],0,255)
         a2=a.copy();a2[v['fg']]=np.clip(pal[FLAT[p[v['fg']]]],0,255)
-        b=splat(model(np.array(F['xv'][i]),0.3)[2],col,d,F['phi'],v['a'],F['offs'][i],p.shape,pal)
+        mm=model(np.array(F['xv'][i]),0.3);N0=int((mm[3]!=C['stick']).sum());ci=np.concatenate([col[:N0],np.where(mm[4][N0:]==mm[4].max(),0,136)])
+        b=splat(mm[2],ci,d,F['phi'],v['a'],F['offs'][i],p.shape,pal)
         sp=np.full((1,)+a.shape[1:],20,np.uint8);t=np.concatenate([a,sp,a2,sp,b],0);tiles.append(Image.fromarray(t).resize((t.shape[1]*s,t.shape[0]*s),Image.NEAREST))
     W=sum(t.width+8 for t in tiles);Hh=max(t.height for t in tiles);im=Image.new('RGB',(W,Hh),(20,20,20));xx=0
     for t in tiles: im.paste(t,(xx,Hh-t.height));xx+=t.width+8

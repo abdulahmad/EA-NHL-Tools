@@ -24,3 +24,6 @@ Needs numpy, scipy, pillow, cma, trimesh. Camera: orthographic, pitched 25 degre
 
 ## Known limits
 Arms come out thin, the stick pose is unreliable (it is drawn differently in every direction), and the back of the jersey has less detail than the front.
+
+## v2 (same day): smooth mesh
+After review ("hunch backed, arms don't join the shoulders, stick looks wrong") the template got a waist / chest / shoulder-line torso, a neck, minimum limb radii, and a stick that is held in the right glove. `fit5.py` refits from an older fit (parameters matched by name, 4 processes). `mesh.py` exports every part as a closed smooth surface (GLB with vertex colours) and renders turntables. The rest pose is the front control pose made left / right symmetric and upright.

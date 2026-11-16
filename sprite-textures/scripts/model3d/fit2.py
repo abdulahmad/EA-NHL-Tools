@@ -1,6 +1,6 @@
 import sys,json,time
 from fit import *
-SHAPE={'Lt','rh','ws','wh','rxw','rzw','rxc','rzc','Lua','Lfa','rua','rfa','rg','Lth','Lsh','rth','rsh','sL','sbl'}
+SHAPE={'Lt','rh','ws','wh','rxw','rzw','rxc','rzc','Lua','Lfa','rua','rfa','rg','Lth','Lsh','rth','rsh','sbl'}
 POSE=np.array([n not in SHAPE for n in NAMES])
 def cost1(x,xs,v,d,phi,off,lam=0.15):
     parts,J,p=build(x,0.6);pts=np.concatenate([q['pts'] for q in parts]);cls=np.concatenate([q['cls'] for q in parts])
