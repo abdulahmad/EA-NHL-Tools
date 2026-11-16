@@ -17,7 +17,7 @@ def pool(parts,pts,cls,pid,col,votes):
     """stripes wrap round a limb and the left and right halves mirror: pool the votes that way before picking each zone"""
     names=[q['name'] for q in parts];col=col.copy()
     groups=[([('R upper arm',1),('L upper arm',-1)],1),([('R forearm',1),('L forearm',-1)],1),([('R shin',1),('L shin',-1)],1),
-            ([('R thigh',1),('L thigh',-1)],8),([('torso',1),('torso',-1)],1),([('chest',1),('chest',-1)],16),([('yoke',1),('yoke',-1)],16),([('R shoulder pad',1),('L shoulder pad',1)],8),([('hips',1),('hips',-1)],12),([('head',1),('head',-1)],12)]
+            ([('R thigh',1),('L thigh',-1)],12),([('torso',1),('torso',-1)],1),([('chest',1),('chest',-1)],16),([('yoke',1),('yoke',-1)],16),([('R shoulder pad',1),('L shoulder pad',1)],8),([('hips',1),('hips',-1)],12),([('head',1),('head',-1)],12)]
     for members,na in groups:
         keys=[];idxs=[];
         q0=parts[names.index(members[0][0])];ext=np.linalg.norm(q0['pts'].max(0)-q0['pts'].min(0));tr=q0['t'].max()-q0['t'].min();nt=max(2,int(round(ext/0.7)))
@@ -27,7 +27,7 @@ def pool(parts,pts,cls,pid,col,votes):
             tb=np.clip(((q['t']-q0['t'].min())/tr*nt).astype(int),0,nt-1);ab=(np.floor(((sg*q['ang'])%(2*np.pi))/(2*np.pi)*na).astype(int))%na
             if nm in('R thigh','L thigh','hips'): ab=np.minimum(ab,(na//2-ab)%na) if False else ab
             k=tb*na+ab;np.add.at(acc,k,votes[ii]);own[(nm,sg)]=(ii,k)
-        acc[:,CRESTI]=0;acc[:,list(PT.SKIN)]=0;acc[:,[178,179]]*=2.5;best=acc.argmax(1);has=acc.sum(1)>0
+        acc[:,CRESTI]=0;acc[:,list(PT.SKIN)]=0;acc[:,[178,179]]*=6;best=acc.argmax(1);has=acc.sum(1)>0
         for (nm,sg),(ii,k) in own.items():
             if sg==-1 and nm==members[0][0]:continue          # self-mirrored part: assign once
             c=col[ii].copy();ok=has[k]&~np.isin(c,CRESTI)&(cls[ii]!=C['skin']);c[ok]=best[k][ok]

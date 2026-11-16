@@ -70,7 +70,7 @@ def build(x,step=0.45,stick=None):
         P,U=ellipsoid(J[sd+' shoulder']-0.5*s,(p['rua']+0.45,p['rua']+0.2,p['rua']+0.7),step);add(sd+' shoulder pad',C['torso'],P,U[:,1],np.arctan2(sg*U[:,0],U[:,2]))
     P,U=ellipsoid(J['head'],(p['rh'],p['rh']*1.3,p['rh']*1.1),step)
     face=(U[:,2]>0.15)&(U[:,1]<0.15);add('head',np.where(face,C['skin'],C['head']),P,U[:,1],np.arctan2(U[:,0],U[:,2]))
-    P,U=ellipsoid(J['pelvis']-1.6*s,(p['wh']+p['rth'],p['rth']*1.1,max(p['rzw'],p['rth'])),step);add('hips',C['pants'],P,U[:,1],np.arctan2(U[:,0],U[:,2]))
+    P,U=ellipsoid(J['pelvis']-2.2*s,(min(p['wh']+p['rth'],0.95*p['rxw']),p['rth']*1.1,0.9*p['rzw']),step);add('hips',C['pants'],P,U[:,1],np.arctan2(U[:,0],U[:,2]))
     for sd in 'RL':
         P,T,A=tube(J[sd+' shoulder'],J[sd+' elbow'],p['rua'],p['rua'],ez,step);add(sd+' upper arm',C['sleeve'],P,T,A)
         P,T,A=tube(J[sd+' elbow'],J[sd+' wrist'],p['rua'],p['rfa'],ez,step);add(sd+' forearm',C['sleeve'],P,T,A)
