@@ -39,3 +39,8 @@ Notes from the 2026-11-16 experiment. No game data is in this repo; every number
   stick side, so rings and grids must be fitted with a tilt rather than assumed level.
 - **Scores, standing pose, later the same day.** Low-poly mesh with one zone per face: 13.6% wrong at 600 faces, 7.0% at about 1,000 (crest and
   number flat). Rule-based clean texture on that mesh: 17.2%. Per-voxel tuning reached 3.4% but only by overfitting the 8 views.
+- **The 96 sprites look point-sampled.** Rendering the clean model with one sample at each pixel centre scores 11.6% wrong on the standing pose;
+  2x2 supersampling scores 25 to 27% and 3x3 15 to 20% depending on the coverage rule (`nhl96/ss96.py`). The shape was tuned with centre
+  sampling, so this favours it, but the sprites also contain no blended colours.
+- **95 and 96 proportions differ.** At NHL 95 size (scale about 0.65) and the 95 camera, the 96 model is slimmer with a smaller head than the
+  95 sprite, which is drawn stockier (`nhl96/cmp95.py`).
