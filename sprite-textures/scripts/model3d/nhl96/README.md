@@ -24,3 +24,5 @@ hill-climbed 3.4% wrong at the 8 game angles but noisy in between (overfit); smo
   from the samples: ordered rings along each sleeve and sock (with a searched tilt), six hem bands (tilted, the torso leans forward), a smooth yoke
   line, a centred pant stripe, and the crest (6x6) and number (7x5) as rectilinear texel grids. Standing pose: 17.2% wrong, clean at any angle.
 - `export96.py`: GLB with the clean texture baked into subdivided face colours, sprite-size turntables.
+- `shape96.py`: moves the mesh vertices while the model is coloured only by the texture rules (rules re-tuned between rounds, `Clean.tune`
+  adjusts each rule number on the wrong-pixel count). Standing pose: 15.3% after tuning the rules, 11.6% after three shape rounds.

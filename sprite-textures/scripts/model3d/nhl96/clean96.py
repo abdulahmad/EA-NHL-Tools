@@ -45,21 +45,21 @@ class Clean:
                     for b_ in np.arange(-0.8,0.81,0.2):
                         u=u0+a*B3[1]+b_*B3[2];u/=np.linalg.norm(u);bb,e=splits((q-c)@u,z[m],order,True)
                         if best is None or e<best[0]:best=(e,u,bb)
-                print(nm,sg,'misfiled',best[0],'of',int(m.sum()));s.par[(nm,sg)]=(c,best[1],best[2])
+                print(nm,sg,'misfiled',best[0],'of',int(m.sum()));s.par[(nm,sg)]=(c,best[1].copy(),best[2].copy())
         mt=np.isin(fz,list(TORSO_SET));q=p[mt];zt=z[mt];s.tc=np.array([np.median(q[:,0]),0,np.median(q[:,2])])
         mh=np.isin(zt,HEM);best=None
         for kx in np.arange(-0.3,0.31,0.1):
             for kz in np.arange(-0.6,0.61,0.1):
                 b,e=splits(q[mh,1]+kx*(q[mh,0]-s.tc[0])+kz*(q[mh,2]-s.tc[2]),zt[mh],HEM,True)
                 if best is None or e<best[0]:best=(e,kx,kz,b)
-        s.hemk=(best[1],best[2]);s.hem=best[3];print('hem tilt',s.hemk,'misfiled',best[0],'of',int(mh.sum()))
+        s.hemk=np.array([best[1],best[2]]);s.hem=best[3];print('hem tilt',s.hemk,'misfiled',best[0],'of',int(mh.sum()))
         # yoke line: height as a smooth function of the angle round the body
         az=np.arctan2(q[:,0]-s.tc[0],q[:,2]-s.tc[2]);yk=np.isin(zt,[26,27,31]);bd=np.isin(zt,[34,40,45])&(q[:,1]>40)
         yb=_yb
         cost=lambda c:((q[yk,1]<yb(c,az[yk])).sum()+(q[bd,1]>=yb(c,az[bd])).sum())
         best=min((minimize(cost,[y0,c1,0.0],method='Nelder-Mead',options=dict(xatol=.05,fatol=.5)) for y0 in (44,45,46,47) for c1 in (-1,0,1)),key=lambda r:r.fun);s.yoke=best.x;s.yb=yb
         d=yb(s.yoke,az)-q[:,1];t27=d[(zt==27)];s.trim=float(np.clip(np.percentile(t27,80),0.6,2.0)) if len(t27)>5 else 1.0
-        m31=zt==31;s.collar=float(np.percentile(q[m31,1],15)) if m31.sum()>5 else 1e9
+        m31=zt==31;s.collar=float(np.percentile(q[m31,1],15)) if m31.sum()>5 else 1e9;s.misc=np.array([s.trim,s.collar])
         # crest and number: texel grids placed by a straight-line fit from (x, y) to (column, row)
         s.grid={}
         for nm,T,front in (('crest',CREST,True),('num',NUM,False)):
@@ -70,16 +70,21 @@ class Clean:
             s.grid[nm]=(T,front,cc,rr)
         # pant stripe: centred band on the outer side of each leg
         mp=np.isin(fz,list(PANTS_SET));qp=p[mp];zp=z[mp];out=(s.nrm[S['face'][mp],0]*np.sign(qp[:,0]))>0.35
-        def pc(c):
-            lab=np.where(out&(np.abs(qp[:,2]-c[0])<abs(c[1])),30,np.where(out&(np.abs(qp[:,2]-c[0])<abs(c[1])+abs(c[2])),29,28));return (lab!=zp).sum()
-        s.pant=min((minimize(pc,[0,w,w2],method='Nelder-Mead',options=dict(xatol=.05,fatol=.5)) for w in (0.5,1,1.5) for w2 in (0.5,1,1.5)),key=lambda r:r.fun).x
+        nx=s.nrm[S['face'][mp],0]*np.sign(qp[:,0]);best=None
+        for thr in (0.2,0.5,0.8):
+            for z0 in np.arange(-2,2.1,0.5):
+                for w in np.arange(0.4,2.1,0.4):
+                    for w2 in np.arange(0.4,2.1,0.4):
+                        o=nx>thr;lab=np.where(o&(np.abs(qp[:,2]-z0)<w),30,np.where(o&(np.abs(qp[:,2]-z0)<w+w2),29,28));e=(lab!=zp).sum()
+                        if best is None or e<best[0]:best=(e,[z0,w,w2,thr])
+        s.pant=np.array(best[1])
     def label(s,p,face):
         fz=s.fz[face];out=fz.copy()
         for (nm,sg),(c,u,b) in s.par.items():
             zs=SLEEVE_SET if nm=='sleeve' else set(LEG);m=np.isin(fz,list(zs))&(np.sign(p[:,0])==sg)
             out[m]=ring((p[m]-c)@u,b,SLEEVE if nm=='sleeve' else LEG)
         m=np.isin(fz,list(TORSO_SET));q=p[m];lab=ring(q[:,1]+s.hemk[0]*(q[:,0]-s.tc[0])+s.hemk[1]*(q[:,2]-s.tc[2]),s.hem,HEM);az=np.arctan2(q[:,0]-s.tc[0],q[:,2]-s.tc[2]);d=s.yb(s.yoke,az)-q[:,1]
-        lab=np.where(d<=0,26,np.where((d<s.trim)&(lab==34),27,lab));lab=np.where((q[:,1]>s.collar)&(s.nrm[face[m],2]>0.2),31,lab);idx=idx_of(lab)
+        lab=np.where(d<=0,26,np.where((d<s.misc[0])&(lab==34),27,lab));lab=np.where((q[:,1]>s.misc[1])&(s.nrm[face[m],2]>0.2),31,lab);idx=idx_of(lab)
         for nm,(T,front,cc,rr) in s.grid.items():
             cf=cc[0]*q[:,0]+cc[1]*q[:,2]+cc[2];row=np.floor(rr[0]*q[:,1]+rr[1]).astype(int);col=np.floor(cf).astype(int)
             side=(s.nrm[face[m],2]>0) if front else (s.nrm[face[m],2]<0)
@@ -87,8 +92,33 @@ class Clean:
             if nm=='num':ok&=~((row%2==1)&(col%2==1))      # on rows 1 and 3 the model has number texels only in columns 0, 2, 4, 6; plain jersey shows between them
             idx[ok]=T[row[ok],col[ok]]
         res=idx_of(out);res[m]=idx
-        m=np.isin(fz,list(PANTS_SET));q=p[m];o=(s.nrm[face[m],0]*np.sign(q[:,0]))>0.35;c=s.pant
+        m=np.isin(fz,list(PANTS_SET));q=p[m];c=s.pant;o=(s.nrm[face[m],0]*np.sign(q[:,0]))>c[3]
         res[m]=idx_of(np.where(o&(np.abs(q[:,2]-c[0])<abs(c[1])),30,np.where(o&(np.abs(q[:,2]-c[0])<abs(c[1])+abs(c[2])),29,28)));return res
+    def cache(s,pal):
+        fit=s.fit;fid,zo=depth_render(fit,s.D['verts']);s.cv=[];s.const=0
+        for d,v in enumerate(fit.V):
+            pd=fit.pad;f=fid[d,pd:pd+v['h'],pd:pd+v['w']];z=zo[d,pd:pd+v['h'],pd:pd+v['w']];sp=FL[v['p']];body=(sp!=255)&~np.isin(v['p'],err96.STK)
+            s.const+=int((body&(f<0)).sum())+int(((f>=0)&(v['p']==255)).sum());ys,xs=np.nonzero(body&(f>=0));s.cv.append((unproject(fit.cam[d],xs+pd,ys+pd,z[ys,xs]),f[ys,xs],pal[sp[ys,xs]].astype(int)))
+        s.P=np.concatenate([c[0] for c in s.cv]);s.Fc=np.concatenate([c[1] for c in s.cv]);s.T=np.concatenate([c[2] for c in s.cv]);s.pal=pal.astype(int)
+    def err(s):return s.const+int((s.pal[s.label(s.P,s.Fc)]!=s.T).any(-1).sum())
+    def params(s):
+        """(array, index, step) for every number the rules use"""
+        out=[(s.hem,i,0.3) for i in range(len(s.hem))]+[(s.hemk,i,0.05) for i in range(2)]+[(s.yoke,i,0.3) for i in range(3)]+[(s.misc,0,0.2),(s.misc,1,0.3)]+[(s.pant,i,0.2) for i in range(4)]
+        for k,(c,u,b) in s.par.items():out+=[(b,i,0.3) for i in range(len(b))]+[(u,i,0.05) for i in range(3)]
+        for k,(T,front,cc,rr) in s.grid.items():out+=[(cc,0,0.03),(cc,1,0.03),(cc,2,0.2),(rr,0,0.02),(rr,1,0.2)]
+        return out
+    def tune(s,rounds=4):
+        best=s.err();print('tune start',best)
+        for r in range(rounds):
+            for scale in (1.0,0.5):
+                for arr,i,st in s.params():
+                    for sg in (1,-1):
+                        while True:
+                            old=arr[i];arr[i]=old+sg*st*scale;e=s.err()
+                            if e<best:best=e
+                            else:arr[i]=old;break
+            print('tune round',r,best,flush=True)
+        return best
     def render(s,cam=None,W=None,H=None,n=None):
         fit=s.fit;fid,zo=depth_render(fit,s.D['verts'],cam,W,H,n);n=fit.n if n is None else n;cam=fit.cam if cam is None else cam;out=np.full((n,MH,MW),255,np.uint8)
         for d in range(n):
@@ -111,7 +141,7 @@ class Clean:
         R=s.render(cam,np.full(n,size[0],np.int32),np.full(n,size[1],np.int32),n);p2=pal.copy();p2[255]=(40,90,60);return [np.kron(p2[R[k,:size[1],:size[0]]],np.ones((sc,sc,1),np.uint8)) for k in range(n)]
 if __name__=='__main__':
     D,fit=load(sys.argv[1]);S=samples(D,fit);cl=Clean(D,fit,S);pal=with_number(pals()['!bfh'],88,fg=np.array([12,0,174]));out=sys.argv[2]
-    print('hem',cl.hem.round(1),'yoke',cl.yoke.round(2),'trim',cl.trim,'collar',cl.collar,'pant',cl.pant.round(2),{k:(v[2].round(2),v[3].round(2)) for k,v in cl.grid.items()})
+    print('hem',cl.hem.round(1),'yoke',cl.yoke.round(2),'misc',cl.misc,'pant',cl.pant.round(2),{k:(v[2].round(2),v[3].round(2)) for k,v in cl.grid.items()})
     for k,(c,u,b) in cl.par.items():print(k,b.round(1))
-    cl.sheet(pal,out+'.png');Image.fromarray(np.concatenate([np.concatenate(cl.novel(pal,None,(22.5,67.5,112.5,157.5,202.5,247.5,292.5,337.5),p),1) for p in (D['phi'],40)],0)).save(out+'_novel.png')
-    pickle.dump(cl,open(out+'.pkl','wb'))
+    cl.cache(pal);cl.tune();cl.sheet(pal,out+'.png');Image.fromarray(np.concatenate([np.concatenate(cl.novel(pal,None,(22.5,67.5,112.5,157.5,202.5,247.5,292.5,337.5),p),1) for p in (D['phi'],40)],0)).save(out+'_novel.png')
+    pickle.dump(dict(hem=cl.hem,hemk=cl.hemk,yoke=cl.yoke,misc=cl.misc,pant=cl.pant,par=cl.par,grid=cl.grid),open(out+'_rules.pkl','wb'))
