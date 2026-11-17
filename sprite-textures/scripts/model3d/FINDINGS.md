@@ -28,3 +28,14 @@ Notes from the 2026-11-16 experiment. No game data is in this repo; every number
 - **Scores for the standing pose** (frames 8-15, about 700 body pixels per frame, flattened shades, stick ignored): plain hull with voted colours 21% wrong; voxels tuned by hill-climbing on the wrong-pixel count 3.4% wrong at the 8 game angles, but noisy at in-between angles (overfit); smoothed shape and colours 21.6% wrong.
 - **Why a smooth voxel model stalls.** Stripes are one pixel wide and a hull from 8 outlines is not accurate to half a pixel.
 - **Open idea.** Four shades per zone suggests flat-shaded polygons: a patch of one shade is one face and the shade gives its facing. Recovering the low-poly mesh should be cleaner than voxels.
+- **The palette is the texture sheet.** Shown 16 wide, the player palette is laid out as textures: rows 0-5 hold four vertical strips of
+  4 shades each (zone = row * 4 + column): columns 0 and 1 are the sleeve stripes (zones 4/5, 8/9, 12/13, 16/17, 20/21, then forearm 24/25; the
+  two columns are the inner and outer half of the arm), column 2 the six hem bands top to bottom (zones 2, 6, 10, 14, 18, 22), column 3 the sock
+  stripes top to bottom (3, 7, 11, 15, 19, 23). Then yoke 26 and its trim 27, pants 28 with stripes 29 and 30, collar 31, helmet 33, jersey 34,
+  knee 35, shoulders 1 / 36. The crest grid sits at the bottom left and the number grid beside it.
+- **Number texels are sparse on rows 1 and 3.** The model only has number texels in columns 0, 2, 4, 6 on those rows; plain jersey shows between
+  them. Each number texel is about 1.2 pixels wide and 2 tall on the standing sprite; each crest texel about 1.4 by 1.2.
+- **The standing pose leans forward.** The hem ring is about 3.5 pixels higher at the back than at the front, and the chest is turned toward the
+  stick side, so rings and grids must be fitted with a tilt rather than assumed level.
+- **Scores, standing pose, later the same day.** Low-poly mesh with one zone per face: 13.6% wrong at 600 faces, 7.0% at about 1,000 (crest and
+  number flat). Rule-based clean texture on that mesh: 17.2%. Per-voxel tuning reached 3.4% but only by overfitting the 8 views.
