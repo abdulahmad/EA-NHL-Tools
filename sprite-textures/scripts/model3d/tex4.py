@@ -23,8 +23,12 @@ def texture4(F,V):
         ii=P(nm);a=np.abs(((q(nm)['ang'])%(2*np.pi))-np.pi);fr=a<np.deg2rad(75);bk=a>np.deg2rad(105)
         m=fr&(lfa[ii]>=0);col[ii[m]]=lfa[ii[m]];m=bk&(lba[ii]>=0);col[ii[m]]=lba[ii[m]]
     # 2) head: what the controls do not see is helmet, except the face band at the front
-    ii=P('head');U_y=q('head')['t'];ang=np.abs(q('head')['ang'])
-    col[ii]=np.where((ang<np.deg2rad(60))&(U_y<0.12),134,190)          # helmet over a square face window
+    # face as the front control draws it (frame 370 rows 3-5): skin under the helmet brim, two dark eyes, darker nose column
+    ii=P('head');hp=q('head')['pts'];lo,hi=hp.min(0),hp.max(0);cy=(lo[1]+hi[1])/2;cz=(lo[2]+hi[2])/2
+    hx=hp[:,0];row=np.floor(cy+0.8-hp[:,1]).astype(int);az=np.abs(np.arctan2(hx,hp[:,2]-cz));hc=np.full(len(ii),190)
+    face=(row>=0)&(az<np.deg2rad(75))&((row>0)|(np.abs(hx)<1.5));hc[face]=134
+    hc[face&(np.abs(hx)<0.5)&(az<np.deg2rad(40))]=133;hc[face&(row==0)&(hx>0.5)]=134;hc[face&(row==0)&(hx<-0.5)&(hx>-1.5)]=133
+    hc[face&(row==1)&(np.abs(hx)>=0.5)&(np.abs(hx)<1.5)&(az<np.deg2rad(50))]=140;col[ii]=hc
     # 3) limbs and waist: clean rings read from the controls (left and right pooled)
     def rings(members,nbw=0.7):
         q0=q(members[0]);ext=np.linalg.norm(q0['pts'].max(0)-q0['pts'].min(0));t0,t1=q0['t'].min(),q0['t'].max();nt=max(2,int(round(ext/nbw)))
@@ -37,6 +41,11 @@ def texture4(F,V):
     rings(['R upper arm','L upper arm']);rings(['R forearm','L forearm']);rings(['R shin','L shin'])
     # waist: rings on the lower torso, but keep literal pixels (crest reaches down on some jerseys)
     ii=P('torso');keep=col[ii].copy();rings(['torso']);m=np.isin(keep,CRESTI);col[ii[m]]=keep[m]
+    # hem of the jersey, all the way round, as the front control draws it (rows 14-16 of frame 370, Abdul 2026-11-16):
+    # from the bottom: blue stripe (waist 3), white gap (waist 2), blue stripe (waist 1), each one sprite pixel tall, then the crest
+    ii=P('torso');t=q('torso')['t'];Lpx=np.linalg.norm(J['chest']-J['pelvis']);px1=1.0/Lpx;hem=0.03
+    band=np.select([t<hem+px1,t<hem+2*px1,t<hem+3*px1],[175,172,168],166)
+    keepc=np.isin(col[ii],CRESTI)&(t>=hem+3*px1);col[ii]=np.where(keepc,col[ii],np.where(t<hem+3*px1,band,np.where(np.isin(col[ii],[168,169,172,175]),166,col[ii])))
     # 4) pants: plain, with a one-pixel stripe down the outer seam
     for nm,sg in (('hips',0),('R thigh',1),('L thigh',-1)):
         ii=P(nm);col[ii]=180

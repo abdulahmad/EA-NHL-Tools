@@ -1,5 +1,5 @@
 """Smooth mesh export: every body part is a closed tube / ellipsoid surface, coloured from the voted zones."""
-import sys,json,numpy as np,trimesh
+import sys,json,collections,numpy as np,trimesh
 from scipy.spatial import cKDTree
 import tmpl
 from PIL import Image
@@ -7,14 +7,17 @@ from carve import proj
 from lib import spritepal,team,BG
 from tex3 import SHADE
 def part_meshes(x,M,seg=64,step=0.3,stick=None):
-    tmpl.MESHSEG=seg;parts=tmpl.build(np.asarray(x),step,stick)[0];tmpl.MESHSEG=0;out=[]
+    tmpl.MESHSEG=seg;parts=tmpl.build(np.asarray(x),step,stick)[0];tmpl.MESHSEG=0;out=[];PTS=tmpl.build(np.asarray(x),step,stick)[0]
     for i,q in enumerate(parts):
         P=q['pts'];nr=len(P)//seg;idx=np.arange(nr*seg).reshape(nr,seg);a=idx[:-1];b=idx[1:]
         quads=np.stack([a,np.roll(a,-1,1),np.roll(b,-1,1),b],-1).reshape(-1,4)
         c0,c1=P[:seg].mean(0),P[-seg:].mean(0);V=np.concatenate([P,[c0,c1]]);n0,n1=len(P),len(P)+1
         F=np.concatenate([quads[:,[0,1,2]],quads[:,[0,2,3]],
                           np.stack([np.full(seg,n0),np.roll(idx[0],-1),idx[0]],1),np.stack([np.full(seg,n1),idx[-1],np.roll(idx[-1],-1)],1)])
-        m=M['pid']==i;ci=M['col'][m][cKDTree(M['pts'][m]).query(V)[1]]
+        # colour by position on the part (ring, then angle), not by 3D distance: stripe edges follow the rings exactly
+        m=M['pid']==i;qp=PTS[i];key=lambda t,a:np.stack([np.asarray(t)*1000,np.cos(a),np.sin(a)],1)
+        ci=M['col'][m][cKDTree(key(qp['t'],qp['ang'])).query(key(q['t'],q['ang']))[1]]
+        ci=np.concatenate([ci,[collections.Counter(ci[:seg].tolist()).most_common(1)[0][0],collections.Counter(ci[-seg:].tolist()).most_common(1)[0][0]]])
         out.append((q['name'],V,F,ci))
     return out
 def to_trimesh(pm,pal,height_m=None):
