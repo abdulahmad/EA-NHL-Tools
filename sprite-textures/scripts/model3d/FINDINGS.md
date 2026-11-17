@@ -64,3 +64,10 @@ Notes from the 2026-11-16 experiment. No game data is in this repo; every number
 - Each part has a few numbers (position, direction, sizes, brim / ear / back lines) tuned on the wrong-pixel count against the 8 standing sprites, within limits that keep the shape recognisable.
 - Cost: 12.5% -> 14.9% wrong pixels per frame (104 of 700). The carved blobs had been moved vertex by vertex to suit these 8 views, so part of their lower score was fit to the views rather than to the object.
 - `hires96.py` draws the model at any size for looking at it (not used for scoring).
+
+## NHL 96 PC: modelled arms and pants, rig on the parts, more poses (`nhl96/rigparts96.py`, `nhl96/joint2_96.py`)
+
+- Arms are now two capsules per side (shoulder-elbow, elbow-wrist) with the glove on the end; pants are a hip block plus two thigh capsules. Sleeve stripes and the pant stripe come from the same texture rules as before. Only the chest and the shins are still carved. Standing pose: 18.4% wrong pixels (carved-everything model: 12.5%).
+- Rig: every solid is one rigid part and the joints are where the capsules meet. Fitting only joint angles: crouch (frames 0-7) 40.5% (first rig: 42.2%); the arms now reach the stick and missed-outline pixels fall by a third, but colour errors stay at about 25% of the body because stripes, crest and number land a pixel or two off on a bent torso.
+- Shared fit: one set of part sizes tuned on standing + crouch + a skating stride (frames 16-23), with upright-with-stick (frames 144-151) kept back. The kept-back pose did not move: 43.8% before, 43.8% after. Part sizes are not what limits other poses.
+- What limits them is the pose search. It walks joint angles downhill on the wrong-pixel count and gets stuck: on the stride it never finds the leg stretched out behind (58.4%). A better start is needed, e.g. find the gloves, skates and helmet (their colours are unique) in all 8 views, triangulate them to 3D and solve the limbs from those points.

@@ -14,6 +14,10 @@ def sbox(n,e=0.45):
 def tube(sections=14,rings=3):
     """open-ended cylinder along +y from 0 to 1, radius 1, with end caps"""
     m=trimesh.creation.cylinder(radius=1,height=1,sections=sections);v=np.array(m.vertices)[:,[0,2,1]];v[:,1]+=0.5;return v,np.array(m.faces)[:,::-1]
+def capsule(A,B,ra,rb,n=2):
+    """limb segment from A to B with radius ra at A and rb at B, round ends"""
+    v,f=ico(n);ax=(B-A)/np.linalg.norm(B-A);hint=np.array([0,0,1.0]) if abs(ax[2])<0.9 else np.array([1.0,0,0]);e1,e2,ax=frame(ax,hint);M=np.stack([e1,ax,e2],1);top=v[:,1]>=0
+    return np.where(top[:,None],B+(v*rb)@M.T,A+(v*ra)@M.T),f
 def frame(a,hint):
     a=a/np.linalg.norm(a);e2=hint-a*(hint@a);e2/=np.linalg.norm(e2);e1=np.cross(e2,a);return e1,e2,a
 class Parts:
@@ -23,13 +27,16 @@ class Parts:
             s.names.append((nm,len(s.th0),len(vals)));s.th0+=list(vals);s.step+=list(steps);s.lo+=list(lo if lo is not None else [-1e9]*len(vals));s.hi+=list(hi if hi is not None else [1e9]*len(vals))
         hm=rig.fp==1;hc=c[hm].mean(0);add('head',[hc[0],hc[1]+0.3,hc[2]-0.3,3.0,4.1,3.6,0.25,0.22,-0.5,0.0,-0.35,1.7,-0.4,3.6],[.25,.25,.25,.15,.15,.15,.05,.06,.08,.08,.08,.15,.2,.3],[-9,0,-9,2.6,3.6,3.0,-0.1,0.0,-0.8,-0.5,-0.6,1.3,-1.5,2],[9,99,9,3.6,4.8,4.2,0.6,0.5,-0.1,0.5,0.3,2.6,1.5,6])
         for sg in (-1,1):
-            side=np.sign(c[:,0]-cl.tc[0])==sg;a0=c[(fz==1)&side].mean(0);a1=c[(fz==25)&side].mean(0);ax=(a1-a0)/np.linalg.norm(a1-a0);g=a1+ax*4.2
-            add('glove%+d'%sg,[*g,ax[0],ax[2],1.0,1.0],[.25,.25,.25,.05,.05,.04,.04],[-99,-99,-99,-0.7,-0.7,0.85,0.8],[99,99,99,0.7,0.7,1.3,1.6])
+            side=np.sign(c[:,0]-cl.tc[0])==sg;S=c[(fz==1)&side].mean(0)+np.array([0,1.5,0]);E=c[(fz==13)&side].mean(0);W=c[(fz==25)&side].mean(0);W=W+(W-E)/np.linalg.norm(W-E)*1.5
+            add('arm%+d'%sg,[*S,*E,*W,2.7,2.3,2.0,1.0,1.0],[.25]*9+[.1,.1,.1,.04,.04],[-99]*9+[2.0,1.7,1.5,0.85,0.8],[99]*9+[3.4,3.0,2.6,1.3,1.6])
+        pm=np.isin(fz,[28,29,30]);pc=np.median(c[pm],0);add('pelvis',[cl.tc[0],28.0,pc[2],6.3,3.6,4.3],[.25,.25,.25,.15,.15,.15],[-9,24,-9,5,2.5,3],[9,32,9,8,5,6])
+        for sg in (-1,1):
+            side=np.sign(c[:,0]-cl.tc[0])==sg;K=c[(fz==35)&side].mean(0);add('thigh%+d'%sg,[cl.tc[0]+sg*3.6,26.5,pc[2],K[0],K[1]+0.5,K[2],3.7,3.1],[.25]*6+[.1,.1],[-99]*6+[2.8,2.4],[99]*6+[4.6,4.0])
         for sg in (-1,1):
             side=np.sign(c[:,0]-cl.tc[0])==sg;m=np.isin(fz,[38,39])&(c[:,1]<10)&side;q=V[np.unique(F[m])];u=np.linalg.svd((q-q.mean(0))[:,[0,2]])[2][0];u=u if u[1]>0 else -u
             an=c[(fz==23)&side].mean(0);add('skate%+d'%sg,[an[0],0.0,an[2],np.arctan2(u[0],u[1]),1.0,1.0,1.0,3.9,1.2],[.25,.2,.25,.06,.04,.06,.08,.2,.2],[-99,-1,-99,-1.5,0.85,0.7,0.4,2.8,0.2],[99,1.5,99,1.5,1.5,1.4,1.5,4.4,2.0])
         s.th0=np.array(s.th0,float);s.step=np.array(s.step);s.lo=np.array(s.lo);s.hi=np.array(s.hi)
-        s.keep=~(hm|(np.isin(rig.fp,[3,5])&(fz==38))|(np.isin(rig.fp,[7,9])&np.isin(fz,[38,39])));s.body_v=V;s.body_f=F[s.keep];s.prim=[];s.build(s.th0,first=True)
+        s.keep=~(hm|np.isin(rig.fp,[2,3,4,5])|np.isin(fz,[28,29,30])|(np.isin(rig.fp,[7,9])&np.isin(fz,[38,39])));s.body_v=V;s.body_f=F[s.keep];s.prim=[];s.build(s.th0,first=True)
     def get(s,th,nm):
         for n,i,k in s.names:
             if n==nm:return th[i:i+k]
@@ -43,7 +50,8 @@ class Parts:
         tv,tf=tube();nv=tv*np.array([nr,nl,nr])+np.array([0,-nl,0]);out.append((nv@R.T+np.array([cx,cy,cz])+R@np.array([0,-ry*0.75,nz]),tf,np.full(len(tf),SKIN)))
         for sg in (-1,1):
             # glove: flared cuff, padded hand, thumb
-            gx,gy,gz,ax,az,kw,kl=s.get(th,'glove%+d'%sg);k=np.array([kw,kl,kw]);a=np.array([ax,-np.sqrt(max(1e-6,1-ax*ax-az*az)),az]);e1,e2,a=frame(a,np.array([0,0.2,1.0]));M=np.stack([e1,a,e2],1);o=np.array([gx,gy,gz])
+            A=s.get(th,'arm%+d'%sg);S,E,W=A[0:3],A[3:6],A[6:9];rs,re,rw,kw,kl=A[9:];k=np.array([kw,kl,kw]);a=(W-E)/np.linalg.norm(W-E);e1,e2,a=frame(a,np.array([0,0.2,1.0]));M=np.stack([e1,a,e2],1);o=W+a*2.4
+            out.append((*capsule(S,E,rs,re),None,1));out.append((*capsule(E,W,re,rw),None,1))
             tv,tf=tube();rad=(2.25-0.5*tv[:,1])[:,None];cv=np.c_[tv[:,0]*rad[:,0],tv[:,1]*2.8-3.3,tv[:,2]*rad[:,0]*0.85];out.append((o+(k*cv)@M.T,tf,np.full(len(tf),BLACK)))
             bv,bf=sbox(2);hv=bv*np.array([1.9,2.0,1.55])+np.array([0,1.2,0]);out.append((o+(k*hv)@M.T,bf,np.full(len(bf),BLACK)))
             iv,i_f=ico(1);th_=iv*np.array([0.75,1.3,0.8])+np.array([-sg*0.9,0.5,1.7]);out.append((o+(k*th_)@M.T,i_f,np.full(len(i_f),BLACK)))
@@ -53,12 +61,16 @@ class Parts:
             bv,bf=sbox(2);t=(bv[:,2]+1)/2;fv=np.c_[bv[:,0]*1.45*(1-0.2*t),bv[:,1]*1.45*(1-0.25*t)+2*bh+1.25-0.3*t,bv[:,2]*3.4+1.3];out.append((o+k*fv@M.T,bf,np.full(len(bf),BLACK)))
             tv,tf=tube();rad=1.55+0.35*tv[:,1];sv=np.c_[tv[:,0]*rad,tv[:,1]*5.2*ksh+2*bh+1.7,tv[:,2]*rad-0.9+0.6*tv[:,1]];out.append((o+k*sv@M.T,tf,np.full(len(tf),BLACK)))
             bv,bf=sbox(1,0.3);lv=bv*np.array([0.28,bh,bl])+np.array([0,bh,bo]);out.append((o+k*lv@M.T,bf,np.full(len(bf),WHITE)))
+        px,py,pz,hx,hy,hz=s.get(th,'pelvis');bv,bf=sbox(2,0.6);out.append((np.array([px,py,pz])+bv*np.array([hx,hy,hz]),bf,None,28))
+        for sg in (-1,1):
+            T=s.get(th,'thigh%+d'%sg);out.append((*capsule(T[0:3],T[3:6],T[6],T[7]),None,28))
         return out
     def build(s,th,first=False):
         S=s.solids(th);vs=[s.body_v];fs=[s.body_f];n=len(s.body_v)
-        for v,f,c in S:vs.append(v);fs.append(f+n);n+=len(v)
+        S=[(t[0],t[1],t[2] if t[2] is not None else np.full(len(t[1]),-1),t[3] if len(t)>3 else 38) for t in S]
+        for v,f,c,z in S:vs.append(v);fs.append(f+n);n+=len(v)
         V=np.ascontiguousarray(np.concatenate(vs),np.float64)
-        if first:s.F=np.ascontiguousarray(np.concatenate(fs),np.int32);s.fixed=np.r_[np.full(len(s.body_f),-1),np.concatenate([c for _,_,c in S])].astype(int)
+        if first:s.F=np.ascontiguousarray(np.concatenate(fs),np.int32);s.fixed=np.r_[np.full(len(s.body_f),-1),np.concatenate([c for _,_,c,_ in S])].astype(int);s.zone=np.concatenate([np.full(len(f),z) for _,f,_,z in S])
         return V
 def normals(V,F):
     n=np.cross(V[F[:,1]]-V[F[:,0]],V[F[:,2]]-V[F[:,0]]);return n/(np.linalg.norm(n,axis=1,keepdims=True)+1e-9)
@@ -84,7 +96,7 @@ def pnormals(cl,ns,p,face):
     return n
 def attach(cl,rig):
     """swap the carved head, gloves and skates of the clean model for the modelled parts"""
-    pt=Parts(cl,rig);V=pt.build(pt.th0);cl.__class__=WithParts;cl.fz=np.r_[cl.fz[pt.keep],np.full(len(pt.F)-pt.keep.sum(),38)];nb=cl.nrm[pt.keep];cl.fixed=pt.fixed;cl.head=pt.head;cl.fit.bind(pt.F);cl.D=dict(cl.D,verts=V,faces=pt.F)
+    pt=Parts(cl,rig);V=pt.build(pt.th0);cl.__class__=WithParts;cl.fz=np.r_[cl.fz[pt.keep],pt.zone];nb=cl.nrm[pt.keep];cl.fixed=pt.fixed;cl.head=pt.head;cl.fit.bind(pt.F);cl.D=dict(cl.D,verts=V,faces=pt.F)
     cl.nrm=np.r_[nb,normals(V,pt.F)[len(nb):]];cl.nbody=len(nb);return pt
 def refresh(cl,pt,th):
     V=pt.build(th);cl.head=pt.head;cl.D['verts']=V;cl.nrm=np.r_[cl.nrm[:cl.nbody],normals(V,pt.F)[cl.nbody:]];return V
@@ -113,7 +125,18 @@ def hires(cl,light,pal,yaws,pitch=13,sc=8,levels=5,size=(64,76)):
 if __name__=='__main__':
     D,cl,rig=setup_rig(sys.argv[1]);out=sys.argv[2];pal=with_number(pals()['!bfh'],88,fg=np.array([12,0,174]));sh=Shape(cl,pal);print('before parts',sh.err(D['verts']))
     pt=attach(cl,rig);sh=Shape(cl,pal);th=pt.th0;print('faces',len(pt.F),'with untuned parts',sh.err(cl.D['verts']))
-    if len(sys.argv)>4:th=pickle.load(open(sys.argv[4],'rb'))['th']
-    if len(sys.argv)>3:th,e=tune(cl,pt,sh,th,int(sys.argv[3]))
+    if len(sys.argv)>4:
+        st=pickle.load(open(sys.argv[4],'rb'));th=st['th']
+        for k,v in st.get('rules',{}).items():setattr(cl,k,v)
+    refresh(cl,pt,th);pz=pt.get(th,'pelvis')[2];cl.cache(pal);best=None
+    for z0 in pz+np.arange(-2,2.1,0.5):          # pant stripe: start from the best of a coarse grid, the tuner then refines it
+        for w in (0.5,0.9,1.3):
+            for w2 in (0.3,0.6,0.9):
+                for thr in (0.2,0.5,0.8):
+                    cl.pant=np.array([z0,w,w2,thr]);e=cl.err()
+                    if best is None or e<best[0]:best=(e,cl.pant.copy())
+    cl.pant=best[1];print('pant stripe grid',best[0],best[1])
+    for r in range(int(sys.argv[3]) if len(sys.argv)>3 else 0):
+        th,e=tune(cl,pt,sh,th,2,log=False);cl.cache(pal);e2=cl.tune(2);print('round',r,'parts',e,'rules',e2,flush=True)
     for n,i,k in pt.names:print(n,th[i:i+k].round(2))
-    pickle.dump(dict(th=th),open(out+'.pkl','wb'));cl.cache(pal);cl.sheet(pal,out+'.png');Image.fromarray(np.concatenate(hires(cl,D['rules']['light'],pal,(180,135,90,0)),1)).save(out+'_hi.png')
+    pickle.dump(dict(th=th,rules=dict(hem=cl.hem,hemk=cl.hemk,yoke=cl.yoke,misc=cl.misc,pant=cl.pant,par=cl.par,grid=cl.grid,wid=cl.wid,off=cl.off)),open(out+'.pkl','wb'));cl.cache(pal);cl.sheet(pal,out+'.png');Image.fromarray(np.concatenate(hires(cl,D['rules']['light'],pal,(180,135,90,0)),1)).save(out+'_hi.png')

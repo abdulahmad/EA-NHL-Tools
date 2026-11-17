@@ -2,8 +2,10 @@
 import numpy as np,sys,pickle,os,imageio,trimesh
 from PIL import Image
 from parts96 import *
-D,cl,rig=setup_rig(sys.argv[1]);th=pickle.load(open(sys.argv[2],'rb'))['th'];out=sys.argv[3];os.makedirs(out,exist_ok=True);pal=with_number(pals()['!bfh'],88,fg=np.array([12,0,174]));co=D['rules']['light'];phi=D['phi']
-pt=attach(cl,rig);refresh(cl,pt,th);cl.cache(pal);cl.sheet(pal,out+'/sprites_vs_model_vs_errors.png')
+D,cl,rig=setup_rig(sys.argv[1]);st=pickle.load(open(sys.argv[2],'rb'));th=st['th'];out=sys.argv[3];os.makedirs(out,exist_ok=True);pal=with_number(pals()['!bfh'],88,fg=np.array([12,0,174]));co=D['rules']['light'];phi=D['phi']
+pt=attach(cl,rig)
+for k,v in st.get('rules',{}).items():setattr(cl,k,v)
+refresh(cl,pt,th);cl.cache(pal);cl.sheet(pal,out+'/sprites_vs_model_vs_errors.png')
 ns=shade96.smooth_normals(cl,1)
 def small(yaws,pitch,sc,size=(64,76),anchor=(32,68)):
     n=len(yaws);cam=np.array([[np.cos(np.deg2rad(y)),np.sin(np.deg2rad(y)),np.cos(np.deg2rad(pitch)),np.sin(np.deg2rad(pitch)),anchor[0],anchor[1]] for y in yaws]);fid,zo=depth_render(cl.fit,cl.D['verts'],cam,np.full(n,size[0],np.int32),np.full(n,size[1],np.int32),n)
@@ -25,5 +27,5 @@ V,F=cl.D['verts'],cl.D['faces'];T=V[F];fid=np.arange(len(F))
 for _ in range(3):
     a,b,c=T[:,0],T[:,1],T[:,2];ab,bc,ca=(a+b)/2,(b+c)/2,(c+a)/2;T=np.concatenate([np.stack(x,1) for x in ((a,ab,ca),(ab,b,bc),(ca,bc,c),(ab,bc,ca))]);fid=np.tile(fid,4)
 idx=shade_all(cl.label(T.mean(1),fid),pnormals(cl,ns,T.mean(1),fid),co);Vg=T.reshape(-1,3)*np.array([-1,1,1]);Fg=np.arange(len(Vg)).reshape(-1,3)[:,::-1]
-trimesh.Trimesh(Vg,Fg,face_colors=np.c_[pal[idx],np.full(len(idx),255)].astype(np.uint8),process=False).export(out+'/nhl96pc_buffalo_player_clean_v4.glb')
+trimesh.Trimesh(Vg,Fg,face_colors=np.c_[pal[idx],np.full(len(idx),255)].astype(np.uint8),process=False).export(out+'/nhl96pc_buffalo_player_clean_'+os.path.basename(out)[-2:]+'.glb')
 pickle.dump(dict(D,verts=V,faces=F,parts=dict(th=th,fixed=cl.fixed,nbody=cl.nbody,fz=cl.fz)),open(out+'/state.pkl','wb'));print('done',len(Fg))
