@@ -44,3 +44,9 @@ Notes from the 2026-11-16 experiment. No game data is in this repo; every number
   sampling, so this favours it, but the sprites also contain no blended colours.
 - **95 and 96 proportions differ.** At NHL 95 size (scale about 0.65) and the 95 camera, the 96 model is slimmer with a smaller head than the
   95 sprite, which is drawn stockier (`nhl96/cmp95.py`).
+
+## NHL 96 PC: symmetric rules and shading (`nhl96/final96.py`, `nhl96/shade96.py`)
+
+- Symmetric stripes: both sleeves share one set of stripe widths, both legs another; only the starting offset along each limb is per side (it absorbs the pose). Cost on the standing pose: 11.6% -> 12.5% wrong pixels (flattened shades, stick ignored).
+- Shading: the 4 shades per palette zone follow a light fixed to the player, not to the camera (a camera-fixed light fits worse in every test). Best fit, in model axes (x right, y up, z front): shade = clip(round(-0.20 nx + 3.90 ny - 0.53 nz + 1.85), 0, 3), on face normals smoothed once. So the light is almost straight overhead, a little behind the player, and the response is steep and clipped: up-facing surfaces are the lightest shade, down-facing the darkest.
+- How well it fits: where the model has the right zone, the exact shade matches on 46.8% of pixels and is within one shade on 84.5%. A constant shade gets 36%. The sprite shading is mottled at pixel scale (it follows the original model's flat faces, which this mesh does not have), so the fitted light gives the right look but not the right pixels.
