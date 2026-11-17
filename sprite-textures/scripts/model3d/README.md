@@ -33,3 +33,6 @@ After review ("hunch backed, arms don't join the shoulders, stick looks wrong") 
 - `stickfit.py`: the stick is no longer fitted. It is read from its own pixels (best straight line through the shaft pixels, blade from the black stick pixels) and lifted to 3D through the nearest glove, with the heel on the ice when that gives a sane length.
 - Template: shoulder pads, rounded-box jersey, no neck, taller head, skates with blades. Crest votes come from the front control only.
 - Camera pitch (`phiscan.py`): the upright frames used here fit best at 15 to 35 degrees. Lying-flat fall frames are drawn as if from about 55 degrees (foreshortening of the body), so the art does not use one camera; treat pitch as per-frame if flat frames are added.
+
+## v4: colouring from the control sprites (`tex4.py`)
+The jersey half facing each control frame (370 front, 185 back) takes that frame's flattened pixels outright, so the crest and waist stripes are exact. Arm, sock and waist stripes become rings read from those pixels. Rules cover what the sprites cannot give: a helmet over a square face window, a skin V at the collar, and a thin pant stripe on the outer seam. Run `tex4.py` in place of `tex3.py`.

@@ -63,7 +63,7 @@ def build(x,step=0.45,stick=None):
     """returns list of parts: dict(name, cls, pts, t, ang)"""
     J,p=joints(x,stick);ex=np.array([1.,0,0]);ez=np.array([0,0,1.]);s=J['spine'];out=[]
     def add(name,cls,pts,t,ang): out.append(dict(name=name,cls=np.full(len(pts),cls) if np.isscalar(cls) else cls,pts=pts,t=t,ang=ang))
-    P,T,A=tube(J['pelvis'],J['chest'],(p['rxw'],p['rzw']),(p['rxc'],p['rzc']),None,step,caps=(True,False),ez=ex,sq=0.7);add('torso',C['torso'],P,T,A)
+    P,T,A=tube(J['pelvis'],J['chest'],(p['rxw'],p['rzw']),(p['rxc'],p['rzc']),None,step,caps=(True,False),ez=ex,sq=0.7,capk=0.25);add('torso',C['torso'],P,T,A)
     top=(p['ws']+0.3,0.85*p['rzc'])
     P,T,A=tube(J['chest'],J['shline'],(p['rxc'],p['rzc']),top,None,step,caps=(False,False),ez=ex,sq=0.7);add('chest',C['torso'],P,T,A)
     P,T,A=tube(J['shline'],J['neck']-0.2*s,top,(0.82*p['ws'],0.75*p['rzc']),None,step,caps=(False,True),ez=ex,sq=0.8,capk=0.3);add('yoke',C['torso'],P,T,A)

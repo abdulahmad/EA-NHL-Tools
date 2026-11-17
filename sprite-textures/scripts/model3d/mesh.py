@@ -6,7 +6,7 @@ from PIL import Image
 from carve import proj
 from lib import spritepal,team,BG
 from tex3 import SHADE
-def part_meshes(x,M,seg=48,step=0.3,stick=None):
+def part_meshes(x,M,seg=64,step=0.3,stick=None):
     tmpl.MESHSEG=seg;parts=tmpl.build(np.asarray(x),step,stick)[0];tmpl.MESHSEG=0;out=[]
     for i,q in enumerate(parts):
         P=q['pts'];nr=len(P)//seg;idx=np.arange(nr*seg).reshape(nr,seg);a=idx[:-1];b=idx[1:]
@@ -26,7 +26,7 @@ def to_trimesh(pm,pal,height_m=None):
     if height_m:V=(V-[0,V[:,1].min(),0])*height_m/(V[:,1].max()-V[:,1].min())
     rgb=np.clip(pal[ci],0,255).astype(np.uint8)
     return trimesh.Trimesh(V,F,vertex_colors=np.concatenate([rgb,np.full((len(V),1),255,np.uint8)],1),process=False),ci
-def sample(pm,n=500000,seed=0):
+def sample(pm,n=1500000,seed=0):
     """dense surface samples (body frame px) with zone index and outward normal, for the preview renderer"""
     Vs=[];Fs=[];CI=[];k=0
     for name,V,F,ci in pm:
