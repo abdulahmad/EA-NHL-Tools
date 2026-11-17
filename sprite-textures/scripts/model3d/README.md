@@ -36,3 +36,8 @@ After review ("hunch backed, arms don't join the shoulders, stick looks wrong") 
 
 ## v4: colouring from the control sprites (`tex4.py`)
 The jersey half facing each control frame (370 front, 185 back) takes that frame's flattened pixels outright, so the crest and waist stripes are exact. Arm, sock and waist stripes become rings read from those pixels. Rules cover what the sprites cannot give: a helmet over a square face window, a skin V at the collar, and a thin pant stripe on the outer seam. Run `tex4.py` in place of `tex3.py`.
+
+## v5
+Jersey hem read from the front control (rows 14-16 of frame 370): from the bottom, blue stripe, white gap, blue stripe, each one sprite pixel, then the crest; wrapped all the way round. Face restored from rows 3-5 of the front control. `mesh.py` looks vertex colours up in each part's own (length, angle) space so stripe edges are straight.
+
+See `FINDINGS.md` for what was learned about the NHL 95 PC and NHL 96 PC sprites, and `nhl96/` for the NHL 96 PC work.
