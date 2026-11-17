@@ -57,3 +57,10 @@ Notes from the 2026-11-16 experiment. No game data is in this repo; every number
 - Held-out test on bank frames 0-7 (crouched, bent at the waist, both hands on the stick), with shape, texture rules and light exactly as fitted on the standing pose and only the joint angles fitted: 42.2% wrong pixels (standing pose: 12.5%). The body bend, legs and head land well; about half the error is the arms. In the standing mesh the arms hang against the body and are only an outer shell, so they cannot swing forward as limbs.
 - Fitting one rest shape to both poses at once (10 minutes of vertex moves, rules fixed): second pose 33.0%, standing pose 13.7%. The limbs start to separate, but the arms still do not reach the stick.
 - Supersampling picture: 2x renders reduced to sprite size are about twice as wrong as one sample per pixel (24.6% against 12.5%); stripes and number strokes thicken or drop out.
+
+## NHL 96 PC: modelled helmet, gloves and skates (`nhl96/parts96.py`, `nhl96/export_parts96.py`)
+
+- The carved head, gloves and skates were shapeless at any size above the sprite's. They are replaced by simple solids: head = one egg whose helmet part is pushed out slightly (straight brim over the eyes, down over the ears, round the back), a neck, eyes as two dark rectangles; glove = flared cuff + padded hand + thumb; skate = boot (foot + ankle shaft) on a thin white blade.
+- Each part has a few numbers (position, direction, sizes, brim / ear / back lines) tuned on the wrong-pixel count against the 8 standing sprites, within limits that keep the shape recognisable.
+- Cost: 12.5% -> 14.9% wrong pixels per frame (104 of 700). The carved blobs had been moved vertex by vertex to suit these 8 views, so part of their lower score was fit to the views rather than to the object.
+- `hires96.py` draws the model at any size for looking at it (not used for scoring).
