@@ -50,3 +50,11 @@ Kosinski-Tools/*.bin
 4MB-ROM/nhl94expanded.bin.bak
 JIM-Tools/decompressed_output.bin
 JIM-Tools/memory_writes.bin
+
+# Retail game files: bring your own, never committed (removed from the repo 2026-11-18)
+*retail*.bin
+*.anim
+Sprite-Viewer/pc94/*
+!Sprite-Viewer/pc94/HOCKEY.dcproject
+TIL-To-BMP/tor.til
+TIL-To-BMP/tor.map
