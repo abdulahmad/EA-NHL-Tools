@@ -5,6 +5,8 @@ Tools for various EA NHL games
 
 Recommend checking out Releases for latest stable release: https://github.com/abdulahmad/EA-NHL-Tools/releases
 
+> **📀 Game files are not included.** ROMs and the PC games' files are not in the repo. Bring your own: put the ROM or game file a tool asks for next to it (for example `nhl92retail.bin` for NHL92FMTunes-To-MIDI, `nhlpa93retailRevA.bin` for JIM-Tools, your NHL 94 PC install in `Sprite-Viewer/pc94/`, the `.anim` files for ANIM-To-BMP). Never commit them.
+
 Note that this suite of tools have only been tested on a windows machine. Some of the tools (the ones designed for NHL94/95 PC) use `gfxpak`, which is a windows only application.
 
 - goalie14: segmented skeleton + stick/blade exclusion, 89 strict errors (41 mapping + 48 missing colour), D105–D108.

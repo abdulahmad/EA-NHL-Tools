@@ -58,7 +58,7 @@ There is **no database** and **no audio pipeline** in the viewer yet. All state 
 
 *(Table follows **implementation priority** § above; not chronological release order.)*
 
-**Not in viewer:** NHL 96 Genesis (extract script only), Sega CD branches, **94PC** (assets exist under `Sprite-Viewer/pc94/` on `main` but no profile).
+**Not in viewer:** NHL 96 Genesis (extract script only), Sega CD branches, **94PC** (your own install goes under `Sprite-Viewer/pc94/`; no profile yet).
 
 ### 1.3 UI modes (all games except PC use the same four tabs)
 
@@ -104,7 +104,7 @@ Static: `/viewer.js`, `/lib/*.js`, `/data/*`.
 
 - `node test.js` — parsers, PC95 codec, catalog smoke tests.
 - **Sibling repos / folders** (not npm packages): `ANIM-To-BMP`, `ANIM94-To-BMP`, `ANIM95-To-BMP`, Genesis/SNES disassemblies for ROM paths in dev.
-- PC asset trees are **large**; `pc95/` and `pc94/` are typically gitignored or committed as a separate asset drop (`pc94/` committed on EA-NHL-Tools `main`).
+- PC asset trees are **large**; `pc95/` and `pc94/` are typically gitignored or committed as a separate asset drop (`pc94/` is your own NHL 94 PC install; not in the repo).
 
 ### 1.7 Known graphics gaps
 
