@@ -62,6 +62,7 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 `PAL-To-ACT` - Convert NHL95 PC `!<palname>` & `<HOME/AWAY>PALS.bin` files to `.ACT`. For use with sprites extracted from PPV files & centre ice logos extracted
 
 `PPV-To-BMP` - Extracts NHL95 PC `.PPV` files (in-game sprites), WIP: with ability to pass in .ACT palette
+`PPV94-To-BMP` - Decodes NHL94 PC `.PPV` shape banks (a different format from NHL95 PC) to `.BMP`, with team colors from `HOMEPALS.BIN`/`AWAYPALS.BIN` and a drag-and-drop browser viewer. No `gfxpak` needed
 `QPP94-To-PNG` - Decodes NHL94 PC `.QPP` files (EA Huffman `30FB` / BTree `46FB` shape banks) to `.PNG`, pure Node.js. Documents the QPP format
 
 `QFS-To-BMP` - Convert NHL95 PC `.QFS` files to `.BMP` using defined mapping to ensure correct palette is used
