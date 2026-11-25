@@ -1,14 +1,15 @@
 # NHL94-colored-faces
 
-All 144 player photos in NHL '94 (Sega Genesis), in colour. Each face is a 48 x 48 PNG of the
-cartridge's own picture, pixel for pixel, with colour added. There's one file per card,
-`CardNNN_Name.png`; the card number is the picture's order in the ROM.
+All 144 player photos in NHL '94 (Sega Genesis), plus the 2 extra faces on NHL '94 for Sega CD, in
+colour. Each face is a 48 x 48 PNG of the game's own grey picture, pixel for pixel, with colour added.
+The cartridge's faces are one file per card, `CardNNN_Name.png`, where the card number is the
+picture's order in the ROM. The Sega CD's are `SegaCD_Team_Name.png`.
 
 - `faces.csv` gives each file's player, team and where its colour came from.
-- `contact-sheet.png` shows them all at 2x.
+- `contact-sheet.png` shows the cartridge's 144 at 2x.
 - `how/` holds the pictures used on this page.
 
-![All 144 faces](contact-sheet.png)
+![The cartridge's 144 faces](contact-sheet.png)
 
 ## How they were coloured
 
@@ -18,20 +19,20 @@ painted into regions. A face's group depends on where its colour came from:
 
 | How | Faces |
 |---|--:|
-| [The same photo in NHL 95 PC](#the-same-photo-in-nhl-95-pc) | 87 |
+| [The same photo in NHL 95 PC](#the-same-photo-in-nhl-95-pc) | 88 |
 | [The same photo in NHL 94 PC](#the-same-photo-in-nhl-94-pc) | 32 |
-| [The same photo in NHL 95 SNES](#the-same-photo-in-nhl-95-snes) | 8 |
+| [The same photo in NHL 95 SNES](#the-same-photo-in-nhl-95-snes) | 9 |
 | [The back of EA's 1993-94 NHL '94 card](#the-back-of-eas-1993-94-nhl-94-card) | 3 |
 | [A 1992-93 Bowman card](#a-1992-93-bowman-card) | 3 |
 | [Colours from a different photo](#colours-from-a-different-photo) | 2 |
 | [Hand coloured](#hand-coloured) | 9 |
-| **All** | **144** |
+| **All** | **146** (144 cartridge, 2 Sega CD) |
 
 ### The same photo in NHL 95 PC
 
 95 PC has the same photo as the player's portrait (`PORTRnnn.QFS` on its disc). The portrait is
 lined up on the grey card. The card keeps its own shading and takes the portrait's colour. That covers
-**87 faces**.
+**88 faces** (87 cartridge, plus Rick Tocchet from the Sega CD).
 
 | Cartridge | Source | Colour |
 |:-:|:-:|:-:|
@@ -169,11 +170,12 @@ This is used where 95 PC has no copy of the photo; the portraits are in 94 PC's 
 <img src="Card136_PeterBondra.png" width="48" alt="Peter Bondra">
 <img src="Card138_AlIafrate.png" width="48" alt="Al Iafrate">
 <img src="Card141_PhilHousley.png" width="48" alt="Phil Housley">
+<img src="SegaCD_PIT_RickTocchet.png" width="48" alt="Rick Tocchet (Sega CD)">
 
 ### The same photo in NHL 95 SNES
 
 The 95 SNES cartridge has smaller, rougher copies of some photos. Where the SNES cut the player
-out of the photo, the background is a calm grey-brown. **8 faces**.
+out of the photo, the background is a calm grey-brown. **9 faces** (8 cartridge, plus Jari Kurri from the Sega CD).
 
 | Cartridge | Source | Colour |
 |:-:|:-:|:-:|
@@ -188,6 +190,7 @@ out of the photo, the background is a calm grey-brown. **8 faces**.
 <img src="Card090_DimitriYushkevich.png" width="48" alt="Dimitri Yushkevich">
 <img src="Card102_MatsSundin.png" width="48" alt="Mats Sundin">
 <img src="Card132_CliffRonning.png" width="48" alt="Cliff Ronning">
+<img src="SegaCD_LA_JariKurri.png" width="48" alt="Jari Kurri (Sega CD)">
 
 ### The back of EA's 1993-94 NHL '94 card
 
@@ -268,14 +271,21 @@ background, magenta is skin). **9 faces**.
 
 ## The Sega CD's own faces
 
-NHL '94 on Sega CD has photos for some players that the cartridge has no photo of. There are three
-new faces: Jari Kurri, Rick Tocchet and a Florida photo of John Vanbiesbrouck. Every other disc-only
-player gets one of two stock pictures (a skater and a goalie). These three aren't coloured yet. They're
-the disc's own 48 x 48 pictures, in grey.
+NHL '94 for Sega CD has photos of two players that the cartridge has no photo of: Jari Kurri and Rick
+Tocchet. Every other disc-only player gets one of the disc's two stock pictures (a skater and a goalie),
+so those aren't included. Both faces were coloured in the same way as the cartridge's and are counted in
+the groups above.
 
-| Jari Kurri (LA) | Rick Tocchet (PIT) | John Vanbiesbrouck (FLA) |
+- **Jari Kurri**: the same photo is in NHL 95 SNES. The background is a calm grey-brown.
+- **Rick Tocchet**: coloured from his NHL 95 PC portrait, which is a very close shot. The colour that
+  spilled onto his shoulder at the bottom right was set to the background's, and the collar was kept white.
+
+| Sega CD (grey) | Source | Colour |
 |:-:|:-:|:-:|
-| <img src="how/SegaCD_LA_JariKurri.png" width="144"> | <img src="how/SegaCD_PIT_RickTocchet.png" width="144"> | <img src="how/SegaCD_FLA_JohnVanbiesbrouck.png" width="144"> |
+| <img src="how/SegaCD_LA_JariKurri_grey.png" width="144" alt="grey"> | <img src="how/SegaCD_LA_JariKurri_source.png" alt="95 SNES photo"> | <img src="SegaCD_LA_JariKurri.png" width="144" alt="Jari Kurri"> |
+| Sega CD (grey) | 95 SNES photo | Jari Kurri (LA) |
+| <img src="how/SegaCD_PIT_RickTocchet_grey.png" width="144" alt="grey"> | <img src="how/SegaCD_PIT_RickTocchet_source.png" alt="95 PC portrait"> | <img src="SegaCD_PIT_RickTocchet.png" width="144" alt="Rick Tocchet"> |
+| Sega CD (grey) | 95 PC portrait | Rick Tocchet (PIT) |
 
 ## In the game
 
