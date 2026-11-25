@@ -9,32 +9,6 @@ Recommend checking out Releases for latest stable release: https://github.com/ab
 
 Note that this suite of tools have only been tested on a windows machine. Some of the tools (the ones designed for NHL94/95 PC) use `gfxpak`, which is a windows only application.
 
-- goalie14: segmented skeleton + stick/blade exclusion, 89 strict errors (41 mapping + 48 missing colour), D105–D108.
-- goalie15: sock shades 182/183 in texture v6 + colour-zone/fitted-skeleton segmentation, 50 strict errors (50 mapping + 0 missing colour), D109–D112.
-- goalie16: all facings of each animation frame fitted jointly (one 3D pose), 49 strict errors (49 mapping + 0 missing colour), D113–D115.
-- goalie17: Abdul's g15 segmentation corrections as ground truth (pads by connected leg, stick butt, skate vs blade, catcher), per-correction checks + coordinate inspection sheets, 42 strict errors, D116–D121.
-- goalie18: frame 538 blocker taken from Abdul's green marks, leftover old blocker cells → body, 42 strict errors, D122.
-- goalie19: Abdul's answers (980 right pad edge, 1044 pad stripe, 428 no blocker) and skeleton-bounded arm vs glove, 42 strict errors, D123.
-- goalie20: Abdul's goalie19 answers (980 arm, 416 catcher kept, 419 arm stripes and green blocker), 42 strict errors, D124.
-- goalie21: frame 419 catcher = Abdul's green cells (8 cuff cells added), 42 strict errors, D125.
-- goalie22: two-piece pad mapping per leg (one straight cut, best mode per piece), 14 strict errors (was 42), labels unchanged, D126.
-- goalie23: recursive pad splits, 0 strict pad errors in all 14 frames, D127.
-- goalie24: next group SPAgglover (8 frames) auto-labelled for inspection, 3 open questions; Fuhr pad test render local only, D128.
-- goalie24 (Fuhr v8): Fuhr Oilers art remapped into the current 23x32 goalie layout, mask = centre front / back on both sides, D129.
-- goalie25: Fuhr v9 from the v12 source art (+ high-res build), geometric-snap pad maps and new blocker/catcher/mask maps; strict: pads 1127/0, mask 335/2, catcher 519/1, blocker 304/73 (open question), D130.
-- goalie26: Fuhr v10 from Abdul's DR high-res gear (pads, blocker, catcher front/back), NHL95 cage-style mask with warped edges and orange/blue chin, 1044 arm ruling, Abdul rulings log (D131, D132).
-- goalie26 v11: Fuhr mask mirrored symmetric with the orange flame on top (D133).
-- goalie27: pad test patterns + geometric pad maps v2 (straight columns/rows, 22 frames), Fuhr v12 with a clean straight navy stripe; pad-bottom transparency confirmed as Abdul's original (D134, D135).
-- goalie27 D136: pad direction from the skeleton hip->ankle line when the blob axis disagrees; highlighted cuff test.
-- goalie27 D137: the 12 still-off pad frames are left as they are (Abdul).
-- goalie27 D138: blocker orientation and pad mapping confirmed as they are (Abdul).
-- goalie27 D139: open questions resolved by pixel match; back-view pads use the strap strip.
-- goalie27 D140: Fuhr knee cuff and mask V tip stay as v12 (Abdul).
-- goalie28: strict mapping 0 errors on blocker/catcher/stick (mask 2 left: index 45 eyes on 538), new stick region, Fuhr v13 (D141, D142).
-- goalie28 editor: goalie_part_editor.html (paint parts, drag skeleton, export) + g28all/g28export/g28import (D143).
-- goalie28 D144: strict 0 errors on all 246 frames (pixel-match relabel, index-exact pads).
-- goalie13: strict pad remap, 95 strict errors (g12 152), D101–D104.
-
 ## Tools included
 
 `95-Team-Swap-Mod` - Unfinished Mod for NHL95PC that allows you to use teams/rosters/jerseys/logos from the '22-'23 season
@@ -140,24 +114,6 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 - .ACT to !PAL
 - Reorg to use central NHL95CD folder
 - Make similar functionality in PPV-To-BMP to extract with palette
-- D145-D147: eye holes in the mask texture (v8 / Fuhr v14), audit of the D144 relabels plus the region rule, per-pixel measurement and glove/mask per-pixel targets.
-- D148: skater part/skeleton editor (skater_part_editor.html + skater_editor/skater_export.py, skater_import.py).
-- D149: test textures (lines, checker, grid, part regions, solid cuff) in both part editors; live texture preview in the skater editor.
-- D150: draft per-pixel goalie layout measured (review only; pipeline unchanged).
-- D151: keep the current 23x32 goalie layout; D150 draft dropped.
-- D152: leg px D146 made body are pads again (540, 1040, 1059); 407 back-view helmet is mask.
-- D153: earlier test textures added to both part editors; skater texture preview auto-fitted on 601/881 frames.
-- D154: both part editors show the active texture image next to the preview.
-- D155: pad pieces with 1-3 pixels get strict pad texels (30 px in 19 frames); full goalie render has 0 errors.
-- D156: auto-fitted skater back views use the back-torso column remap; 100% agreement with all 11 hand frames.
-- D157: skater texel columns straightened per body segment (one across-axis per segment, strict same-family match); auto and hand frames.
-- D158: ruling, keep D157 strict colour-band columns (straight-column options a/b rejected).
-- D159: skater pants px now get texels (unmapped 10512 -> 1162 auto, 235 -> 7 hand), strict colour band, straightened per pants zone.
-- D160: last skater pants px (old hem row) mapped onto the row-23 pants texels: no-texel pants px 1162 -> 0 auto, 7 -> 0 hand, 0 wrong band.
-- D161: full skater skeleton (limbs, stick, blade) for all frames; skeleton axes straighten columns on falls/dives/crouches; editor shows/edits/imports it.
-- D162: skater skeleton refit: skates/stick snapped to their px, stick hand at the stick, new sanity checks; SKELROWS still off.
-- D163: wrap-up: face shade 136 labelled skin (wrong band 1086 -> 0), full skater render 0 errors, sprite-textures/HANDOFF.md.
-- D164: sprite-textures/docs/PROCESS_HISTORY.md: illustrated history of how the sprite texture work was directed.
 
 ## Credits and derivative works
 

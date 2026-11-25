@@ -12,7 +12,7 @@ Status: PLAN ONLY, nothing implemented yet. **No implementation starts until Abd
 Inputs are the textures in `textures/v12` (gear) and `textures/v7` (jerseys), plus the 1134 NHL 95 PC frames (`data/frames.bin`, `frames.json` = [n,w,h,offset,anchorX,anchorY]).
 
 ## 0. What the current pipeline got wrong, and the lessons
-Sources: AUDIT.md, FINDINGS.md, FIX_RESULTS_V4–V10.
+Sources: AUDIT.md, FINDINGS.md and the FIX_RESULTS_V4–V10 logs (removed; in git history).
 
 | Problem today | Root cause | Lesson for the new design |
 |---|---|---|
