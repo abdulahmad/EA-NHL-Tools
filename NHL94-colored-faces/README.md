@@ -1,5 +1,9 @@
 # NHL94-colored-faces
 
+> **Making a mod, hack, port or other derivative work from these faces? You must credit me (abdulahmad) and everyone credited in this repo, clearly, in your own repo and in every release. See [Credits and derivative works](#credits-and-derivative-works).**
+
+> **AI usage:** these faces were made with AI assistance, directed and reviewed by hand face by face. See [AI assistance](#ai-assistance).
+
 All 144 player photos in NHL '94 (Sega Genesis), plus the 2 extra faces on NHL '94 for Sega CD, in
 colour. Each face is a 48 x 48 PNG of the game's own grey picture, pixel for pixel, with colour added.
 The cartridge's faces are one file per card, `CardNNN_Name.png`, where the card number is the
@@ -19,12 +23,12 @@ painted into regions. A face's group depends on where its colour came from:
 
 | How | Faces |
 |---|--:|
-| [The same photo in NHL 95 PC](#the-same-photo-in-nhl-95-pc) | 88 |
+| [The same photo in NHL 95 PC](#the-same-photo-in-nhl-95-pc) | 89 |
 | [The same photo in NHL 94 PC](#the-same-photo-in-nhl-94-pc) | 32 |
 | [The same photo in NHL 95 SNES](#the-same-photo-in-nhl-95-snes) | 9 |
 | [The back of EA's 1993-94 NHL '94 card](#the-back-of-eas-1993-94-nhl-94-card) | 3 |
 | [A 1992-93 Bowman card](#a-1992-93-bowman-card) | 3 |
-| [Colours from a different photo](#colours-from-a-different-photo) | 2 |
+| [Colours from a different photo](#colours-from-a-different-photo) | 1 |
 | [Hand coloured](#hand-coloured) | 9 |
 | **All** | **146** (144 cartridge, 2 Sega CD) |
 
@@ -32,12 +36,18 @@ painted into regions. A face's group depends on where its colour came from:
 
 95 PC has the same photo as the player's portrait (`PORTRnnn.QFS` on its disc). The portrait is
 lined up on the grey card. The card keeps its own shading and takes the portrait's colour. That covers
-**88 faces** (87 cartridge, plus Rick Tocchet from the Sega CD).
+**89 faces** (88 cartridge, plus Rick Tocchet from the Sega CD).
+
+Viacheslav Fetisov is the same photo too, but the cartridge's copy is stretched about 16% wider and
+cropped differently, so it can't be lined up pixel for pixel. His colours were taken from the portrait
+region by region (skin, helmet, jersey, background) and painted into the same regions on the card.
 
 | Cartridge | Source | Colour |
 |:-:|:-:|:-:|
 | <img src="docs/Card050_grey.png" width="144" alt="grey"> | <img src="docs/Card050_source.png" alt="95 PC portrait"> | <img src="faces/Card050_WayneGretzky.png" width="144" alt="Wayne Gretzky"> |
 | cartridge (grey) | 95 PC portrait | Wayne Gretzky |
+| <img src="docs/Card069_grey.png" width="144" alt="grey"> | <img src="docs/Card069_source.png" alt="95 PC portrait"> | <img src="faces/Card069_VachslavFetisov.png" width="144" alt="Vachslav Fetisov"> |
+| cartridge (grey) | 95 PC portrait (colours by region) | Vachslav Fetisov |
 
 ![95pc](docs/group-95pc.png)
 
@@ -101,20 +111,15 @@ flattened first, then mirrored and lined up. **3 faces**.
 
 ### Colours from a different photo
 
-No copy of the cartridge's photo was found for these two. Skin, jersey, helmet and background colours
-were taken from another photo of the player and painted into the matching regions. **2 faces**.
-
-- **Eric Lindros**: colours from a different photo of him in a Flyers jersey (only his head is shown
-  here). The orange is at half strength, and the shoulder yoke and collar are white.
-- **Viacheslav Fetisov**: colours from his own 95 PC portrait. It is a different crop of the photo, and the
-  cartridge's copy is stretched about 16% wider, so it can't be lined up pixel for pixel.
+No copy of Eric Lindros's cartridge photo was found. His skin, jersey, helmet and background colours
+were taken from a different photo of him in a Flyers jersey (only his head is shown here) and painted
+into the matching regions. The orange is at half strength, and the shoulder yoke and collar are white.
+**1 face**.
 
 | Cartridge | Source | Colour |
 |:-:|:-:|:-:|
 | <img src="docs/Card085_grey.png" width="144" alt="grey"> | <img src="docs/Card085_source.png" alt="another photo"> | <img src="faces/Card085_EricLindros.png" width="144" alt="Eric Lindros"> |
 | cartridge (grey) | another photo (head) | Eric Lindros |
-| <img src="docs/Card069_grey.png" width="144" alt="grey"> | <img src="docs/Card069_source.png" alt="95 PC portrait"> | <img src="faces/Card069_VachslavFetisov.png" width="144" alt="Vachslav Fetisov"> |
-| cartridge (grey) | 95 PC portrait | Vachslav Fetisov |
 
 ### Hand coloured
 
@@ -166,3 +171,25 @@ NHL94Genesis-C-Port shows these faces when "Colour player photos" is on (Game pa
 this folder, `NHL94-colored-faces` (its `faces/`), beside the program, or in the folder `NHL94_COLORED_FACES` names, and
 shows each card's face pixel for pixel. Cards it has no face for are coloured at run time from the
 player's own NHL 95 PC and NHL 94 PC files.
+
+## AI assistance
+
+These faces were made with AI assistance. The colouring was directed by a strict set of rules and reviewed by
+hand, face by face: each one was checked against its sources and only kept once it was approved. We
+can't guarantee every face is perfect. If you see one that needs fixing, raise an issue, or even
+better, raise a PR.
+
+## Credits and derivative works
+
+Faces by abdulahmad (https://github.com/abdulahmad/EA-NHL-Tools). Thanks to chaos, StaticEck, McMarkis
+(Mhopkinsinc) and Drezz, with special thanks to smozoma and kingraph.
+
+This project is the result of my work (abdulahmad) and the work of the people credited above. If you build anything from it, including mods, ROM or EXE hacks, ports, released forks, tools, or any other derivative work, you must credit us:
+
+- Put the credit in your repo's README, near the top and not buried in a footer, and in the notes of every release you publish, including any text file shipped inside a release archive.
+- Name me (abdulahmad) and link to this repository.
+- Name everyone credited here: chaos, StaticEck, McMarkis (Mhopkinsinc) and Drezz, with special thanks to smozoma and kingraph.
+- If you only use part of this repo (the faces, a sheet, faces.csv, the method), the credit still applies.
+- If you are unsure, over-credit.
+
+Credit is the condition for using this work. Please do not release a derivative without it.
