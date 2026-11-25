@@ -1,6 +1,6 @@
 # NHL94-colored-faces
 
-> **Making a mod, hack, port or other derivative work from these faces? You must credit me (abdulahmad) and everyone credited in this repo, clearly, in your own repo and in every release. See [Credits and derivative works](#credits-and-derivative-works).**
+> **Making a mod, hack, port or other derivative work from these faces? You must credit me (abdulahmad), clearly, in your own repo and in every release. See [Credits and derivative works](#credits-and-derivative-works).**
 
 > **AI usage:** these faces were made with AI assistance, directed and reviewed by hand face by face. See [AI assistance](#ai-assistance).
 
@@ -181,15 +181,13 @@ better, raise a PR.
 
 ## Credits and derivative works
 
-Faces by abdulahmad (https://github.com/abdulahmad/EA-NHL-Tools). Thanks to chaos, StaticEck, McMarkis
-(Mhopkinsinc) and Drezz, with special thanks to smozoma and kingraph.
+Faces by abdulahmad (https://github.com/abdulahmad/EA-NHL-Tools).
 
-This project is the result of my work (abdulahmad) and the work of the people credited above. If you build anything from it, including mods, ROM or EXE hacks, ports, released forks, tools, or any other derivative work, you must credit us:
+These faces are my work (abdulahmad). If you build anything from them, including mods, ROM or EXE hacks, ports, released forks, tools, or any other derivative work, you must credit me:
 
 - Put the credit in your repo's README, near the top and not buried in a footer, and in the notes of every release you publish, including any text file shipped inside a release archive.
 - Name me (abdulahmad) and link to this repository.
-- Name everyone credited here: chaos, StaticEck, McMarkis (Mhopkinsinc) and Drezz, with special thanks to smozoma and kingraph.
-- If you only use part of this repo (the faces, a sheet, faces.csv, the method), the credit still applies.
+- If you only use part of this folder (some faces, a sheet, faces.csv, the method), the credit still applies.
 - If you are unsure, over-credit.
 
 Credit is the condition for using this work. Please do not release a derivative without it.
