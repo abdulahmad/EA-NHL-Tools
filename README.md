@@ -126,7 +126,7 @@ This project is the result of my work (abdulahmad) and the work of the people cr
 - Put the credit in your repo's README, near the top and not buried in a footer, and in the notes of every release you publish, including any text file shipped inside a release archive.
 - Name me (abdulahmad) and link to this repository.
 - Name everyone credited here: chaos, StaticEck, McMarkis (Mhopkinsinc) and Drezz, with special thanks to smozoma and kingraph.
-- If you only use part of this repo (docs, a tool, labels, a file format description, the faces in `NHL94-colored-faces`), the credit still applies.
+- If you only use part of this repo (docs, a tool, labels, a file format description), the credit still applies. The faces in `NHL94-colored-faces` are credited to me alone: see that folder's README.
 - If you are unsure, over-credit.
 
 Credit is the condition for using this work. Please do not release a derivative without it.
