@@ -1,5 +1,9 @@
 # NHL94-colored-faces
 
+> **Making a mod, hack, port or other derivative work from these faces? You must credit me (abdulahmad) and everyone credited in this repo, clearly, in your own repo and in every release. See [Credits and derivative works](#credits-and-derivative-works).**
+
+> **AI usage:** these faces were made with AI assistance, directed and reviewed by hand face by face. See [AI assistance](#ai-assistance).
+
 All 144 player photos in NHL '94 (Sega Genesis), plus the 2 extra faces on NHL '94 for Sega CD, in
 colour. Each face is a 48 x 48 PNG of the game's own grey picture, pixel for pixel, with colour added.
 The cartridge's faces are one file per card, `CardNNN_Name.png`, where the card number is the
@@ -166,3 +170,25 @@ NHL94Genesis-C-Port shows these faces when "Colour player photos" is on (Game pa
 this folder, `NHL94-colored-faces` (its `faces/`), beside the program, or in the folder `NHL94_COLORED_FACES` names, and
 shows each card's face pixel for pixel. Cards it has no face for are coloured at run time from the
 player's own NHL 95 PC and NHL 94 PC files.
+
+## AI assistance
+
+These faces were made with AI assistance. The colouring was directed by a strict set of rules and reviewed by
+hand, face by face: each one was checked against its sources and only kept once it was approved. We
+can't guarantee every face is perfect. If you see one that needs fixing, raise an issue, or even
+better, raise a PR.
+
+## Credits and derivative works
+
+Faces by abdulahmad (https://github.com/abdulahmad/EA-NHL-Tools). Thanks to chaos, StaticEck, McMarkis
+(Mhopkinsinc) and Drezz, with special thanks to smozoma and kingraph.
+
+This project is the result of my work (abdulahmad) and the work of the people credited above. If you build anything from it, including mods, ROM or EXE hacks, ports, released forks, tools, or any other derivative work, you must credit us:
+
+- Put the credit in your repo's README, near the top and not buried in a footer, and in the notes of every release you publish, including any text file shipped inside a release archive.
+- Name me (abdulahmad) and link to this repository.
+- Name everyone credited here: chaos, StaticEck, McMarkis (Mhopkinsinc) and Drezz, with special thanks to smozoma and kingraph.
+- If you only use part of this repo (the faces, a sheet, faces.csv, the method), the credit still applies.
+- If you are unsure, over-credit.
+
+Credit is the condition for using this work. Please do not release a derivative without it.
