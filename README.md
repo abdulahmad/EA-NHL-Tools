@@ -33,6 +33,8 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 
 `MID94-Tools` - Experiment in extracting music from NHL 94 Genesis
 
+`NHL94-colored-faces` - All 144 NHL '94 Genesis player photos in colour, pixel for pixel (48 x 48 PNGs), with where each face's colour came from
+
 `PAL-To-ACT` - Convert NHL95 PC `!<palname>` & `<HOME/AWAY>PALS.bin` files to `.ACT`. For use with sprites extracted from PPV files & centre ice logos extracted
 
 `PPV-To-BMP` - Extracts NHL95 PC `.PPV` files (in-game sprites), WIP: with ability to pass in .ACT palette
