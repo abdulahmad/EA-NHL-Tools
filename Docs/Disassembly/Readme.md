@@ -1,3 +1,5 @@
+> Early notes, kept for history. The current work is in the disassembly repos: [NHL92Genesis](https://github.com/abdulahmad/NHL92Genesis), [NHLPA93Genesis](https://github.com/abdulahmad/NHLPA93Genesis), [NHL94Genesis](https://github.com/abdulahmad/NHL94Genesis), [NHL95Genesis](https://github.com/abdulahmad/NHL95Genesis).
+
 # Routine investigation:
 NHL95 Genesis: part of playeracc routine hex bytes are:
 
