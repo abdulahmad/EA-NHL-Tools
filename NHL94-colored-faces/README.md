@@ -11,6 +11,7 @@ picture's order in the ROM. The Sega CD's are `SegaCD_Team_Name.png`.
 
 - `faces.csv` gives each file's player, team and where its colour came from.
 - `faces/` holds the colour faces.
+- `sources/` holds the picture each face's colour came from (see [The colour sources](#the-colour-sources)).
 - `docs/` holds the pictures on this page: `contact-sheet.png` (the cartridge's 144 at 2x), a sheet for each group (`group-*.png`), and the examples.
 
 ![The cartridge's 144 faces](docs/contact-sheet.png)
@@ -172,6 +173,11 @@ get a stock picture (a skater or a goalie). On the Sega CD the same goes for Mik
 starting goalie there. These 12 faces are made from scratch for them, from EA's 1993-94 NHL '94 card
 of each player, since there is no grey picture to colour. They are `Player_Team_Name.png`.
 
+So that they look like the rest, each one is made the way the cartridge's are: first a grey picture as
+the Genesis keeps its photos (48 x 48, the same 8 greys, dithered, its tones spread like the cartridge's
+pictures), then the colour put on that grey picture in the same way as on the cartridge's faces. The grey
+pictures are in `docs/` (`Player_..._grey.png`). The photo each grey picture was made from:
+
 - **The card's back, colours matched to the player's NHL 95 PC portrait** (the same photo there): Guy
   Hebert, Randy Ladouceur, Troy Loney, Gord Murphy, Joe Cirella, Scott Mellanby.
 - **The card's front, colours matched to his NHL 95 PC portrait**: Andrei Lomakin, Brian Skrudland.
@@ -185,7 +191,20 @@ a small picture, was cleaned of its noise first.
 
 John Vanbiesbrouck isn't here: the cartridge already has a photo of him.
 
-![The 12 faces for players with a stock picture](docs/group-stock-players.png)
+![The 12 faces for players with a stock picture: the Genesis grey picture made for each, and its colour](docs/group-stock-players.png)
+
+## The colour sources
+
+`sources/` holds the picture each face's colour came from, under the face's own file name:
+
+- the NHL 95 PC portrait (`PORTRnnn.QFS`) or NHL 94 PC portrait (`PORTRAIT.NSH`), as the game has it;
+- the NHL 95 SNES photo;
+- the card's photo (EA's 1993-94 NHL '94 card or a 1992-93 Bowman card), cropped to the photo;
+- for Eric Lindros, the cropped head of the photo reference;
+- for the `Player_` faces, the photo on the player's EA NHL '94 card (the back, or the front).
+
+The hand coloured faces have no colour source, except Dale Hawerchuk and Craig Janney, whose paint
+maps are there (`..._paintmap.png`).
 
 ## In the game
 
