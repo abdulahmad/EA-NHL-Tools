@@ -79,6 +79,57 @@ the Genesis game. In 1995 all three 96 games shipped together.
 - 96: Wikipedia's NHL 96 article says the Genesis, SNES and DOS versions "were shipped to stores in North America on
   September 30, 1995", citing EA's press release (Business Wire).
 
+### What the developers said
+
+These are the development details from the Hockey News oral history and two documentaries. Tags: **THN** = the
+Hockey News oral history; **Noclip ~mm:ss** = "The Making of NHL 94 - 30th Anniversary Documentary" (Noclip, 2023);
+**PH ~mm:ss** = "Best Video Game of All Time! PIXELATED HEROES #nhl94" (Mikey McBryan, 2020). Times are approximate
+and come from the videos' English captions. Noclip's captions are uploaded by the channel; Pixelated Heroes has only
+YouTube's automatic captions, so it is paraphrased here and quoted only where the caption reads cleanly. Links are under
+[Sources](#sources).
+
+**Who built what:**
+
+- 92G: Jim Simmons programmed it (THN). Brook: "The idea was we were going to convert the Madden model to the NHL"
+  (THN); they designed it "using the same physics model that Jim had built in" football (PH ~11:18).
+- 94G: Simmons moved to another project (THN); Brook: "Jim got slotted over to do to do soccer" and "I hired Mark to
+  do NHL 94" (PH ~12:07). Lesser on Simmons's code: "So he just dumped the code on me" (Noclip ~20:07). He chose to
+  "use the code and just tear out sections" rather than rewrite it, and over the next several versions he tore out
+  "more and more" (Noclip ~20:27-20:40). That supports the arrows 93G -> 94G -> 95G -> 96G.
+- 94G took "about a four or five month development cycle" (Lesser, PH ~41:31). Wong finished 94S "in less than 6
+  months" (Classic Gaming Quarterly).
+- 94S and 94 PC: "EA tasks its Canadian branch to develop NHLPA Hockey '94 for the Super Nintendo and for personal
+  computers. One programmer takes Lesser's code and ports it to the SNES, while other programmers work on the PC
+  version of the game" (THN).
+- Genesis first: Brook says the SNES versions "initially, they were ports of our Genesis version", and "I would always
+  do the initial design for the Genesis and then convert it"; the CD version "was almost like an afterthought"
+  (Noclip ~46:59-47:18). He is speaking about EA's sports games in general, starting with Madden.
+- Each platform had its own lead: an EA staffer of that era recalls that the team's notes went to "a lead on each
+  product, whether it was the Genesis or Super Nintendo", who would "champion the best ideas" (Noclip ~33:47-33:56).
+- 95: Brook "left EA after NHL '94 and was the developer of NHL '95", and "The creative direction really changed with
+  NHL '95" (THN; also Noclip ~51:56). Lesser says the 95 game was made faster than 94 (THN). Wong was "not involved
+  in NHL '95 for the SNES" (THN). Brook: "Development of the game eventually went to EA Canada" (THN).
+
+**Features and decisions:**
+
+- The 94 requirements, as Lesser lists them: goalie control, "four player, four user mode", crowd animations, one
+  timers, "flip passes, season mode, shootout mode" and visual changes, plus reverse instant replay (Noclip
+  ~21:21-21:47). Season mode is on that list, but no 94 console game shipped one; 94 PC did (see
+  [the Season mode arrows](#95g-nhl-95-genesis)).
+- One-timers were Lesser's 94G breakthrough: "Suddenly, I pulled a one-timer, and it was perfect" (THN); he tuned them
+  late at night in the barn (PH ~41:31); "One-timers were a mess" until weeks of tuning (Noclip ~36:50).
+- Fighting was fully built and improved for "NHLPA Hockey '94", then removed in a last-minute deal with the NHL, which
+  owned the game footage EA wanted for the Sega CD; the game was renamed NHL '94 (THN; Noclip ~12:54-13:18). Fighting
+  came back in 96 (THN; "until '96", Noclip ~13:33).
+- No skating referees on the early Genesis games: "there's no refs in the game" because it "would impact the frame
+  rate" (Brook, Noclip ~10:51; also THN). The 94 PC box, by contrast, shows "Refs on the ice".
+- Ron Barr was brought in for the EA Sports Network branding on NHLPA 93, giving pre-game scouting reports (THN).
+- 95's headline features: "trading between teams, the ability to create players and the much-anticipated full-season
+  mode" (THN).
+- 94 PC: "Like the Sega CD version, the PC version includes full-motion video and Barr's voice" (THN). The 94 PC box
+  shows Ron Barr at the sports desk, but no video clips were found in its box text or code, so the feature table still
+  lists video clips from 95 PC (see the notes under the tables).
+
 ## Diagram (Abdul's interpretation)
 
 This is Abdul's lineage diagram, redrawn. Solid arrows: a game built on another. Dotted arrows with a label: one
@@ -275,7 +326,9 @@ These rows support both arrows into 93S (from 92G and from 93G).
   waited on the 94G features (inference).
 - **Wong remembers it differently.** "We started with the '93 code and Michael [Brook] gave us the '94 feature
   requirements", but Brook did not like how 93S played, "so we worked off the '93 Genesis code" (Classic Gaming
-  Quarterly). The code match with 93S points the other way, so this page follows the code.
+  Quarterly). The Hockey News also says one programmer "takes Lesser's code and ports it to the SNES", and Brook says
+  the SNES versions were initially "ports of our Genesis version" (Noclip ~46:59). The code match with 93S points the
+  other way, so this page follows the code.
 
 ### 94 PC: NHL Hockey (DOS, 1993)
 
@@ -354,6 +407,16 @@ These rows support both arrows into 93S (from 92G and from 93G).
 - **The "Season mode" arrows from 94 PC:** season mode first appeared on 94 PC and showed up on the 95 console
   versions. 94 PC had a full season with end-of-season awards (box; code: `AwardNamePtrs`, NHL94PC). The 95G and 95S
   boxes call season mode and its awards "all new in '95".
+  - **Abdul's interpretation:** these arrows are shared design more than shared code.
+  - Code evidence, which fits that reading: 95G's season, trade and awards code has no 94G source (NHL95Genesis
+    `docs/FILE_ORIGINS.md`), and the DOS season, trade, create-player and awards screens "share strings and labels
+    with 95G but not code" (NHL95PC `docs/CONSOLE_LINEAGE.md`). The details differ too: 94 PC and 95 PC have the same
+    10 awards, including the Calder and an "EA Sports Cup"; 95G has 9, with the Pearson and no Calder. 95G trades
+    allow three players a side with roster checks and a general manager; the DOS trades are one for one between human
+    teams.
+  - Documentary evidence, which also fits: Lesser lists "season mode" among the features EA wanted for 94 (Noclip
+    ~21:38). So it was on the 94 feature list before any game shipped it, and 94 PC was the first to ship it.
+  - No source says code was shared between the DOS and console season modes.
 
 ### 95S: NHL 95 (SNES)
 
@@ -601,6 +664,8 @@ Notes on the tables:
 - Rink announcer speech: 94 PC box ("digitized speech") and manual credits (speech programming); 95 PC manual
   (speech setting, rink announcer); 96S box and manual; 96 PC manual. The Sega CD's Ron Barr is a voiced scouting
   report (NHL94Genesis `docs/segacd_differences.md`), counted under "Ron Barr coverage", not here.
+- Video clips: the Hockey News says 94 PC "includes full-motion video" like the Sega CD. Its box lists none and none
+  was found in the NHL94PC code, so 94 PC is not listed; treat that row as open.
 
 ## What the evidence says about Abdul's diagram
 
@@ -617,20 +682,30 @@ Notes on the tables:
   ultimate hat trick", with the same "Any Goalie, NHL" quote as the other 94 boxes), their headline. Each
   platform implemented the features separately: drop pass, fake shot, penalty shots, skill levels, fighting and PK AI each
   differ in code between platforms.
-- **Cross-platform arrows.** Season mode first appeared on 94 PC and showed up on the 95 console versions. Rink
+- **Cross-platform arrows.** Season mode first appeared on 94 PC and showed up on the 95 console versions. In
+  Abdul's interpretation that is shared design more than shared code, and the code comparison and Lesser's 94
+  feature list (Noclip ~21:38) fit that. Rink
   announcer speech starts at 94 PC, carries into 95 PC, then 96S; 96S's box and manual are the only 96 console
   sources to mention announcer or referee voices. 96 PC's manual also has the announcer introduce the matchup.
 
 ## Sources
 
-**Interviews:**
+**Interviews and documentaries:**
 
 - Classic Gaming Quarterly, "Amory Wong: The Classic Gaming Quarterly Interview", Chris Alaimo, February 2, 2016:
   http://www.cgquarterly.com/2016/02/02/amory-wong-the-classic-gaming-quarterly-interview/
   Source for the DOS game using the SNES code, and for Wong's account of how 94S was made.
 - The Hockey News, "The Making of NHL '94: An Oral History", Sal Barry, October 7, 2018:
   https://thehockeynews.com/news/all-access/the-making-of-nhl-94-an-oral-history
-  Source for EA Canada making 94S and 94 PC, and for the 94 release months.
+  Source for who built which version, the fighting decision, Ron Barr, Brook leaving after 94, and the 94 release
+  months ("THN" above).
+- Noclip, "The Making of NHL 94 - 30th Anniversary Documentary", November 24, 2023:
+  https://www.youtube.com/watch?v=NRFT3iQx1BY
+  Interviews with Michael Brook (shown on screen as "Designer") and Mark Lesser, and EA staff. Cited from the
+  channel's English captions ("Noclip ~mm:ss" above).
+- Mikey McBryan, "Best Video Game of All Time! PIXELATED HEROES #nhl94", October 11, 2020:
+  https://www.youtube.com/watch?v=FWqNi7Al1RI
+  Fan documentary with Brook and Lesser. Cited from YouTube's automatic captions ("PH ~mm:ss" above).
 
 **Release dates:** Wikipedia's articles
 [NHLPA Hockey '93](https://en.wikipedia.org/wiki/NHLPA_Hockey_%2793), [NHL '94](https://en.wikipedia.org/wiki/NHL_%2794),
