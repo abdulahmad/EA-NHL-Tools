@@ -173,19 +173,355 @@ ones that depend on rink size were rescaled:
 ## Rink size and coordinates
 
 **The rule.** On the Genesis and both PC games, one game unit is one pixel on both axes. 94 PC redrew the rink wider
-and shorter, and moved the wall and line constants to match. It kept the corner radius (Code, `checkwallcoll`).
+and shorter. It then changed the rink numbers in the code by hand, one by one (Code).
 
-| Constant | 93G / 94G | 94 PC |
+| Line | 93G / 94G | 94 PC | Ratio |
+|---|---|---|---|
+| Side boards | ±136 | ±160 | 1.18 |
+| End boards | ±298 | ±264 | 0.886 |
+| Goal lines | ±264 | ±232 | 0.879 |
+| Blue lines | ±88 | ±78 | 0.886 |
+| Corner radius | 64 | 64 | 1 |
+| View | 256×224 | 320×168 | |
+
+The PC playfield is 320 × 168 above a 32-line score panel. On the Genesis the score bar is an overlay (Code).
+
+### How the values are stored
+
+**Consoles.** 93G and 94G have three rink equates:
+
+- `Sideline` = $88 (136, centre to side boards)
+- `Blueline` = $58 (88, centre to blue line)
+- `goalline` = 176 (blue line to goal line, so `Blueline+goalline` = 264)
+
+They're in ram93.asm and ram94.asm. NHL 92 kept the first two in RAM variables (ram93.asm comments).
+
+The console code mixes the names and plain numbers:
+
+- **93G names** (logic93.asm): `doshot`, `chk4shot`, `chk4pass`, `chk4lc`, `PuckIChk`, `findpc`, `asswingo`,
+  `asscentero`, `asscenterd`, `assgoalie`, `assbench`, `asseben`, `asspenalty`, `ChkOffsides`,
+  `ClearOffsidesIfAllPlayers` and `a2offsides`.
+- **93G plain numbers:** `checkwallcoll`, `shotdiradj`, `asswingd`, `CompShoot`, `assdefd`, `EvadePC`, `chkatop`,
+  `limitfo`, `Stop4Pen` and the crease tests (`#$58`, `#$108`, `#$88`).
+- **94G** writes many of the named ones back as plain numbers. For example, `asswingo`, `asscentero`, `chk4shot` and
+  the bench routines use `#$58`, `#$108` and `#$88`.
+
+(Code)
+
+**94 PC.** There are no rink equates. Every rink value is an inline immediate in the compiled code, written out again in
+each routine that needs it (`0xe8`, `0xff18`, `0x4e` and so on). The only rink-related data tables are:
+
+- the speed tables (`dirtab`, `MaxSpeed`)
+- the rink tile files (`RINK.TIL`, `RINK.MAP`)
+
+So moving a line meant editing every routine by hand. That explains the few values that don't follow the rule (see
+[Values left unchanged or inconsistent](#values-left-unchanged-or-inconsistent)) (Code; Inference for the reason).
+
+The tables below give each value as decimal, then hex. The Kind column says how the value is stored:
+
+- **Inline:** an immediate in the instruction.
+- **Equate:** a named constant.
+- **Table:** a data table.
+
+Where the two differ, the Kind cell gives the consoles first, then 94 PC, separated by a semicolon.
+
+### Boards and corners
+
+`checkwallcoll` handles board collisions: 93G hockey93.asm, 94G engine/collide94.asm, 94 PC engine/physics.asm.
+
+- It takes the rink half width and half length minus the object's radius (`wcradiusx`, `wcradiusy`).
+- It moves in by the corner radius.
+- It tests the corner circles, then the goal mouths (`checkgoal` on sort objects 12/13), then the straight boards.
+
+94 PC keeps that order and only swaps the two board values (Code). 94G also has `checkcornercoll` (front/crowd94.asm),
+with `Sideline` and $12A. No 94 PC routine by that name was found.
+
+| Value | Consoles | 94 PC | Kind |
+|---|---|---|---|
+| Side boards | 136 / $88 | 160 / A0h | Inline (`Sideline` elsewhere) |
+| End boards | 298 / $12A | 264 / 108h | Inline |
+| Corner radius | 64 / $40 | 64 / 40h | Inline |
+
+The side-board value is also used for positions against the boards. All of these were moved to the new value (Code):
+
+- **Bench and penalty-box x:** 93G `assbench`, `asspenalty` and `asseben` use `Sideline`, and 94G uses $88. 94 PC
+  `asspenalty` uses A0h and `asseben` uses FF60h (−160).
+- **Goalie behind his net:** 93G `assgoalie` sends him to x ±$88. 94 PC `assgoalie` uses ±A0h.
+- **Shot aim cap:** 93G `doshot` caps the aim x error at $88. 94 PC `doshot` caps it at A0h.
+- **Puck-crossing forecast:** 94G `findpc` uses `Sideline`. 94 PC `findpc` (engine/hockey.asm) uses A0h.
+
+The 93G `showzam` (Zamboni, video93.asm) also uses 298. 94 PC has no Zamboni.
+
+### Goal lines and nets
+
+**Goal lines.** The goal line is the most-copied rink value.
+
+- **93G names** (`Blueline+goalline`): `doshot`, `chk4shot`, `PuckIChk`, `findpc`, `asswingo`, `asscentero` and
+  `assgoalie`.
+- **93G plain numbers** (`#$108` / `#$FEF8`): `shotdiradj`, `asswingd`, `CompShoot` and `assgoalie`.
+- **94G** writes most of them as $108 and adds `checkanim` and the one-timer routines (onetimer94.asm).
+
+In 94 PC, 0E8h / 0FF18h (±232) appears in:
+
+- `findpc`
+- `PuckIChk`, `chk4shot`, `CompShoot`, `doshot`, `shotdiradj`, `FacingBoards` (engine/physics.asm)
+- `asswingd`, `asswingo`, `asscentero`, `assgoalie`, `assnearest`, `assreffollow`, `assrefgoalpa`, `SkateToSpot`
+  (engine/logic.asm)
+- `avdgoal`, `avdgoal_box` (engine/skate.asm)
+- `assonetimer` (engine/input.asm)
+- `DrawRinkOverlays`, `DrawReplayFrame`
+
+(Code)
+
+**Nets.** The nets are sort objects 12 and 13. `puckfaceoff2` puts them back at every faceoff:
+
+- 93G (logic93.asm): x 0, y ±$10C
+- 94 PC (engine/faceoff.asm): writes `sortobj12_Ypos2` / `sortobj13_Ypos2`
+
+`checkgoal` gives the net's size; 94 PC keeps the console numbers. `PuckIChk` (icing) and `assgoalie` test the goal-mouth
+x range (Code).
+
+| Value | Consoles | 94 PC | Kind |
+|---|---|---|---|
+| Goal lines | ±264 / $108 | ±232 / E8h | Equate sum or Inline; Inline |
+| Net y (`puckfaceoff2`) | ±268 / $10C | ±236 / ECh | Inline |
+| Net half width | 16 / $10 | 16 / 10h | Inline |
+| Net height | 13 / $D | 13 / Dh | Inline |
+| Mouth x range | ±44 / $2C | ±44 / 2Ch | Inline |
+
+The nets sit 4 units behind the goal line on both: 264 + 4 and 232 + 4 (Code).
+
+### Goalie crease and goalie targets
+
+All of these are in `assgoalie` (93G logic93.asm; 94 PC engine/logic.asm). 93G's `ClampYPosition` (logic93.asm) is
+written inline in 94 PC's `assgoalie`.
+
+- **Crease:** when the goalie is outside the crease box, he skates back.
+- **Goalie "goal line" and targets:** the y he stands at, the top of the crease when the puck is far, and the line he
+  treats as his goal line.
+- **Facing clamp:** clamps the puck y he faces.
+
+Every y value moved by exactly −32, the same as the goal line. The x values stayed the same (Code).
+
+| Value | 93G | 94 PC | Kind |
+|---|---|---|---|
+| Crease x | ±52 / $34 | ±52 / 34h | Inline |
+| Crease y, near | 210 / $D2 | 178 / B2h | Inline |
+| Crease y, far | 270 / $10E | 238 / EEh | Inline |
+| Stand y | 228 / $E4 | 196 / C4h | Inline |
+| Top of crease | 244 / $F4 | 212 / D4h | Inline |
+| Goalie goal line | 260 / $104 | 228 / E4h | Inline |
+| Facing clamp | ±259 / $103 | ±227 / E3h | Inline |
+
+94G's `puckgoalie` (collide94.asm) also uses the crease box, for the catch-speed cut near the crease. 94 PC has no
+such cut (NHL94PC `docs/CONSOLE_LINEAGE.md`).
+
+### Blue lines and offside
+
+**Consoles.** 93G uses the `Blueline` equate in:
+
+- `chk4pass`, `chk4lc`, `asswingo`, `asscentero`, `asscenterd`
+- `ChkOffsides`, `ClearOffsidesIfAllPlayers`, `a2offsides` (logic93.asm)
+
+It uses inline `#$58` in:
+
+- `assdefd`, `EvadePC` (logic93.asm)
+- `chkatop`, `limitfo` (penalty93.asm)
+
+94G turns most of these into inline $58 / $FFA8 and adds `OneTimerTarget`, `BreakawayOffsidesFlagSet` and
+`setSlotBit` (front/cards94.asm).
+
+**94 PC** uses 4Eh / FFB2h (±78) in:
+
+- `chk4pass`, `chk4lc`, `ChkOffsides` (engine/physics.asm)
+- `assdefd`, `asswingo`, `asscentero`, `asscenterd`, `assnearest`, `a2offsides`, `ChkTwoLinePass` (engine/logic.asm)
+- `chkatop`, `Stop4Pen` (engine/penalty.asm)
+- `EvadePC` (engine/skate.asm)
+- `OneTimerChk` (engine/input.asm)
+- `asstakeposition`, `puckfaceoff2` (engine/faceoff.asm)
+
+(Code)
+
+| Value | Consoles | 94 PC | Kind |
+|---|---|---|---|
+| Blue lines | ±88 / $58 | ±78 / 4Eh | Equate or Inline; Inline |
+| Offside line test | 84 (`Blueline-4`) | 74 / 4Ah | Equate in 93G; Inline |
+| Two-line pass | — | ±78 | Inline |
+
+- The offside test sits 4 units inside the blue line on both: 93G `Blueline-4`, 94G $54, 94 PC 4Ah (Code).
+- `ChkTwoLinePass` and `MarkTwoLinePlayers` are 94 PC only. They use the blue lines and the red line (y = 0) (Code).
+
+### Faceoff spots
+
+**Consoles.** `Stop4Pen` (93G penalty93.asm, 94G penalty94.asm) clamps the stoppage spot to the faceoff dots. Then
+`limitfo` pulls it out of a penalised team's zone.
+
+**94 PC.** `Stop4Pen` (engine/penalty.asm) does both, with `limitfo` written inline. It also adds an offside case: if
+the puck is inside the blue lines, the spot moves out to y = ±78. Centre ice is (0, 0) on both (Code).
+
+| Value | Consoles | 94 PC | Kind |
+|---|---|---|---|
+| End dot x | ±70 / $46 | ±96 / 60h | Inline |
+| End dot y | ±206 / $CE | ±184 / B8h | Inline |
+| Use end dot past y | ±166 / $A6 | ±144 / 90h | Inline |
+| Neutral dot x (`limitfo`) | ±70 / $46 | ±100 / 64h | Inline |
+| Neutral dot y (`limitfo`) | ±65 / $41 | ±61 / 3Dh | Inline |
+| `limitfo` trigger | ±88 / $58 | ±78 / 4Eh | Inline |
+| Icing spot y | ±600 / $258 | ±600 / 258h | Inline |
+
+- The dot y values moved by −22 (206 → 184, 166 → 144) and −4 (65 → 61). Neither is exactly the goal-line shift or
+  the 0.886 ratio. They look placed to match the new rink art (Inference).
+- The icing value ±600 is off the rink on both. It's always clamped to an end dot right after, so it didn't need to
+  change (Code).
+
+### Camera and scroll limits
+
+**Consoles.** `checkwindow` (93G logic93.asm, 94G logic94.asm) eases `Vpos` and `Hpos` toward the puck plus a lead
+(`yleader`). `updatescroll` (93G video93.asm) turns them into VDP scroll values:
+
+- `Hscroll` = −64 − `Hpos`
+- the rink-map row = `Vpos` / 8, with row 30 at centre ice
+
+`puckfaceoff2` runs `checkwindow` 101 times to settle the camera (Code).
+
+**94 PC.** `checkwindow` (engine/hud.asm) eases `camx` and `camy`. The draw loop then turns them into the scroll:
+
+- scroll x = `camx` + 20h, clamped to 0-40h
+- scroll y = ECh − `camy`, clamped to 0-1A8h
+- the rink is drawn at x − C0h and 140h − scroll y (`DrawRinkOverlays`)
+
+That clamp is written out five times: `Gameloop` (front/game_main.asm), `ThreeStarsLoop` (engine/intro.asm),
+`StartHL2` (engine/highlight_game.asm) and twice in `InstantReplay` (front/replay_controls.asm). `puckfaceoff2`
+clamps `yc1` to the camera limits directly instead of running `checkwindow` over and over (Code).
+
+| Value | Consoles | 94 PC | Kind |
+|---|---|---|---|
+| Camera y range | −200..256 | −188..236 | Inline |
+| Camera x range | ±60 / $3C | ±32 / 20h | Inline |
+| Dead zone x / y | 40 / 10 | 40 / 10 | Inline |
+| Lead (`yleader`) | ±50 / $32 | ±50 / 32h | Inline |
+| Step per frame | 1/16 of gap | 1/32, max 32 | Inline |
+
+- **Where the limits come from.** The 94 PC limits follow from the map size. The rink map is 384 × 592 pixels. 384 −
+  320 = 64 (40h, the scroll-x range) and 592 − 168 = 424 (1A8h, the scroll-y range, which is 236 − (−188)) (Code,
+  arithmetic). So world (0, 0) is map pixel (192, 320) (Inference from the two formulas).
+- **Horizontal scroll.** The horizontal range shrank from ±60 to ±32, because the wider 320-pixel view shows almost
+  the whole rink width (Code).
+- **Label.** The word the repo calls `ovltimer2` holds scroll y in these loops (Code). The name looks wrong (Inference).
+
+### Rink graphics and map
+
+**Consoles.** The rink is a VDP tile plane (`IceRinkMap`, graphics93.asm). `updatescroll` streams one map row at a time
+into the 64-tile-wide plane by DMA.
+
+Features that move with the rink are "field objects" tied to the scroll:
+
+- 93G (`ffonum` = 5): 3 pads, the centre-ice logo and gloves
+- 94G (`ffonum` = 7) (ram93.asm, ram94.asm)
+
+(Code)
+
+**94 PC.** `LoadRinkTiles` (front/rink_tiles.asm) loads three things:
+
+- `RINK.TIL`: 8 × 8 tiles at 64 bytes each, 8-bit planar VGA. The size must be a multiple of 64.
+- `RINK.MAP`: a map with a header (`RinkRowBytes`, `RinkMapWidth`).
+- A per-team `%s.TIL` / `%s.MAP` pair for the centre-ice art, patched in by `PatchRinkMap`.
+
+`DrawRinkBackground` stamps the visible tiles. `DrawRinkEndArt` (front/game_main.asm) draws the end-board art.
+`DrawRinkObjects` (engine/rink_objects.asm) draws the penalty-box doors and side sprites (Code).
+
+| File | Bytes | Contents |
 |---|---|---|
-| Side boards | ±136 | ±160 |
-| End boards | ±298 | ±264 |
-| Goal lines | ±264 | ±232 |
-| Blue lines | ±88 | ±78 |
-| Corner radius | 64 | 64 |
-| View | 256×224 | 320×168 |
+| `RINK.TIL` | 29,568 | 462 tiles |
+| `RINK.MAP` | 7,110 | Header 30h, 4Ah, 210h |
+| Map grid | | 48 × 74 tiles |
+| Map pixels | | 384 × 592 |
 
-- The PC playfield is 320 × 168 above a 32-line score panel. On the Genesis the score bar is an overlay (Code).
-- The goalie save window keeps 93G's timings. Its y limit was moved to the new goal line, |y| ≤ E8h (Code, `assgoalie`).
+- The map has 3,552 entries, which is 48 × 74 (Data).
+- The third header word, 210h = 528, is twice the end-board value 264. It may be the rink length in pixels; it wasn't
+  traced (Inference).
+
+### AI positioning
+
+The skater assignments (93G logic93.asm, 94 PC engine/logic.asm and engine/physics.asm) use inline target points and
+zone limits. They follow two patterns (Code):
+
+- **Values tied to the goal line** moved by a fixed −32, like the crease.
+- **Values in open ice** were scaled: about 0.87-0.9 on y, and about 1.2-1.4 on x for the wider rink.
+
+| Routine: value | 93G | 94 PC | Change |
+|---|---|---|---|
+| `asswingd` x | ±100 | ±120 | ×1.2 |
+| `asswingd` y target | 158 | 142 | ×0.9 |
+| `asswingd` inner y | ±78 | ±68 | ×0.87 |
+| `asscenterd` y | −128 | −113 | ×0.88 |
+| `assdefd` y band | 190 / 220 | 170 / 195 | ×0.89 |
+| `assdefo` y test | 93 | 83 | −10 |
+| `assdefo` x / y | 80 / 98 | 100 / 88 | ×1.25 / −10 |
+| `chk4pass` box x | ±40 | ±50 | ×1.25 |
+| `chk4pass` box y | ±204 | ±172 | −32 |
+| `avdgoal` net line | 254 / $FE | 226 / E2h | −28 |
+| `avdgoal` x | ±80 / $50 | ±80 / 50h | Same |
+
+- The `assdefd` changes go beyond rescaling. 94 PC adds an x limit of ±80 and a y cap of ±182 (B6h) that 93G doesn't
+  have (Code).
+- `avdgoal` keeps its 35-unit margins around the net line: 219/289 and 184/324 become 191/261 and 156/296 (Code).
+
+### Physics constants scaled by about 0.87
+
+These are the values the rink change pulled along. The full physics comparison is in
+[Game speed and acceleration](#game-speed-and-acceleration).
+
+| Value | Consoles | 94 PC | Kind |
+|---|---|---|---|
+| Push `dirtab` | 200 / 141 | 175 / 124 | Table |
+| Top speed `MaxSpeed` | 5500-9625 | 4800-7875 | Table |
+| Shot vector | $44 (68) | 3Bh (59) | Inline |
+| Shot target y | 264 / $108 | 232 / E8h | Inline |
+| Shot aim x cap | 136 / $88 | 160 / A0h | Inline |
+
+- **`dirtab`.** 93G builds it from the equate `runspeed` = 200, with diagonals 200/1.414 (logic93.asm). 94 PC stores the
+  finished numbers, AFh and 7Ch (data/dgroup/game_state.asm).
+
+  It's used by `playeracc` (engine/skate.asm), `dopass` and `burst` (engine/physics.asm) and `Endfaceoff`
+  (engine/logic.asm). 175 / 200 = 0.875 (Code).
+- **`MaxSpeed`.** It moved from logic93.asm into data/dgroup/game_tables.asm, with a new curve. `playeracc` reads it
+  (Code).
+- **Shots.** The shot vector is `imul ... 3Bh` in `doshot`; 59 / 68 = 0.868. The pass-to-a-teammate time factor ($78 in
+  `passtoa0`) and friction were not changed (Code).
+
+### Values left unchanged or inconsistent
+
+- **Kept at the console size (Code):**
+  - corner radius 64
+  - net half width 16, height 13, mouth ±44
+  - crease x ±52
+  - `avdgoal` x ±80
+  - icing spot ±600
+  - camera dead zones and the `yleader` lead
+
+  The rink is 18% wider but these didn't change (Code). On screen, the net and crease are the same pixel size as on the
+  Genesis (Inference).
+- **`avdgoal` moved 28, not 32.** Its net line went 254 → 226. So the net-avoid line is now 6 units in front of the
+  goal line, where it was 10 (Code). It's probably a hand edit; the effect is small (Inference).
+- **Faceoff dots don't match.** The end-zone and neutral dots share x = ±70 on the console. On 94 PC they're ±96 and
+  ±100 (Code).
+- **Several "goal lines" on the console.** 93G already uses 264 (the line), 260 (goalie), 259 (facing clamp) and 254
+  (`avdgoal`) for nearby jobs. 94 PC keeps each offset from the goal line, except `avdgoal` (Code).
+- **108h means two things.** In 94 PC, 108h (264) is the end boards. In the console code the same number is the goal
+  line. Don't take a 108h in one game's code as the same line as in the other (Code).
+- **Look-alikes of A0h (160).** These aren't rink values:
+  - the goalie's puck-lead factor ($A0 in both 93G and 94 PC `assgoalie`)
+  - the mouse x screen centre in `DrawRinkOverlays`
+  - the screen half-width in the HUD and menu code
+
+  (Code)
+- **No equates.** 94 PC has none for the rink, so the same number is repeated in 20 or more routines. 95 PC keeps the
+  same rink values (NHL95PC `docs/CONSOLE_LINEAGE.md`) (Code).
+- **Not compared:**
+  - 94 SNES rink values
+  - the 94G-only routines (`PlaceBoardFall`, `checkanim`, the one-timer helpers) beyond the PC routines that replaced
+    them
 
 ## Player attributes
 

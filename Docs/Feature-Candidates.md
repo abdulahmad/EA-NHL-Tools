@@ -2,7 +2,9 @@
 
 Which gameplay and mode features from the other EA NHL games of 1991-1995 (92 to 96) could be added to NHL '94 on the
 Genesis (94G), and which to NHL Hockey '95 on DOS (95 PC). It builds on [Game Lineage](Game-Lineage.md), which has the
-sources, and on the public disassembly and decompilation repos listed there. Written 2026-11-26.
+sources, and on the public disassembly and decompilation repos listed there. For how the console code was
+changed for 94 PC and 95 PC, routine by routine, see [PC Port Code Evolution](PC-Port-Code-Evolution.md). Written
+2026-11-26.
 
 How to read it:
 
