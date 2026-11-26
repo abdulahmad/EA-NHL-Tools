@@ -17,7 +17,7 @@ The work was paused on 2026-11-18. See [`scripts/FINDINGS.md`](scripts/FINDINGS.
 
 ## Pictures
 
-All pictures below are renders of the models. None of them show the original game sprites.
+The pictures in this section are renders of the models only. Comparisons against the game sprites are in the next section.
 
 ### NHL 95 PC and NHL 96 PC side by side
 
@@ -79,11 +79,77 @@ Voxels to smooth mesh (v2):
 
 ![v2 before and after](nhl95pc/v2_mesh/before_after.png)
 
-## No game data
+## Comparisons with the game sprites
 
-No retail game data is in this folder. The scripts read the sprites and palettes from your own copy of
-each game at run time. Pictures that put the original game sprites next to the model (the "sprite vs model"
-comparisons and error maps) are left out of this public repo for that reason.
+### NHL 96 PC
+
+Each round's sprite vs model vs wrong pixels at the eight game directions (top row: game sprites; middle: model; bottom: wrong pixels in red).
+
+| Round | Picture |
+| --- | --- |
+| Clean v1 | ![](nhl96pc/clean_v1/sprites_vs_model_vs_errors.png) |
+| Clean v2 | ![](nhl96pc/clean_v2/sprites_vs_model_vs_errors.png) |
+| Clean v3 | ![](nhl96pc/clean_v3/sprites_vs_model_vs_errors.png) |
+| Clean v4 | ![](nhl96pc/clean_v4/sprites_vs_model_vs_errors.png) |
+| Clean v5 (latest, about 18% wrong) | ![](nhl96pc/clean_v5/sprites_vs_model_vs_errors.png) |
+
+Sprites vs shaded model vs flat model (clean v3):
+
+![](nhl96pc/clean_v3/sprites_vs_shaded_vs_flat.png)
+
+Progress pictures with the game sprites, in order:
+
+| Step | Picture |
+| --- | --- |
+| Buffalo sprite sample | ![](nhl96pc/progress/00_buffalo_sprites_sample.png) |
+| The eight standing sprites | ![](nhl96pc/progress/01_buffalo_standing_8_sprites.png) |
+| First carve, 8.6% wrong | ![](nhl96pc/progress/03_sprite_vs_model_vs_errors_8.6pct.png) |
+| Voxels tuned to the 8 views, 3.4% (overfit) | ![](nhl96pc/progress/04_tuned_to_8_views_3.4pct.png) |
+| Smoothed, 21.6% | ![](nhl96pc/progress/06_smoothed_model_21.6pct.png) |
+| Number 88 drawn on the sprites | ![](nhl96pc/progress/08_number_88_on_sprites.png) |
+| Low poly before fitting, 28.8% | ![](nhl96pc/progress/09a_low_poly_before_fitting_28.8pct.png) |
+| Low poly 600 faces, 13.6% | ![](nhl96pc/progress/09_low_poly_600_faces_13.6pct.png) |
+| Low poly 1,000 faces | ![](nhl96pc/progress/11_low_poly_1000_faces.png) |
+| Buffalo palette as a 16x16 texture sheet, with 88 | ![](nhl96pc/progress/12_buffalo_palette_16x16_with_88.png) |
+| Clean rule texture, 17.2% | ![](nhl96pc/progress/13_clean_rule_texture_17.2pct.png) |
+| Shape refined under the clean texture, 11.6% | ![](nhl96pc/progress/15_clean_texture_shape_refined_11.6pct.png) |
+| 96 model at 95 size and camera | ![](nhl96pc/progress/17_96_model_at_95_size_and_camera.png) |
+| Shaded and symmetric | ![](nhl96pc/progress/18_shaded_and_symmetric.png) |
+| Supersampling vs centre sampling | ![](nhl96pc/progress/19_supersampling_comparison.png) |
+| Second pose, rigid parts only | ![](nhl96pc/progress/20_second_pose_rigid_parts_only.png) |
+| Second pose after a two-pose shape fit | ![](nhl96pc/progress/21_second_pose_after_two_pose_shape_fit.png) |
+| Standing after the two-pose shape fit | ![](nhl96pc/progress/22_standing_after_two_pose_shape_fit.png) |
+| Held-back pose with new joints | ![](nhl96pc/progress/25_held_back_pose_with_new_joints.png) |
+| Skating stride (pose fit fails) | ![](nhl96pc/progress/26_skating_stride_pose_fit_fails.png) |
+| Crouch with new joints | ![](nhl96pc/progress/27_crouch_with_new_joints.png) |
+
+### NHL 95 PC
+
+Game sprites next to the model for the control frames and falls, and for the glide in 8 directions:
+
+| Round | Controls and falls | Glide, 8 directions |
+| --- | --- | --- |
+| First model | ![](nhl95pc/previews/compare_controls_and_falls.png) | ![](nhl95pc/previews/compare_glide_8_directions.png) |
+| v2 | ![](nhl95pc/v2_mesh/compare_controls_and_falls.png) | |
+| v3 | ![](nhl95pc/v3_mesh/compare_controls_and_falls.png) | ![](nhl95pc/v3_mesh/compare_glide_8_directions.png) |
+| v4 | ![](nhl95pc/v4_mesh/compare_controls_and_falls.png) | |
+
+Sprite vs model, zoomed:
+
+| v3 | Round 4 work | v4 | v5 |
+| --- | --- | --- | --- |
+| ![](nhl95pc/v3_mesh/zoom_sprite_vs_model.png) | ![](nhl95pc/wip_round4/renders/zoom_sprite_vs_model.png) | ![](nhl95pc/v4_mesh/zoom_sprite_vs_model.png) | ![](nhl95pc/v5_mesh/zoom_sprite_vs_model.png) |
+
+First steps: voxel carve, first body-part fit, ten views flattened to zones:
+
+![](nhl95pc/progress/01_voxel_carve.png)
+![](nhl95pc/progress/02_body_part_fit_first_pass.png)
+![](nhl95pc/progress/03_ten_views_flattened.png)
+
+## Game data
+
+The scripts read the sprites and palettes from your own copy of each game at run time; no game files are
+stored here. The pictures in the comparisons section above do show original game sprites.
 
 ## What is here
 
@@ -96,7 +162,7 @@ comparisons and error maps) are left out of this public repo for that reason.
 | `nhl95pc/wip_round4/` | State and renders from round 4 |
 | `nhl96pc/clean_v1/` to `clean_v5/` | Each NHL 96 PC round: GLB, turntables at sprite size (`_1x` actual size) and large (hi-res), eight directions, angles the game never drew, close-ups (v4, v5) |
 | `nhl96pc/standing_pose/` | The first carved standing-pose model and its turntables |
-| `nhl96pc/progress/` | Intermediate pictures (model renders only) |
+| `nhl96pc/progress/` | Intermediate pictures |
 | `scripts/` | The NHL 95 PC scripts ([README](scripts/README.md)) and NHL 96 PC scripts ([README](scripts/nhl96/README.md)), plus `FINDINGS.md` |
 
 The latest models are `nhl95pc/v5_mesh/nhl95pc_player_mesh.glb` and
