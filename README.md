@@ -26,6 +26,7 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 `DIG-To-WAV` - Converts NHL94/95 PC `.DIG` files to `.WAV` (in-game sounds)
 
 `Docs` - Documentation on various aspects of the NHL games.
+  - [Game Lineage](Docs/Game-Lineage.md) - How features and gameplay changes carried between the EA NHL games, NHL 92 to NHL 96, across Genesis, SNES and the DOS games.
 
 `IFF-To-WAV` - Converts NHL95 PC `.IFF` files to `.WAV` (out of game music files)
 
