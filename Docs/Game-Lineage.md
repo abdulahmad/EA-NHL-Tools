@@ -383,6 +383,8 @@ These rows support both arrows into 93S (from 92G and from 93G).
 - **Who led it.** The English manual (p.21) and the in-game credits both name Robert Penner as project leader and
   first programmer. Robert White appears only under special thanks; he is a credited 94S programmer. Wong remembers
   White as the DOS lead. This page follows the credits.
+- **How the code changed:** routine by routine, with the sound and sample comparisons, in
+  [PC Port Code Evolution](PC-Port-Code-Evolution.md).
 
 ## NHL 95, 1994
 
