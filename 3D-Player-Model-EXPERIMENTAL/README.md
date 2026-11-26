@@ -149,8 +149,7 @@ First steps: voxel carve, first body-part fit, ten views flattened to zones:
 ## Game data
 
 The scripts read the sprites and palettes from your own copy of each game at run time; no game files are
-stored here. The comparison pictures in the section below do show original game sprites
- 
+stored here. The pictures in the comparisons section above do show original game sprites.
 
 ## What is here
 
