@@ -34,11 +34,13 @@ and two published interviews.
 2. **The SNES game spun off the Genesis game.**
    - 93S was programmed at Park Place Productions by William Robinson, with Jim Simmons as technical designer (93S
      manual credits).
-   - 94S was ported by EA Canada (94S manual credits: Amory Wong, Robert White, Rod Reddekopp). Wong: "I was
-     responsible for porting the Genesis code onto the SNES" (Classic Gaming Quarterly, 2016).
+   - 94S was made by EA Canada (94S manual credits: Amory Wong, Robert White, Rod Reddekopp). It started from the 93S
+     code and then added the 94G features (see [94S](#94s-nhl-94-snes)).
+   - The SNES game usually shipped a few months after the Genesis game (see [Release order](#release-order)).
 3. **The DOS game spun off the SNES game.**
-   - Wong, asked about the DOS releases: "He used the SNES code instead of the Genesis code, since I was around to answer
-     questions" (Classic Gaming Quarterly, 2016). "He" is Robert White, whom Wong names as lead programmer of the DOS game.
+   - Source: Amory Wong, the 94S programmer, asked about the DOS releases: "He used the SNES code instead of the Genesis
+     code, since I was around to answer questions" (Classic Gaming Quarterly, 2016). Wong names Robert White as the
+     DOS lead; the game's own credits name Robert Penner as project leader (see [94 PC](#94-pc-nhl-hockey-dos-1993)).
    - The code agrees: 94 PC's one-timers, goalie wall animations and organ tunes are the 94S versions (see
      [1993-94](#nhl-94-1993-94)).
 4. **Each year had a feature mandate across platforms.** The 94G, 94S and 94 Sega CD boxes share the same headline and
@@ -48,11 +50,34 @@ and two published interviews.
    have an on-ice Stanley Cup ceremony.
    Each platform built most of these features with its own code (see the per-year sections).
 
-**The magazine interview.** Abdul recalls a magazine interview in which a developer of the DOS game said the Genesis developer was
-away, so the port team could only talk to the SNES developer. That interview **was not found**. The closest published
-source is the Amory Wong interview (Classic Gaming Quarterly, 2016, online). Wong is the SNES programmer, not a DOS
-developer, and he says the DOS team used his SNES code because he was around to answer questions. He does not say the
-Genesis developer was away. Until the magazine is found, that detail is Abdul's recollection.
+**The interview.** The source for the DOS-from-SNES link is the Classic Gaming Quarterly interview with Amory Wong
+(Chris Alaimo, February 2, 2016; link under [Sources](#sources)). Wong programmed 94S. He says the DOS programmer
+"used the SNES code instead of the Genesis code, since I was around to answer questions", and was "cursing quite a bit
+converting my code because of the way I optimized things".
+
+The Hockey News oral history of NHL '94 (Sal Barry, 2018) agrees on who made which version: "EA tasks its Canadian
+branch to develop NHLPA Hockey '94 for the Super Nintendo and for personal computers. One programmer takes Lesser's
+code and ports it to the SNES, while other programmers work on the PC version of the game." It does not say which code
+the DOS game started from. No Hockey News article that says so was found (thehockeynews.com and archive.org searched).
+
+### Release order
+
+Classic Gaming Quarterly notes, in a question to Wong, that 94S "came out less than 2 months after the Genesis
+version". Dates are North American releases, from the Wikipedia article for each game, which cite magazines of the
+time; the 94 dates also appear in the Hockey News oral history. In 1992-94 the SNES game came one to three months after
+the Genesis game. In 1995 all three 96 games shipped together.
+
+| Year | Genesis | SNES | DOS |
+|---|---|---|---|
+| 93 | Sep 1992 | Dec 1992 | none |
+| 94 | Sep 1993 | Oct or Nov 1993 | late 1993 |
+| 95 | Sep 1994 | Nov 1994 | 1994 |
+| 96 | Sep 30, 1995 | Sep 30, 1995 | Sep 30, 1995 |
+
+- 94S: the Hockey News oral history says October 1993; Wikipedia says November 1993.
+- 94 PC: the Hockey News says "the fall of 1993". 95 PC: year only (the manual is "© 1994 Electronic Arts").
+- 96: Wikipedia's NHL 96 article says the Genesis, SNES and DOS versions "were shipped to stores in North America on
+  September 30, 1995", citing EA's press release (Business Wire).
 
 ## Diagram (Abdul's interpretation)
 
@@ -241,27 +266,28 @@ These rows support both arrows into 93S (from 92G and from 93G).
   - goalie control on X (p.3)
   - one-timers (p.3)
   - playoffs continued by password (p.5)
-- **Code:** the 94S repo found two kinds of inheritance (nhl-disasm-report `docs/ALIGNMENT.md`, appendix A1):
-  - **Code lineage: 93S.** Game logic was matched instruction by instruction to 93S routines. 808 names come from
-    93S and 306 from 94G.
-  - **Design lineage: 94G.** "Shootout, player cards, line editor, crowd meter, three stars, matchups, scouting
-    rewrite."
-  - So the arrows 93S -> 94S (code) and 94G -> 94S (features) are both supported.
-
-**Open question.** Wong says the opposite about the starting code. "We started with the '93 code and Michael [Brook]
-gave us the '94 feature requirements", and Brook did not like how 93S played, "so we worked off the '93 Genesis code"
-(Classic Gaming Quarterly). The instruction-level match with 93S suggests 93S code was reused. Both may be partly true:
-93S is itself a translation of the Genesis code.
+- **Lineage:** 94S started from the 93S code and then added the 94G features. The arrows 93S -> 94S and 94G -> 94S
+  are both supported.
+- **Code** (nhl-disasm-report `docs/ALIGNMENT.md`, appendix A1):
+  - From 93S: game logic matches 93S routines instruction by instruction. 808 names come from 93S and 306 from 94G.
+  - From 94G: "Shootout, player cards, line editor, crowd meter, three stars, matchups, scouting rewrite."
+- **Timing:** 94S came out one to two months after 94G (see [Release order](#release-order)). That fits a port that
+  waited on the 94G features (inference).
+- **Wong remembers it differently.** "We started with the '93 code and Michael [Brook] gave us the '94 feature
+  requirements", but Brook did not like how 93S played, "so we worked off the '93 Genesis code" (Classic Gaming
+  Quarterly). The code match with 93S points the other way, so this page follows the code.
 
 ### 94 PC: NHL Hockey (DOS, 1993)
 
 - **Release:** shipped as "NHL Hockey", not "NHL '94" (NHL94PC `docs/CONSOLE_LINEAGE.md`, "Music and packaging").
-- **Credits:** the German manual (the only scan found) gives:
-  - original game idea: Jim Simmons, Scott Orr, Richard Hilleman
-  - project lead: Robert Penner
-  - programming: Robert Penner, Victoria Wong, Eric Pauker
-  - organ: Dieter Ruehle and Michael J. Sokyrka
-  - special thanks: Robert White, Ron Barr and Bruce Jamieson
+- **Credits** (English manual p.21; the in-game credits in NHL94PC `src/data/far/credits.asm` list the same names):
+  - original game concept: Jim Simmons, Scott Orr, Richard Hilleman
+  - PC version game design: Dave Warfield, Richard Hilleman
+  - project leader: Robert Penner
+  - programming: Robert Penner, Victoria Wong, Eric Pauker; additional programming: Pete Veys, Dan Gessel
+  - speech programming: Iain Macanulty
+  - organ music: Dieter Ruehle and Michael J. Sokyrka
+  - special thanks: Robert White, Ron Barr and Bruce Jamieson, among others
 - **Box:**
   - "real NHL teams and logos"
   - "simulate the actual 1993 NHL season or create a league of your own with up to 24 human participants"
@@ -271,8 +297,12 @@ gave us the '94 feature requirements", and Brook did not like how 93S played, "s
   - "refs on the ice"
   - one-timers
   - one or two players
-- **Manual (German):** league play for up to 24 participants, a league manager, and saved playoff and league
-  highlights.
+- **Manual (English):**
+  - one-timers (p.7)
+  - the Announcer's Booth pause screen (p.8)
+  - league play "with up to twenty four human players" (p.13)
+  - a league manager with player trades between human-controlled teams (p.15)
+  - saved league and playoff highlights (p.10)
 - **Code:** NHL94PC `docs/CONSOLE_LINEAGE.md` sums it up as "a 93-generation engine carrying 94 content and the headline
   94 gameplay changes".
 
@@ -293,9 +323,9 @@ gave us the '94 feature requirements", and Brook did not like how 93S played, "s
   - 93S -> 94 PC: the 93-generation engine.
   - 94S -> 94 PC: one-timers, wall animations and organ tunes match 94S.
   - 94G -> 94 PC: the 94 feature set and content.
-- **Credit puzzle.** Wong names Robert White as the DOS lead. The German manual names Robert Penner as project lead and
-  lists White only under special thanks. White is in the 94S programming credits. An English 94 PC manual would
-  settle it.
+- **Who led it.** The English manual (p.21) and the in-game credits both name Robert Penner as project leader and
+  first programmer. Robert White appears only under special thanks; he is a credited 94S programmer. Wong remembers
+  White as the DOS lead. This page follows the credits.
 
 ## NHL 95, 1994
 
@@ -321,10 +351,9 @@ gave us the '94 feature requirements", and Brook did not like how 93S played, "s
   The season, trade, create, awards and schedule files are new in 95. Lesser re-filed the 94 code into subsystem files
   (NHL95Genesis `docs/WHY_95_MOVED.md`).
 - **Inherited:** 94G's engine (code), so 94G -> 95G is confirmed.
-- **The "Season mode" arrow from 94 PC:** 94 PC had a full season with the 10-award list a year before any console
-  (code: `AwardNamePtrs`, NHL94PC). The 95G and 95S boxes call season mode and its awards "all new in '95".
-  - 95G's season and awards code is new in 95 and not shared with the DOS code.
-  - So the arrow is a design (mandate) arrow, not a code arrow (inference).
+- **The "Season mode" arrows from 94 PC:** season mode first appeared on 94 PC and showed up on the 95 console
+  versions. 94 PC had a full season with end-of-season awards (box; code: `AwardNamePtrs`, NHL94PC). The 95G and 95S
+  boxes call season mode and its awards "all new in '95".
 
 ### 95S: NHL 95 (SNES)
 
@@ -361,11 +390,12 @@ reconciled.
 
 ### 95 PC: NHL Hockey '95 (DOS CD-ROM)
 
-- **Credits** (credit pages in the code, NHL95PC `src/data/front/scoreboard_data.asm`):
+- **Credits** (manual p.33; the credit pages in the code, NHL95PC `src/data/front/scoreboard_data.asm`, agree):
   - lead programmer Lance Wall
   - programmers Victoria Wong, Robert Penner, Kurt Kennett
+  - audio programmers Alan Stewart, Iain Macanulty
   - producer and design Ken Sayler
-  - a SportsDesk announcer (Michael Donovan) and a rink announcer (Bruce Jamieson)
+  - a Sportsdesk announcer (Michael Donovan) and a rink announcer (Bruce Jamieson)
 - **Box:**
   - "New player moves include fake shots, drop passes, and players laying down on 'D'"
   - "New in '95": penalty shots
@@ -374,7 +404,13 @@ reconciled.
   - unlimited trades, signing rookies, starting line-ups, the 84-game season
   - updated rosters with the Mighty Ducks and Panthers
   - high-resolution screens and "digital quality sound effects and music"
-- **Manual:** no public scan found.
+- **Manual:**
+  - a "Digitized Speech" game setting (p.7)
+  - fake shot (p.9) and shot block (p.10)
+  - penalty shots "when a player is on a breakaway ... and an opponent brings him down from behind" (p.14)
+  - league play "with up to 26 human players" (p.17)
+  - the League Manager, with trades only "between human-controlled teams", as in 94 PC (p.20)
+  - no shootout, practice mode or goalie control section was found in the manual's text
 - **Code:** "95 PC is built on the 94 PC engine, not ported from 95 Genesis" (NHL95PC `docs/CONSOLE_LINEAGE.md`, "What
   this means").
   - From the 94 consoles: board, bench and cross-checks, penalty shots, and a goalie poke check like 94S's.
@@ -451,20 +487,22 @@ reconciled.
 | Referee and PA voices | Different (96S only) | Manual, box |
 | Players | Different (1-2 vs 1-4) | Box |
 
-- **The "Matchup & Rink Announcer Speech" arrow from 95 PC:**
-  - Sourced: of the 96 console games, only 96S lists referee voices and public address announcers (manual, box). The
+- **The "Matchup & Rink Announcer Speech" arrow from 95 PC:** the rink announcer speech starts at 94 PC, carries
+  into 95 PC, then 96S (Abdul). The sources along that path:
+  - 94 PC: the box lists "digitized speech" and "digitized voices"; the manual credits speech programming to Iain
+    Macanulty and thanks Bruce Jamieson (p.21); the code has 61 announcer routines (`Pa` / `Say`).
+  - 95 PC: a "Digitized Speech" setting (manual p.7), and Bruce Jamieson credited as rink announcer (manual p.33).
+  - 96S: of the 96 console games, only 96S lists "vocal referees" (manual) and "public address announcers" (box). The
     96G manual's sound line has crowd chants and organ tunes only.
-  - Sourced: on the DOS side, 95 PC credits a rink announcer, Bruce Jamieson (code credits). 94 PC already has
-    announcer code (61 `Pa` / `Say` routines, against 49 in 95 PC) and thanks Bruce Jamieson and Ron Barr in its
-    German manual.
-  - So the speech may start at 94 PC rather than 95 PC.
-  - That 96S took it from the DOS games is not confirmed: there is no 96S code to check.
+  - 96 PC has it too: speech is "the digitized voices of the announcer and the ref" (manual p.14), and "the announcer
+    introduces tonight's matchup" before the scouting report (manual p.21).
+  - There is no 96S code, so the link to 96S rests on its box and manual.
 
 ### 96 PC: NHL 96 (DOS CD-ROM)
 
-- **Credits:** the manual credits name Pioneer Productions and EA Canada, with Victoria Wong, Lance Wall and Kurt
-  Kennett among the programmers, "the core of the 95 PC team" (NHL96PC `README.md`, citing manual p.37). No public scan
-  of the 96 PC manual was found.
+- **Credits (manual):** developed by "Pioneer Productions, part of the EA Canada studio" (p.2). Programmers: Victoria
+  Wong, Lance Wall, Kurt Kennett, D. Funky Swadling, Jay MacDonald, Eric Pauker, Spencer Cathey; producer and
+  designer Ken Sayler (p.39). Wong, Wall, Kennett and Sayler are the core of the 95 PC team.
 - **Box ("New in '96"):**
   - power-play offence, penalty-killing defence
   - goalie control
@@ -473,6 +511,15 @@ reconciled.
   - player portraits and video profiles
   - "eleven freewheeling camera angles"
   - Gravis GrIP 4-player adaptor support
+- **Manual ("NHL 96 Features", p.2):**
+  - exhibition, season and playoff modes
+  - "two-computer modem connection for Exhibition games"
+  - "up to four human-controlled players in any game"
+  - "Rookie and All-Star levels of competition" (the code also has a third level, Pro: NHL96PC `docs/FEATURES.md`)
+  - give and go, one-timer shots and passes
+  - a fighting option
+  - player creation and trades between any teams (p.18-19)
+  - announcer and referee speech (p.14), with a matchup introduction (p.21)
 - **Code** (NHL96PC `docs/CONSOLE_LINEAGE.md`): built on 95 PC (`README.md`, "Lineage"). It takes the 96 mandate with
   its own code:
   - three skill levels
@@ -504,8 +551,8 @@ not checked.
 | Battery save | 93G (box) | 94G, 95G, 95S | 93S, 94S |
 | Shootout mode | 94G, 94S | Sega CD, 95G, 96G | DOS games, 96S |
 | League season, awards | 94 PC (box) | 95 PC, 95G, 95S, 96 | 94 consoles |
-| Trades | 94 PC (code) | 95G, 95S, 95 PC, 96 | 94 consoles |
-| Create player | 95G, 95S | 95 PC, 96G, 96S | 94 PC |
+| Trades | 94 PC (manual) | 95G, 95S, 95 PC, 96 | 94 consoles |
+| Create player | 95G, 95S | 95 PC (box), 96 | 94 PC |
 | Practice 2-on-2 | 95G, 95S | 96S (manual) | 95 PC |
 | Skill levels | 96G, 96S | 96 PC | 95 PC |
 | Modem play | 96 PC | none | consoles |
@@ -542,7 +589,7 @@ not checked.
 | Per-team organ music | 94G (72 tunes) | 94S (53), 94 PC | 93 games |
 | Referee on the ice | 94 PC (code, box) | 95 PC | consoles |
 | Video clips | Sega CD (box) | 95 PC, 96 PC | consoles |
-| Announcer speech | Sega CD, 94 PC | 95 PC, 96S (box) | none found |
+| Rink announcer speech | 94 PC | 95 PC, 96S, 96 PC | none found |
 | On-ice Cup ceremony | 96G, 96S (box) | 96 PC (code) | none |
 
 Notes on the tables:
@@ -551,26 +598,28 @@ Notes on the tables:
 - 96S's play modes are exhibition, season and practice (manual p.5), so the shootout mode is listed as missing there.
 - The 94 PC Stanley Cup animations (`SPAgetcup`) are older than the 96 ceremony. The 96 PC version adds players
   skating the Cup on the ice (code).
-- The Sega CD's Ron Barr is a voiced scouting report (NHL94Genesis `docs/segacd_differences.md`). The 94 PC box lists
-  "digitized speech", and the code has 61 announcer routines.
+- Rink announcer speech: 94 PC box ("digitized speech") and manual credits (speech programming); 95 PC manual
+  (speech setting, rink announcer); 96S box and manual; 96 PC manual. The Sega CD's Ron Barr is a voiced scouting
+  report (NHL94Genesis `docs/segacd_differences.md`), counted under "Ron Barr coverage", not here.
 
 ## What the evidence says about Abdul's diagram
 
 - **Genesis-led, confirmed.** Every Genesis game builds on the one before it (code), and the Genesis manuals list each
   year's new features against the previous Genesis game.
-- **SNES from Genesis, confirmed with a twist.** 93S started from 92G code, then took 93G's features (code). 94S took
-  its features from 94G but much of its 65816 code from 93S (code). 95S is a separate code base by another team that
+- **SNES from Genesis, confirmed with a twist.** 93S started from 92G code, then took 93G's features (code). 94S
+  started from the 93S code and added the 94G features (code: 808 names from 93S, 306 from 94G). The SNES games
+  shipped one to three months after the Genesis games in 1992-94, and with them in 1995. 95S is a separate code base by another team that
   still carries 94S code. 96S was made by Tiburon, whose founders made 95S (manual).
-- **DOS from SNES, confirmed for 94 PC.** Wong's interview and the code agree: one-timers, goalie wall animations and
-  organ tunes come from 94S. 95 PC and 96 PC then build on the DOS engine, not on a console port, and add each year's
+- **DOS from SNES, confirmed for 94 PC.** Wong's interview (Classic Gaming Quarterly, 2016) and the code agree:
+  one-timers, goalie wall animations and organ tunes come from 94S. 95 PC and 96 PC then build on the DOS engine, not on a console port, and add each year's
   console features in their own code.
 - **Yearly mandate, confirmed.** The boxes in each year share most feature lines and, apart from 94 PC ("The
   ultimate hat trick", with the same "Any Goalie, NHL" quote as the other 94 boxes), their headline. Each
   platform implemented the features separately: drop pass, fake shot, penalty shots, skill levels, fighting and PK AI each
   differ in code between platforms.
-- **Cross-platform arrows.** "Season mode" (94 PC to the 95 consoles) fits the sources, but as a design idea, not
-  shared code. "Matchup & rink announcer speech" (95 PC to 96S) fits the 96S box and manual, which are the only 96
-  console sources to mention voices. It cannot be checked in code, and the DOS speech goes back to 94 PC.
+- **Cross-platform arrows.** Season mode first appeared on 94 PC and showed up on the 95 console versions. Rink
+  announcer speech starts at 94 PC, carries into 95 PC, then 96S; 96S's box and manual are the only 96 console
+  sources to mention announcer or referee voices. 96 PC's manual also has the announcer introduce the matchup.
 
 ## Sources
 
@@ -578,9 +627,19 @@ Notes on the tables:
 
 - Classic Gaming Quarterly, "Amory Wong: The Classic Gaming Quarterly Interview", Chris Alaimo, February 2, 2016:
   http://www.cgquarterly.com/2016/02/02/amory-wong-the-classic-gaming-quarterly-interview/
+  Source for the DOS game using the SNES code, and for Wong's account of how 94S was made.
 - The Hockey News, "The Making of NHL '94: An Oral History", Sal Barry, October 7, 2018:
   https://thehockeynews.com/news/all-access/the-making-of-nhl-94-an-oral-history
-- The DOS-developer magazine interview Abdul recalls: not found.
+  Source for EA Canada making 94S and 94 PC, and for the 94 release months.
+
+**Release dates:** Wikipedia's articles
+[NHLPA Hockey '93](https://en.wikipedia.org/wiki/NHLPA_Hockey_%2793), [NHL '94](https://en.wikipedia.org/wiki/NHL_%2794),
+[NHL 95](https://en.wikipedia.org/wiki/NHL_95) and [NHL 96](https://en.wikipedia.org/wiki/NHL_96), which cite
+Electronic Gaming Monthly, GamePro, Nintendo's SNES release list and EA's September 30, 1995 press release.
+
+**DOS game scans:** [EA Sports NHL 94-97 PC: Box, Manual & Pack-in Scans](https://archive.org/details/ea-nhl94-nhl95-nhl96-nhl97-ibm-pc-dos-win-scans)
+on the Internet Archive ([PC] below). It has the US box, English manual and reference card for 94 PC, and the box and
+manual for 95 PC and 96 PC.
 
 **Box backs** (North American boxes; [GDB] = gamesdatabase.org, [LB] = LaunchBox Games Database):
 
@@ -592,13 +651,13 @@ Notes on the tables:
 | 94G | [LB](https://images.launchbox-app.com/fcc00a99-bf30-48ed-950a-87212142ed11.jpg) |
 | 94 Sega CD | [LB](https://images.launchbox-app.com/c23350df-8cca-415e-bdf8-0db9531fd7fc.jpg) |
 | 94S | [LB](https://images.launchbox-app.com/227c9bfb-7beb-4085-b116-70f07e210569.jpg) |
-| 94 PC | [LB](https://images.launchbox-app.com/cafd40fb-4e5f-4c26-9ad2-a5795a2bf216.jpg) |
+| 94 PC | [LB](https://images.launchbox-app.com/cafd40fb-4e5f-4c26-9ad2-a5795a2bf216.jpg), [PC: back leaflet](https://archive.org/download/ea-nhl94-nhl95-nhl96-nhl97-ibm-pc-dos-win-scans/NHL94-PC/US/NHL94-PC_US_01_Back_Leaflet.png) |
 | 95G | [GDB](https://www.gamesdatabase.org/Media/SYSTEM/Sega_Genesis/BoxBack/big/Nhl_95_-_1994_-_Electronic_Arts.jpg) |
 | 95S | [GDB](https://www.gamesdatabase.org/Media/SYSTEM/Nintendo_SNES/BoxBack/big/Nhl_95_-_1994_-_Electronic_Arts.jpg) |
-| 95 PC | [LB](https://images.launchbox-app.com/708f73ba-79f4-4194-bbf3-e27a7faa4536.jpg) |
+| 95 PC | [PC](https://archive.org/download/ea-nhl94-nhl95-nhl96-nhl97-ibm-pc-dos-win-scans/NHL95-PC/NHL95-PC_01_Box_Back.png), [LB](https://images.launchbox-app.com/708f73ba-79f4-4194-bbf3-e27a7faa4536.jpg) |
 | 96G | [GDB](https://www.gamesdatabase.org/Media/SYSTEM/Sega_Genesis/BoxBack/big/Nhl_96_-_Electronic_Arts.jpg) |
 | 96S | [GDB](https://www.gamesdatabase.org/Media/SYSTEM/Nintendo_SNES/BoxBack/big/Nhl_96_-_1995_-_EA_SPORTS.jpg) |
-| 96 PC | [GDB](https://www.gamesdatabase.org/Media/SYSTEM/Microsoft_DOS/BoxBack/big/NHL_96_-_1995_-_EA_SPORTS.jpg) |
+| 96 PC | [PC](https://archive.org/download/ea-nhl94-nhl95-nhl96-nhl97-ibm-pc-dos-win-scans/NHL96-PC/NHL96-PC_01_Box_Back.png), [GDB](https://www.gamesdatabase.org/Media/SYSTEM/Microsoft_DOS/BoxBack/big/NHL_96_-_1995_-_EA_SPORTS.jpg) |
 
 **Manuals.** [Gen] is the Internet Archive collection
 [SEGAGenesisMegaDriveManuals](https://archive.org/details/SEGAGenesisMegaDriveManuals) and [SNES] is
@@ -612,12 +671,11 @@ Notes on the tables:
 | 94G | [Gen: NHL '94](https://archive.org/download/SEGAGenesisMegaDriveManuals/NHL%20%2794%20%28USA%2C%20Europe%29.pdf) |
 | 94 Sega CD | [SEGA CD Manuals: NHL '94](https://archive.org/details/SEGACDManuals) |
 | 94S | [SNES: NHL '94](https://archive.org/download/SNESManuals/NHL%20%2794%20%28USA%29.pdf) |
-| 94 PC | German only: [Handbuch](https://archive.org/details/nhl-hockey-handbuch), [Referenzkarte](https://archive.org/details/nhl-hockey-referenzkarte) |
+| 94 PC | [PC: US manual](https://archive.org/download/ea-nhl94-nhl95-nhl96-nhl97-ibm-pc-dos-win-scans/NHL94-PC/US/NHL94-PC_US_03_Manual.pdf); German: [Handbuch](https://archive.org/details/nhl-hockey-handbuch) |
 | 95G | [Gen: NHL 95](https://archive.org/download/SEGAGenesisMegaDriveManuals/NHL%2095%20%28USA%2C%20Europe%29.pdf) |
 | 95S | [SNES: NHL '95](https://archive.org/download/SNESManuals/NHL%20%2795%20%28USA%29.pdf) |
-| 95 PC | Not found |
+| 95 PC | [PC: manual](https://archive.org/download/ea-nhl94-nhl95-nhl96-nhl97-ibm-pc-dos-win-scans/NHL95-PC/NHL95-PC_02_Manual.pdf) |
 | 96G | [Gen: NHL 96](https://archive.org/download/SEGAGenesisMegaDriveManuals/NHL%2096%20%28USA%2C%20Europe%29.pdf) |
 | 96S | [SNES: NHL '96](https://archive.org/download/SNESManuals/NHL%20%2796%20%28USA%29.pdf) |
-| 96 PC | Not found; NHL96PC docs cite pages |
+| 96 PC | [PC: manual](https://archive.org/download/ea-nhl94-nhl95-nhl96-nhl97-ibm-pc-dos-win-scans/NHL96-PC/NHL96-PC_03_Manual.pdf) |
 
-The 95 PC and 96 PC manuals and an English 94 PC manual would close the remaining gaps.
