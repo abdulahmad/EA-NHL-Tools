@@ -175,6 +175,11 @@ of each player, since there is no grey picture to colour. They are `Player_Team_
 - **The card's back, colours matched to the player's NHL 95 PC portrait** (the same photo there): Guy
   Hebert, Randy Ladouceur, Troy Loney, Gord Murphy, Joe Cirella, Scott Mellanby.
 - **The card's front, colours matched to his NHL 95 PC portrait**: Andrei Lomakin, Brian Skrudland.
+
+For these eight the card's photo was lined up with the 95 PC portrait. Hebert, Murphy, Lomakin, Skrudland
+and Mellanby show the portrait's full height, top to bottom. Ladouceur, Murphy, Cirella and Lomakin have
+the portrait's light as well as its colours (the cards are washed out next to it), and Lomakin's front,
+a small picture, was cleaned of its noise first.
 - **The card's front, contrast raised**: Terry Yake, Anatoli Semenov, Mike Richter (his mask).
 - **The card's back, contrast raised**: Alexei Kasatonov.
 
