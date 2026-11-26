@@ -27,6 +27,7 @@ Note that this suite of tools have only been tested on a windows machine. Some o
 
 `Docs` - Documentation on various aspects of the NHL games.
   - [Game Lineage](Docs/Game-Lineage.md) - How features and gameplay changes carried between the EA NHL games, NHL 92 to NHL 96, across Genesis, SNES and the DOS games.
+  - [Feature Candidates](Docs/Feature-Candidates.md) - Which features from the other NHL 92-96 games could be added to NHL 94 Genesis and to NHL 95 PC, with the donor code and a difficulty estimate.
 
 `IFF-To-WAV` - Converts NHL95 PC `.IFF` files to `.WAV` (out of game music files)
 

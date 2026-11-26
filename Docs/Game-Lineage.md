@@ -563,7 +563,9 @@ reconciled.
   - 96S: of the 96 console games, only 96S lists "vocal referees" (manual) and "public address announcers" (box). The
     96G manual's sound line has crowd chants and organ tunes only.
   - 96 PC has it too: speech is "the digitized voices of the announcer and the ref" (manual p.14), and "the announcer
-    introduces tonight's matchup" before the scouting report (manual p.21).
+    introduces tonight's matchup" before the scouting report (manual p.21). The code shows the matchup introduction is
+    older: 94 PC (`PaTonightIntro`, `PaPlayoffTonight` in NHL94PC src/front/crowd.asm) and 95 PC (`PreGameScreen`
+    calling `PaTonightIntro` in NHL95PC src/front/pregame/PreGameScreen.c) already have it.
   - There is no 96S code, so the link to 96S rests on its box and manual.
 
 ### 96 PC: NHL 96 (DOS CD-ROM)
@@ -691,7 +693,13 @@ Notes on the tables:
   Abdul's interpretation that is shared design more than shared code, and the code comparison and Lesser's 94
   feature list (Noclip ~21:38) fit that. Rink
   announcer speech starts at 94 PC, carries into 95 PC, then 96S; 96S's box and manual are the only 96 console
-  sources to mention announcer or referee voices. 96 PC's manual also has the announcer introduce the matchup.
+  sources to mention announcer or referee voices. 96 PC's manual also has the announcer introduce the matchup, which
+  the code shows 94 PC and 95 PC already do.
+
+## Related pages
+
+- [Feature candidates](Feature-Candidates.md): which features from the other 92-96 games could be added to 94G and to
+  95 PC, with the donor code and a difficulty estimate.
 
 ## Sources
 
