@@ -126,9 +126,9 @@ YouTube's automatic captions, so it is paraphrased here and quoted only where th
 - Ron Barr was brought in for the EA Sports Network branding on NHLPA 93, giving pre-game scouting reports (THN).
 - 95's headline features: "trading between teams, the ability to create players and the much-anticipated full-season
   mode" (THN).
-- 94 PC: "Like the Sega CD version, the PC version includes full-motion video and Barr's voice" (THN). The 94 PC box
-  shows Ron Barr at the sports desk, but no video clips were found in its box text or code, so the feature table still
-  lists video clips from 95 PC (see the notes under the tables).
+- 94 PC: "Like the Sega CD version, the PC version includes full-motion video and Barr's voice" (THN). Abdul
+  confirms the 94 PC intro has full-motion video, and the code has the movie player (see
+  [94 PC](#94-pc-nhl-hockey-dos-1993)).
 
 ## Diagram (Abdul's interpretation)
 
@@ -356,6 +356,10 @@ These rows support both arrows into 93S (from 92G and from 93G).
   - league play "with up to twenty four human players" (p.13)
   - a league manager with player trades between human-controlled teams (p.15)
   - saved league and playoff highlights (p.10)
+- **Full-motion video in the intro:** the Hockey News says the PC version "includes full-motion video", and Abdul
+  confirms the intro has it. The code has a movie player and start-up movies: the `MOVIE.OVL` overlay with `MviOpen`,
+  `MviNextFrame` and `MviClose` (NHL94PC `src/lib/rtlink/ovl_entries.inc`), and `PlayTitleMovies`, which opens the
+  `P1.MVI` and `G1.MVI` movie files (NHL94PC `src/front/title_movies.asm`). The box does not list video.
 - **Code:** NHL94PC `docs/CONSOLE_LINEAGE.md` sums it up as "a 93-generation engine carrying 94 content and the headline
   94 gameplay changes".
 
@@ -479,7 +483,8 @@ reconciled.
   - From the 94 consoles: board, bench and cross-checks, penalty shots, and a goalie poke check like 94S's.
   - From 95G: the 1993-94 season data, and 95G-style fake shots, shot blocks and roster tools, each in 95 PC's own code.
   - Its own: a contextual drop pass (no button), a fake one-timer, four shot-block animations, a goalie knee hold,
-    more penalties, CD video, high resolution and digitized music.
+    more penalties, much more full-motion video than 94 PC (Abdul), high resolution and
+    digitized music.
   - Not taken: shootout, manual goalie, more than two players, practice mode.
 - **Arrows:**
   - 94 PC -> 95 PC: confirmed by the code.
@@ -651,7 +656,7 @@ not checked.
 | Ron Barr coverage | 93G (manual) | 93S, Sega CD, 94 PC | none |
 | Per-team organ music | 94G (72 tunes) | 94S (53), 94 PC | 93 games |
 | Referee on the ice | 94 PC (code, box) | 95 PC | consoles |
-| Video clips | Sega CD (box) | 95 PC, 96 PC | consoles |
+| Full-motion video | 94 PC (intro only) | Sega CD, 95 PC (much more), 96 PC | cartridge games |
 | Rink announcer speech | 94 PC | 95 PC, 96S, 96 PC | none found |
 | On-ice Cup ceremony | 96G, 96S (box) | 96 PC (code) | none |
 
@@ -664,8 +669,8 @@ Notes on the tables:
 - Rink announcer speech: 94 PC box ("digitized speech") and manual credits (speech programming); 95 PC manual
   (speech setting, rink announcer); 96S box and manual; 96 PC manual. The Sega CD's Ron Barr is a voiced scouting
   report (NHL94Genesis `docs/segacd_differences.md`), counted under "Ron Barr coverage", not here.
-- Video clips: the Hockey News says 94 PC "includes full-motion video" like the Sega CD. Its box lists none and none
-  was found in the NHL94PC code, so 94 PC is not listed; treat that row as open.
+- Full-motion video: 94 PC has it in the intro only (Abdul; the Hockey News; NHL94PC `PlayTitleMovies` and the
+  `MOVIE.OVL` player). 94 PC (fall 1993) shipped before the Sega CD (January 1994). 95 PC has much more (Abdul).
 
 ## What the evidence says about Abdul's diagram
 
