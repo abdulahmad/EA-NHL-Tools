@@ -165,12 +165,30 @@ the groups above.
 | <img src="docs/SegaCD_PIT_RickTocchet_grey.png" width="144" alt="grey"> | <img src="docs/SegaCD_PIT_RickTocchet_source.png" alt="95 PC portrait"> | <img src="faces/SegaCD_PIT_RickTocchet.png" width="144" alt="Rick Tocchet"> |
 | Sega CD (grey) | 95 PC portrait | Rick Tocchet (PIT) |
 
+## Players with a stock picture
+
+In the game, the starters of Anaheim and Florida have no photo: on the cartridge and on the Sega CD they
+get a stock picture (a skater or a goalie). On the Sega CD the same goes for Mike Richter, the Rangers'
+starting goalie there. These 12 faces are made from scratch for them, from EA's 1993-94 NHL '94 card
+of each player, since there is no grey picture to colour. They are `Player_Team_Name.png`.
+
+- **The card's back, colours matched to the player's NHL 95 PC portrait** (the same photo there): Guy
+  Hebert, Randy Ladouceur, Troy Loney, Gord Murphy, Joe Cirella, Scott Mellanby.
+- **The card's front, colours matched to his NHL 95 PC portrait**: Andrei Lomakin, Brian Skrudland.
+- **The card's front, contrast raised**: Terry Yake, Anatoli Semenov, Mike Richter (his mask).
+- **The card's back, contrast raised**: Alexei Kasatonov.
+
+John Vanbiesbrouck isn't here: the cartridge already has a photo of him.
+
+![The 12 faces for players with a stock picture](docs/group-stock-players.png)
+
 ## In the game
 
 NHL94Genesis-C-Port shows these faces when "Colour player photos" is on (Game page). It looks for
 this folder, `NHL94-colored-faces` (its `faces/`), beside the program, or in the folder `NHL94_COLORED_FACES` names, and
 shows each card's face pixel for pixel. Cards it has no face for are coloured at run time from the
-player's own NHL 95 PC and NHL 94 PC files.
+player's own NHL 95 PC and NHL 94 PC files. A `Player_` face is shown in place of the stock picture for
+the player of that name, on whichever team he plays for.
 
 ## AI assistance
 
