@@ -15,6 +15,70 @@ game sprites of **NHL 95 PC** and **NHL 96 PC**:
 
 The work was paused on 2026-11-18. See [`scripts/FINDINGS.md`](scripts/FINDINGS.md) for everything that was learned.
 
+## Pictures
+
+All pictures below are renders of the models. None of them show the original game sprites.
+
+### NHL 95 PC and NHL 96 PC side by side
+
+Each game's model turned at that game's own sprite size and camera pitch (95: about 37 px tall, about 25 degrees;
+96: about 58 px tall, about 13 degrees), one sample per pixel like the games. Left is the 95 model, right the 96 model. Shown at 5x.
+
+| At NHL 95 PC resolution | At NHL 96 PC resolution |
+| --- | --- |
+| ![95 and 96 models at 95 resolution](compare_95_96/turntable_nhl95_angle_and_size.gif) | ![95 and 96 models at 96 resolution](compare_95_96/turntable_nhl96_angle_and_size.gif) |
+| Actual size: ![](compare_95_96/turntable_nhl95_angle_and_size_1x.gif) | Actual size: ![](compare_95_96/turntable_nhl96_angle_and_size_1x.gif) |
+
+### NHL 96 PC (Buffalo home), latest round (clean v5)
+
+| Hi-res | Sprite size | Actual size |
+| --- | --- | --- |
+| ![96 v5 hi-res turntable](nhl96pc/clean_v5/turntable_large.gif) | ![96 v5 sprite-size turntable](nhl96pc/clean_v5/turntable_sprite_size.gif) | ![96 v5 actual size](nhl96pc/clean_v5/turntable_sprite_size_1x.gif) |
+
+![96 v5 large views](nhl96pc/clean_v5/large_views.png)
+
+The eight game directions at sprite size:
+
+![96 v5 eight directions](nhl96pc/clean_v5/eight_directions.png)
+
+Close-ups of the modelled helmet, gloves and skates:
+
+![helmet](nhl96pc/clean_v5/closeup_helmet.png)
+![gloves](nhl96pc/clean_v5/closeup_gloves.png)
+![skates](nhl96pc/clean_v5/closeup_skates.png)
+
+Angles the game never drew (in between its eight directions), clean v3:
+
+![angles the game never drew](nhl96pc/clean_v3/angles_the_game_never_drew.png)
+
+How it got there, sprite-size turntables of each round:
+
+| Carved standing pose | Clean v1 | Clean v2 | Clean v3 | Clean v4 | Clean v5 |
+| --- | --- | --- | --- | --- | --- |
+| ![](nhl96pc/standing_pose/turntable_sprite_size.gif) | ![](nhl96pc/clean_v1/turntable_sprite_size.gif) | ![](nhl96pc/clean_v2/turntable_sprite_size.gif) | ![](nhl96pc/clean_v3/turntable_sprite_size.gif) | ![](nhl96pc/clean_v4/turntable_sprite_size.gif) | ![](nhl96pc/clean_v5/turntable_sprite_size.gif) |
+
+### NHL 95 PC (Toronto home), latest round (v5)
+
+| Hi-res | Sprite size |
+| --- | --- |
+| ![95 v5 hi-res turntable](nhl95pc/v5_mesh/turntable_mesh_large.gif) | ![95 v5 sprite-size turntable](nhl95pc/v5_mesh/turntable_mesh_sprite_size.gif) |
+
+![95 v5 eight directions](nhl95pc/v5_mesh/mesh_8_directions_large.png)
+
+Sixteen directions at sprite size:
+
+![95 v5 sixteen directions](nhl95pc/v5_mesh/mesh_16_directions_sprite_size.png)
+
+How it got there, hi-res turntables of each round:
+
+| First model (voxels) | v2 | v3 | v4 | v5 |
+| --- | --- | --- | --- | --- |
+| ![](nhl95pc/previews/turntable_large.gif) | ![](nhl95pc/v2_mesh/turntable_mesh_large.gif) | ![](nhl95pc/v3_mesh/turntable_mesh_large.gif) | ![](nhl95pc/v4_mesh/turntable_mesh_large.gif) | ![](nhl95pc/v5_mesh/turntable_mesh_large.gif) |
+
+Voxels to smooth mesh (v2):
+
+![v2 before and after](nhl95pc/v2_mesh/before_after.png)
+
 ## No game data
 
 No retail game data is in this folder. The scripts read the sprites and palettes from your own copy of
