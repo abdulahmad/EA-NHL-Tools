@@ -1,0 +1,90 @@
+newmtl idx000_gear
+Kd 0.0000 0.0000 0.0000
+newmtl idx134_gear
+Kd 0.8784 0.5020 0.5020
+newmtl idx136_gear
+Kd 0.7529 0.3765 0.3765
+newmtl idx145_forearm_medium
+Kd 0.8784 0.8784 0.8784
+newmtl idx148_arm_stripe_3_medium
+Kd 0.0000 0.0000 0.4392
+newmtl idx151_arm_stripe_2_medium
+Kd 0.8784 0.8784 0.8784
+newmtl idx154_arm_stripe_1_medium
+Kd 0.0000 0.0000 0.4392
+newmtl idx157_upper_arm_medium
+Kd 0.8784 0.8784 0.8784
+newmtl idx159_yoke_corner
+Kd 0.8784 0.8784 0.8784
+newmtl idx160_shoulder_patch
+Kd 0.1412 0.0000 0.6275
+newmtl idx161_yoke_3
+Kd 0.8157 0.8157 0.8157
+newmtl idx162_yoke_1
+Kd 0.9882 0.9882 0.9882
+newmtl idx163_yoke_2
+Kd 0.9882 0.9882 0.9882
+newmtl idx166_jersey_medium
+Kd 0.8784 0.8784 0.8784
+newmtl idx168_waist_1_odd
+Kd 0.0000 0.0000 0.5020
+newmtl idx169_waist_1_even
+Kd 0.0000 0.0000 0.4392
+newmtl idx172_waist_2_medium
+Kd 0.8784 0.8784 0.8784
+newmtl idx175_waist_3_medium
+Kd 0.0000 0.0000 0.4392
+newmtl idx178_pants_stripe_2
+Kd 0.0000 0.0000 0.5490
+newmtl idx179_pants_stripe_1
+Kd 0.8157 0.8157 0.8157
+newmtl idx180_pants_medium
+Kd 0.0000 0.0000 0.5490
+newmtl idx182_socks_medium
+Kd 0.8157 0.8157 0.8157
+newmtl idx185_socks_stripe_1_medium
+Kd 0.0000 0.0000 0.4392
+newmtl idx188_socks_stripe_2_medium
+Kd 0.8157 0.8157 0.8157
+newmtl idx190_helmet_medium
+Kd 0.8157 0.8157 0.8157
+newmtl idx192_gear
+Kd 0.8157 0.8157 0.8157
+newmtl idx193_gear
+Kd 0.7529 0.8157 0.9882
+newmtl idx194_gear
+Kd 0.1412 0.0000 0.6275
+newmtl idx195_gear
+Kd 0.7529 0.8157 0.9882
+newmtl idx196_gear
+Kd 0.8157 0.8157 0.8157
+newmtl idx208_gear
+Kd 0.1412 0.0000 0.6275
+newmtl idx209_gear
+Kd 0.1412 0.0000 0.6275
+newmtl idx210_gear
+Kd 0.1412 0.0000 0.6275
+newmtl idx211_gear
+Kd 0.1412 0.0000 0.6275
+newmtl idx212_gear
+Kd 0.1412 0.0000 0.6275
+newmtl idx224_gear
+Kd 0.8157 0.8157 0.8157
+newmtl idx225_gear
+Kd 0.1412 0.0000 0.6275
+newmtl idx226_gear
+Kd 0.1412 0.0000 0.6275
+newmtl idx227_gear
+Kd 0.1412 0.0000 0.6275
+newmtl idx228_gear
+Kd 0.9882 0.9882 0.9882
+newmtl idx240_gear
+Kd 0.1412 0.0000 0.6275
+newmtl idx241_gear
+Kd 0.9882 0.9882 0.9882
+newmtl idx242_gear
+Kd 0.1412 0.0000 0.6275
+newmtl idx243_gear
+Kd 0.9882 0.9882 0.9882
+newmtl idx244_gear
+Kd 0.1412 0.0000 0.6275
