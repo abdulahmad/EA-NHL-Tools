@@ -4,6 +4,8 @@ import os;_c=os.getcwd();os.chdir('/workspace/preview_v2/platform_unique');impor
 from PIL import Image,ImageDraw,ImageFont
 A,S93SET=pickle.load(open('/workspace/preview_v2/platform_unique/v2/all.pkl','rb'))
 TR={'PC':255};BG=np.array([60,60,60],np.uint8)
+# Shown frame numbers: console sets from 1, 95 PC from 0 (the pickles keep PC 1-based).
+def shown(t,n):return n-1 if t=='PC' else n
 def img(t,n,s=3):
     a=A[t][n];tr=TR.get(t,0);m=a!=tr
     rgb=(vis.tpal if t=='PC' else vis.g94b)[np.where(m,a,0)].copy()
@@ -16,7 +18,7 @@ def grid(cells,title,out,W=1000,s=3):
     for lab,ks in cells:
         parts=[img(t,n,s) for t,n in ks];w=sum(p.width for p in parts)+6*(len(parts)-1);h=max(p.height for p in parts)
         c=Image.new('RGB',(max(w,len(lab)*9,len(ks)*70)+4,h+42),(15,15,15));d=ImageDraw.Draw(c);x=2
-        for p,(t,n) in zip(parts,ks):c.paste(p,(x,22+h-p.height));d.text((x,2),f'{t} {n}',fill=(255,255,255),font=F2);x+=max(p.width,64)+6
+        for p,(t,n) in zip(parts,ks):c.paste(p,(x,22+h-p.height));d.text((x,2),f'{t} {shown(t,n)}',fill=(255,255,255),font=F2);x+=max(p.width,64)+6
         d.text((2,h+24),lab,fill=(255,230,0),font=F2);ims.append(c)
     rows=[];row=[];x=0
     for c in ims:
