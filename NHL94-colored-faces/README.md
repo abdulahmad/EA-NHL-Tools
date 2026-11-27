@@ -31,7 +31,7 @@ painted into regions. A face's group depends on where its colour came from:
 | [A 1992-93 Bowman card](#a-1992-93-bowman-card) | 3 |
 | [Colours from a different photo](#colours-from-a-different-photo) | 1 |
 | [Hand coloured](#hand-coloured) | 9 |
-| **All** | **146** (144 cartridge, 2 Sega CD) |
+| **All** | **146** (144 cartridge, 2 Sega CD), plus 12 [stock players](#players-with-a-stock-picture) and 33 [NHL 95 Genesis photos](#nhl-95-genesis-photos-the-1993-94-rosters) |
 
 ### The same photo in NHL 95 PC
 
@@ -193,15 +193,31 @@ John Vanbiesbrouck isn't here: the cartridge already has a photo of him.
 
 ![The 12 faces for players with a stock picture: the Genesis grey picture made for each, and its colour](docs/group-stock-players.png)
 
+## NHL 95 Genesis photos (the 1993-94 rosters)
+
+NHL94Genesis-C-Port's 1993-94 roster sets give players the cartridge has no photo of their NHL 95 Genesis photo, read from
+the player's own NHL 95 ROM. These 33 faces colour those grey pictures, the same way as the cartridge's: the NHL 95 Genesis
+grey keeps its light, and the colour comes from the same photo in NHL 95 SNES, lined up over it. They are also
+`Player_Team_Name.png`, the team being the one he plays for in those sets. The faces' backgrounds stay grey.
+
+Bill Houlder, Garry Valk, Bob Corkum, Bryan Smolinski, Dominik Hasek, Derian Hatcher, Zdeno Ciger, Brian Benning, Jesse
+Belanger, Alexander Godynyuk, Chris Pronger, Jari Kurri (not the Sega CD's photo of him), Scott Niedermayer, Corey Millen,
+John MacLean, Sergei Zubov, Adam Graves, Craig Billington, Alexei Yashin, Alexandre Daigle, Dominic Roussel, Alexei
+Gusarov, Valeri Kamensky, Jeff Norton, Sandis Ozolins, Igor Larionov, Sergei Makarov, Daren Puppa, Shawn Chambers, Chris
+Gratton, Jamie Macoun, Wendel Clark, Sylvain Cote.
+
+Not coloured: Ulf Dahlen, Stephane Fiset, Sean Hill, Joe Murphy and Keith Tkachuk (NHL 95 SNES has a different photo of
+them). Guy Hebert, Terry Yake, Gord Murphy, Andrei Lomakin and Mike Richter keep the faces above.
+
 ## The colour sources
 
 `sources/` holds the picture each face's colour came from, under the face's own file name:
 
 - the NHL 95 PC portrait (`PORTRnnn.QFS`) or NHL 94 PC portrait (`PORTRAIT.NSH`), as the game has it;
-- the NHL 95 SNES photo;
+- the NHL 95 SNES photo (for the NHL 95 Genesis photos' `Player_` faces too);
 - the card's photo (EA's 1993-94 NHL '94 card or a 1992-93 Bowman card), cropped to the photo;
 - for Eric Lindros, the cropped head of the photo reference;
-- for the `Player_` faces, the photo on the player's EA NHL '94 card (the back, or the front).
+- for the stock players' `Player_` faces, the photo on the player's EA NHL '94 card (the back, or the front).
 
 The hand coloured faces have no colour source, except Dale Hawerchuk and Craig Janney, whose paint
 maps are there (`..._paintmap.png`).
