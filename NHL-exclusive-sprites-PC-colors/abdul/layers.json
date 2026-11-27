@@ -1,0 +1,1636 @@
+[
+ {
+  "file": "layers/01_Background.png",
+  "name": "Background",
+  "group": "",
+  "bbox": [
+   0,
+   0,
+   400,
+   400
+  ],
+  "visible": true,
+  "size": [
+   400,
+   400
+  ],
+  "opaque_px": 160000,
+  "semi_alpha": 0,
+  "colours": 1
+ },
+ {
+  "file": "layers/02_IF0000_632.png",
+  "name": "IF0000 - 632",
+  "group": "injury finished",
+  "bbox": [
+   0,
+   0,
+   32,
+   50
+  ],
+  "visible": true,
+  "size": [
+   32,
+   50
+  ],
+  "opaque_px": 1600,
+  "semi_alpha": 0,
+  "colours": 69
+ },
+ {
+  "file": "layers/03_IF0001_633.png",
+  "name": "IF0001 - 633",
+  "group": "injury finished",
+  "bbox": [
+   33,
+   0,
+   65,
+   49
+  ],
+  "visible": true,
+  "size": [
+   32,
+   49
+  ],
+  "opaque_px": 1568,
+  "semi_alpha": 0,
+  "colours": 75
+ },
+ {
+  "file": "layers/04_IF0002_634.png",
+  "name": "IF0002 - 634",
+  "group": "injury finished",
+  "bbox": [
+   66,
+   0,
+   98,
+   52
+  ],
+  "visible": true,
+  "size": [
+   32,
+   52
+  ],
+  "opaque_px": 1664,
+  "semi_alpha": 0,
+  "colours": 73
+ },
+ {
+  "file": "layers/05_IF0003_635.png",
+  "name": "IF0003 - 635",
+  "group": "injury finished",
+  "bbox": [
+   99,
+   0,
+   131,
+   51
+  ],
+  "visible": true,
+  "size": [
+   32,
+   51
+  ],
+  "opaque_px": 1632,
+  "semi_alpha": 0,
+  "colours": 74
+ },
+ {
+  "file": "layers/06_IF0004_636.png",
+  "name": "IF0004 - 636",
+  "group": "injury finished",
+  "bbox": [
+   132,
+   0,
+   164,
+   49
+  ],
+  "visible": true,
+  "size": [
+   32,
+   49
+  ],
+  "opaque_px": 1568,
+  "semi_alpha": 0,
+  "colours": 72
+ },
+ {
+  "file": "layers/07_IF0005_637.png",
+  "name": "IF0005 - 637",
+  "group": "injury finished",
+  "bbox": [
+   165,
+   0,
+   197,
+   51
+  ],
+  "visible": true,
+  "size": [
+   32,
+   51
+  ],
+  "opaque_px": 1632,
+  "semi_alpha": 0,
+  "colours": 72
+ },
+ {
+  "file": "layers/08_IF0006_638.png",
+  "name": "IF0006 - 638",
+  "group": "injury finished",
+  "bbox": [
+   198,
+   0,
+   230,
+   45
+  ],
+  "visible": true,
+  "size": [
+   32,
+   45
+  ],
+  "opaque_px": 1440,
+  "semi_alpha": 0,
+  "colours": 73
+ },
+ {
+  "file": "layers/09_IF0007_639.png",
+  "name": "IF0007 - 639",
+  "group": "injury finished",
+  "bbox": [
+   231,
+   0,
+   271,
+   48
+  ],
+  "visible": true,
+  "size": [
+   40,
+   48
+  ],
+  "opaque_px": 1920,
+  "semi_alpha": 0,
+  "colours": 75
+ },
+ {
+  "file": "layers/10_IF0008_640.png",
+  "name": "IF0008 - 640",
+  "group": "injury finished",
+  "bbox": [
+   272,
+   0,
+   304,
+   45
+  ],
+  "visible": true,
+  "size": [
+   32,
+   45
+  ],
+  "opaque_px": 1440,
+  "semi_alpha": 0,
+  "colours": 69
+ },
+ {
+  "file": "layers/11_IF0009_641.png",
+  "name": "IF0009 - 641",
+  "group": "injury finished",
+  "bbox": [
+   305,
+   0,
+   337,
+   45
+  ],
+  "visible": true,
+  "size": [
+   32,
+   45
+  ],
+  "opaque_px": 1440,
+  "semi_alpha": 0,
+  "colours": 69
+ },
+ {
+  "file": "layers/12_IF0010_642.png",
+  "name": "IF0010 - 642",
+  "group": "injury finished",
+  "bbox": [
+   338,
+   0,
+   378,
+   45
+  ],
+  "visible": true,
+  "size": [
+   40,
+   45
+  ],
+  "opaque_px": 1800,
+  "semi_alpha": 0,
+  "colours": 71
+ },
+ {
+  "file": "layers/13_IF0011_643.png",
+  "name": "IF0011 - 643",
+  "group": "injury finished",
+  "bbox": [
+   -21,
+   53,
+   32,
+   98
+  ],
+  "visible": true,
+  "size": [
+   53,
+   45
+  ],
+  "opaque_px": 1492,
+  "semi_alpha": 0,
+  "colours": 71
+ },
+ {
+  "file": "layers/14_IF0012_GEN_PAL.png",
+  "name": "IF0012 GEN PAL",
+  "group": "Fight finished",
+  "bbox": [
+   33,
+   53,
+   64,
+   94
+  ],
+  "visible": true,
+  "size": [
+   31,
+   41
+  ],
+  "opaque_px": 1271,
+  "semi_alpha": 0,
+  "colours": 16
+ },
+ {
+  "file": "layers/15_IF0012_PC_PAL.png",
+  "name": "IF0012 PC PAL",
+  "group": "Fight finished",
+  "bbox": [
+   33,
+   53,
+   64,
+   94
+  ],
+  "visible": true,
+  "size": [
+   31,
+   41
+  ],
+  "opaque_px": 1271,
+  "semi_alpha": 0,
+  "colours": 54
+ },
+ {
+  "file": "layers/16_IF0012.png",
+  "name": "IF0012",
+  "group": "Fight finished",
+  "bbox": [
+   33,
+   53,
+   64,
+   94
+  ],
+  "visible": false,
+  "size": [
+   31,
+   41
+  ],
+  "opaque_px": 1271,
+  "semi_alpha": 0,
+  "colours": 51
+ },
+ {
+  "file": "layers/17_IF0012_offset.png",
+  "name": "IF0012 offset",
+  "group": "Fight finished",
+  "bbox": [
+   33,
+   78,
+   64,
+   94
+  ],
+  "visible": false,
+  "size": [
+   31,
+   16
+  ],
+  "opaque_px": 282,
+  "semi_alpha": 0,
+  "colours": 6
+ },
+ {
+  "file": "layers/18_IF0013_GEN_PAL.png",
+  "name": "IF0013 GEN PAL",
+  "group": "Fight finished",
+  "bbox": [
+   65,
+   53,
+   97,
+   93
+  ],
+  "visible": true,
+  "size": [
+   32,
+   40
+  ],
+  "opaque_px": 1280,
+  "semi_alpha": 0,
+  "colours": 16
+ },
+ {
+  "file": "layers/19_IF0013_PC_PAL.png",
+  "name": "IF0013 PC PAL",
+  "group": "Fight finished",
+  "bbox": [
+   65,
+   53,
+   97,
+   93
+  ],
+  "visible": true,
+  "size": [
+   32,
+   40
+  ],
+  "opaque_px": 1280,
+  "semi_alpha": 0,
+  "colours": 54
+ },
+ {
+  "file": "layers/20_IF0013_offset.png",
+  "name": "IF0013 offset",
+  "group": "Fight finished",
+  "bbox": [
+   65,
+   77,
+   96,
+   93
+  ],
+  "visible": false,
+  "size": [
+   31,
+   16
+  ],
+  "opaque_px": 282,
+  "semi_alpha": 0,
+  "colours": 6
+ },
+ {
+  "file": "layers/21_IF0014_GEN_PAL.png",
+  "name": "IF0014 GEN PAL",
+  "group": "Fight finished",
+  "bbox": [
+   98,
+   53,
+   129,
+   94
+  ],
+  "visible": true,
+  "size": [
+   31,
+   41
+  ],
+  "opaque_px": 1271,
+  "semi_alpha": 0,
+  "colours": 15
+ },
+ {
+  "file": "layers/22_IF0014_PC_PAL.png",
+  "name": "IF0014 PC PAL",
+  "group": "Fight finished",
+  "bbox": [
+   98,
+   53,
+   129,
+   94
+  ],
+  "visible": true,
+  "size": [
+   31,
+   41
+  ],
+  "opaque_px": 1271,
+  "semi_alpha": 0,
+  "colours": 50
+ },
+ {
+  "file": "layers/23_IF0014_offset.png",
+  "name": "IF0014 offset",
+  "group": "Fight finished",
+  "bbox": [
+   98,
+   78,
+   129,
+   94
+  ],
+  "visible": false,
+  "size": [
+   31,
+   16
+  ],
+  "opaque_px": 282,
+  "semi_alpha": 0,
+  "colours": 6
+ },
+ {
+  "file": "layers/24_IF0015_GEN_PAL.png",
+  "name": "IF0015 GEN PAL",
+  "group": "Fight finished",
+  "bbox": [
+   130,
+   53,
+   161,
+   93
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 15
+ },
+ {
+  "file": "layers/25_IF0015_PC_PAL.png",
+  "name": "IF0015 PC PAL",
+  "group": "Fight finished",
+  "bbox": [
+   130,
+   53,
+   161,
+   93
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 58
+ },
+ {
+  "file": "layers/26_IF0015_offset.png",
+  "name": "IF0015 offset",
+  "group": "Fight finished",
+  "bbox": [
+   130,
+   77,
+   161,
+   93
+  ],
+  "visible": false,
+  "size": [
+   31,
+   16
+  ],
+  "opaque_px": 282,
+  "semi_alpha": 0,
+  "colours": 6
+ },
+ {
+  "file": "layers/27_IF0016_GEN_PAL.png",
+  "name": "IF0016 GEN PAL",
+  "group": "Fight finished",
+  "bbox": [
+   162,
+   53,
+   193,
+   93
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 15
+ },
+ {
+  "file": "layers/28_IF0016_PC_PAL.png",
+  "name": "IF0016 PC PAL",
+  "group": "Fight finished",
+  "bbox": [
+   162,
+   53,
+   193,
+   93
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 52
+ },
+ {
+  "file": "layers/29_IF0016_offset.png",
+  "name": "IF0016 offset",
+  "group": "Fight finished",
+  "bbox": [
+   162,
+   77,
+   193,
+   93
+  ],
+  "visible": false,
+  "size": [
+   31,
+   16
+  ],
+  "opaque_px": 106,
+  "semi_alpha": 0,
+  "colours": 1
+ },
+ {
+  "file": "layers/30_IF0017_GEN_PAL.png",
+  "name": "IF0017 GEN PAL",
+  "group": "Fight finished",
+  "bbox": [
+   194,
+   53,
+   225,
+   93
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 15
+ },
+ {
+  "file": "layers/31_IF0017_PC_PAL.png",
+  "name": "IF0017 PC PAL",
+  "group": "Fight finished",
+  "bbox": [
+   194,
+   53,
+   225,
+   93
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 69
+ },
+ {
+  "file": "layers/32_IF0017_offset.png",
+  "name": "IF0017 offset",
+  "group": "Fight finished",
+  "bbox": [
+   194,
+   77,
+   225,
+   93
+  ],
+  "visible": false,
+  "size": [
+   31,
+   16
+  ],
+  "opaque_px": 282,
+  "semi_alpha": 0,
+  "colours": 6
+ },
+ {
+  "file": "layers/33_IF0018_GEN_PAL.png",
+  "name": "IF0018 GEN PAL",
+  "group": "Fight finished",
+  "bbox": [
+   226,
+   53,
+   257,
+   93
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 15
+ },
+ {
+  "file": "layers/34_IF0018_PC_PAL.png",
+  "name": "IF0018 PC PAL",
+  "group": "Fight finished",
+  "bbox": [
+   226,
+   53,
+   257,
+   93
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 52
+ },
+ {
+  "file": "layers/35_IF0018_offset.png",
+  "name": "IF0018 offset",
+  "group": "Fight finished",
+  "bbox": [
+   226,
+   77,
+   257,
+   93
+  ],
+  "visible": false,
+  "size": [
+   31,
+   16
+  ],
+  "opaque_px": 282,
+  "semi_alpha": 0,
+  "colours": 6
+ },
+ {
+  "file": "layers/36_IF0019_GEN_PAL.png",
+  "name": "IF0019 GEN PAL",
+  "group": "Fight finished",
+  "bbox": [
+   259,
+   53,
+   290,
+   93
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 15
+ },
+ {
+  "file": "layers/37_IF0019_PC_PAL.png",
+  "name": "IF0019 PC PAL",
+  "group": "Fight finished",
+  "bbox": [
+   259,
+   53,
+   290,
+   93
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 50
+ },
+ {
+  "file": "layers/38_IF0019_offset.png",
+  "name": "IF0019 offset",
+  "group": "Fight finished",
+  "bbox": [
+   259,
+   77,
+   290,
+   93
+  ],
+  "visible": false,
+  "size": [
+   31,
+   16
+  ],
+  "opaque_px": 282,
+  "semi_alpha": 0,
+  "colours": 6
+ },
+ {
+  "file": "layers/39_IF0020_GEN_PAL.png",
+  "name": "IF0020 GEN PAL",
+  "group": "Fight finished",
+  "bbox": [
+   291,
+   53,
+   322,
+   93
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 15
+ },
+ {
+  "file": "layers/40_IF0020_PC_PAL.png",
+  "name": "IF0020 PC PAL",
+  "group": "Fight finished",
+  "bbox": [
+   291,
+   53,
+   322,
+   93
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 65
+ },
+ {
+  "file": "layers/41_IF0020_offset.png",
+  "name": "IF0020 offset",
+  "group": "Fight finished",
+  "bbox": [
+   291,
+   77,
+   322,
+   93
+  ],
+  "visible": false,
+  "size": [
+   31,
+   16
+  ],
+  "opaque_px": 282,
+  "semi_alpha": 0,
+  "colours": 6
+ },
+ {
+  "file": "layers/42_IF0021_GEN_PAL.png",
+  "name": "IF0021 GEN PAL",
+  "group": "Fight finished",
+  "bbox": [
+   323,
+   53,
+   354,
+   91
+  ],
+  "visible": true,
+  "size": [
+   31,
+   38
+  ],
+  "opaque_px": 1178,
+  "semi_alpha": 0,
+  "colours": 15
+ },
+ {
+  "file": "layers/43_IF0021_PC_PAL.png",
+  "name": "IF0021 PC PAL",
+  "group": "Fight finished",
+  "bbox": [
+   323,
+   53,
+   354,
+   91
+  ],
+  "visible": true,
+  "size": [
+   31,
+   38
+  ],
+  "opaque_px": 1178,
+  "semi_alpha": 0,
+  "colours": 15
+ },
+ {
+  "file": "layers/44_IF0020_offset_copy.png",
+  "name": "IF0020 offset copy",
+  "group": "Fight finished",
+  "bbox": [
+   323,
+   75,
+   354,
+   91
+  ],
+  "visible": false,
+  "size": [
+   31,
+   16
+  ],
+  "opaque_px": 282,
+  "semi_alpha": 0,
+  "colours": 6
+ },
+ {
+  "file": "layers/45_SNES0000.png",
+  "name": "SNES0000",
+  "group": "snes",
+  "bbox": [
+   186,
+   185,
+   213,
+   225
+  ],
+  "visible": true,
+  "size": [
+   27,
+   40
+  ],
+  "opaque_px": 1080,
+  "semi_alpha": 0,
+  "colours": 16
+ },
+ {
+  "file": "layers/46_SNES0000_copy.png",
+  "name": "SNES0000 copy",
+  "group": "snes",
+  "bbox": [
+   186,
+   185,
+   213,
+   225
+  ],
+  "visible": true,
+  "size": [
+   27,
+   40
+  ],
+  "opaque_px": 1080,
+  "semi_alpha": 0,
+  "colours": 50
+ },
+ {
+  "file": "layers/47_crest.png",
+  "name": "crest",
+  "group": "snes",
+  "bbox": [
+   201,
+   198,
+   206,
+   203
+  ],
+  "visible": true,
+  "size": [
+   5,
+   5
+  ],
+  "opaque_px": 14,
+  "semi_alpha": 0,
+  "colours": 14
+ },
+ {
+  "file": "layers/48_PCHead_DL.png",
+  "name": "PCHead DL",
+  "group": "snes",
+  "bbox": [
+   202,
+   189,
+   208,
+   198
+  ],
+  "visible": true,
+  "size": [
+   6,
+   9
+  ],
+  "opaque_px": 43,
+  "semi_alpha": 0,
+  "colours": 8
+ },
+ {
+  "file": "layers/49_IF0021.png",
+  "name": "IF0021?",
+  "group": "unfinished",
+  "bbox": [
+   359,
+   50,
+   390,
+   90
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 17
+ },
+ {
+  "file": "layers/50_IF0021etc.png",
+  "name": "IF0021etc??",
+  "group": "unfinished",
+  "bbox": [
+   359,
+   50,
+   390,
+   90
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 17
+ },
+ {
+  "file": "layers/51_PC_Head.png",
+  "name": "PC Head",
+  "group": "unfinished",
+  "bbox": [
+   370,
+   50,
+   375,
+   57
+  ],
+  "visible": true,
+  "size": [
+   5,
+   7
+  ],
+  "opaque_px": 33,
+  "semi_alpha": 0,
+  "colours": 7
+ },
+ {
+  "file": "layers/52_IF0022.png",
+  "name": "IF0022?",
+  "group": "unfinished",
+  "bbox": [
+   385,
+   55,
+   419,
+   96
+  ],
+  "visible": true,
+  "size": [
+   34,
+   41
+  ],
+  "opaque_px": 1394,
+  "semi_alpha": 0,
+  "colours": 17
+ },
+ {
+  "file": "layers/53_IF0022etc.png",
+  "name": "IF0022etc?",
+  "group": "unfinished",
+  "bbox": [
+   385,
+   55,
+   419,
+   96
+  ],
+  "visible": true,
+  "size": [
+   34,
+   41
+  ],
+  "opaque_px": 1394,
+  "semi_alpha": 0,
+  "colours": 17
+ },
+ {
+  "file": "layers/54_PC_Head_copy.png",
+  "name": "PC Head copy",
+  "group": "unfinished",
+  "bbox": [
+   395,
+   55,
+   400,
+   63
+  ],
+  "visible": true,
+  "size": [
+   5,
+   8
+  ],
+  "opaque_px": 35,
+  "semi_alpha": 0,
+  "colours": 7
+ },
+ {
+  "file": "layers/55_IF0023.png",
+  "name": "IF0023??",
+  "group": "unfinished",
+  "bbox": [
+   0,
+   99,
+   31,
+   139
+  ],
+  "visible": true,
+  "size": [
+   31,
+   40
+  ],
+  "opaque_px": 1240,
+  "semi_alpha": 0,
+  "colours": 17
+ },
+ {
+  "file": "layers/56_Layer_24.png",
+  "name": "Layer 24",
+  "group": "unfinished",
+  "bbox": [
+   33,
+   99,
+   64,
+   137
+  ],
+  "visible": true,
+  "size": [
+   31,
+   38
+  ],
+  "opaque_px": 1178,
+  "semi_alpha": 0,
+  "colours": 17
+ },
+ {
+  "file": "layers/57_Layer_25.png",
+  "name": "Layer 25",
+  "group": "unfinished",
+  "bbox": [
+   34,
+   99,
+   65,
+   137
+  ],
+  "visible": true,
+  "size": [
+   31,
+   38
+  ],
+  "opaque_px": 1178,
+  "semi_alpha": 0,
+  "colours": 17
+ },
+ {
+  "file": "layers/58_Layer_26.png",
+  "name": "Layer 26",
+  "group": "unfinished",
+  "bbox": [
+   66,
+   99,
+   97,
+   132
+  ],
+  "visible": true,
+  "size": [
+   31,
+   33
+  ],
+  "opaque_px": 1023,
+  "semi_alpha": 0,
+  "colours": 17
+ },
+ {
+  "file": "layers/59_PC_Crest.png",
+  "name": "PC Crest",
+  "group": "unfinished",
+  "bbox": [
+   84,
+   107,
+   89,
+   112
+  ],
+  "visible": true,
+  "size": [
+   5,
+   5
+  ],
+  "opaque_px": 14,
+  "semi_alpha": 0,
+  "colours": 14
+ },
+ {
+  "file": "layers/60_Layer_27.png",
+  "name": "Layer 27",
+  "group": "unfinished",
+  "bbox": [
+   98,
+   99,
+   136,
+   125
+  ],
+  "visible": true,
+  "size": [
+   38,
+   26
+  ],
+  "opaque_px": 988,
+  "semi_alpha": 0,
+  "colours": 19
+ },
+ {
+  "file": "layers/61_PC_Crest.png",
+  "name": "PC Crest",
+  "group": "unfinished",
+  "bbox": [
+   120,
+   105,
+   124,
+   110
+  ],
+  "visible": true,
+  "size": [
+   4,
+   5
+  ],
+  "opaque_px": 20,
+  "semi_alpha": 0,
+  "colours": 20
+ },
+ {
+  "file": "layers/62_color_guide_PC.png",
+  "name": "color guide PC",
+  "group": "unfinished",
+  "bbox": [
+   99,
+   99,
+   155,
+   119
+  ],
+  "visible": false,
+  "size": [
+   56,
+   20
+  ],
+  "opaque_px": 1120,
+  "semi_alpha": 0,
+  "colours": 76
+ },
+ {
+  "file": "layers/63_Layer_28.png",
+  "name": "Layer 28",
+  "group": "unfinished",
+  "bbox": [
+   137,
+   99,
+   179,
+   125
+  ],
+  "visible": true,
+  "size": [
+   42,
+   26
+  ],
+  "opaque_px": 1092,
+  "semi_alpha": 0,
+  "colours": 20
+ },
+ {
+  "file": "layers/64_PC_Crest_copy.png",
+  "name": "PC Crest copy",
+  "group": "unfinished",
+  "bbox": [
+   159,
+   105,
+   163,
+   110
+  ],
+  "visible": true,
+  "size": [
+   4,
+   5
+  ],
+  "opaque_px": 20,
+  "semi_alpha": 0,
+  "colours": 20
+ },
+ {
+  "file": "layers/65_Layer_29.png",
+  "name": "Layer 29",
+  "group": "unfinished",
+  "bbox": [
+   180,
+   99,
+   225,
+   126
+  ],
+  "visible": true,
+  "size": [
+   45,
+   27
+  ],
+  "opaque_px": 1215,
+  "semi_alpha": 0,
+  "colours": 21
+ },
+ {
+  "file": "layers/66_PC_Crest_copy_2.png",
+  "name": "PC Crest copy 2",
+  "group": "unfinished",
+  "bbox": [
+   206,
+   105,
+   210,
+   110
+  ],
+  "visible": true,
+  "size": [
+   4,
+   5
+  ],
+  "opaque_px": 20,
+  "semi_alpha": 0,
+  "colours": 20
+ },
+ {
+  "file": "layers/67_Layer_30.png",
+  "name": "Layer 30",
+  "group": "unfinished",
+  "bbox": [
+   226,
+   99,
+   267,
+   126
+  ],
+  "visible": true,
+  "size": [
+   41,
+   27
+  ],
+  "opaque_px": 1107,
+  "semi_alpha": 0,
+  "colours": 19
+ },
+ {
+  "file": "layers/68_PC_Crest_copy_3.png",
+  "name": "PC Crest copy 3",
+  "group": "unfinished",
+  "bbox": [
+   248,
+   105,
+   252,
+   110
+  ],
+  "visible": true,
+  "size": [
+   4,
+   5
+  ],
+  "opaque_px": 20,
+  "semi_alpha": 0,
+  "colours": 20
+ },
+ {
+  "file": "layers/69_Layer_31.png",
+  "name": "Layer 31",
+  "group": "unfinished",
+  "bbox": [
+   268,
+   99,
+   309,
+   126
+  ],
+  "visible": true,
+  "size": [
+   41,
+   27
+  ],
+  "opaque_px": 1107,
+  "semi_alpha": 0,
+  "colours": 20
+ },
+ {
+  "file": "layers/70_PC_Crest_copy_4.png",
+  "name": "PC Crest copy 4",
+  "group": "unfinished",
+  "bbox": [
+   290,
+   105,
+   294,
+   110
+  ],
+  "visible": true,
+  "size": [
+   4,
+   5
+  ],
+  "opaque_px": 20,
+  "semi_alpha": 0,
+  "colours": 20
+ },
+ {
+  "file": "layers/71_Layer_32.png",
+  "name": "Layer 32",
+  "group": "unfinished",
+  "bbox": [
+   310,
+   99,
+   355,
+   126
+  ],
+  "visible": true,
+  "size": [
+   45,
+   27
+  ],
+  "opaque_px": 1215,
+  "semi_alpha": 0,
+  "colours": 21
+ },
+ {
+  "file": "layers/72_PC_Crest_copy_5.png",
+  "name": "PC Crest copy 5",
+  "group": "unfinished",
+  "bbox": [
+   336,
+   105,
+   340,
+   110
+  ],
+  "visible": true,
+  "size": [
+   4,
+   5
+  ],
+  "opaque_px": 20,
+  "semi_alpha": 0,
+  "colours": 20
+ },
+ {
+  "file": "layers/73_Layer_33.png",
+  "name": "Layer 33",
+  "group": "unfinished",
+  "bbox": [
+   356,
+   99,
+   397,
+   126
+  ],
+  "visible": true,
+  "size": [
+   41,
+   27
+  ],
+  "opaque_px": 1107,
+  "semi_alpha": 0,
+  "colours": 19
+ },
+ {
+  "file": "layers/74_PC_Crest_copy_6.png",
+  "name": "PC Crest copy 6",
+  "group": "unfinished",
+  "bbox": [
+   378,
+   105,
+   382,
+   110
+  ],
+  "visible": true,
+  "size": [
+   4,
+   5
+  ],
+  "opaque_px": 20,
+  "semi_alpha": 0,
+  "colours": 20
+ },
+ {
+  "file": "layers/75_Layer_36.png",
+  "name": "Layer 36",
+  "group": "unfinished",
+  "bbox": [
+   0,
+   140,
+   31,
+   181
+  ],
+  "visible": true,
+  "size": [
+   31,
+   41
+  ],
+  "opaque_px": 1271,
+  "semi_alpha": 0,
+  "colours": 17
+ },
+ {
+  "file": "layers/76_fighting_sticks.png",
+  "name": "fighting sticks",
+  "group": "unfinished",
+  "bbox": [
+   32,
+   140,
+   131,
+   161
+  ],
+  "visible": true,
+  "size": [
+   99,
+   21
+  ],
+  "opaque_px": 2079,
+  "semi_alpha": 0,
+  "colours": 4
+ },
+ {
+  "file": "layers/77_idle93sg.png",
+  "name": "idle93sg",
+  "group": "reference",
+  "bbox": [
+   137,
+   140,
+   169,
+   173
+  ],
+  "visible": false,
+  "size": [
+   32,
+   33
+  ],
+  "opaque_px": 1056,
+  "semi_alpha": 0,
+  "colours": 16
+ },
+ {
+  "file": "layers/78_idle95pc.png",
+  "name": "idle95pc",
+  "group": "reference",
+  "bbox": [
+   168,
+   142,
+   200,
+   173
+  ],
+  "visible": true,
+  "size": [
+   32,
+   31
+  ],
+  "opaque_px": 992,
+  "semi_alpha": 0,
+  "colours": 67
+ },
+ {
+  "file": "layers/79_idle94snes.png",
+  "name": "idle94snes",
+  "group": "reference",
+  "bbox": [
+   194,
+   141,
+   220,
+   173
+  ],
+  "visible": false,
+  "size": [
+   26,
+   32
+  ],
+  "opaque_px": 832,
+  "semi_alpha": 0,
+  "colours": 11
+ },
+ {
+  "file": "layers/80_pc_edit_pal_front.png",
+  "name": "pc edit pal front",
+  "group": "reference",
+  "bbox": [
+   359,
+   54,
+   379,
+   90
+  ],
+  "visible": true,
+  "size": [
+   20,
+   36
+  ],
+  "opaque_px": 720,
+  "semi_alpha": 0,
+  "colours": 75
+ },
+ {
+  "file": "layers/81_pc_edit_pal_side.png",
+  "name": "pc edit pal side",
+  "group": "reference",
+  "bbox": [
+   292,
+   56,
+   324,
+   87
+  ],
+  "visible": true,
+  "size": [
+   32,
+   31
+  ],
+  "opaque_px": 992,
+  "semi_alpha": 0,
+  "colours": 67
+ },
+ {
+  "file": "layers/82_pc_edit_pal_goalief.png",
+  "name": "pc edit pal goalief",
+  "group": "reference",
+  "bbox": [
+   123,
+   173,
+   155,
+   201
+  ],
+  "visible": true,
+  "size": [
+   32,
+   28
+  ],
+  "opaque_px": 896,
+  "semi_alpha": 0,
+  "colours": 63
+ },
+ {
+  "file": "layers/83_pc_edit_goalb.png",
+  "name": "pc edit goalb",
+  "group": "reference",
+  "bbox": [
+   0,
+   53,
+   32,
+   85
+  ],
+  "visible": true,
+  "size": [
+   32,
+   32
+  ],
+  "opaque_px": 1024,
+  "semi_alpha": 0,
+  "colours": 50
+ },
+ {
+  "file": "layers/84_pc_edit_sidechk.png",
+  "name": "pc edit sidechk",
+  "group": "reference",
+  "bbox": [
+   66,
+   171,
+   88,
+   207
+  ],
+  "visible": true,
+  "size": [
+   22,
+   36
+  ],
+  "opaque_px": 792,
+  "semi_alpha": 0,
+  "colours": 52
+ },
+ {
+  "file": "layers/85_comparison.png",
+  "name": "comparison",
+  "group": "reference",
+  "bbox": [
+   214,
+   137,
+   246,
+   175
+  ],
+  "visible": true,
+  "size": [
+   32,
+   38
+  ],
+  "opaque_px": 1216,
+  "semi_alpha": 0,
+  "colours": 76
+ },
+ {
+  "file": "layers/86_comparison_back.png",
+  "name": "comparison back",
+  "group": "reference",
+  "bbox": [
+   268,
+   98,
+   284,
+   130
+  ],
+  "visible": true,
+  "size": [
+   16,
+   32
+  ],
+  "opaque_px": 512,
+  "semi_alpha": 0,
+  "colours": 52
+ }
+]

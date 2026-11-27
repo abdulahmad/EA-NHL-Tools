@@ -1,0 +1,76 @@
+index,r,g,b,pixels_in_bmp,pc_zone,source
+0,0,0,0,42,black outline,GUESS from 94G/93G vs 95 PC aligned frames + BMP position
+1,232,232,232,3,light grey,GUESS from 94G/93G vs 95 PC aligned frames + BMP position
+8,8,8,8,3,skate blade dark,GUESS from 94G/93G vs 95 PC aligned frames + BMP position
+28,0,64,128,2,blade dark 2,GUESS from 94G/93G vs 95 PC aligned frames + BMP position
+88,64,160,224,28,ice shadow,GUESS from 94G/93G vs 95 PC aligned frames + BMP position
+133,224,160,160,3,skin light,GUESS from 94G/93G vs 95 PC aligned frames + BMP position
+134,224,128,128,11,skin medium,GUESS from 94G/93G vs 95 PC aligned frames + BMP position
+136,192,96,96,25,stick / skin darkest,GUESS from 94G/93G vs 95 PC aligned frames + BMP position
+140,160,64,64,2,skin shadow,GUESS from 94G/93G vs 95 PC aligned frames + BMP position
+144,220,100,100,4,forearm dark,NHL9XStudio pc-jersey.js ZONES
+145,230,160,160,6,forearm medium,NHL9XStudio pc-jersey.js ZONES
+146,255,180,180,6,forearm light,NHL9XStudio pc-jersey.js ZONES
+147,110,0,0,2,arm stripe 3 light,NHL9XStudio pc-jersey.js ZONES
+148,95,0,0,2,arm stripe 3 medium,NHL9XStudio pc-jersey.js ZONES
+149,80,0,0,2,arm stripe 3 dark,NHL9XStudio pc-jersey.js ZONES
+150,125,0,0,2,arm stripe 2 dark,NHL9XStudio pc-jersey.js ZONES
+151,140,0,0,2,arm stripe 2 medium,NHL9XStudio pc-jersey.js ZONES
+152,155,0,0,2,arm stripe 2 light,NHL9XStudio pc-jersey.js ZONES
+153,200,0,0,2,arm stripe 1 light,NHL9XStudio pc-jersey.js ZONES
+154,185,0,0,2,arm stripe 1 medium,NHL9XStudio pc-jersey.js ZONES
+155,170,0,0,2,arm stripe 1 dark,NHL9XStudio pc-jersey.js ZONES
+156,255,0,0,6,upper arm light,NHL9XStudio pc-jersey.js ZONES
+157,230,0,0,6,upper arm medium,NHL9XStudio pc-jersey.js ZONES
+158,215,0,0,6,upper arm dark,NHL9XStudio pc-jersey.js ZONES
+159,0,250,0,2,yoke corner,NHL9XStudio pc-jersey.js ZONES
+160,210,210,0,2,shoulder patch,NHL9XStudio pc-jersey.js ZONES
+161,0,230,0,7,yoke 3,NHL9XStudio pc-jersey.js ZONES
+162,0,0,255,5,yoke 1,NHL9XStudio pc-jersey.js ZONES
+163,0,0,230,5,yoke 2,NHL9XStudio pc-jersey.js ZONES
+165,210,210,255,3,jersey light,NHL9XStudio pc-jersey.js ZONES
+166,185,185,255,9,jersey medium,NHL9XStudio pc-jersey.js ZONES
+167,170,170,255,7,jersey dark,NHL9XStudio pc-jersey.js ZONES
+168,155,155,255,4,waist 1 odd,NHL9XStudio pc-jersey.js ZONES
+169,140,140,255,4,waist 1 even,NHL9XStudio pc-jersey.js ZONES
+171,125,125,255,3,waist 2 light,NHL9XStudio pc-jersey.js ZONES
+172,110,110,255,2,waist 2 medium,NHL9XStudio pc-jersey.js ZONES
+173,95,95,255,3,waist 2 dark,NHL9XStudio pc-jersey.js ZONES
+174,70,70,255,3,waist 3 light,NHL9XStudio pc-jersey.js ZONES
+175,55,55,255,2,waist 3 medium,NHL9XStudio pc-jersey.js ZONES
+176,35,35,255,3,waist 3 dark,NHL9XStudio pc-jersey.js ZONES
+177,220,0,220,24,pants dark,NHL9XStudio pc-jersey.js ZONES
+179,0,190,0,6,pants stripe 1,NHL9XStudio pc-jersey.js ZONES
+180,255,0,255,26,pants medium,NHL9XStudio pc-jersey.js ZONES
+181,255,255,210,7,socks light,NHL9XStudio pc-jersey.js ZONES
+182,240,240,195,2,socks medium,NHL9XStudio pc-jersey.js ZONES
+183,205,205,175,3,socks dark,NHL9XStudio pc-jersey.js ZONES
+184,100,100,170,4,socks stripe 1 light,NHL9XStudio pc-jersey.js ZONES
+185,75,75,150,3,socks stripe 1 medium,NHL9XStudio pc-jersey.js ZONES
+186,30,30,120,2,socks stripe 1 dark,NHL9XStudio pc-jersey.js ZONES
+187,211,140,101,2,socks stripe 2 light,NHL9XStudio pc-jersey.js ZONES
+188,211,105,47,3,socks stripe 2 medium,NHL9XStudio pc-jersey.js ZONES
+189,211,75,1,2,socks stripe 2 dark,NHL9XStudio pc-jersey.js ZONES
+190,255,255,0,4,helmet medium,NHL9XStudio pc-jersey.js ZONES
+191,230,230,0,11,helmet dark,NHL9XStudio pc-jersey.js ZONES
+192,192,192,192,1,crest r1c1,pc-jersey.js CREST
+193,193,193,193,1,crest r1c2,pc-jersey.js CREST
+194,194,194,194,1,crest r1c3,pc-jersey.js CREST
+195,195,195,195,1,crest r1c4,pc-jersey.js CREST
+196,196,196,196,1,crest r1c5,pc-jersey.js CREST
+208,208,208,208,1,crest r2c1,pc-jersey.js CREST
+209,209,209,209,1,crest r2c2,pc-jersey.js CREST
+210,210,210,210,1,crest r2c3,pc-jersey.js CREST
+211,211,211,211,1,crest r2c4,pc-jersey.js CREST
+212,212,212,212,1,crest r2c5,pc-jersey.js CREST
+224,224,224,224,1,crest r3c1,pc-jersey.js CREST
+225,225,225,225,1,crest r3c2,pc-jersey.js CREST
+226,226,226,226,1,crest r3c3,pc-jersey.js CREST
+227,227,227,227,1,crest r3c4,pc-jersey.js CREST
+228,228,228,228,1,crest r3c5,pc-jersey.js CREST
+240,240,240,240,1,crest r4c1,pc-jersey.js CREST
+241,241,241,241,1,crest r4c2,pc-jersey.js CREST
+242,242,242,242,1,crest r4c3,pc-jersey.js CREST
+243,243,243,243,1,crest r4c4,pc-jersey.js CREST
+244,244,244,244,1,crest r4c5,pc-jersey.js CREST
+255,255,255,255,366,transparent,pc95.js skips 255
