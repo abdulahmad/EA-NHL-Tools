@@ -11,7 +11,7 @@ By **StaticEck**, collaborator on this folder, shared with Abdul (abdulahmad) fo
 | `10_4328bf04.gif`, `11_44bc2f39.gif`, `12_edaab6ad.gif` | animations |
 
 ## His approach (95 PC standard)
-- Zones come from the 95 PC game's own frames of the same pose (for the injury set: 95 PC frames 633–644).
+- Zones come from the 95 PC game's own frames of the same pose (for the injury set: 95 PC frames 632–643).
 - Colours go through the retail 95 PC jersey records, with the Genesis tones put on the 95 PC shade ramps, so every team's colours come out right.
 - 95 PC frames that look like the Genesis frame act as training data for the zones.
 

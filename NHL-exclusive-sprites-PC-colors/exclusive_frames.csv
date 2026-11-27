@@ -1,293 +1,293 @@
 section,game,frame,animation_spf,spa,category,width,height,nearest_pc,pc_score,pc_mirrored,nearest_94g,g94_score,near_duplicate_in_same_rom,unused_no_spa_ref,note
-94G only,NHL94 Genesis,659,ghighl,SPAghighl,goalie,32,36,408,0.619,False,,,,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,663,ghighl,SPAghighl,goalie,24,32,688,0.648,False,,,,False,animation not in PC; best PC score 0.65
-94G only,NHL94 Genesis,664,ghighr,SPAghighr,goalie,32,31,995,0.564,True,,,,False,animation not in PC; best PC score 0.56
-94G only,NHL94 Genesis,665,ghighl,SPAghighl,goalie,24,32,487,0.605,True,,,,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,666,ghighr,SPAghighr,goalie,32,32,430,0.589,False,,,,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,667,ghighl,SPAghighl,goalie,25,40,367,0.607,False,,,,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,669,ghighl,SPAghighl,goalie,29,39,455,0.58,False,,,,False,animation not in PC; best PC score 0.58
-94G only,NHL94 Genesis,670,ghighr,SPAghighr,goalie,24,38,426,0.632,False,,,,False,animation not in PC; best PC score 0.63
-94G only,NHL94 Genesis,671,ghighl,SPAghighl,goalie,31,40,680,0.603,True,,,,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,673,ghighl,SPAghighl,goalie,24,32,411,0.649,True,,,,False,animation not in PC; best PC score 0.65
-94G only,NHL94 Genesis,677,gstick2l,SPAgstick2l,goalie,32,32,995,0.634,False,,,,False,animation not in PC; best PC score 0.63
-94G only,NHL94 Genesis,678,gstick2r,SPAgstick2r,goalie,24,32,493,0.643,False,,,,False,animation not in PC; best PC score 0.64
-94G only,NHL94 Genesis,680,gstick2l,SPAgstick2l,goalie,24,40,1105,0.64,False,,,,False,animation not in PC; best PC score 0.64
-94G only,NHL94 Genesis,681,gstick2l,SPAgstick2l,goalie,24,34,447,0.635,False,,,,False,animation not in PC; best PC score 0.64
-94G only,NHL94 Genesis,682,gstick2r,SPAgstick2r,goalie,32,40,59,0.6,False,,,,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,683,gstick2r,SPAgstick2r,goalie,24,40,78,0.615,True,,,,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,684,gstick2l,SPAgstick2l,goalie,24,32,67,0.6,True,,,,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,686,gstick2r,SPAgstick2r,goalie,24,39,501,0.636,False,,,,False,animation not in PC; best PC score 0.64
-94G only,NHL94 Genesis,687,gstick2r,SPAgstick2r,goalie,24,32,1105,0.602,False,,,,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,688,gstick2l,SPAgstick2l,goalie,24,31,515,0.611,True,,,,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,689,gstick2l,SPAgstick2l,goalie,32,32,461,0.617,False,,,,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,690,gstick2r,SPAgstick2r,goalie,25,32,505,0.602,False,,,,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,691,gstick2r,SPAgstick2r,goalie,32,32,1068,0.576,False,,,,False,animation not in PC; best PC score 0.58
-94G only,NHL94 Genesis,692,gstick2l,SPAgstick2l,goalie,32,32,467,0.568,False,,,,False,animation not in PC; best PC score 0.57
-94G only,NHL94 Genesis,693,gstick2l,SPAgstick2l,goalie,40,33,986,0.568,False,,,,False,animation not in PC; best PC score 0.57
-94G only,NHL94 Genesis,694,gstick2r,SPAgstick2r,goalie,24,32,515,0.594,False,,,,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,695,gstick2r,SPAgstick2r,goalie,24,32,461,0.612,True,,,,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,696,gstick2l,SPAgstick2l,goalie,24,32,680,0.625,True,,,,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,697,gstick2l,SPAgstick2l,goalie,24,40,488,0.613,False,,,,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,698,gstick2r,SPAgstick2r,goalie,24,32,68,0.616,False,,,,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,700,gstick2l,SPAgstick2l,goalie,32,40,79,0.604,False,,,,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,701,gstick2l,SPAgstick2l,goalie,24,40,26,0.593,False,,,,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,705,gstick2l,SPAgstick2l,goalie,32,32,423,0.607,True,,,,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,706,gslamtop,SPAgslamtop,goalie,24,47,432,0.612,False,,,,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,707,gslamtop,SPAgslamtop,goalie,24,46,905,0.635,True,,,,False,animation not in PC; best PC score 0.64
-94G only,NHL94 Genesis,708,gslamtop,SPAgslamtop,goalie,32,44,306,0.619,False,,,,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,710,gslambot,SPAgslambot,goalie,24,32,995,0.621,False,,,,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,711,gslambot,SPAgslambot,goalie,25,48,723,0.568,False,,,,False,animation not in PC; best PC score 0.57
-94G only,NHL94 Genesis,712,gslambot,SPAgslambot,goalie,26,41,671,0.597,True,,,,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,713,gslambot,SPAgslambot,goalie,25,32,802,0.58,False,,,,False,animation not in PC; best PC score 0.58
-94G only,NHL94 Genesis,714,slambot,,player,32,33,102,0.642,True,,,,True,animation not in PC; best PC score 0.64
-94G only,NHL94 Genesis,728,slambot,,player,31,40,592,0.59,False,,,,True,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,730,slambot,,player,24,40,362,0.62,False,,,,True,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,731,slambot,,player,24,36,162,0.641,True,,,,True,animation not in PC; best PC score 0.64
-94G only,NHL94 Genesis,732,slambot,,player,16,39,153,0.611,False,,,,True,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,735,slambot,,player,21,34,156,0.64,False,,,,True,animation not in PC; best PC score 0.64
-94G only,NHL94 Genesis,737,slambot,,player,29,35,248,0.586,False,,,,True,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,738,boardfront,SPAboardfront,player,24,33,520,0.626,True,,,,False,animation not in PC; best PC score 0.63
-94G only,NHL94 Genesis,739,boardfront,SPAboardfront,player,32,36,996,0.619,False,,,,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,740,boardfront,SPAboardfront,player,24,38,185,0.64,False,,,770,False,animation not in PC; best PC score 0.64
-94G only,NHL94 Genesis,741,boardfront,SPAboardfront,player,40,24,1067,0.532,True,,,,False,animation not in PC; best PC score 0.53
-94G only,NHL94 Genesis,742,boardfront,SPAboardfront,player,36,41,591,0.597,False,,,750,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,743,boardfront,SPAboardfront,player,51,40,1096,0.556,False,,,751,False,animation not in PC; best PC score 0.56
-94G only,NHL94 Genesis,744,boardfront,SPAboardfront,player,54,34,316,0.616,False,,,752 776 784,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,747,boardfront,SPAboardfront,player,51,48,1073,0.537,True,,,,False,animation not in PC; best PC score 0.54
-94G only,NHL94 Genesis,748,boardfront,SPAboardfront,player,27,28,321,0.563,False,,,,False,animation not in PC; best PC score 0.56
-94G only,NHL94 Genesis,749,boardfront,SPAboardfront,player,24,37,630,0.54,False,,,765 797,False,animation not in PC; best PC score 0.54
-94G only,NHL94 Genesis,750,boardfront,SPAboardfront,player,36,41,591,0.597,True,,,742,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,751,boardfront,SPAboardfront,player,51,40,1096,0.556,True,,,743,False,animation not in PC; best PC score 0.56
-94G only,NHL94 Genesis,752,boardfront,SPAboardfront,player,54,34,316,0.616,True,,,744 776 784,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,758,benchcheckr+1,SPAbenchcheckr SPAboardright,player,27,40,3,0.613,False,,,798,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,759,boardright,SPAboardright,player,16,40,143,0.631,True,,,799,False,animation not in PC; best PC score 0.63
-94G only,NHL94 Genesis,760,boardright,SPAboardright,player,24,32,163,0.573,False,,,,False,animation not in PC; best PC score 0.57
-94G only,NHL94 Genesis,761,benchcheckl+2,SPAbenchcheckl SPAbenchcheckr SPAboardright,player,24,38,774,0.536,False,,,793,False,animation not in PC; best PC score 0.54
-94G only,NHL94 Genesis,762,boardright,SPAboardright,player,25,47,23,0.58,True,,,,False,animation not in PC; best PC score 0.58
-94G only,NHL94 Genesis,763,boardright,SPAboardright,player,16,40,25,0.606,True,,,,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,764,boardright,SPAboardright,player,24,40,265,0.591,False,,,796,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,765,boardright,SPAboardright,player,24,37,630,0.54,False,,,749 797,False,animation not in PC; best PC score 0.54
-94G only,NHL94 Genesis,766,benchcheckr+1,SPAbenchcheckr SPAboardright,player,39,42,249,0.582,False,,,790,False,animation not in PC; best PC score 0.58
-94G only,NHL94 Genesis,767,boardright,SPAboardright,player,27,40,249,0.587,False,,,,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,768,boardright,SPAboardright,player,32,49,947,0.617,True,,,,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,769,benchcheckl+2,SPAbenchcheckl SPAbenchcheckr SPAboardright,player,40,27,938,0.572,False,,,801,False,animation not in PC; best PC score 0.57
-94G only,NHL94 Genesis,770,boardback,SPAboardback,player,24,32,185,0.64,False,,,740,False,animation not in PC; best PC score 0.64
-94G only,NHL94 Genesis,774,boardback,SPAboardback,player,40,32,333,0.606,True,,,782,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,775,boardback,SPAboardback,player,54,33,1083,0.583,True,,,783,False,animation not in PC; best PC score 0.58
-94G only,NHL94 Genesis,776,boardback,SPAboardback,player,54,34,316,0.616,False,,,744 752 784,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,778,boardback,SPAboardback,player,25,34,1130,0.58,True,,,,False,animation not in PC; best PC score 0.58
-94G only,NHL94 Genesis,779,boardback,SPAboardback,player,45,32,446,0.535,False,,,,False,animation not in PC; best PC score 0.54
-94G only,NHL94 Genesis,780,boardback,SPAboardback,player,43,32,246,0.535,False,,,,False,animation not in PC; best PC score 0.54
-94G only,NHL94 Genesis,781,boardback,SPAboardback,player,48,24,919,0.553,True,,,,False,animation not in PC; best PC score 0.55
-94G only,NHL94 Genesis,782,boardback,SPAboardback,player,40,32,333,0.6,False,,,774,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,783,boardback,SPAboardback,player,54,33,1083,0.583,False,,,775,False,animation not in PC; best PC score 0.58
-94G only,NHL94 Genesis,784,boardback,SPAboardback,player,54,34,316,0.616,True,,,744 752 776,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,790,benchcheckl+1,SPAbenchcheckl SPAboardleft,player,39,42,249,0.61,True,,,766,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,791,boardleft,SPAboardleft,player,28,40,249,0.573,True,,,,False,animation not in PC; best PC score 0.57
-94G only,NHL94 Genesis,792,benchcheckl+2,SPAbenchcheckl SPAbenchcheckr SPAboardleft,player,32,40,947,0.619,False,,,800,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,793,boardleft,SPAboardleft,player,24,38,774,0.536,False,,,761,False,animation not in PC; best PC score 0.54
-94G only,NHL94 Genesis,794,boardleft,SPAboardleft,player,25,47,23,0.58,False,,,,False,animation not in PC; best PC score 0.58
-94G only,NHL94 Genesis,795,boardleft,SPAboardleft,player,16,40,25,0.606,False,,,,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,796,boardleft,SPAboardleft,player,24,40,265,0.591,False,,,764,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,797,boardleft,SPAboardleft,player,24,37,630,0.54,False,,,749 765,False,animation not in PC; best PC score 0.54
-94G only,NHL94 Genesis,798,benchcheckl+1,SPAbenchcheckl SPAboardleft,player,27,40,3,0.613,True,,,758,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,799,boardleft,SPAboardleft,player,16,40,143,0.631,False,,,759,False,animation not in PC; best PC score 0.63
-94G only,NHL94 Genesis,800,benchcheckl+2,SPAbenchcheckl SPAbenchcheckr SPAboardleft,player,32,40,947,0.617,True,,,792,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,801,boardleft,SPAboardleft,player,40,27,938,0.572,False,,,769,False,animation not in PC; best PC score 0.57
-94G only,NHL94 Genesis,803,benchcheckl,SPAbenchcheckl,player,36,32,522,0.588,True,,,817,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,804,benchcheckl,SPAbenchcheckl,player,32,39,1123,0.506,False,,,,False,animation not in PC; best PC score 0.51
-94G only,NHL94 Genesis,805,benchcheckl,SPAbenchcheckl,player,34,35,530,0.588,False,,,819,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,806,benchcheckl,SPAbenchcheckl,player,40,29,318,0.511,True,,,820,False,animation not in PC; best PC score 0.51
-94G only,NHL94 Genesis,807,benchcheckl,SPAbenchcheckl,player,34,28,462,0.516,True,,,821,False,animation not in PC; best PC score 0.52
-94G only,NHL94 Genesis,808,benchcheckl,SPAbenchcheckl,player,40,29,523,0.598,True,,,822,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,809,benchcheckl,SPAbenchcheckl,player,32,24,281,0.611,False,,,,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,810,benchcheckl,SPAbenchcheckl,player,40,24,810,0.53,True,,,,False,animation not in PC; best PC score 0.53
-94G only,NHL94 Genesis,811,benchcheckl,SPAbenchcheckl,player,32,35,530,0.545,False,,,,False,animation not in PC; best PC score 0.55
-94G only,NHL94 Genesis,812,benchcheckl,SPAbenchcheckl,player,28,32,878,0.608,True,,,,False,animation not in PC; best PC score 0.61
-94G only,NHL94 Genesis,813,benchcheckl,SPAbenchcheckl,player,32,24,458,0.54,False,,,,False,animation not in PC; best PC score 0.54
-94G only,NHL94 Genesis,814,benchcheckl,SPAbenchcheckl,player,32,32,111,0.621,True,,,,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,815,benchcheckl,SPAbenchcheckl,player,36,32,522,0.587,True,,,823,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,817,benchcheckr,SPAbenchcheckr,player,36,32,522,0.588,False,,,803,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,818,benchcheckr,SPAbenchcheckr,player,32,39,1123,0.506,True,,,,False,animation not in PC; best PC score 0.51
-94G only,NHL94 Genesis,819,benchcheckr,SPAbenchcheckr,player,34,35,530,0.593,True,,,805,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,820,benchcheckr,SPAbenchcheckr,player,40,29,318,0.511,False,,,806,False,animation not in PC; best PC score 0.51
-94G only,NHL94 Genesis,821,benchcheckr,SPAbenchcheckr,player,34,28,462,0.516,False,,,807,False,animation not in PC; best PC score 0.52
-94G only,NHL94 Genesis,822,benchcheckr,SPAbenchcheckr,player,40,29,523,0.598,False,,,808,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,823,benchcheckr,SPAbenchcheckr,player,36,32,522,0.587,False,,,815,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,824,benchcheckr,SPAbenchcheckr,player,32,32,111,0.616,False,,,,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,825,benchcheckr,SPAbenchcheckr,player,32,35,877,0.619,False,,,,False,animation not in PC; best PC score 0.62
-94G only,NHL94 Genesis,826,benchcheckr,SPAbenchcheckr,player,47,24,1030,0.528,False,,,,False,animation not in PC; best PC score 0.53
-94G only,NHL94 Genesis,827,benchcheckr,SPAbenchcheckr,player,40,32,878,0.559,False,,,,False,animation not in PC; best PC score 0.56
-94G only,NHL94 Genesis,828,benchcheckr,SPAbenchcheckr,player,40,32,1113,0.564,False,,,,False,animation not in PC; best PC score 0.56
-94G only,NHL94 Genesis,829,benchcheckr,SPAbenchcheckr,player,43,24,42,0.553,True,,,,False,animation not in PC; best PC score 0.55
-94G only,NHL94 Genesis,830,crosscheck,SPAcrosscheck,player,32,40,258,0.643,False,,,,False,animation not in PC; best PC score 0.64
-94G only,NHL94 Genesis,831,crosscheck,SPAcrosscheck,player,32,40,248,0.602,True,,,,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,832,crosscheck,SPAcrosscheck,player,40,32,14,0.586,False,,,,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,833,crosscheck,SPAcrosscheck,player,41,32,272,0.601,True,,,,False,animation not in PC; best PC score 0.60
-94G only,NHL94 Genesis,834,crosscheck,SPAcrosscheck,player,32,32,679,0.564,False,,,,False,animation not in PC; best PC score 0.56
-94G only,NHL94 Genesis,835,crosscheck,SPAcrosscheck,player,40,32,113,0.59,True,,,,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,836,crosscheck,SPAcrosscheck,player,34,32,430,0.587,False,,,,False,animation not in PC; best PC score 0.59
-94G only,NHL94 Genesis,837,crosscheck,SPAcrosscheck,player,48,32,271,0.561,False,,,,False,animation not in PC; best PC score 0.56
-93 only,NHLPA93 Genesis,353,gloves,,fight,100,23,1074,0.523,False,744,0.518,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,354,fight,SPAfight,fight,32,40,37,0.636,True,715,0.67,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,355,fight,SPAfight,fight,40,41,8,0.6,False,8,0.646,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,356,fight,SPAfight,fight,16,40,358,0.665,True,144,0.651,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,357,fgrab+6,SPAfgrab SPAfheld SPAfhigh SPAfhith SPAfhitl SPAfight SPAflow,player,24,40,1,0.673,True,1,0.672,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,358,fgrab+1,SPAfgrab SPAfheld,player,32,32,891,0.655,False,1,0.662,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,359,fhigh+1,SPAfhigh SPAflow,player,32,40,1125,0.627,False,207,0.662,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,360,fhigh,SPAfhigh,player,25,40,203,0.631,False,76,0.65,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,361,flow,SPAflow,player,24,40,690,0.648,False,106,0.684,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,362,fgrab+6,SPAfgrab SPAfheld SPAfhigh SPAfhith SPAfhitl SPAfight SPAflow,player,24,40,850,0.662,False,720,0.723,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,363,fgrab+1,SPAfgrab SPAfheld,player,25,40,203,0.638,False,40,0.662,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,364,fhigh+1,SPAfhigh SPAflow,player,32,40,165,0.634,False,36,0.664,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,365,fhigh,SPAfhigh,player,31,39,140,0.625,True,608,0.676,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,366,flow,SPAflow,player,24,40,134,0.675,True,720,0.688,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,367,fhitl,SPAfhitl,player,20,32,55,0.664,False,723,0.752,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,368,ffall+2,SPAffall SPAfhith SPAfinjury,player,24,32,47,0.621,True,47,0.624,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,369,ffall+1,SPAffall SPAfinjury,player,32,32,184,0.595,True,281,0.606,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,370,ffall+1,SPAffall SPAfinjury,player,32,32,808,0.558,True,809,0.64,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,371,finjury,SPAfinjury,fight,43,24,524,0.573,True,532,0.506,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,372,finjury,SPAfinjury,fight,41,27,532,0.556,False,386,0.492,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,373,finjury,SPAfinjury,fight,47,24,532,0.548,False,448,0.492,376,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,374,finjury,SPAfinjury,fight,45,24,532,0.586,False,532,0.537,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,375,finjury,SPAfinjury,fight,40,27,532,0.547,False,392,0.525,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,376,finjury,SPAfinjury,fight,47,24,532,0.548,False,448,0.492,373,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
-93 only,NHLPA93 Genesis,633,injury1 (bloody),,injury,24,51,633,,,641,,,False,"blood variant: same pose in 94G 641 and 95 PC 633 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
-93 only,NHLPA93 Genesis,634,injury1 (bloody),,injury,29,51,634,,,642,,,False,"blood variant: same pose in 94G 642 and 95 PC 634 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
-93 only,NHLPA93 Genesis,635,injury1 (bloody),,injury,32,55,635,,,643,,,False,"blood variant: same pose in 94G 643 and 95 PC 635 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
-93 only,NHLPA93 Genesis,636,injury1 (bloody),,injury,30,55,636,,,644,,,False,"blood variant: same pose in 94G 644 and 95 PC 636 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
-93 only,NHLPA93 Genesis,637,injury1 (bloody),,injury,29,51,637,,,645,,,False,"blood variant: same pose in 94G 645 and 95 PC 637 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
-93 only,NHLPA93 Genesis,638,injury1 (bloody),,injury,32,55,638,,,646,,,False,"blood variant: same pose in 94G 646 and 95 PC 638 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
-93 only,NHLPA93 Genesis,639,injury1 (bloody),,injury,24,48,639,,,647,,,False,"blood variant: same pose in 94G 647 and 95 PC 639 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
-93 only,NHLPA93 Genesis,640,injury1 (bloody),,injury,30,48,640,,,648,,,False,"blood variant: same pose in 94G 648 and 95 PC 640 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
-93 only,NHLPA93 Genesis,641,injury1 (bloody),,injury,30,48,641,,,649,,,False,"blood variant: same pose in 94G 649 and 95 PC 641 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
-93 only,NHLPA93 Genesis,642,injury1 (bloody),,injury,25,48,642,,,650,,,False,"blood variant: same pose in 94G 650 and 95 PC 642 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
-93 only,NHLPA93 Genesis,643,injury1 (bloody),,injury,31,48,643,,,651,,,False,"blood variant: same pose in 94G 651 and 95 PC 643 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
-93 only,NHLPA93 Genesis,644,injury1 (bloody),,injury,30,48,644,,,652,,,False,"blood variant: same pose in 94G 652 and 95 PC 644 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
-uncertain,NHL94 Genesis,381,wallleft+1,SPAwallleft SPAwallright,player,32,32,137,0.594,False,,,,False,PC slot 381 is the same animation slot (wallleft) but a different pose
-uncertain,NHL94 Genesis,382,wallleft+1,SPAwallleft SPAwallright,player,28,24,1016,0.592,True,,,,False,PC slot 382 is the same animation slot (wallleft) but a different pose
-uncertain,NHL94 Genesis,383,wallleft+1,SPAwallleft SPAwallright,player,24,24,112,0.544,True,,,,False,PC slot 383 is the same animation slot (wallleft) but a different pose
-uncertain,NHL94 Genesis,539,gready,SPAgready,goalie,32,32,407,0.758,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,541,gready,SPAgready,goalie,31,32,407,0.772,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,542,gready,SPAgready,goalie,24,32,410,0.735,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,543,gready,SPAgready,goalie,24,32,410,0.779,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,544,gready,SPAgready,goalie,24,32,410,0.752,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,545,gready,SPAgready,goalie,24,32,1059,0.759,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,546,gready,SPAgready,goalie,24,32,1059,0.764,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,547,gready,SPAgready,goalie,24,32,1059,0.752,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,548,gready,SPAgready,goalie,32,32,416,0.712,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,549,gready,SPAgready,goalie,32,32,416,0.71,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,550,gready,SPAgready,goalie,32,32,416,0.698,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,551,gready,SPAgready,goalie,40,32,419,0.712,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,552,gready,SPAgready,goalie,32,32,419,0.722,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,553,gready,SPAgready,goalie,32,32,419,0.721,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,554,gready,SPAgready,goalie,24,32,422,0.668,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,555,gready,SPAgready,goalie,24,32,422,0.711,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,556,gready,SPAgready,goalie,24,32,422,0.667,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,557,gready,SPAgready,goalie,16,32,425,0.705,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,558,gready,SPAgready,goalie,16,33,425,0.689,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,559,gready,SPAgready,goalie,16,32,70,0.653,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,560,gready,SPAgready,goalie,24,32,428,0.754,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,561,gready,SPAgready,goalie,24,32,428,0.752,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,562,gready,SPAgready,goalie,24,32,428,0.738,False,,,,False,"PC has its own redrawn gready set (PC 539-554, 2 frames per facing vs 3 in 94G)"
-uncertain,NHL94 Genesis,658,ghighr,SPAghighr,goalie,32,32,408,0.694,False,,,,False,"animation not in PC, but PC 408 has a similar pose (score 0.69)"
-uncertain,NHL94 Genesis,660,ghighr,SPAghighr,goalie,24,31,411,0.652,False,,,,False,"animation not in PC, but PC 411 has a similar pose (score 0.65)"
-uncertain,NHL94 Genesis,661,ghighl,SPAghighl,goalie,24,39,1032,0.651,False,,,,False,"animation not in PC, but PC 1032 has a similar pose (score 0.65)"
-uncertain,NHL94 Genesis,662,ghighr,SPAghighr,goalie,24,32,413,0.624,False,,,,False,"animation not in PC, but PC 413 has a similar pose (score 0.62)"
-uncertain,NHL94 Genesis,668,ghighr,SPAghighr,goalie,24,32,423,0.676,False,,,,False,"animation not in PC, but PC 423 has a similar pose (score 0.68)"
-uncertain,NHL94 Genesis,672,ghighr,SPAghighr,goalie,29,40,429,0.692,False,,,,False,"animation not in PC, but PC 429 has a similar pose (score 0.69)"
-uncertain,NHL94 Genesis,674,gstick2r,SPAgstick2r,goalie,24,40,489,0.699,False,,,,False,"animation not in PC, but PC 489 has a similar pose (score 0.70)"
-uncertain,NHL94 Genesis,675,gstick2r,SPAgstick2r,goalie,26,32,447,0.734,False,,,,False,"animation not in PC, but PC 447 has a similar pose (score 0.73)"
-uncertain,NHL94 Genesis,676,gstick2l,SPAgstick2l,goalie,30,40,1,0.692,False,,,,False,"animation not in PC, but PC 1 has a similar pose (score 0.69)"
-uncertain,NHL94 Genesis,679,gstick2r,SPAgstick2r,goalie,24,32,449,0.696,False,,,,False,"animation not in PC, but PC 449 has a similar pose (score 0.70)"
-uncertain,NHL94 Genesis,685,gstick2l,SPAgstick2l,goalie,16,32,461,0.675,False,,,,False,"animation not in PC, but PC 461 has a similar pose (score 0.68)"
-uncertain,NHL94 Genesis,699,gstick2r,SPAgstick2r,goalie,25,32,461,0.676,True,,,,False,"animation not in PC, but PC 461 has a similar pose (score 0.68)"
-uncertain,NHL94 Genesis,702,gstick2r,SPAgstick2r,goalie,24,40,1105,0.657,True,,,,False,"animation not in PC, but PC 1105 has a similar pose (score 0.66)"
-uncertain,NHL94 Genesis,703,gstick2r,SPAgstick2r,goalie,24,32,461,0.682,True,,,,False,"animation not in PC, but PC 461 has a similar pose (score 0.68)"
-uncertain,NHL94 Genesis,704,gstick2l,SPAgstick2l,goalie,32,32,515,0.706,False,,,,False,"animation not in PC, but PC 515 has a similar pose (score 0.71)"
-uncertain,NHL94 Genesis,709,gslamtop,SPAgslamtop,goalie,32,32,1,0.667,False,,,,False,"animation not in PC, but PC 1 has a similar pose (score 0.67)"
-uncertain,NHL94 Genesis,716,slambot,,player,24,37,600,0.654,False,,,,True,"animation not in PC, but PC 600 has a similar pose (score 0.65)"
-uncertain,NHL94 Genesis,717,slambot,,player,24,32,99,0.653,False,,,,True,"animation not in PC, but PC 99 has a similar pose (score 0.65)"
-uncertain,NHL94 Genesis,719,slambot,,player,24,37,101,0.68,False,,,,True,"animation not in PC, but PC 101 has a similar pose (score 0.68)"
-uncertain,NHL94 Genesis,720,slambot,,player,16,32,145,0.736,False,,,,True,"animation not in PC, but PC 145 has a similar pose (score 0.74)"
-uncertain,NHL94 Genesis,722,slambot,,player,30,32,107,0.673,False,,,,True,"animation not in PC, but PC 107 has a similar pose (score 0.67)"
-uncertain,NHL94 Genesis,723,slambot,,player,16,32,68,0.692,True,,,,True,"animation not in PC, but PC 68 has a similar pose (score 0.69)"
-uncertain,NHL94 Genesis,724,slambot,,player,20,33,111,0.669,False,,,,True,"animation not in PC, but PC 111 has a similar pose (score 0.67)"
-uncertain,NHL94 Genesis,725,slambot,,player,32,32,113,0.705,False,,,,True,"animation not in PC, but PC 113 has a similar pose (score 0.70)"
-uncertain,NHL94 Genesis,726,slambot,,player,26,32,117,0.624,False,,,,True,"animation not in PC, but PC 117 has a similar pose (score 0.62)"
-uncertain,NHL94 Genesis,729,slambot,,player,28,40,541,0.671,False,,,,True,"animation not in PC, but PC 541 has a similar pose (score 0.67)"
-uncertain,NHL94 Genesis,733,slambot,,player,21,37,130,0.656,False,,,,True,"animation not in PC, but PC 130 has a similar pose (score 0.66)"
-uncertain,NHL94 Genesis,734,slambot,,player,35,36,132,0.692,False,,,,True,"animation not in PC, but PC 132 has a similar pose (score 0.69)"
-uncertain,NHL94 Genesis,736,slambot,,player,24,32,136,0.716,False,,,,True,"animation not in PC, but PC 136 has a similar pose (score 0.72)"
-uncertain,NHL94 Genesis,745,boardfront,SPAboardfront,player,54,24,316,0.744,False,,,777,False,"animation not in PC, but PC 316 has a similar pose (score 0.74)"
-uncertain,NHL94 Genesis,746,boardfront,SPAboardfront,player,31,40,614,0.706,False,,,,False,"animation not in PC, but PC 614 has a similar pose (score 0.71)"
-uncertain,NHL94 Genesis,753,boardfront,SPAboardfront,player,56,24,332,0.745,False,,,785,False,"animation not in PC, but PC 332 has a similar pose (score 0.74)"
-uncertain,NHL94 Genesis,754,boardright,SPAboardright,player,24,36,259,0.668,True,,,,False,"animation not in PC, but PC 259 has a similar pose (score 0.67)"
-uncertain,NHL94 Genesis,755,boardright,SPAboardright,player,22,43,143,0.655,True,,,,False,"animation not in PC, but PC 143 has a similar pose (score 0.66)"
-uncertain,NHL94 Genesis,756,boardright,SPAboardright,player,32,41,308,0.697,False,,,772 788,False,"animation not in PC, but PC 308 has a similar pose (score 0.70)"
-uncertain,NHL94 Genesis,757,boardright,SPAboardright,player,24,32,308,0.668,False,,,773 789,False,"animation not in PC, but PC 308 has a similar pose (score 0.67)"
-uncertain,NHL94 Genesis,771,boardback,SPAboardback,player,24,43,306,0.663,False,,,,False,"animation not in PC, but PC 306 has a similar pose (score 0.66)"
-uncertain,NHL94 Genesis,772,boardback,SPAboardback,player,24,36,308,0.697,False,,,756 788,False,"animation not in PC, but PC 308 has a similar pose (score 0.70)"
-uncertain,NHL94 Genesis,773,boardback,SPAboardback,player,24,32,308,0.668,False,,,757 789,False,"animation not in PC, but PC 308 has a similar pose (score 0.67)"
-uncertain,NHL94 Genesis,777,boardback,SPAboardback,player,54,24,316,0.744,False,,,745,False,"animation not in PC, but PC 316 has a similar pose (score 0.74)"
-uncertain,NHL94 Genesis,785,boardback,SPAboardback,player,56,24,332,0.745,False,,,753,False,"animation not in PC, but PC 332 has a similar pose (score 0.74)"
-uncertain,NHL94 Genesis,786,boardleft,SPAboardleft,player,24,36,259,0.669,False,,,,False,"animation not in PC, but PC 259 has a similar pose (score 0.67)"
-uncertain,NHL94 Genesis,787,boardleft,SPAboardleft,player,22,43,143,0.655,False,,,,False,"animation not in PC, but PC 143 has a similar pose (score 0.66)"
-uncertain,NHL94 Genesis,788,boardleft,SPAboardleft,player,32,41,308,0.697,False,,,756 772,False,"animation not in PC, but PC 308 has a similar pose (score 0.70)"
-uncertain,NHL94 Genesis,789,boardleft,SPAboardleft,player,24,32,308,0.668,False,,,757 773,False,"animation not in PC, but PC 308 has a similar pose (score 0.67)"
-uncertain,NHL94 Genesis,802,benchcheckl,SPAbenchcheckl,player,16,32,3,0.681,True,,,816,False,"animation not in PC, but PC 3 has a similar pose (score 0.68)"
-uncertain,NHL94 Genesis,816,benchcheckr,SPAbenchcheckr,player,16,32,66,0.685,False,,,802,False,"animation not in PC, but PC 66 has a similar pose (score 0.69)"
-not exclusive (resolved),NHL94 Genesis,1,faceoff+2,SPAfaceoff SPAfaceoffr SPAglide,player,16,32,1,0.781,False,,,,False,same slot PC 1 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,3,skatewp,SPAskatewp,player,16,32,1,0.725,False,,,,False,same slot PC 3 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,4,skatewp,SPAskatewp,player,16,32,100,0.679,False,,,,False,same slot PC 4 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,36,glide,SPAglide,goalie,24,32,76,0.797,False,,,,False,same slot PC 36 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,41,burst+1,SPAburst SPAflail,player,22,32,1,0.725,True,,,,False,same slot PC 41 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,42,skate,SPAskate,player,24,32,4,0.688,True,,,,False,same slot PC 42 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,43,skate,SPAskate,player,24,32,1105,0.684,True,,,,False,same slot PC 43 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,44,skate,SPAskate,player,24,32,100,0.66,False,,,,False,same slot PC 44 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,45,skate,SPAskate,player,24,32,45,0.665,False,,,,False,same slot PC 45 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,46,burst+1,SPAburst SPAflail,player,16,32,571,0.768,False,,,,False,same slot PC 46 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,149,stop,SPAstop,player,40,32,149,0.697,False,,,,False,same slot PC 149 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,150,stop,SPAstop,player,40,32,150,0.693,False,,,,False,same slot PC 150 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,219,stanley,SPAstanley,player,24,42,223,0.707,True,,,,False,same slot PC 219 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,220,stanley,SPAstanley,player,24,44,220,0.663,False,,,,False,same slot PC 220 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,222,stanley,SPAstanley,player,25,44,217,0.654,True,,,,False,same slot PC 222 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,224,stanley,SPAstanley,player,24,42,218,0.723,True,,,,False,same slot PC 224 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,324,boardfront+3,SPAboardfront SPAboardleft SPAboardright SPAfallfwd,player,24,43,324,0.641,False,,,,False,same slot PC 324 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,345,Hold+1,SPAHold SPAHold2,player,24,44,345,0.6,False,,,,False,same slot PC 345 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,384,arrow,,nonplayer,24,24,1064,0.52,False,,,387 838 841,False,same slot PC 384 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,385,arrow,,nonplayer,24,24,567,0.52,False,,,388 839 842,True,same slot PC 385 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,386,arrow,,nonplayer,24,24,568,0.512,True,,,389 840 843,True,same slot PC 386 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,387,arrow,,nonplayer,24,24,1064,0.52,False,,,384 838 841,False,same slot PC 387 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,388,arrow,,nonplayer,24,24,567,0.52,False,,,385 839 842,True,same slot PC 388 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,389,arrow,,nonplayer,24,24,568,0.512,True,,,386 840 843,True,same slot PC 389 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,390,pad,,nonplayer,31,24,390,0.485,False,,,391 844 845,False,same slot PC 390 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,391,pad,,nonplayer,31,24,390,0.485,False,,,390 844 845,False,same slot PC 391 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,392,pad,,nonplayer,31,24,1014,0.653,False,,,,False,same slot PC 392 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,393,replay,,nonplayer,37,28,393,0.62,False,,,,False,same slot PC 393 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,394,puck,,nonplayer,8,8,561,0.592,True,,,,False,same slot PC 394 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,405,goal,,goalie,51,32,406,0.557,False,,,,False,same slot PC 405 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,413,gready+3,SPAgready SPAgready2 SPAgslambot SPAgslamtop,goalie,24,32,1059,0.796,False,,,,False,same slot PC 413 is this animation frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,563,siren,SPAsiren,nonplayer,16,8,561,0.705,True,,,569,False,same slot PC 555 (94G slot - 8) is this frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,564,siren,SPAsiren,nonplayer,16,16,557,0.733,False,,,568,False,same slot PC 556 (94G slot - 8) is this frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,568,siren,SPAsiren,nonplayer,16,16,557,0.738,True,,,564,False,same slot PC 560 (94G slot - 8) is this frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,569,siren,SPAsiren,nonplayer,16,8,561,0.705,False,,,563,False,same slot PC 561 (94G slot - 8) is this frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,570,siren,SPAsiren,nonplayer,31,20,568,0.681,True,,,576,False,same slot PC 562 (94G slot - 8) is this frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,571,siren,SPAsiren,nonplayer,17,23,567,0.692,True,,,575,False,same slot PC 563 (94G slot - 8) is this frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,572,siren,SPAsiren,nonplayer,16,22,566,0.644,True,,,,False,same slot PC 564 (94G slot - 8) is this frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,573,siren,SPAsiren,nonplayer,16,25,565,0.591,True,,,,False,same slot PC 565 (94G slot - 8) is this frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,575,siren,SPAsiren,nonplayer,17,23,567,0.692,False,,,571,False,same slot PC 567 (94G slot - 8) is this frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,576,siren,SPAsiren,nonplayer,31,20,568,0.681,False,,,570,False,same slot PC 568 (94G slot - 8) is this frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,648,injury1,SPAinjury1,injury,30,48,643,0.784,False,,,651,False,same pose redrawn in PC 640 (visual review)
-not exclusive (resolved),NHL94 Genesis,653,bglass,SPAbglass,nonplayer,32,16,645,0.654,False,,,,False,same slot PC 645 (94G slot - 8) is this frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,655,bglass,SPAbglass,nonplayer,33,41,645,0.66,True,,,,False,same slot PC 647 (94G slot - 8) is this frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,656,bglass,SPAbglass,nonplayer,32,45,645,0.689,False,,,,False,same slot PC 648 (94G slot - 8) is this frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,657,bglass,SPAbglass,nonplayer,34,45,645,0.609,True,,,,False,same slot PC 649 (94G slot - 8) is this frame redrawn/recoloured (visual review)
-not exclusive (resolved),NHL94 Genesis,838,slambot,,player,24,24,1064,0.52,False,,,384 387 841,True,unused duplicate of arrow/star frame 384 (same shape as PC 384)
-not exclusive (resolved),NHL94 Genesis,839,slambot,,player,24,24,567,0.52,False,,,385 388 842,True,unused duplicate of arrow/star frame 385 (same shape as PC 385)
-not exclusive (resolved),NHL94 Genesis,840,slambot,,player,24,24,568,0.512,True,,,386 389 843,True,unused duplicate of arrow/star frame 386 (same shape as PC 386)
-not exclusive (resolved),NHL94 Genesis,841,slambot,,player,24,24,1064,0.52,False,,,384 387 838,True,unused duplicate of arrow/star frame 387 (same shape as PC 387)
-not exclusive (resolved),NHL94 Genesis,842,slambot,,player,24,24,567,0.52,False,,,385 388 839,True,unused duplicate of arrow/star frame 388 (same shape as PC 388)
-not exclusive (resolved),NHL94 Genesis,843,slambot,,player,24,24,568,0.512,True,,,386 389 840,True,unused duplicate of arrow/star frame 389 (same shape as PC 389)
-not exclusive (resolved),NHL94 Genesis,844,slambot,,player,31,24,390,0.485,False,,,390 391 845,True,unused duplicate of arrow/star frame 390 (same shape as PC 390)
-not exclusive (resolved),NHL94 Genesis,845,slambot,,player,31,24,390,0.485,False,,,390 391 844,True,unused duplicate of arrow/star frame 391 (same shape as PC 391)
+94G only,NHL94 Genesis,659,ghighl,SPAghighl,goalie,32,36,407,0.619,False,,,,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,663,ghighl,SPAghighl,goalie,24,32,687,0.648,False,,,,False,animation not in PC; best PC score 0.65
+94G only,NHL94 Genesis,664,ghighr,SPAghighr,goalie,32,31,994,0.564,True,,,,False,animation not in PC; best PC score 0.56
+94G only,NHL94 Genesis,665,ghighl,SPAghighl,goalie,24,32,486,0.605,True,,,,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,666,ghighr,SPAghighr,goalie,32,32,429,0.589,False,,,,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,667,ghighl,SPAghighl,goalie,25,40,366,0.607,False,,,,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,669,ghighl,SPAghighl,goalie,29,39,454,0.58,False,,,,False,animation not in PC; best PC score 0.58
+94G only,NHL94 Genesis,670,ghighr,SPAghighr,goalie,24,38,425,0.632,False,,,,False,animation not in PC; best PC score 0.63
+94G only,NHL94 Genesis,671,ghighl,SPAghighl,goalie,31,40,679,0.603,True,,,,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,673,ghighl,SPAghighl,goalie,24,32,410,0.649,True,,,,False,animation not in PC; best PC score 0.65
+94G only,NHL94 Genesis,677,gstick2l,SPAgstick2l,goalie,32,32,994,0.634,False,,,,False,animation not in PC; best PC score 0.63
+94G only,NHL94 Genesis,678,gstick2r,SPAgstick2r,goalie,24,32,492,0.643,False,,,,False,animation not in PC; best PC score 0.64
+94G only,NHL94 Genesis,680,gstick2l,SPAgstick2l,goalie,24,40,1104,0.64,False,,,,False,animation not in PC; best PC score 0.64
+94G only,NHL94 Genesis,681,gstick2l,SPAgstick2l,goalie,24,34,446,0.635,False,,,,False,animation not in PC; best PC score 0.64
+94G only,NHL94 Genesis,682,gstick2r,SPAgstick2r,goalie,32,40,58,0.6,False,,,,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,683,gstick2r,SPAgstick2r,goalie,24,40,77,0.615,True,,,,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,684,gstick2l,SPAgstick2l,goalie,24,32,66,0.6,True,,,,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,686,gstick2r,SPAgstick2r,goalie,24,39,500,0.636,False,,,,False,animation not in PC; best PC score 0.64
+94G only,NHL94 Genesis,687,gstick2r,SPAgstick2r,goalie,24,32,1104,0.602,False,,,,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,688,gstick2l,SPAgstick2l,goalie,24,31,514,0.611,True,,,,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,689,gstick2l,SPAgstick2l,goalie,32,32,460,0.617,False,,,,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,690,gstick2r,SPAgstick2r,goalie,25,32,504,0.602,False,,,,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,691,gstick2r,SPAgstick2r,goalie,32,32,1067,0.576,False,,,,False,animation not in PC; best PC score 0.58
+94G only,NHL94 Genesis,692,gstick2l,SPAgstick2l,goalie,32,32,466,0.568,False,,,,False,animation not in PC; best PC score 0.57
+94G only,NHL94 Genesis,693,gstick2l,SPAgstick2l,goalie,40,33,985,0.568,False,,,,False,animation not in PC; best PC score 0.57
+94G only,NHL94 Genesis,694,gstick2r,SPAgstick2r,goalie,24,32,514,0.594,False,,,,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,695,gstick2r,SPAgstick2r,goalie,24,32,460,0.612,True,,,,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,696,gstick2l,SPAgstick2l,goalie,24,32,679,0.625,True,,,,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,697,gstick2l,SPAgstick2l,goalie,24,40,487,0.613,False,,,,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,698,gstick2r,SPAgstick2r,goalie,24,32,67,0.616,False,,,,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,700,gstick2l,SPAgstick2l,goalie,32,40,78,0.604,False,,,,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,701,gstick2l,SPAgstick2l,goalie,24,40,25,0.593,False,,,,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,705,gstick2l,SPAgstick2l,goalie,32,32,422,0.607,True,,,,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,706,gslamtop,SPAgslamtop,goalie,24,47,431,0.612,False,,,,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,707,gslamtop,SPAgslamtop,goalie,24,46,904,0.635,True,,,,False,animation not in PC; best PC score 0.64
+94G only,NHL94 Genesis,708,gslamtop,SPAgslamtop,goalie,32,44,305,0.619,False,,,,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,710,gslambot,SPAgslambot,goalie,24,32,994,0.621,False,,,,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,711,gslambot,SPAgslambot,goalie,25,48,722,0.568,False,,,,False,animation not in PC; best PC score 0.57
+94G only,NHL94 Genesis,712,gslambot,SPAgslambot,goalie,26,41,670,0.597,True,,,,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,713,gslambot,SPAgslambot,goalie,25,32,801,0.58,False,,,,False,animation not in PC; best PC score 0.58
+94G only,NHL94 Genesis,714,slambot,,player,32,33,101,0.642,True,,,,True,animation not in PC; best PC score 0.64
+94G only,NHL94 Genesis,728,slambot,,player,31,40,591,0.59,False,,,,True,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,730,slambot,,player,24,40,361,0.62,False,,,,True,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,731,slambot,,player,24,36,161,0.641,True,,,,True,animation not in PC; best PC score 0.64
+94G only,NHL94 Genesis,732,slambot,,player,16,39,152,0.611,False,,,,True,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,735,slambot,,player,21,34,155,0.64,False,,,,True,animation not in PC; best PC score 0.64
+94G only,NHL94 Genesis,737,slambot,,player,29,35,247,0.586,False,,,,True,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,738,boardfront,SPAboardfront,player,24,33,519,0.626,True,,,,False,animation not in PC; best PC score 0.63
+94G only,NHL94 Genesis,739,boardfront,SPAboardfront,player,32,36,995,0.619,False,,,,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,740,boardfront,SPAboardfront,player,24,38,184,0.64,False,,,770,False,animation not in PC; best PC score 0.64
+94G only,NHL94 Genesis,741,boardfront,SPAboardfront,player,40,24,1066,0.532,True,,,,False,animation not in PC; best PC score 0.53
+94G only,NHL94 Genesis,742,boardfront,SPAboardfront,player,36,41,590,0.597,False,,,750,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,743,boardfront,SPAboardfront,player,51,40,1095,0.556,False,,,751,False,animation not in PC; best PC score 0.56
+94G only,NHL94 Genesis,744,boardfront,SPAboardfront,player,54,34,315,0.616,False,,,752 776 784,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,747,boardfront,SPAboardfront,player,51,48,1072,0.537,True,,,,False,animation not in PC; best PC score 0.54
+94G only,NHL94 Genesis,748,boardfront,SPAboardfront,player,27,28,320,0.563,False,,,,False,animation not in PC; best PC score 0.56
+94G only,NHL94 Genesis,749,boardfront,SPAboardfront,player,24,37,629,0.54,False,,,765 797,False,animation not in PC; best PC score 0.54
+94G only,NHL94 Genesis,750,boardfront,SPAboardfront,player,36,41,590,0.597,True,,,742,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,751,boardfront,SPAboardfront,player,51,40,1095,0.556,True,,,743,False,animation not in PC; best PC score 0.56
+94G only,NHL94 Genesis,752,boardfront,SPAboardfront,player,54,34,315,0.616,True,,,744 776 784,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,758,benchcheckr+1,SPAbenchcheckr SPAboardright,player,27,40,2,0.613,False,,,798,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,759,boardright,SPAboardright,player,16,40,142,0.631,True,,,799,False,animation not in PC; best PC score 0.63
+94G only,NHL94 Genesis,760,boardright,SPAboardright,player,24,32,162,0.573,False,,,,False,animation not in PC; best PC score 0.57
+94G only,NHL94 Genesis,761,benchcheckl+2,SPAbenchcheckl SPAbenchcheckr SPAboardright,player,24,38,773,0.536,False,,,793,False,animation not in PC; best PC score 0.54
+94G only,NHL94 Genesis,762,boardright,SPAboardright,player,25,47,22,0.58,True,,,,False,animation not in PC; best PC score 0.58
+94G only,NHL94 Genesis,763,boardright,SPAboardright,player,16,40,24,0.606,True,,,,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,764,boardright,SPAboardright,player,24,40,264,0.591,False,,,796,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,765,boardright,SPAboardright,player,24,37,629,0.54,False,,,749 797,False,animation not in PC; best PC score 0.54
+94G only,NHL94 Genesis,766,benchcheckr+1,SPAbenchcheckr SPAboardright,player,39,42,248,0.582,False,,,790,False,animation not in PC; best PC score 0.58
+94G only,NHL94 Genesis,767,boardright,SPAboardright,player,27,40,248,0.587,False,,,,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,768,boardright,SPAboardright,player,32,49,946,0.617,True,,,,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,769,benchcheckl+2,SPAbenchcheckl SPAbenchcheckr SPAboardright,player,40,27,937,0.572,False,,,801,False,animation not in PC; best PC score 0.57
+94G only,NHL94 Genesis,770,boardback,SPAboardback,player,24,32,184,0.64,False,,,740,False,animation not in PC; best PC score 0.64
+94G only,NHL94 Genesis,774,boardback,SPAboardback,player,40,32,332,0.606,True,,,782,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,775,boardback,SPAboardback,player,54,33,1082,0.583,True,,,783,False,animation not in PC; best PC score 0.58
+94G only,NHL94 Genesis,776,boardback,SPAboardback,player,54,34,315,0.616,False,,,744 752 784,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,778,boardback,SPAboardback,player,25,34,1129,0.58,True,,,,False,animation not in PC; best PC score 0.58
+94G only,NHL94 Genesis,779,boardback,SPAboardback,player,45,32,445,0.535,False,,,,False,animation not in PC; best PC score 0.54
+94G only,NHL94 Genesis,780,boardback,SPAboardback,player,43,32,245,0.535,False,,,,False,animation not in PC; best PC score 0.54
+94G only,NHL94 Genesis,781,boardback,SPAboardback,player,48,24,918,0.553,True,,,,False,animation not in PC; best PC score 0.55
+94G only,NHL94 Genesis,782,boardback,SPAboardback,player,40,32,332,0.6,False,,,774,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,783,boardback,SPAboardback,player,54,33,1082,0.583,False,,,775,False,animation not in PC; best PC score 0.58
+94G only,NHL94 Genesis,784,boardback,SPAboardback,player,54,34,315,0.616,True,,,744 752 776,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,790,benchcheckl+1,SPAbenchcheckl SPAboardleft,player,39,42,248,0.61,True,,,766,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,791,boardleft,SPAboardleft,player,28,40,248,0.573,True,,,,False,animation not in PC; best PC score 0.57
+94G only,NHL94 Genesis,792,benchcheckl+2,SPAbenchcheckl SPAbenchcheckr SPAboardleft,player,32,40,946,0.619,False,,,800,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,793,boardleft,SPAboardleft,player,24,38,773,0.536,False,,,761,False,animation not in PC; best PC score 0.54
+94G only,NHL94 Genesis,794,boardleft,SPAboardleft,player,25,47,22,0.58,False,,,,False,animation not in PC; best PC score 0.58
+94G only,NHL94 Genesis,795,boardleft,SPAboardleft,player,16,40,24,0.606,False,,,,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,796,boardleft,SPAboardleft,player,24,40,264,0.591,False,,,764,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,797,boardleft,SPAboardleft,player,24,37,629,0.54,False,,,749 765,False,animation not in PC; best PC score 0.54
+94G only,NHL94 Genesis,798,benchcheckl+1,SPAbenchcheckl SPAboardleft,player,27,40,2,0.613,True,,,758,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,799,boardleft,SPAboardleft,player,16,40,142,0.631,False,,,759,False,animation not in PC; best PC score 0.63
+94G only,NHL94 Genesis,800,benchcheckl+2,SPAbenchcheckl SPAbenchcheckr SPAboardleft,player,32,40,946,0.617,True,,,792,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,801,boardleft,SPAboardleft,player,40,27,937,0.572,False,,,769,False,animation not in PC; best PC score 0.57
+94G only,NHL94 Genesis,803,benchcheckl,SPAbenchcheckl,player,36,32,521,0.588,True,,,817,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,804,benchcheckl,SPAbenchcheckl,player,32,39,1122,0.506,False,,,,False,animation not in PC; best PC score 0.51
+94G only,NHL94 Genesis,805,benchcheckl,SPAbenchcheckl,player,34,35,529,0.588,False,,,819,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,806,benchcheckl,SPAbenchcheckl,player,40,29,317,0.511,True,,,820,False,animation not in PC; best PC score 0.51
+94G only,NHL94 Genesis,807,benchcheckl,SPAbenchcheckl,player,34,28,461,0.516,True,,,821,False,animation not in PC; best PC score 0.52
+94G only,NHL94 Genesis,808,benchcheckl,SPAbenchcheckl,player,40,29,522,0.598,True,,,822,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,809,benchcheckl,SPAbenchcheckl,player,32,24,280,0.611,False,,,,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,810,benchcheckl,SPAbenchcheckl,player,40,24,809,0.53,True,,,,False,animation not in PC; best PC score 0.53
+94G only,NHL94 Genesis,811,benchcheckl,SPAbenchcheckl,player,32,35,529,0.545,False,,,,False,animation not in PC; best PC score 0.55
+94G only,NHL94 Genesis,812,benchcheckl,SPAbenchcheckl,player,28,32,877,0.608,True,,,,False,animation not in PC; best PC score 0.61
+94G only,NHL94 Genesis,813,benchcheckl,SPAbenchcheckl,player,32,24,457,0.54,False,,,,False,animation not in PC; best PC score 0.54
+94G only,NHL94 Genesis,814,benchcheckl,SPAbenchcheckl,player,32,32,110,0.621,True,,,,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,815,benchcheckl,SPAbenchcheckl,player,36,32,521,0.587,True,,,823,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,817,benchcheckr,SPAbenchcheckr,player,36,32,521,0.588,False,,,803,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,818,benchcheckr,SPAbenchcheckr,player,32,39,1122,0.506,True,,,,False,animation not in PC; best PC score 0.51
+94G only,NHL94 Genesis,819,benchcheckr,SPAbenchcheckr,player,34,35,529,0.593,True,,,805,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,820,benchcheckr,SPAbenchcheckr,player,40,29,317,0.511,False,,,806,False,animation not in PC; best PC score 0.51
+94G only,NHL94 Genesis,821,benchcheckr,SPAbenchcheckr,player,34,28,461,0.516,False,,,807,False,animation not in PC; best PC score 0.52
+94G only,NHL94 Genesis,822,benchcheckr,SPAbenchcheckr,player,40,29,522,0.598,False,,,808,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,823,benchcheckr,SPAbenchcheckr,player,36,32,521,0.587,False,,,815,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,824,benchcheckr,SPAbenchcheckr,player,32,32,110,0.616,False,,,,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,825,benchcheckr,SPAbenchcheckr,player,32,35,876,0.619,False,,,,False,animation not in PC; best PC score 0.62
+94G only,NHL94 Genesis,826,benchcheckr,SPAbenchcheckr,player,47,24,1029,0.528,False,,,,False,animation not in PC; best PC score 0.53
+94G only,NHL94 Genesis,827,benchcheckr,SPAbenchcheckr,player,40,32,877,0.559,False,,,,False,animation not in PC; best PC score 0.56
+94G only,NHL94 Genesis,828,benchcheckr,SPAbenchcheckr,player,40,32,1112,0.564,False,,,,False,animation not in PC; best PC score 0.56
+94G only,NHL94 Genesis,829,benchcheckr,SPAbenchcheckr,player,43,24,41,0.553,True,,,,False,animation not in PC; best PC score 0.55
+94G only,NHL94 Genesis,830,crosscheck,SPAcrosscheck,player,32,40,257,0.643,False,,,,False,animation not in PC; best PC score 0.64
+94G only,NHL94 Genesis,831,crosscheck,SPAcrosscheck,player,32,40,247,0.602,True,,,,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,832,crosscheck,SPAcrosscheck,player,40,32,13,0.586,False,,,,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,833,crosscheck,SPAcrosscheck,player,41,32,271,0.601,True,,,,False,animation not in PC; best PC score 0.60
+94G only,NHL94 Genesis,834,crosscheck,SPAcrosscheck,player,32,32,678,0.564,False,,,,False,animation not in PC; best PC score 0.56
+94G only,NHL94 Genesis,835,crosscheck,SPAcrosscheck,player,40,32,112,0.59,True,,,,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,836,crosscheck,SPAcrosscheck,player,34,32,429,0.587,False,,,,False,animation not in PC; best PC score 0.59
+94G only,NHL94 Genesis,837,crosscheck,SPAcrosscheck,player,48,32,270,0.561,False,,,,False,animation not in PC; best PC score 0.56
+93 only,NHLPA93 Genesis,353,gloves,,fight,100,23,1073,0.523,False,744,0.518,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,354,fight,SPAfight,fight,32,40,36,0.636,True,715,0.67,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,355,fight,SPAfight,fight,40,41,7,0.6,False,8,0.646,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,356,fight,SPAfight,fight,16,40,357,0.665,True,144,0.651,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,357,fgrab+6,SPAfgrab SPAfheld SPAfhigh SPAfhith SPAfhitl SPAfight SPAflow,player,24,40,0,0.673,True,1,0.672,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,358,fgrab+1,SPAfgrab SPAfheld,player,32,32,890,0.655,False,1,0.662,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,359,fhigh+1,SPAfhigh SPAflow,player,32,40,1124,0.627,False,207,0.662,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,360,fhigh,SPAfhigh,player,25,40,202,0.631,False,76,0.65,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,361,flow,SPAflow,player,24,40,689,0.648,False,106,0.684,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,362,fgrab+6,SPAfgrab SPAfheld SPAfhigh SPAfhith SPAfhitl SPAfight SPAflow,player,24,40,849,0.662,False,720,0.723,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,363,fgrab+1,SPAfgrab SPAfheld,player,25,40,202,0.638,False,40,0.662,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,364,fhigh+1,SPAfhigh SPAflow,player,32,40,164,0.634,False,36,0.664,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,365,fhigh,SPAfhigh,player,31,39,139,0.625,True,608,0.676,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,366,flow,SPAflow,player,24,40,133,0.675,True,720,0.688,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,367,fhitl,SPAfhitl,player,20,32,54,0.664,False,723,0.752,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,368,ffall+2,SPAffall SPAfhith SPAfinjury,player,24,32,46,0.621,True,47,0.624,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,369,ffall+1,SPAffall SPAfinjury,player,32,32,183,0.595,True,281,0.606,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,370,ffall+1,SPAffall SPAfinjury,player,32,32,807,0.558,True,809,0.64,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,371,finjury,SPAfinjury,fight,43,24,523,0.573,True,532,0.506,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,372,finjury,SPAfinjury,fight,41,27,531,0.556,False,386,0.492,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,373,finjury,SPAfinjury,fight,47,24,531,0.548,False,448,0.492,376,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,374,finjury,SPAfinjury,fight,45,24,531,0.586,False,532,0.537,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,375,finjury,SPAfinjury,fight,40,27,531,0.547,False,392,0.525,,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,376,finjury,SPAfinjury,fight,47,24,531,0.548,False,448,0.492,373,False,fight/blood set; nearest 94G and PC frames visually different (reviewed)
+93 only,NHLPA93 Genesis,633,injury1 (bloody),,injury,24,51,632,,,641,,,False,"blood variant: same pose in 94G 641 and 95 PC 632 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
+93 only,NHLPA93 Genesis,634,injury1 (bloody),,injury,29,51,633,,,642,,,False,"blood variant: same pose in 94G 642 and 95 PC 633 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
+93 only,NHLPA93 Genesis,635,injury1 (bloody),,injury,32,55,634,,,643,,,False,"blood variant: same pose in 94G 643 and 95 PC 634 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
+93 only,NHLPA93 Genesis,636,injury1 (bloody),,injury,30,55,635,,,644,,,False,"blood variant: same pose in 94G 644 and 95 PC 635 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
+93 only,NHLPA93 Genesis,637,injury1 (bloody),,injury,29,51,636,,,645,,,False,"blood variant: same pose in 94G 645 and 95 PC 636 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
+93 only,NHLPA93 Genesis,638,injury1 (bloody),,injury,32,55,637,,,646,,,False,"blood variant: same pose in 94G 646 and 95 PC 637 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
+93 only,NHLPA93 Genesis,639,injury1 (bloody),,injury,24,48,638,,,647,,,False,"blood variant: same pose in 94G 647 and 95 PC 638 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
+93 only,NHLPA93 Genesis,640,injury1 (bloody),,injury,30,48,639,,,648,,,False,"blood variant: same pose in 94G 648 and 95 PC 639 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
+93 only,NHLPA93 Genesis,641,injury1 (bloody),,injury,30,48,640,,,649,,,False,"blood variant: same pose in 94G 649 and 95 PC 640 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
+93 only,NHLPA93 Genesis,642,injury1 (bloody),,injury,25,48,641,,,650,,,False,"blood variant: same pose in 94G 650 and 95 PC 641 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
+93 only,NHLPA93 Genesis,643,injury1 (bloody),,injury,31,48,642,,,651,,,False,"blood variant: same pose in 94G 651 and 95 PC 642 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
+93 only,NHLPA93 Genesis,644,injury1 (bloody),,injury,30,48,643,,,652,,,False,"blood variant: same pose in 94G 652 and 95 PC 643 (both redrawn without blood, 12/12 frames differ from 93); the bloody version exists only in 93"
+uncertain,NHL94 Genesis,381,wallleft+1,SPAwallleft SPAwallright,player,32,32,136,0.594,False,,,,False,PC slot 380 is the same animation slot (wallleft) but a different pose
+uncertain,NHL94 Genesis,382,wallleft+1,SPAwallleft SPAwallright,player,28,24,1015,0.592,True,,,,False,PC slot 381 is the same animation slot (wallleft) but a different pose
+uncertain,NHL94 Genesis,383,wallleft+1,SPAwallleft SPAwallright,player,24,24,111,0.544,True,,,,False,PC slot 382 is the same animation slot (wallleft) but a different pose
+uncertain,NHL94 Genesis,539,gready,SPAgready,goalie,32,32,406,0.758,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,541,gready,SPAgready,goalie,31,32,406,0.772,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,542,gready,SPAgready,goalie,24,32,409,0.735,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,543,gready,SPAgready,goalie,24,32,409,0.779,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,544,gready,SPAgready,goalie,24,32,409,0.752,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,545,gready,SPAgready,goalie,24,32,1058,0.759,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,546,gready,SPAgready,goalie,24,32,1058,0.764,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,547,gready,SPAgready,goalie,24,32,1058,0.752,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,548,gready,SPAgready,goalie,32,32,415,0.712,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,549,gready,SPAgready,goalie,32,32,415,0.71,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,550,gready,SPAgready,goalie,32,32,415,0.698,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,551,gready,SPAgready,goalie,40,32,418,0.712,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,552,gready,SPAgready,goalie,32,32,418,0.722,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,553,gready,SPAgready,goalie,32,32,418,0.721,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,554,gready,SPAgready,goalie,24,32,421,0.668,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,555,gready,SPAgready,goalie,24,32,421,0.711,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,556,gready,SPAgready,goalie,24,32,421,0.667,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,557,gready,SPAgready,goalie,16,32,424,0.705,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,558,gready,SPAgready,goalie,16,33,424,0.689,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,559,gready,SPAgready,goalie,16,32,69,0.653,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,560,gready,SPAgready,goalie,24,32,427,0.754,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,561,gready,SPAgready,goalie,24,32,427,0.752,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,562,gready,SPAgready,goalie,24,32,427,0.738,False,,,,False,"PC has its own redrawn gready set (PC 538-553, 2 frames per facing vs 3 in 94G)"
+uncertain,NHL94 Genesis,658,ghighr,SPAghighr,goalie,32,32,407,0.694,False,,,,False,"animation not in PC, but PC 407 has a similar pose (score 0.69)"
+uncertain,NHL94 Genesis,660,ghighr,SPAghighr,goalie,24,31,410,0.652,False,,,,False,"animation not in PC, but PC 410 has a similar pose (score 0.65)"
+uncertain,NHL94 Genesis,661,ghighl,SPAghighl,goalie,24,39,1031,0.651,False,,,,False,"animation not in PC, but PC 1031 has a similar pose (score 0.65)"
+uncertain,NHL94 Genesis,662,ghighr,SPAghighr,goalie,24,32,412,0.624,False,,,,False,"animation not in PC, but PC 412 has a similar pose (score 0.62)"
+uncertain,NHL94 Genesis,668,ghighr,SPAghighr,goalie,24,32,422,0.676,False,,,,False,"animation not in PC, but PC 422 has a similar pose (score 0.68)"
+uncertain,NHL94 Genesis,672,ghighr,SPAghighr,goalie,29,40,428,0.692,False,,,,False,"animation not in PC, but PC 428 has a similar pose (score 0.69)"
+uncertain,NHL94 Genesis,674,gstick2r,SPAgstick2r,goalie,24,40,488,0.699,False,,,,False,"animation not in PC, but PC 488 has a similar pose (score 0.70)"
+uncertain,NHL94 Genesis,675,gstick2r,SPAgstick2r,goalie,26,32,446,0.734,False,,,,False,"animation not in PC, but PC 446 has a similar pose (score 0.73)"
+uncertain,NHL94 Genesis,676,gstick2l,SPAgstick2l,goalie,30,40,0,0.692,False,,,,False,"animation not in PC, but PC 0 has a similar pose (score 0.69)"
+uncertain,NHL94 Genesis,679,gstick2r,SPAgstick2r,goalie,24,32,448,0.696,False,,,,False,"animation not in PC, but PC 448 has a similar pose (score 0.70)"
+uncertain,NHL94 Genesis,685,gstick2l,SPAgstick2l,goalie,16,32,460,0.675,False,,,,False,"animation not in PC, but PC 460 has a similar pose (score 0.68)"
+uncertain,NHL94 Genesis,699,gstick2r,SPAgstick2r,goalie,25,32,460,0.676,True,,,,False,"animation not in PC, but PC 460 has a similar pose (score 0.68)"
+uncertain,NHL94 Genesis,702,gstick2r,SPAgstick2r,goalie,24,40,1104,0.657,True,,,,False,"animation not in PC, but PC 1104 has a similar pose (score 0.66)"
+uncertain,NHL94 Genesis,703,gstick2r,SPAgstick2r,goalie,24,32,460,0.682,True,,,,False,"animation not in PC, but PC 460 has a similar pose (score 0.68)"
+uncertain,NHL94 Genesis,704,gstick2l,SPAgstick2l,goalie,32,32,514,0.706,False,,,,False,"animation not in PC, but PC 514 has a similar pose (score 0.71)"
+uncertain,NHL94 Genesis,709,gslamtop,SPAgslamtop,goalie,32,32,0,0.667,False,,,,False,"animation not in PC, but PC 0 has a similar pose (score 0.67)"
+uncertain,NHL94 Genesis,716,slambot,,player,24,37,599,0.654,False,,,,True,"animation not in PC, but PC 599 has a similar pose (score 0.65)"
+uncertain,NHL94 Genesis,717,slambot,,player,24,32,98,0.653,False,,,,True,"animation not in PC, but PC 98 has a similar pose (score 0.65)"
+uncertain,NHL94 Genesis,719,slambot,,player,24,37,100,0.68,False,,,,True,"animation not in PC, but PC 100 has a similar pose (score 0.68)"
+uncertain,NHL94 Genesis,720,slambot,,player,16,32,144,0.736,False,,,,True,"animation not in PC, but PC 144 has a similar pose (score 0.74)"
+uncertain,NHL94 Genesis,722,slambot,,player,30,32,106,0.673,False,,,,True,"animation not in PC, but PC 106 has a similar pose (score 0.67)"
+uncertain,NHL94 Genesis,723,slambot,,player,16,32,67,0.692,True,,,,True,"animation not in PC, but PC 67 has a similar pose (score 0.69)"
+uncertain,NHL94 Genesis,724,slambot,,player,20,33,110,0.669,False,,,,True,"animation not in PC, but PC 110 has a similar pose (score 0.67)"
+uncertain,NHL94 Genesis,725,slambot,,player,32,32,112,0.705,False,,,,True,"animation not in PC, but PC 112 has a similar pose (score 0.70)"
+uncertain,NHL94 Genesis,726,slambot,,player,26,32,116,0.624,False,,,,True,"animation not in PC, but PC 116 has a similar pose (score 0.62)"
+uncertain,NHL94 Genesis,729,slambot,,player,28,40,540,0.671,False,,,,True,"animation not in PC, but PC 540 has a similar pose (score 0.67)"
+uncertain,NHL94 Genesis,733,slambot,,player,21,37,129,0.656,False,,,,True,"animation not in PC, but PC 129 has a similar pose (score 0.66)"
+uncertain,NHL94 Genesis,734,slambot,,player,35,36,131,0.692,False,,,,True,"animation not in PC, but PC 131 has a similar pose (score 0.69)"
+uncertain,NHL94 Genesis,736,slambot,,player,24,32,135,0.716,False,,,,True,"animation not in PC, but PC 135 has a similar pose (score 0.72)"
+uncertain,NHL94 Genesis,745,boardfront,SPAboardfront,player,54,24,315,0.744,False,,,777,False,"animation not in PC, but PC 315 has a similar pose (score 0.74)"
+uncertain,NHL94 Genesis,746,boardfront,SPAboardfront,player,31,40,613,0.706,False,,,,False,"animation not in PC, but PC 613 has a similar pose (score 0.71)"
+uncertain,NHL94 Genesis,753,boardfront,SPAboardfront,player,56,24,331,0.745,False,,,785,False,"animation not in PC, but PC 331 has a similar pose (score 0.74)"
+uncertain,NHL94 Genesis,754,boardright,SPAboardright,player,24,36,258,0.668,True,,,,False,"animation not in PC, but PC 258 has a similar pose (score 0.67)"
+uncertain,NHL94 Genesis,755,boardright,SPAboardright,player,22,43,142,0.655,True,,,,False,"animation not in PC, but PC 142 has a similar pose (score 0.66)"
+uncertain,NHL94 Genesis,756,boardright,SPAboardright,player,32,41,307,0.697,False,,,772 788,False,"animation not in PC, but PC 307 has a similar pose (score 0.70)"
+uncertain,NHL94 Genesis,757,boardright,SPAboardright,player,24,32,307,0.668,False,,,773 789,False,"animation not in PC, but PC 307 has a similar pose (score 0.67)"
+uncertain,NHL94 Genesis,771,boardback,SPAboardback,player,24,43,305,0.663,False,,,,False,"animation not in PC, but PC 305 has a similar pose (score 0.66)"
+uncertain,NHL94 Genesis,772,boardback,SPAboardback,player,24,36,307,0.697,False,,,756 788,False,"animation not in PC, but PC 307 has a similar pose (score 0.70)"
+uncertain,NHL94 Genesis,773,boardback,SPAboardback,player,24,32,307,0.668,False,,,757 789,False,"animation not in PC, but PC 307 has a similar pose (score 0.67)"
+uncertain,NHL94 Genesis,777,boardback,SPAboardback,player,54,24,315,0.744,False,,,745,False,"animation not in PC, but PC 315 has a similar pose (score 0.74)"
+uncertain,NHL94 Genesis,785,boardback,SPAboardback,player,56,24,331,0.745,False,,,753,False,"animation not in PC, but PC 331 has a similar pose (score 0.74)"
+uncertain,NHL94 Genesis,786,boardleft,SPAboardleft,player,24,36,258,0.669,False,,,,False,"animation not in PC, but PC 258 has a similar pose (score 0.67)"
+uncertain,NHL94 Genesis,787,boardleft,SPAboardleft,player,22,43,142,0.655,False,,,,False,"animation not in PC, but PC 142 has a similar pose (score 0.66)"
+uncertain,NHL94 Genesis,788,boardleft,SPAboardleft,player,32,41,307,0.697,False,,,756 772,False,"animation not in PC, but PC 307 has a similar pose (score 0.70)"
+uncertain,NHL94 Genesis,789,boardleft,SPAboardleft,player,24,32,307,0.668,False,,,757 773,False,"animation not in PC, but PC 307 has a similar pose (score 0.67)"
+uncertain,NHL94 Genesis,802,benchcheckl,SPAbenchcheckl,player,16,32,2,0.681,True,,,816,False,"animation not in PC, but PC 2 has a similar pose (score 0.68)"
+uncertain,NHL94 Genesis,816,benchcheckr,SPAbenchcheckr,player,16,32,65,0.685,False,,,802,False,"animation not in PC, but PC 65 has a similar pose (score 0.69)"
+not exclusive (resolved),NHL94 Genesis,1,faceoff+2,SPAfaceoff SPAfaceoffr SPAglide,player,16,32,0,0.781,False,,,,False,PC 0 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,3,skatewp,SPAskatewp,player,16,32,0,0.725,False,,,,False,PC 2 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,4,skatewp,SPAskatewp,player,16,32,99,0.679,False,,,,False,PC 3 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,36,glide,SPAglide,goalie,24,32,75,0.797,False,,,,False,PC 35 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,41,burst+1,SPAburst SPAflail,player,22,32,0,0.725,True,,,,False,PC 40 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,42,skate,SPAskate,player,24,32,3,0.688,True,,,,False,PC 41 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,43,skate,SPAskate,player,24,32,1104,0.684,True,,,,False,PC 42 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,44,skate,SPAskate,player,24,32,99,0.66,False,,,,False,PC 43 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,45,skate,SPAskate,player,24,32,44,0.665,False,,,,False,PC 44 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,46,burst+1,SPAburst SPAflail,player,16,32,570,0.768,False,,,,False,PC 45 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,149,stop,SPAstop,player,40,32,148,0.697,False,,,,False,PC 148 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,150,stop,SPAstop,player,40,32,149,0.693,False,,,,False,PC 149 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,219,stanley,SPAstanley,player,24,42,222,0.707,True,,,,False,PC 218 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,220,stanley,SPAstanley,player,24,44,219,0.663,False,,,,False,PC 219 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,222,stanley,SPAstanley,player,25,44,216,0.654,True,,,,False,PC 221 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,224,stanley,SPAstanley,player,24,42,217,0.723,True,,,,False,PC 223 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,324,boardfront+3,SPAboardfront SPAboardleft SPAboardright SPAfallfwd,player,24,43,323,0.641,False,,,,False,PC 323 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,345,Hold+1,SPAHold SPAHold2,player,24,44,344,0.6,False,,,,False,PC 344 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,384,arrow,,nonplayer,24,24,1063,0.52,False,,,387 838 841,False,PC 383 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,385,arrow,,nonplayer,24,24,566,0.52,False,,,388 839 842,True,PC 384 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,386,arrow,,nonplayer,24,24,567,0.512,True,,,389 840 843,True,PC 385 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,387,arrow,,nonplayer,24,24,1063,0.52,False,,,384 838 841,False,PC 386 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,388,arrow,,nonplayer,24,24,566,0.52,False,,,385 839 842,True,PC 387 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,389,arrow,,nonplayer,24,24,567,0.512,True,,,386 840 843,True,PC 388 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,390,pad,,nonplayer,31,24,389,0.485,False,,,391 844 845,False,PC 389 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,391,pad,,nonplayer,31,24,389,0.485,False,,,390 844 845,False,PC 390 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,392,pad,,nonplayer,31,24,1013,0.653,False,,,,False,PC 391 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,393,replay,,nonplayer,37,28,392,0.62,False,,,,False,PC 392 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,394,puck,,nonplayer,8,8,560,0.592,True,,,,False,PC 393 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,405,goal,,goalie,51,32,405,0.557,False,,,,False,PC 404 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,413,gready+3,SPAgready SPAgready2 SPAgslambot SPAgslamtop,goalie,24,32,1058,0.796,False,,,,False,PC 412 (94G slot - 1) is this animation frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,563,siren,SPAsiren,nonplayer,16,8,560,0.705,True,,,569,False,PC 554 (94G slot - 9) is this frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,564,siren,SPAsiren,nonplayer,16,16,556,0.733,False,,,568,False,PC 555 (94G slot - 9) is this frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,568,siren,SPAsiren,nonplayer,16,16,556,0.738,True,,,564,False,PC 559 (94G slot - 9) is this frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,569,siren,SPAsiren,nonplayer,16,8,560,0.705,False,,,563,False,PC 560 (94G slot - 9) is this frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,570,siren,SPAsiren,nonplayer,31,20,567,0.681,True,,,576,False,PC 561 (94G slot - 9) is this frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,571,siren,SPAsiren,nonplayer,17,23,566,0.692,True,,,575,False,PC 562 (94G slot - 9) is this frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,572,siren,SPAsiren,nonplayer,16,22,565,0.644,True,,,,False,PC 563 (94G slot - 9) is this frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,573,siren,SPAsiren,nonplayer,16,25,564,0.591,True,,,,False,PC 564 (94G slot - 9) is this frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,575,siren,SPAsiren,nonplayer,17,23,566,0.692,False,,,571,False,PC 566 (94G slot - 9) is this frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,576,siren,SPAsiren,nonplayer,31,20,567,0.681,False,,,570,False,PC 567 (94G slot - 9) is this frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,648,injury1,SPAinjury1,injury,30,48,642,0.784,False,,,651,False,same pose redrawn in PC 639 (visual review)
+not exclusive (resolved),NHL94 Genesis,653,bglass,SPAbglass,nonplayer,32,16,644,0.654,False,,,,False,PC 644 (94G slot - 9) is this frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,655,bglass,SPAbglass,nonplayer,33,41,644,0.66,True,,,,False,PC 646 (94G slot - 9) is this frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,656,bglass,SPAbglass,nonplayer,32,45,644,0.689,False,,,,False,PC 647 (94G slot - 9) is this frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,657,bglass,SPAbglass,nonplayer,34,45,644,0.609,True,,,,False,PC 648 (94G slot - 9) is this frame redrawn/recoloured (visual review)
+not exclusive (resolved),NHL94 Genesis,838,slambot,,player,24,24,1063,0.52,False,,,384 387 841,True,unused duplicate of arrow/star frame 384 (same shape as PC 383)
+not exclusive (resolved),NHL94 Genesis,839,slambot,,player,24,24,566,0.52,False,,,385 388 842,True,unused duplicate of arrow/star frame 385 (same shape as PC 384)
+not exclusive (resolved),NHL94 Genesis,840,slambot,,player,24,24,567,0.512,True,,,386 389 843,True,unused duplicate of arrow/star frame 386 (same shape as PC 385)
+not exclusive (resolved),NHL94 Genesis,841,slambot,,player,24,24,1063,0.52,False,,,384 387 838,True,unused duplicate of arrow/star frame 387 (same shape as PC 386)
+not exclusive (resolved),NHL94 Genesis,842,slambot,,player,24,24,566,0.52,False,,,385 388 839,True,unused duplicate of arrow/star frame 388 (same shape as PC 387)
+not exclusive (resolved),NHL94 Genesis,843,slambot,,player,24,24,567,0.512,True,,,386 389 840,True,unused duplicate of arrow/star frame 389 (same shape as PC 388)
+not exclusive (resolved),NHL94 Genesis,844,slambot,,player,31,24,389,0.485,False,,,390 391 845,True,unused duplicate of arrow/star frame 390 (same shape as PC 389)
+not exclusive (resolved),NHL94 Genesis,845,slambot,,player,31,24,389,0.485,False,,,390 391 844,True,unused duplicate of arrow/star frame 391 (same shape as PC 390)

@@ -6,6 +6,7 @@ Built 27 Nov 2026. Scripts are in `tools/` (inputs are set in `tools/paths.py`; 
 - **94G only**: a NHL 94 Genesis sprite frame that no 95 PC frame shows in the same pose or animation frame. Any facing counts, including mirrored frames.
 - **93 only**: a NHLPA 93 Genesis frame that matches no 94G frame and no 95 PC frame.
 - **Uncertain**: there is a 95 PC frame with a similar pose, but I couldn't confirm it is the same frame. These are listed separately and not counted as exclusive.
+- **Frame numbers**: Genesis frames (93, 94G) count from 1, as in the disassemblies. 95 PC frames count from 0, as the game, NHL9X Studio and the platform census count them (`nearest_pc` and every "PC n" in this folder; relabelled 27 Nov 2026, before that PC was listed one higher). 94G frame N is usually the same pose as PC frame N-1.
 - **Scope**: every frame in the main sprite bank of each game. That covers skaters, goalies, refs, fights, injuries, celebrations, and small items such as arrows, stars, the puck, the goal, the siren and broken glass. It does not include the side archives (face-off close-ups, crowd, Zamboni, title art).
 
 ## Data (decoded from the game data, nothing redrawn)
@@ -32,12 +33,12 @@ Built 27 Nov 2026. Scripts are in `tools/` (inputs are set in `tools/paths.py`; 
    - Frames 838 to 845 are unused copies of the arrow and star frames 384 to 391.
 4. Uncertain frames:
    - **wallleft 381 to 383**: the 95 PC slot holds a different pose.
-   - **gready 539 and 541 to 562**: 95 PC has its own redrawn ready set in 95 PC 539 to 554. That set has 2 frames per facing, against 3 in 94G.
+   - **gready 539 and 541 to 562**: 95 PC has its own redrawn ready set in 95 PC 538 to 553. That set has 2 frames per facing, against 3 in 94G.
 5. Frames 658 onward come from SPAs that are new in 94: `ghigh*`, `gstick2*`, `gslam*`, `slambot`, `board*`, `benchcheck*` and `crosscheck`. 95 PC has none of these animations.
    - If the best 95 PC score is below 0.65, the frame is **exclusive**.
    - Otherwise it is **uncertain**, and the CSV names the 95 PC frame with the similar pose.
 6. 93: I compared all 24 candidates (the fights `fight/fgrab/fhigh/flow/fhitl/ffall` plus gloves 353 to 370, and the blood `finjury` 371 to 376) by eye against their nearest 94G and 95 PC frames. None of them is the same drawing. In 94G, slots 353 to 376 are blank.
-7. **Bloody injury 633–644 (NHLPA 93).** The census matched these to 94G 641–652 and 95 PC 633–644, because the pose is the same. But the 93 frames carry blood (palette line 1, values 28/29, 10–41 px per frame), and both later games redrew them without it: all 12 of 94G 641–652 differ from 93 (e.g. 93 634 vs 94G 642: 66 px, 47 of them not blood), and 95 PC 633–644 is its own redraw (census scores 0.72–0.81, no blood). So the pose is not exclusive, but the bloody version exists only in 93; it is listed in the 93 section with that note. That brings 93 only to 36.
+7. **Bloody injury 633–644 (NHLPA 93).** The census matched these to 94G 641–652 and 95 PC 632–643, because the pose is the same. But the 93 frames carry blood (palette line 1, values 28/29, 10–41 px per frame), and both later games redrew them without it: all 12 of 94G 641–652 differ from 93 (e.g. 93 634 vs 94G 642: 66 px, 47 of them not blood), and 95 PC 632–643 is its own redraw (census scores 0.72–0.81, no blood). So the pose is not exclusive, but the bloody version exists only in 93; it is listed in the 93 section with that note. That brings 93 only to 36.
 
 ## Colour zones
 - In these games, a zone is a palette index in the 16-colour sprite line, which is line 2: Genesis values 33 to 47 become indices 1 to 15.

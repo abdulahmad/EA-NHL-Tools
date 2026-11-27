@@ -75,4 +75,4 @@ g93=D[(D.set=='G93')].sort_values('frame')
 unc=D[(D.status=='uncertain')].sort_values('frame')
 F1=pages('94 GENESIS ONLY (not in 95 PC)',list(g94.itertuples()),'sheet_94G_only')
 F2=pages('NHLPA 93 ONLY (not in 94G or 95 PC)',list(g93.itertuples()),'sheet_93_only',blood=True)
-F3=pages('UNCERTAIN: 94G, similar frame in 95 PC',list(unc.itertuples()),'sheet_uncertain_94G',extra=lambda r:f'~PC #{int(r.PC_best)}' if not (539<=r.frame<=562 or r.frame in (381,382,383)) else ('PC 539-554' if r.frame>=539 else f'PC #{r.frame} differs'))
+F3=pages('UNCERTAIN: 94G, similar frame in 95 PC',list(unc.itertuples()),'sheet_uncertain_94G',extra=lambda r:f'~PC #{int(r.PC_best)-1}' if not (539<=r.frame<=562 or r.frame in (381,382,383)) else ('PC 538-553' if r.frame>=539 else f'PC #{r.frame-1} differs'))   # PC numbers 0-based
