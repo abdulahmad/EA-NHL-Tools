@@ -1,81 +1,122 @@
-# The 95 PC palette: which colours a sprite can use
+# The two 95 PC palettes, and which index the blood should use
 
-Why this matters: NHLPA 93 has blood and 95 PC sprites do not, so blood needs a 95 PC index that looks right for **every** team. A few stray pixels in the fight frames also need an index.
+NHLPA 93 has blood and 95 PC sprites do not, so blood needs a 95 PC index that looks right for **every** team, home or away.
 
-![95 PC palette by role](status/palette95_rink.png)
+95 PC has **two palettes** and a mapping between them. This is the "multi-step mapping" in Abdul's PPV-To-BMP and PAL-To-ACT tools:
 
-Per-index data: `status/palette95_indices.csv` (rink RGB, role, what the team records map it to, pixel counts). Made by `tools/palette95.py` (set `NHL95_DIR` to your own NHL 95 PC game files; `tools/refpack.py` unpacks the .QFS files).
+- **Sprite palette** (sprite data in the .PPV files): the colour index stored in each sprite pixel, 0–255. For player and goalie sprites ("dynamic palette") it is **not** a screen colour. PPV-To-BMP extracts these "as stored … in grayscale" (`PPV-To-BMP/README.md:2-4`).
+- **Game palette** (the in-game palette): the 256 colour slots on screen during play.
+- **Colour mapping**: each team record maps sprite index → game slot.
 
-## How the in-game palette is built
-Sources: NHL9XStudio `lib/pc-jersey.js` and `lib/pc-rink.js`, checked against the game files.
+| chart | what it shows |
+|---|---|
+| ![sprite palette](status/palette95_sprite.png) | **(A)** `status/palette95_sprite.png`: the sprite palette by role. Each cell shows the sprite index, the game slot it goes to (home side), and its colour for TOR at home. |
+| ![game palette](status/palette95_game.png) | **(B)** `status/palette95_game.png`: the game palette as rink / team one / team two / overwritten bands, with real colours (TOR home vs MTL away). **(C)** shows how sprite index groups reach game slots, home side and away side. |
 
-| game palette index | filled from | changes per team? |
+The per-index data is in `status/palette95_indices.csv`: role, stored map values, game slot (home and away), whether it is the same for every team, the colour shown, and pixel counts. `tools/palette95.py` makes all of it; set `NHL95_DIR` to your own game files. `tools/refpack.py` unpacks the .QFS files.
+
+## Game palette (what is on screen)
+| game slots | filled from | changes |
 |---|---|---|
-| 0–127 | `RINKPAL.QFS` (an SHPI with one `!pal` picture: 256 × RGB, 6-bit, × 4 = 8-bit). Same colours as `PAL-To-ACT/rinkpal.act` in this repo | no |
-| 128–191 | home team record: 64 colours (bytes 0–191 of the 448-byte record in `HOMEPALS.BIN`) | yes |
-| 192–255 | away team record (`AWAYPALS.BIN`, same layout, +64) | yes |
+| 0–127 | **rink palette**: `RINKPAL.QFS` (one `!pal` picture, 256 × 6-bit RGB, × 4) = `PAL-To-ACT/rinkpal.act` (byte-identical) | never |
+| 128–191 | **team one = home**: the 64 colours of the home team's HOMEPALS record (record bytes 0–191) | every game |
+| 192–250 | **team two = away**: away record colours 0–58 | every game |
+| 251–255 | **rink palette again**: overwrites away colours 59–63 | never |
 
-`RINKPAL2.QFS` differs from `RINKPAL.QFS` only at 251–254. `rinkpalShadowfixed.act` differs at 8, 82 and 88.
+**Overwritten slots: exactly 5, game slots 251–255.** The away team's last 5 colours (59–63) never reach the screen.
+- `PAL-To-ACT/mergePal.js:52-55,57-68`: when the first file is a rinkpal, the output is rink 0–127, then the team file up to byte 753 (slot 250), then rink bytes 753–767 (slots 251–255).
+- `PAL-To-ACT/README.md:285`: "overwrite the first 128 colours and last 5 colours … with the Rink Palette".
+- `PAL-To-ACT/README.md:303`: "of last 64 colours (192-255), 5 for rink pal".
+- NHL9XStudio `lib/pc-jersey.js:211-212`: LoadTeamPalette copies the away record's 64 colours to 192–255, then copies RINKPAL `!pal` bytes 0x2F1–0x2FF over 251–255.
+- NHL9XStudio `lib/pc-rink.js:17-18,44-50,55-62`: the same bands; away is filled for i < 59 only.
 
-A **sprite** pixel is not a game palette index. Each team record also holds a 256-byte map (bytes 192–447): sprite index → game palette index. Across all 56 records (28 home + 28 away):
+What the 5 slots hold (`RINKPAL.QFS`):
 
-| sprite index | maps to | so it shows |
-|---|---|---|
-| 0–127 | itself (except 8 → 16, 82 and 88 → 99) | the fixed rink colour, the same for every team |
-| 8 | 16 (32,32,32) | dark grey (blade side) |
-| 82, 88 | 99 | the shadow colour; **88 is the 95 PC shadow** (36,706 px) |
-| 128–143 | fixed: 132 → 71, 133 → 104, 134 → 72, 135 → 6, 136 → 73, 138 → 6, 140 → 74, the rest → 0 | skin, eyes, stick; the same for every team |
-| 144–191 | team colours 128–170 (home) or the away range | the 48 jersey zones, different per team |
-| 192–250 | team colours | crest / ice logo, different per team |
-| 251–254 | 0 | black; not usable |
-| 255 | — | transparent |
+| slot | colour |
+|---|---|
+| 251 | (96,0,0) |
+| 252 | (168,0,0) |
+| 253 | (236,72,0) |
+| 254 | (236,236,236) |
+| 255 | (224,224,224) |
 
-**Rule for blood (and anything else that must not change with the team): use a sprite index in 0–127 other than 8, 82 and 88, or one of the fixed 128–143.**
+255 is transparent: the blitter skips it (`pc-rink.js:49`). `RINKPAL2.QFS` has 0 in 251–254. **What 251–254 are used for is not shown by the code or the data I have.** None of the art I counted (player banks, RINK.QFS, the other SPIT banks) uses slots 251–254. Two possibilities: something sets them at run time, or the HUD files I could not decode use them (see the end of this page).
 
-Pixel counts in the CSV: `player_px` = all numbered 95 PC player banks (`NNN_NNN.PPV`, `NNNNNNNN.PPV`); `rink_px` = `RINK.QFS`; `other_px` = the other SPIT banks (GOAL, SIREN, CROSS, NUMSHP, SCRBRD1/2, TRINKND, GUILT, HOOK, RUFF, CLAP, FANOM, GADGET5/6, CFLAG, UFLAG, SAVED, CRESTS4, F*.PPV). The F*.PPV banks may be drawn with a menu palette, so their use of an index says less about the ice. SCRBRD2.QFS and PSTATBAR.QFS are not counted.
+## Sprite palette → game slot (the colour mapping)
+Each 448-byte team record holds 64 colours (bytes 0–191) and a 256-byte map (bytes 192–447): sprite index → game slot. The table below is checked on all 56 records (28 HOMEPALS + 28 AWAYPALS).
 
-## Red and dark-red fixed colours (blood candidates)
-Gold frames in the image. RGB from `RINKPAL.QFS`.
+| sprite index (sprite palette) | stored map value | game slot, home | game slot, away | same for every team? |
+|---|---|---|---|---|
+| 0–127 (rink palette indices) | itself, except **8 → 16**, **82 and 88 → 99** | same | same | yes |
+| 128–143 skin tones / eyes / stick | 132→71, 133→104, 134→72, 135→6, 136→73, 138→6, 140→74, the rest → 0 | same | same | yes (rink slots) |
+| 144–191 jersey zones (forearm … helmet) | 128–170 | 128–170 | **+64** = 192–234 | no |
+| 192–254 crest / ice logo | 0 or 128–170 | same | team values +64 | no |
+| 255 | — | transparent | transparent | — |
 
-| sprite index | RGB | player px | rink px | other px | where 95 PC uses it |
+- **Map bytes 192–319** (sprite 0–127) are the block `PAL-To-ACT/README.md:222` asks about ("values 0-127 - maybe a reference to rink/game palette?"). They are the identity map for the rink indices, with 3 exceptions: 8 → 16, and 82, 88 → 99.
+- **binToAct reads only map bytes 320–447** (`binToAct.js:38,223-229`, sprite 128–255). That explains `rinkpalShadowfixed.act` (`PAL-To-ACT/README.md:280`): it patches slots 82 and 88 to the colour of slot 99, (64,160,224), exactly what the record map does.
+  - It patches slot 8 to (0,64,128). The record map sends sprite 8 to slot 16, which is (32,32,32).
+  - So the BMPs extracted with `createPal` show sprite 8 (blade side) bluer than the game does.
+- **Away side, +64.** AWAYPALS maps store team values in the same 128–191 space as HOMEPALS (away max 168, home max 170). For the away team they must be shifted into 192–255. NHL9XStudio documents this +64 for the HUD crest remap (`pc-jersey.js:71`).
+  - Map values below 128 (rink slots: skin 71/104/72/6/73/74, black 0, blade 16, shadow 99) cannot be shifted. Otherwise every away player's skin and shadow would become team colours.
+  - Because the largest stored value is 170, no sprite index ever reaches slots 251–255, home or away.
+- **Static sprites** (referee, nets, siren, glass) and `RINK.QFS` use the game palette directly, without the team map (`PPV-To-BMP/README.md:4`). For 0–127 this makes no difference, except 8, 82 and 88.
+
+## Blood candidates
+Red and dark-red sprite indices whose game slot is the same for every team, home and away. They have gold frames in charts A and B. Colours are from the rink palette.
+
+The pixel-count columns hold the raw stored value:
+- **player px**: the numbered player banks;
+- **rink px**: `RINK.QFS`;
+- **other px**: GOAL, SIREN, CROSS, NUMSHP, SCRBRD1/2, TRINKND, GUILT, HOOK, RUFF, CLAP, FANOM, GADGET5/6, CFLAG, UFLAG, SAVED, CRESTS4, F000_149.
+
+| sprite index → game slot | colour | player px | rink px | other px | where 95 PC uses it |
 |---|---|---|---|---|---|
-| 14 | (96,0,0) | 2 | 1,456 | 413 | rink art |
-| 75 | (96,0,0) | 1 | 0 | 190 | 1 px in glass 648; F*.PPV |
-| **76** | (96,0,0) | 0 | 0 | 112 | not used on the ice at all (F*.PPV only) |
-| 77 | (128,32,0) | 0 | 0 | 70 | F*.PPV |
-| **78** | (160,64,0) | 7 | 78 | 42 | broken glass 647/648, Stanley Cup 866–871 |
-| 81 | (160,0,0) | 0 | 128 | 888 | rink art, F*.PPV |
-| 82 | (128,0,0) | 278 | 456 | 5 | **not usable** (shows the shadow) |
-| **83** | (96,0,0) | 176 | 0 | 270 | siren 554–567, broken glass 645–648 |
-| 84 | (64,0,0) | 1 | 299 | 558 | |
-| 86 | (192,32,0) | 180 | 0 | 30 | siren, glass, and 1 px each in 95 PC injury 633/634 |
-| 87 | (128,0,0) | 186 | 0 | 12 | siren |
-| 80 | (192,0,0) | 1,122 | 210 | 22,804 | referee and other art |
-| 32 | (224,0,0) | 198 | 16 | 18,683 | net, other art |
-| 33 | (224,32,0) | 1,756 | 64 | 7,237 | referee |
-| 34 | (224,64,0) | 14 | 8 | 3,047 | |
-| 73 | (192,96,96) | 932 | 513 | 1,380 | also what stick/skin 136 shows |
-| 74 | (160,64,64) | 81 | 20 | 396 | also what 140 shows |
-| 5 | (224,128,128) | 97 | 590 | 1,310 | broken glass |
-| 6 | (160,96,96) | 37 | 1,247 | 804 | also what skin 135/138 show |
+| **83 → 83** | (96,0,0) | 176 | 0 | 135 | siren 554–567, broken glass 645–648 |
+| **78 → 78** | (160,64,0) | 7 | 78 | 22 | glass 647/648, Stanley Cup 866–871 |
+| **76 → 76** | (96,0,0) | 0 | 0 | 56 | only in F000_149 (may use a menu palette) |
+| 75 → 75 | (96,0,0) | 1 | 0 | 95 | 1 px in glass 648 |
+| 14 → 14 | (96,0,0) | 2 | 1,456 | 221 | rink art |
+| 84 → 84 | (64,0,0) | 1 | 299 | 280 | rink art |
+| 87 → 87 | (128,0,0) | 186 | 0 | 6 | siren |
+| 81 → 81 | (160,0,0) | 0 | 128 | 444 | rink art |
+| 86 → 86 | (192,32,0) | 180 | 0 | 15 | siren, glass, 1 px each in 95 PC injury 633/634 |
+| 80 → 80 | (192,0,0) | 1,122 | 210 | 22,495 | referee and other art |
+| 32 → 32 | (224,0,0) | 198 | 16 | 18,674 | net and other art |
+| 82 → **99** | shows (64,160,224) | | | | **not usable**: the map sends it to the shadow slot |
 
 ## Recommendation for the NHLPA 93 blood
 The Genesis blood uses two colours: value 29 (108,0,0), most of the blood, and value 28 (180,72,0).
 
-| Genesis | 95 PC sprite index | RGB | why |
-|---|---|---|---|
-| 29 (108,0,0) | **83** | (96,0,0) | closest dark red; already drawn on the ice by 95 PC player sprites (siren, broken glass), so it is known to show correctly in game |
-| 28 (180,72,0) | **78** | (160,64,0) | closest colour; already used by 95 PC player sprites (glass, Stanley Cup) |
+| Genesis | sprite index | game slot (home and away) | colour | why |
+|---|---|---|---|---|
+| 29 (108,0,0) | **83** | 83 | (96,0,0) | closest dark red; already drawn on the ice by 95 PC player-bank sprites (siren, broken glass) |
+| 28 (180,72,0) | **78** | 78 | (160,64,0) | closest colour; already used on the ice (glass, Stanley Cup) |
 
-- Alternative for 29: **76**, the same RGB as 83 but used by no on-ice art. Pick it if blood should have its own slot, so a future rink-palette edit could retint blood without touching the siren or glass.
-- Brighter pair if the blood looks too dark in game: **81** (160,0,0) for 29 and **86** (192,32,0) for 28.
-- Never 82 or 88 (they show the shadow), 8 (dark grey) or 251–254 (black), and nothing in 144–250 (changes with the team).
-- None of these indices is in Abdul's guide palette BMP, so on the status sheets they show in the cyan fallback colour.
-- Still to do: try it in the game. Whether the game changes any of 0–127 during play has not been checked.
+- **The recommendation holds under the double mapping.** In all 28 HOMEPALS and 28 AWAYPALS records, the map value for sprite 83, 78 and 76 is 83, 78 and 76: a rink slot, below 128. So the game slot is the same for every team on both sides, and it is never in the team bands or in 251–255.
+- **Alternative for 29: 76.** It has the same colour as 83 but no on-ice art uses it, so it would be a blood-only slot if the rink palette is ever edited.
+- **Brighter pair:** 81 (160,0,0) with 86 (192,32,0).
+- **Never use:**
+  - 82 or 88 (they map to the shadow slot 99);
+  - 8 (maps to 16);
+  - anything in 144–254 (team colours; 251–254 map to 0).
+- 83, 78 and 76 are not in Abdul's guide palette, so the status sheets show them in the cyan fallback.
+- **Still to do:** try it in the game. Whether the game changes rink slots 0–127 during play has not been checked.
 
-## The stray fight pixels (group 1 in PLAN.md)
-| colour in the PSD | where | likely 95 PC index |
+## Stray pixels in the fight frames: confirmed
+Abdul's complete guide palette (`abdul/act/abdul_palette_complete.act`) colours three gaps in his BMP. The two fight-frame colours that looked like strays are his own zone colours for 135 and 178.
+
+| colour in the PSD | index | zone |
 |---|---|---|
-| (160,96,96) | 3 px on dark skin | **135** (skin dark): 135 and 138 both show rink 6 = (160,96,96) exactly |
-| (0,170,0) | 6–8 px per frame, a vertical line 48–70% down the frame next to 179 *pants stripe 1* and 177/180 | **178** *pants stripe 2*. 178 is not in Abdul's guide BMP, which explains the off-guide green |
-| (255,199,154) | 1 px on light skin | **133** (shows 104 = (224,160,160)) or **132** (shows 71 = (224,160,128)). Abdul to decide |
+| (160,96,96) | **135** | skin dark; it also shows rink slot 6 = (160,96,96) in game |
+| (0,170,0) | **178** | pants stripe 2 |
+| (74,173,134) | **164** | goalie mask |
+
+With the complete palette, 359–362 are FULL. Still left:
+- 354–357: 1–2 grey Genesis pixels each.
+- 368: one pixel of (255,199,154) on light skin. It is probably 133 (shows slot 104 = (224,160,160)) or 132 (shows slot 71 = (224,160,128)); Abdul to decide.
+
+## Notes and limits
+- `SCRBRD2.QFS` and `PSTATBAR.QFS` (HUD) are not counted: `tools/refpack.py` unpacks `SCRBRD2.QFS` 2 bytes longer than its header says, and neither then parses, so I left them out rather than guess.
+- `F000_049`, `F050_099` and `F100_149` are byte-identical subsets of `F000_149`, so only `F000_149` is counted.
+- `PAL-To-ACT/README.md:160-162` lists stick as sprite 135. The records map 136 → slot 73 ("Stick - 73" in the game palette list), and 135 → slot 6 (a skin colour).

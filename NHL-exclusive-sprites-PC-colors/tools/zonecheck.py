@@ -3,8 +3,8 @@ import pickle,json,collections,numpy as np
 from PIL import Image
 U=pickle.load(open(paths.WORK+'recon.pkl','rb'));R={r['layer']:r for r in json.load(open(paths.WORK+'recon.json'))['results']}
 A,S=paths.frames()
-B=Image.open(paths.ABDUL+'abdul_palette.bmp');BP=np.array(B.getpalette()).reshape(-1,3)
-GUIDE={tuple(int(x) for x in BP[i]):i for i in sorted(set(np.array(B).flatten().tolist()))}
+BP,GIDX=paths.guide()
+GUIDE={BP[i]:i for i in GIDX}
 FAM={33:'blade',34:'black',35:'pants',36:'pants',37:'pants',38:'skin',39:'skin',40:'trim',41:'trim',42:'trim',43:'jersey',44:'jersey',45:'jersey',46:'stick',47:'shadow',1:'chips',2:'chips',28:'blood',29:'blood'}
 def pf(i):
   if i in(0,8,28,1,31):return 'black/blade'

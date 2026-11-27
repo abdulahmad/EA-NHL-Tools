@@ -5,12 +5,11 @@ OUT=paths.STATUS
 R=json.load(open(paths.WORK+'recon.json'));GENPAL={int(k):tuple(v) for k,v in R['genpal'].items()}
 U={n:(a,f,al,mp) for n,a,f,al,mp in pickle.load(open(paths.WORK+'recon.pkl','rb'))}
 A,S=paths.frames();G93=A['G93']
-B=Image.open(paths.ABDUL+'abdul_palette.bmp');BP=np.array(B.getpalette()).reshape(-1,3)
-BIDX=sorted(set(np.array(B).flatten().tolist()))
-GUIDE={tuple(int(x) for x in BP[i]):i for i in BIDX}
-# Comparisons use Abdul's palette: 95 PC index -> his guide colour from abdul_palette.bmp, so each zone is visible.
-# Indices his BMP does not use get FALLBACK (cyan with a black centre dot on the sheets) and are listed in the legend.
-GUIDE_RGB={i:tuple(int(x) for x in BP[i]) for i in BIDX}
+BP,BIDX=paths.guide()
+GUIDE={BP[i]:i for i in BIDX}
+# Comparisons use Abdul's palette: 95 PC index -> his guide colour (abdul/act/abdul_palette_complete.act), so each zone is visible.
+# Indices outside his palette get FALLBACK (cyan with a black centre dot on the sheets) and are listed in the legend.
+GUIDE_RGB={i:BP[i] for i in BIDX}
 FALLBACK=(0,255,255);FALLBACK_USED=set()
 F=paths.font
 MAPC={'pc':(45,45,45),'shared':(45,45,45),'genesis':(255,220,0),'other':(235,0,200),'missing':(0,160,255),'':(150,150,150)}
@@ -79,9 +78,9 @@ for si,frames in enumerate(FR):
   y+=30
   d.text((6,y),'FULL = every pixel a 95 PC index; PARTIAL = mix (% = PC share); NONE = Genesis colours only.',fill=(0,0,0),font=F(14));y+=22
   d.text((6,y),'Best PSD layer shown per frame (overlays such as PC Head / PC Crest composited in place).',fill=(0,0,0),font=F(14));y+=22
-  d.text((6,y),"Middle panel: 95 PC indices drawn in Abdul's palette (abdul_palette.bmp guide colours, one colour per zone);",fill=(0,0,0),font=F(14));y+=22
+  d.text((6,y),"Middle panel: 95 PC indices drawn in Abdul's palette (abdul_palette_complete.act, one colour per zone);",fill=(0,0,0),font=F(14));y+=22
   d.text((6,y),"Genesis-coloured pixels keep their Genesis colour.",fill=(0,0,0),font=F(14));y+=24
   fbl=sorted(FALLBACK_USED)
   d.rectangle([6,y,32,y+22],fill=FALLBACK,outline=(0,0,0));d.rectangle([18,y+10,20,y+12],fill=(0,0,0))
-  d.text((40,y+2),('index not in Abdul\'s BMP (fallback): '+', '.join(map(str,fbl))) if fbl else "index not in Abdul's BMP (fallback): none in these frames",fill=(0,0,0),font=F(15))
+  d.text((40,y+2),('index not in Abdul\'s palette (fallback): '+', '.join(map(str,fbl))) if fbl else "index not in Abdul's palette (fallback): none in these frames",fill=(0,0,0),font=F(15))
   im.save(OUT+f'status_{["injury","fights"][si]}.png');print(im.size)

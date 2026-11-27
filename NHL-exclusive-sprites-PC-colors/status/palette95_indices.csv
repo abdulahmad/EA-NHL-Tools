@@ -1,257 +1,257 @@
-index,r,g,b,role,maps_to,fixed_for_all_teams,player_px,rink_px,other_px
-0,0,0,0,rink (fixed),0,1,39559,9046,57408
-1,232,232,232,rink (fixed),1,1,305,13632,89
-2,128,224,224,rink (fixed),2,1,2,22,5
-3,64,96,192,rink (fixed),3,1,11,225,124
-4,168,168,168,rink (fixed),4,1,905,8284,353
-5,224,128,128,rink (fixed),5,1,97,590,1310
-6,160,96,96,rink (fixed),6,1,37,1247,804
-7,96,96,96,rink (fixed),7,1,357,7107,567
-8,0,0,96,remapped to 16 (blade side),16,1,2350,1125,776
-9,64,64,64,rink (fixed),9,1,5843,12659,17011
-10,192,160,32,rink (fixed),10,1,26,3077,5255
-11,32,32,32,rink (fixed),11,1,22903,6080,2191
-12,192,128,0,rink (fixed),12,1,3,0,10274
-13,160,96,0,rink (fixed),13,1,100,375,1328
-14,96,0,0,rink (fixed),14,1,2,1456,413
-15,0,0,0,rink (fixed),15,1,244,0,34971
-16,32,32,32,rink (fixed),16,1,526,0,471730
-17,64,64,64,rink (fixed),17,1,4012,0,9186
-18,96,96,96,rink (fixed),18,1,560,0,27212
-19,128,128,128,rink (fixed),19,1,650,2435,5038
-20,160,160,160,rink (fixed),20,1,1086,557,8883
-21,192,192,192,rink (fixed),21,1,5842,1142,10449
-22,228,228,228,rink (fixed),22,1,1047,15130,21224
-23,120,116,252,rink (fixed),23,1,72,6574,282
-24,96,128,192,rink (fixed),24,1,116,0,784
-25,64,96,192,rink (fixed),25,1,156,0,151313
-26,32,64,192,rink (fixed),26,1,109,331,2337
-27,32,64,160,rink (fixed),27,1,73,42,3382
-28,0,64,128,rink (fixed),28,1,1039,317,5377
-29,0,32,96,rink (fixed),29,1,518,0,150
-30,0,32,96,rink (fixed),30,1,268,0,82
-31,0,32,64,rink (fixed),31,1,1735,170,299
-32,224,0,0,rink (fixed),32,1,198,16,18683
-33,224,32,0,rink (fixed),33,1,1756,64,7237
-34,224,64,0,rink (fixed),34,1,14,8,3047
-35,224,96,0,rink (fixed),35,1,106,163,3149
-36,224,128,0,rink (fixed),36,1,129,0,7794
-37,224,160,0,rink (fixed),37,1,225,0,4927
-38,224,192,0,rink (fixed),38,1,355,1363,16759
-39,224,224,0,rink (fixed),39,1,43,14,35990
-40,192,160,0,rink (fixed),40,1,93,0,0
-41,160,96,0,rink (fixed),41,1,1698,0,108
-42,128,96,0,rink (fixed),42,1,6,106,58
-43,96,32,0,rink (fixed),43,1,12,0,100
-44,96,32,0,rink (fixed),44,1,274,0,46
-45,96,64,0,rink (fixed),45,1,6,0,168
-46,96,96,0,rink (fixed),46,1,0,150,24
-47,96,128,0,rink (fixed),47,1,0,28,22
-48,0,224,0,rink (fixed),48,1,0,0,0
-49,0,224,0,rink (fixed),49,1,0,0,60
-50,0,192,0,rink (fixed),50,1,78,0,294
-51,0,160,0,rink (fixed),51,1,0,0,28
-52,0,128,0,rink (fixed),52,1,3,0,184
-53,0,96,0,rink (fixed),53,1,3,129,202
-54,0,64,0,rink (fixed),54,1,168,103,40
-55,0,32,0,rink (fixed),55,1,1,0,222
-56,0,96,32,rink (fixed),56,1,0,0,454
-57,0,128,96,rink (fixed),57,1,0,236,323
-58,0,128,160,rink (fixed),58,1,0,17,0
-59,0,64,192,rink (fixed),59,1,0,0,1646
-60,0,0,224,rink (fixed),60,1,0,126,881
-61,64,128,224,rink (fixed),61,1,0,0,4814
-62,128,192,224,rink (fixed),62,1,259,0,0
-63,192,224,224,rink (fixed),63,1,26,0,0
-64,0,128,0,rink (fixed),64,1,22,0,0
-65,0,96,0,rink (fixed),65,1,6,0,348
-66,32,96,32,rink (fixed),66,1,9,0,100
-67,32,64,32,rink (fixed),67,1,57,0,2294
-68,64,64,64,rink (fixed),68,1,2,0,102
-69,0,0,0,rink (fixed),69,1,4565,0,0
-70,0,0,0,rink (fixed),70,1,0,0,0
-71,224,160,128,rink (fixed),71,1,6,175,200
-72,224,128,128,rink (fixed),72,1,1898,0,542
-73,192,96,96,rink (fixed),73,1,932,513,1380
-74,160,64,64,rink (fixed),74,1,81,20,396
-75,96,0,0,rink (fixed),75,1,1,0,190
-76,96,0,0,rink (fixed),76,1,0,0,112
-77,128,32,0,rink (fixed),77,1,0,0,70
-78,160,64,0,rink (fixed),78,1,7,78,42
-79,160,96,0,rink (fixed),79,1,0,0,56
-80,192,0,0,rink (fixed),80,1,1122,210,22804
-81,160,0,0,rink (fixed),81,1,0,128,888
-82,128,0,0,remapped to 99 (shadow),99,1,278,456,1179
-83,96,0,0,rink (fixed),83,1,176,0,270
-84,64,0,0,rink (fixed),84,1,1,299,558
-85,224,96,0,rink (fixed),85,1,86,0,6
-86,192,32,0,rink (fixed),86,1,180,0,30
-87,128,0,0,rink (fixed),87,1,186,0,12
-88,64,0,0,remapped to 99 (shadow),99,1,36706,0,14
-89,224,224,224,rink (fixed),89,1,5171,2184,8575
-90,224,224,224,rink (fixed),90,1,0,0,6242
-91,140,148,248,rink (fixed),91,1,158,70,5838
-92,160,192,224,rink (fixed),92,1,14,0,1
-93,0,64,96,rink (fixed),93,1,23,217,286
-94,0,96,128,rink (fixed),94,1,12,0,270
-95,224,0,224,rink (fixed),95,1,0,0,0
-96,252,96,96,rink (fixed),96,1,172,4933,0
-97,32,32,224,rink (fixed),97,1,0,22,0
-98,64,96,224,rink (fixed),98,1,0,275,0
-99,64,160,224,rink (fixed),99,1,5492,0,0
-100,128,224,224,rink (fixed),100,1,13,0,0
-101,236,236,236,rink (fixed),101,1,4,10513,0
-102,244,244,244,rink (fixed),102,1,0,6741,7357
-103,252,252,252,rink (fixed),103,1,284,4097,18490
-104,224,160,160,rink (fixed),104,1,9,305,264
-105,216,216,216,rink (fixed),105,1,904,44895,300
-106,212,212,212,rink (fixed),106,1,0,56985,3
-107,128,160,224,rink (fixed),107,1,0,65,16
-108,0,176,176,rink (fixed),108,1,0,0,0
-109,0,0,0,rink (fixed),109,1,44,0,0
-110,0,0,0,rink (fixed),110,1,0,0,0
-111,0,0,0,rink (fixed),111,1,10,0,2
-112,0,0,0,rink (fixed),112,1,0,0,0
-113,0,0,0,rink (fixed),113,1,0,0,0
-114,0,0,0,rink (fixed),114,1,0,0,0
-115,0,0,0,rink (fixed),115,1,0,0,0
-116,0,0,0,rink (fixed),116,1,0,0,0
-117,0,0,0,rink (fixed),117,1,0,0,0
-118,0,0,0,rink (fixed),118,1,0,0,0
-119,0,0,0,rink (fixed),119,1,0,0,0
-120,0,0,0,rink (fixed),120,1,0,0,0
-121,0,0,0,rink (fixed),121,1,0,0,0
-122,160,224,224,rink (fixed),122,1,0,0,0
-123,0,0,0,rink (fixed),123,1,0,0,0
-124,0,0,0,rink (fixed),124,1,0,0,0
-125,0,0,0,rink (fixed),125,1,0,0,0
-126,0,0,0,rink (fixed),126,1,0,0,0
-127,0,0,0,rink (fixed),127,1,0,0,0
-128,0,0,0,shared skin / stick (fixed map),0,1,0,0,0
-129,0,0,0,shared skin / stick (fixed map),0,1,0,0,0
-130,0,0,0,shared skin / stick (fixed map),0,1,0,0,0
-131,0,0,0,shared skin / stick (fixed map),0,1,0,0,0
-132,0,0,0,shared skin / stick (fixed map),71,1,8,0,0
-133,0,0,0,shared skin / stick (fixed map),104,1,1088,0,284
-134,0,0,0,shared skin / stick (fixed map),72,1,2240,0,214
-135,0,0,0,shared skin / stick (fixed map),6,1,1342,0,640
-136,0,0,0,shared skin / stick (fixed map),73,1,16368,0,1112
-137,0,0,0,shared skin / stick (fixed map),0,1,0,0,28
-138,0,0,0,shared skin / stick (fixed map),6,1,4,0,4
-139,0,0,0,shared skin / stick (fixed map),0,1,1,0,0
-140,0,0,0,shared skin / stick (fixed map),74,1,649,0,62
-141,0,0,0,shared skin / stick (fixed map),0,1,0,0,0
-142,0,0,0,shared skin / stick (fixed map),0,1,0,0,0
-143,0,0,0,shared skin / stick (fixed map),0,1,0,0,0
-144,0,0,0,team zones (team-swapped),team 128..156,0,4626,0,348
-145,0,0,0,team zones (team-swapped),team 128..157,0,3552,0,276
-146,0,0,0,team zones (team-swapped),team 128..170,0,5150,0,246
-147,0,0,0,team zones (team-swapped),team 128..167,0,5886,0,100
-148,0,0,0,team zones (team-swapped),team 128..162,0,3133,0,114
-149,0,0,0,team zones (team-swapped),team 128..155,0,1373,0,94
-150,0,0,0,team zones (team-swapped),team 128..155,0,2688,0,78
-151,0,0,0,team zones (team-swapped),team 128..166,0,2972,0,106
-152,0,0,0,team zones (team-swapped),team 129..167,0,4498,0,82
-153,0,0,0,team zones (team-swapped),team 128..168,0,1394,0,116
-154,0,0,0,team zones (team-swapped),team 130..162,0,1726,0,108
-155,0,0,0,team zones (team-swapped),team 128..155,0,6781,0,86
-156,0,0,0,team zones (team-swapped),team 128..170,0,4101,0,552
-157,0,0,0,team zones (team-swapped),team 128..158,0,3997,0,386
-158,0,0,0,team zones (team-swapped),team 128..153,0,3902,0,282
-159,0,0,0,team zones (team-swapped),team 128..170,0,1471,0,72
-160,0,0,0,team zones (team-swapped),team 128..153,0,1191,0,64
-161,0,0,0,team zones (team-swapped),team 128..168,0,5723,0,462
-162,0,0,0,team zones (team-swapped),team 129..170,0,4014,0,362
-163,0,0,0,team zones (team-swapped),team 129..158,0,6527,0,534
-164,0,0,0,team zones (team-swapped),team 135..160,0,4821,0,0
-165,0,0,0,team zones (team-swapped),team 128..170,0,10455,0,832
-166,0,0,0,team zones (team-swapped),team 128..156,0,7960,0,456
-167,0,0,0,team zones (team-swapped),team 128..153,0,3797,0,248
-168,0,0,0,team zones (team-swapped),team 128..166,0,2165,0,100
-169,0,0,0,team zones (team-swapped),team 128..166,0,2411,0,112
-170,0,0,0,team zones (team-swapped),team 128..155,0,706,0,0
-171,0,0,0,team zones (team-swapped),team 128..167,0,1447,0,64
-172,0,0,0,team zones (team-swapped),team 128..166,0,2049,0,96
-173,0,0,0,team zones (team-swapped),team 128..163,0,1668,0,48
-174,0,0,0,team zones (team-swapped),team 128..164,0,1376,0,24
-175,0,0,0,team zones (team-swapped),team 128..159,0,2155,0,90
-176,0,0,0,team zones (team-swapped),team 128..153,0,1745,0,60
-177,0,0,0,team zones (team-swapped),team 128..143,0,16981,0,260
-178,0,0,0,team zones (team-swapped),team 128..168,0,2988,0,140
-179,0,0,0,team zones (team-swapped),team 128..160,0,3053,0,176
-180,0,0,0,team zones (team-swapped),team 129..141,0,13008,0,270
-181,0,0,0,team zones (team-swapped),team 128..170,0,3958,0,174
-182,0,0,0,team zones (team-swapped),team 129..156,0,3916,0,304
-183,0,0,0,team zones (team-swapped),team 128..153,0,3405,0,160
-184,0,0,0,team zones (team-swapped),team 130..167,0,2073,0,78
-185,0,0,0,team zones (team-swapped),team 129..166,0,2775,0,62
-186,0,0,0,team zones (team-swapped),team 128..166,0,1363,0,48
-187,0,0,0,team zones (team-swapped),team 128..161,0,2092,0,46
-188,0,0,0,team zones (team-swapped),team 129..153,0,2582,0,42
-189,0,0,0,team zones (team-swapped),team 128..157,0,1967,0,140
-190,0,0,0,team zones (team-swapped),team 128..161,0,3070,0,364
-191,0,0,0,team zones (team-swapped),team 128..163,0,8230,0,1486
-192,0,0,0,crest / logo (team-swapped),team 130..160,0,166,0,10
-193,0,0,0,crest / logo (team-swapped),team 128..167,0,248,0,6
-194,0,0,0,crest / logo (team-swapped),team 128..158,0,257,0,16
-195,0,0,0,crest / logo (team-swapped),team 128..167,0,263,0,16
-196,0,0,0,crest / logo (team-swapped),team 130..167,0,210,0,16
-197,0,0,0,crest / logo (team-swapped),team 128..167,0,0,0,1568
-198,0,0,0,crest / logo (team-swapped),team 128..165,0,0,0,1586
-199,0,0,0,crest / logo (team-swapped),team 128..162,0,0,0,879
-200,0,0,0,crest / logo (team-swapped),team 128..155,0,0,0,716
-201,0,0,0,crest / logo (team-swapped),team 128..157,0,0,0,745
-202,0,0,0,crest / logo (team-swapped),team 128..153,0,0,0,19
-203,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-204,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-205,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-206,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-207,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-208,0,0,0,crest / logo (team-swapped),team 128..164,0,223,0,6
-209,0,0,0,crest / logo (team-swapped),team 128..157,0,254,0,4
-210,0,0,0,crest / logo (team-swapped),team 128..167,0,246,0,4
-211,0,0,0,crest / logo (team-swapped),team 128..166,0,228,0,10
-212,0,0,0,crest / logo (team-swapped),team 128..166,0,205,0,12
-213,0,0,0,crest / logo (team-swapped),team 128..168,0,0,0,582
-214,0,0,0,crest / logo (team-swapped),team 128..166,0,0,0,490
-215,0,0,0,crest / logo (team-swapped),team 128..157,0,0,0,201
-216,0,0,0,crest / logo (team-swapped),team 128..168,0,0,0,508
-217,0,0,0,crest / logo (team-swapped),team 128..167,0,0,0,178
-218,0,0,0,crest / logo (team-swapped),team 128..132,0,0,0,187
-219,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-220,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-221,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-222,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-223,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-224,0,0,0,crest / logo (team-swapped),team 128..167,0,194,0,4
-225,0,0,0,crest / logo (team-swapped),team 128..166,0,215,0,4
-226,0,0,0,crest / logo (team-swapped),team 128..163,0,221,0,4
-227,0,0,0,crest / logo (team-swapped),team 128..160,0,192,0,4
-228,0,0,0,crest / logo (team-swapped),team 128..161,0,168,0,4
-229,0,0,0,crest / logo (team-swapped),team 128..164,0,0,0,81
-230,0,0,0,crest / logo (team-swapped),team 128..161,0,0,0,124
-231,0,0,0,crest / logo (team-swapped),team 128..169,0,0,0,217
-232,0,0,0,crest / logo (team-swapped),team 128..163,0,0,0,166
-233,0,0,0,crest / logo (team-swapped),team 128..158,0,0,0,204
-234,0,0,0,crest / logo (team-swapped),128,1,0,0,0
-235,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-236,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-237,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-238,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-239,0,0,0,crest / logo (team-swapped),0,1,0,0,0
-240,0,0,0,crest / logo (team-swapped),team 129..164,0,159,0,4
-241,0,0,0,crest / logo (team-swapped),team 128..167,0,175,0,4
-242,0,0,0,crest / logo (team-swapped),team 128..153,0,181,0,4
-243,0,0,0,crest / logo (team-swapped),team 128..156,0,148,0,8
-244,0,0,0,crest / logo (team-swapped),team 130..156,0,131,0,8
-245,0,0,0,crest / logo (team-swapped),team 128..170,0,0,0,415
-246,0,0,0,crest / logo (team-swapped),team 128..165,0,0,0,338
-247,0,0,0,crest / logo (team-swapped),team 128..159,0,0,0,391
-248,0,0,0,crest / logo (team-swapped),team 128..161,0,0,0,536
-249,0,0,0,crest / logo (team-swapped),team 128..157,0,0,0,1102
-250,0,0,0,crest / logo (team-swapped),128,1,0,0,0
-251,96,0,0,crest / logo (team-swapped),0,1,0,0,0
-252,168,0,0,crest / logo (team-swapped),0,1,0,0,0
-253,236,72,0,crest / logo (team-swapped),0,1,0,0,0
-254,236,236,236,crest / logo (team-swapped),0,1,0,0,0
-255,224,224,224,transparent,0,1,711788,1,58940
+sprite_index,role,stored_map_value,game_slot_home,game_slot_away,same_for_every_team,r,g,b,player_px,rink_px,other_px
+0,rink palette (identity),0,0,0,1,0,0,0,39559,9046,55467
+1,rink palette (identity),1,1,1,1,232,232,232,305,13632,89
+2,rink palette (identity),2,2,2,1,128,224,224,2,22,5
+3,rink palette (identity),3,3,3,1,64,96,192,11,225,62
+4,rink palette (identity),4,4,4,1,168,168,168,905,8284,215
+5,rink palette (identity),5,5,5,1,224,128,128,97,590,661
+6,rink palette (identity),6,6,6,1,160,96,96,37,1247,415
+7,rink palette (identity),7,7,7,1,96,96,96,357,7107,513
+8,blade side (remapped to 16),16,16,16,1,32,32,32,2350,1125,388
+9,rink palette (identity),9,9,9,1,64,64,64,5843,12659,16262
+10,rink palette (identity),10,10,10,1,192,160,32,26,3077,5240
+11,rink palette (identity),11,11,11,1,32,32,32,22903,6080,1234
+12,rink palette (identity),12,12,12,1,192,128,0,3,0,10094
+13,rink palette (identity),13,13,13,1,160,96,0,100,375,1151
+14,rink palette (identity),14,14,14,1,96,0,0,2,1456,221
+15,rink palette (identity),15,15,15,1,0,0,0,244,0,33353
+16,rink palette (identity),16,16,16,1,32,32,32,526,0,471376
+17,rink palette (identity),17,17,17,1,64,64,64,4012,0,8194
+18,rink palette (identity),18,18,18,1,96,96,96,560,0,26170
+19,rink palette (identity),19,19,19,1,128,128,128,650,2435,4183
+20,rink palette (identity),20,20,20,1,160,160,160,1086,557,7847
+21,rink palette (identity),21,21,21,1,192,192,192,5842,1142,9334
+22,rink palette (identity),22,22,22,1,228,228,228,1047,15130,20794
+23,rink palette (identity),23,23,23,1,120,116,252,72,6574,141
+24,rink palette (identity),24,24,24,1,96,128,192,116,0,392
+25,rink palette (identity),25,25,25,1,64,96,192,156,0,151087
+26,rink palette (identity),26,26,26,1,32,64,192,109,331,2196
+27,rink palette (identity),27,27,27,1,32,64,160,73,42,3345
+28,rink palette (identity),28,28,28,1,0,64,128,1039,317,4948
+29,rink palette (identity),29,29,29,1,0,32,96,518,0,75
+30,rink palette (identity),30,30,30,1,0,32,96,268,0,41
+31,rink palette (identity),31,31,31,1,0,32,64,1735,170,192
+32,rink palette (identity),32,32,32,1,224,0,0,198,16,18674
+33,rink palette (identity),33,33,33,1,224,32,0,1756,64,7237
+34,rink palette (identity),34,34,34,1,224,64,0,14,8,3044
+35,rink palette (identity),35,35,35,1,224,96,0,106,163,3149
+36,rink palette (identity),36,36,36,1,224,128,0,129,0,7762
+37,rink palette (identity),37,37,37,1,224,160,0,225,0,4846
+38,rink palette (identity),38,38,38,1,224,192,0,355,1363,16759
+39,rink palette (identity),39,39,39,1,224,224,0,43,14,35990
+40,rink palette (identity),40,40,40,1,192,160,0,93,0,0
+41,rink palette (identity),41,41,41,1,160,96,0,1698,0,54
+42,rink palette (identity),42,42,42,1,128,96,0,6,106,29
+43,rink palette (identity),43,43,43,1,96,32,0,12,0,50
+44,rink palette (identity),44,44,44,1,96,32,0,274,0,23
+45,rink palette (identity),45,45,45,1,96,64,0,6,0,84
+46,rink palette (identity),46,46,46,1,96,96,0,0,150,17
+47,rink palette (identity),47,47,47,1,96,128,0,0,28,11
+48,rink palette (identity),48,48,48,1,0,224,0,0,0,0
+49,rink palette (identity),49,49,49,1,0,224,0,0,0,60
+50,rink palette (identity),50,50,50,1,0,192,0,78,0,294
+51,rink palette (identity),51,51,51,1,0,160,0,0,0,14
+52,rink palette (identity),52,52,52,1,0,128,0,3,0,184
+53,rink palette (identity),53,53,53,1,0,96,0,3,129,202
+54,rink palette (identity),54,54,54,1,0,64,0,168,103,20
+55,rink palette (identity),55,55,55,1,0,32,0,1,0,111
+56,rink palette (identity),56,56,56,1,0,96,32,0,0,227
+57,rink palette (identity),57,57,57,1,0,128,96,0,236,166
+58,rink palette (identity),58,58,58,1,0,128,160,0,17,0
+59,rink palette (identity),59,59,59,1,0,64,192,0,0,1583
+60,rink palette (identity),60,60,60,1,0,0,224,0,126,700
+61,rink palette (identity),61,61,61,1,64,128,224,0,0,4802
+62,rink palette (identity),62,62,62,1,128,192,224,259,0,0
+63,rink palette (identity),63,63,63,1,192,224,224,26,0,0
+64,rink palette (identity),64,64,64,1,0,128,0,22,0,0
+65,rink palette (identity),65,65,65,1,0,96,0,6,0,174
+66,rink palette (identity),66,66,66,1,32,96,32,9,0,50
+67,rink palette (identity),67,67,67,1,32,64,32,57,0,2064
+68,rink palette (identity),68,68,68,1,64,64,64,2,0,51
+69,rink palette (identity),69,69,69,1,0,0,0,4565,0,0
+70,rink palette (identity),70,70,70,1,0,0,0,0,0,0
+71,rink palette (identity),71,71,71,1,224,160,128,6,175,100
+72,rink palette (identity),72,72,72,1,224,128,128,1898,0,271
+73,rink palette (identity),73,73,73,1,192,96,96,932,513,693
+74,rink palette (identity),74,74,74,1,160,64,64,81,20,198
+75,rink palette (identity),75,75,75,1,96,0,0,1,0,95
+76,rink palette (identity),76,76,76,1,96,0,0,0,0,56
+77,rink palette (identity),77,77,77,1,128,32,0,0,0,35
+78,rink palette (identity),78,78,78,1,160,64,0,7,78,22
+79,rink palette (identity),79,79,79,1,160,96,0,0,0,28
+80,rink palette (identity),80,80,80,1,192,0,0,1122,210,22495
+81,rink palette (identity),81,81,81,1,160,0,0,0,128,444
+82,shadow (remapped to 99),99,99,99,1,64,160,224,278,456,592
+83,rink palette (identity),83,83,83,1,96,0,0,176,0,135
+84,rink palette (identity),84,84,84,1,64,0,0,1,299,280
+85,rink palette (identity),85,85,85,1,224,96,0,86,0,3
+86,rink palette (identity),86,86,86,1,192,32,0,180,0,15
+87,rink palette (identity),87,87,87,1,128,0,0,186,0,6
+88,shadow (remapped to 99),99,99,99,1,64,160,224,36706,0,7
+89,rink palette (identity),89,89,89,1,224,224,224,5171,2184,8549
+90,rink palette (identity),90,90,90,1,224,224,224,0,0,6242
+91,rink palette (identity),91,91,91,1,140,148,248,158,70,5835
+92,rink palette (identity),92,92,92,1,160,192,224,14,0,1
+93,rink palette (identity),93,93,93,1,0,64,96,23,217,143
+94,rink palette (identity),94,94,94,1,0,96,128,12,0,135
+95,rink palette (identity),95,95,95,1,224,0,224,0,0,0
+96,rink palette (identity),96,96,96,1,252,96,96,172,4933,0
+97,rink palette (identity),97,97,97,1,32,32,224,0,22,0
+98,rink palette (identity),98,98,98,1,64,96,224,0,275,0
+99,rink palette (identity),99,99,99,1,64,160,224,5492,0,0
+100,rink palette (identity),100,100,100,1,128,224,224,13,0,0
+101,rink palette (identity),101,101,101,1,236,236,236,4,10513,0
+102,rink palette (identity),102,102,102,1,244,244,244,0,6741,7357
+103,rink palette (identity),103,103,103,1,252,252,252,284,4097,18490
+104,rink palette (identity),104,104,104,1,224,160,160,9,305,132
+105,rink palette (identity),105,105,105,1,216,216,216,904,44895,300
+106,rink palette (identity),106,106,106,1,212,212,212,0,56985,3
+107,rink palette (identity),107,107,107,1,128,160,224,0,65,8
+108,rink palette (identity),108,108,108,1,0,176,176,0,0,0
+109,rink palette (identity),109,109,109,1,0,0,0,44,0,0
+110,rink palette (identity),110,110,110,1,0,0,0,0,0,0
+111,rink palette (identity),111,111,111,1,0,0,0,10,0,1
+112,rink palette (identity),112,112,112,1,0,0,0,0,0,0
+113,rink palette (identity),113,113,113,1,0,0,0,0,0,0
+114,rink palette (identity),114,114,114,1,0,0,0,0,0,0
+115,rink palette (identity),115,115,115,1,0,0,0,0,0,0
+116,rink palette (identity),116,116,116,1,0,0,0,0,0,0
+117,rink palette (identity),117,117,117,1,0,0,0,0,0,0
+118,rink palette (identity),118,118,118,1,0,0,0,0,0,0
+119,rink palette (identity),119,119,119,1,0,0,0,0,0,0
+120,rink palette (identity),120,120,120,1,0,0,0,0,0,0
+121,rink palette (identity),121,121,121,1,0,0,0,0,0,0
+122,rink palette (identity),122,122,122,1,160,224,224,0,0,0
+123,rink palette (identity),123,123,123,1,0,0,0,0,0,0
+124,rink palette (identity),124,124,124,1,0,0,0,0,0,0
+125,rink palette (identity),125,125,125,1,0,0,0,0,0,0
+126,rink palette (identity),126,126,126,1,0,0,0,0,0,0
+127,rink palette (identity),127,127,127,1,0,0,0,0,0,0
+128,skin tones / eyes / stick (fixed),0,0,0,1,0,0,0,0,0,0
+129,skin tones / eyes / stick (fixed),0,0,0,1,0,0,0,0,0,0
+130,skin tones / eyes / stick (fixed),0,0,0,1,0,0,0,0,0,0
+131,skin tones / eyes / stick (fixed),0,0,0,1,0,0,0,0,0,0
+132,skin tones / eyes / stick (fixed),71,71,71,1,224,160,128,8,0,0
+133,skin tones / eyes / stick (fixed),104,104,104,1,224,160,160,1088,0,142
+134,skin tones / eyes / stick (fixed),72,72,72,1,224,128,128,2240,0,107
+135,skin tones / eyes / stick (fixed),6,6,6,1,160,96,96,1342,0,320
+136,skin tones / eyes / stick (fixed),73,73,73,1,192,96,96,16368,0,556
+137,skin tones / eyes / stick (fixed),0,0,0,1,0,0,0,0,0,14
+138,skin tones / eyes / stick (fixed),6,6,6,1,160,96,96,4,0,2
+139,skin tones / eyes / stick (fixed),0,0,0,1,0,0,0,1,0,0
+140,skin tones / eyes / stick (fixed),74,74,74,1,160,64,64,649,0,31
+141,skin tones / eyes / stick (fixed),0,0,0,1,0,0,0,0,0,0
+142,skin tones / eyes / stick (fixed),0,0,0,1,0,0,0,0,0,0
+143,skin tones / eyes / stick (fixed),0,0,0,1,0,0,0,0,0,0
+144,jersey zones (team),128..156,128..156,192..219,0,,,,4626,0,174
+145,jersey zones (team),128..157,128..156,192..221,0,,,,3552,0,138
+146,jersey zones (team),128..170,128..170,192..223,0,,,,5150,0,123
+147,jersey zones (team),128..167,128..159,192..231,0,,,,5886,0,50
+148,jersey zones (team),128..162,128..152,192..226,0,,,,3133,0,57
+149,jersey zones (team),128..155,128..144,192..219,0,,,,1373,0,47
+150,jersey zones (team),128..155,128..151,192..219,0,,,,2688,0,39
+151,jersey zones (team),128..166,128..166,192..228,0,,,,2972,0,53
+152,jersey zones (team),129..167,129..167,194..229,0,,,,4498,0,41
+153,jersey zones (team),128..168,128..160,192..232,0,,,,1394,0,58
+154,jersey zones (team),130..162,130..150,195..226,0,,,,1726,0,54
+155,jersey zones (team),128..155,129..146,192..219,0,,,,6781,0,43
+156,jersey zones (team),128..170,129..170,192..222,0,,,,4101,0,276
+157,jersey zones (team),128..158,128..156,192..222,0,,,,3997,0,193
+158,jersey zones (team),128..153,128..153,192..210,0,,,,3902,0,141
+159,jersey zones (team),128..170,128..170,195..226,0,,,,1471,0,36
+160,jersey zones (team),128..153,128..153,193..213,0,,,,1191,0,32
+161,jersey zones (team),128..168,128..160,192..232,0,,,,5723,0,231
+162,jersey zones (team),129..170,129..170,194..220,0,,,,4014,0,181
+163,jersey zones (team),129..158,129..156,193..222,0,,,,6527,0,267
+164,jersey zones (team),135..160,135..158,200..224,0,,,,4821,0,0
+165,jersey zones (team),128..170,128..170,192..225,0,,,,10455,0,416
+166,jersey zones (team),128..156,128..156,192..216,0,,,,7960,0,228
+167,jersey zones (team),128..153,128..153,192..210,0,,,,3797,0,124
+168,jersey zones (team),128..166,128..160,192..230,0,,,,2165,0,50
+169,jersey zones (team),128..166,128..159,192..230,0,,,,2411,0,56
+170,jersey zones (team),128..155,128..143,192..219,0,,,,706,0,0
+171,jersey zones (team),128..167,128..167,192..229,0,,,,1447,0,32
+172,jersey zones (team),128..166,128..166,192..228,0,,,,2049,0,48
+173,jersey zones (team),128..163,128..163,192..225,0,,,,1668,0,24
+174,jersey zones (team),128..164,128..154,192..228,0,,,,1376,0,12
+175,jersey zones (team),128..159,128..148,192..223,0,,,,2155,0,45
+176,jersey zones (team),128..153,128..145,192..217,0,,,,1745,0,30
+177,jersey zones (team),128..143,128..139,192..207,0,,,,16981,0,130
+178,jersey zones (team),128..168,128..163,192..232,0,,,,2988,0,70
+179,jersey zones (team),128..160,128..154,192..224,0,,,,3053,0,88
+180,jersey zones (team),129..141,129..137,193..205,0,,,,13008,0,135
+181,jersey zones (team),128..170,128..170,192..218,0,,,,3958,0,87
+182,jersey zones (team),129..156,135..156,193..216,0,,,,3916,0,152
+183,jersey zones (team),128..153,131..153,192..212,0,,,,3405,0,80
+184,jersey zones (team),130..167,130..167,194..231,0,,,,2073,0,39
+185,jersey zones (team),129..166,129..166,193..230,0,,,,2775,0,31
+186,jersey zones (team),128..166,128..159,192..230,0,,,,1363,0,24
+187,jersey zones (team),128..161,128..161,192..224,0,,,,2092,0,23
+188,jersey zones (team),129..153,129..148,193..217,0,,,,2582,0,21
+189,jersey zones (team),128..157,128..146,192..221,0,,,,1967,0,70
+190,jersey zones (team),128..161,131..161,192..212,0,,,,3070,0,182
+191,jersey zones (team),128..163,128..163,192..209,0,,,,8230,0,743
+192,crest / ice logo (team),130..160,130..160,194..224,0,,,,166,0,5
+193,crest / ice logo (team),128..167,128..160,192..231,0,,,,248,0,3
+194,crest / ice logo (team),128..158,128..158,192..215,0,,,,257,0,8
+195,crest / ice logo (team),128..167,128..160,194..231,0,,,,263,0,8
+196,crest / ice logo (team),130..167,130..160,194..231,0,,,,210,0,8
+197,crest / ice logo (team),128..167,128..162,192..231,0,,,,0,0,1568
+198,crest / ice logo (team),128..165,128..158,192..229,0,,,,0,0,1586
+199,crest / ice logo (team),128..162,128..162,192..226,0,,,,0,0,879
+200,crest / ice logo (team),128..155,128..152,192..219,0,,,,0,0,716
+201,crest / ice logo (team),128..157,128..153,192..221,0,,,,0,0,745
+202,crest / ice logo (team),"128,150,153","128,150","192,217",0,,,,0,0,19
+203,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+204,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+205,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+206,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+207,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+208,crest / ice logo (team),128..164,128..157,192..228,0,,,,223,0,3
+209,crest / ice logo (team),128..157,128..153,192..221,0,,,,254,0,2
+210,crest / ice logo (team),128..167,128..160,193..231,0,,,,246,0,2
+211,crest / ice logo (team),128..166,128..166,192..226,0,,,,228,0,5
+212,crest / ice logo (team),128..166,129..166,192..228,0,,,,205,0,6
+213,crest / ice logo (team),128..168,128..161,192..232,0,,,,0,0,582
+214,crest / ice logo (team),128..166,128..161,192..230,0,,,,0,0,490
+215,crest / ice logo (team),128..157,128..156,192..221,0,,,,0,0,201
+216,crest / ice logo (team),128..168,128..168,192..230,0,,,,0,0,508
+217,crest / ice logo (team),128..167,128..160,192..231,0,,,,0,0,178
+218,crest / ice logo (team),"128,132","128,132","192,196",0,,,,0,0,187
+219,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+220,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+221,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+222,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+223,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+224,crest / ice logo (team),128..167,128..160,192..231,0,,,,194,0,2
+225,crest / ice logo (team),128..166,129..166,192..219,0,,,,215,0,2
+226,crest / ice logo (team),128..163,128..163,192..226,0,,,,221,0,2
+227,crest / ice logo (team),128..160,128..153,192..224,0,,,,192,0,2
+228,crest / ice logo (team),128..161,130..161,192..221,0,,,,168,0,2
+229,crest / ice logo (team),128..164,128..157,192..228,0,,,,0,0,81
+230,crest / ice logo (team),128..161,128..161,192..225,0,,,,0,0,124
+231,crest / ice logo (team),128..169,128..169,192..231,0,,,,0,0,217
+232,crest / ice logo (team),128..163,128..162,192..227,0,,,,0,0,166
+233,crest / ice logo (team),128..158,128..157,192..222,0,,,,0,0,204
+234,crest / ice logo (team),128,128,192,0,,,,0,0,0
+235,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+236,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+237,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+238,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+239,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+240,crest / ice logo (team),129..164,130..164,193..225,0,,,,159,0,2
+241,crest / ice logo (team),128..167,128..160,193..231,0,,,,175,0,2
+242,crest / ice logo (team),128..153,128..153,192..217,0,,,,181,0,2
+243,crest / ice logo (team),128..156,129..152,192..220,0,,,,148,0,4
+244,crest / ice logo (team),130..156,130..156,194..218,0,,,,131,0,4
+245,crest / ice logo (team),128..170,128..170,192..232,0,,,,0,0,415
+246,crest / ice logo (team),128..165,128..165,192..227,0,,,,0,0,338
+247,crest / ice logo (team),128..159,128..159,192..223,0,,,,0,0,391
+248,crest / ice logo (team),128..161,128..159,192..225,0,,,,0,0,536
+249,crest / ice logo (team),128..157,128..153,192..221,0,,,,0,0,1102
+250,crest / ice logo (team),128,128,192,0,,,,0,0,0
+251,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+252,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+253,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+254,crest / ice logo (team),0,0,0,1,0,0,0,0,0,0
+255,transparent,0,0,0,1,,,,711788,1,45201

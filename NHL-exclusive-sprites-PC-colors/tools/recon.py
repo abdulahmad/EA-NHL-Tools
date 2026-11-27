@@ -10,8 +10,8 @@ LY=json.load(open(AB+'layers.json'))
 for i,m in enumerate(LY):m['z']=i;m['img']=np.array(Image.open(AB+m['file']).convert('RGBA'))
 byname={}
 for m in LY:byname.setdefault(m['name'],[]).append(m)
-B=Image.open(AB+'abdul_palette.bmp');BP=np.array(B.getpalette()).reshape(-1,3)
-GUIDE={tuple(int(x) for x in BP[i]):i for i in sorted(set(np.array(B).flatten().tolist()))}
+BP,GIDX=paths.guide()   # Abdul's complete guide palette (abdul/act/abdul_palette_complete.act)
+GUIDE={BP[i]:i for i in GIDX}
 PCU=set()
 for f in (A['PC'].values() if isinstance(A['PC'],dict) else A['PC']):
   if f is not None:PCU|=set(np.unique(f).tolist())

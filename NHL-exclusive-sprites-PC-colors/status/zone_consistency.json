@@ -1,5 +1,5 @@
 {
- "pixels": 8188,
+ "pixels": 6875,
  "pc_indices_per_genesis_zone": {
   "black": [
    0,
@@ -116,7 +116,6 @@
    153,
    154,
    155,
-   156,
    157,
    158,
    159,
@@ -161,7 +160,6 @@
    179,
    180,
    181,
-   182,
    185,
    186
   ],
@@ -214,9 +212,9 @@
   "('jersey', 'black/blade', 0)": 136,
   "('trim', 'stick', 136)": 14,
   "('jersey', 'shadow', 88)": 12,
-  "('jersey', 'skin', 140)": 9,
   "('shadow', 'socks', 181)": 6,
   "('jersey', 'other(30)', 30)": 5,
+  "('jersey', 'skin', 140)": 5,
   "('black', 'jersey/arm', 165)": 4,
   "('jersey', 'other(109)', 109)": 3,
   "('skin', 'black/blade', 0)": 3,
@@ -350,18 +348,6 @@
    "('jersey', 'skin', 140)": 1
   },
   "IF0015 PC PAL": {
-   "('jersey', 'skin', 140)": 1
-  },
-  "IF0016 PC PAL": {
-   "('jersey', 'skin', 140)": 1
-  },
-  "IF0017 PC PAL": {
-   "('jersey', 'skin', 140)": 1
-  },
-  "IF0018 PC PAL": {
-   "('jersey', 'skin', 140)": 1
-  },
-  "IF0019 PC PAL": {
    "('jersey', 'skin', 140)": 1
   },
   "IF0020 PC PAL": {

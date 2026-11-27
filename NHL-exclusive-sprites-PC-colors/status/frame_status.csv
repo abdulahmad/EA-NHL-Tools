@@ -1,20 +1,20 @@
 game,frame,group,status,pc_pct,best_layer,other_layers,genesis_px_left,off_palette_px,what_is_left
 NHLPA93 Genesis,353,fight,NONE,,fighting sticks,,185,0,most of the frame (only head/crest overlay or shared black is PC)
 NHLPA93 Genesis,354,fight,PARTIAL,99.4,IF0012,IF0012 GEN PAL;IF0012 PC PAL,2,0,"remaining non-PC colours: (36, 36, 36)"
-NHLPA93 Genesis,355,fight,PARTIAL,98.8,IF0013 PC PAL,IF0013 GEN PAL,1,3,"remaining non-PC colours: (160, 96, 96), (144, 144, 144)"
-NHLPA93 Genesis,356,fight,PARTIAL,96.5,IF0014 PC PAL,IF0014 GEN PAL,1,9,"remaining non-PC colours: (0, 170, 0), (160, 96, 96), (180, 180, 180)"
-NHLPA93 Genesis,357,fight,PARTIAL,96.7,IF0015 PC PAL,IF0015 GEN PAL,1,10,"remaining non-PC colours: (0, 170, 0), (160, 96, 96), (180, 180, 180)"
+NHLPA93 Genesis,355,fight,PARTIAL,99.7,IF0013 PC PAL,IF0013 GEN PAL,1,0,"remaining non-PC colours: (144, 144, 144)"
+NHLPA93 Genesis,356,fight,PARTIAL,99.7,IF0014 PC PAL,IF0014 GEN PAL,1,0,"remaining non-PC colours: (180, 180, 180)"
+NHLPA93 Genesis,357,fight,PARTIAL,99.7,IF0015 PC PAL,IF0015 GEN PAL,1,0,"remaining non-PC colours: (180, 180, 180)"
 NHLPA93 Genesis,358,fight,TODO (no layer),,,,,,whole frame
-NHLPA93 Genesis,359,fight,PARTIAL,97.2,IF0017 PC PAL,IF0017 GEN PAL,0,11,"remaining non-PC colours: (0, 170, 0), (160, 96, 96)"
-NHLPA93 Genesis,360,fight,PARTIAL,98.0,IF0018 PC PAL,IF0018 GEN PAL,0,7,"remaining non-PC colours: (0, 170, 0)"
-NHLPA93 Genesis,361,fight,PARTIAL,97.0,IF0019 PC PAL,IF0019 GEN PAL,0,10,"remaining non-PC colours: (0, 170, 0), (160, 96, 96)"
-NHLPA93 Genesis,362,fight,PARTIAL,96.9,IF0016 PC PAL,IF0016 GEN PAL,0,10,"remaining non-PC colours: (0, 170, 0), (160, 96, 96)"
+NHLPA93 Genesis,359,fight,FULL,,IF0017 PC PAL,IF0017 GEN PAL,0,0,
+NHLPA93 Genesis,360,fight,FULL,,IF0018 PC PAL,IF0018 GEN PAL,0,0,
+NHLPA93 Genesis,361,fight,FULL,,IF0019 PC PAL,IF0019 GEN PAL,0,0,
+NHLPA93 Genesis,362,fight,FULL,,IF0016 PC PAL,IF0016 GEN PAL,0,0,
 NHLPA93 Genesis,363,fight,TODO (no layer),,,,,,whole frame
 NHLPA93 Genesis,364,fight,PARTIAL,16.2,IF0021?,IF0021etc??;IF0023??,325,0,most of the frame (only head/crest overlay or shared black is PC)
 NHLPA93 Genesis,365,fight,PARTIAL,19.0,IF0022?,IF0022etc?,315,0,most of the frame (only head/crest overlay or shared black is PC)
 NHLPA93 Genesis,366,fight,NONE,,Layer 36,,320,0,most of the frame (only head/crest overlay or shared black is PC)
 NHLPA93 Genesis,367,fight,NONE,,IF0021 PC PAL,IF0021 GEN PAL,282,0,most of the frame (only head/crest overlay or shared black is PC)
-NHLPA93 Genesis,368,fight,PARTIAL,98.3,IF0020 PC PAL,IF0020 GEN PAL,0,6,"remaining non-PC colours: (0, 170, 0), (255, 199, 154)"
+NHLPA93 Genesis,368,fight,PARTIAL,99.7,IF0020 PC PAL,IF0020 GEN PAL,0,1,"remaining non-PC colours: (255, 199, 154)"
 NHLPA93 Genesis,369,fight,NONE,,Layer 24,Layer 25,326,0,most of the frame (only head/crest overlay or shared black is PC)
 NHLPA93 Genesis,370,fight,PARTIAL,12.9,Layer 26,,323,0,most of the frame (only head/crest overlay or shared black is PC)
 NHLPA93 Genesis,371,fight injury,PARTIAL,14.0,Layer 27,,301,0,most of the frame (only head/crest overlay or shared black is PC)

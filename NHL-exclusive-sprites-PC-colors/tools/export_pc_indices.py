@@ -1,5 +1,5 @@
 """Write each PSD frame (best layer, overlays composited in place, lined up on the retail 93 frame) as an indexed PNG whose
-pixel values ARE 95 PC palette indices (255 = transparent). The PNG palette is Abdul's palette (abdul_palette.bmp guide colours), for viewing only; indices his BMP does not use show as cyan.
+pixel values ARE 95 PC palette indices (255 = transparent). The PNG palette is Abdul's complete guide palette (abdul/act/abdul_palette_complete.act), for viewing only; indices outside it show as cyan.
 Pixels that are still Genesis colours are left as 255 here and listed in <frame>_todo.png (white = still to do).
 Then runs the round-trip gate on every exported frame: encode to a 95 PC SPIT picture -> decode -> identical indices."""
 import os,sys;sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));import paths
@@ -10,10 +10,10 @@ OUT=os.path.join(paths.ROOT,'frames_pc')+os.sep;os.makedirs(OUT,exist_ok=True)
 R={r['layer']:r for r in json.load(open(paths.WORK+'recon.json'))['results']}
 U={n:(a,f,al,mp) for n,a,f,al,mp in pickle.load(open(paths.WORK+'recon.pkl','rb'))}
 A,S=paths.frames();G93=A['G93']
-B=Image.open(paths.ABDUL+'abdul_palette.bmp');BP=np.array(B.getpalette()).reshape(-1,3)
-GUIDE={tuple(int(x) for x in BP[i]):i for i in sorted(set(np.array(B).flatten().tolist()))}
-BIDX=set(np.array(B).flatten().tolist())
-# Viewing palette = Abdul's palette (his guide colours). Indices his BMP does not use show as cyan (0,255,255).
+BP,GIDX=paths.guide()
+GUIDE={BP[i]:i for i in GIDX}
+BIDX=set(GIDX)
+# Viewing palette = Abdul's complete guide palette. Indices outside it show as cyan (0,255,255).
 PAL=[int(v) for i in range(256) for v in (BP[i] if i in BIDX or i==255 else (0,255,255))]
 best={}
 for r in R.values():
