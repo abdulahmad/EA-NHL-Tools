@@ -1,5 +1,6 @@
 import os,sys;sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));import paths
 import json,pickle,numpy as np
+import decisions
 from PIL import Image,ImageDraw,ImageFont
 OUT=paths.STATUS
 R=json.load(open(paths.WORK+'recon.json'));GENPAL={int(k):tuple(v) for k,v in R['genpal'].items()}
@@ -37,7 +38,8 @@ def render(f,r):
       c=tuple(int(t) for t in a[ly,lx,:3]) if 0<=ly<a.shape[0] and 0<=lx<a.shape[1] else (150,150,150)
       k=mp[gy,gx]
       if k in('pc','shared'):
-        i=GUIDE.get(c,c[0])
+        d=decisions.index_for(r['layer'],gy,gx,mir,w,c)
+        i=d if d is not None else GUIDE.get(c,c[0])
         if i in GUIDE_RGB:pv[gy,gx]=GUIDE_RGB[i]
         else:pv[gy,gx]=FALLBACK;FALLBACK_USED.add(i);fb[gy,gx]=True
       else:pv[gy,gx]=c
@@ -57,9 +59,9 @@ for si,frames in enumerate(FR):
     if X+cw>W:X=0;Y+=rowh+10;rowh=0
     pos.append((X+6,Y+4,sc));X+=cw;rowh=max(rowh,chh)
   rows_h=Y+rowh+10
-  im=Image.new('RGB',(W,rows_h+230),(255,255,255));d=ImageDraw.Draw(im)
+  im=Image.new('RGB',(W,rows_h+262),(255,255,255));d=ImageDraw.Draw(im)
   for (f,r,ret,pv,st),(X,Y,sc) in zip(cells,pos):
-    stt=r['status'] if r else 'NO LAYER';pct=f" {r['done_pct']:.0f}% PC" if r and r['status']=='PARTIAL' else ''
+    stt=r['status'] if r else 'NO LAYER';pct=f" {(int(r['done_pct']) if r['done_pct']<99 else r['done_pct'])}%" if r and r['status']=='PARTIAL' else ''
     d.text((X,Y),f"93:{f} {stt}{pct}",fill=(0,0,0),font=F(17))
     d.text((X,Y+20),((r['layer']+(' - NAME != PIXELS' if r['flag'] else '')) if r else 'not in PSD')[:40],fill=(0,0,0),font=F(13))
     xx=X
@@ -76,11 +78,15 @@ for si,frames in enumerate(FR):
   for lab,c in [('PC index done',MAPC['pc']),('Genesis colour left',MAPC['genesis']),('off-palette colour',MAPC['other']),('hole / transparent',MAPC['missing'])]:
     d.rectangle([x,y,x+26,y+22],fill=c,outline=(0,0,0));d.text((x+32,y+2),lab,fill=(0,0,0),font=F(15));x+=d.textlength(lab,font=F(15))+52
   y+=30
-  d.text((6,y),'FULL = every pixel a 95 PC index; PARTIAL = mix (% = PC share); NONE = Genesis colours only.',fill=(0,0,0),font=F(14));y+=22
+  d.text((6,y),'FULL = every pixel a 95 PC index; PARTIAL = mix (% = share of pixels that are 95 PC indices); NONE = Genesis colours only.',fill=(0,0,0),font=F(14));y+=22
   d.text((6,y),'Best PSD layer shown per frame (overlays such as PC Head / PC Crest composited in place).',fill=(0,0,0),font=F(14));y+=22
   d.text((6,y),"Middle panel: 95 PC indices drawn in Abdul's palette (abdul_palette_complete.act, one colour per zone);",fill=(0,0,0),font=F(14));y+=22
   d.text((6,y),"Genesis-coloured pixels keep their Genesis colour.",fill=(0,0,0),font=F(14));y+=24
   fbl=sorted(FALLBACK_USED)
   d.rectangle([6,y,32,y+22],fill=FALLBACK,outline=(0,0,0));d.rectangle([18,y+10,20,y+12],fill=(0,0,0))
-  d.text((40,y+2),('index not in Abdul\'s palette (fallback): '+', '.join(map(str,fbl))) if fbl else "index not in Abdul's palette (fallback): none in these frames",fill=(0,0,0),font=F(15))
+  d.text((40,y+2),('index not in Abdul\'s palette (fallback): '+', '.join(map(str,fbl))) if fbl else "index not in Abdul's palette (fallback): none in these frames",fill=(0,0,0),font=F(15));y+=30
+  x=6
+  for i,lab in ((76,'76 blood (dark)'),(78,'78 blood (light)')):
+    d.rectangle([x,y,x+26,y+22],fill=paths.GUIDE_OVERLAY[i],outline=(0,0,0));d.text((x+32,y+2),lab,fill=(0,0,0),font=F(15));x+=d.textlength(lab,font=F(15))+52
+  d.text((x,y+2),'added guide colours (not in his ACT); decisions/abdul_decisions.csv applied',fill=(0,0,0),font=F(14))
   im.save(OUT+f'status_{["injury","fights"][si]}.png');print(im.size)

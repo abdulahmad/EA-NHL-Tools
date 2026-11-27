@@ -1,9 +1,9 @@
 game,frame,group,status,pc_pct,best_layer,other_layers,genesis_px_left,off_palette_px,what_is_left
 NHLPA93 Genesis,353,fight,NONE,,fighting sticks,,185,0,most of the frame (only head/crest overlay or shared black is PC)
-NHLPA93 Genesis,354,fight,PARTIAL,99.4,IF0012,IF0012 GEN PAL;IF0012 PC PAL,2,0,"remaining non-PC colours: (36, 36, 36)"
-NHLPA93 Genesis,355,fight,PARTIAL,99.7,IF0013 PC PAL,IF0013 GEN PAL,1,0,"remaining non-PC colours: (144, 144, 144)"
-NHLPA93 Genesis,356,fight,PARTIAL,99.7,IF0014 PC PAL,IF0014 GEN PAL,1,0,"remaining non-PC colours: (180, 180, 180)"
-NHLPA93 Genesis,357,fight,PARTIAL,99.7,IF0015 PC PAL,IF0015 GEN PAL,1,0,"remaining non-PC colours: (180, 180, 180)"
+NHLPA93 Genesis,354,fight,FULL,,IF0012,IF0012 GEN PAL;IF0012 PC PAL,0,0,
+NHLPA93 Genesis,355,fight,FULL,,IF0013 PC PAL,IF0013 GEN PAL,0,0,
+NHLPA93 Genesis,356,fight,FULL,,IF0014 PC PAL,IF0014 GEN PAL,0,0,
+NHLPA93 Genesis,357,fight,FULL,,IF0015 PC PAL,IF0015 GEN PAL,0,0,
 NHLPA93 Genesis,358,fight,TODO (no layer),,,,,,whole frame
 NHLPA93 Genesis,359,fight,FULL,,IF0017 PC PAL,IF0017 GEN PAL,0,0,
 NHLPA93 Genesis,360,fight,FULL,,IF0018 PC PAL,IF0018 GEN PAL,0,0,
@@ -14,7 +14,7 @@ NHLPA93 Genesis,364,fight,PARTIAL,16.2,IF0021?,IF0021etc??;IF0023??,325,0,most o
 NHLPA93 Genesis,365,fight,PARTIAL,19.0,IF0022?,IF0022etc?,315,0,most of the frame (only head/crest overlay or shared black is PC)
 NHLPA93 Genesis,366,fight,NONE,,Layer 36,,320,0,most of the frame (only head/crest overlay or shared black is PC)
 NHLPA93 Genesis,367,fight,NONE,,IF0021 PC PAL,IF0021 GEN PAL,282,0,most of the frame (only head/crest overlay or shared black is PC)
-NHLPA93 Genesis,368,fight,PARTIAL,99.7,IF0020 PC PAL,IF0020 GEN PAL,0,1,"remaining non-PC colours: (255, 199, 154)"
+NHLPA93 Genesis,368,fight,FULL,,IF0020 PC PAL,IF0020 GEN PAL,0,0,
 NHLPA93 Genesis,369,fight,NONE,,Layer 24,Layer 25,326,0,most of the frame (only head/crest overlay or shared black is PC)
 NHLPA93 Genesis,370,fight,PARTIAL,12.9,Layer 26,,323,0,most of the frame (only head/crest overlay or shared black is PC)
 NHLPA93 Genesis,371,fight injury,PARTIAL,14.0,Layer 27,,301,0,most of the frame (only head/crest overlay or shared black is PC)
@@ -23,15 +23,15 @@ NHLPA93 Genesis,373,fight injury,PARTIAL,13.4,Layer 29,,335,0,most of the frame 
 NHLPA93 Genesis,374,fight injury,PARTIAL,13.4,Layer 30,Layer 33,316,0,most of the frame (only head/crest overlay or shared black is PC)
 NHLPA93 Genesis,375,fight injury,PARTIAL,11.4,Layer 31,,341,0,most of the frame (only head/crest overlay or shared black is PC)
 NHLPA93 Genesis,376,fight injury,PARTIAL,13.4,Layer 32,,335,0,most of the frame (only head/crest overlay or shared black is PC)
-NHLPA93 Genesis,633,injury1 (bloody),PARTIAL,96.3,IF0000 - 632,,13,0,"blood still Genesis RGB (108,0,0)/(180,72,0) - needs a 95 PC index decision"
-NHLPA93 Genesis,634,injury1 (bloody),PARTIAL,91.0,IF0001 - 633,,36,0,"blood still Genesis RGB (108,0,0)/(180,72,0) - needs a 95 PC index decision"
-NHLPA93 Genesis,635,injury1 (bloody),PARTIAL,87.2,IF0002 - 634,,48,0,"blood still Genesis RGB (108,0,0)/(180,72,0) - needs a 95 PC index decision"
-NHLPA93 Genesis,636,injury1 (bloody),PARTIAL,88.6,IF0003 - 635,,48,0,"blood still Genesis RGB (108,0,0)/(180,72,0) - needs a 95 PC index decision"
-NHLPA93 Genesis,637,injury1 (bloody),PARTIAL,88.8,IF0004 - 636,,48,0,"blood still Genesis RGB (108,0,0)/(180,72,0) - needs a 95 PC index decision"
-NHLPA93 Genesis,638,injury1 (bloody),PARTIAL,88.9,IF0005 - 637,,48,0,"blood still Genesis RGB (108,0,0)/(180,72,0) - needs a 95 PC index decision"
-NHLPA93 Genesis,639,injury1 (bloody),PARTIAL,96.5,IF0006 - 638,,16,0,"blood still Genesis RGB (108,0,0)/(180,72,0) - needs a 95 PC index decision"
-NHLPA93 Genesis,640,injury1 (bloody),PARTIAL,94.2,IF0007 - 639,,28,0,"blood still Genesis RGB (108,0,0)/(180,72,0) - needs a 95 PC index decision"
-NHLPA93 Genesis,641,injury1 (bloody),PARTIAL,89.2,IF0008 - 640,,52,0,"blood still Genesis RGB (108,0,0)/(180,72,0) - needs a 95 PC index decision"
-NHLPA93 Genesis,642,injury1 (bloody),PARTIAL,89.1,IF0009 - 641,,52,0,"blood still Genesis RGB (108,0,0)/(180,72,0) - needs a 95 PC index decision"
-NHLPA93 Genesis,643,injury1 (bloody),PARTIAL,89.4,IF0010 - 642,,52,0,"blood still Genesis RGB (108,0,0)/(180,72,0) - needs a 95 PC index decision"
-NHLPA93 Genesis,644,injury1 (bloody),PARTIAL,89.2,IF0011 - 643,,52,0,"blood still Genesis RGB (108,0,0)/(180,72,0) - needs a 95 PC index decision"
+NHLPA93 Genesis,633,injury1 (bloody),PARTIAL,99.5,IF0000 - 632,,0,0,2 px are holes (transparent/background in the PSD where retail has a pixel)
+NHLPA93 Genesis,634,injury1 (bloody),PARTIAL,99.5,IF0001 - 633,,0,0,2 px are holes (transparent/background in the PSD where retail has a pixel)
+NHLPA93 Genesis,635,injury1 (bloody),PARTIAL,98.4,IF0002 - 634,,0,0,7 px are holes (transparent/background in the PSD where retail has a pixel)
+NHLPA93 Genesis,636,injury1 (bloody),PARTIAL,99.8,IF0003 - 635,,0,0,1 px are holes (transparent/background in the PSD where retail has a pixel)
+NHLPA93 Genesis,637,injury1 (bloody),FULL,,IF0004 - 636,,0,0,
+NHLPA93 Genesis,638,injury1 (bloody),FULL,,IF0005 - 637,,0,0,
+NHLPA93 Genesis,639,injury1 (bloody),FULL,,IF0006 - 638,,0,0,
+NHLPA93 Genesis,640,injury1 (bloody),PARTIAL,99.8,IF0007 - 639,,0,0,1 px are holes (transparent/background in the PSD where retail has a pixel)
+NHLPA93 Genesis,641,injury1 (bloody),PARTIAL,99.8,IF0008 - 640,,0,0,1 px are holes (transparent/background in the PSD where retail has a pixel)
+NHLPA93 Genesis,642,injury1 (bloody),FULL,,IF0009 - 641,,0,0,
+NHLPA93 Genesis,643,injury1 (bloody),PARTIAL,99.4,IF0010 - 642,,0,0,3 px are holes (transparent/background in the PSD where retail has a pixel)
+NHLPA93 Genesis,644,injury1 (bloody),PARTIAL,99.8,IF0011 - 643,,0,0,1 px are holes (transparent/background in the PSD where retail has a pixel)

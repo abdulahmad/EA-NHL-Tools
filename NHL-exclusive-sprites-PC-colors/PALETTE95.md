@@ -85,7 +85,11 @@ The pixel-count columns hold the raw stored value:
 | 32 → 32 | (224,0,0) | 198 | 16 | 18,674 | net and other art |
 | 82 → **99** | shows (64,160,224) | | | | **not usable**: the map sends it to the shadow slot |
 
-## Recommendation for the NHLPA 93 blood
+## The NHLPA 93 blood: decided
+**Approved by Abdul (27 Nov 2026): Genesis 29 → sprite index 76, Genesis 28 → 78.** Applied through `decisions/abdul_decisions.csv`; the status sheets show 76 as wine (100,30,60) and 78 as orange (255,150,0), guide colours added on top of his ACT.
+
+The analysis behind it. The first proposal was 83 for Genesis 29; Abdul picked the alternative, 76 (same colour, used by no on-ice art, so blood gets its own slot).
+
 The Genesis blood uses two colours: value 29 (108,0,0), most of the blood, and value 28 (180,72,0).
 
 | Genesis | sprite index | game slot (home and away) | colour | why |
@@ -93,17 +97,16 @@ The Genesis blood uses two colours: value 29 (108,0,0), most of the blood, and v
 | 29 (108,0,0) | **83** | 83 | (96,0,0) | closest dark red; already drawn on the ice by 95 PC player-bank sprites (siren, broken glass) |
 | 28 (180,72,0) | **78** | 78 | (160,64,0) | closest colour; already used on the ice (glass, Stanley Cup) |
 
-- **The recommendation holds under the double mapping.** In all 28 HOMEPALS and 28 AWAYPALS records, the map value for sprite 83, 78 and 76 is 83, 78 and 76: a rink slot, below 128. So the game slot is the same for every team on both sides, and it is never in the team bands or in 251–255.
-- **Alternative for 29: 76.** It has the same colour as 83 but no on-ice art uses it, so it would be a blood-only slot if the rink palette is ever edited.
+- **It holds under the double mapping.** In all 28 HOMEPALS and 28 AWAYPALS records, the map value for sprite 83, 78 and 76 is 83, 78 and 76: a rink slot, below 128. So the game slot is the same for every team on both sides, and it is never in the team bands or in 251–255.
+- **76 (chosen for 29)** has the same colour as 83 but no on-ice art uses it, so it is a blood-only slot if the rink palette is ever edited.
 - **Brighter pair:** 81 (160,0,0) with 86 (192,32,0).
 - **Never use:**
   - 82 or 88 (they map to the shadow slot 99);
   - 8 (maps to 16);
   - anything in 144–254 (team colours; 251–254 map to 0).
-- 83, 78 and 76 are not in Abdul's guide palette, so the status sheets show them in the cyan fallback.
 - **Still to do:** try it in the game. Whether the game changes rink slots 0–127 during play has not been checked.
 
-## Stray pixels in the fight frames: confirmed
+## Stray pixels in the fight frames: done
 Abdul's complete guide palette (`abdul/act/abdul_palette_complete.act`) colours three gaps in his BMP. The two fight-frame colours that looked like strays are his own zone colours for 135 and 178.
 
 | colour in the PSD | index | zone |
@@ -112,9 +115,10 @@ Abdul's complete guide palette (`abdul/act/abdul_palette_complete.act`) colours 
 | (0,170,0) | **178** | pants stripe 2 |
 | (74,173,134) | **164** | goalie mask |
 
-With the complete palette, 359–362 are FULL. Still left:
+With the complete palette, 359–362 were FULL. The rest:
 - 354–357: 1–2 grey Genesis pixels each.
-- 368: one pixel of (255,199,154) on light skin. It is probably 133 (shows slot 104 = (224,160,160)) or 132 (shows slot 71 = (224,160,128)); Abdul to decide.
+- 368: one pixel of (255,199,154) on light skin → **133** (approved).
+- 354–357: the grey Genesis pixels → the index of their zone, from the same Genesis value next to them (approved rule). All 9 fight frames are now FULL; every changed pixel is in `frames_pc/decisions_applied.csv`.
 
 ## Notes and limits
 - `SCRBRD2.QFS` and `PSTATBAR.QFS` (HUD) are not counted: `tools/refpack.py` unpacks `SCRBRD2.QFS` 2 bytes longer than its header says, and neither then parses, so I left them out rather than guess.

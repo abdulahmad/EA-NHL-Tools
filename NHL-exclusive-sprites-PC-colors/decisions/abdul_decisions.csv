@@ -1,0 +1,9 @@
+layer,frame_93,x,y,from_rgb,genesis_value,to_index,approved,note
+IF0000 - 632;IF0001 - 633;IF0002 - 634;IF0003 - 635;IF0004 - 636;IF0005 - 637;IF0006 - 638;IF0007 - 639;IF0008 - 640;IF0009 - 641;IF0010 - 642;IF0011 - 643,633-644,,,108 0 0,29,76,Abdul 27 Nov 2026,blood (most of it): every pixel of this colour in these layers
+IF0000 - 632;IF0001 - 633;IF0002 - 634;IF0003 - 635;IF0004 - 636;IF0005 - 637;IF0006 - 638;IF0007 - 639;IF0008 - 640;IF0009 - 641;IF0010 - 642;IF0011 - 643,633-644,,,180 72 0,28,78,Abdul 27 Nov 2026,blood (lighter): every pixel of this colour in these layers
+IF0020 PC PAL,368,15,9,255 199 154,44,133,Abdul 27 Nov 2026,skin light
+IF0012,354,9,28,36 36 36,33,28,Abdul 27 Nov 2026 (rule: zone from surroundings),blade: Genesis 33 is 28 (blade tip) on every other 33 pixel in this frame (7 px)
+IF0012,354,10,28,36 36 36,33,28,Abdul 27 Nov 2026 (rule: zone from surroundings),blade: as above
+IF0013 PC PAL,355,19,23,144 144 144,37,180,Abdul 27 Nov 2026 (rule: zone from surroundings),pants medium: Genesis 37 is 180 on the other 11 pixels in this frame; 177 pants dark and 182 socks next to it
+IF0014 PC PAL,356,6,18,180 180 180,40,179,Abdul 27 Nov 2026 (rule: zone from surroundings),pants stripe 1: the Genesis 40 pixels next to it (diagonal stripe) are 179
+IF0015 PC PAL,357,6,5,180 180 180,40,161,Abdul 27 Nov 2026 (rule: zone from surroundings),yoke 3: the Genesis 40 pixel below-left is 161; yoke 1 (162) below

@@ -6,6 +6,8 @@ import os,sys;sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));impo
 import json,pickle,numpy as np,csv
 from PIL import Image
 from ppv95 import encode_pic,decode_pic
+import decisions
+CHANGED=[]
 OUT=os.path.join(paths.ROOT,'frames_pc')+os.sep;os.makedirs(OUT,exist_ok=True)
 R={r['layer']:r for r in json.load(open(paths.WORK+'recon.json'))['results']}
 U={n:(a,f,al,mp) for n,a,f,al,mp in pickle.load(open(paths.WORK+'recon.pkl','rb'))}
@@ -27,7 +29,10 @@ for f,r in sorted(best.items()):
   for gy,gx in zip(*np.nonzero(gg)):
     ly,lx=gy+y,gx+x
     c=tuple(int(t) for t in a[ly,lx,:3]) if 0<=ly<a.shape[0] and 0<=lx<a.shape[1] else None
-    if c is not None and mp[gy,gx] in('pc','shared'):idx[gy,gx]=GUIDE.get(c,c[0])
+    if c is not None and mp[gy,gx] in('pc','shared'):
+      d=decisions.index_for(r['layer'],gy,gx,mir,gg.shape[1],c)
+      idx[gy,gx]=d if d is not None else GUIDE.get(c,c[0])
+      if d is not None:CHANGED.append((f,r['layer'],(gg.shape[1]-1-gx) if mir else gx,gy,c,d))
     else:todo[gy,gx]=255
   if mir:idx=idx[:,::-1];todo=todo[:,::-1]           # back to the retail frame's own facing
   im=Image.fromarray(idx,'P');im.putpalette(PAL);im.save(OUT+f'93_{f}.png',transparency=255)
@@ -38,4 +43,6 @@ for f,r in sorted(best.items()):
   rows.append([f,r['layer'],r['status'],r['done_pct'],int((todo>0).sum()),w,h,'pass' if same else 'FAIL'])
 with open(OUT+'frames_pc.csv','w',newline='') as fh:
   wr=csv.writer(fh);wr.writerow(['frame_93','psd_layer','status','pc_pct','todo_px','w','h','spit_roundtrip']);wr.writerows(rows)
-print(f'exported {len(rows)} frames to {OUT}; SPIT encode->decode identical: {ok}/{len(rows)}')
+with open(OUT+'decisions_applied.csv','w',newline='') as fh:
+  wr=csv.writer(fh);wr.writerow(['frame_93','psd_layer','x','y','psd_rgb','to_index']);wr.writerows([(a,b,x,y,' '.join(map(str,c)),d) for a,b,x,y,c,d in sorted(CHANGED)])
+print(f'decisions applied to {len(CHANGED)} px');print(f'exported {len(rows)} frames to {OUT}; SPIT encode->decode identical: {ok}/{len(rows)}')

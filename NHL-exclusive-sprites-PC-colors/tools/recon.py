@@ -2,6 +2,7 @@ import os,sys;sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));impo
 """Rebuild Abdul's PSD frames in place (base layer + overlays at their real positions), line each up
 against the retail NHLPA 93 Genesis frame, and classify every pixel as 95 PC index / Genesis-only / other."""
 import json,pickle,collections,numpy as np
+import decisions
 from PIL import Image
 from scipy import ndimage
 AB=paths.ABDUL
@@ -121,7 +122,9 @@ for u in units:
   P=pairs(a,G93[f],al);C=collections.Counter();offc=collections.Counter();gz=collections.Counter()
   mapmask=np.zeros(G93[f].shape,'U8')
   for v,r,gy,gx in P:
-    k=cls(v,r);C[k]+=1;mapmask[gy,gx]=k
+    k=cls(v,r)
+    if k in('genesis','other','missing') and r[3] and decisions.index_for(b['name'],gy,gx,al[1],G93[f].shape[1],r[:3]) is not None:k='pc'   # Abdul's approved decisions
+    C[k]+=1;mapmask[gy,gx]=k
     if k in('genesis','other'):offc[str(r[:3])]+=1;gz[v]+=1
   # foreground outside the retail silhouette (detached / extra parts)
   s,mir,y,x=al;g=G93[f];gg=(g[:,::-1] if mir else g)>0

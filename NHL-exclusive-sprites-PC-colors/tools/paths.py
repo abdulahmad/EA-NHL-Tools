@@ -27,6 +27,9 @@ def frames():
 # Abdul's guide palette. Default: his complete ACT (abdul/act/abdul_palette_complete.act), which agrees with
 # abdul_palette.bmp on every index the BMP uses and also colours 135, 164, 178 (and 170). Entries still at the grey
 # placeholder (i,i,i) outside 144-191 are not guide colours. Override with NHL_GUIDE_ACT.
+# Extra guide colours for indices Abdul approved that his ACT does not colour (his ACT files are never edited):
+# blood 76 = wine (100,30,60), blood 78 = orange (255,150,0); both at least 67 RGB units from every colour in his palette.
+GUIDE_OVERLAY={76:(100,30,60),78:(255,150,0)}
 GUIDE_ACT=os.environ.get('NHL_GUIDE_ACT',os.path.join(ABDUL,'act','abdul_palette_complete.act'))
 def guide():
   """(rgb, defined): rgb = 256 x (r,g,b) tuples; defined = sorted indices that carry a real guide colour."""
@@ -34,5 +37,6 @@ def guide():
   import numpy as np
   b=open(GUIDE_ACT,'rb').read()[:768];rgb=[tuple(b[i*3:i*3+3]) for i in range(256)]
   bmp=set(np.array(Image.open(ABDUL+'abdul_palette.bmp')).flatten().tolist())
-  defined=sorted(i for i in range(256) if i in bmp or 144<=i<=191 or rgb[i]!=(i,i,i))
-  return rgb,defined
+  defined=set(i for i in range(256) if i in bmp or 144<=i<=191 or rgb[i]!=(i,i,i))
+  for i,c in GUIDE_OVERLAY.items():rgb[i]=c;defined.add(i)
+  return rgb,sorted(defined)

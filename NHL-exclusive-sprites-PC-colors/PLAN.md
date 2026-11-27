@@ -20,10 +20,10 @@ Working together: **Abdul** (guide-palette painting, the PSD) and **StaticEck** 
 ## Order, sizes and who does what
 | # | group | frames | state now | automated | needs Abdul's eye |
 |---|---|---|---|---|---|
-| 1 | NHLPA 93 fights already in the guide palette: 354–357, 359–362, 368 | 9 | 359–362 FULL; the rest 99.4–99.7% | list the last pixels | (160,96,96) = 135 and (0,170,0) = 178 are his own guide colours (confirmed). Left: 1–2 grey Genesis pixels in 354–357; (255,199,154) in 368 → 133 or 132 |
-| 2 | NHLPA 93 bloody injury 633–644 | 12 | 87–96%; only blood left | blood pixel lists per frame | **confirm the blood indices**: proposed Genesis 29 → 83 (96,0,0) and 28 → 78 (160,64,0), alternative 76 for 29 (PALETTE95.md); one 52-px blood splat in `IF0011 - 643` sits off the canvas |
+| 1 | NHLPA 93 fights already in the guide palette: 354–357, 359–362, 368 | 9 | **done: all 9 FULL** | — | done: (160,96,96) = 135, (0,170,0) = 178, (255,199,154) in 368 → 133, the grey pixels in 354–357 → their zone (`decisions/abdul_decisions.csv`) |
+| 2 | NHLPA 93 bloody injury 633–644 | 12 | **blood done** (Genesis 29 → 76, 28 → 78); 637, 638, 639, 642 FULL; 8 frames 98–99.8% | — | 18 white holes left where retail has a pixel (below); one 52-px blood splat in `IF0011 - 643` sits off the canvas |
 | 3 | NHLPA 93 fights not started: 353 (gloves/sticks), 358, 363 (no layer), 364, 365, 366, 367 (`PC PAL` layer is still Genesis), 369, 370 | 9 | 0–19% (head/crest only) | first pass from the 93→95 PC answer key + the done fight frames (same players, same poses) | review every frame; decide between `IF0021?`/`IF0021etc??`/`IF0023??` (all 364) and `IF0022?`/`IF0022etc?` (365), `Layer 24`/`25` (369) |
-| 4 | NHLPA 93 fight injury 371–376 | 6 | 11–14% (crest only) | first pass; blood as decided in 2 | review; `Layer 33` is a second copy of 374 |
+| 4 | NHLPA 93 fight injury 371–376 | 6 | 11–14% (crest only) | first pass; blood 76/78 as in 2 | review; `Layer 33` is a second copy of 374 |
 | 5 | NHL 94 Genesis goalie: ghighl/ghighr 10, gstick2l/gstick2r 23, gslamtop 3, gslambot 4 | 40 | not started | first pass: 95 PC goalie frames as look-alikes (StaticEck's method) | goalie pads/mask zones (164 goalie mask) |
 | 6 | NHL 94 Genesis checks: boardfront 13, boardback 11, boardleft 8, boardright 8 | 40 | not started | first pass from the skater answer key | review, 10 at a time |
 | 7 | NHL 94 Genesis bench checks: benchcheckl 19, benchcheckr 15; crosscheck 8 | 42 | not started | as 6 | as 6 |
@@ -38,7 +38,17 @@ Totals: 36 NHLPA 93 frames (21 nearly done, 15 to do) + 129 NHL 94 Genesis frame
 - Each first pass is written straight to `frames_pc/` as indices and goes through the gate.
 
 ## Review checkpoints
-1. After group 1 + 2: Abdul picks the last pixel in 368 and confirms the blood index; re-run `recon.py`, `statussheet.py`, `export_pc_indices.py`; the 21 frames should be FULL and pass the gate.
+1. ~~After group 1 + 2~~ (done 27 Nov 2026): decisions applied, 13 frames FULL, all 34 exports pass the round trip. Still open in group 2: white pixels in the PSD (= transparent) where the retail 93 frame has a pixel, (x, y) in the retail frame, Genesis value in brackets:
+   - 633: (17,18) [47], (10,27) [43]
+   - 634: (20,13) [47], (18,18) [47]
+   - 635: (25,17) [47], (23,22) [47], (22,23) [47], (22,24) [43], (16,32) [47], (17,32) [47], (18,32) [47]
+   - 636: (22,22) [47]
+   - 640: (0,34) [1]
+   - 641: (29,38) [2]
+   - 643: (23,30) [41], (0,34) [1], plus (24,46) [47] which falls outside the PSD canvas
+   - 644: (7,19) [44]
+   
+   Most are Genesis 47 (shadow, 95 PC 88). Abdul decides whether they are meant to be holes or should be filled.
 2. After the first automated pass of group 3: Abdul and StaticEck compare it with the hand-done fight frames before anything else is automated.
 3. After each NHL 94 Genesis group (5, 6, 7): status sheet + zone check + one rebuilt bank tried in the game.
 4. Before group 9: Abdul goes through `sheets/sheet_uncertain_94G_*.png` and marks keep / drop.

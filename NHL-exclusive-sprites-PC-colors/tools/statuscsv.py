@@ -19,7 +19,8 @@ with open(OUT+'frame_status.csv','w',newline='') as f:
     r=best.get(fr);others=[x['layer'] for x in R if x['frame']==fr and (not r or x['layer']!=r['layer'])]
     if not r:w.writerow(['NHLPA93 Genesis',fr,grp,'TODO (no layer)','','',';'.join(others),'','','whole frame']);continue
     c=r['counts'];left=[]
-    if fr>=633:left.append('blood still Genesis RGB (108,0,0)/(180,72,0) - needs a 95 PC index decision')
+    if fr>=633 and any(k in r['remaining_colours'] for k in('(108, 0, 0)','(180, 72, 0)')):left.append('blood still Genesis RGB (108,0,0)/(180,72,0)')
+    if c.get('missing',0):left.append(f"{c['missing']} px are holes (transparent/background in the PSD where retail has a pixel)")
     rest=[k for k in r['remaining_colours'] if k not in('(108, 0, 0)','(180, 72, 0)')]
     if rest:left.append('remaining non-PC colours: '+', '.join(rest))
     if r['status']=='NONE' or r['done_pct']<50:left=['most of the frame (only head/crest overlay or shared black is PC)']
