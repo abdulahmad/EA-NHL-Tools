@@ -1,5 +1,5 @@
 import pickle,re
-from vis2 import grid
+from vis2 import grid,shown
 rows,_=pickle.load(open('rows.pkl','rb'))
 SCOPE=['G92','G93','G94','S94','PC']
 def base(l):return re.sub(r'\+\d+$','',l or '')
@@ -10,7 +10,7 @@ def cells(t,ns):
     out=[]
     for n in ns:
         s,x,b=closest(t,n);r=rows[(t,n)]
-        out.append((f"{base(r['label']) if t!='PC' else 'nearest'} | {x} {b} {s:.2f}",[(t,n),(x,b)]))
+        out.append((f"{base(r['label']) if t!='PC' else 'nearest'} | {x} {shown(x,b)} {s:.2f}",[(t,n),(x,b)]))
     return out
 def pages(t,ns,title,stem,per=36):
     fs=[]

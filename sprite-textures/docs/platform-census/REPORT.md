@@ -19,12 +19,16 @@ Generated 2026-10-25 (EDT). Nothing committed or pushed. Contact sheets and pick
   - new goalie SPAs: `gbutterfly`, `gcover`, `gpoke`, `gsprawll/r`;
   - `pump2` celebrations, `unused1/2`, and the replay icon;
   - fonts 433–447 and 929–966.
-- **95PC exclusives**: 174 frames, plus 328 ambiguous. Most are **new goalie art and many new referee frames (roughly PC 817–843)**, plus the PC-only slot use 358–376. PC has no SPA names, so these are labelled "PC-new" with the category of the nearest console frame.
+- **95PC exclusives**: 174 frames, plus 328 ambiguous. Most are **new goalie art and many new referee frames (roughly PC 816–842)**, plus the PC-only slot use 357–375. PC has no SPA names, so these are labelled "PC-new" with the category of the nearest console frame.
 - **Missing from 95PC but present elsewhere**: 429 console frames, which collapse to **353 unique poses** (G94 141, S94 187, G93 18, G92 7). The list is in `roadmap_missing_from_pc.csv`.
 - **Intra-game ("SPA/SPF differ in the same game")**:
   - Many SPA tables pull frames from other SPF groups. In 94G, `board*` and `benchcheck*` reuse `duck/fallback/fallfwd/slambot` frames. In 94S, `pump2` uses `celebrate/pump/skatewp`. The full list is below.
   - Large blocks of drawn frames are never referenced by any SPA or SPF symbol, and 94G and 94S also hold near-duplicate frames.
   - ROM revisions don't differ in art: 92 retail = RevA, and 93 retail/RevA = RevB plus one empty dummy table entry.
+
+## Frame numbering
+
+Console frames (92G, 93G, 94G, 93S, 94S) count from 1, as in the disassemblies. 95 PC frames count from 0, as the game, NHL9X Studio and `Docs/Sprites/Readme.md` count them. Every PC number in this folder (the matrix `PC` rows and `PC_best` column, the roadmap CSVs, `intra.json`, this report and the sample sheets) uses the 0-based numbers. Until 2026-11-27 PC was listed 1-based (one higher). The scripts still work 1-based internally; run `scripts/pc_zero_based.py` after `build.py`, `report.py` and `intra.py`. 94G frame N is usually the same pose as PC frame N-1 (438 of 520 well-matched pairs; 77 more sit in one block shifted by 8).
 
 ## Files
 
@@ -56,7 +60,7 @@ Sheets:
 - **Names**:
   - SPF equates and SPA tables are parsed from each disassembly (case-insensitive; 92 mixes `SPFpen`/`SPFPen`).
   - Code references are `SPFxxx(+N)` greps of the non-frame source.
-  - PC SPAs come from SPAtab bytes in `035_C9078_data_engine_35.asm`. The stored frame value is 0-based (PC id = value + 1, verified against 94G `stop`).
+  - PC SPAs come from SPAtab bytes in `035_C9078_data_engine_35.asm`. The stored frame value is 0-based, the same as the PC frame numbers in these files (verified against 94G `stop`). The scripts and pickles add 1 internally; `scripts/pc_zero_based.py` turns the outputs back to the game's 0-based numbers.
 - **Matching**:
   - Coarse pass: 32×32 bottom-centred mask + 3-band luminance grids, with mirroring and an x-shift.
   - Then pixel alignment of the top candidates for anything under 0.85: scales 1/0.9/0.8, dx ±2, dy ±1, mirror.
@@ -81,7 +85,7 @@ Sheets:
 
 ## Per-game exclusive lists (by animation and frame ID)
 
-Frame IDs are 1-based as in the disassemblies. The `animation` column is the SPF group the frame sits in; PC frames have no names.
+Frame IDs are 1-based for the console sets (92G, 93G, 94G, 93S, 94S), as in the disassemblies, and 0-based for 95 PC, as the game counts them (relabelled 2026-11-27; before that PC was listed 1-based too). With this numbering, 94G frame N is usually the same pose as PC frame N-1. The `animation` column is the SPF group the frame sits in; PC frames have no names.
 
 #### G92: exclusive (no match or ambiguous in any other in-scope game) — 0 frames
 
@@ -214,26 +218,26 @@ Frame IDs are 1-based as in the disassemblies. The `animation` column is the SPF
 
 | category | animation (SPF) | frames |
 |---|---|---|
-| celebration? | PC-new | 874, 888, 896, 911, 926, 931, 936 |
-| fight? | PC-new | 1082 |
-| goalie? | PC-new | 672, 703, 729, 732-734, 789-790, 817-818, 824-825, 840, 869, 881, 912, 917-919, 921, 929, 934, 937, 939, 963, 966, 969, 971, 974-975, 978, 991-992, 999, 1001-1003, 1008-1009, 1018, 1021-1022, 1033, 1046, 1049-1050, 1054, 1063, 1070, 1076, 1098, 1104 |
-| nonplayer? | PC-new | 383, 562-563, 649, 908, 988, 1039, 1087, 1113 |
-| nonplayer? | PC-new-unused | 392, 405 |
-| player? | PC-new | 359, 361-364, 376, 728, 748, 783, 785, 821, 823, 831-833, 835-839, 841-843, 873, 875, 877-878, 882, 886-887, 910, 913, 915-916, 920, 922-923, 930, 932-933, 935, 938, 940-941, 951-952, 954, 958-962, 965, 967, 970, 972-973, 989, 1007, 1017, 1020, 1023-1025, 1031, 1034, 1037-1038, 1040, 1042-1043, 1045, 1055, 1058, 1061, 1064, 1066-1069, 1074-1075, 1077-1081, 1083-1084, 1086, 1088, 1090, 1092, 1094-1097, 1099-1102, 1122 |
-| player? | PC-new-unused | 360 |
+| celebration? | PC-new | 873, 887, 895, 910, 925, 930, 935 |
+| fight? | PC-new | 1081 |
+| goalie? | PC-new | 671, 702, 728, 731-733, 788-789, 816-817, 823-824, 839, 868, 880, 911, 916-918, 920, 928, 933, 936, 938, 962, 965, 968, 970, 973-974, 977, 990-991, 998, 1000-1002, 1007-1008, 1017, 1020-1021, 1032, 1045, 1048-1049, 1053, 1062, 1069, 1075, 1097, 1103 |
+| nonplayer? | PC-new | 382, 561-562, 648, 907, 987, 1038, 1086, 1112 |
+| nonplayer? | PC-new-unused | 391, 404 |
+| player? | PC-new | 358, 360-363, 375, 727, 747, 782, 784, 820, 822, 830-832, 834-838, 840-842, 872, 874, 876-877, 881, 885-886, 909, 912, 914-915, 919, 921-922, 929, 931-932, 934, 937, 939-940, 950-951, 953, 957-961, 964, 966, 969, 971-972, 988, 1006, 1016, 1019, 1022-1024, 1030, 1033, 1036-1037, 1039, 1041-1042, 1044, 1054, 1057, 1060, 1063, 1065-1068, 1073-1074, 1076-1080, 1082-1083, 1085, 1087, 1089, 1091, 1093-1096, 1098-1101, 1121 |
+| player? | PC-new-unused | 359 |
 
 #### PC: ambiguous only (no confident match anywhere; check by eye) — 328 frames
 
 | category | animation (SPF) | frames |
 |---|---|---|
-| celebration? | PC-new | 372, 702, 885, 1089, 1114-1120 |
-| goalie? | PC-new | 366-367, 373, 650-651, 658, 660-661, 663-670, 673, 675-678, 680, 682, 684, 688-699, 701, 704, 706-708, 712-713, 716-717, 722, 725-726, 730-731, 735-742, 745, 747, 749, 751, 753-754, 757-758, 760-763, 765-771, 777, 779-781, 793, 796, 799-802, 805, 808, 811-815, 819, 822, 826, 830, 834, 844-847, 851-853, 856-857, 862-863, 866-868, 880, 884, 891-892, 904, 907, 964, 968, 976, 979-981, 984-987, 990, 993-998, 1000, 1004-1006, 1010-1012, 1016, 1019, 1026, 1028-1029, 1032, 1035-1036, 1041, 1044, 1047, 1051, 1053, 1056, 1062, 1065, 1071, 1129, 1132, 1134 |
-| goalie? | PC-new-unused | 1124 |
-| injury? | PC-new | 635, 637 |
-| nonplayer? | PC-new | 41, 43, 555-556, 559-561, 564-565, 647-648, 816, 872, 1030 |
-| nonplayer? | PC-new-unused | 353-356, 393 |
-| player? | PC-new | 3-4, 44-45, 150, 358, 368-371, 374-375, 381-382, 652, 654-655, 662, 671, 674, 679, 681, 683, 685, 687, 700, 705, 709-711, 714-715, 718-721, 723-724, 727, 743-744, 746, 750, 752, 755-756, 759, 764, 776, 778, 782, 784, 786-788, 791-792, 804, 806-807, 809-810, 820, 827-829, 848-850, 854-855, 858-859, 864-865, 870-871, 876, 879, 883, 889-890, 893-895, 897-903, 905-906, 925, 942-943, 945-950, 953, 956, 977, 1015, 1027, 1048, 1052, 1057, 1060, 1072-1073, 1085, 1091, 1093, 1103, 1109, 1111-1112, 1121, 1123, 1125-1128, 1130-1131, 1133 |
-| player? | PC-new-unused | 357, 365 |
+| celebration? | PC-new | 371, 701, 884, 1088, 1113-1119 |
+| goalie? | PC-new | 365-366, 372, 649-650, 657, 659-660, 662-669, 672, 674-677, 679, 681, 683, 687-698, 700, 703, 705-707, 711-712, 715-716, 721, 724-725, 729-730, 734-741, 744, 746, 748, 750, 752-753, 756-757, 759-762, 764-770, 776, 778-780, 792, 795, 798-801, 804, 807, 810-814, 818, 821, 825, 829, 833, 843-846, 850-852, 855-856, 861-862, 865-867, 879, 883, 890-891, 903, 906, 963, 967, 975, 978-980, 983-986, 989, 992-997, 999, 1003-1005, 1009-1011, 1015, 1018, 1025, 1027-1028, 1031, 1034-1035, 1040, 1043, 1046, 1050, 1052, 1055, 1061, 1064, 1070, 1128, 1131, 1133 |
+| goalie? | PC-new-unused | 1123 |
+| injury? | PC-new | 634, 636 |
+| nonplayer? | PC-new | 40, 42, 554-555, 558-560, 563-564, 646-647, 815, 871, 1029 |
+| nonplayer? | PC-new-unused | 352-355, 392 |
+| player? | PC-new | 2-3, 43-44, 149, 357, 367-370, 373-374, 380-381, 651, 653-654, 661, 670, 673, 678, 680, 682, 684, 686, 699, 704, 708-710, 713-714, 717-720, 722-723, 726, 742-743, 745, 749, 751, 754-755, 758, 763, 775, 777, 781, 783, 785-787, 790-791, 803, 805-806, 808-809, 819, 826-828, 847-849, 853-854, 857-858, 863-864, 869-870, 875, 878, 882, 888-889, 892-894, 896-902, 904-905, 924, 941-942, 944-949, 952, 955, 976, 1014, 1026, 1047, 1051, 1056, 1059, 1071-1072, 1084, 1090, 1092, 1102, 1108, 1110-1111, 1120, 1122, 1124-1127, 1129-1130, 1132 |
+| player? | PC-new-unused | 356, 364 |
 
 ## 93G fights and blood, in detail
 
@@ -284,7 +288,7 @@ Groups overlap because SPAs share frames. The exact frame→SPA lists are in the
 | G94 | 355-376 (blank fight slots), 385-386, 388-389, 714-737, 838-845 |
 | S93 | 385-386, 388-389, 533-541, 543-556, 660-720 |
 | S94 | 226-232, 375-376, 378-379, 381-382, 384-385, 387-388, 424-432 (faceoff close-ups, probably drawn by code), 435-447 (font), 918-922, 924-928, 930-966, 968-975 (bench/fonts, drawn by code) |
-| PC | 353-357, 360, 365, 384-394, 405-406, 1124 (SPAtab only) |
+| PC | 352-356, 359, 364, 383-393, 404-405, 1123 (SPAtab only) |
 
 **Near-identical duplicates inside one set (score ≥ 0.985)**: G92 19, G93 25, G94 84, S93 35, S94 47, PC 21. Pairs are in `intra.json` → `dups`.
 
