@@ -11,7 +11,7 @@ WORK=os.environ.get('EXCL_WORK',os.path.join(HERE,'work'))+os.sep   # scratch (g
 FRAMES=os.environ.get('NHL_FRAMES_PKL','')
 CENSUS=os.environ.get('NHL_CENSUS_DIR','')                   # frames_matrix.csv + intra.json from the D165 platform census
 ALIGN=os.environ.get('NHL_ALIGN_PKL','')                     # 94G/93G <-> 95 PC silhouette alignment (D168)
-PCPAL=os.environ.get('NHL95_TOR_PAL_NPY','')                 # 256x3 95 PC sprite palette (TOR home), preview only
+PCPAL=os.environ.get('NHL95_TOR_PAL_NPY','')                 # optional 256x3 95 PC team palette; not used by default (comparisons use Abdul's palette)
 TORPAL94=os.environ.get('NHL94_TOR_PAL','')                  # NHL94Genesis Extracted/.../Pals/TORh.pal
 os.makedirs(WORK,exist_ok=True)
 def font(size):

@@ -6,7 +6,8 @@ Working together: **Abdul** (guide-palette painting, the PSD) and **StaticEck** 
 
 ## Source of truth: 95 PC indices, never RGB
 - Every frame is stored as an indexed image whose **pixel values are 95 PC palette indices** (255 = transparent), like `frames_pc/93_355.png`. The palette inside the file is only for viewing; Abdul's guide palette works as is (`abdul/abdul_palette.bmp` uses the real indices).
-- RGB previews (team colours, guide colours) are always made from the indices, never the other way round.
+- RGB previews (team colours, guide colours) are always made from the indices, never the other way round. Comparisons use **Abdul's guide palette** (indices missing from his BMP show in cyan with a black dot), because it shows which zone each pixel is in.
+- Colours that must look the same for every team (blood, skin, stick) must use sprite indices 0–127 (not 8, 82, 88) or 128–143: see [PALETTE95.md](PALETTE95.md).
 - Zones stay intact: 144–191 jersey/arm/pants/socks/helmet, 192+ crest (4 × 5), 133–140 skin and stick, 88 shadow, 0 black, 8/28/31 blades (`status/abdul_palette_indices.csv`).
 
 ## Gate: every frame must pass all of these
@@ -19,8 +20,8 @@ Working together: **Abdul** (guide-palette painting, the PSD) and **StaticEck** 
 ## Order, sizes and who does what
 | # | group | frames | state now | automated | needs Abdul's eye |
 |---|---|---|---|---|---|
-| 1 | NHLPA 93 fights already in the guide palette: 354–357, 359–362, 368 | 9 | 96–99% | find and list stray pixels | pick the index for (0,170,0) (6–8 px each, near 179 *pants stripe 1*), (160,96,96) (3 px, near 136/140), (255,199,154) |
-| 2 | NHLPA 93 bloody injury 633–644 | 12 | 87–96%; only blood left | blood pixel lists per frame | **decide which 95 PC index blood uses** (95 PC sprites have no blood colour); one 52-px blood splat in `IF0011 - 643` sits off the canvas |
+| 1 | NHLPA 93 fights already in the guide palette: 354–357, 359–362, 368 | 9 | 96–99% | find and list stray pixels | confirm the stray-pixel indices proposed in PALETTE95.md: (0,170,0) → 178 *pants stripe 2*, (160,96,96) → 135 (shows exactly that colour), (255,199,154) → 133 or 132 |
+| 2 | NHLPA 93 bloody injury 633–644 | 12 | 87–96%; only blood left | blood pixel lists per frame | **confirm the blood indices**: proposed Genesis 29 → 83 (96,0,0) and 28 → 78 (160,64,0), alternative 76 for 29 (PALETTE95.md); one 52-px blood splat in `IF0011 - 643` sits off the canvas |
 | 3 | NHLPA 93 fights not started: 353 (gloves/sticks), 358, 363 (no layer), 364, 365, 366, 367 (`PC PAL` layer is still Genesis), 369, 370 | 9 | 0–19% (head/crest only) | first pass from the 93→95 PC answer key + the done fight frames (same players, same poses) | review every frame; decide between `IF0021?`/`IF0021etc??`/`IF0023??` (all 364) and `IF0022?`/`IF0022etc?` (365), `Layer 24`/`25` (369) |
 | 4 | NHLPA 93 fight injury 371–376 | 6 | 11–14% (crest only) | first pass; blood as decided in 2 | review; `Layer 33` is a second copy of 374 |
 | 5 | NHL 94 Genesis goalie: ghighl/ghighr 10, gstick2l/gstick2r 23, gslamtop 3, gslambot 4 | 40 | not started | first pass: 95 PC goalie frames as look-alikes (StaticEck's method) | goalie pads/mask zones (164 goalie mask) |
@@ -47,4 +48,5 @@ Totals: 36 NHLPA 93 frames (21 nearly done, 15 to do) + 129 NHL 94 Genesis frame
 cd tools
 python recon.py && python statuscsv.py && python statussheet.py && python zonecheck.py && python export_pc_indices.py
 python roundtrip_test.py <folder with the NHL 95 PC NNN_NNN.PPV files>
+NHL95_DIR=<same folder> python palette95.py   # status/palette95_indices.csv + palette95_rink.png
 ```
