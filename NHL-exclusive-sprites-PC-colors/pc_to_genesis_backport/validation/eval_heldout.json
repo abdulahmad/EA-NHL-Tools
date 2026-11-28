@@ -1,0 +1,32 @@
+{
+ "skater": {
+  "n_train_px": 72811,
+  "n_test_px": 17752,
+  "n_test_pairs": 55,
+  "n_test_team_px": 10590,
+  "A0_exact": 0.6201554754393871,
+  "A0_ramp": 0.8224988733663813,
+  "model_exact": 0.6936683190626408,
+  "model_ramp": 0.8579315006759801,
+  "model_raw_exact": 0.6956399278954484,
+  "A0_team_exact": 0.44730878186968837,
+  "A0_team_ramp": 0.7806421152030217,
+  "model_team_exact": 0.5178470254957507,
+  "model_team_ramp": 0.7888574126534467
+ },
+ "goalie": {
+  "n_train_px": 34357,
+  "n_test_px": 8607,
+  "n_test_pairs": 23,
+  "n_test_team_px": 6367,
+  "A0_exact": 0.5677936563262461,
+  "A0_ramp": 0.737887765772046,
+  "model_exact": 0.6572557220866736,
+  "model_ramp": 0.8009759498082956,
+  "model_raw_exact": 0.6573719065876612,
+  "A0_team_exact": 0.4773048531490498,
+  "A0_team_ramp": 0.7066122192555364,
+  "model_team_exact": 0.5682425003926496,
+  "model_team_ramp": 0.7611119836657767
+ }
+}

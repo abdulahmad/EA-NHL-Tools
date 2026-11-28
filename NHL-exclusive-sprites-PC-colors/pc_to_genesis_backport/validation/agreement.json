@@ -1,0 +1,22 @@
+{
+ "skater": {
+  "pairs": 55,
+  "px": 17752,
+  "exact": 0.6915,
+  "ramp": 0.8552,
+  "team_px": 10590,
+  "team_exact": 0.5155,
+  "team_ramp": 0.7856,
+  "fallback_px": 100
+ },
+ "goalie": {
+  "pairs": 23,
+  "px": 8607,
+  "exact": 0.6507,
+  "ramp": 0.7902,
+  "team_px": 6367,
+  "team_exact": 0.5605,
+  "team_ramp": 0.7476,
+  "fallback_px": 99
+ }
+}
