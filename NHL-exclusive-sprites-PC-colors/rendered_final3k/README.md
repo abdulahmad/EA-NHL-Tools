@@ -14,6 +14,7 @@ Round-trippable **95 PC index PNGs** and **Boston home preview renders** for eve
 | `94g/idx/g94_<n>_idx.png` | 180 paletted index PNGs (129 exclusive + 51 sequence companions) |
 | `94g/preview_bos_h/g94_<n>_bos_h.png` | BOS home RGB previews of those 180 |
 | `sheets/` | labelled animation contact sheets (≤1000 px wide) and the A/B/C/D comparison |
+| `contact_sheets/` | eight exclusive-only contact sheets (36 93G + 129 94G), Genesis original beside each final3k BOS-home render, ≤1000 px, colour-blind-safe, palette legend beside |
 | `gif/` | BOS home animation GIFs (4×, 8 fps, loop) |
 | `fight/` | NHLPA 93 BOS-home vs PHI-away fight GIF, sequence strip, contact sheet, `source_map.json` |
 
