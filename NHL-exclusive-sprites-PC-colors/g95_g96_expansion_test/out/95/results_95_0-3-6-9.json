@@ -1,0 +1,135 @@
+[
+ {
+  "game": "95",
+  "frame": 1,
+  "K": 950001,
+  "label": "skate dir0",
+  "kind": "skater",
+  "shape": [
+   32,
+   32
+  ],
+  "px": 391,
+  "how": "skeleton of PC 43 (best match, IoU 0.70); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 8,
+  "partner": null,
+  "near": {
+   "pc": 539,
+   "mir": false,
+   "dy": 0,
+   "dx": -1,
+   "iou": 0.6389496717724289
+  },
+  "vs_genesis_all": 85.7
+ },
+ {
+  "game": "95",
+  "frame": 49,
+  "K": 950049,
+  "label": "skate dir6",
+  "kind": "skater",
+  "shape": [
+   40,
+   24
+  ],
+  "px": 346,
+  "how": "skeleton of PC 744 (best match, IoU 0.60); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 6,
+  "partner": null,
+  "near": {
+   "pc": 834,
+   "mir": false,
+   "dy": 2,
+   "dx": -2,
+   "iou": 0.6201923076923077
+  },
+  "vs_genesis_all": 91.9
+ },
+ {
+  "game": "95",
+  "frame": 123,
+  "K": 950123,
+  "label": "shoulder check L",
+  "kind": "skater",
+  "shape": [
+   40,
+   32
+  ],
+  "px": 331,
+  "how": "skeleton of PC 837 (best match, IoU 0.61); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 18,
+  "partner": null,
+  "near": {
+   "pc": 490,
+   "mir": false,
+   "dy": 7,
+   "dx": -8,
+   "iou": 0.6910377358490566
+  },
+  "vs_genesis_all": 87.6
+ },
+ {
+  "game": "95",
+  "frame": 640,
+  "K": 950640,
+  "label": "goalie stick-R",
+  "kind": "goalie",
+  "shape": [
+   32,
+   40
+  ],
+  "px": 393,
+  "how": "auto (g28 skeleton of PC 1042, best match IoU 0.64); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": {
+   "pc": 475,
+   "iou": 0.8743961352657005,
+   "mir": false,
+   "dy": 5,
+   "dx": 2,
+   "cat": "goalie",
+   "label": "goalie stick-R",
+   "slot": false
+  },
+  "near": {
+   "pc": 475,
+   "mir": false,
+   "dy": 5,
+   "dx": 2,
+   "iou": 0.8743961352657005
+  },
+  "score_final3k": {
+   "vs_pc": 34.0,
+   "zone_vs_pc": 26.8,
+   "vs_genesis": 86.2,
+   "px": 362
+  },
+  "score_J_only": {
+   "vs_pc": 34.0,
+   "zone_vs_pc": 26.8,
+   "vs_genesis": 86.2,
+   "px": 362
+  },
+  "vs_genesis_all": 87.3
+ }
+]

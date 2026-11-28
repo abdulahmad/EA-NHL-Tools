@@ -1,0 +1,135 @@
+[
+ {
+  "game": "95",
+  "frame": 33,
+  "K": 950033,
+  "label": "skate dir4",
+  "kind": "skater",
+  "shape": [
+   30,
+   35
+  ],
+  "px": 370,
+  "how": "skeleton of PC 625 (best match, IoU 0.57); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 33,
+  "partner": null,
+  "near": {
+   "pc": 1041,
+   "mir": true,
+   "dy": 5,
+   "dx": 8,
+   "iou": 0.5963114754098361
+  },
+  "vs_genesis_all": 74.9
+ },
+ {
+  "game": "95",
+  "frame": 576,
+  "K": 950576,
+  "label": "backhand shot",
+  "kind": "skater",
+  "shape": [
+   40,
+   16
+  ],
+  "px": 332,
+  "how": "skeleton of PC 304 (best match, IoU 0.70); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 6,
+  "partner": null,
+  "near": {
+   "pc": 215,
+   "mir": false,
+   "dy": -7,
+   "dx": -2,
+   "iou": 0.7219387755102041
+  },
+  "vs_genesis_all": 88.6
+ },
+ {
+  "game": "95",
+  "frame": 616,
+  "K": 950616,
+  "label": "goalie glove-L",
+  "kind": "goalie",
+  "shape": [
+   32,
+   24
+  ],
+  "px": 320,
+  "how": "auto (g28 skeleton of PC 460, best match IoU 0.70); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": {
+   "pc": 415,
+   "iou": 0.8872832369942196,
+   "mir": false,
+   "dy": 3,
+   "dx": 5,
+   "cat": "goalie",
+   "label": "goalie glove-L",
+   "slot": false
+  },
+  "near": {
+   "pc": 415,
+   "mir": false,
+   "dy": 3,
+   "dx": 5,
+   "iou": 0.8872832369942196
+  },
+  "score_final3k": {
+   "vs_pc": 39.7,
+   "zone_vs_pc": 31.3,
+   "vs_genesis": 82.4,
+   "px": 307
+  },
+  "score_J_only": {
+   "vs_pc": 39.7,
+   "zone_vs_pc": 31.3,
+   "vs_genesis": 82.4,
+   "px": 307
+  },
+  "vs_genesis_all": 83.1
+ },
+ {
+  "game": "95",
+  "frame": 904,
+  "K": 950904,
+  "label": "goalie ready",
+  "kind": "goalie",
+  "shape": [
+   32,
+   32
+  ],
+  "px": 428,
+  "how": "auto (g28 skeleton of PC 994, best match IoU 0.74); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": null,
+  "near": {
+   "pc": 995,
+   "mir": false,
+   "dy": 0,
+   "dx": -1,
+   "iou": 0.7121848739495799
+  },
+  "vs_genesis_all": 86.9
+ }
+]

@@ -1,0 +1,2 @@
+616 goalie glove-L spit True png True invalid [] holes 0 extra 0 {'vs_pc': np.float64(47.6), 'zone_vs_pc': np.float64(37.5), 'vs_genesis': np.float64(65.1), 'px': 307} 65.6
+640 goalie stick-R spit True png True invalid [] holes 0 extra 0 {'vs_pc': np.float64(42.0), 'zone_vs_pc': np.float64(33.7), 'vs_genesis': np.float64(66.3), 'px': 362} 68.2

@@ -1,0 +1,114 @@
+[
+ {
+  "game": "96",
+  "frame": 387,
+  "K": 960387,
+  "label": "skate (other dir)",
+  "kind": "skater",
+  "shape": [
+   40,
+   38
+  ],
+  "px": 380,
+  "how": "skeleton of PC 895 (best match, IoU 0.52); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 16,
+  "partner": null,
+  "near": {
+   "pc": 427,
+   "mir": true,
+   "dy": -9,
+   "dx": -2,
+   "iou": 0.558
+  },
+  "vs_genesis_all": 86.6
+ },
+ {
+  "game": "96",
+  "frame": 681,
+  "K": 960681,
+  "label": "backhand shot",
+  "kind": "skater",
+  "shape": [
+   37,
+   24
+  ],
+  "px": 227,
+  "how": "skeleton of PC 88 (best match, IoU 0.58); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 10,
+  "partner": null,
+  "near": {
+   "pc": 1093,
+   "mir": true,
+   "dy": -1,
+   "dx": -2,
+   "iou": 0.5838926174496645
+  },
+  "vs_genesis_all": 88.1
+ },
+ {
+  "game": "96",
+  "frame": 965,
+  "K": 960965,
+  "label": "cross check",
+  "kind": "skater",
+  "shape": [
+   32,
+   32
+  ],
+  "px": 353,
+  "how": "skeleton of PC 898 (best match, IoU 0.66); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 12,
+  "partner": null,
+  "near": {
+   "pc": 1107,
+   "mir": true,
+   "dy": -1,
+   "dx": 4,
+   "iou": 0.6506024096385542
+  },
+  "vs_genesis_all": 88.1
+ },
+ {
+  "game": "96",
+  "frame": 171,
+  "K": 960171,
+  "label": "goalie dive",
+  "kind": "goalie",
+  "shape": [
+   34,
+   24
+  ],
+  "px": 328,
+  "how": "auto (g28 skeleton of PC 975, best match IoU 0.72); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": null,
+  "near": {
+   "pc": 308,
+   "mir": false,
+   "dy": -3,
+   "dx": -3,
+   "iou": 0.7146739130434783
+  },
+  "vs_genesis_all": 80.2
+ }
+]

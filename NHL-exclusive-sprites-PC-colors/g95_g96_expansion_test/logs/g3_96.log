@@ -1,0 +1,12 @@
+960363 skate skeleton of PC 256 (best match, IoU 0.74); arms: learned classifier
+960387 skate (other dir) skeleton of PC 895 (best match, IoU 0.52); arms: learned classifier
+960435 skate backwards skeleton of PC 653 (best match, IoU 0.69); arms: learned classifier
+960757 forehand shot skeleton of PC 721 (best match, IoU 0.66); arms: learned classifier
+960681 backhand shot skeleton of PC 88 (best match, IoU 0.58); arms: learned classifier
+960933 body check R skeleton of PC 160 (best match, IoU 0.74); arms: learned classifier
+960997 body check L skeleton of PC 105 (best match, IoU 0.68); arms: learned classifier
+960965 cross check skeleton of PC 898 (best match, IoU 0.66); arms: learned classifier
+960355 goalie ready auto (g28 skeleton of PC 978, best match IoU 0.76); arms: learned classifier
+960075 goalie glove-L auto (g28 skeleton of PC 410, best match IoU 0.69); arms: learned classifier
+960171 goalie dive auto (g28 skeleton of PC 975, best match IoU 0.72); arms: learned classifier
+960123 goalie block auto (g28 skeleton of PC 406, best match IoU 0.78); arms: learned classifier

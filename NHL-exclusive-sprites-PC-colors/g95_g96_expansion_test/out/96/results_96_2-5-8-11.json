@@ -1,0 +1,114 @@
+[
+ {
+  "game": "96",
+  "frame": 435,
+  "K": 960435,
+  "label": "skate backwards",
+  "kind": "skater",
+  "shape": [
+   32,
+   32
+  ],
+  "px": 306,
+  "how": "skeleton of PC 653 (best match, IoU 0.69); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 12,
+  "partner": null,
+  "near": {
+   "pc": 461,
+   "mir": true,
+   "dy": 0,
+   "dx": 2,
+   "iou": 0.6459459459459459
+  },
+  "vs_genesis_all": 90.5
+ },
+ {
+  "game": "96",
+  "frame": 933,
+  "K": 960933,
+  "label": "body check R",
+  "kind": "skater",
+  "shape": [
+   33,
+   24
+  ],
+  "px": 299,
+  "how": "skeleton of PC 160 (best match, IoU 0.74); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 10,
+  "partner": null,
+  "near": {
+   "pc": 161,
+   "mir": false,
+   "dy": -1,
+   "dx": 3,
+   "iou": 0.6986666666666667
+  },
+  "vs_genesis_all": 88.3
+ },
+ {
+  "game": "96",
+  "frame": 355,
+  "K": 960355,
+  "label": "goalie ready",
+  "kind": "goalie",
+  "shape": [
+   32,
+   24
+  ],
+  "px": 362,
+  "how": "auto (g28 skeleton of PC 978, best match IoU 0.76); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": null,
+  "near": {
+   "pc": 979,
+   "mir": false,
+   "dy": -1,
+   "dx": -5,
+   "iou": 0.7322654462242563
+  },
+  "vs_genesis_all": 74.6
+ },
+ {
+  "game": "96",
+  "frame": 123,
+  "K": 960123,
+  "label": "goalie block",
+  "kind": "goalie",
+  "shape": [
+   32,
+   24
+  ],
+  "px": 343,
+  "how": "auto (g28 skeleton of PC 406, best match IoU 0.78); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": null,
+  "near": {
+   "pc": 407,
+   "mir": false,
+   "dy": -2,
+   "dx": -2,
+   "iou": 0.7619047619047619
+  },
+  "vs_genesis_all": 78.7
+ }
+]

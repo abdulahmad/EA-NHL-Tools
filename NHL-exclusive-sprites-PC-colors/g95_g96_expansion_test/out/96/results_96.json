@@ -1,0 +1,338 @@
+[
+ {
+  "game": "96",
+  "frame": 363,
+  "K": 960363,
+  "label": "skate",
+  "kind": "skater",
+  "shape": [
+   32,
+   16
+  ],
+  "px": 267,
+  "how": "skeleton of PC 256 (best match, IoU 0.74); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 21,
+  "partner": null,
+  "near": {
+   "pc": 100,
+   "mir": true,
+   "dy": 1,
+   "dx": -1,
+   "iou": 0.7207792207792207
+  },
+  "vs_genesis_all": 76.0
+ },
+ {
+  "game": "96",
+  "frame": 387,
+  "K": 960387,
+  "label": "skate (other dir)",
+  "kind": "skater",
+  "shape": [
+   40,
+   38
+  ],
+  "px": 380,
+  "how": "skeleton of PC 895 (best match, IoU 0.52); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 16,
+  "partner": null,
+  "near": {
+   "pc": 427,
+   "mir": true,
+   "dy": -9,
+   "dx": -2,
+   "iou": 0.558
+  },
+  "vs_genesis_all": 86.6
+ },
+ {
+  "game": "96",
+  "frame": 435,
+  "K": 960435,
+  "label": "skate backwards",
+  "kind": "skater",
+  "shape": [
+   32,
+   32
+  ],
+  "px": 306,
+  "how": "skeleton of PC 653 (best match, IoU 0.69); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 12,
+  "partner": null,
+  "near": {
+   "pc": 461,
+   "mir": true,
+   "dy": 0,
+   "dx": 2,
+   "iou": 0.6459459459459459
+  },
+  "vs_genesis_all": 90.5
+ },
+ {
+  "game": "96",
+  "frame": 757,
+  "K": 960757,
+  "label": "forehand shot",
+  "kind": "skater",
+  "shape": [
+   39,
+   32
+  ],
+  "px": 311,
+  "how": "skeleton of PC 721 (best match, IoU 0.66); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 9,
+  "partner": null,
+  "near": {
+   "pc": 125,
+   "mir": false,
+   "dy": 2,
+   "dx": 2,
+   "iou": 0.5984455958549223
+  },
+  "vs_genesis_all": 88.4
+ },
+ {
+  "game": "96",
+  "frame": 681,
+  "K": 960681,
+  "label": "backhand shot",
+  "kind": "skater",
+  "shape": [
+   37,
+   24
+  ],
+  "px": 227,
+  "how": "skeleton of PC 88 (best match, IoU 0.58); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 10,
+  "partner": null,
+  "near": {
+   "pc": 1093,
+   "mir": true,
+   "dy": -1,
+   "dx": -2,
+   "iou": 0.5838926174496645
+  },
+  "vs_genesis_all": 88.1
+ },
+ {
+  "game": "96",
+  "frame": 933,
+  "K": 960933,
+  "label": "body check R",
+  "kind": "skater",
+  "shape": [
+   33,
+   24
+  ],
+  "px": 299,
+  "how": "skeleton of PC 160 (best match, IoU 0.74); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 10,
+  "partner": null,
+  "near": {
+   "pc": 161,
+   "mir": false,
+   "dy": -1,
+   "dx": 3,
+   "iou": 0.6986666666666667
+  },
+  "vs_genesis_all": 88.3
+ },
+ {
+  "game": "96",
+  "frame": 997,
+  "K": 960997,
+  "label": "body check L",
+  "kind": "skater",
+  "shape": [
+   32,
+   24
+  ],
+  "px": 305,
+  "how": "skeleton of PC 105 (best match, IoU 0.68); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 5,
+  "partner": null,
+  "near": {
+   "pc": 178,
+   "mir": true,
+   "dy": 0,
+   "dx": 2,
+   "iou": 0.6742209631728046
+  },
+  "vs_genesis_all": 84.9
+ },
+ {
+  "game": "96",
+  "frame": 965,
+  "K": 960965,
+  "label": "cross check",
+  "kind": "skater",
+  "shape": [
+   32,
+   32
+  ],
+  "px": 353,
+  "how": "skeleton of PC 898 (best match, IoU 0.66); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 12,
+  "partner": null,
+  "near": {
+   "pc": 1107,
+   "mir": true,
+   "dy": -1,
+   "dx": 4,
+   "iou": 0.6506024096385542
+  },
+  "vs_genesis_all": 88.1
+ },
+ {
+  "game": "96",
+  "frame": 355,
+  "K": 960355,
+  "label": "goalie ready",
+  "kind": "goalie",
+  "shape": [
+   32,
+   24
+  ],
+  "px": 362,
+  "how": "auto (g28 skeleton of PC 978, best match IoU 0.76); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": null,
+  "near": {
+   "pc": 979,
+   "mir": false,
+   "dy": -1,
+   "dx": -5,
+   "iou": 0.7322654462242563
+  },
+  "vs_genesis_all": 61.3
+ },
+ {
+  "game": "96",
+  "frame": 75,
+  "K": 960075,
+  "label": "goalie glove-L",
+  "kind": "goalie",
+  "shape": [
+   32,
+   32
+  ],
+  "px": 380,
+  "how": "auto (g28 skeleton of PC 410, best match IoU 0.69); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": null,
+  "near": {
+   "pc": 1013,
+   "mir": false,
+   "dy": 0,
+   "dx": -1,
+   "iou": 0.6505494505494506
+  },
+  "vs_genesis_all": 73.4
+ },
+ {
+  "game": "96",
+  "frame": 171,
+  "K": 960171,
+  "label": "goalie dive",
+  "kind": "goalie",
+  "shape": [
+   34,
+   24
+  ],
+  "px": 328,
+  "how": "auto (g28 skeleton of PC 975, best match IoU 0.72); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": null,
+  "near": {
+   "pc": 308,
+   "mir": false,
+   "dy": -3,
+   "dx": -3,
+   "iou": 0.7146739130434783
+  },
+  "vs_genesis_all": 71.0
+ },
+ {
+  "game": "96",
+  "frame": 123,
+  "K": 960123,
+  "label": "goalie block",
+  "kind": "goalie",
+  "shape": [
+   32,
+   24
+  ],
+  "px": 343,
+  "how": "auto (g28 skeleton of PC 406, best match IoU 0.78); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": null,
+  "near": {
+   "pc": 407,
+   "mir": false,
+   "dy": -2,
+   "dx": -2,
+   "iou": 0.7619047619047619
+  },
+  "vs_genesis_all": 62.1
+ }
+]

@@ -1,0 +1,4 @@
+1 skate dir0 spit True png True invalid [] holes 0 extra 0 None 85.7
+49 skate dir6 spit True png True invalid [] holes 0 extra 0 None 91.9
+123 shoulder check L spit True png True invalid [] holes 0 extra 0 None 87.6
+640 goalie stick-R spit True png True invalid [] holes 0 extra 0 {'vs_pc': np.float64(34.0), 'zone_vs_pc': np.float64(26.8), 'vs_genesis': np.float64(86.2), 'px': 362} 87.3

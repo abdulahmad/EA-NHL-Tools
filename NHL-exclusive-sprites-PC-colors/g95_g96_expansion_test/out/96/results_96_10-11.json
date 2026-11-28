@@ -1,0 +1,58 @@
+[
+ {
+  "game": "96",
+  "frame": 171,
+  "K": 960171,
+  "label": "goalie dive",
+  "kind": "goalie",
+  "shape": [
+   34,
+   24
+  ],
+  "px": 328,
+  "how": "auto (g28 skeleton of PC 975, best match IoU 0.72); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": null,
+  "near": {
+   "pc": 308,
+   "mir": false,
+   "dy": -3,
+   "dx": -3,
+   "iou": 0.7146739130434783
+  },
+  "vs_genesis_all": 71.0
+ },
+ {
+  "game": "96",
+  "frame": 123,
+  "K": 960123,
+  "label": "goalie block",
+  "kind": "goalie",
+  "shape": [
+   32,
+   24
+  ],
+  "px": 343,
+  "how": "auto (g28 skeleton of PC 406, best match IoU 0.78); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": null,
+  "near": {
+   "pc": 407,
+   "mir": false,
+   "dy": -2,
+   "dx": -2,
+   "iou": 0.7619047619047619
+  },
+  "vs_genesis_all": 62.1
+ }
+]

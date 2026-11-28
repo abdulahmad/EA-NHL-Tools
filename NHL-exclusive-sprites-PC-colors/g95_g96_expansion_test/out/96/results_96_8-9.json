@@ -1,0 +1,58 @@
+[
+ {
+  "game": "96",
+  "frame": 355,
+  "K": 960355,
+  "label": "goalie ready",
+  "kind": "goalie",
+  "shape": [
+   32,
+   24
+  ],
+  "px": 362,
+  "how": "auto (g28 skeleton of PC 978, best match IoU 0.76); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": null,
+  "near": {
+   "pc": 979,
+   "mir": false,
+   "dy": -1,
+   "dx": -5,
+   "iou": 0.7322654462242563
+  },
+  "vs_genesis_all": 61.3
+ },
+ {
+  "game": "96",
+  "frame": 75,
+  "K": 960075,
+  "label": "goalie glove-L",
+  "kind": "goalie",
+  "shape": [
+   32,
+   32
+  ],
+  "px": 380,
+  "how": "auto (g28 skeleton of PC 410, best match IoU 0.69); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": null,
+  "near": {
+   "pc": 1013,
+   "mir": false,
+   "dy": 0,
+   "dx": -1,
+   "iou": 0.6505494505494506
+  },
+  "vs_genesis_all": 73.4
+ }
+]

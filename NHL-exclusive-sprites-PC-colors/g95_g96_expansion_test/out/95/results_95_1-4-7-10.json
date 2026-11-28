@@ -1,0 +1,135 @@
+[
+ {
+  "game": "95",
+  "frame": 17,
+  "K": 950017,
+  "label": "skate dir2",
+  "kind": "skater",
+  "shape": [
+   32,
+   32
+  ],
+  "px": 333,
+  "how": "skeleton of PC 68 (best match, IoU 0.60); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 17,
+  "partner": null,
+  "near": {
+   "pc": 488,
+   "mir": true,
+   "dy": -3,
+   "dx": 4,
+   "iou": 0.5920745920745921
+  },
+  "vs_genesis_all": 88.0
+ },
+ {
+  "game": "95",
+  "frame": 448,
+  "K": 950448,
+  "label": "shot (swing)",
+  "kind": "skater",
+  "shape": [
+   33,
+   32
+  ],
+  "px": 330,
+  "how": "skeleton of PC 198 (best match, IoU 0.67); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 10,
+  "partner": null,
+  "near": {
+   "pc": 891,
+   "mir": false,
+   "dy": -1,
+   "dx": -2,
+   "iou": 0.6649484536082474
+  },
+  "vs_genesis_all": 85.2
+ },
+ {
+  "game": "95",
+  "frame": 131,
+  "K": 950131,
+  "label": "shoulder check R",
+  "kind": "skater",
+  "shape": [
+   39,
+   40
+  ],
+  "px": 407,
+  "how": "skeleton of PC 799 (best match, IoU 0.56); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 16,
+  "partner": null,
+  "near": {
+   "pc": 520,
+   "mir": true,
+   "dy": 2,
+   "dx": -7,
+   "iou": 0.6169811320754717
+  },
+  "vs_genesis_all": 86.7
+ },
+ {
+  "game": "95",
+  "frame": 742,
+  "K": 950742,
+  "label": "goalie swing",
+  "kind": "goalie",
+  "shape": [
+   32,
+   32
+  ],
+  "px": 396,
+  "how": "auto (g28 skeleton of PC 430, best match IoU 0.74); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": {
+   "pc": 437,
+   "iou": 0.9012048192771084,
+   "mir": false,
+   "dy": 1,
+   "dx": 0,
+   "cat": "goalie",
+   "label": "goalie swing",
+   "slot": false
+  },
+  "near": {
+   "pc": 437,
+   "mir": false,
+   "dy": 1,
+   "dx": 0,
+   "iou": 0.9012048192771084
+  },
+  "score_final3k": {
+   "vs_pc": 36.9,
+   "zone_vs_pc": 25.7,
+   "vs_genesis": 80.7,
+   "px": 374
+  },
+  "score_J_only": {
+   "vs_pc": 36.9,
+   "zone_vs_pc": 25.7,
+   "vs_genesis": 80.7,
+   "px": 374
+  },
+  "vs_genesis_all": 80.8
+ }
+]

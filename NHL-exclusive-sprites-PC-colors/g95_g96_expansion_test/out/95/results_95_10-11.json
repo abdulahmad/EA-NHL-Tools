@@ -1,0 +1,79 @@
+[
+ {
+  "game": "95",
+  "frame": 742,
+  "K": 950742,
+  "label": "goalie swing",
+  "kind": "goalie",
+  "shape": [
+   32,
+   32
+  ],
+  "px": 396,
+  "how": "auto (g28 skeleton of PC 430, best match IoU 0.74); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": {
+   "pc": 437,
+   "iou": 0.9012048192771084,
+   "mir": false,
+   "dy": 1,
+   "dx": 0,
+   "cat": "goalie",
+   "label": "goalie swing",
+   "slot": false
+  },
+  "near": {
+   "pc": 437,
+   "mir": false,
+   "dy": 1,
+   "dx": 0,
+   "iou": 0.9012048192771084
+  },
+  "score_final3k": {
+   "vs_pc": 47.1,
+   "zone_vs_pc": 31.3,
+   "vs_genesis": 61.5,
+   "px": 374
+  },
+  "score_J_only": {
+   "vs_pc": 47.1,
+   "zone_vs_pc": 31.3,
+   "vs_genesis": 61.5,
+   "px": 374
+  },
+  "vs_genesis_all": 62.4
+ },
+ {
+  "game": "95",
+  "frame": 904,
+  "K": 950904,
+  "label": "goalie ready",
+  "kind": "goalie",
+  "shape": [
+   32,
+   32
+  ],
+  "px": 428,
+  "how": "auto (g28 skeleton of PC 994, best match IoU 0.74); arms: learned classifier",
+  "spit_rt": true,
+  "png_palette_rt": true,
+  "invalid": [],
+  "holes": 0,
+  "extra": 0,
+  "nonline_changed": 0,
+  "partner": null,
+  "near": {
+   "pc": 995,
+   "mir": false,
+   "dy": 0,
+   "dx": -1,
+   "iou": 0.7121848739495799
+  },
+  "vs_genesis_all": 79.2
+ }
+]

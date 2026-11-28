@@ -1,0 +1,4 @@
+33 skate dir4 spit True png True invalid [] holes 0 extra 0 None 74.9
+576 backhand shot spit True png True invalid [] holes 0 extra 0 None 88.6
+616 goalie glove-L spit True png True invalid [] holes 0 extra 0 {'vs_pc': np.float64(39.7), 'zone_vs_pc': np.float64(31.3), 'vs_genesis': np.float64(82.4), 'px': 307} 83.1
+904 goalie ready spit True png True invalid [] holes 0 extra 0 None 86.9
