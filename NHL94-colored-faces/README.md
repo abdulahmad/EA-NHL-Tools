@@ -31,7 +31,7 @@ painted into regions. A face's group depends on where its colour came from:
 | [A 1992-93 Bowman card](#a-1992-93-bowman-card) | 3 |
 | [Colours from a different photo](#colours-from-a-different-photo) | 1 |
 | [Hand coloured](#hand-coloured) | 9 |
-| **All** | **146** (144 cartridge, 2 Sega CD), plus 12 [stock players](#players-with-a-stock-picture), 33 [NHL 95 Genesis photos](#nhl-95-genesis-photos-the-1993-94-rosters) and 32 [from NHL 97 PC](#faces-from-nhl-97-pc-the-1993-94-rosters-other-starters) |
+| **All** | **146** (144 cartridge, 2 Sega CD), plus 12 [stock players](#players-with-a-stock-picture), 33 [NHL 95 Genesis photos](#nhl-95-genesis-photos-the-1993-94-rosters) 32 [from NHL 97 PC](#faces-from-nhl-97-pc-the-1993-94-rosters-other-starters) and 6 [from trading cards](#faces-from-trading-cards-the-last-six-starters) |
 
 ### The same photo in NHL 95 PC
 
@@ -223,6 +223,13 @@ Hackett, Grant Ledyard, Paul Cavallini, Ray Sheppard, Nicklas Lidstrom, Chris Os
 Zhitnik, Lyle Odelein, Martin Brodeur, Jim Dowd, Derek King, Mikael Renberg, Yves Racine, Scott Young, Brad Werenka, John
 Tucker, Chris Joseph, Damian Rhodes, Jiri Slegr, Boris Mironov, Stephane Quintal, Michal Pivonka.
 
+## Faces from trading cards (the last six starters)
+
+Six starters of the 1993-94 roster sets are in no EA game's files: Ron Tugnutt, Dirk Graham, Ilja Byakin, Frank
+Pietrangelo, Tom Kurvers and Dave McLlwain. Their faces are cropped from the photo on one of their 1993-94 cards (1994-95
+for McLlwain, still with Ottawa), framed like the cartridge's photos, then turned into the same 8 Genesis greys, dithered,
+with the photo's colour on them. Tugnutt's and Pietrangelo's are posed portraits; the other four are game photos.
+
 ## The colour sources
 
 `sources/` holds the picture each face's colour came from, under the face's own file name:
@@ -230,6 +237,7 @@ Tucker, Chris Joseph, Damian Rhodes, Jiri Slegr, Boris Mironov, Stephane Quintal
 - the NHL 95 PC portrait (`PORTRnnn.QFS`) or NHL 94 PC portrait (`PORTRAIT.NSH`), as the game has it;
 - the NHL 95 SNES photo (for the NHL 95 Genesis photos' `Player_` faces too);
 - the NHL 97 PC head shot (`TINYFACE.VIV`), for the faces made from it;
+- the cropped card photo, for the six trading-card faces;
 - the card's photo (EA's 1993-94 NHL '94 card or a 1992-93 Bowman card), cropped to the photo;
 - for Eric Lindros, the cropped head of the photo reference;
 - for the stock players' `Player_` faces, the photo on the player's EA NHL '94 card (the back, or the front).
