@@ -1,0 +1,60 @@
+{
+ "go": {
+  "e2e": {
+   "vs_pc_same_colour": 49.7,
+   "zone_aware": 36.9,
+   "exact_index": 29.2,
+   "px": 5723
+  },
+  "g2pc_nojoint": {
+   "vs_pc_same_colour": 60.8,
+   "zone_aware": 45.2,
+   "exact_index": 35.0,
+   "px": 6096
+  },
+  "g2pc_hybrid_joints": {
+   "vs_pc_same_colour": 73.0,
+   "zone_aware": 65.7,
+   "exact_index": 55.8,
+   "px": 6096
+  },
+  "n_frames": 16,
+  "snes2g_mean": {
+   "exact_union": 0.411,
+   "fam_union": 0.574,
+   "sil": 0.877,
+   "exact_inter": 0.468,
+   "fam_inter": 0.654,
+   "npx_ratio": 0.996
+  }
+ },
+ "sk": {
+  "e2e": {
+   "vs_pc_same_colour": 70.5,
+   "zone_aware": 60.2,
+   "exact_index": 47.9,
+   "px": 14262
+  },
+  "g2pc_nojoint": {
+   "vs_pc_same_colour": 77.6,
+   "zone_aware": 66.7,
+   "exact_index": 52.7,
+   "px": 14957
+  },
+  "g2pc_hybrid_joints": {
+   "vs_pc_same_colour": 79.9,
+   "zone_aware": 73.1,
+   "exact_index": 62.8,
+   "px": 14957
+  },
+  "n_frames": 45,
+  "snes2g_mean": {
+   "exact_union": 0.58,
+   "fam_union": 0.748,
+   "sil": 0.917,
+   "exact_inter": 0.628,
+   "fam_inter": 0.813,
+   "npx_ratio": 0.987
+  }
+ }
+}
