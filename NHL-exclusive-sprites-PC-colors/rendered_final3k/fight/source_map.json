@@ -1,0 +1,153 @@
+{
+ "source": {
+  "353": "AUTO",
+  "354": "ABDUL",
+  "355": "ABDUL",
+  "356": "ABDUL",
+  "357": "ABDUL",
+  "358": "AUTO",
+  "359": "ABDUL",
+  "360": "ABDUL",
+  "361": "ABDUL",
+  "362": "ABDUL",
+  "363": "AUTO",
+  "364": "PART",
+  "365": "PART",
+  "366": "AUTO",
+  "367": "AUTO",
+  "368": "ABDUL",
+  "369": "AUTO",
+  "370": "PART",
+  "371": "PART",
+  "372": "PART",
+  "373": "PART",
+  "374": "PART",
+  "375": "PART",
+  "376": "PART"
+ },
+ "stats": {
+  "353": {
+   "source": "AUTO",
+   "kept": 88,
+   "opaque": 276
+  },
+  "354": {
+   "source": "ABDUL",
+   "kept": 310,
+   "opaque": 310
+  },
+  "355": {
+   "source": "ABDUL",
+   "kept": 327,
+   "opaque": 327
+  },
+  "356": {
+   "source": "ABDUL",
+   "kept": 288,
+   "opaque": 288
+  },
+  "357": {
+   "source": "ABDUL",
+   "kept": 338,
+   "opaque": 338
+  },
+  "358": {
+   "source": "AUTO",
+   "kept": 0,
+   "opaque": 358
+  },
+  "359": {
+   "source": "ABDUL",
+   "kept": 387,
+   "opaque": 387
+  },
+  "360": {
+   "source": "ABDUL",
+   "kept": 345,
+   "opaque": 345
+  },
+  "361": {
+   "source": "ABDUL",
+   "kept": 336,
+   "opaque": 336
+  },
+  "362": {
+   "source": "ABDUL",
+   "kept": 319,
+   "opaque": 319
+  },
+  "363": {
+   "source": "AUTO",
+   "kept": 0,
+   "opaque": 349
+  },
+  "364": {
+   "source": "PART",
+   "kept": 63,
+   "opaque": 388
+  },
+  "365": {
+   "source": "PART",
+   "kept": 74,
+   "opaque": 389
+  },
+  "366": {
+   "source": "AUTO",
+   "kept": 41,
+   "opaque": 361
+  },
+  "367": {
+   "source": "AUTO",
+   "kept": 33,
+   "opaque": 315
+  },
+  "368": {
+   "source": "ABDUL",
+   "kept": 346,
+   "opaque": 346
+  },
+  "369": {
+   "source": "AUTO",
+   "kept": 31,
+   "opaque": 357
+  },
+  "370": {
+   "source": "PART",
+   "kept": 48,
+   "opaque": 371
+  },
+  "371": {
+   "source": "PART",
+   "kept": 49,
+   "opaque": 350
+  },
+  "372": {
+   "source": "PART",
+   "kept": 44,
+   "opaque": 391
+  },
+  "373": {
+   "source": "PART",
+   "kept": 52,
+   "opaque": 387
+  },
+  "374": {
+   "source": "PART",
+   "kept": 49,
+   "opaque": 365
+  },
+  "375": {
+   "source": "PART",
+   "kept": 44,
+   "opaque": 385
+  },
+  "376": {
+   "source": "PART",
+   "kept": 52,
+   "opaque": 387
+  }
+ },
+ "invalid": {},
+ "spit_ok": 24,
+ "png_ok": 24
+}
