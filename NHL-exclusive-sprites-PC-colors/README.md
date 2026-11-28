@@ -24,6 +24,10 @@ No game files are in this folder. Frame images are drawn from the games for refe
 | `training_final3l/` | final3l training lists, orientation table, training code, reports, and the trained per-colour model (39 MB), with 35-d facing/body/crest features. How to retrain and re-render is in its README. |
 | `rendered_final3l_genesis_locs/` | final3l sister set G: same 36+129 exclusives, arm/sock bands at Genesis locations, BOS previews, A/G/P contact sheets, fight GIF. |
 | `rendered_final3l_pc_locs/` | final3l sister set P: same frames with arm/sock bands at 95 PC locations. 93G frames and 94G goalies match the G set; 88 of 89 94G exclusive skaters differ. |
+| `snes_style_compare/` | measurements of how 94 SNES sprites differ from 94 Genesis and 95 PC (scale, shading, outline), with sheets and findings |
+| `snes_to_pc/` | the 393 SNES-exclusive 94 frames converted to Genesis style and to 95 PC zones: code, findings, sample and check sheets, and `out/all/` with all 343 player/goalie/celebration conversions and contact sheets |
+| `pc_to_genesis_backport/` | the 95 PC frames that 94 Genesis does not have, backported to 94G Genesis colours: models, index PNGs, previews, sheets, validation, tile packs |
+| `g95_g96_expansion_test/` | a small test expanding 12 95 Genesis and 12 96 Genesis sprites to 95 PC colour zones |
 | `tools/` | Python scripts (`pip install numpy pandas pillow scipy psd-tools`) |
 | `PALETTE95.md` | the sprite palette vs the game palette, the colour mapping between them (home and away), which indices stay the same for every team, and the blood index |
 | `PPV95-FORMAT.md` | the 95 PC sprite file format and the byte-exact round trip |
