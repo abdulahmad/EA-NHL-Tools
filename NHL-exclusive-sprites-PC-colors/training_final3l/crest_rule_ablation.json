@@ -1,0 +1,9 @@
+{
+ "tried": "hard strip crest when orientation crest==none (back/qback)",
+ "held_skaters_stripped_frames": 11,
+ "stripped_px": 148,
+ "stripped_were_correct_pc_crest": 111,
+ "crest_iou_with_strip": 0.06,
+ "crest_iou_final3k": 0.419,
+ "decision": "do not apply hard strip; keep paste_crest; orientation stays a 35-d classifier feature"
+}

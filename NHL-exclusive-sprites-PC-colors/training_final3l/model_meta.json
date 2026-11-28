@@ -1,0 +1,11 @@
+{
+ "feature": "ctx53 + kfeats152 + abdul_flag + orient35 (dir/body/yaw/crest/near_arm/conf/source/anim dirs)",
+ "kfeat_dim": 152,
+ "hold_abdul": [
+  357,
+  360,
+  368
+ ],
+ "model_bytes": 39000185,
+ "orient_dim": 35
+}

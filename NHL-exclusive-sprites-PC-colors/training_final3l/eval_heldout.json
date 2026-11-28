@@ -1,0 +1,220 @@
+{
+ "skater": {
+  "final3i": {
+   "overall": {
+    "vs_pc": 79.3,
+    "zone_vs_pc": 72.5,
+    "vs_genesis": 84.9,
+    "px": 17780
+   },
+   "stripe_area": {
+    "vs_pc": 43.8,
+    "zone_vs_pc": 31.4,
+    "px": 3518
+   },
+   "crest_zone": {
+    "pc_px": 225,
+    "pred_px": 204,
+    "both": 128,
+    "union": 301,
+    "recall": 0.569,
+    "precision": 0.627,
+    "iou": 0.425
+   }
+  },
+  "final3j": {
+   "overall": {
+    "vs_pc": 79.3,
+    "zone_vs_pc": 72.5,
+    "vs_genesis": 84.3,
+    "px": 17780
+   },
+   "stripe_area": {
+    "vs_pc": 43.3,
+    "zone_vs_pc": 31.4,
+    "px": 3518
+   },
+   "crest_zone": {
+    "pc_px": 225,
+    "pred_px": 196,
+    "both": 129,
+    "union": 292,
+    "recall": 0.573,
+    "precision": 0.658,
+    "iou": 0.442
+   }
+  },
+  "final3jK": {
+   "overall": {
+    "vs_pc": 79.7,
+    "zone_vs_pc": 73.1,
+    "vs_genesis": 85.1,
+    "px": 17780
+   },
+   "stripe_area": {
+    "vs_pc": 47.8,
+    "zone_vs_pc": 36.7,
+    "px": 3518
+   },
+   "crest_zone": {
+    "pc_px": 225,
+    "pred_px": 205,
+    "both": 127,
+    "union": 303,
+    "recall": 0.564,
+    "precision": 0.62,
+    "iou": 0.419
+   }
+  },
+  "final3k": {
+   "overall": {
+    "vs_pc": 79.8,
+    "zone_vs_pc": 72.9,
+    "vs_genesis": 85.2,
+    "px": 17780
+   },
+   "stripe_area": {
+    "vs_pc": 47.5,
+    "zone_vs_pc": 36.8,
+    "px": 3518
+   },
+   "crest_zone": {
+    "pc_px": 225,
+    "pred_px": 205,
+    "both": 127,
+    "union": 303,
+    "recall": 0.564,
+    "precision": 0.62,
+    "iou": 0.419
+   }
+  },
+  "final3l": {
+   "overall": {
+    "vs_pc": 79.7,
+    "zone_vs_pc": 72.7,
+    "vs_genesis": 85.3,
+    "px": 17780
+   },
+   "stripe_area": {
+    "vs_pc": 47.1,
+    "zone_vs_pc": 36.1,
+    "px": 3518
+   },
+   "crest_zone": {
+    "pc_px": 225,
+    "pred_px": 205,
+    "both": 127,
+    "union": 303,
+    "recall": 0.564,
+    "precision": 0.62,
+    "iou": 0.419
+   }
+  }
+ },
+ "goalie": {
+  "final3i": {
+   "overall": {
+    "vs_pc": 73.5,
+    "zone_vs_pc": 65.6,
+    "px": 8607
+   },
+   "stripe_area": {
+    "vs_pc": 54.9,
+    "px": 2617
+   },
+   "crest_zone": {
+    "pc_px": 87,
+    "pred_px": 7,
+    "both": 7,
+    "union": 87,
+    "recall": 0.08,
+    "precision": 1.0,
+    "iou": 0.08
+   }
+  },
+  "final3j": {
+   "overall": {
+    "vs_pc": 73.5,
+    "zone_vs_pc": 65.7,
+    "px": 8607
+   },
+   "stripe_area": {
+    "vs_pc": 54.8,
+    "px": 2617
+   },
+   "crest_zone": {
+    "pc_px": 87,
+    "pred_px": 7,
+    "both": 7,
+    "union": 87,
+    "recall": 0.08,
+    "precision": 1.0,
+    "iou": 0.08
+   }
+  },
+  "final3jK": {
+   "overall": {
+    "vs_pc": 73.5,
+    "zone_vs_pc": 65.7,
+    "px": 8607
+   },
+   "stripe_area": {
+    "vs_pc": 54.8,
+    "px": 2617
+   },
+   "crest_zone": {
+    "pc_px": 87,
+    "pred_px": 7,
+    "both": 7,
+    "union": 87,
+    "recall": 0.08,
+    "precision": 1.0,
+    "iou": 0.08
+   }
+  },
+  "final3k": {
+   "overall": {
+    "vs_pc": 73.5,
+    "zone_vs_pc": 65.7,
+    "px": 8607
+   },
+   "stripe_area": {
+    "vs_pc": 54.8,
+    "px": 2617
+   },
+   "crest_zone": {
+    "pc_px": 87,
+    "pred_px": 7,
+    "both": 7,
+    "union": 87,
+    "recall": 0.08,
+    "precision": 1.0,
+    "iou": 0.08
+   }
+  },
+  "final3l": {
+   "overall": {
+    "vs_pc": 73.5,
+    "zone_vs_pc": 65.7,
+    "px": 8607
+   },
+   "stripe_area": {
+    "vs_pc": 54.8,
+    "px": 2617
+   },
+   "crest_zone": {
+    "pc_px": 87,
+    "pred_px": 7,
+    "both": 7,
+    "union": 87,
+    "recall": 0.08,
+    "precision": 1.0,
+    "iou": 0.08
+   }
+  }
+ },
+ "spit_ok": 55,
+ "png_ok": 55,
+ "n_skater": 55,
+ "invalid": []
+}

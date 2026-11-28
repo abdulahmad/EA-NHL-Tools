@@ -1,0 +1,1143 @@
+[
+ {
+  "colour": 33,
+  "classes": [
+   "black",
+   "blade",
+   "other"
+  ],
+  "n_train": 1287,
+  "train_dist": [
+   [
+    "blade",
+    1224
+   ],
+   [
+    "black",
+    42
+   ],
+   [
+    "other",
+    21
+   ]
+  ],
+  "held94_px": 277,
+  "acc": 0.9747292418772563,
+  "acc_final3i": 0.9602888086642599,
+  "acc_final3j": 0.9602888086642599,
+  "acc_final3jK": 0.9602888086642599,
+  "top_confusions": [
+   [
+    "PC other -> pred blade",
+    3
+   ],
+   [
+    "PC shadow -> pred blade",
+    2
+   ],
+   [
+    "PC black -> pred blade",
+    2
+   ]
+  ],
+  "held_abdul_px": 38,
+  "acc_abdul": 0.9473684210526315,
+  "abdul_confusions": [
+   [
+    "PC eye -> pred blade",
+    2
+   ]
+  ]
+ },
+ {
+  "colour": 34,
+  "classes": [
+   "arm stripe 3",
+   "black",
+   "blade",
+   "eye",
+   "forearm",
+   "jersey",
+   "other",
+   "pants",
+   "socks",
+   "socks stripe 2"
+  ],
+  "n_train": 10525,
+  "train_dist": [
+   [
+    "black",
+    9769
+   ],
+   [
+    "blade",
+    445
+   ],
+   [
+    "other",
+    94
+   ],
+   [
+    "socks",
+    58
+   ],
+   [
+    "forearm",
+    49
+   ],
+   [
+    "eye",
+    45
+   ],
+   [
+    "pants",
+    35
+   ],
+   [
+    "arm stripe 3",
+    12
+   ]
+  ],
+  "held94_px": 2333,
+  "acc": 0.8812687526789541,
+  "acc_final3i": 0.9301328761251607,
+  "acc_final3j": 0.9301328761251607,
+  "acc_final3jK": 0.9301328761251607,
+  "top_confusions": [
+   [
+    "PC black -> pred pants",
+    84
+   ],
+   [
+    "PC blade -> pred black",
+    70
+   ],
+   [
+    "PC black -> pred blade",
+    45
+   ]
+  ],
+  "held_abdul_px": 105,
+  "acc_abdul": 0.9904761904761905,
+  "abdul_confusions": [
+   [
+    "PC socks stripe 2 -> pred black",
+    1
+   ]
+  ]
+ },
+ {
+  "colour": 35,
+  "classes": [
+   "black",
+   "other",
+   "pants",
+   "pants stripe 1",
+   "pants stripe 2",
+   "socks",
+   "socks stripe 1",
+   "socks stripe 2",
+   "waist 2",
+   "waist 3"
+  ],
+  "n_train": 2554,
+  "train_dist": [
+   [
+    "pants",
+    2011
+   ],
+   [
+    "waist 3",
+    166
+   ],
+   [
+    "socks",
+    99
+   ],
+   [
+    "socks stripe 1",
+    71
+   ],
+   [
+    "waist 2",
+    50
+   ],
+   [
+    "pants stripe 1",
+    45
+   ],
+   [
+    "pants stripe 2",
+    41
+   ],
+   [
+    "other",
+    35
+   ]
+  ],
+  "held94_px": 579,
+  "acc": 0.7789291882556131,
+  "acc_final3i": 0.7426597582037997,
+  "acc_final3j": 0.7426597582037997,
+  "acc_final3jK": 0.7478411053540587,
+  "top_confusions": [
+   [
+    "PC socks -> pred pants",
+    20
+   ],
+   [
+    "PC pants -> pred waist 3",
+    16
+   ],
+   [
+    "PC waist 3 -> pred pants",
+    16
+   ]
+  ],
+  "held_abdul_px": 60,
+  "acc_abdul": 1.0,
+  "abdul_confusions": []
+ },
+ {
+  "colour": 36,
+  "classes": [
+   "other",
+   "pants",
+   "pants stripe 1",
+   "pants stripe 2",
+   "socks",
+   "socks stripe 1",
+   "socks stripe 2",
+   "waist 1",
+   "waist 2",
+   "waist 3"
+  ],
+  "n_train": 4250,
+  "train_dist": [
+   [
+    "pants",
+    3237
+   ],
+   [
+    "waist 3",
+    325
+   ],
+   [
+    "pants stripe 1",
+    203
+   ],
+   [
+    "pants stripe 2",
+    181
+   ],
+   [
+    "socks",
+    137
+   ],
+   [
+    "waist 2",
+    80
+   ],
+   [
+    "socks stripe 1",
+    49
+   ],
+   [
+    "other",
+    20
+   ]
+  ],
+  "held94_px": 853,
+  "acc": 0.7561547479484173,
+  "acc_final3i": 0.7116060961313013,
+  "acc_final3j": 0.7116060961313013,
+  "acc_final3jK": 0.7151230949589683,
+  "top_confusions": [
+   [
+    "PC pants stripe 1 -> pred pants",
+    45
+   ],
+   [
+    "PC pants stripe 2 -> pred pants",
+    36
+   ],
+   [
+    "PC socks -> pred pants",
+    34
+   ]
+  ],
+  "held_abdul_px": 41,
+  "acc_abdul": 1.0,
+  "abdul_confusions": []
+ },
+ {
+  "colour": 37,
+  "classes": [
+   "other",
+   "pants",
+   "pants stripe 1",
+   "pants stripe 2",
+   "socks",
+   "socks stripe 1",
+   "waist 2",
+   "waist 3"
+  ],
+  "n_train": 2980,
+  "train_dist": [
+   [
+    "pants",
+    2496
+   ],
+   [
+    "waist 3",
+    122
+   ],
+   [
+    "pants stripe 1",
+    120
+   ],
+   [
+    "pants stripe 2",
+    114
+   ],
+   [
+    "socks",
+    76
+   ],
+   [
+    "waist 2",
+    21
+   ],
+   [
+    "other",
+    16
+   ],
+   [
+    "socks stripe 1",
+    15
+   ]
+  ],
+  "held94_px": 553,
+  "acc": 0.8227848101265823,
+  "acc_final3i": 0.7884267631103075,
+  "acc_final3j": 0.7884267631103075,
+  "acc_final3jK": 0.7848101265822784,
+  "top_confusions": [
+   [
+    "PC pants stripe 1 -> pred pants",
+    24
+   ],
+   [
+    "PC socks -> pred pants",
+    17
+   ],
+   [
+    "PC pants stripe 2 -> pred pants",
+    17
+   ]
+  ],
+  "held_abdul_px": 40,
+  "acc_abdul": 1.0,
+  "abdul_confusions": []
+ },
+ {
+  "colour": 38,
+  "classes": [
+   "other",
+   "skin",
+   "stick"
+  ],
+  "n_train": 423,
+  "train_dist": [
+   [
+    "skin",
+    377
+   ],
+   [
+    "stick",
+    36
+   ],
+   [
+    "other",
+    10
+   ]
+  ],
+  "held94_px": 104,
+  "acc": 0.875,
+  "acc_final3i": 0.8846153846153846,
+  "acc_final3j": 0.8846153846153846,
+  "acc_final3jK": 0.8846153846153846,
+  "top_confusions": [
+   [
+    "PC stick -> pred skin",
+    11
+   ],
+   [
+    "PC skin -> pred stick",
+    1
+   ],
+   [
+    "PC eye -> pred skin",
+    1
+   ]
+  ],
+  "held_abdul_px": 25,
+  "acc_abdul": 0.96,
+  "abdul_confusions": [
+   [
+    "PC helmet -> pred skin",
+    1
+   ]
+  ]
+ },
+ {
+  "colour": 39,
+  "classes": [
+   "eye",
+   "jersey",
+   "other",
+   "skin",
+   "stick"
+  ],
+  "n_train": 1585,
+  "train_dist": [
+   [
+    "skin",
+    1223
+   ],
+   [
+    "stick",
+    290
+   ],
+   [
+    "eye",
+    38
+   ],
+   [
+    "other",
+    26
+   ],
+   [
+    "jersey",
+    8
+   ]
+  ],
+  "held94_px": 377,
+  "acc": 0.8408488063660478,
+  "acc_final3i": 0.8328912466843501,
+  "acc_final3j": 0.8328912466843501,
+  "acc_final3jK": 0.8328912466843501,
+  "top_confusions": [
+   [
+    "PC stick -> pred skin",
+    36
+   ],
+   [
+    "PC skin -> pred stick",
+    11
+   ],
+   [
+    "PC eye -> pred skin",
+    7
+   ]
+  ],
+  "held_abdul_px": 63,
+  "acc_abdul": 0.9523809523809523,
+  "abdul_confusions": [
+   [
+    "PC helmet -> pred skin",
+    3
+   ]
+  ]
+ },
+ {
+  "colour": 40,
+  "classes": [
+   "arm stripe 1",
+   "arm stripe 2",
+   "arm stripe 3",
+   "black",
+   "forearm",
+   "jersey",
+   "other",
+   "pants",
+   "pants stripe 1",
+   "pants stripe 2",
+   "shoulder patch",
+   "socks",
+   "socks stripe 1",
+   "socks stripe 2",
+   "stick",
+   "upper arm",
+   "waist 1",
+   "waist 2",
+   "waist 3",
+   "yoke 2",
+   "yoke 3",
+   "yoke corner"
+  ],
+  "n_train": 3849,
+  "train_dist": [
+   [
+    "pants stripe 1",
+    504
+   ],
+   [
+    "waist 2",
+    351
+   ],
+   [
+    "waist 3",
+    348
+   ],
+   [
+    "socks stripe 2",
+    256
+   ],
+   [
+    "pants",
+    252
+   ],
+   [
+    "yoke 3",
+    242
+   ],
+   [
+    "pants stripe 2",
+    231
+   ],
+   [
+    "socks stripe 1",
+    227
+   ]
+  ],
+  "held94_px": 868,
+  "acc": 0.3859447004608295,
+  "acc_final3i": 0.3490783410138249,
+  "acc_final3j": 0.35368663594470046,
+  "acc_final3jK": 0.35368663594470046,
+  "top_confusions": [
+   [
+    "PC pants stripe 1 -> pred waist 3",
+    25
+   ],
+   [
+    "PC pants stripe 2 -> pred waist 3",
+    21
+   ],
+   [
+    "PC pants stripe 1 -> pred socks",
+    21
+   ]
+  ],
+  "held_abdul_px": 62,
+  "acc_abdul": 0.7741935483870968,
+  "abdul_confusions": [
+   [
+    "PC arm stripe 2 -> pred yoke 3",
+    3
+   ],
+   [
+    "PC arm stripe 3 -> pred arm stripe 1",
+    3
+   ],
+   [
+    "PC yoke corner -> pred yoke 3",
+    3
+   ]
+  ]
+ },
+ {
+  "colour": 41,
+  "classes": [
+   "arm stripe 1",
+   "arm stripe 2",
+   "arm stripe 3",
+   "forearm",
+   "jersey",
+   "other",
+   "pants",
+   "shoulder patch",
+   "socks",
+   "socks stripe 1",
+   "socks stripe 2",
+   "stick",
+   "upper arm",
+   "waist 1",
+   "waist 2",
+   "waist 3",
+   "yoke 2",
+   "yoke 3",
+   "yoke corner"
+  ],
+  "n_train": 4284,
+  "train_dist": [
+   [
+    "yoke 3",
+    1132
+   ],
+   [
+    "waist 2",
+    414
+   ],
+   [
+    "waist 3",
+    375
+   ],
+   [
+    "upper arm",
+    304
+   ],
+   [
+    "arm stripe 1",
+    291
+   ],
+   [
+    "socks stripe 2",
+    274
+   ],
+   [
+    "yoke corner",
+    255
+   ],
+   [
+    "arm stripe 2",
+    216
+   ]
+  ],
+  "held94_px": 950,
+  "acc": 0.5336842105263158,
+  "acc_final3i": 0.4421052631578947,
+  "acc_final3j": 0.44526315789473686,
+  "acc_final3jK": 0.4610526315789474,
+  "top_confusions": [
+   [
+    "PC waist 3 -> pred waist 2",
+    39
+   ],
+   [
+    "PC yoke corner -> pred yoke 3",
+    25
+   ],
+   [
+    "PC waist 3 -> pred pants",
+    22
+   ]
+  ],
+  "held_abdul_px": 43,
+  "acc_abdul": 0.7441860465116279,
+  "abdul_confusions": [
+   [
+    "PC yoke 3 -> pred yoke corner",
+    6
+   ],
+   [
+    "PC upper arm -> pred yoke corner",
+    2
+   ],
+   [
+    "PC arm stripe 2 -> pred yoke 3",
+    1
+   ]
+  ]
+ },
+ {
+  "colour": 42,
+  "classes": [
+   "arm stripe 1",
+   "arm stripe 2",
+   "arm stripe 3",
+   "forearm",
+   "jersey",
+   "other",
+   "pants",
+   "pants stripe 1",
+   "pants stripe 2",
+   "shoulder patch",
+   "skin",
+   "socks",
+   "socks stripe 1",
+   "socks stripe 2",
+   "stick",
+   "upper arm",
+   "waist 3",
+   "yoke 1",
+   "yoke 2",
+   "yoke 3",
+   "yoke corner"
+  ],
+  "n_train": 6021,
+  "train_dist": [
+   [
+    "yoke 2",
+    1624
+   ],
+   [
+    "yoke 1",
+    1062
+   ],
+   [
+    "socks",
+    548
+   ],
+   [
+    "pants stripe 2",
+    495
+   ],
+   [
+    "socks stripe 2",
+    439
+   ],
+   [
+    "arm stripe 2",
+    327
+   ],
+   [
+    "arm stripe 1",
+    291
+   ],
+   [
+    "pants",
+    274
+   ]
+  ],
+  "held94_px": 1369,
+  "acc": 0.5982468955441929,
+  "acc_final3i": 0.5763330898466034,
+  "acc_final3j": 0.577063550036523,
+  "acc_final3jK": 0.6004382761139518,
+  "top_confusions": [
+   [
+    "PC pants stripe 2 -> pred waist 3",
+    42
+   ],
+   [
+    "PC yoke 1 -> pred yoke 2",
+    38
+   ],
+   [
+    "PC pants -> pred waist 3",
+    34
+   ]
+  ],
+  "held_abdul_px": 77,
+  "acc_abdul": 0.7532467532467533,
+  "abdul_confusions": [
+   [
+    "PC yoke 1 -> pred yoke 2",
+    9
+   ],
+   [
+    "PC yoke 2 -> pred yoke 1",
+    4
+   ],
+   [
+    "PC upper arm -> pred yoke 1",
+    2
+   ]
+  ]
+ },
+ {
+  "colour": 43,
+  "classes": [
+   "arm stripe 1",
+   "arm stripe 2",
+   "arm stripe 3",
+   "black",
+   "blade",
+   "crest",
+   "eye",
+   "forearm",
+   "helmet",
+   "jersey",
+   "other",
+   "pants",
+   "pants stripe 1",
+   "shadow",
+   "shoulder patch",
+   "socks",
+   "socks stripe 1",
+   "socks stripe 2",
+   "stick",
+   "upper arm",
+   "waist 1",
+   "waist 2",
+   "waist 3",
+   "yoke 2",
+   "yoke 3",
+   "yoke corner"
+  ],
+  "n_train": 10536,
+  "train_dist": [
+   [
+    "jersey",
+    2088
+   ],
+   [
+    "helmet",
+    1514
+   ],
+   [
+    "socks",
+    1307
+   ],
+   [
+    "forearm",
+    1121
+   ],
+   [
+    "upper arm",
+    1004
+   ],
+   [
+    "waist 1",
+    692
+   ],
+   [
+    "socks stripe 1",
+    397
+   ],
+   [
+    "crest",
+    360
+   ]
+  ],
+  "held94_px": 2446,
+  "acc": 0.6291905151267375,
+  "acc_final3i": 0.5817661488143908,
+  "acc_final3j": 0.5764513491414555,
+  "acc_final3jK": 0.5850367947669665,
+  "top_confusions": [
+   [
+    "PC upper arm -> pred jersey",
+    50
+   ],
+   [
+    "PC socks -> pred pants",
+    48
+   ],
+   [
+    "PC waist 1 -> pred jersey",
+    41
+   ]
+  ],
+  "held_abdul_px": 137,
+  "acc_abdul": 0.635036496350365,
+  "abdul_confusions": [
+   [
+    "PC crest -> pred jersey",
+    9
+   ],
+   [
+    "PC upper arm -> pred jersey",
+    9
+   ],
+   [
+    "PC forearm -> pred helmet",
+    6
+   ]
+  ]
+ },
+ {
+  "colour": 44,
+  "classes": [
+   "arm stripe 1",
+   "arm stripe 2",
+   "arm stripe 3",
+   "black",
+   "crest",
+   "forearm",
+   "helmet",
+   "jersey",
+   "other",
+   "pants",
+   "shoulder patch",
+   "socks",
+   "socks stripe 1",
+   "socks stripe 2",
+   "upper arm",
+   "waist 1",
+   "waist 2",
+   "waist 3",
+   "yoke 3",
+   "yoke corner"
+  ],
+  "n_train": 10010,
+  "train_dist": [
+   [
+    "jersey",
+    3271
+   ],
+   [
+    "helmet",
+    1491
+   ],
+   [
+    "upper arm",
+    1136
+   ],
+   [
+    "socks",
+    871
+   ],
+   [
+    "crest",
+    769
+   ],
+   [
+    "forearm",
+    744
+   ],
+   [
+    "socks stripe 1",
+    301
+   ],
+   [
+    "waist 1",
+    256
+   ]
+  ],
+  "held94_px": 2192,
+  "acc": 0.7121350364963503,
+  "acc_final3i": 0.6938868613138686,
+  "acc_final3j": 0.698905109489051,
+  "acc_final3jK": 0.7157846715328468,
+  "top_confusions": [
+   [
+    "PC helmet -> pred jersey",
+    59
+   ],
+   [
+    "PC crest -> pred jersey",
+    51
+   ],
+   [
+    "PC upper arm -> pred jersey",
+    42
+   ]
+  ],
+  "held_abdul_px": 138,
+  "acc_abdul": 0.7101449275362319,
+  "abdul_confusions": [
+   [
+    "PC jersey -> pred upper arm",
+    9
+   ],
+   [
+    "PC arm stripe 3 -> pred forearm",
+    4
+   ],
+   [
+    "PC forearm -> pred helmet",
+    4
+   ]
+  ]
+ },
+ {
+  "colour": 45,
+  "classes": [
+   "arm stripe 1",
+   "arm stripe 2",
+   "arm stripe 3",
+   "black",
+   "crest",
+   "eye",
+   "forearm",
+   "helmet",
+   "jersey",
+   "other",
+   "pants",
+   "pants stripe 1",
+   "shadow",
+   "skin",
+   "socks",
+   "socks stripe 1",
+   "socks stripe 2",
+   "stick",
+   "upper arm",
+   "waist 1",
+   "waist 2",
+   "waist 3",
+   "yoke 1",
+   "yoke 2",
+   "yoke 3"
+  ],
+  "n_train": 3712,
+  "train_dist": [
+   [
+    "helmet",
+    1414
+   ],
+   [
+    "jersey",
+    663
+   ],
+   [
+    "upper arm",
+    210
+   ],
+   [
+    "forearm",
+    196
+   ],
+   [
+    "waist 1",
+    160
+   ],
+   [
+    "arm stripe 3",
+    122
+   ],
+   [
+    "eye",
+    117
+   ],
+   [
+    "waist 2",
+    104
+   ]
+  ],
+  "held94_px": 907,
+  "acc": 0.6350606394707828,
+  "acc_final3i": 0.6163175303197354,
+  "acc_final3j": 0.6229327453142227,
+  "acc_final3jK": 0.6108048511576626,
+  "top_confusions": [
+   [
+    "PC helmet -> pred jersey",
+    16
+   ],
+   [
+    "PC upper arm -> pred jersey",
+    14
+   ],
+   [
+    "PC black -> pred socks",
+    14
+   ]
+  ],
+  "held_abdul_px": 69,
+  "acc_abdul": 0.6231884057971014,
+  "abdul_confusions": [
+   [
+    "PC jersey -> pred forearm",
+    5
+   ],
+   [
+    "PC crest -> pred jersey",
+    5
+   ],
+   [
+    "PC forearm -> pred jersey",
+    3
+   ]
+  ]
+ },
+ {
+  "colour": 46,
+  "classes": [
+   "black",
+   "blade",
+   "eye",
+   "other",
+   "skin",
+   "stick"
+  ],
+  "n_train": 5705,
+  "train_dist": [
+   [
+    "stick",
+    3732
+   ],
+   [
+    "black",
+    1866
+   ],
+   [
+    "other",
+    36
+   ],
+   [
+    "blade",
+    29
+   ],
+   [
+    "skin",
+    22
+   ],
+   [
+    "eye",
+    20
+   ]
+  ],
+  "held94_px": 1358,
+  "acc": 0.9153166421207658,
+  "acc_final3i": 0.9153166421207658,
+  "acc_final3j": 0.9153166421207658,
+  "acc_final3jK": 0.9153166421207658,
+  "top_confusions": [
+   [
+    "PC black -> pred stick",
+    49
+   ],
+   [
+    "PC stick -> pred black",
+    44
+   ],
+   [
+    "PC blade -> pred black",
+    10
+   ]
+  ]
+ },
+ {
+  "colour": 47,
+  "classes": [
+   "arm stripe 2",
+   "other",
+   "shadow",
+   "socks"
+  ],
+  "n_train": 12503,
+  "train_dist": [
+   [
+    "shadow",
+    12357
+   ],
+   [
+    "other",
+    129
+   ],
+   [
+    "socks",
+    9
+   ],
+   [
+    "arm stripe 2",
+    8
+   ]
+  ],
+  "held94_px": 2586,
+  "acc": 0.991492652745553,
+  "acc_final3i": 0.991492652745553,
+  "acc_final3j": 0.991492652745553,
+  "acc_final3jK": 0.991492652745553,
+  "top_confusions": [
+   [
+    "PC pants -> pred shadow",
+    5
+   ],
+   [
+    "PC pants stripe 1 -> pred shadow",
+    4
+   ],
+   [
+    "PC blade -> pred shadow",
+    2
+   ]
+  ],
+  "held_abdul_px": 131,
+  "acc_abdul": 1.0,
+  "abdul_confusions": []
+ }
+]
