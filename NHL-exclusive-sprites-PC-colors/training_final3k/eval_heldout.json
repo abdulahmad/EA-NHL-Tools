@@ -1,0 +1,106 @@
+{
+ "skater": {
+  "final3i": {
+   "overall": {
+    "vs_pc": 79.3,
+    "zone_vs_pc": 72.5,
+    "vs_genesis": 84.9,
+    "px": 17780
+   },
+   "stripe_area": {
+    "vs_pc": 43.8,
+    "zone_vs_pc": 31.4,
+    "px": 3514
+   }
+  },
+  "final3j": {
+   "overall": {
+    "vs_pc": 79.3,
+    "zone_vs_pc": 72.5,
+    "vs_genesis": 84.3,
+    "px": 17780
+   },
+   "stripe_area": {
+    "vs_pc": 43.3,
+    "zone_vs_pc": 31.3,
+    "px": 3514
+   }
+  },
+  "final3jK": {
+   "overall": {
+    "vs_pc": 79.7,
+    "zone_vs_pc": 73.1,
+    "vs_genesis": 85.1,
+    "px": 17780
+   },
+   "stripe_area": {
+    "vs_pc": 47.8,
+    "zone_vs_pc": 36.7,
+    "px": 3514
+   }
+  },
+  "final3k": {
+   "overall": {
+    "vs_pc": 79.8,
+    "zone_vs_pc": 72.9,
+    "vs_genesis": 85.2,
+    "px": 17780
+   },
+   "stripe_area": {
+    "vs_pc": 47.5,
+    "zone_vs_pc": 36.8,
+    "px": 3514
+   }
+  }
+ },
+ "goalie": {
+  "final3i": {
+   "overall": {
+    "vs_pc": 73.5,
+    "zone_vs_pc": 65.6,
+    "px": 8607
+   },
+   "stripe_area": {
+    "vs_pc": 54.9,
+    "px": 2617
+   }
+  },
+  "final3j": {
+   "overall": {
+    "vs_pc": 73.5,
+    "zone_vs_pc": 65.7,
+    "px": 8607
+   },
+   "stripe_area": {
+    "vs_pc": 54.8,
+    "px": 2617
+   }
+  },
+  "final3jK": {
+   "overall": {
+    "vs_pc": 73.5,
+    "zone_vs_pc": 65.7,
+    "px": 8607
+   },
+   "stripe_area": {
+    "vs_pc": 54.8,
+    "px": 2617
+   }
+  },
+  "final3k": {
+   "overall": {
+    "vs_pc": 73.5,
+    "zone_vs_pc": 65.7,
+    "px": 8607
+   },
+   "stripe_area": {
+    "vs_pc": 54.8,
+    "px": 2617
+   }
+  }
+ },
+ "spit_ok": 55,
+ "png_ok": 55,
+ "n_skater": 55,
+ "invalid": []
+}

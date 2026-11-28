@@ -1,0 +1,10 @@
+{
+ "feature": "ctx53 + kfeats152 + abdul_flag",
+ "kfeat_dim": 152,
+ "hold_abdul": [
+  357,
+  360,
+  368
+ ],
+ "model_bytes": 38809313
+}
