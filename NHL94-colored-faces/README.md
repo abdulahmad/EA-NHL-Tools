@@ -230,6 +230,10 @@ Pietrangelo, Tom Kurvers and Dave McLlwain. Their faces are cropped from the pho
 for McLlwain, still with Ottawa), framed like the cartridge's photos, then turned into the same 8 Genesis greys, dithered,
 with the photo's colour on them. Tugnutt's and Pietrangelo's are posed portraits; the other four are game photos.
 
+The goalies among these and the NHL 97 PC faces (Ron Tugnutt, Frank Pietrangelo, Martin Brodeur, Chris Osgood, Jeff
+Hackett, Fred Brathwaite, Stephane Fiset and Damian Rhodes) wear their masks instead: their faces come from a 1993-94
+card's game photo in the team's jersey (1992-93 for Fiset), made the same way.
+
 ## The colour sources
 
 `sources/` holds the picture each face's colour came from, under the face's own file name:
