@@ -1,0 +1,394 @@
+frame,category,label,spa,used,G94_class,G94_best,G94_score,PC_class,PC_best,PC_score,exclusive
+1,player,faceoff+4,SPAfaceoff SPAfaceoffr SPAglide SPApump2 SPAskatewp,True,ambiguous,3.0,0.71,ambiguous,305.0,0.731,False
+2,player,skatewp,SPAskatewp,True,ambiguous,42.0,0.737,ambiguous,586.0,0.745,False
+3,player,skatewp,SPAskatewp,True,ambiguous,3.0,0.723,ambiguous,5.0,0.736,False
+4,player,skatewp,SPAskatewp,True,ambiguous,100.0,0.672,ambiguous,100.0,0.732,False
+185,celebration,celebrate+1,SPAcelebrate SPApump2,True,ambiguous,188.0,0.649,ambiguous,345.0,0.672,False
+187,celebration,celebrate+1,SPAcelebrate SPApump2,True,ambiguous,345.0,0.627,ambiguous,216.0,0.633,False
+188,celebration,celebrate+1,SPAcelebrate SPApump2,True,ambiguous,188.0,0.634,ambiguous,188.0,0.627,False
+189,celebration,celebrate+1,SPAcelebrate SPApump2,True,ambiguous,109.0,0.63,none,200.0,0.61,False
+190,celebration,celebrate+1,SPAcelebrate SPApump2,True,ambiguous,192.0,0.622,none,192.0,0.604,False
+191,celebration,celebrate+1,SPAcelebrate SPApump2,True,ambiguous,192.0,0.635,ambiguous,192.0,0.627,False
+192,celebration,celebrate+1,SPAcelebrate SPApump2,True,ambiguous,196.0,0.623,none,200.0,0.611,False
+194,celebration,celebrate+1,SPAcelebrate SPApump2,True,ambiguous,188.0,0.634,ambiguous,188.0,0.632,False
+196,celebration,celebrate+1,SPAcelebrate SPApump2,True,none,192.0,0.618,none,192.0,0.614,True
+197,celebration,celebrate+1,SPAcelebrate SPApump2,True,none,196.0,0.599,none,196.0,0.596,True
+198,celebration,celebrate+1,SPAcelebrate SPApump2,True,none,109.0,0.58,none,109.0,0.572,True
+199,celebration,celebrate+1,SPAcelebrate SPApump2,True,ambiguous,200.0,0.64,ambiguous,200.0,0.639,False
+200,celebration,celebrate+1,SPAcelebrate SPApump2,True,ambiguous,192.0,0.626,ambiguous,200.0,0.606,False
+208,celebration,pump,SPApump,True,ambiguous,208.0,0.588,none,45.0,0.616,False
+210,celebration,pump,SPApump,True,ambiguous,594.0,0.645,ambiguous,163.0,0.641,False
+213,celebration,celebrate+1,SPAcelebrate SPApump,True,ambiguous,213.0,0.635,ambiguous,213.0,0.629,False
+214,celebration,pump,SPApump,True,none,187.0,0.618,ambiguous,206.0,0.641,False
+217,player,stanley,SPAstanley,True,ambiguous,3.0,0.676,ambiguous,570.0,0.693,False
+218,player,stanley,SPAstanley,True,ambiguous,219.0,0.638,ambiguous,219.0,0.64,False
+219,player,stanley,SPAstanley,True,ambiguous,110.0,0.628,ambiguous,893.0,0.707,False
+220,player,stanley,SPAstanley,True,none,3.0,0.601,ambiguous,716.0,0.644,False
+221,player,stanley,SPAstanley,True,ambiguous,1.0,0.655,ambiguous,305.0,0.671,False
+222,player,stanley,SPAstanley,True,ambiguous,720.0,0.625,ambiguous,1133.0,0.652,False
+223,player,stanley,SPAstanley,True,none,787.0,0.592,ambiguous,893.0,0.68,False
+224,player,stanley,SPAstanley,True,none,816.0,0.611,ambiguous,224.0,0.636,False
+225,celebration,cupover,,True,ambiguous,392.0,0.701,ambiguous,1040.0,0.656,False
+226,celebration,cupover,,False,ambiguous,567.0,0.68,none,557.0,0.609,False
+227,celebration,cupover,,False,ambiguous,567.0,0.696,ambiguous,557.0,0.638,False
+228,celebration,cupover,,False,ambiguous,567.0,0.691,none,1014.0,0.613,False
+229,celebration,cupover,,False,ambiguous,392.0,0.696,ambiguous,1040.0,0.648,False
+232,celebration,cupover,,False,ambiguous,392.0,0.733,ambiguous,1027.0,0.65,False
+338,player,fallfwd,SPAfallfwd,True,ambiguous,314.0,0.665,ambiguous,314.0,0.696,False
+354,player,Hold+1,SPAHold SPAHold2,True,ambiguous,8.0,0.626,ambiguous,82.0,0.644,False
+355,player,Hold+1,SPAHold SPAHold2,True,none,55.0,0.592,ambiguous,89.0,0.623,False
+356,player,Hold+1,SPAHold SPAHold2,True,ambiguous,723.0,0.649,ambiguous,48.0,0.648,False
+357,player,Hold+1,SPAHold SPAHold2,True,ambiguous,577.0,0.624,ambiguous,578.0,0.645,False
+358,player,Hold+1,SPAHold SPAHold2,True,ambiguous,735.0,0.678,ambiguous,757.0,0.683,False
+359,player,Hold+1,SPAHold SPAHold2,True,ambiguous,77.0,0.666,ambiguous,71.0,0.641,False
+360,player,Hold+1,SPAHold SPAHold2,True,ambiguous,816.0,0.649,ambiguous,49.0,0.65,False
+368,player,wallleft+1,SPAwallleft SPAwallright,True,none,703.0,0.606,ambiguous,1013.0,0.69,False
+369,nonplayer,Pen,,True,ambiguous,2.0,0.634,ambiguous,100.0,0.653,False
+370,goalie,gwallleft+1,SPAgwallleft SPAgwallright,True,ambiguous,672.0,0.623,ambiguous,995.0,0.687,False
+371,goalie,gwallleft+1,SPAgwallleft SPAgwallright,True,ambiguous,453.0,0.636,ambiguous,656.0,0.643,False
+395,nonplayer,replay,,True,none,390.0,0.538,none,907.0,0.511,True
+423,player,faceoff,,True,none,16.0,0.5,none,124.0,0.525,True
+424,player,faceoff,,False,none,755.0,0.511,none,490.0,0.52,True
+425,player,faceoff,,False,none,697.0,0.53,none,124.0,0.546,True
+426,player,faceoff,,False,none,20.0,0.549,none,86.0,0.579,True
+427,player,faceoff,,False,none,1.0,0.562,none,95.0,0.603,True
+428,player,faceoff,,False,none,29.0,0.588,none,1124.0,0.593,True
+429,player,faceoff,,False,none,332.0,0.484,none,384.0,0.494,True
+430,player,faceoff,,False,none,575.0,0.503,none,562.0,0.505,True
+431,player,faceoff,,False,none,566.0,0.507,none,295.0,0.503,True
+432,player,faceoff,,False,none,296.0,0.508,none,560.0,0.507,True
+433,nonplayer,smallfont,,True,ambiguous,568.0,0.704,none,557.0,0.522,False
+435,nonplayer,smallfont,,False,ambiguous,568.0,0.645,none,560.0,0.581,False
+436,nonplayer,smallfont,,False,ambiguous,565.0,0.655,none,560.0,0.572,False
+437,nonplayer,smallfont,,False,ambiguous,568.0,0.729,ambiguous,557.0,0.641,False
+438,nonplayer,smallfont,,False,ambiguous,568.0,0.667,none,560.0,0.538,False
+439,nonplayer,smallfont,,False,ambiguous,568.0,0.693,none,560.0,0.545,False
+442,nonplayer,smallfont,,False,ambiguous,568.0,0.693,none,560.0,0.574,False
+443,nonplayer,smallfont,,False,ambiguous,394.0,0.685,none,557.0,0.567,False
+444,nonplayer,smallfont,,False,ambiguous,568.0,0.725,none,557.0,0.566,False
+445,nonplayer,smallfont,,False,ambiguous,568.0,0.635,none,560.0,0.574,False
+446,nonplayer,smallfont,,False,ambiguous,568.0,0.741,none,560.0,0.599,False
+447,nonplayer,smallfont,,False,ambiguous,568.0,0.683,none,560.0,0.579,False
+448,nonplayer,zamboni,,True,ambiguous,654.0,0.643,none,406.0,0.588,False
+475,player,stumble,SPAstumble,True,ambiguous,615.0,0.685,ambiguous,607.0,0.743,False
+516,nonplayer,bglass,SPAbglass,True,ambiguous,657.0,0.675,none,183.0,0.535,False
+519,player,crosscheck,SPAcrosscheck,True,none,3.0,0.593,ambiguous,890.0,0.647,False
+520,player,crosscheck,SPAcrosscheck,True,ambiguous,43.0,0.675,ambiguous,358.0,0.694,False
+521,player,crosscheck,SPAcrosscheck,True,none,37.0,0.605,ambiguous,588.0,0.665,False
+522,player,crosscheck,SPAcrosscheck,True,ambiguous,720.0,0.654,ambiguous,893.0,0.704,False
+523,player,crosscheck,SPAcrosscheck,True,none,595.0,0.61,ambiguous,102.0,0.639,False
+524,player,crosscheck,SPAcrosscheck,True,ambiguous,195.0,0.626,ambiguous,900.0,0.643,False
+525,player,crosscheck,SPAcrosscheck,True,none,102.0,0.618,ambiguous,102.0,0.653,False
+526,player,crosscheck,SPAcrosscheck,True,none,1.0,0.604,ambiguous,898.0,0.706,False
+527,player,crosscheck,SPAcrosscheck,True,none,36.0,0.587,none,1122.0,0.592,True
+528,player,crosscheck,SPAcrosscheck,True,none,802.0,0.595,ambiguous,651.0,0.63,False
+529,player,crosscheck,SPAcrosscheck,True,none,596.0,0.589,none,705.0,0.61,True
+530,player,crosscheck,SPAcrosscheck,True,ambiguous,720.0,0.646,ambiguous,893.0,0.677,False
+531,player,crosscheck,SPAcrosscheck,True,ambiguous,595.0,0.635,ambiguous,572.0,0.67,False
+532,player,crosscheck,SPAcrosscheck,True,ambiguous,43.0,0.667,ambiguous,358.0,0.71,False
+533,player,crosscheck,SPAcrosscheck,True,ambiguous,595.0,0.627,ambiguous,587.0,0.638,False
+537,goalie,gready+1,SPAgready SPAgready2,True,ambiguous,544.0,0.675,ambiguous,998.0,0.699,False
+555,goalie,gready+1,SPAgready SPAgready2,True,ambiguous,562.0,0.698,ambiguous,656.0,0.731,False
+556,goalie,gglover,SPAgglover,True,ambiguous,163.0,0.644,ambiguous,429.0,0.648,False
+557,goalie,gglovel,SPAgglovel,True,ambiguous,661.0,0.651,ambiguous,430.0,0.632,False
+590,goalie,gstackl,SPAgstackl,True,ambiguous,463.0,0.631,ambiguous,656.0,0.641,False
+596,goalie,gstackl,SPAgstackl,True,ambiguous,672.0,0.683,ambiguous,407.0,0.696,False
+619,goalie,gskate,SPAgskate,True,ambiguous,31.0,0.637,ambiguous,491.0,0.666,False
+622,goalie,gskate,SPAgskate,True,ambiguous,495.0,0.621,ambiguous,765.0,0.635,False
+623,goalie,gskate,SPAgskate,True,ambiguous,723.0,0.659,ambiguous,764.0,0.674,False
+624,goalie,gskate,SPAgskate,True,ambiguous,34.0,0.677,ambiguous,497.0,0.689,False
+625,goalie,gskate,SPAgskate,True,ambiguous,31.0,0.635,ambiguous,705.0,0.65,False
+626,goalie,gskate,SPAgskate,True,ambiguous,697.0,0.626,ambiguous,662.0,0.622,False
+627,goalie,gskate,SPAgskate,True,none,502.0,0.614,ambiguous,658.0,0.678,False
+628,goalie,gskate,SPAgskate,True,ambiguous,502.0,0.623,ambiguous,687.0,0.662,False
+629,goalie,gskate,SPAgskate,True,ambiguous,48.0,0.652,ambiguous,655.0,0.687,False
+630,goalie,gskate,SPAgskate,True,none,17.0,0.603,none,872.0,0.608,True
+631,goalie,gskate,SPAgskate,True,ambiguous,697.0,0.66,ambiguous,706.0,0.655,False
+632,goalie,gskate,SPAgskate,True,ambiguous,505.0,0.711,ambiguous,505.0,0.668,False
+633,goalie,gskate,SPAgskate,True,ambiguous,505.0,0.64,ambiguous,691.0,0.628,False
+634,goalie,gskate,SPAgskate,True,ambiguous,267.0,0.64,none,847.0,0.617,False
+636,goalie,gskate,SPAgskate,True,none,510.0,0.61,ambiguous,662.0,0.659,False
+638,goalie,gskate,SPAgskate,True,ambiguous,32.0,0.646,ambiguous,680.0,0.658,False
+641,goalie,gskate,SPAgskate,True,ambiguous,32.0,0.672,ambiguous,678.0,0.663,False
+643,goalie,gskate,SPAgskate,True,ambiguous,589.0,0.667,ambiguous,581.0,0.684,False
+645,goalie,gskate,SPAgskate,True,ambiguous,723.0,0.645,ambiguous,490.0,0.659,False
+646,goalie,gbutterfly+5,SPAgbutterfly SPAgcover SPAgcover2 SPAgready SPAgsprawll SPAgsprawlr,True,ambiguous,193.0,0.622,ambiguous,995.0,0.694,False
+647,goalie,gready,SPAgready,True,ambiguous,407.0,0.682,ambiguous,995.0,0.738,False
+648,goalie,gbutterfly+5,SPAgbutterfly SPAgcover SPAgcover2 SPAgready SPAgsprawll SPAgsprawlr,True,ambiguous,723.0,0.678,ambiguous,686.0,0.703,False
+649,goalie,gready,SPAgready,True,ambiguous,579.0,0.684,ambiguous,686.0,0.712,False
+650,goalie,gbutterfly+5,SPAgbutterfly SPAgcover SPAgcover2 SPAgready SPAgsprawll SPAgsprawlr,True,ambiguous,413.0,0.691,ambiguous,413.0,0.687,False
+651,goalie,gready,SPAgready,True,ambiguous,547.0,0.727,ambiguous,1059.0,0.703,False
+652,goalie,gbutterfly+5,SPAgbutterfly SPAgcover SPAgcover2 SPAgready SPAgsprawll SPAgsprawlr,True,ambiguous,416.0,0.688,ambiguous,416.0,0.697,False
+653,goalie,gready,SPAgready,True,ambiguous,500.0,0.678,ambiguous,676.0,0.696,False
+654,goalie,gbutterfly+5,SPAgbutterfly SPAgcover SPAgcover2 SPAgready SPAgsprawll SPAgsprawlr,True,ambiguous,419.0,0.66,ambiguous,802.0,0.649,False
+655,goalie,gready,SPAgready,True,ambiguous,552.0,0.649,ambiguous,802.0,0.647,False
+656,goalie,gbutterfly+5,SPAgbutterfly SPAgcover SPAgcover2 SPAgready SPAgsprawll SPAgsprawlr,True,ambiguous,422.0,0.684,ambiguous,422.0,0.644,False
+657,goalie,gready,SPAgready,True,ambiguous,555.0,0.701,ambiguous,422.0,0.675,False
+658,goalie,gbutterfly+5,SPAgbutterfly SPAgcover SPAgcover2 SPAgready SPAgsprawll SPAgsprawlr,True,ambiguous,558.0,0.716,ambiguous,425.0,0.718,False
+659,goalie,gready,SPAgready,True,ambiguous,558.0,0.718,ambiguous,425.0,0.713,False
+660,goalie,gbutterfly+5,SPAgbutterfly SPAgcover SPAgcover2 SPAgready SPAgsprawll SPAgsprawlr,True,ambiguous,46.0,0.653,ambiguous,656.0,0.744,False
+678,goalie,gpoke,SPAgpoke,True,ambiguous,540.0,0.655,ambiguous,995.0,0.714,False
+679,goalie,gpoke,SPAgpoke,True,ambiguous,543.0,0.662,ambiguous,407.0,0.708,False
+680,goalie,gpoke,SPAgpoke,True,ambiguous,539.0,0.674,ambiguous,539.0,0.728,False
+681,goalie,gpoke,SPAgpoke,True,ambiguous,164.0,0.664,ambiguous,539.0,0.704,False
+683,goalie,gpoke,SPAgpoke,True,none,783.0,0.557,ambiguous,984.0,0.636,False
+684,goalie,gpoke,SPAgpoke,True,ambiguous,20.0,0.677,ambiguous,686.0,0.663,False
+685,goalie,gpoke,SPAgpoke,True,ambiguous,603.0,0.641,ambiguous,986.0,0.598,False
+686,goalie,gpoke,SPAgpoke,True,none,691.0,0.611,none,694.0,0.605,True
+687,goalie,gpoke,SPAgpoke,True,none,504.0,0.603,ambiguous,698.0,0.581,False
+688,goalie,gpoke,SPAgpoke,True,none,723.0,0.617,ambiguous,699.0,0.657,False
+689,goalie,gpoke,SPAgpoke,True,none,29.0,0.577,none,990.0,0.559,True
+690,goalie,gpoke,SPAgpoke,True,ambiguous,15.0,0.633,ambiguous,847.0,0.652,False
+691,goalie,gpoke,SPAgpoke,True,ambiguous,605.0,0.636,none,228.0,0.575,False
+692,goalie,gpoke,SPAgpoke,True,ambiguous,1.0,0.629,ambiguous,686.0,0.645,False
+693,goalie,gpoke,SPAgpoke,True,none,246.0,0.589,none,168.0,0.59,True
+694,goalie,gcover+1,SPAgcover SPAgcover2,True,none,165.0,0.614,ambiguous,996.0,0.692,False
+696,goalie,gcover+1,SPAgcover SPAgcover2,True,none,634.0,0.589,ambiguous,997.0,0.648,False
+697,goalie,gcover+1,SPAgcover SPAgcover2,True,ambiguous,40.0,0.628,none,982.0,0.618,False
+698,goalie,gcover+1,SPAgcover SPAgcover2,True,none,273.0,0.545,ambiguous,1013.0,0.627,False
+699,goalie,gcover+1,SPAgcover SPAgcover2,True,none,634.0,0.541,none,997.0,0.599,True
+700,goalie,gcover+1,SPAgcover SPAgcover2,True,ambiguous,547.0,0.647,ambiguous,678.0,0.692,False
+701,goalie,gcover+1,SPAgcover SPAgcover2,True,none,472.0,0.615,ambiguous,478.0,0.662,False
+702,goalie,gcover+1,SPAgcover SPAgcover2,True,none,524.0,0.576,ambiguous,532.0,0.635,False
+703,goalie,gcover+1,SPAgcover SPAgcover2,True,ambiguous,20.0,0.626,ambiguous,1053.0,0.653,False
+704,goalie,gcover+1,SPAgcover SPAgcover2,True,none,271.0,0.594,ambiguous,697.0,0.617,False
+705,goalie,gcover+1,SPAgcover SPAgcover2,True,none,532.0,0.53,none,1012.0,0.551,True
+706,goalie,gcover+1,SPAgcover SPAgcover2,True,ambiguous,419.0,0.692,ambiguous,699.0,0.636,False
+707,goalie,gcover+1,SPAgcover SPAgcover2,True,none,251.0,0.596,ambiguous,968.0,0.661,False
+708,goalie,gcover+1,SPAgcover SPAgcover2,True,none,273.0,0.552,ambiguous,788.0,0.624,False
+709,goalie,gcover+1,SPAgcover SPAgcover2,True,ambiguous,704.0,0.625,ambiguous,1029.0,0.654,False
+710,goalie,gcover+1,SPAgcover SPAgcover2,True,none,531.0,0.572,none,968.0,0.615,True
+711,goalie,gcover+1,SPAgcover SPAgcover2,True,none,524.0,0.53,none,1004.0,0.609,True
+712,goalie,gcover+1,SPAgcover SPAgcover2,True,ambiguous,514.0,0.652,ambiguous,678.0,0.681,False
+713,goalie,gcover+1,SPAgcover SPAgcover2,True,ambiguous,478.0,0.66,ambiguous,478.0,0.679,False
+714,goalie,gcover+1,SPAgcover SPAgcover2,True,none,524.0,0.59,ambiguous,532.0,0.654,False
+715,goalie,gcover+1,SPAgcover SPAgcover2,True,ambiguous,699.0,0.623,ambiguous,540.0,0.646,False
+716,goalie,gcover+1,SPAgcover SPAgcover2,True,none,251.0,0.572,none,536.0,0.611,True
+717,goalie,gcover+1,SPAgcover SPAgcover2,True,none,524.0,0.531,ambiguous,1012.0,0.642,False
+718,goalie,gbutterfly,SPAgbutterfly,True,ambiguous,407.0,0.676,ambiguous,407.0,0.727,False
+721,goalie,gbutterfly,SPAgbutterfly,True,ambiguous,183.0,0.621,ambiguous,539.0,0.651,False
+722,goalie,gbutterfly,SPAgbutterfly,True,ambiguous,382.0,0.635,ambiguous,1028.0,0.641,False
+723,goalie,gbutterfly,SPAgbutterfly,True,none,382.0,0.588,ambiguous,1028.0,0.703,False
+724,goalie,gbutterfly,SPAgbutterfly,True,ambiguous,6.0,0.632,ambiguous,542.0,0.644,False
+725,goalie,gbutterfly,SPAgbutterfly,True,none,825.0,0.569,ambiguous,808.0,0.717,False
+726,goalie,gbutterfly,SPAgbutterfly,True,ambiguous,382.0,0.621,ambiguous,1028.0,0.651,False
+727,goalie,gbutterfly,SPAgbutterfly,True,ambiguous,59.0,0.628,ambiguous,533.0,0.626,False
+728,goalie,gbutterfly,SPAgbutterfly,True,none,161.0,0.599,ambiguous,805.0,0.632,False
+729,goalie,gbutterfly,SPAgbutterfly,True,none,246.0,0.588,none,1016.0,0.614,True
+730,goalie,gbutterfly,SPAgbutterfly,True,ambiguous,453.0,0.649,ambiguous,684.0,0.647,False
+731,goalie,gbutterfly,SPAgbutterfly,True,none,634.0,0.598,ambiguous,968.0,0.652,False
+732,goalie,gbutterfly,SPAgbutterfly,True,ambiguous,634.0,0.628,ambiguous,964.0,0.723,False
+733,goalie,gbutterfly,SPAgbutterfly,True,none,407.0,0.611,none,767.0,0.618,True
+734,goalie,gbutterfly,SPAgbutterfly,True,none,449.0,0.58,none,793.0,0.596,True
+735,goalie,gbutterfly,SPAgbutterfly,True,none,382.0,0.593,ambiguous,808.0,0.62,False
+736,goalie,gbutterfly,SPAgbutterfly,True,ambiguous,66.0,0.623,ambiguous,771.0,0.68,False
+737,goalie,gbutterfly,SPAgbutterfly,True,ambiguous,825.0,0.637,none,1018.0,0.591,False
+738,goalie,gbutterfly,SPAgbutterfly,True,ambiguous,382.0,0.661,ambiguous,793.0,0.651,False
+739,goalie,gbutterfly,SPAgbutterfly,True,none,2.0,0.617,ambiguous,863.0,0.668,False
+740,goalie,gbutterfly,SPAgbutterfly,True,ambiguous,825.0,0.626,ambiguous,1028.0,0.636,False
+742,goalie,gsprawll,SPAgsprawll,True,none,308.0,0.613,ambiguous,1029.0,0.644,False
+743,goalie,gsprawll,SPAgsprawll,True,none,826.0,0.583,none,792.0,0.605,True
+744,goalie,gsprawll,SPAgsprawll,True,none,283.0,0.54,none,316.0,0.558,True
+745,goalie,gsprawll,SPAgsprawll,True,ambiguous,661.0,0.645,ambiguous,539.0,0.665,False
+746,goalie,gsprawll,SPAgsprawll,True,none,382.0,0.583,ambiguous,1028.0,0.625,False
+747,goalie,gsprawll,SPAgsprawll,True,none,810.0,0.505,none,968.0,0.598,True
+748,goalie,gsprawll,SPAgsprawll,True,ambiguous,5.0,0.584,ambiguous,655.0,0.646,False
+749,goalie,gsprawll,SPAgsprawll,True,none,6.0,0.607,none,1033.0,0.615,True
+750,goalie,gsprawll,SPAgsprawll,True,none,382.0,0.581,none,1028.0,0.576,True
+751,goalie,gsprawll,SPAgsprawll,True,none,596.0,0.492,none,391.0,0.575,True
+752,goalie,gsprawll,SPAgsprawll,True,none,531.0,0.542,none,391.0,0.579,True
+753,goalie,gsprawll,SPAgsprawll,True,none,532.0,0.542,none,532.0,0.57,True
+754,goalie,gsprawll,SPAgsprawll,True,ambiguous,308.0,0.626,ambiguous,996.0,0.637,False
+755,goalie,gsprawll,SPAgsprawll,True,none,332.0,0.559,none,977.0,0.582,True
+756,goalie,gsprawll,SPAgsprawll,True,none,330.0,0.534,none,694.0,0.573,True
+757,goalie,gsprawll,SPAgsprawll,True,none,672.0,0.613,ambiguous,996.0,0.661,False
+758,goalie,gsprawll,SPAgsprawll,True,none,314.0,0.545,none,314.0,0.548,True
+759,goalie,gsprawll,SPAgsprawll,True,none,199.0,0.517,none,804.0,0.556,True
+760,goalie,gsprawll,SPAgsprawll,True,ambiguous,723.0,0.66,ambiguous,655.0,0.68,False
+761,goalie,gsprawll,SPAgsprawll,True,ambiguous,536.0,0.629,ambiguous,536.0,0.639,False
+762,goalie,gsprawll,SPAgsprawll,True,none,531.0,0.505,none,1008.0,0.57,True
+763,goalie,gsprawll,SPAgsprawll,True,ambiguous,672.0,0.654,ambiguous,654.0,0.697,False
+764,goalie,gsprawll,SPAgsprawll,True,none,472.0,0.612,ambiguous,699.0,0.632,False
+765,goalie,gsprawll,SPAgsprawll,True,none,470.0,0.553,none,788.0,0.602,True
+767,goalie,gsprawlr,SPAgsprawlr,True,none,382.0,0.58,ambiguous,1028.0,0.621,False
+769,goalie,gsprawlr,SPAgsprawlr,True,ambiguous,107.0,0.64,ambiguous,677.0,0.645,False
+770,goalie,gsprawlr,SPAgsprawlr,True,ambiguous,480.0,0.633,ambiguous,811.0,0.638,False
+771,goalie,gsprawlr,SPAgsprawlr,True,none,479.0,0.578,ambiguous,811.0,0.686,False
+772,goalie,gsprawlr,SPAgsprawlr,True,ambiguous,696.0,0.641,ambiguous,688.0,0.697,False
+773,goalie,gsprawlr,SPAgsprawlr,True,none,472.0,0.616,ambiguous,692.0,0.635,False
+774,goalie,gsprawlr,SPAgsprawlr,True,none,314.0,0.577,none,314.0,0.586,True
+775,goalie,gsprawlr,SPAgsprawlr,True,none,658.0,0.608,ambiguous,996.0,0.651,False
+776,goalie,gsprawlr,SPAgsprawlr,True,none,246.0,0.569,none,977.0,0.608,True
+777,goalie,gsprawlr,SPAgsprawlr,True,none,316.0,0.591,none,316.0,0.605,True
+778,goalie,gsprawlr,SPAgsprawlr,True,none,699.0,0.607,ambiguous,996.0,0.638,False
+779,goalie,gsprawlr,SPAgsprawlr,True,none,478.0,0.571,ambiguous,692.0,0.706,False
+780,goalie,gsprawlr,SPAgsprawlr,True,none,62.0,0.521,none,975.0,0.593,True
+781,goalie,gsprawlr,SPAgsprawlr,True,none,661.0,0.617,ambiguous,802.0,0.673,False
+782,goalie,gsprawlr,SPAgsprawlr,True,none,246.0,0.587,ambiguous,1028.0,0.632,False
+783,goalie,gsprawlr,SPAgsprawlr,True,none,246.0,0.562,none,1028.0,0.585,True
+784,goalie,gsprawlr,SPAgsprawlr,True,ambiguous,50.0,0.645,ambiguous,660.0,0.686,False
+785,goalie,gsprawlr,SPAgsprawlr,True,none,703.0,0.612,ambiguous,942.0,0.671,False
+786,goalie,gsprawlr,SPAgsprawlr,True,none,524.0,0.603,none,532.0,0.617,True
+787,goalie,gsprawlr,SPAgsprawlr,True,ambiguous,47.0,0.65,ambiguous,163.0,0.7,False
+788,goalie,gsprawlr,SPAgsprawlr,True,none,449.0,0.613,ambiguous,907.0,0.647,False
+789,goalie,gsprawlr,SPAgsprawlr,True,none,299.0,0.551,none,975.0,0.598,True
+790,celebration,pump2,SPApump2,True,none,204.0,0.595,ambiguous,204.0,0.663,False
+791,celebration,pump2,SPApump2,True,ambiguous,346.0,0.595,ambiguous,204.0,0.629,False
+792,celebration,pump2,SPApump2,True,none,426.0,0.591,ambiguous,623.0,0.648,False
+793,celebration,pump2,SPApump2,True,ambiguous,348.0,0.623,ambiguous,700.0,0.644,False
+794,celebration,pump2,SPApump2,True,none,186.0,0.613,ambiguous,186.0,0.655,False
+795,celebration,pump2,SPApump2,True,none,192.0,0.589,none,186.0,0.6,True
+796,celebration,pump2,SPApump2,True,none,351.0,0.587,none,351.0,0.584,True
+797,celebration,pump2,SPApump2,True,none,36.0,0.583,ambiguous,163.0,0.634,False
+798,celebration,pump2,SPApump2,True,none,182.0,0.555,none,797.0,0.575,True
+799,celebration,pump2,SPApump2,True,none,6.0,0.572,none,932.0,0.579,True
+800,celebration,pump2,SPApump2,True,none,800.0,0.606,none,774.0,0.594,True
+801,celebration,pump2,SPApump2,True,none,184.0,0.585,none,686.0,0.591,True
+802,celebration,pump2,SPApump2,True,none,768.0,0.533,none,350.0,0.533,True
+803,celebration,pump2,SPApump2,True,none,176.0,0.536,none,45.0,0.567,True
+804,celebration,pump2,SPApump2,True,none,36.0,0.615,ambiguous,686.0,0.626,False
+805,celebration,pump2,SPApump2,True,none,31.0,0.576,none,107.0,0.601,True
+806,celebration,pump2,SPApump2,True,none,143.0,0.615,ambiguous,144.0,0.64,False
+807,celebration,pump2,SPApump2,True,ambiguous,816.0,0.638,ambiguous,1106.0,0.63,False
+808,celebration,pump2,SPApump2,True,none,802.0,0.593,ambiguous,601.0,0.634,False
+809,celebration,pump2,SPApump2,True,ambiguous,539.0,0.641,ambiguous,1105.0,0.655,False
+810,celebration,pump2,SPApump2,True,none,188.0,0.605,ambiguous,188.0,0.631,False
+811,celebration,pump2,SPApump2,True,none,188.0,0.555,none,200.0,0.566,True
+812,celebration,pump2,SPApump2,True,none,341.0,0.55,none,906.0,0.564,True
+814,celebration,pump2,SPApump2,True,none,14.0,0.572,ambiguous,1106.0,0.608,False
+815,celebration,pump2,SPApump2,True,ambiguous,46.0,0.568,none,14.0,0.599,False
+816,celebration,pump2,SPApump2,True,none,14.0,0.582,none,14.0,0.606,True
+817,celebration,pump2,SPApump2,True,none,48.0,0.616,ambiguous,144.0,0.631,False
+818,celebration,pump2,SPApump2,True,none,579.0,0.614,none,110.0,0.608,True
+819,celebration,pump2,SPApump2,True,none,407.0,0.596,ambiguous,163.0,0.623,False
+820,celebration,pump2,SPApump2,True,ambiguous,134.0,0.622,ambiguous,50.0,0.629,False
+821,player,unused1+1,SPAunused1 SPAunused2,True,none,596.0,0.583,none,705.0,0.613,True
+822,player,unused1,SPAunused1,True,none,767.0,0.58,none,945.0,0.569,True
+823,player,unused1,SPAunused1,True,none,75.0,0.555,none,688.0,0.602,True
+824,player,unused1+1,SPAunused1 SPAunused2,True,none,802.0,0.589,ambiguous,871.0,0.69,False
+825,player,unused1,SPAunused1,True,none,213.0,0.604,ambiguous,871.0,0.641,False
+826,player,unused1,SPAunused1,True,ambiguous,720.0,0.659,ambiguous,5.0,0.651,False
+827,player,unused2,SPAunused2,True,none,732.0,0.57,ambiguous,870.0,0.621,False
+828,player,unused2,SPAunused2,True,none,735.0,0.544,none,870.0,0.591,True
+829,player,unused2,SPAunused2,True,none,735.0,0.552,none,871.0,0.598,True
+830,player,unused2,SPAunused2,True,none,787.0,0.606,ambiguous,893.0,0.682,False
+831,player,unused2,SPAunused2,True,ambiguous,5.0,0.631,ambiguous,893.0,0.719,False
+832,player,boardfront,SPAboardfront,True,none,596.0,0.596,ambiguous,604.0,0.664,False
+833,player,boardfront,SPAboardfront,True,none,606.0,0.611,ambiguous,945.0,0.635,False
+834,player,boardfront,SPAboardfront,True,none,781.0,0.553,none,919.0,0.585,True
+835,player,boardfront,SPAboardfront,True,none,316.0,0.523,none,977.0,0.585,True
+836,player,boardfront,SPAboardfront,True,none,782.0,0.589,none,872.0,0.588,True
+837,player,boardfront,SPAboardfront,True,none,351.0,0.589,none,822.0,0.573,True
+838,player,boardfront,SPAboardfront,True,none,132.0,0.528,none,298.0,0.532,True
+839,player,boardfront,SPAboardfront,True,none,283.0,0.552,none,315.0,0.579,True
+840,player,boardfront,SPAboardfront,True,none,36.0,0.584,none,126.0,0.576,True
+841,player,boardfront,SPAboardfront,True,none,472.0,0.584,none,408.0,0.596,True
+842,player,boardfront,SPAboardfront,True,none,472.0,0.594,none,408.0,0.58,True
+843,player,boardfront,SPAboardfront,True,none,531.0,0.55,none,523.0,0.594,True
+844,player,boardfront,SPAboardfront,True,none,346.0,0.54,none,825.0,0.576,True
+845,player,boardfront,SPAboardfront,True,none,351.0,0.6,none,822.0,0.571,True
+846,player,boardfront,SPAboardfront,True,none,748.0,0.513,none,314.0,0.522,True
+847,player,boardfront,SPAboardfront,True,none,283.0,0.543,none,315.0,0.601,True
+848,player,boardright,SPAboardright,True,none,109.0,0.614,ambiguous,720.0,0.626,False
+849,player,boardright,SPAboardright,True,none,806.0,0.543,none,907.0,0.606,True
+850,player,boardright,SPAboardright,True,none,741.0,0.521,none,568.0,0.504,True
+851,player,boardright,SPAboardright,True,none,828.0,0.536,none,387.0,0.529,True
+852,player,boardright,SPAboardright,True,ambiguous,663.0,0.635,ambiguous,110.0,0.678,False
+853,player,boardright,SPAboardright,True,none,295.0,0.535,none,287.0,0.589,True
+854,player,boardright,SPAboardright,True,none,531.0,0.519,none,659.0,0.53,True
+855,player,boardright,SPAboardright,True,none,182.0,0.538,none,471.0,0.583,True
+856,player,boardright,SPAboardright,True,none,596.0,0.575,none,705.0,0.58,True
+857,player,boardright,SPAboardright,True,none,202.0,0.588,none,103.0,0.617,True
+858,player,boardright,SPAboardright,True,none,47.0,0.574,none,601.0,0.587,True
+859,player,boardright,SPAboardright,True,none,809.0,0.588,none,877.0,0.599,True
+860,player,boardright,SPAboardright,True,none,719.0,0.573,none,719.0,0.605,False
+861,player,boardright,SPAboardright,True,none,345.0,0.613,ambiguous,201.0,0.661,False
+862,player,boardright,SPAboardright,True,none,382.0,0.569,ambiguous,907.0,0.626,False
+863,player,boardright,SPAboardright,True,none,528.0,0.484,none,528.0,0.543,True
+864,player,boardback,SPAboardback,True,none,73.0,0.607,ambiguous,604.0,0.636,False
+865,player,boardback,SPAboardback,True,none,36.0,0.61,ambiguous,945.0,0.628,False
+866,player,boardback,SPAboardback,True,none,781.0,0.569,ambiguous,1016.0,0.668,False
+867,player,boardback,SPAboardback,True,none,316.0,0.563,none,332.0,0.602,True
+868,player,boardback,SPAboardback,True,none,319.0,0.552,none,332.0,0.559,True
+869,player,boardback,SPAboardback,True,none,287.0,0.539,none,333.0,0.534,True
+870,player,boardback,SPAboardback,True,none,294.0,0.573,none,932.0,0.604,True
+871,player,boardback,SPAboardback,True,none,278.0,0.587,none,448.0,0.612,True
+872,player,boardback,SPAboardback,True,none,201.0,0.58,none,206.0,0.608,True
+873,player,boardback,SPAboardback,True,none,352.0,0.552,none,909.0,0.558,True
+874,player,boardback,SPAboardback,True,none,251.0,0.512,none,1013.0,0.613,True
+875,player,boardback,SPAboardback,True,none,526.0,0.562,none,526.0,0.594,True
+876,player,boardback,SPAboardback,True,none,344.0,0.573,none,872.0,0.548,True
+877,player,boardback,SPAboardback,True,none,294.0,0.533,none,311.0,0.547,True
+878,player,boardback,SPAboardback,True,none,16.0,0.522,none,872.0,0.538,True
+879,player,boardback,SPAboardback,True,none,246.0,0.513,none,670.0,0.567,True
+880,player,boardleft,SPAboardleft,True,none,578.0,0.597,none,202.0,0.618,True
+881,player,boardleft,SPAboardleft,True,ambiguous,607.0,0.677,ambiguous,599.0,0.698,False
+882,player,boardleft,SPAboardleft,True,none,595.0,0.599,ambiguous,336.0,0.634,False
+883,player,boardleft,SPAboardleft,True,none,270.0,0.546,none,1088.0,0.558,True
+884,player,boardleft,SPAboardleft,True,none,438.0,0.561,none,174.0,0.603,True
+885,player,boardleft,SPAboardleft,True,ambiguous,348.0,0.622,ambiguous,201.0,0.665,False
+886,player,boardleft,SPAboardleft,True,none,273.0,0.581,ambiguous,273.0,0.628,False
+887,player,boardleft,SPAboardleft,True,none,528.0,0.489,none,528.0,0.524,True
+888,player,boardleft,SPAboardleft,True,none,670.0,0.546,none,688.0,0.594,True
+889,player,boardleft,SPAboardleft,True,none,118.0,0.596,none,230.0,0.569,True
+890,player,boardleft,SPAboardleft,True,none,570.0,0.548,none,596.0,0.594,True
+891,player,boardleft,SPAboardleft,True,none,461.0,0.569,none,408.0,0.543,True
+892,player,boardleft,SPAboardleft,True,ambiguous,3.0,0.659,ambiguous,109.0,0.665,False
+893,player,boardleft,SPAboardleft,True,none,538.0,0.519,none,877.0,0.566,True
+894,player,boardleft,SPAboardleft,True,none,825.0,0.529,none,735.0,0.58,True
+895,player,boardleft,SPAboardleft,True,none,470.0,0.516,none,270.0,0.539,True
+896,player,benchcheckr,SPAbenchcheckr,True,none,76.0,0.608,none,166.0,0.61,True
+897,player,benchcheckr,SPAbenchcheckr,True,none,460.0,0.517,none,460.0,0.588,True
+898,player,benchcheckl,SPAbenchcheckl,True,none,786.0,0.6,ambiguous,1105.0,0.637,False
+899,player,benchcheckl,SPAbenchcheckl,True,none,448.0,0.535,none,460.0,0.593,True
+900,player,benchcheckl+1,SPAbenchcheckl SPAbenchcheckr,True,none,407.0,0.512,none,970.0,0.555,True
+901,player,benchcheckr,SPAbenchcheckr,True,none,723.0,0.576,ambiguous,670.0,0.645,False
+902,player,benchcheckr,SPAbenchcheckr,True,none,681.0,0.512,none,626.0,0.532,True
+903,player,benchcheckl,SPAbenchcheckl,True,none,66.0,0.567,ambiguous,757.0,0.623,False
+904,player,benchcheckl,SPAbenchcheckl,True,none,681.0,0.538,none,877.0,0.562,True
+905,player,benchcheckl+1,SPAbenchcheckl SPAbenchcheckr,True,none,407.0,0.512,none,970.0,0.555,True
+906,player,benchcheckr,SPAbenchcheckr,True,ambiguous,2.0,0.639,ambiguous,163.0,0.643,False
+907,player,benchcheckr,SPAbenchcheckr,True,none,825.0,0.599,none,877.0,0.559,True
+908,player,benchcheckl,SPAbenchcheckl,True,none,792.0,0.572,none,171.0,0.595,True
+909,player,benchcheckl,SPAbenchcheckl,True,none,825.0,0.603,none,807.0,0.578,True
+910,player,benchcheckl+1,SPAbenchcheckl SPAbenchcheckr,True,none,278.0,0.554,none,278.0,0.585,True
+911,player,benchcheckr,SPAbenchcheckr,True,none,111.0,0.613,none,820.0,0.585,True
+912,player,benchcheckr,SPAbenchcheckr,True,none,448.0,0.527,none,448.0,0.596,True
+913,player,benchcheckl,SPAbenchcheckl,True,none,20.0,0.588,none,10.0,0.583,True
+914,player,benchcheckl,SPAbenchcheckl,True,none,448.0,0.527,none,448.0,0.596,True
+915,player,benchcheckl+1,SPAbenchcheckl SPAbenchcheckr,True,none,407.0,0.512,none,970.0,0.555,True
+916,player,benchcheckl+1,SPAbenchcheckl SPAbenchcheckr,True,none,5.0,0.615,none,735.0,0.601,True
+917,nonplayer,bench,,True,none,198.0,0.428,none,109.0,0.456,True
+918,nonplayer,bench,,False,none,190.0,0.422,none,109.0,0.437,True
+919,nonplayer,bench,,False,none,190.0,0.419,none,109.0,0.444,True
+920,nonplayer,bench,,False,none,186.0,0.438,none,109.0,0.465,True
+921,nonplayer,bench,,False,none,186.0,0.427,none,109.0,0.457,True
+922,nonplayer,bench,,False,none,196.0,0.43,none,196.0,0.431,True
+923,nonplayer,bench,,True,none,196.0,0.405,none,198.0,0.409,True
+924,nonplayer,bench,,False,none,196.0,0.414,none,109.0,0.42,True
+925,nonplayer,bench,,False,none,192.0,0.412,none,109.0,0.407,True
+926,nonplayer,bench,,False,none,190.0,0.419,none,192.0,0.413,True
+927,nonplayer,bench,,False,none,190.0,0.418,none,196.0,0.419,True
+928,nonplayer,bench,,False,none,190.0,0.42,none,109.0,0.441,True
+929,nonplayer,bigfont,,True,ambiguous,567.0,0.741,ambiguous,557.0,0.668,False
+931,nonplayer,bigfont,,False,ambiguous,567.0,0.642,none,557.0,0.599,False
+933,nonplayer,bigfont,,False,ambiguous,567.0,0.698,ambiguous,557.0,0.645,False
+937,nonplayer,bigfont,,False,ambiguous,567.0,0.657,none,560.0,0.571,False
+938,nonplayer,bigfont,,False,ambiguous,567.0,0.637,none,557.0,0.561,False
+939,nonplayer,bigfont,,False,ambiguous,564.0,0.715,ambiguous,557.0,0.622,False
+940,nonplayer,bigfont,,False,ambiguous,567.0,0.623,none,1072.0,0.559,False
+941,nonplayer,bigfont,,False,ambiguous,567.0,0.728,ambiguous,557.0,0.668,False
+942,nonplayer,bigfont,,False,ambiguous,567.0,0.734,ambiguous,557.0,0.67,False
+943,nonplayer,bigfont,,False,ambiguous,567.0,0.726,ambiguous,557.0,0.679,False
+947,nonplayer,bigfont,,False,ambiguous,567.0,0.714,ambiguous,557.0,0.659,False
+948,nonplayer,bigfont,,False,ambiguous,567.0,0.687,none,557.0,0.604,False
+949,nonplayer,bigfont,,False,ambiguous,567.0,0.664,ambiguous,557.0,0.622,False
+950,nonplayer,bigfont,,False,ambiguous,567.0,0.703,none,557.0,0.613,False
+951,nonplayer,bigfont,,False,ambiguous,567.0,0.737,ambiguous,557.0,0.661,False
+952,nonplayer,bigfont,,False,ambiguous,567.0,0.695,ambiguous,557.0,0.623,False
+953,nonplayer,bigfont,,False,ambiguous,567.0,0.705,none,557.0,0.593,False
+954,nonplayer,bigfont,,False,ambiguous,567.0,0.658,none,557.0,0.569,False
+955,nonplayer,bigfont,,False,ambiguous,394.0,0.706,none,400.0,0.526,False
+963,nonplayer,bigfont,,False,ambiguous,565.0,0.721,ambiguous,557.0,0.634,False
+965,nonplayer,bigfont,,False,ambiguous,565.0,0.714,ambiguous,557.0,0.651,False
+966,nonplayer,bigfont,,False,ambiguous,567.0,0.741,ambiguous,557.0,0.634,False
