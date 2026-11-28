@@ -31,7 +31,7 @@ painted into regions. A face's group depends on where its colour came from:
 | [A 1992-93 Bowman card](#a-1992-93-bowman-card) | 3 |
 | [Colours from a different photo](#colours-from-a-different-photo) | 1 |
 | [Hand coloured](#hand-coloured) | 9 |
-| **All** | **146** (144 cartridge, 2 Sega CD), plus 12 [stock players](#players-with-a-stock-picture) and 33 [NHL 95 Genesis photos](#nhl-95-genesis-photos-the-1993-94-rosters) |
+| **All** | **146** (144 cartridge, 2 Sega CD), plus 12 [stock players](#players-with-a-stock-picture), 33 [NHL 95 Genesis photos](#nhl-95-genesis-photos-the-1993-94-rosters) and 32 [from NHL 97 PC](#faces-from-nhl-97-pc-the-1993-94-rosters-other-starters) |
 
 ### The same photo in NHL 95 PC
 
@@ -209,12 +209,27 @@ Gratton, Jamie Macoun, Wendel Clark, Sylvain Cote.
 Not coloured: Ulf Dahlen, Stephane Fiset, Sean Hill, Joe Murphy and Keith Tkachuk (NHL 95 SNES has a different photo of
 them). Guy Hebert, Terry Yake, Gord Murphy, Andrei Lomakin and Mike Richter keep the faces above.
 
+## Faces from NHL 97 PC (the 1993-94 rosters' other starters)
+
+The 32 starters of the 1993-94 roster sets that no 16-bit game has a photo of get a face from the small colour head
+shot NHL 97 PC keeps of each player (`DATA/TINYFACE.VIV` on its disc, 39 x 55, named by `PLAYERS.HDB`). Each is made
+like the stock players' faces: first a Genesis grey picture (48 x 48, the same 8 greys, dithered), then the photo's
+colour on it. The head is framed like the cartridge's photos, the shoulders are carried out to the frame's sides, and the
+background is a dark, warm, mottled one like the cartridge's (Luc Robitaille's), lighter behind the head. The photos are
+from 1996-97, so a few jerseys are of later teams.
+
+Sean Hill, Joe Murphy, Stephane Fiset, Keith Tkachuk, Ted Donato, Glen Wesley, Yuri Khmylev, Richard Smehlik, Jeff
+Hackett, Grant Ledyard, Paul Cavallini, Ray Sheppard, Nicklas Lidstrom, Chris Osgood, Fred Brathwaite, Adam Burt, Alexei
+Zhitnik, Lyle Odelein, Martin Brodeur, Jim Dowd, Derek King, Mikael Renberg, Yves Racine, Scott Young, Brad Werenka, John
+Tucker, Chris Joseph, Damian Rhodes, Jiri Slegr, Boris Mironov, Stephane Quintal, Michal Pivonka.
+
 ## The colour sources
 
 `sources/` holds the picture each face's colour came from, under the face's own file name:
 
 - the NHL 95 PC portrait (`PORTRnnn.QFS`) or NHL 94 PC portrait (`PORTRAIT.NSH`), as the game has it;
 - the NHL 95 SNES photo (for the NHL 95 Genesis photos' `Player_` faces too);
+- the NHL 97 PC head shot (`TINYFACE.VIV`), for the faces made from it;
 - the card's photo (EA's 1993-94 NHL '94 card or a 1992-93 Bowman card), cropped to the photo;
 - for Eric Lindros, the cropped head of the photo reference;
 - for the stock players' `Player_` faces, the photo on the player's EA NHL '94 card (the back, or the front).
